@@ -80,6 +80,13 @@ permission dialog was visible, no bindings were confirmed, and no synthetic even
 were sent to unconfirmed shortcuts. Requests/sessions and temporary identity were
 cleaned up. Native shortcut support remains pending.
 
+A subsequent official GNOME GSettings custom-shortcut adapter passed temporary
+F13/F14/Ctrl+Alt+K save/readback and direct marker-command launches, restoring the
+exact previous settings. Actual global activation was blocked after the desktop
+automatically locked (`LockedHint=yes`; portal `Session creation inhibited`). No
+unlock or bypass was attempted. See [global shortcuts](hotkeys.md); settings storage
+success is not counted as key activation.
+
 ## Hotkeys, overlay, audio and packaging
 
 - Xvfb `XGrabKey`: F13, F14 and Ctrl+Alt+K each activated through synthetic XTest

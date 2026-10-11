@@ -25,6 +25,11 @@ before interpreting a passed item as a complete application workflow.
 | RemoteDesktop keyboard portal / native Wayland | Session/consent handshake passed, input not proven | Own fixture never passed fresh active-window checks; no sample sent |
 | Windows/macOS | Not implemented or tested | Interfaces remain isolated for future adapters |
 
+The GNOME GSettings shortcut adapter subsequently passed temporary registration,
+readback, quoted marker-command launches and exact settings restoration. The native
+session had locked before activation could be tested, so the Wayland shortcut/F13/F14
+cells remain pending. See [global shortcuts](hotkeys.md).
+
 An installed portal, visible application window, passing unit test, or isolated
 toolkit fixture does not establish support for all applications in a desktop row.
 No backend falls back to a clipboard. Unsupported input must remain a visible
