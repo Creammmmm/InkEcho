@@ -1,17 +1,16 @@
-# AppImage packaging — stage 0
+# Full application AppImage packaging
 
-This artifact is a **runtime feasibility probe**, not the voice input application.
-It displays a small Qt window and explicitly labels unimplemented functionality.
-It does not record audio, contact cloud services, inject text, or access the
-clipboard. Passing this check proves only that the bundled runtime launches in
-the measured environment. Full application delivery remains outstanding.
+The current recipe builds `dist/InkEcho-0.1.0-alpha-x86_64.AppImage` with
+`python -m inkecho` as its entry. It is a Linux x86_64 preview application.
+The preserved [stage-zero probe record](packaging-stage0.md) describes the
+separate older artifact; its successful tests do not substitute for these tests.
 
-## Build
+## Build and contents
 
-Prerequisites: Linux x86_64, `uv`, `squashfs-tools`, network access for the first
-dependency/runtime download. Build with an uv-managed standalone CPython; a
-system interpreter is rejected because copying it does not provide a portable
-Python runtime. No root installation or PyInstaller is required.
+Use Linux x86_64, `uv`, `squashfs-tools`, `binutils` (`readelf`) and `dpkg-deb`.
+Initial dependency downloads require network access. No host root installation
+is performed by the recipe. The builder rejects a system Python because it
+needs the uv-managed standalone runtime:
 
 ```sh
 uv python install 3.13.15
@@ -19,113 +18,77 @@ uv sync --frozen --python 3.13.15
 uv run python scripts/packaging/build_appimage.py
 ```
 
-The script copies standalone Python, locked PySide6/shiboken6 runtime packages,
-their distribution metadata/licenses, and project source into `build/InkEcho.AppDir`.
-It includes a `.desktop` entry, SVG icon, Qt plugins, and an `AppRun` launcher.
-`mksquashfs` produces the embedded filesystem; the official type-2 AppImage ELF
-runtime is prepended. This is a real AppImage, not a shell script named AppImage.
-Outputs and downloaded tools stay in ignored `build/` and `dist/` directories.
+The type-2 AppImage contains standalone CPython, runtime dependency wheels and
+their distribution metadata/licenses, application code/icons, Chinese Noto Sans
+CJK Regular font, and selected Qt modules/plugins. Core, GUI, Widgets, Network,
+Multimedia, Svg and DBus bindings remain; recursive ELF dependencies retain
+needed Qt, ICU and FFmpeg libraries. QML, WebEngine, PDF, Charts and development
+headers are excluded. XCB, Wayland and offscreen platform plugins remain.
 
-`SOURCE_DATE_EPOCH` controls the filesystem and all inode timestamps (default
-zero), and host extended attributes are omitted. Two consecutive complete
-builds on the measured host produced byte-identical artifacts after this
-normalization. This establishes same-host repeatability with unchanged inputs,
-not a universal cross-host reproducibility claim: the standalone Python,
-locked wheels, source, `mksquashfs` version and build file permissions must also
-match. The measured builder was `mksquashfs 4.7.5`. The recipe currently includes
-the complete PySide6 runtime and is intentionally unoptimized.
+Pinned Ubuntu 24.04 packages provide XCB utility and Kerberos leaf libraries
+plus Noto. `scripts/packaging/system-deps.json` records exact URLs and SHA-256;
+archives were also checked against APT repository SHA-512 on acquisition.
+The builder checks every cached/downloaded archive and the official AppImage
+runtime before use, failing on any mismatch. It extracts only required assets
+and original copyright notices, and does not bundle host glibc or graphics drivers.
 
-To repeat the comparison with unchanged source and dependencies:
+`usr/share/doc/inkecho/inventory.json` inside the image lists wheel versions,
+selected Qt libraries, downloaded asset hashes, and every regular file checksum
+and symbolic-link target except the inventory itself. The adjacent license
+folders and `THIRD_PARTY_NOTICES.md` retain attribution and source links.
+The runtime is pinned to upstream commit `8f39b89`, SHA-256
+`156f4bdbde9c52d01814600013e0a273f0118dc2de98975f3c8c63427ec79074`.
+Its upstream `continuous` URL can change; inspect new official release metadata
+and deliberately update the hash before accepting a replacement.
 
-```sh
-uv run python scripts/packaging/build_appimage.py
-cp dist/InkEcho-0.1.0-stage0-x86_64.AppImage.sha256 build/first.sha256
-uv run python scripts/packaging/build_appimage.py
-cmp build/first.sha256 dist/InkEcho-0.1.0-stage0-x86_64.AppImage.sha256
-```
-
-## Runtime provenance
-
-Official upstream: [AppImage/type2-runtime](https://github.com/AppImage/type2-runtime).
-Asset: [runtime-x86_64, continuous](https://github.com/AppImage/type2-runtime/releases/download/continuous/runtime-x86_64).
-The official [release asset metadata](https://github.com/AppImage/type2-runtime/releases/expanded_assets/continuous)
-inspected on 2026-10-12 published SHA-256:
-
-```text
-156f4bdbde9c52d01814600013e0a273f0118dc2de98975f3c8c63427ec79074
-```
-
-The downloaded runtime matched that digest. The build verifies it before use,
-including cached files, and stops on mismatch. Upstream `continuous` is mutable;
-if it changes, review the new official release metadata, update the pinned
-digest deliberately, and repeat all artifact tests. Do not remove verification
-to make an upstream change pass. The cached validated runtime allows rebuilding
-the same pinned version while available locally. This is checksum verification,
-not an independent signing-key trust claim.
-The downloaded runtime reports upstream commit `8f39b89` via
-`--appimage-version`.
-
-## Verify the artifact itself
+## Verify the actual application
 
 ```sh
-cd dist
-sha256sum -c InkEcho-0.1.0-stage0-x86_64.AppImage.sha256
-./InkEcho-0.1.0-stage0-x86_64.AppImage --appimage-version
-./InkEcho-0.1.0-stage0-x86_64.AppImage --smoke-test --screenshot /tmp/inkecho.png
+(cd dist && sha256sum -c InkEcho-0.1.0-alpha-x86_64.AppImage.sha256)
+./dist/InkEcho-0.1.0-alpha-x86_64.AppImage --appimage-extract-and-run \
+  --config-dir /tmp/inkecho-qa/config --data-dir /tmp/inkecho-qa/data \
+  --screenshot-dir /tmp/inkecho-qa/screenshots --quit-after 1
 ```
 
-The smoke result must show `packaged: true`, `visible: true`, the real desktop
-platform, and a Python executable inside the AppImage mount/extraction directory.
-Inspect the screenshot for clipped text and missing widgets. Without FUSE, use
-the runtime's native `--appimage-extract-and-run` option. An offscreen test only
-checks runtime startup, not real display integration. Run outside the source
-checkout with an empty Python environment to detect accidental source imports.
+Use a fresh temporary directory and an actual test display. Clear `PYTHONPATH`,
+`PYTHONHOME` and `LD_LIBRARY_PATH` inherited from development before launching.
+Inspect all nine screenshots for Chinese glyphs, clipping and page content.
+Without FUSE, the runtime's native extract-and-run option works. The automated
+[desktop acceptance driver](../scripts/validation/desktop_app_probe.py) also
+checks single-instance show/cancel/quit commands against the actual artifact.
+These startup checks do not prove voice transcription or target delivery.
 
-On this development machine, Ubuntu 26.04.1 / GNOME Wayland / x86_64, the source
-probe and real microphone capture passed. The final 242 MiB artifact was rebuilt
-after the packaging source changes, its checksum passed, and it launched with
-`packaged: true`, `visible: true`, `platform: wayland` from `/tmp` after clearing
-`PYTHONPATH` and `PYTHONHOME`. Its interpreter was inside `/tmp/.mount_…/usr/bin/`.
-The screenshot `build/appimage-wayland.png` was visually inspected successfully.
-Native `--appimage-extract-and-run` also passed the offscreen smoke test with
-its interpreter inside `/tmp/appimage_extracted_…/usr/bin/`.
-Artifact SHA-256 for that measured build:
-
-```text
-6f4b889b326a0af1e5893bab861045ca5f288f3fcf9b1cf068f154dc9abb363f
-```
-
-Ubuntu 24.04 desktop operation, X11 desktop integration, desktop installation
-and autostart are not proven by this stage-zero build. The host must provide
-compatible glibc, display/graphics
-libraries, a Wayland or X11 desktop and (for subsequent recording features)
-PipeWire/PulseAudio. Those host dependencies require a clean-machine audit in
-stage 4.
-
-For the separate RAM-only microphone probe, see [audio validation](audio-validation.md).
-
-## Ubuntu 24.04 userspace smoke test
+For an offline Ubuntu 24.04 userspace check with an existing Docker daemon:
 
 ```sh
 scripts/packaging/check_ubuntu24.sh
 ```
 
-This uses an already available Docker daemon; it does not install a host
-service. The Dockerfile pins the official Ubuntu 24.04 base image digest and
-installs only basic Qt runtime dependencies inside the test image. Package
-versions are resolved from Ubuntu repositories when building that image; this
-container image itself is not claimed to be reproducible.
+The image pins the official Ubuntu base digest and supplies desktop baseline
+libraries: GLib, GL/EGL, xkbcommon, fontconfig, D-Bus and PulseAudio client libs.
+The application runs non-root with read-only root/artifact, network disabled,
+and temporary configuration, state and screenshots. No user home, audio device,
+display socket or credentials are mounted. Qt offscreen startup on this image
+proves userspace library compatibility only, not a Ubuntu 24.04 desktop session.
 
-The artifact then runs as UID 65532 with networking disabled, a read-only root
-filesystem and artifact mount, and an executable temporary filesystem. No
-host display socket, audio device, home directory or credentials are mounted.
-The raw minimal Ubuntu image failed with missing `libglib-2.0.so.0`; the test
-image supplies `libglib2.0-0t64`, `libgl1`, `libegl1`, `libxkbcommon0`,
-`libfontconfig1`, `libdbus-1-3` and `fonts-dejavu-core` with their dependencies.
+Linux desktops must provide compatible glibc, graphics/display libraries,
+PipeWire/PulseAudio, D-Bus and the AT-SPI/Secret Service facilities needed by
+selected features. The image does not provide those desktop services. Initial
+clean-image trials caught missing Kerberos dependencies (now bundled) and
+PulseAudio client libraries (now declared in the container baseline).
 
-The final normalized artifact passed on 2026-10-12: `platform: offscreen`,
-`visible: true`, `packaged: true`, and bundled Python under
-`/tmp/appimage_extracted_…/usr/bin/python3`. This is a real Ubuntu 24.04 userspace
-launch with the host kernel. It does **not** establish Ubuntu 24.04 Wayland/X11
-desktop compatibility, input injection, FUSE mounting, microphone operation,
-or a complete clean-desktop acceptance test.
+## Repeatability
+
+`SOURCE_DATE_EPOCH` normalizes filesystem/inode times (default zero) and xattrs
+are omitted. Compare two complete builds with unchanged source and dependencies:
+
+```sh
+uv run python scripts/packaging/build_appimage.py
+cp dist/InkEcho-0.1.0-alpha-x86_64.AppImage.sha256 build/first.sha256
+uv run python scripts/packaging/build_appimage.py
+cmp build/first.sha256 dist/InkEcho-0.1.0-alpha-x86_64.AppImage.sha256
+```
+
+Python, wheels, assets, build file permissions and `mksquashfs` must also match;
+this is same-host repeatability, not universal cross-host reproducibility.
+Final measured results and limitations are in [release notes](release-notes.md).

@@ -6,9 +6,10 @@ import platform
 import shutil
 import subprocess
 import sys
-import sysconfig
 import urllib.request
 from pathlib import Path
+
+from bundle import collect_python, system_assets, trim_qt, write_inventory
 
 ROOT = Path(__file__).resolve().parents[2]
 BUILD = ROOT / "build"
@@ -38,17 +39,21 @@ def main() -> None:
     if APPDIR.exists():
         shutil.rmtree(APPDIR)
     shutil.copytree(python_home, APPDIR / "usr", symlinks=True)
+    # Runtime modules come from the locked environment, not standalone pip.
+    for site_packages in (APPDIR / "usr/lib").glob("python*/site-packages"):
+        shutil.rmtree(site_packages)
+        site_packages.mkdir()
+    for pip_entry in (APPDIR / "usr/bin").glob("pip*"):
+        pip_entry.unlink()
     packages = APPDIR / "packages"
     packages.mkdir()
-    installed = Path(sysconfig.get_paths()["purelib"])
-    for pattern in (
-        "PySide6",
-        "shiboken6",
-        "pyside6*.dist-info",
-        "shiboken6*.dist-info",
-    ):
-        for path in installed.glob(pattern):
-            shutil.copytree(path, packages / path.name)
+    versions = collect_python(packages)
+    libraries = trim_qt(packages)
+    assets = system_assets(ROOT, APPDIR)
+    notices = APPDIR / "usr/share/doc/inkecho"
+    shutil.copytree(ROOT / "assets/licenses", notices / "licenses")
+    for name in ("LICENSE", "THIRD_PARTY_NOTICES.md"):
+        shutil.copy2(ROOT / name, notices / name)
     shutil.copytree(ROOT / "src/inkecho", packages / "inkecho")
     for path in APPDIR.rglob("__pycache__"):
         shutil.rmtree(path)
@@ -61,20 +66,28 @@ def main() -> None:
         'export PYTHONPATH="$APPDIR/packages"\n'
         "export PYTHONNOUSERSITE=1\n"
         'export QT_PLUGIN_PATH="$APPDIR/packages/PySide6/Qt/plugins"\n'
-        'exec "$APPDIR/usr/bin/python3" -m inkecho.probe "$@"\n'
+        'export LD_LIBRARY_PATH="$APPDIR/usr/lib/inkecho'
+        '${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"\n'
+        'exec "$APPDIR/usr/bin/python3" -m inkecho "$@"\n'
     )
     launcher.chmod(0o755)
     (APPDIR / "inkecho.desktop").write_text(
-        "[Desktop Entry]\nType=Application\nName=InkEcho Feasibility Probe\n"
-        "Exec=AppRun\nIcon=inkecho\nCategories=Utility;Audio;\nTerminal=false\n"
+        "[Desktop Entry]\nType=Application\nName=InkEcho\n"
+        "Exec=AppRun\nIcon=inkecho\nCategories=AudioVideo;Audio;\nTerminal=false\n"
     )
-    (APPDIR / "inkecho.svg").write_text(
-        '<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128">'
-        '<rect width="128" height="128" rx="28" fill="#245B52"/>'
-        '<path d="M36 54v20m14-34v48m14-60v72m14-60v48m14-34v20" '
-        'stroke="#fff" stroke-width="7" stroke-linecap="round"/></svg>\n'
-    )
+    shutil.copy2(ROOT / "src/inkecho/assets/inkecho.svg", APPDIR / "inkecho.svg")
     (APPDIR / ".DirIcon").symlink_to("inkecho.svg")
+    write_inventory(
+        APPDIR,
+        {
+            "application": "0.1.0-alpha",
+            "python": platform.python_version(),
+            "python_distributions": versions,
+            "qt_libraries": libraries,
+            "system_assets": assets,
+            "appimage_runtime_sha256": RUNTIME_SHA256,
+        },
+    )
     squashfs = BUILD / "inkecho.squashfs"
     subprocess.run(
         [
@@ -98,7 +111,7 @@ def main() -> None:
     )
     dist = ROOT / "dist"
     dist.mkdir(exist_ok=True)
-    artifact = dist / "InkEcho-0.1.0-stage0-x86_64.AppImage"
+    artifact = dist / "InkEcho-0.1.0-alpha-x86_64.AppImage"
     with artifact.open("wb") as output:
         output.write(RUNTIME.read_bytes())
         with squashfs.open("rb") as filesystem:
