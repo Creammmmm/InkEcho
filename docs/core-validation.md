@@ -2,9 +2,10 @@
 
 The first core module implements a single active task with an opaque captured
 target, unique task ID, bounded lifetime, and explicit asynchronous completion.
-It is independent of Qt and supplier HTTP details. No desktop backend is wired
-to this module yet; the tests use deterministic mock adapters and **do not
-establish real desktop injection safety**.
+It is independent of Qt and supplier HTTP details. Unit tests use deterministic
+mock adapters and **do not by themselves establish real desktop injection
+safety**. The later isolated AT-SPI integration check below exercises the real
+backend separately.
 
 ## Adapter contract
 
@@ -53,6 +54,10 @@ sanitized adapter failures and terminal-state callback reentrancy, and observer 
 notifications. Observer exceptions propagate while the task is released and the
 controller returns to IDLE, so subsequent work remains possible.
 
-This module does not call cloud APIs or manipulate a real target. Provider
-workers, qasync orchestration, focus event subscriptions and actual targeted
-injection require their own integration acceptance before application use.
+The unit suite does not call cloud APIs or manipulate a real target. The later
+`scripts/feasibility/accessibility_probe.py` check exercised this controller with
+the production AT-SPI backend and an actual isolated Xvfb text fixture: exact
+Unicode delivery, cancellation preserving content, switching away/back rejecting
+a stale target, and `core_injection_succeeded` passed. This is targeted backend
+integration evidence, not a complete UI/voice/cloud workflow or general desktop
+compatibility claim. Full orchestration still requires its own acceptance.
