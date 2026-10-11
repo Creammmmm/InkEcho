@@ -26,10 +26,23 @@ It includes a `.desktop` entry, SVG icon, Qt plugins, and an `AppRun` launcher.
 runtime is prepended. This is a real AppImage, not a shell script named AppImage.
 Outputs and downloaded tools stay in ignored `build/` and `dist/` directories.
 
-This is a repeatable build recipe, **not a byte-identical reproducible-build
-claim**. `SOURCE_DATE_EPOCH` currently controls the filesystem creation time;
-file timestamps and build-host inputs are not normalized. The recipe currently
-includes the complete PySide6 runtime and is intentionally unoptimized.
+`SOURCE_DATE_EPOCH` controls the filesystem and all inode timestamps (default
+zero), and host extended attributes are omitted. Two consecutive complete
+builds on the measured host produced byte-identical artifacts after this
+normalization. This establishes same-host repeatability with unchanged inputs,
+not a universal cross-host reproducibility claim: the standalone Python,
+locked wheels, source, `mksquashfs` version and build file permissions must also
+match. The measured builder was `mksquashfs 4.7.5`. The recipe currently includes
+the complete PySide6 runtime and is intentionally unoptimized.
+
+To repeat the comparison with unchanged source and dependencies:
+
+```sh
+uv run python scripts/packaging/build_appimage.py
+cp dist/InkEcho-0.1.0-stage0-x86_64.AppImage.sha256 build/first.sha256
+uv run python scripts/packaging/build_appimage.py
+cmp build/first.sha256 dist/InkEcho-0.1.0-stage0-x86_64.AppImage.sha256
+```
 
 ## Runtime provenance
 
@@ -79,14 +92,40 @@ its interpreter inside `/tmp/appimage_extracted_…/usr/bin/`.
 Artifact SHA-256 for that measured build:
 
 ```text
-64cb0552f3dbd8b177cbabf3a249decbd2ee89c3434beb0ac3568db699941041
+6f4b889b326a0af1e5893bab861045ca5f288f3fcf9b1cf068f154dc9abb363f
 ```
 
-Ubuntu 24.04, clean-machine operation, X11
-desktop integration, desktop installation and autostart are not proven by this
-stage-zero build. The host must provide compatible glibc, display/graphics
+Ubuntu 24.04 desktop operation, X11 desktop integration, desktop installation
+and autostart are not proven by this stage-zero build. The host must provide
+compatible glibc, display/graphics
 libraries, a Wayland or X11 desktop and (for subsequent recording features)
 PipeWire/PulseAudio. Those host dependencies require a clean-machine audit in
 stage 4.
 
 For the separate RAM-only microphone probe, see [audio validation](audio-validation.md).
+
+## Ubuntu 24.04 userspace smoke test
+
+```sh
+scripts/packaging/check_ubuntu24.sh
+```
+
+This uses an already available Docker daemon; it does not install a host
+service. The Dockerfile pins the official Ubuntu 24.04 base image digest and
+installs only basic Qt runtime dependencies inside the test image. Package
+versions are resolved from Ubuntu repositories when building that image; this
+container image itself is not claimed to be reproducible.
+
+The artifact then runs as UID 65532 with networking disabled, a read-only root
+filesystem and artifact mount, and an executable temporary filesystem. No
+host display socket, audio device, home directory or credentials are mounted.
+The raw minimal Ubuntu image failed with missing `libglib-2.0.so.0`; the test
+image supplies `libglib2.0-0t64`, `libgl1`, `libegl1`, `libxkbcommon0`,
+`libfontconfig1`, `libdbus-1-3` and `fonts-dejavu-core` with their dependencies.
+
+The final normalized artifact passed on 2026-10-12: `platform: offscreen`,
+`visible: true`, `packaged: true`, and bundled Python under
+`/tmp/appimage_extracted_…/usr/bin/python3`. This is a real Ubuntu 24.04 userspace
+launch with the host kernel. It does **not** establish Ubuntu 24.04 Wayland/X11
+desktop compatibility, input injection, FUSE mounting, microphone operation,
+or a complete clean-desktop acceptance test.
