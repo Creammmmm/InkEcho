@@ -27,6 +27,8 @@ preferences, overlay preferences and close-to-tray behavior. Defaults are F13,
 the default microphone, 16,000 Hz mono audio and a 120-second recording limit.
 Configured sample rates are 16,000, 24,000 and 48,000 Hz, subject to actual device
 capabilities. Recording limits are 1–300 seconds.
+Transcription and polishing each have an independent 5–120-second request timeout,
+defaulting to 30 seconds. Existing version 1 settings receive these defaults.
 
 Polishing starts disabled; failure fallback is enabled. The waveform overlay
 defaults to bottom center, 90% opacity and a two-second result duration. Settings

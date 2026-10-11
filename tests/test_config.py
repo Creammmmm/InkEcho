@@ -201,6 +201,15 @@ def test_settings_limit_and_relative_xdg_fallback(monkeypatch):
     assert ConfigStore().root.is_absolute()
 
 
+def test_independent_request_timeouts(tmp_path):
+    store = ConfigStore(tmp_path)
+    settings = Settings(transcription_timeout_seconds=120, polishing_timeout_seconds=15)
+    store.save_settings(settings)
+    assert store.load_settings() == settings
+    with pytest.raises(ConfigError):
+        Settings(polishing_timeout_seconds=121)
+
+
 def test_record_ids_cannot_escape_config_directory(tmp_path):
     store = ConfigStore(tmp_path)
     with pytest.raises(ConfigError):

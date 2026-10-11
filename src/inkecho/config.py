@@ -69,6 +69,8 @@ class Settings:
     polishing_provider: str = "deepseek"
     polishing_enabled: bool = False
     polishing_fallback: bool = True
+    transcription_timeout_seconds: int = 30
+    polishing_timeout_seconds: int = 30
     prompt: str = "builtin-faithful"
     recording_limit_seconds: int = 120
     overlay_style: str = "waveform"
@@ -100,6 +102,12 @@ class Settings:
         for name in ("polishing_enabled", "polishing_fallback", "close_to_tray"):
             if type(getattr(self, name)) is not bool:
                 raise ConfigError(f"{name} must be true or false.")
+        for name in ("transcription_timeout_seconds", "polishing_timeout_seconds"):
+            value = getattr(self, name)
+            if type(value) is not int or not 5 <= value <= 120:
+                raise ConfigError(
+                    "Cloud request timeout must be between 5 and 120 seconds."
+                )
         if type(self.overlay_opacity) not in (int, float) or not (
             0.1 <= self.overlay_opacity <= 1
         ):
