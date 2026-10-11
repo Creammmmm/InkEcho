@@ -21,3 +21,14 @@ da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LGPL-3.0-only.
 commit `8f39b89`. `Noto-CJK-copyright.txt` is copied unchanged from the installed
 Ubuntu `fonts-noto-cjk` package's copyright file. These notices do not relicense
 those dependencies under InkEcho's own MIT license.
+
+`qt/` retains 59 official Qt 6.12 component attribution pages for the selected
+Core/GUI/Network/DBus/Widgets/Multimedia/Svg/Wayland/image-format modules,
+including FFmpeg's notices. They were downloaded on 2026-10-12; `qt/sources.json`
+records original URLs and SHA-256 digests. The pages remain unmodified, including
+their documentation copyright and license statements. They describe possible
+upstream components, not a claim that every listed component is in the binary.
+`GFDL-1.3.txt` and `LGPL-2.1.txt` were copied unchanged from Ubuntu's
+`/usr/share/common-licenses` for the documentation and FFmpeg references.
+The build additionally retains the exact Ubuntu package copyright files for
+bundled Noto and utility libraries, separately from these reference notices.

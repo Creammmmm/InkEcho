@@ -32,8 +32,11 @@ the earlier stage-zero probe included a larger, untrimmed Qt distribution.
 Python wheel distribution metadata and license directories must be copied with
 their runtime modules. The installed PySide wheels in this environment did not
 contain actual license text files, so the project retains their official
-license texts under `assets/licenses` for inclusion in the AppImage. Those
-texts alone are not a replacement for Qt's individual component notices.
+license texts under `assets/licenses` for inclusion in the AppImage. The `assets/licenses/qt` directory additionally retains the official component
+attribution pages, with URL and checksum provenance. Exact bundled Ubuntu
+package notices accompany Noto, XCB utility and Kerberos libraries in
+`usr/share/doc/inkecho/system`. Generated `inventory.json` records the actual
+files, links, dependency versions and downloaded asset hashes.
 
 ## Sources and modification
 
