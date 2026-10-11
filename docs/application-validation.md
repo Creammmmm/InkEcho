@@ -46,6 +46,28 @@ uv run python scripts/validation/overlay_focus_probe.py --isolated-display :91
 
 ## 实际录音到目标链路
 
-独立验收代理使用 `scripts/validation/voice_workflow_probe.py` 验证生产 Session、Qt Recorder、ProviderClient、实际 AT-SPI 编辑目标和生产悬浮窗。云服务由本地可信 TLS 模拟器提供确定的 Unicode 响应，因此该验证可以覆盖真实音频采集、TLS 请求、处理时序与直接输入，不证明商业服务账户权限或识别准确率。2026-10-12 源码运行通过，结果见本地 `build/voice-source-acceptance.json`：三次真实麦克风 WAV 分别为 19,786 / 19,786 / 19,104 字节；一次成功精确输入 28 个 Unicode 码点，两次取消分别覆盖迟到回复与焦点离开后返回。统计中的润色 Token 为模拟器精确返回的 5 / 7 / 12；目标焦点保持，未产生音频文件。该结果不包含尚待重建的最终 AppImage。
+独立验收代理使用 `scripts/validation/voice_workflow_probe.py` 验证生产 Session、Qt Recorder、ProviderClient、实际 AT-SPI 编辑目标和生产悬浮窗。云服务由本地可信 TLS 模拟器提供确定的 Unicode 响应，因此该验证可以覆盖真实音频采集、TLS 请求、处理时序与直接输入，不证明商业服务账户权限或识别准确率。2026-10-12 源码运行通过，结果见本地 `build/voice-source-acceptance.json`：三次真实麦克风 WAV 分别为 19,786 / 19,786 / 19,104 字节；一次成功精确输入 28 个 Unicode 码点，两次取消分别覆盖迟到回复与焦点离开后返回。统计中的润色 Token 为模拟器精确返回的 5 / 7 / 12；目标焦点保持，未产生音频文件。此段为源码验证；最终 AppImage 的独立结果见下文。
 
 原生 Wayland 自动输入、原生会话物理快捷键触发、真实云端模型请求及更多浏览器/终端输入，仍需独立实测；原生会话锁定期间不绕过锁屏。没有用户云端凭据时不宣称完成实际商业 API 验收。
+
+
+## 最终 AppImage 独立验收
+
+最终产物 `dist/InkEcho-0.1.0-alpha-x86_64.AppImage` 的 SHA-256 为
+`cb35d203024538a4ee3d55c6ccb8619059ce9f4bfda387fd1b92e2291eec11a4`。
+独立评审清除开发环境的 `PYTHONPATH`、`PYTHONHOME` 与 `LD_LIBRARY_PATH` 后，实际运行
+九页截图、双进程 show/toggle/cancel/quit、正常退出及损坏配置保留检查，全部通过；
+证据为 `build/ui-root-final-appimage/result.json`。另一独立运行逐页检查了 1120×850
+截图，中文与表单可读，长页面具有滚动条；README 使用同一产物的实际首页截图。
+
+随后从该确切产物提取运行时，核对 31 个应用源文件与当前源码逐字节一致、3883 个
+库存文件哈希匹配，并用包内 Python/依赖在私有 Xvfb `:92` 执行真实录音链路探针。
+实际录音 WAV 为 17738 / 18422 / 18422 字节；精确输入 28 个 Unicode 码点，悬浮窗
+不抢焦点，取消与失焦后迟到回复均未改变目标。统计为 3 次任务、1 次成功、2 次取消，
+供应商模拟器返回 Token 5/7/12；没有音频文件或剪贴板访问。证据为
+`build/voice-root-final-appimage.json`。仅测试辅助程序 xdotool 的库由外部提供，应用库
+来自 AppImage。该结果证明打包后的实际链路，不证明真实云端识别质量或完整桌面矩阵。
+
+最终源码全套检查为 211 项通过、1 项默认跳过的显式麦克风测试；Ruff 检查与 86 个
+Python 文件格式检查通过。麦克风另在上述真实链路中实测。聚合证据见
+[本地交付验证](local-validation.md)。
