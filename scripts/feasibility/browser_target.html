@@ -1,0 +1,14 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>InkEcho isolated browser</title>
+<style>body{font:20px sans-serif;padding:40px}textarea{width:90%;height:250px}</style>
+<h1>InkEcho isolated browser</h1>
+<label for="target">Disposable Unicode input target</label>
+<textarea id="target" autofocus></textarea>
+<output id="received"></output>
+<script>
+const target = document.getElementById('target');
+target.addEventListener('input', () => {
+  document.getElementById('received').textContent = JSON.stringify(target.value);
+});
+</script>
