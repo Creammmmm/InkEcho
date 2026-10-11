@@ -12,7 +12,7 @@ It does not convert fixture results into untested desktop compatibility claims.
 .venv/bin/python -m pytest -q
 ```
 
-Independent root review: Ruff passed, 86 Python files formatted, **211 tests passed,
+Independent root review: Ruff and formatting checks passed, **211 tests passed,
 1 opt-in microphone test skipped**. Real microphone use was additionally exercised
 in the integrated pipeline below. Tests requiring local sockets/thread wakeups ran
 in an authorized local environment; restricted-sandbox `EPERM` wakeup failures were

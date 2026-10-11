@@ -68,6 +68,6 @@ uv run python scripts/validation/overlay_focus_probe.py --isolated-display :91
 `build/voice-root-final-appimage.json`。仅测试辅助程序 xdotool 的库由外部提供，应用库
 来自 AppImage。该结果证明打包后的实际链路，不证明真实云端识别质量或完整桌面矩阵。
 
-最终源码全套检查为 211 项通过、1 项默认跳过的显式麦克风测试；Ruff 检查与 86 个
+最终源码全套检查为 211 项通过、1 项默认跳过的显式麦克风测试；Ruff 检查与
 Python 文件格式检查通过。麦克风另在上述真实链路中实测。聚合证据见
 [本地交付验证](local-validation.md)。
