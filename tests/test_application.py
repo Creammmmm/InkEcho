@@ -1,12 +1,13 @@
 """Orchestration regressions; real desktop acceptance is recorded separately."""
 
 import asyncio
+import gc
 from dataclasses import replace
 
 import pytest
 from PySide6.QtCore import QObject, Signal
 
-from inkecho.app import Session
+from inkecho.app import AudioError, Session
 from inkecho.config import ConfigStore
 from inkecho.core import Failure, State
 from inkecho.providers import ProviderError, Result, Usage
@@ -472,6 +473,113 @@ def test_known_incompatible_protocol_is_rejected_before_target_key_and_audio(fac
         assert diagnostics == ["protocol"]
         assert len(problems) == 1
         assert "当前适配器不支持" in problems[0]
+        await session.close()
+
+    asyncio.run(scenario())
+
+
+@pytest.mark.parametrize(
+    "reason,code,message",
+    [
+        ("recording_timed_out", "recording_timed_out", "最长时限"),
+        ("microphone_interrupted", "microphone_interrupted", "设备连接"),
+        ("empty_recording", "empty_recording", "未收到有效录音数据"),
+        ("untrusted-private-detail", "audio_failed", "录音失败"),
+    ],
+)
+def test_recorder_reason_is_reported_once_and_sanitized(factory, reason, code, message):
+    async def scenario():
+        session = factory()
+        problems, diagnostics = [], []
+        session.problem.connect(problems.append)
+        session.diagnostic.connect(diagnostics.append)
+        await session.toggle()
+        session.recorder.failed.emit(reason)
+        assert session.controller.state == State.IDLE
+        assert not session.recorder.recording
+        assert diagnostics == [code]
+        assert len(problems) == 1
+        assert message in problems[0]
+        assert "untrusted-private-detail" not in str(problems + diagnostics)
+        await session.close()
+
+    asyncio.run(scenario())
+
+
+@pytest.mark.parametrize("at_start", [True, False])
+@pytest.mark.parametrize(
+    "reason,code,message",
+    [
+        ("microphone_unavailable", "microphone_unavailable", "重新选择"),
+        ("audio_format_unsupported", "audio_format_unsupported", "采样率"),
+        ("untrusted-private-detail", "audio_failed", "录音失败"),
+    ],
+)
+def test_microphone_test_preserves_safe_reason_and_releases_resources(
+    factory, monkeypatch, at_start, reason, code, message
+):
+    async def scenario():
+        session = factory()
+        diagnostics = []
+        unhandled = []
+        asyncio.get_running_loop().set_exception_handler(
+            lambda loop, context: unhandled.append(context)
+        )
+        session.diagnostic.connect(diagnostics.append)
+        created = []
+
+        class FailedRecorder(Recorder):
+            def __init__(self, parent):
+                super().__init__()
+                created.append(self)
+
+            def start(self, *args, **kwargs):
+                if at_start:
+                    self.failed.emit(reason)
+                    return False
+                self.recording = True
+                return True
+
+            def stop(self):
+                self.failed.emit(reason)
+
+        monkeypatch.setattr("inkecho.app.Recorder", FailedRecorder)
+        with pytest.raises(AudioError) as caught:
+            await session.sample_audio(seconds=0)
+        assert caught.value.code == code
+        assert message in str(caught.value)
+        assert "untrusted-private-detail" not in str(caught.value)
+        assert diagnostics == [code]
+        assert not session.testing and not created[0].recording
+        del caught
+        gc.collect()
+        await asyncio.sleep(0)
+        assert unhandled == []
+        await session.close()
+
+    asyncio.run(scenario())
+
+
+def test_old_audio_reason_is_cleared_before_cancel_and_next_task(factory):
+    async def scenario():
+        session = factory()
+        problems, diagnostics = [], []
+        session.problem.connect(problems.append)
+        session.diagnostic.connect(diagnostics.append)
+        await session.toggle()
+        session.recorder.failed.emit("recording_timed_out")
+        assert session.audio_failure is None
+        session.last_toggle = 0
+        await session.toggle()
+        session.cancel()
+        assert session.audio_failure is None
+        session.last_toggle = 0
+        await session.toggle()
+        session.controller.fail(session.controller.task.id, Failure.AUDIO)
+        assert diagnostics == ["recording_timed_out", "audio_failed"]
+        assert len(problems) == 2
+        assert "最长时限" in problems[0]
+        assert "录音失败" in problems[1] and "最长时限" not in problems[1]
         await session.close()
 
     asyncio.run(scenario())

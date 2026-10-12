@@ -9,7 +9,7 @@ from PySide6.QtCore import Qt
 from PySide6.QtTest import QTest
 from PySide6.QtWidgets import QPushButton
 
-from inkecho.app import Session
+from inkecho.app import AudioError, Session
 from inkecho.config import BUILTIN_PROMPT, ConfigStore
 from inkecho.core import Failure, State
 from inkecho.integration import DesktopIntegration
@@ -334,6 +334,22 @@ def test_provider_failure_is_actionable_chinese(window):
         assert "云端服务暂时不可用" in page.message.text()
         assert "稍后重试" in page.message.text()
         assert "unavailable" not in page.message.text()
+
+    asyncio.run(scenario())
+
+
+def test_microphone_test_page_keeps_specific_failure(window):
+    async def scenario():
+        page = window.pages[1]
+
+        async def failed():
+            raise AudioError("audio_format_unsupported")
+
+        window.session.sample_audio = failed
+        await page.run(page.test_audio())
+        assert "麦克风不支持当前采样率" in page.message.text()
+        assert "录音设置中调整" in page.message.text()
+        assert "操作未完成" not in page.message.text()
 
     asyncio.run(scenario())
 

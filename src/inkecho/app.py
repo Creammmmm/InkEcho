@@ -53,6 +53,27 @@ PROVIDER_LABELS = {
     "empty": "云端没有返回有效文字。",
     "audio": "录音格式或大小不符合服务要求。",
 }
+AUDIO_LABELS = {
+    "microphone_unavailable": "所选麦克风当前不可用，请刷新设备并重新选择。",
+    "audio_format_unsupported": "麦克风不支持当前采样率，请在录音设置中调整。",
+    "microphone_start_failed": "无法启动麦克风，请检查系统音频服务与设备权限。",
+    "microphone_interrupted": "麦克风录音已中断，请检查设备连接后重试。",
+    "empty_recording": "未收到有效录音数据，请检查麦克风输入后重试。",
+    "recording_timed_out": "录音已达到最长时限，本次录音已丢弃；请缩短录音后重试。",
+    "audio_failed": ERROR_LABELS[Failure.AUDIO],
+}
+
+
+class AudioError(RuntimeError):
+    """Only fixed recorder codes and safe, actionable messages cross the UI boundary."""
+
+    def __init__(self, reason):
+        self.code = (
+            reason
+            if isinstance(reason, str) and reason in AUDIO_LABELS
+            else "audio_failed"
+        )
+        super().__init__(AUDIO_LABELS[self.code])
 
 
 def current_task():
@@ -92,6 +113,7 @@ class Session(QObject):
         self.metrics = {}
         self.keys = {}
         self.task_context = None
+        self.audio_failure = None
         self.settings = self.store.load_settings()
         self.recorder.level.connect(self.level)
         self.recorder.finished.connect(self._recorded)
@@ -184,7 +206,10 @@ class Session(QObject):
         if state == State.FAILED or (
             state == State.CANCELLED and self.controller.failure == Failure.FOCUS
         ):
-            self.diagnostic.emit(self.controller.failure.value)
+            code = self.controller.failure.value
+            if self.controller.failure == Failure.AUDIO and self.audio_failure:
+                code, message = self.audio_failure.code, str(self.audio_failure)
+            self.diagnostic.emit(code)
             self.report_problem(message)
         else:
             self.status.emit(message)
@@ -198,6 +223,7 @@ class Session(QObject):
                     task.cancel()
             self.keys.clear()
             self.task_context = None
+            self.audio_failure = None
             self.finished.emit({"outcome": state.value, **self.metrics})
             self.metrics = {}
 
@@ -350,8 +376,9 @@ class Session(QObject):
                 if not self.controller.task:
                     self.keys.clear()
 
-    def _audio_failed(self, _reason):
+    def _audio_failed(self, reason):
         if self.controller.task:
+            self.audio_failure = AudioError(reason)
             self.controller.fail(self.controller.task.id, Failure.AUDIO)
 
     def _recorded(self, audio: bytes, duration: float):
@@ -431,9 +458,8 @@ class Session(QObject):
             lambda data, _seconds: not future.done() and future.set_result(data)
         )
         recorder.failed.connect(
-            lambda _reason: (
-                not future.done()
-                and future.set_exception(RuntimeError("麦克风测试失败。"))
+            lambda reason: (
+                not future.done() and future.set_exception(AudioError(reason))
             )
         )
         try:
@@ -442,11 +468,18 @@ class Session(QObject):
             if not recorder.start(
                 device, sample_rate=settings.sample_rate, max_seconds=seconds + 2
             ):
-                raise RuntimeError("麦克风不可用或不支持当前采样率。")
+                if future.done():
+                    return await future
+                raise AudioError("microphone_start_failed")
             await asyncio.sleep(seconds)
             recorder.stop()
             return await asyncio.wait_for(future, 2)
+        except AudioError as error:
+            self.diagnostic.emit(error.code)
+            raise
         finally:
+            if future.done() and not future.cancelled():
+                future.exception()
             recorder.cancel()
             recorder.deleteLater()
             self.testing = False

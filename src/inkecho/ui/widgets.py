@@ -97,7 +97,7 @@ class Page(QWidget):
             except Exception as error:
                 if revision != getattr(self, "revision", None):
                     return
-                from inkecho.app import PROVIDER_LABELS
+                from inkecho.app import PROVIDER_LABELS, AudioError
                 from inkecho.config import ConfigError
                 from inkecho.providers import ProviderError
                 from inkecho.security import CredentialError
@@ -108,7 +108,7 @@ class Page(QWidget):
                             error.code, "云端请求失败，请检查服务配置。"
                         )
                     )
-                elif isinstance(error, (ConfigError, CredentialError)):
+                elif isinstance(error, (AudioError, ConfigError, CredentialError)):
                     self.message.setText(str(error))
                 else:
                     self.message.setText("操作未完成，请检查设置与系统服务。")
