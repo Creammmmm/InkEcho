@@ -6,6 +6,7 @@ permanently invalidate a captured token, even if focus later returns.
 """
 
 import asyncio
+import os
 from collections.abc import Callable
 from dataclasses import dataclass
 
@@ -35,6 +36,7 @@ class AccessibleTarget:
     window: tuple[str, str]
     generation: int
     caret: int
+    process_id: int | None = None
 
 
 def has_state(words: list[int], state: int) -> bool:
@@ -130,6 +132,30 @@ class AccessibilityInput:
             0
         ].value
 
+    async def _external_process_id(self, address):
+        # Unique bus names cannot be transferred to a different connection. Never
+        # decide target ownership from Qt's possibly stale active-window cache.
+        if not address[0].startswith(":"):
+            raise UnsupportedTarget("The target's process could not be verified.")
+        try:
+            response = await self._call(
+                ("org.freedesktop.DBus", "/org/freedesktop/DBus"),
+                "org.freedesktop.DBus",
+                "GetConnectionUnixProcessID",
+                "s",
+                [address[0]],
+            )
+            process_id = response[0]
+            if type(process_id) is not int or process_id <= 0:
+                raise ValueError("Invalid process identifier")
+        except Exception:
+            raise UnsupportedTarget(
+                "The target's process could not be verified."
+            ) from None
+        if process_id == os.getpid():
+            raise UnsupportedTarget("InkEcho cannot insert text into its own process.")
+        return process_id
+
     async def _capture(self):
         self.target = None
         self.consumed = None
@@ -148,6 +174,7 @@ class AccessibilityInput:
                         visited += 1
                         states = await self._state(address)
                         if has_state(states, FOCUSED):
+                            process_id = await self._external_process_id(address)
                             interfaces = (
                                 await self._call(address, ACCESSIBLE, "GetInterfaces")
                             )[0]
@@ -166,7 +193,9 @@ class AccessibilityInput:
                                     "The focused control is not editable."
                                 )
                             caret = await self._property(address, TEXT, "CaretOffset")
-                            token = AccessibleTarget(address, window, generation, caret)
+                            token = AccessibleTarget(
+                                address, window, generation, caret, process_id
+                            )
                             if not await self._current(token):
                                 raise InputUnavailable(
                                     "Focus changed while capturing the target."
@@ -184,6 +213,9 @@ class AccessibilityInput:
 
     async def _current(self, target):
         try:
+            process_id = await self._external_process_id(target.address)
+            if process_id != target.process_id:
+                return False
             states = await self._state(target.address)
             window = await self._state(target.window)
             caret = await self._property(target.address, TEXT, "CaretOffset")
