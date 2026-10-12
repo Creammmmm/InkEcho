@@ -2,7 +2,7 @@
 
 InkEcho 是一个 Linux 桌面语音输入应用：录音后调用云端转写，可选按 Prompt 润色，再通过辅助功能接口向已校验的文本目标输入文字。默认不读取、修改或使用剪贴板。
 
-当前版本为 **0.1.0a6 开发预览版**。已有可运行的中文设置界面、录音、供应商配置、任务取消、焦点保护、统计、桌面集成及 AppImage 构建。安全输入已在隔离 X11 的 GTK 可编辑控件实测；Wayland 已开放实验性逐目标 AT-SPI 检查，但原生完整输入链路仍未验证，本机 Chrome 与 VTE 终端不提供所需接口。不能据此宣称“任意应用均支持”。
+当前版本为 **0.1.0a6 开发预览版**。已有可运行的中文设置界面、录音、供应商配置、任务取消、焦点保护、统计、桌面集成及 AppImage 构建。安全输入已在隔离 X11 的 GTK 可编辑控件实测；本机 GNOME Wayland 的自有 GTK3 测试窗口及 GNOME 文本编辑器 50.1（GTK4）的独立测试文档均通过了[实际麦克风、本机 HTTPS 测试服务、系统通知、Unicode 输入与主动取消](docs/native-voice-workflow-validation.md)。GTK3 测试窗口另通过了[公开音频样本、真实云端转写与润色、原生输入](docs/native-cloud-workflow-validation.md)。这些是独立验证，不能合称一次真实用户语音的云端完整流程；GNOME 文本编辑器本次未测试失焦场景。Wayland 仍为实验性逐目标支持；本机当前 Codex、Chrome 与 VTE 终端未提供可用的安全输入接口，不能据此宣称“任意应用均支持”。
 
 本版保留并显示具体的音频错误原因，例如麦克风不可用、录音中断、空录音或超时，方便区分设备问题。目标失焦、光标变化和主动取消仍会停止输入；上一版的无关辅助功能事件过滤、供应商协议检查及深蓝白色界面保留不变。具体验证范围见[本版验收记录](docs/audio-feedback-validation.md)；取消修复与供应商能力验证分别见[alpha5 记录](docs/listening-repair-release.md)和[alpha4 记录](docs/provider-repair-release.md)。
 

@@ -1,6 +1,7 @@
 # Compatibility matrix
 
-Initial measurements below are from 2026-10-12; dated release supplements follow.
+The first table preserves historical measurements from 2026-10-12; dated release
+supplements follow. The current input support table includes later target checks.
 **Pending is not supported.** Host GNOME Wayland and isolated
 Xvfb evidence are separate. Read [the feasibility report](feasibility-report.md)
 before interpreting a passed item as a complete application workflow.
@@ -19,7 +20,7 @@ before interpreting a passed item as a complete application workflow.
 | Backend/target | Status | Why |
 |---|---|---|
 | Targeted AT-SPI / focused editable GTK fixture | Final bundled-runtime microphone + local HTTPS + safe delivery tested | Sends to a captured object rather than current global focus |
-| Targeted AT-SPI / native GNOME Text Editor 50.1 | Unicode transport demonstrated; focused production workflow pending | Test document was not active during transport probe |
+| Targeted AT-SPI / native GNOME Text Editor 50.1 (GTK 4) | Alpha6 actual microphone + local HTTPS + production notifications + exact Unicode input and explicit cancellation passed | Isolated owned standalone document; native focus-loss case, physical shortcuts and real cloud quality not tested for this target |
 | Targeted AT-SPI / Chrome 154 native Wayland textarea | Unsupported for tested version | Does not expose `EditableText` |
 | Targeted AT-SPI / VTE native terminal | Unsupported | Does not expose `EditableText` |
 | XTest / Xvfb browser, terminal, editor | Diagnostic only | Focus check and global delivery are not atomic |
@@ -103,13 +104,39 @@ Chinese/Latin/emoji insertion, explicit cancellation rejection and stale-target
 rejection after a second owned window took focus. This is a direct-input result
 for that fixture; see [native input evidence](listening-repair-validation.md#unlocked-native-wayland-follow-up-direct-input-passed).
 
-The subsequent complete packaged microphone/local-HTTPS/notification workflow
-and separate public-sample/cloud/Session workflow remain **unvalidated**: both
-stopped before recording or requests when no active target could be captured.
-Later read-only checks found zero Mutter physical/logical monitors, zero GTK
-outputs and only a zero-size Qt placeholder despite an unlocked session. See
-[native voice validation](native-voice-workflow-validation.md) and
+Initial complete packaged microphone/local-HTTPS/notification and separate
+public-sample/cloud/Session attempts stopped before recording or requests when no
+active target could be captured. Read-only checks found zero Mutter
+physical/logical monitors, zero GTK outputs and only a zero-size Qt placeholder
+despite an unlocked session. This historical obstacle is documented in
 [native cloud/display validation](native-cloud-workflow-validation.md).
+
+After the user restored display outputs, root confirmed one physical and one
+logical monitor and an unlocked session. The exact alpha6 runtime then **passed**
+actual microphone → certificate-verified local HTTPS → production MainWindow
+notifications → native owned GTK input: 28 Unicode code points, three recordings,
+one success and two safe cancellations (explicit cancel and native focus loss),
+11 accepted notifications and no visible Qt window. No clipboard, saved audio,
+user credentials or cloud requests were involved. See
+[native voice validation](native-voice-workflow-validation.md). This validates the
+owned GTK fixture with fixed local replies; physical shortcuts, real speech
+recognition quality and arbitrary application targets remain outside that result.
+The actual GNOME Text Editor 50.1 (GTK 4) then independently **passed** the same
+alpha6 microphone/local-HTTPS/production-notification path in an isolated owned
+standalone document: two recordings totaling 1.25525 seconds, 28 exact Unicode
+code points, one success, one explicit cancellation with unchanged text after a
+late reply, eight accepted notifications and no visible Qt window. Its focus-loss
+case was not exercised; do not transfer the GTK 3 focus-loss result to this target.
+See [GNOME Text Editor validation](native-voice-workflow-validation.md#gnome-text-editor-501-native-workflow).
+
+A separate guarded run of the same alpha6 runtime also **passed** public audio
+sample → production Session → real ASR and polishing → native owned GTK input:
+one ASR call, one polishing call, 194 returned characters exactly matched the
+editor, and 20.095 seconds elapsed. This run substituted a public sample for the
+microphone, did not exercise MainWindow notifications, and kept returned text in
+memory. See [native cloud validation](native-cloud-workflow-validation.md).
+These are separate successful workflows, not one test of live user speech
+through cloud recognition and production notifications.
 
 The running Codex instance exposed frames and null child references, with no
 capturable editable input control; it is currently unavailable to the strict

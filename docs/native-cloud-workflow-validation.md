@@ -1,5 +1,39 @@
 # Native cloud workflow validation — 2026-10-13
 
+## Current result: passed after desktop recovery
+
+After the user restored the desktop, the root agent ran the final guarded probe
+once with the extracted alpha6 runtime. The production `Session` completed real
+ASR, real polishing, and direct native Wayland input into its owned GTK target.
+The process exited successfully with the following safe metadata:
+
+| Field | Result |
+| --- | --- |
+| Application version | `0.1.0a6`, extracted runtime |
+| Audio source | Public Aliyun WAV; real microphone **false** |
+| ASR calls | **1** |
+| Polishing calls | **1** |
+| Polishing enabled / succeeded | **true / true** |
+| Fallback enabled | **true**, not needed because polishing succeeded |
+| Characters inserted | **194** |
+| Owned output equals returned text | **true** |
+| Outcome | `succeeded` |
+| Diagnostic codes | None |
+| Elapsed time | **20.095 seconds** |
+| Transcript saved / clipboard accessed | **false / false** |
+
+Observed states were `recording → transcribing → polishing → injecting →
+succeeded → idle`. Here the recording state belongs to the production state
+machine; the recorder was replaced with the public-file source. This was **not
+user microphone speech**, and no ambient audio was captured or uploaded.
+
+This validates the public-sample/real-cloud/production-Session/native-owned-GTK
+combination that had not previously passed. Real microphone input with a local
+TLS test service and hidden MainWindow notifications is a **separate** validation
+in [native-voice-workflow-validation.md](native-voice-workflow-validation.md).
+Those two results must not be described as a single user-speech/cloud/UI run.
+The earlier zero-output failure and its diagnosis are retained below as history.
+
 ## Purpose and scope
 
 The earlier alpha4 authenticated ASR check exercised `ProviderClient` alone.
@@ -53,7 +87,7 @@ QT_QPA_PLATFORM=wayland LD_LIBRARY_PATH="$probe_appdir/usr/lib/inkecho" \
 Do not rerun automatically: this is an opt-in billable validation, and desktop
 focus must first be available and exclusively coordinated.
 
-## Actual result
+## Historical attempt: no display output, zero cloud requests
 
 One attempt ran after the other native test released all owned windows. GNOME's
 unlocked-session precheck passed. Qt reported `There are no outputs - creating
@@ -67,11 +101,9 @@ stopped with `InputUnavailable` after 1.292 seconds and cleaned up its fixture.
 - Microphone captured: **false**. Transcript saved: **false**.
 - No API authentication, ASR result, polishing result, or text insertion was tested.
 
-Therefore this particular production Session/cloud/native input combination is
-**not yet validated**. Earlier successful native GTK direct-input evidence and
-separate microphone/local-service evidence must not be presented as a single real
-user-speech/cloud workflow. The display-output/focus obstacle remains to be
-investigated without weakening capture safety.
+At that point this production Session/cloud/native input combination was not
+yet validated. The later successful guarded run above supersedes that pending
+status; it does not change the zero-request result of this earlier attempt.
 
 Static checks: Ruff lint and formatting passed for the new probe and fixture
 memory mode; `git diff --check` passed. The alpha6 runtime also loaded the script
@@ -97,25 +129,25 @@ monitor geometry positivity. Qt used `screens()` and screen geometry positivity.
 The Mutter reply was reduced in memory to the lengths of its monitor and logical
 monitor arrays; the full reply was not printed.
 
-These consistent observations establish that the current GNOME compositor
-advertises **no display outputs**, despite reporting an unlocked screen. This is
+These consistent observations established that the GNOME compositor at that time
+advertised **no display outputs**, despite reporting an unlocked screen. This is
 not isolated to the packaged Qt runtime: system GTK and Mutter agree. The
 historical transition that removed the outputs was not observed, so no claim is
 made about why they disappeared or about the user's earlier incident.
 
 No settings, display configuration, lock state, or input were changed. The checks
 did not launch additional application windows. Further blind native attempts
-stopped; obtaining real compositor focus requires display outputs to become
-available again. No product code change or weakening of target checks is
+stopped until the user later restored the desktop, allowing the successful run
+recorded above. No product code change or weakening of target checks is
 justified by this environmental evidence.
-
 
 ## Configuration write guard regression
 
 Review identified that production `ConfigStore` may migrate schema-zero files
 while loading them. The earlier attempt used current-schema configuration and did
 not trigger migration, but a general read-only promise required the explicit
-write guard above. The cloud/desktop attempt was **not rerun** after this repair.
+write guard above. No cloud or desktop call was made as part of the guard repair
+or these tests. The later desktop-recovery run used the final guarded script.
 
 ```sh
 QT_QPA_PLATFORM=offscreen .venv/bin/python -m pytest -q \

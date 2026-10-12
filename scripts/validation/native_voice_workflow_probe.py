@@ -26,7 +26,7 @@ from inkecho.config import ConfigStore
 from inkecho.core import State
 from inkecho.integration import DesktopIntegration
 from inkecho.logging import DiagnosticLog
-from inkecho.platform.accessibility import AccessibilityInput, InputUnavailable
+from inkecho.platform.accessibility import TEXT, AccessibilityInput, InputUnavailable
 from inkecho.providers import ProviderClient
 from inkecho.statistics import Statistics
 from inkecho.ui.window import MainWindow
@@ -72,9 +72,27 @@ async def probe(args):
             environment = dict(os.environ, GDK_BACKEND="wayland")
             for name in ("PYTHONHOME", "PYTHONPATH", "LD_LIBRARY_PATH"):
                 environment.pop(name, None)
-            child = subprocess.Popen(
-                ["/usr/bin/python3", str(fixture), str(output)], env=environment
-            )
+            command = ["/usr/bin/python3", str(fixture), str(output)]
+            if args.target == "gnome-text-editor":
+                isolated = folder / ("editor-" + output.stem)
+                isolated.mkdir(mode=0o700)
+                for key, directory in (
+                    ("XDG_CONFIG_HOME", "config"),
+                    ("XDG_DATA_HOME", "data"),
+                    ("XDG_CACHE_HOME", "cache"),
+                    ("XDG_STATE_HOME", "state"),
+                ):
+                    environment[key] = str(isolated / directory)
+                environment["GSETTINGS_BACKEND"] = "memory"
+                document = isolated / "owned-empty.txt"
+                document.write_text("")
+                command = [
+                    "/usr/bin/gnome-text-editor",
+                    "--standalone",
+                    "--ignore-session",
+                    str(document),
+                ]
+            child = subprocess.Popen(command, env=environment)
             children.append(child)
             return child
 
@@ -125,8 +143,30 @@ async def probe(args):
                 output = folder / "received.json"
                 owned = editor(output)
                 inputs.owner_pid = owned.pid
-                await wait_for(output.exists)
+                if args.target == "gtk3":
+                    await wait_for(output.exists)
                 await asyncio.sleep(1.2)
+
+                async def owned_text():
+                    if args.target == "gtk3":
+                        return json.loads(output.read_text())
+                    target = inputs.target
+                    assert target is not None and target.process_id == owned.pid
+                    assert (
+                        await inputs._external_process_id(target.address) == owned.pid
+                    )
+                    return (
+                        await inputs._call(
+                            target.address, TEXT, "GetText", "ii", [0, -1]
+                        )
+                    )[0]
+
+                if args.target == "gnome-text-editor":
+                    initial = await inputs.capture_target()
+                    assert initial.process_id == owned.pid and await inputs._current(
+                        initial
+                    )
+                    assert await owned_text() == ""
 
                 async def record():
                     session.last_toggle = 0
@@ -153,14 +193,22 @@ async def probe(args):
 
                 await record()
                 await wait_for(lambda: session.controller.task is None)
-                await wait_for(lambda: json.loads(output.read_text()) == SAMPLE)
+                if args.target == "gtk3":
+                    await wait_for(lambda: json.loads(output.read_text()) == SAMPLE)
+                else:
+                    assert await owned_text() == SAMPLE
                 assert outcomes == ["succeeded"], (outcomes, diagnostics)
                 assert stats.today()["characters"] == len(SAMPLE)
                 assert stats.today()["total_tokens"] == 12
                 assert session.recorder.source is None and not session.recorder.pcm
 
                 provider.delay = 0.8
-                for action in ("cancel", "focus"):
+                actions = (
+                    ("cancel",)
+                    if args.target == "gnome-text-editor"
+                    else ("cancel", "focus")
+                )
+                for action in actions:
                     before = len(provider.requests)
                     await record()
                     await wait_for(lambda count=before: len(provider.requests) > count)
@@ -172,10 +220,13 @@ async def probe(args):
                         await wait_for(other_output.exists)
                     await wait_for(lambda: session.controller.task is None)
                     await asyncio.sleep(1)
-                    assert json.loads(output.read_text()) == SAMPLE
+                    assert await owned_text() == SAMPLE
                     assert session.recorder.source is None and not session.recorder.pcm
-                assert outcomes == ["succeeded", "cancelled", "cancelled"], outcomes
-                assert json.loads(other_output.read_text()) == ""
+                assert outcomes == ["succeeded"] + ["cancelled"] * len(actions), (
+                    outcomes
+                )
+                if args.target == "gtk3":
+                    assert json.loads(other_output.read_text()) == ""
                 await wait_for(lambda: not session.ui_tasks)
                 assert notices and all(item["accepted"] for item in notices)
                 assert not list(folder.rglob("*.wav"))
@@ -184,6 +235,8 @@ async def probe(args):
                     "version": inkecho.__version__,
                     "package_module": str(package),
                     "session": os.environ["XDG_SESSION_TYPE"],
+                    "target_application": args.target,
+                    "isolated_editor_configuration": args.target == "gnome-text-editor",
                     "qt_platform": QApplication.platformName(),
                     "real_microphone": True,
                     "tls_verified_local_provider": True,
@@ -194,8 +247,12 @@ async def probe(args):
                     "capture_error": inputs.capture_error,
                     "exact_unicode_characters": len(SAMPLE),
                     "cancelled_late_reply_unchanged": True,
-                    "native_focus_loss_late_reply_unchanged": True,
-                    "second_owned_editor_unchanged": True,
+                    "native_focus_loss_late_reply_unchanged": True
+                    if "focus" in actions
+                    else None,
+                    "second_owned_editor_unchanged": True
+                    if "focus" in actions
+                    else None,
                     "statistics": stats.today(),
                     "states": states,
                     "diagnostics": diagnostics,
@@ -243,6 +300,9 @@ async def probe(args):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--package-root", type=Path, required=True)
+    parser.add_argument(
+        "--target", choices=("gtk3", "gnome-text-editor"), default="gtk3"
+    )
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     app = QApplication([])
