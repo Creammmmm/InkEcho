@@ -30,8 +30,8 @@ def detect_desktop(environ=None, release_path=Path("/etc/os-release")):
         reason = "This release implements Linux only."
     elif session == "wayland":
         reason = (
-            "Wayland direct input is not enabled: Chrome and VTE do not expose "
-            "editable accessibility text; portal input still requires validation."
+            "Experimental per-target AT-SPI input requires fresh focus checks. "
+            "Native Wayland workflow is not yet verified; Chrome/VTE lack EditableText."
         )
     elif session == "x11":
         reason = "X11 must pass the selected backend's connection and focus checks."

@@ -277,3 +277,105 @@ def test_running_task_keeps_provider_and_prompt_snapshot(factory):
         await session.close()
 
     asyncio.run(scenario())
+
+
+def test_disabled_polishing_does_not_load_unused_provider_or_prompt(factory):
+    async def scenario():
+        session = factory()
+        session.store.save_settings(
+            replace(
+                session.settings,
+                polishing_enabled=False,
+                polishing_provider="removed-provider",
+                prompt="removed-prompt",
+            )
+        )
+        await session.initialize()
+        await session.toggle()
+        assert session.recorder.recording
+        session.recorder.stop()
+        await complete(session)
+        assert session.inputs.inserted == ["你好 InkEcho"]
+        await session.close()
+
+    asyncio.run(scenario())
+
+
+def test_first_toggle_waits_for_input_connection(factory):
+    async def scenario():
+        session = factory()
+        await session.toggle()
+        assert session.connected
+        assert session.recorder.recording
+        await session.close()
+
+    asyncio.run(scenario())
+
+
+def test_wayland_valid_target_uses_same_guarded_recording_path(factory, monkeypatch):
+    async def scenario():
+        session = factory()
+        monkeypatch.setenv("XDG_SESSION_TYPE", "wayland")
+        await session.initialize()
+        await session.toggle()
+        assert session.recorder.recording
+        session.recorder.stop()
+        await complete(session)
+        assert session.inputs.inserted == ["你好 InkEcho"]
+        await session.close()
+
+    asyncio.run(scenario())
+
+
+def test_unsupported_wayland_target_is_visible_before_key_or_audio(
+    factory, monkeypatch
+):
+    from inkecho.platform.accessibility import UnsupportedTarget
+
+    async def scenario():
+        session = factory()
+        monkeypatch.setenv("XDG_SESSION_TYPE", "wayland")
+        problems, diagnostics = [], []
+        session.problem.connect(problems.append)
+        session.diagnostic.connect(diagnostics.append)
+
+        async def unsupported():
+            raise UnsupportedTarget("No EditableText")
+
+        async def unexpected_key(_reference):
+            raise AssertionError("Unsupported target must not read credentials")
+
+        session.inputs.capture_target = unsupported
+        session.key = unexpected_key
+        await session.initialize()
+        await session.toggle()
+        assert not session.recorder.recording
+        assert len(problems) == 1
+        assert "可编辑辅助功能接口" in problems[0]
+        assert diagnostics == ["desktop_unavailable"]
+        await session.close()
+
+    asyncio.run(scenario())
+
+
+def test_cancel_during_input_connection_does_not_start_recording(factory):
+    async def scenario():
+        session = factory()
+        entered = asyncio.Event()
+        release = asyncio.Event()
+
+        async def connect():
+            entered.set()
+            await release.wait()
+
+        session.inputs.connect = connect
+        pending = asyncio.create_task(session.toggle())
+        await entered.wait()
+        session.cancel()
+        release.set()
+        await pending
+        assert not session.recorder.recording
+        assert session.controller.task is None
+        await session.close()
+
+    asyncio.run(scenario())

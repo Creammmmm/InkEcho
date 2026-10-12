@@ -58,3 +58,17 @@ no host home, audio or credential mounts (`build/ubuntu24-qa.ugphfK`). Inventory
 review matched 31 application source files, 3883 regular-file hashes and 1048
 symlinks, with no symlink escaping the AppDir. Full reproduction and final evidence
 are in [local validation](local-validation.md) and [packaging](packaging.md).
+
+## 0.1.0a2 input attempt policy
+
+Wayland is no longer rejected solely by session name. The application attempts the
+same strict targeted AT-SPI capture as X11, and starts only after an active window,
+focused editable control and stable caret are verified. All existing cancellation,
+epoch and final focus checks remain in force. This is **experimental per-target
+availability**, not a newly verified Wayland desktop support row.
+
+A 2026-10-12 follow-up on the unlocked native host and in a private headless GNOME
+50.1 Wayland compositor both refused inactive/unfocused GTK fixtures safely. No
+sample was injected. The complete focused Wayland workflow remains pending; see
+[input repair evidence](input-repair-validation.md). Controls without EditableText,
+including the previously tested Chrome and VTE controls, remain unsupported.

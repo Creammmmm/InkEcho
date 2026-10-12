@@ -1,0 +1,40 @@
+#!/usr/bin/env python3
+"""Owned GTK application for the private native Wayland input probe."""
+
+import json
+import sys
+from pathlib import Path
+
+import gi
+
+gi.require_version("Gtk", "3.0")
+from gi.repository import Gio, Gtk  # noqa: E402
+
+output = Path(sys.argv[1])
+application = Gtk.Application(
+    application_id="io.github.Creammmmm.InkEcho.InputFixture",
+    flags=Gio.ApplicationFlags.NON_UNIQUE,
+)
+
+
+def activate(app):
+    window = Gtk.ApplicationWindow(application=app)
+    window.set_title("InkEcho owned Wayland input fixture")
+    window.set_default_size(640, 360)
+    widget = Gtk.TextView()
+    buffer = widget.get_buffer()
+
+    def changed(*_):
+        start, end = buffer.get_bounds()
+        output.write_text(json.dumps(buffer.get_text(start, end, True)))
+
+    buffer.connect("changed", changed)
+    changed()
+    window.add(widget)
+    window.show_all()
+    widget.grab_focus()
+    window.present()
+
+
+application.connect("activate", activate)
+application.run(sys.argv[:1])

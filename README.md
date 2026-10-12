@@ -2,7 +2,7 @@
 
 InkEcho 是一个 Linux 桌面语音输入应用：录音后调用云端转写，可选按 Prompt 润色，再通过辅助功能接口向已校验的文本目标输入文字。默认不读取、修改或使用剪贴板。
 
-当前版本为 **0.1.0a1 开发预览版**。已有可运行的中文设置界面、录音、供应商配置、任务取消、焦点保护、统计、桌面集成及 AppImage 构建。安全输入已在隔离 X11 的 GTK 可编辑控件实测；原生 Wayland 输入暂未启用，本机 Chrome 与 VTE 终端不提供所需接口。不能据此宣称“任意应用均支持”。
+当前版本为 **0.1.0a2 开发预览版**。已有可运行的中文设置界面、录音、供应商配置、任务取消、焦点保护、统计、桌面集成及 AppImage 构建。安全输入已在隔离 X11 的 GTK 可编辑控件实测；Wayland 已开放实验性逐目标 AT-SPI 检查，但原生完整输入链路仍未验证，本机 Chrome 与 VTE 终端不提供所需接口。不能据此宣称“任意应用均支持”。
 
 ![InkEcho 开发预览版实际运行界面](docs/images/inkecho-home.png)
 
@@ -21,11 +21,11 @@ uv run python -m inkecho
 
 在界面中分别设置转录与润色服务，测试麦克风，选择 Prompt；GNOME 快捷键需要在录音设置页主动启用。其他桌面可自行将快捷键绑定到 `python -m inkecho --toggle`，使用实际安装的 Python 完整路径。失焦、取消或不支持的目标会停止流程，不会自动粘贴。
 
-本地发布产物为 `dist/InkEcho-0.1.0-alpha-x86_64.AppImage`（约 103 MiB）：
+本地发布产物为 `dist/InkEcho-0.1.0a2-x86_64.AppImage`（约 103 MiB）：
 
 ```sh
-chmod +x dist/InkEcho-0.1.0-alpha-x86_64.AppImage
-./dist/InkEcho-0.1.0-alpha-x86_64.AppImage
+chmod +x dist/InkEcho-0.1.0a2-x86_64.AppImage
+./dist/InkEcho-0.1.0a2-x86_64.AppImage
 ```
 
 构建步骤、校验和与运行依赖见[打包说明](docs/packaging.md)。桌面启动器、图标与自启动均由用户主动安装；移动 AppImage 后可在设置中修复路径。

@@ -1,7 +1,6 @@
 """Qt/asyncio orchestration; all text delivery passes through TaskController."""
 
 import asyncio
-import os
 import time
 from collections.abc import Awaitable
 
@@ -62,6 +61,7 @@ class Session(QObject):
     level = Signal(float)
     finished = Signal(dict)
     diagnostic = Signal(str)
+    problem = Signal(str)
 
     def __init__(
         self, store=None, *, inputs=None, recorder=None, client=None, secrets=None
@@ -111,7 +111,12 @@ class Session(QObject):
             await self.inputs.connect()
             self.connected = True
         except InputUnavailable:
-            self.status.emit("系统输入服务暂不可用，设置与麦克风测试仍可使用。")
+            self.diagnostic.emit("desktop_unavailable")
+            self.report_problem("系统输入服务暂不可用，设置与麦克风测试仍可使用。")
+
+    def report_problem(self, message: str) -> None:
+        self.status.emit(message)
+        self.problem.emit(message)
 
     def active(self, task_id: str) -> bool:
         return bool(self.controller.task and self.controller.task.id == task_id)
@@ -168,7 +173,12 @@ class Session(QObject):
         self.state_changed.emit(state.value)
         if state == State.IDLE:
             return
-        self.status.emit(ERROR_LABELS.get(self.controller.failure, STATE_LABELS[state]))
+        message = ERROR_LABELS.get(self.controller.failure, STATE_LABELS[state])
+        if state == State.FAILED:
+            self.diagnostic.emit(self.controller.failure.value)
+            self.report_problem(message)
+        else:
+            self.status.emit(message)
         if state in {State.SUCCEEDED, State.FAILED, State.CANCELLED}:
             self.epoch += 1
             self.preparing = False
@@ -221,8 +231,11 @@ class Session(QObject):
             transcription = self.store.load_provider(
                 self.settings.transcription_provider
             )
-            polishing = self.store.load_provider(self.settings.polishing_provider)
-            prompt = self.store.load_prompt(self.settings.prompt)
+            polishing = None
+            prompt = None
+            if self.settings.polishing_enabled:
+                polishing = self.store.load_provider(self.settings.polishing_provider)
+                prompt = self.store.load_prompt(self.settings.prompt)
             context = {
                 "transcription": transcription,
                 "polishing": polishing,
@@ -239,11 +252,12 @@ class Session(QObject):
                 await asyncio.sleep(delay)
             if epoch != self.epoch:
                 return
-            if os.environ.get("XDG_SESSION_TYPE") == "wayland":
-                raise InputUnavailable("Native Wayland direct input is not enabled.")
             if not self.connected:
-                self.spawn_ui(self.initialize())
-                raise InputUnavailable("Input service is still connecting.")
+                await self.initialize()
+                if epoch != self.epoch:
+                    return
+                if not self.connected:
+                    return
             target = await self.inputs.capture_target()
             if epoch != self.epoch:
                 return
@@ -293,19 +307,24 @@ class Session(QObject):
         except InputUnavailable:
             if epoch != self.epoch:
                 return
-            self.status.emit(
-                "当前会话或目标不支持安全直接输入。请查看「输入与兼容性」。"
+            self.diagnostic.emit("desktop_unavailable")
+            self.report_problem(
+                "未找到可安全输入的文本框。请先点击文本编辑器的正文区域，"
+                "再按快捷键；当前控件也可能缺少可编辑辅助功能接口。"
+                "Wayland 逐目标输入仍属实验性支持；浏览器和终端可能无法使用。"
             )
         except CredentialError as error:
             if epoch != self.epoch:
                 return
-            self.status.emit(str(error))
+            self.diagnostic.emit("credentials_unavailable")
+            self.report_problem(str(error))
         except Exception:
             if epoch != self.epoch:
                 return
             if self.controller.task:
                 self.controller.fail(self.controller.task.id, Failure.AUDIO)
-            self.status.emit("无法开始录音，请检查配置与系统服务。")
+            self.diagnostic.emit("configuration_invalid")
+            self.report_problem("无法开始录音，请检查配置与系统服务。")
         finally:
             if epoch == self.epoch:
                 self.preparing = False
@@ -381,7 +400,7 @@ class Session(QObject):
             self.controller.fail(task_id, Failure.TRANSCRIPTION)
             if isinstance(error, ProviderError):
                 self.diagnostic.emit(error.code)
-                self.status.emit(PROVIDER_LABELS[error.code])
+                self.report_problem(PROVIDER_LABELS[error.code])
 
     async def sample_audio(self, seconds: float = 3) -> bytes:
         if self.testing or self.preparing or self.controller.task:

@@ -33,7 +33,8 @@ class CompatibilityPage(Page):
         layout.addWidget(
             label(
                 "Chrome 和 VTE 终端在本机未提供所需的可编辑辅助功能接口。"
-                "原生 Wayland 输入暂未启用。Ubuntu 24.04 的完整桌面、"
+                "Wayland 现允许实验性逐目标检查，完整原生输入链路仍未验证。"
+                "Ubuntu 24.04 的完整桌面、"
                 "不同桌面环境及物理 F13/F14 仍待验证。",
                 muted=True,
             )
@@ -54,8 +55,11 @@ class CompatibilityPage(Page):
             f"{environment.distribution} · {environment.desktop} "
             f"· {environment.session}"
         )
-        if environment.session == "wayland":
-            text = "当前 Wayland 会话尚不支持安全直接输入；设置与麦克风测试仍可使用。"
+        if environment.session == "wayland" and self.session.connected:
+            text = (
+                "辅助功能服务已连接。Wayland 输入为实验性：仅在目标明确可编辑、"
+                "窗口活动且光标焦点均通过校验时开始，失败时会显示原因。"
+            )
         elif self.session.connected:
             text = "辅助功能服务已连接。具体输入目标仍需通过可编辑性与焦点校验。"
         else:
