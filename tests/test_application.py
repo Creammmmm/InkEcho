@@ -8,7 +8,7 @@ from PySide6.QtCore import QObject, Signal
 
 from inkecho.app import Session
 from inkecho.config import ConfigStore
-from inkecho.core import State
+from inkecho.core import Failure, State
 from inkecho.providers import ProviderError, Result, Usage
 
 
@@ -151,6 +151,76 @@ def test_focus_change_during_keyring_wait_cannot_retarget(factory):
         assert session.controller.task is None
         assert not session.recorder.recording
         assert not session.inputs.inserted
+        await session.close()
+
+    asyncio.run(scenario())
+
+
+@pytest.mark.parametrize("transcribing", [False, True])
+def test_focus_cancellation_reports_reason_and_safe_diagnostic(factory, transcribing):
+    async def scenario():
+        session = factory()
+        problems, diagnostics = [], []
+        session.problem.connect(problems.append)
+        session.diagnostic.connect(diagnostics.append)
+        await session.initialize()
+        await session.toggle()
+        if transcribing:
+            session.recorder.stop()
+            assert session.controller.state == State.TRANSCRIBING
+        session.inputs.generation += 1
+        session._focus_lost()
+        await asyncio.gather(*session.pending, return_exceptions=True)
+        assert session.controller.outcome == State.CANCELLED
+        assert session.controller.failure == Failure.FOCUS
+        assert session.controller.state == State.IDLE
+        assert not session.recorder.recording
+        assert not session.inputs.inserted
+        assert diagnostics == ["target_changed"]
+        assert len(problems) == 1
+        assert "目标焦点或光标发生变化" in problems[0]
+        assert "重新点击编辑器正文" in problems[0]
+        await session.close()
+
+    asyncio.run(scenario())
+
+
+def test_captured_preparation_focus_loss_reports_reason(factory):
+    async def scenario():
+        session = factory()
+        problems, diagnostics = [], []
+        session.problem.connect(problems.append)
+        session.diagnostic.connect(diagnostics.append)
+
+        async def key(_reference):
+            session._focus_lost()
+            await asyncio.sleep(0)
+            return "disposable-test-key"
+
+        session.key = key
+        await session.toggle()
+        assert diagnostics == ["target_changed"]
+        assert len(problems) == 1
+        assert "目标焦点或光标发生变化" in problems[0]
+        assert not session.recorder.recording
+        assert session.controller.task is None
+        await session.close()
+
+    asyncio.run(scenario())
+
+
+def test_explicit_cancel_does_not_claim_target_focus_changed(factory):
+    async def scenario():
+        session = factory()
+        problems, diagnostics = [], []
+        session.problem.connect(problems.append)
+        session.diagnostic.connect(diagnostics.append)
+        await session.toggle()
+        session.cancel()
+        assert session.controller.outcome == State.CANCELLED
+        assert session.controller.failure is None
+        assert not problems
+        assert not diagnostics
         await session.close()
 
     asyncio.run(scenario())

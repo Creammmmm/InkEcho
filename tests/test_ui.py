@@ -11,6 +11,7 @@ from PySide6.QtWidgets import QPushButton
 
 from inkecho.app import Session
 from inkecho.config import BUILTIN_PROMPT, ConfigStore
+from inkecho.core import Failure, State
 from inkecho.integration import DesktopIntegration
 from inkecho.logging import DiagnosticLog
 from inkecho.platform.hotkeys import ShortcutError
@@ -141,6 +142,23 @@ def test_wayland_status_never_maps_auxiliary_or_delayed_main_window(window, qt_a
     assert not window.problem_notice.isVisible()
     assert not window.overlay.isVisible()
     assert not window.controls.isVisible()
+
+
+def test_focus_cancel_notifies_specific_reason_and_records_safe_code(window):
+    window.wayland = True
+    window.hide()
+    notices = []
+    window.notify = lambda message, **flags: notices.append(message)
+    window.session.controller.failure = Failure.FOCUS
+    window.session._state(State.CANCELLED)
+    window.session._state(State.IDLE)
+    assert len(notices) == 1
+    assert "目标焦点或光标发生变化" in notices[0]
+    assert "重新点击编辑器正文" in window.home.description.text()
+    assert "ERROR error target_changed" in window.log.recent()
+    assert not window.problem_notice.isVisible()
+    assert not window.controls.isVisible()
+    assert not window.overlay.isVisible()
 
 
 def test_notification_actions_cannot_control_a_different_task(window):

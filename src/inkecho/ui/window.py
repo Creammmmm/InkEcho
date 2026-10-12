@@ -20,7 +20,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from inkecho.core import State
+from inkecho.core import Failure, State
 from inkecho.ui.information import AboutPage, CompatibilityPage, StatisticsPage
 from inkecho.ui.notifications import DesktopNotifications
 from inkecho.ui.overlay import Overlay
@@ -344,7 +344,11 @@ class MainWindow(QMainWindow):
             if self.wayland:
                 self.overlay.hide()
                 self.controls.hide()
-                if state != "idle":
+                detailed_failure = state == "failed" or (
+                    state == "cancelled"
+                    and self.session.controller.failure == Failure.FOCUS
+                )
+                if state != "idle" and not detailed_failure:
                     self.notify(
                         STATE_LABELS[State(state)],
                         recording=state == "recording",

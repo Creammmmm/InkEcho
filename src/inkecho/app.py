@@ -25,7 +25,9 @@ STATE_LABELS = {
 }
 ERROR_LABELS = {
     Failure.TARGET: "未找到可安全输入的目标。请先聚焦可编辑文本框。",
-    Failure.FOCUS: "目标焦点或光标已变化，本次输入已取消。",
+    Failure.FOCUS: (
+        "目标焦点或光标发生变化，本次输入已取消。请重新点击编辑器正文，再按快捷键录音。"
+    ),
     Failure.TIMEOUT: "任务超时，请缩短录音后重试。",
     Failure.AUDIO: "录音失败，请检查麦克风及音频设置。",
     Failure.TRANSCRIPTION: "转写失败，请检查服务配置、网络和账户权限。",
@@ -179,7 +181,9 @@ class Session(QObject):
         if state == State.IDLE:
             return
         message = ERROR_LABELS.get(self.controller.failure, STATE_LABELS[state])
-        if state == State.FAILED:
+        if state == State.FAILED or (
+            state == State.CANCELLED and self.controller.failure == Failure.FOCUS
+        ):
             self.diagnostic.emit(self.controller.failure.value)
             self.report_problem(message)
         else:
@@ -200,6 +204,9 @@ class Session(QObject):
     def _focus_lost(self):
         if self.preparing and self.captured_preparation:
             self.cancel()
+            self.diagnostic.emit(Failure.FOCUS.value)
+            self.report_problem(ERROR_LABELS[Failure.FOCUS])
+            return
         self.controller.focus_changed()
 
     def cancel(self):
