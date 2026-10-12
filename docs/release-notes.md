@@ -1,4 +1,32 @@
-# InkEcho 0.1.0-alpha — Linux preview
+# InkEcho 0.1.0a4 — provider repair and updated appearance
+
+This preview aligns transcription requests with the configured model's supported
+protocol and reports actionable Chinese configuration/service errors. Unsupported
+realtime selections are rejected before recording or a capability request, rather
+than sent through an incompatible ordinary HTTP chat endpoint. Dynamic discovery
+still does not by itself establish a model's transcription capability.
+
+The application uses the user's supplied logo artwork and a coordinated navy/white
+palette for settings, tray and desktop integration. AppImage names now include the
+exact package version: `InkEcho-0.1.0a4-x86_64.AppImage`. The stable legacy filename
+is updated only after local acceptance; earlier versioned images are preserved.
+
+The guarded AT-SPI input restrictions remain: target identity, editability, active
+focus, cancellation and stale-result checks must all pass. Experimental Wayland
+target checks do not imply universal browser/terminal compatibility. No clipboard
+fallback is introduced. Keys remain in Secret Service; recordings and transcripts
+are not retained by default.
+
+Current evidence, the exact image checksum and the distinction between local
+fixtures, package startup and actual provider diagnostics are recorded in
+[provider repair release validation](provider-repair-release.md). Reproducible
+build instructions are in [packaging](packaging.md).
+
+## Historical alpha1 evidence
+
+The following section records the original `0.1.0a1` release and its environment
+on 2026-10-12. Its hashes, test counts and desktop state are historical and must
+not be treated as alpha4 acceptance.
 
 This preview provides a complete settings application and the voice-input
 pipeline: RAM-only microphone capture, configurable Qwen transcription,
