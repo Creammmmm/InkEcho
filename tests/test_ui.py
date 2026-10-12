@@ -14,6 +14,7 @@ from inkecho.config import BUILTIN_PROMPT, ConfigStore
 from inkecho.integration import DesktopIntegration
 from inkecho.logging import DiagnosticLog
 from inkecho.platform.hotkeys import ShortcutError
+from inkecho.providers import ProviderError
 from inkecho.statistics import Statistics
 from inkecho.ui.settings import AppearancePage
 from inkecho.ui.window import MainWindow
@@ -281,6 +282,89 @@ def test_model_discovery_does_not_overwrite_another_form(window):
         await request
         assert page.model.currentText() == "new-provider-model"
         assert page.model.findText("old-provider-model") == -1
+
+    asyncio.run(scenario())
+
+
+def test_realtime_capability_rejected_before_key_recording_or_network(window):
+    async def scenario():
+        page = window.pages[2]
+        page.model.setCurrentText("qwen3-asr-flash-realtime")
+
+        async def forbidden(*args, **kwargs):
+            raise AssertionError("Protocol preflight must precede external access")
+
+        window.session.key = forbidden
+        window.session.sample_audio = forbidden
+        window.session.provider_client = forbidden
+        await page.run(page.capability())
+        assert "当前适配器不支持" in page.message.text()
+        assert "qwen3-asr-flash" in page.message.text()
+        assert "当前适配器不支持" in page.model_hint.text()
+
+    asyncio.run(scenario())
+
+
+def test_provider_failure_is_actionable_chinese(window):
+    async def scenario():
+        page = window.pages[2]
+
+        async def failed():
+            raise ProviderError("unavailable")
+
+        await page.run(failed())
+        assert "云端服务暂时不可用" in page.message.text()
+        assert "稍后重试" in page.message.text()
+        assert "unavailable" not in page.message.text()
+
+    asyncio.run(scenario())
+
+
+def test_late_provider_failure_does_not_overwrite_new_form(window):
+    async def scenario():
+        page = window.pages[2]
+        entered, release = asyncio.Event(), asyncio.Event()
+
+        async def failed():
+            entered.set()
+            await release.wait()
+            raise ProviderError("unavailable")
+
+        pending = page.run(failed())
+        await entered.wait()
+        page.new()
+        page.message.setText("new form")
+        release.set()
+        await pending
+        assert page.message.text() == "new form"
+
+    asyncio.run(scenario())
+
+
+def test_discovery_marks_incompatible_protocols_without_switching_model(window):
+    async def scenario():
+        page = window.pages[2]
+        page.model.setCurrentText("qwen3-asr-flash-realtime")
+
+        async def key(*args):
+            return "test-only"
+
+        class Client:
+            async def models(self, *args):
+                return [
+                    "qwen3-asr-flash",
+                    "qwen3-asr-flash-realtime",
+                    "qwen3-asr-flash-filetrans",
+                ]
+
+        window.session.key = key
+        window.session.provider_client = lambda role: Client()
+        await page.discover()
+        assert page.provider().model == "qwen3-asr-flash-realtime"
+        assert page.model.itemData(1, Qt.ItemDataRole.ToolTipRole)
+        assert page.model.itemData(2, Qt.ItemDataRole.ToolTipRole)
+        assert page.model.itemData(0, Qt.ItemDataRole.ToolTipRole) is None
+        assert "2 个模型" in page.message.text()
 
     asyncio.run(scenario())
 

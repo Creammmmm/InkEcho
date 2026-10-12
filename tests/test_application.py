@@ -379,3 +379,29 @@ def test_cancel_during_input_connection_does_not_start_recording(factory):
         await session.close()
 
     asyncio.run(scenario())
+
+
+def test_known_incompatible_protocol_is_rejected_before_target_key_and_audio(factory):
+    async def scenario():
+        session = factory()
+        provider = session.store.load_provider("qwen")
+        session.store.save_provider(replace(provider, model="qwen3-asr-flash-realtime"))
+        problems, diagnostics = [], []
+        session.problem.connect(problems.append)
+        session.diagnostic.connect(diagnostics.append)
+
+        async def forbidden(*args):
+            raise AssertionError("Protocol preflight must run first")
+
+        session.inputs.connect = forbidden
+        session.inputs.capture_target = forbidden
+        session.key = forbidden
+        await session.toggle()
+        assert not session.recorder.recording
+        assert session.controller.task is None
+        assert diagnostics == ["protocol"]
+        assert len(problems) == 1
+        assert "当前适配器不支持" in problems[0]
+        await session.close()
+
+    asyncio.run(scenario())

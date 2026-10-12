@@ -10,7 +10,7 @@ from inkecho.audio import Recorder
 from inkecho.config import ConfigStore
 from inkecho.core import Failure, State, TaskController
 from inkecho.platform.accessibility import AccessibilityInput, InputUnavailable
-from inkecho.providers import ProviderClient, ProviderError
+from inkecho.providers import ProviderClient, ProviderError, validate_provider_protocol
 from inkecho.security import CredentialError, SecretStore
 
 STATE_LABELS = {
@@ -34,12 +34,17 @@ ERROR_LABELS = {
     Failure.INJECTION: "目标无法安全接收文字，未使用剪贴板回退。",
 }
 PROVIDER_LABELS = {
+    "protocol": (
+        "当前适配器不支持实时或文件转写协议。"
+        "请从账户可用模型中选择同步录音转写模型"
+        "（如 qwen-audio-3.0-asr-flash 或 qwen3-asr-flash），保存后重试。"
+    ),
     "configuration": "服务配置或请求参数不正确。",
     "credentials": "请保存有效 API 密钥。",
     "authentication": "服务拒绝了密钥或账户权限。",
     "rate_limit": "服务限流或额度不足。",
     "model": "当前模型不支持此请求，请检查模型 ID 与能力。",
-    "unavailable": "云端服务暂时不可用。",
+    "unavailable": "云端服务暂时不可用，请稍后重试；若持续失败，请检查模型与服务地址。",
     "network": "无法连接云端服务，请检查网络。",
     "timeout": "云端服务响应超时。",
     "response": "云端返回了无法解析的结果。",
@@ -247,6 +252,7 @@ class Session(QObject):
             }
             if not transcription.model:
                 raise CredentialError("请先选择转写模型并保存 API 密钥。")
+            validate_provider_protocol(transcription)
             if delay:
                 self.status.emit("请切换到要输入的文本框，即将开始录音。")
                 await asyncio.sleep(delay)
@@ -318,6 +324,11 @@ class Session(QObject):
                 return
             self.diagnostic.emit("credentials_unavailable")
             self.report_problem(str(error))
+        except ProviderError as error:
+            if epoch != self.epoch:
+                return
+            self.diagnostic.emit(error.code)
+            self.report_problem(PROVIDER_LABELS[error.code])
         except Exception:
             if epoch != self.epoch:
                 return

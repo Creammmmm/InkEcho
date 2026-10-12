@@ -4,9 +4,11 @@ import asyncio
 import base64
 import io
 import json
+import re
 import time
 import wave
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
+from urllib.parse import urlsplit, urlunsplit
 
 import httpx
 
@@ -15,6 +17,8 @@ from inkecho.config import Provider
 ERRORS = {
     "configuration": "Check the provider URL, model and request parameters.",
     "credentials": "Add an API key in the system credential store.",
+    "protocol": "Choose a model for synchronous HTTP audio transcription; "
+    "realtime, streaming and filetrans protocols are not implemented.",
     "authentication": "The service rejected the API key or account permissions.",
     "rate_limit": "The service is busy or its request quota was reached.",
     "model": "The service does not support this model or request format.",
@@ -31,6 +35,52 @@ class ProviderError(RuntimeError):
     def __init__(self, code: str) -> None:
         self.code = code
         super().__init__(ERRORS[code])
+
+
+def validate_provider_protocol(provider: Provider) -> None:
+    """Reject known incompatible families without an allowlist of HTTP models."""
+    if provider.role != "transcription" or provider.adapter != "qwen":
+        return
+    model = provider.model.strip().lower()
+    if model.startswith(("qwen", "fun-asr")) and {
+        "realtime",
+        "streaming",
+        "filetrans",
+    }.intersection(model.split("-")):
+        raise ProviderError("protocol")
+
+
+def uses_dashscope_audio(model: str) -> bool:
+    return (
+        re.fullmatch(
+            r"(?:qwen-audio-3\.\d+-asr-flash|fun-asr-flash)(?:-\d{4}-\d{2}-\d{2})?",
+            model.strip().lower(),
+        )
+        is not None
+    )
+
+
+def dashscope_base_url(base_url: str) -> str:
+    """Change only a recognized API suffix, preserving origin and proxy prefix."""
+    try:
+        url = urlsplit(base_url)
+        if (
+            url.scheme != "https"
+            or not url.netloc
+            or url.username
+            or url.password
+            or url.query
+            or url.fragment
+        ):
+            raise ValueError("Invalid provider URL")
+        path = url.path.rstrip("/")
+        if path.endswith("/compatible-mode/v1"):
+            path = path.removesuffix("/compatible-mode/v1") + "/api/v1"
+        elif not path.endswith("/api/v1"):
+            raise ValueError("Unknown API path")
+        return urlunsplit((url.scheme, url.netloc, path, "", ""))
+    except ValueError:
+        raise ProviderError("configuration") from None
 
 
 @dataclass(frozen=True)
@@ -74,7 +124,13 @@ class ProviderClient:
             raise ProviderError("configuration")
 
     async def _request(
-        self, provider: Provider, key: str, path: str, body: dict | None = None
+        self,
+        provider: Provider,
+        key: str,
+        path: str,
+        body: dict | None = None,
+        *,
+        headers: dict | None = None,
     ) -> dict:
         client = self.http or httpx.AsyncClient(verify=True, trust_env=False)
         try:
@@ -84,7 +140,7 @@ class ProviderClient:
                     async with client.stream(
                         "GET" if body is None else "POST",
                         f"{provider.base_url.rstrip('/')}/{path}",
-                        headers={"Authorization": f"Bearer {key}"},
+                        headers={"Authorization": f"Bearer {key}", **(headers or {})},
                         json=body,
                         timeout=self.timeout_seconds,
                         follow_redirects=False,
@@ -139,11 +195,14 @@ class ProviderClient:
             text = data["choices"][0]["message"]["content"]
         except (KeyError, IndexError, TypeError):
             raise ProviderError("response") from None
+        return ProviderClient._text_result(text, data.get("usage"), started)
+
+    @staticmethod
+    def _text_result(text, usage, started: float) -> Result:
         if not isinstance(text, str):
             raise ProviderError("response")
         if not text.strip():
             raise ProviderError("empty")
-        usage = data.get("usage")
         if not isinstance(usage, dict):
             usage = {}
         counts = [
@@ -152,6 +211,26 @@ class ProviderClient:
         ]
         counts = [n if type(n) is int and n >= 0 else None for n in counts]
         return Result(text, Usage(*counts), time.monotonic() - started)
+
+    @staticmethod
+    def _dashscope_result(data: dict, started: float) -> Result:
+        output = data.get("output")
+        if not isinstance(output, dict):
+            raise ProviderError("response")
+        text = output.get("text")
+        if text is None or (isinstance(text, str) and not text.strip()):
+            nested = output.get("output", output)
+            sentence = nested.get("sentence") if isinstance(nested, dict) else None
+            if isinstance(sentence, dict):
+                text = sentence.get("text", text)
+        usage = data.get("usage")
+        if isinstance(usage, dict):
+            usage = {
+                "prompt_tokens": usage.get("input_tokens"),
+                "completion_tokens": usage.get("output_tokens"),
+                "total_tokens": usage.get("total_tokens"),
+            }
+        return ProviderClient._text_result(text, usage, started)
 
     async def models(self, provider: Provider, key: str) -> list[str]:
         self._validate(provider, key, model=False)
@@ -173,6 +252,7 @@ class ProviderClient:
         return Connection(tuple(await self.models(provider, key)))
 
     async def transcribe(self, provider: Provider, key: str, audio: bytes) -> Result:
+        validate_provider_protocol(provider)
         self._validate(provider, key)
         if provider.role != "transcription" or provider.adapter != "qwen":
             raise ProviderError("configuration")
@@ -185,33 +265,73 @@ class ProviderClient:
                     wav.getnchannels() != 1
                     or wav.getsampwidth() != 2
                     or not wav.getnframes()
+                    or wav.getframerate() <= 0
                     or len(wav.readframes(wav.getnframes())) != wav.getnframes() * 2
                 ):
                     raise ProviderError("audio")
+                sample_rate = wav.getframerate()
+                duration = wav.getnframes() / sample_rate
         except (wave.Error, EOFError):
             raise ProviderError("audio") from None
-        if set(provider.parameters) - {"asr_options"}:
+        dashscope = uses_dashscope_audio(provider.model)
+        allowed = (
+            {
+                "language_hints",
+                "vocabulary",
+                "vocabulary_id",
+                "speaker_diarization_enabled",
+                "keep_dialect",
+            }
+            if dashscope
+            else {"asr_options"}
+        )
+        if set(provider.parameters) - allowed:
             raise ProviderError("configuration")
-        body = {
-            "model": provider.model,
-            "messages": [
-                {
-                    "role": "user",
-                    "content": [
-                        {
-                            "type": "input_audio",
-                            "input_audio": {
-                                "data": "data:audio/wav;base64,"
-                                + base64.b64encode(audio).decode()
-                            },
-                        }
-                    ],
-                }
-            ],
-            "stream": False,
-            **provider.parameters,
-        }
+        if dashscope:
+            if duration > 300:
+                raise ProviderError("audio")
+            provider = replace(provider, base_url=dashscope_base_url(provider.base_url))
+        messages = [
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "input_audio",
+                        "input_audio": {
+                            "data": "data:audio/wav;base64,"
+                            + base64.b64encode(audio).decode()
+                        },
+                    }
+                ],
+            }
+        ]
+        if dashscope:
+            body = {
+                "model": provider.model,
+                "input": {"messages": messages},
+                "parameters": {
+                    "format": "wav",
+                    "sample_rate": str(sample_rate),
+                    **provider.parameters,
+                },
+            }
+        else:
+            body = {
+                "model": provider.model,
+                "messages": messages,
+                "stream": False,
+                **provider.parameters,
+            }
         started = time.monotonic()
+        if dashscope:
+            data = await self._request(
+                provider,
+                key,
+                "services/aigc/multimodal-generation/generation",
+                body,
+                headers={"X-DashScope-SSE": "disable"},
+            )
+            return self._dashscope_result(data, started)
         return self._result(
             await self._request(provider, key, "chat/completions", body), started
         )
@@ -252,6 +372,7 @@ class ProviderClient:
     ) -> Result:
         """Explicit potentially billable request; never run automatically."""
         if provider.role == "transcription":
+            validate_provider_protocol(provider)
             if audio is None:
                 raise ProviderError("audio")
             return await self.transcribe(provider, key, audio)

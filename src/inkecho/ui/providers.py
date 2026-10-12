@@ -4,6 +4,8 @@ import json
 import uuid
 from dataclasses import replace
 
+from PySide6.QtCore import Qt
+from PySide6.QtGui import QColor
 from PySide6.QtWidgets import (
     QCheckBox,
     QComboBox,
@@ -14,6 +16,7 @@ from PySide6.QtWidgets import (
 )
 
 from inkecho.config import Provider
+from inkecho.providers import ProviderError, validate_provider_protocol
 from inkecho.ui.widgets import Page, actions, button, card, label
 
 
@@ -56,6 +59,8 @@ class ProviderPage(Page):
         ):
             form.addRow(title, widget)
         body.addLayout(form)
+        self.model_hint = label("", muted=True)
+        body.addWidget(self.model_hint)
         self.current = QCheckBox("设为当前服务")
         self.current.setChecked(True)
         body.addWidget(self.current)
@@ -92,6 +97,29 @@ class ProviderPage(Page):
         )
         self.refresh()
         self.finish()
+        self.model.currentTextChanged.connect(self.model_changed)
+        self.url.textChanged.connect(self.model_changed)
+        self.update_model_hint()
+
+    def model_changed(self):
+        self.revision += 1
+        self.update_model_hint()
+
+    def update_model_hint(self):
+        from inkecho.app import PROVIDER_LABELS
+
+        try:
+            validate_provider_protocol(self.provider())
+        except ProviderError as error:
+            self.model_hint.setText(PROVIDER_LABELS[error.code])
+        except (ValueError, AttributeError):
+            self.model_hint.setText("请填写有效的服务配置，再检查模型协议。")
+        else:
+            self.model_hint.setText(
+                "模型列表不等于能力验证；标红的实时或文件转写模型不适用于当前适配器。"
+                if self.role == "transcription"
+                else "模型列表不等于能力验证；请测试当前模型能否完成润色。"
+            )
 
     def refresh(self, identifier=None):
         self.selector.blockSignals(True)
@@ -127,6 +155,7 @@ class ProviderPage(Page):
             else settings.transcription_provider
         )
         self.current.setChecked(selected == provider.id)
+        self.update_model_hint()
 
     def new(self):
         self.revision += 1
@@ -144,6 +173,7 @@ class ProviderPage(Page):
         self.parameters.setPlainText("{}")
         self.key.clear()
         self.current.setChecked(True)
+        self.update_model_hint()
 
     def provider(self):
         return Provider(
@@ -211,20 +241,41 @@ class ProviderPage(Page):
         provider = self.provider()
         revision = self.revision
         self.message.setText("正在连接服务并获取模型列表……")
-        models = await self.session.provider_client(self.role).models(
-            provider, await self.session.key(provider.key_ref)
-        )
+        key = await self.session.key(provider.key_ref)
+        if revision != self.revision:
+            return
+        models = await self.session.provider_client(self.role).models(provider, key)
         if revision != self.revision:
             return
         selected = self.model.currentText()
         self.model.clear()
         self.model.addItems(models)
+        unsupported = 0
+        for index, model in enumerate(models):
+            try:
+                validate_provider_protocol(replace(provider, model=model))
+            except ProviderError:
+                unsupported += 1
+                self.model.setItemData(
+                    index, "当前适配器不支持此模型的协议", Qt.ItemDataRole.ToolTipRole
+                )
+                self.model.setItemData(
+                    index, QColor("#aa3434"), Qt.ItemDataRole.ForegroundRole
+                )
         self.model.setCurrentText(selected)
-        self.message.setText(f"连接成功，发现 {len(models)} 个模型；尚未验证模型能力。")
+        self.message.setText(
+            f"连接成功，发现 {len(models)} 个模型；尚未验证模型能力。"
+            + (
+                f"其中 {unsupported} 个模型的协议尚不支持，已标红。"
+                if unsupported
+                else ""
+            )
+        )
 
     async def capability(self):
         provider = self.provider()
         revision = self.revision
+        validate_provider_protocol(provider)
         key = await self.session.key(provider.key_ref)
         if revision != self.revision:
             return

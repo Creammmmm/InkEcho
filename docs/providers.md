@@ -15,7 +15,26 @@ of type `input_audio`, and a WAV data URI under `input_audio.data`. Optional
 or multipart `/audio/transcriptions` upload. Filetrans and realtime models use
 different protocols and are not supported by this adapter. Models remain
 editable configuration; the adapter does not hardcode one model ID.
-[Official Qwen-ASR reference](https://www.alibabacloud.com/help/en/model-studio/qwen-asr-api-reference).
+`validate_provider_protocol(provider)` rejects known Qwen/Fun-ASR model names containing
+`realtime`, `streaming`, or `filetrans` protocol components before recording in the
+UI and before encoding/upload in the adapter. The fixed `protocol` error explains
+the mismatch. Discovery may still list these models; list availability does not
+mean this HTTP adapter can invoke them. Arbitrary future HTTP model IDs remain
+configurable rather than being restricted to a hardcoded supported-model list.
+[Official Qwen-ASR reference](https://help.aliyun.com/en/model-studio/qwen-asr-api-reference).
+The realtime family uses a separate WebSocket session protocol, described in the
+[official realtime guide](https://help.aliyun.com/en/model-studio/qwen-asr-realtime-interaction-process).
+
+The same `qwen` adapter also implements the synchronous DashScope route for
+`qwen-audio-3.x-asr-flash` and `fun-asr-flash` (including dated revisions). It sends
+WAV base64 audio with `X-DashScope-SSE: disable`, derives the actual sample rate
+from the WAV, and parses `output.text` or the nested sentence text. The configured
+origin and any proxy path prefix are preserved: only `/compatible-mode/v1` becomes
+`/api/v1`; an existing `/api/v1` is accepted. Unknown API prefixes fail explicitly.
+The original provider configuration is not mutated. Optional DashScope parameters
+are `language_hints`, `vocabulary`, `vocabulary_id`, `speaker_diarization_enabled`
+and `keep_dialect`; format and sample rate always describe the actual recording.
+[Official synchronous HTTP reference](https://help.aliyun.com/en/model-studio/fun-asr-flash-recorded-speech-recognition-http-api).
 
 The `openai` polishing adapter sends system/user text messages to
 `POST /chat/completions`, matching DeepSeek's documented API. The DeepSeek base
@@ -33,9 +52,10 @@ verified. [DeepSeek models API](https://api-docs.deepseek.com/api/list-models/).
 
 These official pages were inspected on 2026-10-12. Region-specific URLs and
 model availability must be checked against the user's account. A cloud account
-key and model ID must be configured before real use; **no authenticated vendor
-request has been performed during development**. Real Alibaba transcription
-accuracy and real DeepSeek output remain unverified without user credentials.
+key and model ID must be configured before real use. The initial development
+validation did not make authenticated vendor requests. Subsequent repair evidence,
+including the distinction between simulated and authenticated calls, is tracked in
+[provider repair validation](provider-repair-validation.md).
 
 ## Request safety and lifecycle
 
@@ -89,3 +109,20 @@ The same test transport can support desktop integration tests: create a
 `ProviderClient(http=trusted_local_https_client)` and use the fixture's HTTPS
 base URL. The production client default remains unchanged; do not disable TLS
 globally or store a test CA in user application settings.
+
+## Protocol mismatch regression (2026-10-13)
+
+The user selected `qwen3-asr-flash-realtime` with an HTTP compatible-mode endpoint.
+That model requires WebSocket; changing only a key cannot make this HTTP request
+format compatible. The HTTP adapter accepts the documented `qwen3-asr-flash` model
+as one example, subject to the account's actual access and region. The application
+does not replace the selected model silently.
+
+All **60 local HTTPS provider tests passed** after adding protocol preflight and
+the synchronous DashScope route. Tests
+prove rejected families generate no HTTP request or base64 audio copy, rejected
+capability tests do not require audio first, a future arbitrary HTTP model still
+reaches the configured endpoint, and discovery remains distinct from capability.
+A separate root-agent authenticated call using the configured workspace and
+`qwen-audio-3.0-asr-flash` succeeded with a public audio fixture; see the linked
+repair validation for its precise scope.

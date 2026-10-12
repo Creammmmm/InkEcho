@@ -83,17 +83,29 @@ class Page(QWidget):
         self.body.addStretch()
 
     def run(self, operation):
+        revision = getattr(self, "revision", None)
+
         async def perform():
             try:
                 await operation
             except asyncio.CancelledError:
-                self.message.setText("操作已取消。")
+                if revision == getattr(self, "revision", None):
+                    self.message.setText("操作已取消。")
             except Exception as error:
+                if revision != getattr(self, "revision", None):
+                    return
+                from inkecho.app import PROVIDER_LABELS
                 from inkecho.config import ConfigError
                 from inkecho.providers import ProviderError
                 from inkecho.security import CredentialError
 
-                if isinstance(error, (ConfigError, CredentialError, ProviderError)):
+                if isinstance(error, ProviderError):
+                    self.message.setText(
+                        PROVIDER_LABELS.get(
+                            error.code, "云端请求失败，请检查服务配置。"
+                        )
+                    )
+                elif isinstance(error, (ConfigError, CredentialError)):
                     self.message.setText(str(error))
                 else:
                     self.message.setText("操作未完成，请检查设置与系统服务。")
