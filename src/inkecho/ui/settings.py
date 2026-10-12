@@ -14,7 +14,7 @@ from PySide6.QtWidgets import (
 )
 
 from inkecho.audio import Recorder
-from inkecho.platform.hotkeys import GnomeShortcuts
+from inkecho.platform.hotkeys import GnomeShortcuts, ShortcutError
 from inkecho.ui.widgets import Page, actions, button, card, label
 
 
@@ -22,6 +22,8 @@ class RecordingPage(Page):
     def __init__(self, session, command):
         super().__init__("录音与快捷键", "选好麦克风，再为随时开口准备一个快捷键。")
         self.session, self.command = session, command
+        self.shortcut_revision = 0
+        self.shortcut_lock = asyncio.Lock()
         settings = session.store.load_settings()
         panel, body = card()
         form = QFormLayout()
@@ -61,8 +63,11 @@ class RecordingPage(Page):
         self.body.addWidget(panel)
         self.body.addWidget(
             actions(
-                button("保存录音设置", self.save, primary=True),
-                button("保存并启用快捷键", lambda: self.run(self.enable())),
+                button(
+                    "保存并启用快捷键", lambda: self.run(self.enable()), primary=True
+                ),
+                button("仅保存录音设置", self.save),
+                button("检查快捷键", lambda: self.run(self.check_shortcut())),
                 button("停用快捷键", lambda: self.run(self.disable())),
             )
         )
@@ -98,7 +103,10 @@ class RecordingPage(Page):
                 shortcut=self.shortcut.text().strip(),
             )
             self.session.store.save_settings(settings)
-            self.message.setText("录音设置已保存。")
+            self.shortcut_revision += 1
+            self.message.setText(
+                "录音设置已保存。更改快捷键后，请点击「保存并启用快捷键」注册到系统。"
+            )
             return True
         except (ValueError, OSError):
             self.message.setText("无法保存，请检查配置文件或字段。")
@@ -116,14 +124,38 @@ class RecordingPage(Page):
     async def enable(self):
         if not self.save():
             return
-        await asyncio.to_thread(
-            GnomeShortcuts().enable, self.shortcut.text(), self.command
-        )
-        self.message.setText("GNOME 快捷键已配置。请在目标文本框中实测触发。")
+        revision = self.shortcut_revision
+        shortcut = self.shortcut.text()
+        try:
+            async with self.shortcut_lock:
+                await asyncio.to_thread(GnomeShortcuts().enable, shortcut, self.command)
+        except ShortcutError as error:
+            if revision == self.shortcut_revision:
+                self.message.setText(f"快捷键未启用：{error}")
+            return
+        if revision == self.shortcut_revision:
+            self.message.setText("GNOME 快捷键已配置。请在目标文本框中实测触发。")
 
     async def disable(self):
-        await asyncio.to_thread(GnomeShortcuts().disable)
-        self.message.setText("InkEcho 快捷键已停用。")
+        self.shortcut_revision += 1
+        revision = self.shortcut_revision
+        async with self.shortcut_lock:
+            await asyncio.to_thread(GnomeShortcuts().disable)
+        if revision == self.shortcut_revision:
+            self.message.setText("InkEcho 快捷键已停用。")
+
+    async def check_shortcut(self):
+        self.shortcut_revision += 1
+        revision, shortcut = self.shortcut_revision, self.shortcut.text()
+        try:
+            async with self.shortcut_lock:
+                message = await asyncio.to_thread(
+                    GnomeShortcuts().status, shortcut, self.command
+                )
+        except ShortcutError:
+            message = "无法读取 GNOME 快捷键状态，请检查系统服务。"
+        if revision == self.shortcut_revision and shortcut == self.shortcut.text():
+            self.message.setText(message)
 
 
 class AppearancePage(Page):

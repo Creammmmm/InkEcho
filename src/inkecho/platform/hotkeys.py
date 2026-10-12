@@ -121,6 +121,28 @@ class GnomeShortcuts:
         self.settings = settings or GSettings()
         self.schema = f"{CUSTOM}:{OWN_PATH}"
 
+    def status(self, shortcut: str, command: Sequence[str]) -> str:
+        """Read registration health without modifying desktop preferences."""
+        paths = self.settings.get(MEDIA, "custom-keybindings")
+        binding = self.settings.get(self.schema, "binding")
+        if OWN_PATH not in paths or not binding:
+            return "未启用：设置中填写快捷键不会自动注册，请点击「保存并启用快捷键」。"
+        if self.settings.get(self.schema, "name") != OWN_NAME:
+            return "快捷键入口被其他绑定占用，请检查 GNOME 键盘设置。"
+        if canonical(binding) != accelerator(shortcut):
+            return "系统快捷键与当前设置不同，请点击「保存并启用快捷键」同步。"
+        try:
+            registered = shlex.split(self.settings.get(self.schema, "command"))
+        except ValueError:
+            registered = []
+        if (
+            registered != list(command)
+            or not registered
+            or not os.access(registered[0], os.X_OK)
+        ):
+            return "快捷键启动路径已失效或指向其他版本，请重新保存并启用快捷键。"
+        return f"GNOME 已注册 {shortcut}。请在目标文本框中按键开始录音。"
+
     def conflicts(self, binding: str) -> bool:
         settings = self.settings
         for path in settings.get(MEDIA, "custom-keybindings"):

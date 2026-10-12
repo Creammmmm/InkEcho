@@ -89,6 +89,27 @@ def test_enable_updates_own_binding_without_duplicate_path():
     assert settings.get(adapter.schema, "name") == OWN_NAME
 
 
+def test_status_distinguishes_saved_empty_binding_and_registered_shortcut():
+    settings = Settings()
+    adapter = GnomeShortcuts(settings)
+    command = ["/usr/bin/python3", "--toggle"]
+    adapter.enable("F4", command)
+    assert "已注册 F4" in adapter.status("F4", command)
+    settings.set(adapter.schema, "binding", "")
+    assert "未启用" in adapter.status("F4", command)
+
+
+def test_status_detects_changed_key_or_stale_launcher_without_mutation():
+    settings = Settings()
+    adapter = GnomeShortcuts(settings)
+    command = ["/usr/bin/python3", "--toggle"]
+    adapter.enable("F4", command)
+    before = settings.values.copy()
+    assert "系统快捷键与当前设置不同" in adapter.status("F14", command)
+    assert "路径已失效" in adapter.status("F4", ["/missing.AppImage", "--toggle"])
+    assert settings.values == before
+
+
 def test_recent_unrelated_binding_is_preserved():
     class ChangedSettings(Settings):
         def set(self, schema, key, value):

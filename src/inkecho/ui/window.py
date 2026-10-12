@@ -114,6 +114,39 @@ class RecordingControls(QWidget):
                 self.stop = item
 
 
+class ProblemNotice(QWidget):
+    """Visible failure detail even when settings are hidden and no tray exists."""
+
+    def __init__(self):
+        super().__init__()
+        self.setWindowFlags(
+            Qt.WindowType.Tool
+            | Qt.WindowType.FramelessWindowHint
+            | Qt.WindowType.WindowStaysOnTopHint
+            | Qt.WindowType.WindowDoesNotAcceptFocus
+            | Qt.WindowType.WindowTransparentForInput
+        )
+        self.setAttribute(Qt.WidgetAttribute.WA_ShowWithoutActivating)
+        self.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
+        self.setWindowTitle("InkEcho · 操作未完成")
+        self.setStyleSheet(STYLE)
+        self.setFixedWidth(440)
+        body = QVBoxLayout(self)
+        self.message = label("")
+        body.addWidget(self.message)
+        self.dismiss = QTimer(self)
+        self.dismiss.setSingleShot(True)
+        self.dismiss.timeout.connect(self.hide)
+
+    def present(self, message):
+        self.message.setText(message + "\n\n详细状态可在 InkEcho 概览中查看。")
+        self.adjustSize()
+        screen = QApplication.primaryScreen().availableGeometry()
+        self.move(screen.right() - self.width() - 24, screen.y() + 48)
+        self.show()
+        self.dismiss.start(10000)
+
+
 class MainWindow(QMainWindow):
     quit_requested = Signal()
 
@@ -129,6 +162,7 @@ class MainWindow(QMainWindow):
         self.icon = QIcon(str(icon_path))
         self.setWindowIcon(self.icon)
         self.overlay = Overlay(session.store)
+        self.problem_notice = ProblemNotice()
         self.controls = RecordingControls(session)
         root = QWidget()
         layout = QHBoxLayout(root)
@@ -204,6 +238,7 @@ class MainWindow(QMainWindow):
         if QSystemTrayIcon.isSystemTrayAvailable():
             self.tray.show()
         session.status.connect(self.show_status)
+        session.problem.connect(self.show_problem)
         session.state_changed.connect(self.update_state)
         session.level.connect(self.overlay.set_level)
         session.level.connect(
@@ -244,6 +279,17 @@ class MainWindow(QMainWindow):
         self.home.description.setText(message)
         self.statusBar().showMessage(message)
         self.tray.setToolTip("InkEcho · " + message[:70])
+
+    def show_problem(self, message):
+        self.show_status(message)
+        self.problem_notice.present(message)
+        if self.tray.isVisible():
+            self.tray.showMessage(
+                "InkEcho · 操作未完成",
+                message,
+                QSystemTrayIcon.MessageIcon.Warning,
+                10000,
+            )
 
     def update_state(self, state):
         from inkecho.app import STATE_LABELS
@@ -306,7 +352,7 @@ class MainWindow(QMainWindow):
                 QApplication.activeWindow() is not None
                 and not self.session.controller.task
             ):
-                self.show_status("请先聚焦其他应用的文本框，不能向 InkEcho 自身输入。")
+                self.show_problem("请先聚焦其他应用的文本框，不能向 InkEcho 自身输入。")
                 return
             self.session.spawn(self.session.toggle())
 
@@ -338,5 +384,6 @@ class MainWindow(QMainWindow):
         self.duration_timer.stop()
         self.tray.hide()
         self.overlay.close()
+        self.problem_notice.close()
         self.controls.close()
         self.close()

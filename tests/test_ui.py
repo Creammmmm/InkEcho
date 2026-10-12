@@ -13,6 +13,7 @@ from inkecho.app import Session
 from inkecho.config import BUILTIN_PROMPT, ConfigStore
 from inkecho.integration import DesktopIntegration
 from inkecho.logging import DiagnosticLog
+from inkecho.platform.hotkeys import ShortcutError
 from inkecho.statistics import Statistics
 from inkecho.ui.settings import AppearancePage
 from inkecho.ui.window import MainWindow
@@ -94,6 +95,81 @@ def test_own_window_toggle_refused(window, qt_app):
     window.handle_command("toggle")
     assert not window.session.pending
     assert "不能向 InkEcho 自身输入" in window.home.description.text()
+    assert window.problem_notice.isVisible()
+
+
+def test_hidden_start_failure_is_visible_without_activating_settings(window, qt_app):
+    window.hide()
+    message = "目标不支持安全直接输入，请使用支持的文本编辑器。"
+    window.session.problem.emit(message)
+    qt_app.processEvents()
+    assert not window.isVisible()
+    assert window.problem_notice.isVisible()
+    assert message in window.problem_notice.message.text()
+    assert window.problem_notice.windowFlags() & Qt.WindowType.WindowDoesNotAcceptFocus
+    assert window.problem_notice.testAttribute(
+        Qt.WidgetAttribute.WA_ShowWithoutActivating
+    )
+    # Offscreen has no compositor and ignores the native activation prohibition.
+    # Native Wayland activation is checked separately in the validation report.
+
+
+@pytest.mark.parametrize("failed", [False, True])
+def test_stale_shortcut_health_cannot_replace_enable_result(
+    window, monkeypatch, failed
+):
+    async def scenario():
+        page = window.pages[1]
+        waiting, release = asyncio.Event(), asyncio.Event()
+
+        async def operation(function, *args):
+            if function.__name__ == "status":
+                waiting.set()
+                await release.wait()
+                return "stale disabled result"
+            assert function.__name__ == "enable"
+            if failed:
+                raise ShortcutError("conflict")
+
+        monkeypatch.setattr("inkecho.ui.settings.asyncio.to_thread", operation)
+        pending = asyncio.create_task(page.check_shortcut())
+        await waiting.wait()
+        enable = asyncio.create_task(page.enable())
+        await asyncio.sleep(0)
+        release.set()
+        await pending
+        await enable
+        result = page.message.text()
+        assert ("未启用" if failed else "已配置") in result
+        assert page.message.text() == result
+
+    asyncio.run(scenario())
+
+
+def test_shortcut_mutations_are_serialized_in_user_action_order(window, monkeypatch):
+    async def scenario():
+        page = window.pages[1]
+        entered, release = asyncio.Event(), asyncio.Event()
+        calls = []
+
+        async def operation(function, *args):
+            calls.append(function.__name__)
+            if function.__name__ == "enable":
+                entered.set()
+                await release.wait()
+
+        monkeypatch.setattr("inkecho.ui.settings.asyncio.to_thread", operation)
+        enable = asyncio.create_task(page.enable())
+        await entered.wait()
+        disable = asyncio.create_task(page.disable())
+        await asyncio.sleep(0)
+        assert calls == ["enable"]
+        release.set()
+        await asyncio.gather(enable, disable)
+        assert calls == ["enable", "disable"]
+        assert "已停用" in page.message.text()
+
+    asyncio.run(scenario())
 
 
 def test_no_tray_processing_retains_cancel_entry(window):

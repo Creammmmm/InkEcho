@@ -39,6 +39,15 @@ class Instance(QObject):
         self.server = QLocalServer(self)
         self.server.setSocketOptions(QLocalServer.SocketOption.UserAccessOption)
         self.server.newConnection.connect(self.receive)
+        self.pending_commands = []
+        self.attached = False
+
+    def attach(self, handler):
+        self.command.connect(handler)
+        self.attached = True
+        for command in self.pending_commands:
+            self.command.emit(command)
+        self.pending_commands.clear()
 
     def acquire(self, command: str) -> bool:
         if self.lock.tryLock(0):
@@ -67,7 +76,13 @@ class Instance(QObject):
                         bytes(connection.readLine(64)).decode(errors="replace").strip()
                     )
                     if command in {"show", "toggle", "cancel", "quit"}:
-                        self.command.emit(command)
+                        if self.attached:
+                            self.command.emit(command)
+                        else:
+                            self.pending_commands = [
+                                *self.pending_commands[-31:],
+                                command,
+                            ]
                     connection.disconnectFromServer()
 
             socket.readyRead.connect(read)
@@ -77,6 +92,30 @@ class Instance(QObject):
     def close(self):
         self.server.close()
         self.lock.unlock()
+
+
+class StartupCommands:
+    """Keep cold-start toggles until input initialization has finished."""
+
+    def __init__(self, dispatch, *, toggle=False):
+        self.dispatch = dispatch
+        self.ready = False
+        self.pending_toggle = toggle
+
+    def receive(self, command):
+        if not self.ready:
+            if command == "toggle":
+                self.pending_toggle = True
+                return
+            if command in {"cancel", "quit"}:
+                self.pending_toggle = False
+        self.dispatch(command)
+
+    def complete(self):
+        self.ready = True
+        if self.pending_toggle:
+            self.pending_toggle = False
+            self.dispatch("toggle")
 
 
 async def run(app, store, instance, args):
@@ -94,15 +133,18 @@ async def run(app, store, instance, args):
         window = MainWindow(session, stats, log, integration, command)
         stopped = asyncio.Event()
         window.quit_requested.connect(stopped.set)
-        instance.command.connect(window.handle_command)
+        commands = StartupCommands(window.handle_command, toggle=args.toggle)
+        instance.attach(commands.receive)
         log.record("startup")
+        if stopped.is_set():
+            return
         if not args.toggle and (not args.background or not window.tray.isVisible()):
             window.show()
         await session.initialize()
-        if args.toggle:
-            await session.toggle()
-            if not session.controller.task and not window.tray.isVisible():
-                window.show()
+        if stopped.is_set():
+            return
+        commands.complete()
+        window.pages[1].run(window.pages[1].check_shortcut())
         if args.screenshot_dir:
             output = Path(args.screenshot_dir)
             output.mkdir(parents=True, exist_ok=True)
