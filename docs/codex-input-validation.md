@@ -85,3 +85,27 @@ about every Codex build. No verified repair consisting solely of enabling a
 setting has been established. Safe targeted input still requires an editing
 interface exposed by the target application. No settings, focus, user content,
 or product code were changed during this follow-up.
+
+## One temporary activation experiment
+
+After the read-only checks, one explicitly authorized reversible experiment
+verified that `IsEnabled` was writable and temporarily changed it from `false`
+to `true`. A readback confirmed `true` before the existing metadata probe ran
+against the same verified process, PID 6479. The tree was unchanged: one
+application, three frames each returning only a null child, four `Text`
+interfaces, zero `EditableText` interfaces, and the same four `UnknownMethod`
+responses on the null reference. The probe exited successfully.
+
+The experiment's `finally` block restored `IsEnabled=false`. A separate D-Bus
+connection independently read back `IsEnabled=false` and
+`ScreenReaderEnabled=false`, matching the initial values. The screen-reader
+property was never written. No newly started Orca process or unexpected
+screen-reader state change was detected. No application restart, focus change,
+user-content read, or input operation occurred. The root agent reviewed the
+script's restoration path and accepted the observed result; no repeat was run.
+
+This rules out this single runtime switch change as a sufficient fix for the
+current instance. It does not establish behavior after a restart, with other
+settings, or in another version. The temporary mutation script remains outside
+the repository; the tracked metadata probe remains read-only. The Codex process
+hosting the current task was not restarted.
