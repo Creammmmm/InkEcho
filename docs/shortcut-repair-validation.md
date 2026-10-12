@@ -60,7 +60,20 @@ failed on Wayland because it lacked a parent surface; the accepted version uses
 a frameless top-level `Tool` window with `WindowDoesNotAcceptFocus` and
 `WA_ShowWithoutActivating`. No private compositor API or clipboard was involved.
 
-The empty user binding still needs to be restored through the conflict-checking
-adapter after package acceptance. A successful settings readback alone is not
-evidence of a physical F4 key event. Native Wayland text input remains subject to
-the input backend's independently documented compatibility and focus checks.
+## Deployment and final registration readback
+
+Before deployment, the root agent re-read the live settings and found that F4 was
+already registered: the saved preference and GNOME binding both read `F4`, and
+the command still pointed to the stable alpha AppImage path with `--toggle`.
+This differs from the empty binding observed during initial diagnosis. The
+repair did **not** write GNOME settings or claim to have restored the binding.
+
+After package acceptance, the root agent atomically replaced the AppImage at the
+stable path, quit the old instance, and started version `0.1.0a2` in the
+background. The application configuration file remained byte-identical. The
+post-deployment registration check reported that F4 was registered.
+
+A successful settings readback is not evidence of a physical F4 key event; no
+physical-key activation is claimed here. Native Wayland text input remains
+subject to the input backend's independently documented per-target compatibility
+and focus checks.
