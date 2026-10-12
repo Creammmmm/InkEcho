@@ -1,6 +1,7 @@
 # Compatibility matrix
 
-Measured 2026-10-12. **Pending is not supported.** Host GNOME Wayland and isolated
+Initial measurements below are from 2026-10-12; dated release supplements follow.
+**Pending is not supported.** Host GNOME Wayland and isolated
 Xvfb evidence are separate. Read [the feasibility report](feasibility-report.md)
 before interpreting a passed item as a complete application workflow.
 
@@ -72,3 +73,25 @@ A 2026-10-12 follow-up on the unlocked native host and in a private headless GNO
 sample was injected. The complete focused Wayland workflow remains pending; see
 [input repair evidence](input-repair-validation.md). Controls without EditableText,
 including the previously tested Chrome and VTE controls, remain unsupported.
+
+## 0.1.0a5 recording cancellation repair supplement — 2026-10-13
+
+The actual alpha5 AppImage (SHA-256
+`8a7ea103e6c299323038cb8c16e649e6608ed0dd892031c8e1755684d4f2dadb`)
+passed native GNOME Wayland startup and nine-page rendering. This supersedes the
+historical table's pending final-alpha startup entry, but not its pending native
+input/overlay workflow. A bounded owned native GTK probe obtained a safe target
+once; a repeat could not establish ACTIVE focus, so no native Unicode workflow
+success is claimed from that attempt.
+
+The exact extracted alpha5 Python/modules passed real host microphone → locally
+verified HTTPS fixture → production Session/Overlay → GTK AT-SPI delivery on a
+private Xvfb `:96`: 28 Unicode code points delivered; explicit cancellation and
+focus-away/back late replies left the target unchanged; 3 recordings, 1 success,
+2 cancellations. No clipboard, saved audio or real cloud account was used. This
+is isolated X11 fixture evidence, not full X11 desktop or Wayland support.
+
+The same artifact passed private offscreen nine-page/IPC/config-preservation
+checks and a nonroot, network-disabled, read-only Ubuntu 24.04 container startup.
+See [alpha5 release validation](listening-repair-release.md) for the exact artifact,
+reproduction and current limitations. The original historical rows remain intact.

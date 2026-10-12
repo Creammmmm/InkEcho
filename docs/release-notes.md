@@ -1,4 +1,12 @@
-# InkEcho 0.1.0a4 — provider repair and updated appearance
+# InkEcho 0.1.0a5 — recording cancellation repair
+
+This preview narrows accessibility-event handling to the captured target and
+reports why a recording or pending result was cancelled. Unrelated application
+lifecycle events must not cancel dictation, while real target focus changes,
+caret changes and explicit cancellation continue to stop delivery. The exact
+tested scope is recorded in [recording cancellation repair validation](listening-repair-release.md).
+
+## Retained provider and appearance improvements
 
 This preview aligns transcription requests with the configured model's supported
 protocol and reports actionable Chinese configuration/service errors. Unsupported
@@ -8,7 +16,7 @@ still does not by itself establish a model's transcription capability.
 
 The application uses the user's supplied logo artwork and a coordinated navy/white
 palette for settings, tray and desktop integration. AppImage names now include the
-exact package version: `InkEcho-0.1.0a4-x86_64.AppImage`. The stable legacy filename
+exact package version: `InkEcho-0.1.0a5-x86_64.AppImage`. The stable legacy filename
 is updated only after local acceptance; earlier versioned images are preserved.
 
 The guarded AT-SPI input restrictions remain: target identity, editability, active
@@ -17,8 +25,8 @@ target checks do not imply universal browser/terminal compatibility. No clipboar
 fallback is introduced. Keys remain in Secret Service; recordings and transcripts
 are not retained by default.
 
-Current evidence, the exact image checksum and the distinction between local
-fixtures, package startup and actual provider diagnostics are recorded in
+The current checksum and package evidence are in the recording repair report.
+The earlier authenticated provider diagnostic is retained in
 [provider repair release validation](provider-repair-release.md). Reproducible
 build instructions are in [packaging](packaging.md).
 
@@ -26,7 +34,7 @@ build instructions are in [packaging](packaging.md).
 
 The following section records the original `0.1.0a1` release and its environment
 on 2026-10-12. Its hashes, test counts and desktop state are historical and must
-not be treated as alpha4 acceptance.
+not be treated as acceptance of later releases.
 
 This preview provides a complete settings application and the voice-input
 pipeline: RAM-only microphone capture, configurable Qwen transcription,

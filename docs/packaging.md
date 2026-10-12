@@ -1,6 +1,6 @@
 # Full application AppImage packaging
 
-The current recipe builds `dist/InkEcho-0.1.0a4-x86_64.AppImage` with
+The current recipe builds `dist/InkEcho-0.1.0a5-x86_64.AppImage` with
 `python -m inkecho` as its entry. It is a Linux x86_64 preview application.
 The preserved [stage-zero probe record](packaging-stage0.md) describes the
 separate older artifact; its successful tests do not substitute for these tests.
@@ -48,8 +48,8 @@ a mounted old image keeps its original inode. The SHA-256 sidecar is replaced
 separately, so consumers must always verify it against the image.
 
 Previous releases remain preserved locally at the explicit versioned paths
-`InkEcho-0.1.0a1-x86_64.AppImage`, `InkEcho-0.1.0a2-x86_64.AppImage` and
-`InkEcho-0.1.0a3-x86_64.AppImage`.
+`InkEcho-0.1.0a1-x86_64.AppImage`, `InkEcho-0.1.0a2-x86_64.AppImage`,
+`InkEcho-0.1.0a3-x86_64.AppImage` and `InkEcho-0.1.0a4-x86_64.AppImage`.
 The legacy `InkEcho-0.1.0-alpha-x86_64.AppImage` path points to the last accepted
 deployed version and is updated atomically after acceptance. New releases are
 built and validated first under distinct versioned paths.
@@ -57,8 +57,8 @@ built and validated first under distinct versioned paths.
 ## Verify the actual application
 
 ```sh
-(cd dist && sha256sum -c InkEcho-0.1.0a4-x86_64.AppImage.sha256)
-./dist/InkEcho-0.1.0a4-x86_64.AppImage --appimage-extract-and-run \
+(cd dist && sha256sum -c InkEcho-0.1.0a5-x86_64.AppImage.sha256)
+./dist/InkEcho-0.1.0a5-x86_64.AppImage --appimage-extract-and-run \
   --config-dir /tmp/inkecho-qa/config --data-dir /tmp/inkecho-qa/data \
   --screenshot-dir /tmp/inkecho-qa/screenshots --quit-after 1
 ```
@@ -97,9 +97,9 @@ are omitted. Compare two complete builds with unchanged source and dependencies:
 
 ```sh
 uv run python scripts/packaging/build_appimage.py
-cp dist/InkEcho-0.1.0a4-x86_64.AppImage.sha256 build/first.sha256
+cp dist/InkEcho-0.1.0a5-x86_64.AppImage.sha256 build/first.sha256
 uv run python scripts/packaging/build_appimage.py
-cmp build/first.sha256 dist/InkEcho-0.1.0a4-x86_64.AppImage.sha256
+cmp build/first.sha256 dist/InkEcho-0.1.0a5-x86_64.AppImage.sha256
 ```
 
 Python, wheels, assets, build file permissions and `mksquashfs` must also match;
