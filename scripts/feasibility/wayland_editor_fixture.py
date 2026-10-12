@@ -10,7 +10,7 @@ import gi
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gio, Gtk  # noqa: E402
 
-output = Path(sys.argv[1])
+output = None if sys.argv[1] == "-" else Path(sys.argv[1])
 application = Gtk.Application(
     application_id="io.github.Creammmmm.InkEcho.InputFixture",
     flags=Gio.ApplicationFlags.NON_UNIQUE,
@@ -26,7 +26,8 @@ def activate(app):
 
     def changed(*_):
         start, end = buffer.get_bounds()
-        output.write_text(json.dumps(buffer.get_text(start, end, True)))
+        if output is not None:
+            output.write_text(json.dumps(buffer.get_text(start, end, True)))
 
     buffer.connect("changed", changed)
     changed()
