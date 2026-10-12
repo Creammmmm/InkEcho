@@ -95,3 +95,25 @@ The same artifact passed private offscreen nine-page/IPC/config-preservation
 checks and a nonroot, network-disabled, read-only Ubuntu 24.04 container startup.
 See [alpha5 release validation](listening-repair-release.md) for the exact artifact,
 reproduction and current limitations. The original historical rows remain intact.
+
+## Native Wayland follow-up — 2026-10-13
+
+An unlocked native GNOME Wayland run passed owned GTK 3 target capture, exact
+Chinese/Latin/emoji insertion, explicit cancellation rejection and stale-target
+rejection after a second owned window took focus. This is a direct-input result
+for that fixture; see [native input evidence](listening-repair-validation.md#unlocked-native-wayland-follow-up-direct-input-passed).
+
+The subsequent complete packaged microphone/local-HTTPS/notification workflow
+and separate public-sample/cloud/Session workflow remain **unvalidated**: both
+stopped before recording or requests when no active target could be captured.
+Later read-only checks found zero Mutter physical/logical monitors, zero GTK
+outputs and only a zero-size Qt placeholder despite an unlocked session. See
+[native voice validation](native-voice-workflow-validation.md) and
+[native cloud/display validation](native-cloud-workflow-validation.md).
+
+The running Codex instance exposed frames and null child references, with no
+capturable editable input control; it is currently unavailable to the strict
+AT-SPI input backend. This does not establish the behavior of other Codex versions
+or configurations. See [Codex target evidence](codex-input-validation.md).
+Historical measurements above remain unchanged; these checks do not establish
+universal Wayland support.
