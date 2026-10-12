@@ -6,6 +6,8 @@ import platform
 import shutil
 import subprocess
 import sys
+import tempfile
+import tomllib
 import urllib.request
 from pathlib import Path
 
@@ -21,6 +23,40 @@ RUNTIME_URL = (
 )
 # Official release asset digest, inspected 2026-10-12. Fail closed on upstream change.
 RUNTIME_SHA256 = "156f4bdbde9c52d01814600013e0a273f0118dc2de98975f3c8c63427ec79074"
+
+
+def publish_appimage(runtime: Path, squashfs: Path, artifact: Path) -> str:
+    """Publish a complete image without truncating an existing or mounted image."""
+    temporary = None
+    checksum_temporary = None
+    try:
+        with tempfile.NamedTemporaryFile(
+            dir=artifact.parent, prefix=f".{artifact.name}.", delete=False
+        ) as output:
+            temporary = Path(output.name)
+            for source in (runtime, squashfs):
+                with source.open("rb") as stream:
+                    shutil.copyfileobj(stream, output)
+            output.flush()
+            os.fsync(output.fileno())
+        temporary.chmod(0o755)
+        with temporary.open("rb") as stream:
+            digest = hashlib.file_digest(stream, "sha256").hexdigest()
+        with tempfile.NamedTemporaryFile(
+            mode="w", dir=artifact.parent, prefix=".sha256.", delete=False
+        ) as output:
+            checksum_temporary = Path(output.name)
+            output.write(f"{digest}  {artifact.name}\n")
+            output.flush()
+            os.fsync(output.fileno())
+        # Atomic replacement keeps an old mounted inode intact, even on a rebuild.
+        temporary.replace(artifact)
+        checksum_temporary.replace(artifact.with_suffix(".AppImage.sha256"))
+        return digest
+    finally:
+        for path in (temporary, checksum_temporary):
+            if path is not None:
+                path.unlink(missing_ok=True)
 
 
 def main() -> None:
@@ -77,10 +113,11 @@ def main() -> None:
     )
     shutil.copy2(ROOT / "src/inkecho/assets/inkecho.svg", APPDIR / "inkecho.svg")
     (APPDIR / ".DirIcon").symlink_to("inkecho.svg")
+    version = tomllib.loads((ROOT / "pyproject.toml").read_text())["project"]["version"]
     write_inventory(
         APPDIR,
         {
-            "application": "0.1.0-alpha",
+            "application": version,
             "python": platform.python_version(),
             "python_distributions": versions,
             "qt_libraries": libraries,
@@ -111,14 +148,8 @@ def main() -> None:
     )
     dist = ROOT / "dist"
     dist.mkdir(exist_ok=True)
-    artifact = dist / "InkEcho-0.1.0-alpha-x86_64.AppImage"
-    with artifact.open("wb") as output:
-        output.write(RUNTIME.read_bytes())
-        with squashfs.open("rb") as filesystem:
-            shutil.copyfileobj(filesystem, output)
-    artifact.chmod(0o755)
-    digest = hashlib.sha256(artifact.read_bytes()).hexdigest()
-    artifact.with_suffix(".AppImage.sha256").write_text(f"{digest}  {artifact.name}\n")
+    artifact = dist / f"InkEcho-{version}-x86_64.AppImage"
+    publish_appimage(RUNTIME, squashfs, artifact)
     print(f"Built {artifact} ({artifact.stat().st_size // 1048576} MiB)")
 
 

@@ -1,6 +1,6 @@
 # Full application AppImage packaging
 
-The current recipe builds `dist/InkEcho-0.1.0-alpha-x86_64.AppImage` with
+The current recipe builds `dist/InkEcho-0.1.0a2-x86_64.AppImage` with
 `python -m inkecho` as its entry. It is a Linux x86_64 preview application.
 The preserved [stage-zero probe record](packaging-stage0.md) describes the
 separate older artifact; its successful tests do not substitute for these tests.
@@ -41,11 +41,21 @@ The runtime is pinned to upstream commit `8f39b89`, SHA-256
 Its upstream `continuous` URL can change; inspect new official release metadata
 and deliberately update the hash before accepting a replacement.
 
+The filename and inventory application version come from `pyproject.toml`. Image
+publication uses a complete temporary sibling, flushes it, then atomically replaces
+the destination. Failed payload or checksum preparation leaves the old image intact;
+a mounted old image keeps its original inode. The SHA-256 sidecar is replaced
+separately, so consumers must always verify it against the image.
+
+The previous alpha1 package is preserved locally under both its original
+`InkEcho-0.1.0-alpha-x86_64.AppImage` filename and the explicit
+`InkEcho-0.1.0a1-x86_64.AppImage` backup. New releases use distinct versioned paths.
+
 ## Verify the actual application
 
 ```sh
-(cd dist && sha256sum -c InkEcho-0.1.0-alpha-x86_64.AppImage.sha256)
-./dist/InkEcho-0.1.0-alpha-x86_64.AppImage --appimage-extract-and-run \
+(cd dist && sha256sum -c InkEcho-0.1.0a2-x86_64.AppImage.sha256)
+./dist/InkEcho-0.1.0a2-x86_64.AppImage --appimage-extract-and-run \
   --config-dir /tmp/inkecho-qa/config --data-dir /tmp/inkecho-qa/data \
   --screenshot-dir /tmp/inkecho-qa/screenshots --quit-after 1
 ```
@@ -84,9 +94,9 @@ are omitted. Compare two complete builds with unchanged source and dependencies:
 
 ```sh
 uv run python scripts/packaging/build_appimage.py
-cp dist/InkEcho-0.1.0-alpha-x86_64.AppImage.sha256 build/first.sha256
+cp dist/InkEcho-0.1.0a2-x86_64.AppImage.sha256 build/first.sha256
 uv run python scripts/packaging/build_appimage.py
-cmp build/first.sha256 dist/InkEcho-0.1.0-alpha-x86_64.AppImage.sha256
+cmp build/first.sha256 dist/InkEcho-0.1.0a2-x86_64.AppImage.sha256
 ```
 
 Python, wheels, assets, build file permissions and `mksquashfs` must also match;
