@@ -275,3 +275,146 @@ asyncio.run(run())
                 child.wait(timeout=5)
 
     asyncio.run(run())
+
+
+def state_event(path, state, enabled, *, sender=":1.1"):
+    return Message(
+        message_type=MessageType.SIGNAL,
+        sender=sender,
+        path=path,
+        interface="org.a11y.atspi.Event.Object",
+        member="StateChanged",
+        signature="si",
+        body=[state, enabled],
+    )
+
+
+@pytest.mark.parametrize("sender", [":1.1", ":1.99"])
+@pytest.mark.parametrize(
+    "state,enabled", [("defunct", 1), ("focused", 0), ("active", 0)]
+)
+def test_unrelated_notification_or_secondary_process_exit_keeps_target(
+    sender, state, enabled
+):
+    backend, target = backend_with_target()
+    lost = []
+    backend.on_focus_lost = lambda: lost.append(True)
+    backend._event(state_event("/unrelated", state, enabled, sender=sender))
+    assert backend.target_is_current(target)
+    assert lost == []
+
+
+@pytest.mark.parametrize(
+    "path,state,enabled",
+    [
+        ("/target", "focused", 0),
+        ("/window", "active", 0),
+        ("/target", "defunct", 1),
+        ("/window", "defunct", 1),
+    ],
+)
+def test_captured_control_or_window_loss_invalidates_immediately(path, state, enabled):
+    backend, target = backend_with_target()
+    lost = []
+    backend.on_focus_lost = lambda: lost.append(True)
+    backend._event(state_event(path, state, enabled))
+    assert not backend.target_is_current(target)
+    assert lost == [True]
+    backend._event(state_event("/target", "focused", 1))
+    backend._event(state_event("/window", "active", 1))
+    assert not backend.target_is_current(target)
+    assert lost == [True]
+
+
+@pytest.mark.parametrize("still_focused", [False, True])
+def test_foreign_focus_gain_checks_actual_captured_target(still_focused):
+    async def run():
+        backend, target = backend_with_target()
+        calls, lost = [], []
+        backend.on_focus_lost = lambda: lost.append(True)
+
+        async def current(token):
+            calls.append(token)
+            return still_focused
+
+        backend._current = current
+        backend._event(state_event("/notification", "focused", 1, sender=":1.99"))
+        pending = backend._verification
+        assert backend.target_is_current(target)
+        await pending
+        assert calls == [target]
+        assert backend.target_is_current(target) == still_focused
+        assert lost == ([] if still_focused else [True])
+
+    asyncio.run(run())
+
+
+def test_foreign_verification_cannot_revive_target_after_focus_away_and_back():
+    async def run():
+        backend, target = backend_with_target()
+        entered, release = asyncio.Event(), asyncio.Event()
+        lost = []
+        backend.on_focus_lost = lambda: lost.append(True)
+
+        async def current(_):
+            entered.set()
+            await release.wait()
+            return True
+
+        backend._current = current
+        backend._event(state_event("/other", "active", 1, sender=":1.99"))
+        pending = backend._verification
+        await entered.wait()
+        backend._event(state_event("/target", "focused", 0))
+        backend._event(state_event("/target", "focused", 1))
+        release.set()
+        await pending
+        assert not backend.target_is_current(target)
+        assert lost == [True]
+
+    asyncio.run(run())
+
+
+def test_late_foreign_verification_cannot_cancel_new_target():
+    async def run():
+        backend, target = backend_with_target()
+        entered, release = asyncio.Event(), asyncio.Event()
+        lost = []
+        backend.on_focus_lost = lambda: lost.append(True)
+
+        async def current(_):
+            entered.set()
+            await release.wait()
+            return False
+
+        backend._current = current
+        backend._event(state_event("/other", "focused", 1, sender=":1.99"))
+        pending = backend._verification
+        await entered.wait()
+        backend.generation += 1
+        new_target = AccessibleTarget(
+            target.address, target.window, backend.generation, 4
+        )
+        backend.target = new_target
+        release.set()
+        await pending
+        assert backend.target_is_current(new_target)
+        assert lost == []
+
+    asyncio.run(run())
+
+
+def test_caret_change_still_invalidates_target():
+    backend, target = backend_with_target()
+    backend._event(
+        Message(
+            message_type=MessageType.SIGNAL,
+            sender=target.address[0],
+            path=target.address[1],
+            interface="org.a11y.atspi.Event.Object",
+            member="TextCaretMoved",
+            signature="i",
+            body=[4],
+        )
+    )
+    assert not backend.target_is_current(target)

@@ -51,6 +51,8 @@ class AccessibilityInput:
         self.consumed = None
         self.bus = None
         self.inserting = False
+        self._verification = None
+        self._verification_requested = False
 
     async def connect(self) -> None:
         try:
@@ -103,26 +105,93 @@ class AccessibilityInput:
                 REGISTRY, "org.a11y.atspi.Registry", "RegisterEvent", "s", [event]
             )
 
+    def _invalidate(self, target):
+        if self.target_is_current(target):
+            self.generation += 1
+            self.on_focus_lost()
+
     def _event(self, message):
-        if message.message_type != MessageType.SIGNAL:
+        if (
+            message.message_type != MessageType.SIGNAL
+            or message.interface != "org.a11y.atspi.Event.Object"
+        ):
             return
         address = (message.sender, message.path)
         body = message.body
-        changed_focus = (
-            message.member == "StateChanged"
-            and body
-            and body[0] in {"focused", "active", "defunct"}
-        )
-        moved_caret = (
-            self.target
-            and message.member == "TextCaretMoved"
-            and address == self.target.address
+        target = self.target
+        state_event = message.member == "StateChanged" and len(body) >= 2
+        if target is None:
+            # Discovery has no identified control yet. Keep focus transitions
+            # conservative, but unrelated object destruction cannot move focus.
+            if state_event and body[0] in {"focused", "active"}:
+                self.generation += 1
+            return
+        if (
+            message.member == "TextCaretMoved"
+            and address == target.address
             and not self.inserting
+        ):
+            self._invalidate(target)
+            return
+        if not state_event:
+            return
+        state, enabled = body[:2]
+        target_lost = (
+            (address == target.address and state == "focused" and not enabled)
+            or (address == target.window and state == "active" and not enabled)
+            or (
+                address in {target.address, target.window}
+                and state == "defunct"
+                and enabled
+            )
         )
-        if changed_focus or moved_caret:
-            self.generation += 1
-            if self.target:
-                self.on_focus_lost()
+        if target_lost:
+            # A later focus-gain event must never revive this generation.
+            self._invalidate(target)
+        elif (
+            state in {"focused", "active"}
+            and enabled
+            and address not in {target.address, target.window}
+            and self.target_is_current(target)
+            and not self.inserting
+            and self.consumed != target
+        ):
+            # Notification controls may advertise focus without taking keyboard
+            # focus from the editor. Check the captured target, without a delay.
+            self._verification_requested = True
+            if self._verification is None or self._verification.done():
+                try:
+                    loop = asyncio.get_running_loop()
+                except RuntimeError:
+                    self._invalidate(target)
+                    return
+                self._verification = loop.create_task(self._verify_target(target))
+
+    async def _verify_target(self, target):
+        try:
+            async with asyncio.timeout(5):
+                while self._verification_requested and self.target_is_current(target):
+                    self._verification_requested = False
+                    valid = await self._current(target)
+                    if self.inserting or self.consumed == target:
+                        return
+                    if not valid:
+                        self._invalidate(target)
+                        return
+        except asyncio.CancelledError:
+            raise
+        except Exception:
+            self._invalidate(target)
+        finally:
+            if self._verification is asyncio.current_task():
+                self._verification = None
+                self._verification_requested = False
+
+    def _cancel_verification(self):
+        if self._verification is not None:
+            self._verification.cancel()
+            self._verification = None
+        self._verification_requested = False
 
     async def _state(self, address):
         return (await self._call(address, ACCESSIBLE, "GetState"))[0]
@@ -157,6 +226,7 @@ class AccessibilityInput:
         return process_id
 
     async def _capture(self):
+        self._cancel_verification()
         self.target = None
         self.consumed = None
         generation = self.generation
@@ -285,6 +355,7 @@ class AccessibilityInput:
             raise InputUnavailable("The target rejected direct text input.")
 
     def close(self) -> None:
+        self._cancel_verification()
         self.target = None
         if self.bus:
             self.bus.disconnect()
