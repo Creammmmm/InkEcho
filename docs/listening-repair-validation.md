@@ -121,3 +121,34 @@ its historical lock state was not recorded and cannot be inferred. Native
 Wayland end-to-end recording/recognition/insertion acceptance remains incomplete.
 No product change is justified by this lock-state diagnostic alone; alpha5's
 existing focus and cancellation guards remain intact.
+
+## Unlocked native Wayland follow-up: direct input passed
+
+Later on 2026-10-13, the root agent observed GNOME `GetActive` return `(false,)`.
+With the desktop unlocked, the existing probe ran successfully on the actual
+GNOME Wayland session, with no application source change:
+
+```sh
+PYTHONPATH=src .venv/bin/python scripts/feasibility/listening_event_probe.py
+```
+
+Result: **passed**, approximately 3.83 seconds. The probe captured its own GTK 3
+fixture's actual focused editable target and verified its authoritative D-Bus PID
+before any insertion. Exact Chinese, Latin, and emoji text reached that owned
+field. Explicit task cancellation inserted nothing. Opening a second owned GTK
+window invalidated the original target; its expired token could not insert after
+the second window closed. Both fixture processes were cleaned up.
+
+The transient offscreen Qt process did not disturb the target, and again emitted
+**zero** relevant foreign state events. Three explicitly synthetic unrelated
+state events replayed through the actual native AT-SPI bus were observed and did
+not cancel the target. This establishes the regression behavior over native
+transport, not the original user's precise cancellation event source.
+
+This new result supersedes the earlier pending status **for owned GTK 3 native
+Wayland direct input and cancellation only**. It does not establish every
+application's support, GTK 4 support, cloud recognition quality, or a complete
+microphone/provider/application workflow. No microphone, API credentials, cloud
+calls, user-document reads, clipboard access, system setting changes, or screen
+unlock were performed in this probe. Packaged native workflow testing is a
+separate release validation task.
