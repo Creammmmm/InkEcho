@@ -109,3 +109,6 @@ current instance. It does not establish behavior after a restart, with other
 settings, or in another version. The temporary mutation script remains outside
 the repository; the tracked metadata probe remains read-only. The Codex process
 hosting the current task was not restarted.
+
+See the [bounded alternative-interface audit](direct-input-alternatives.md) for
+other input contracts and the installed libei/libeis 1.5.0-3 version limits.
