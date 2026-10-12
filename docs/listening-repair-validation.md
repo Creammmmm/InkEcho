@@ -91,3 +91,33 @@ shortcut subprocess or native notification emitted those events. It also does no
 establish GTK 4, browser, terminal, or broad native Wayland compatibility. The
 packaged microphone/local-provider workflow is recorded by release validation in
 [listening-repair-release.md](listening-repair-release.md).
+
+## Follow-up: native session lock state
+
+A later bounded diagnostic on 2026-10-13 found the **current** GNOME Wayland
+session locked. Reproduce the read-only session checks with:
+
+```sh
+loginctl show-session auto -p Type -p Active -p LockedHint
+gdbus call --session --dest org.gnome.ScreenSaver \
+  --object-path /org/gnome/ScreenSaver \
+  --method org.gnome.ScreenSaver.GetActive
+```
+
+Observed independently: `Type=wayland`, `Active=yes`, `LockedHint=yes`; the GNOME
+screen saver call returned `(true,)`. Here session `Active=yes` means the login
+session is active, not that an application window has keyboard focus.
+
+Before noticing the lock, a disposable owned GTK fixture was sampled three times
+at one-second intervals. Its `window_active`, `window_toplevel_focus`, and
+`textview_has_focus` were all false. Its corresponding owned AT-SPI window also
+reported ACTIVE=false and FOCUSED=false. No discrepancy between GTK and AT-SPI was
+observed; refusing capture was correct for that window. The fixture was cleaned
+up without text insertion. No screen unlock or focus restriction workaround was
+attempted, and further native attempts stopped.
+
+This explains the current validation obstacle, not the earlier user's incident:
+its historical lock state was not recorded and cannot be inferred. Native
+Wayland end-to-end recording/recognition/insertion acceptance remains incomplete.
+No product change is justified by this lock-state diagnostic alone; alpha5's
+existing focus and cancellation guards remain intact.
