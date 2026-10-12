@@ -1,4 +1,14 @@
-# InkEcho 0.1.0a5 — recording cancellation repair
+# InkEcho 0.1.0a6 — specific audio error feedback
+
+This focused release preserves the recorder's specific, sanitized failure reason
+through normal recording and microphone-test feedback. Missing devices,
+unsupported formats, start failures, interruptions, empty input and recording
+timeouts receive distinct explanations. Input routing, cancellation policy,
+providers, dependencies and appearance are unchanged. Current package evidence
+and the locked-native-session limitation are recorded in
+[audio feedback validation](audio-feedback-validation.md).
+
+## Earlier recording cancellation repair
 
 This preview narrows accessibility-event handling to the captured target and
 reports why a recording or pending result was cancelled. Unrelated application
@@ -16,7 +26,7 @@ still does not by itself establish a model's transcription capability.
 
 The application uses the user's supplied logo artwork and a coordinated navy/white
 palette for settings, tray and desktop integration. AppImage names now include the
-exact package version: `InkEcho-0.1.0a5-x86_64.AppImage`. The stable legacy filename
+exact package version: `InkEcho-0.1.0a6-x86_64.AppImage`. The stable legacy filename
 is updated only after local acceptance; earlier versioned images are preserved.
 
 The guarded AT-SPI input restrictions remain: target identity, editability, active
@@ -25,7 +35,7 @@ target checks do not imply universal browser/terminal compatibility. No clipboar
 fallback is introduced. Keys remain in Secret Service; recordings and transcripts
 are not retained by default.
 
-The current checksum and package evidence are in the recording repair report.
+The current checksum and package evidence are in the audio feedback report.
 The earlier authenticated provider diagnostic is retained in
 [provider repair release validation](provider-repair-release.md). Reproducible
 build instructions are in [packaging](packaging.md).
