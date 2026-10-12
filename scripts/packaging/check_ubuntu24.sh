@@ -2,7 +2,7 @@
 # Tests Ubuntu 24.04 userspace startup, not a Wayland/X11 desktop session.
 set -eu
 repo=$(CDPATH= cd -- "$(dirname -- "$0")/../.." && pwd)
-artifact=${1:-InkEcho-0.1.0a3-x86_64.AppImage}
+artifact=${1:-InkEcho-0.1.0a4-x86_64.AppImage}
 test -x "$repo/dist/$artifact"
 output=$(mktemp -d "$repo/build/ubuntu24-qa.XXXXXX")
 # Only this newly created screenshot directory is writable by container UID 65532.
