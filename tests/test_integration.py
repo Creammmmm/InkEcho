@@ -91,6 +91,40 @@ def test_existing_modified_icon_not_removed(integration):
     assert icon.read_text() == "user replacement"
 
 
+def test_repair_upgrades_known_managed_icons_and_removes_old_svg(integration):
+    integration.install()
+    fixtures = Path(__file__).parent / "fixtures"
+    old_png = integration._icons()[0][1]
+    old_png.write_bytes((fixtures / "legacy-inkecho-16.png").read_bytes())
+    old_svg = integration._legacy_svg()
+    old_svg.parent.mkdir(parents=True)
+    old_svg.write_bytes((fixtures / "legacy-inkecho.svg").read_bytes())
+    integration.repair()
+    assert old_png.read_bytes() == integration._icons()[0][0].read_bytes()
+    assert not old_svg.exists()
+    assert len(list(integration.data_home.glob("icons/hicolor/*/apps/*"))) == 8
+
+
+def test_repair_preserves_unknown_scalable_icon(integration):
+    integration.install()
+    old_svg = integration._legacy_svg()
+    old_svg.parent.mkdir(parents=True)
+    old_svg.write_text("user supplied icon")
+    with pytest.raises(IntegrationError):
+        integration.repair()
+    assert old_svg.read_text() == "user supplied icon"
+
+
+def test_legacy_icon_requires_managed_launcher_before_replacement(integration):
+    old_png = integration._icons()[0][1]
+    old_png.parent.mkdir(parents=True)
+    fixture = Path(__file__).parent / "fixtures/legacy-inkecho-16.png"
+    old_png.write_bytes(fixture.read_bytes())
+    with pytest.raises(IntegrationError):
+        integration.install()
+    assert old_png.read_bytes() == fixture.read_bytes()
+
+
 @pytest.mark.parametrize("path", [Path("relative"), Path("/tmp/path=bad")])
 def test_invalid_executable_path(path):
     with pytest.raises(IntegrationError):

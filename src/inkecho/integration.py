@@ -1,5 +1,6 @@
 """Explicit user desktop integration; never remove configuration or credentials."""
 
+import hashlib
 import os
 import shutil
 import subprocess
@@ -10,7 +11,32 @@ from inkecho.config import atomic_write
 
 APP_ID = "io.github.Creammmmm.InkEcho"
 MARKER = "X-InkEcho-Managed=true"
-SIZES = (16, 24, 32, 48, 64, 128, 256)
+SIZES = (16, 24, 32, 48, 64, 128, 256, 512)
+# Exact assets shipped before the blue branding. Never replace unknown artwork.
+LEGACY_ICON_SHA256 = {
+    "inkecho-16.png": (
+        "d26847979e9f027f02d5c46849875c5c47382878b24fe787229184a4a43637ed"
+    ),
+    "inkecho-24.png": (
+        "baed2993f14d0a86468d1d0a613a66be1876765bb06c585c9eed3e4a9a6140d7"
+    ),
+    "inkecho-32.png": (
+        "76603488559747258c0c6db66b2b52c3b7f08a2d560530d0ed6e624563b717b7"
+    ),
+    "inkecho-48.png": (
+        "2fc2dc8d1d7d8eb9abd333c9497ac33cbdb939d7a929fe6e2d4fce1c5b58bd95"
+    ),
+    "inkecho-64.png": (
+        "12927cb4d56f781f8335295f954936c6ce61290fd7f748e87e94ae80eb46113e"
+    ),
+    "inkecho-128.png": (
+        "f2cb2a058835b86d7e165c392714ab2cf05e55a0e0fdd36204469b5ccd3cefc5"
+    ),
+    "inkecho-256.png": (
+        "3e40b7eb151d90b9176f9799573d2ee7fe27f15e292d2eb663b790aab9d1b1c2"
+    ),
+    "inkecho.svg": "df9f4e49cbfe80a6754ff133b2548968550ba74965b69388c6ccdf0ce64a5cc6",
+}
 
 
 class IntegrationError(ValueError):
@@ -93,29 +119,52 @@ class DesktopIntegration:
     def _icons(self) -> list[tuple[Path, Path]]:
         assets = Path(str(files("inkecho").joinpath("assets")))
         icons = self.data_home / "icons/hicolor"
-        result = [(assets / "inkecho.svg", icons / "scalable/apps" / f"{APP_ID}.svg")]
-        result.extend(
+        return [
             (
                 assets / f"inkecho-{size}.png",
                 icons / f"{size}x{size}/apps" / f"{APP_ID}.png",
             )
             for size in SIZES
+        ]
+
+    def _legacy_svg(self) -> Path:
+        return self.data_home / "icons/hicolor/scalable/apps" / f"{APP_ID}.svg"
+
+    @staticmethod
+    def _legacy_asset(path: Path, name: str) -> bool:
+        return (
+            path.is_file()
+            and not path.is_symlink()
+            and hashlib.sha256(path.read_bytes()).hexdigest()
+            == LEGACY_ICON_SHA256.get(name)
         )
-        return result
 
     def install(self) -> None:
         entry = self._entry()
+        managed = self._owned(self.launcher)
         for source, destination in self._icons():
             if destination.is_symlink() or (
-                destination.exists() and destination.read_bytes() != source.read_bytes()
+                destination.exists()
+                and destination.read_bytes() != source.read_bytes()
+                and not (managed and self._legacy_asset(destination, source.name))
             ):
                 raise IntegrationError(
                     "An unrelated icon occupies this path; preserve it."
                 )
+        old_svg = self._legacy_svg()
+        if old_svg.is_symlink() or (
+            old_svg.exists()
+            and not (managed and self._legacy_asset(old_svg, "inkecho.svg"))
+        ):
+            raise IntegrationError(
+                "An unrelated scalable icon occupies this path; preserve it."
+            )
         self._write(self.launcher, entry)
         for source, destination in self._icons():
             destination.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(source, destination)
+        if old_svg.exists():
+            old_svg.unlink()
         self._refresh()
 
     def _refresh(self) -> None:
@@ -160,6 +209,9 @@ class DesktopIntegration:
         }
 
     def remove(self) -> None:
+        old_svg = self._legacy_svg()
+        if self._owned(self.launcher) and self._legacy_asset(old_svg, "inkecho.svg"):
+            old_svg.unlink()
         for path in (self.launcher, self.autostart):
             if self._owned(path):
                 path.unlink()

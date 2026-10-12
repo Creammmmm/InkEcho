@@ -39,7 +39,7 @@ class HomePage(Page):
         self.session = session
         panel, body = card()
         self.state = label("准备就绪")
-        self.state.setStyleSheet("font-size: 24px; font-weight: 600; color: #187661;")
+        self.state.setStyleSheet("font-size: 24px; font-weight: 600; color: #173e78;")
         body.addWidget(self.state)
         self.description = label("先配置转写模型与密钥，再启用快捷键。", muted=True)
         body.addWidget(self.description)
@@ -160,9 +160,10 @@ class MainWindow(QMainWindow):
         self.resize(1120, 850)
         self.setMinimumSize(940, 700)
         self.setStyleSheet(STYLE)
-        icon_path = Path(__file__).resolve().parents[1] / "assets/inkecho.svg"
+        icon_path = Path(__file__).resolve().parents[1] / "assets/inkecho.png"
         self.icon = QIcon(str(icon_path))
         self.setWindowIcon(self.icon)
+        QApplication.setWindowIcon(self.icon)
         self.overlay = Overlay(session.store)
         self.problem_notice = ProblemNotice()
         self.wayland = os.environ.get(
@@ -178,9 +179,12 @@ class MainWindow(QMainWindow):
         sidebar.setFixedWidth(220)
         navigation = QVBoxLayout(sidebar)
         navigation.setContentsMargins(14, 24, 14, 20)
-        brand = label("◉  InkEcho")
+        brand = label("InkEcho")
         brand.setObjectName("brand")
-        navigation.addWidget(brand)
+        brand_icon = label("")
+        brand_icon.setPixmap(self.icon.pixmap(44, 44))
+        brand_icon.setFixedSize(44, 44)
+        navigation.addWidget(actions(brand_icon, brand))
         navigation.addWidget(label("把声音，变成文字。", muted=True))
         self.navigation = QListWidget()
         navigation.addWidget(self.navigation, 1)

@@ -70,18 +70,18 @@ class Overlay(QWidget):
     def paintEvent(self, _event):
         colors = {
             "failed": "#fca5a5",
-            "cancelled": "#b5c8be",
+            "cancelled": "#b9c5d9",
             "transcribing": "#8ed6f2",
-            "polishing": "#c4b5fd",
+            "polishing": "#93adff",
         }
         painter = QPainter(self)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
         painter.setPen(Qt.PenStyle.NoPen)
-        painter.setBrush(QColor("#153b30"))
+        painter.setBrush(QColor("#102a56"))
         painter.drawRoundedRect(self.rect(), 18, 18)
         painter.setPen(
             QPen(
-                QColor(colors.get(self.state, "#6ee7b7")),
+                QColor(colors.get(self.state, "#9fc0ff")),
                 5,
                 Qt.PenStyle.SolidLine,
                 Qt.PenCapStyle.RoundCap,
@@ -104,7 +104,7 @@ class Overlay(QWidget):
             painter.drawLine(99, 40, 110, 29)
             return
         if getattr(self, "style", "waveform") == "pulse":
-            painter.setBrush(QColor(colors.get(self.state, "#6ee7b7")))
+            painter.setBrush(QColor(colors.get(self.state, "#9fc0ff")))
             radius = 7 + int(4 * abs(math.sin(self.phase)))
             painter.drawEllipse(88 - radius, 29 - radius, radius * 2, radius * 2)
             return

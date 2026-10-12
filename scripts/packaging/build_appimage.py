@@ -111,8 +111,8 @@ def main() -> None:
         "[Desktop Entry]\nType=Application\nName=InkEcho\n"
         "Exec=AppRun\nIcon=inkecho\nCategories=AudioVideo;Audio;\nTerminal=false\n"
     )
-    shutil.copy2(ROOT / "src/inkecho/assets/inkecho.svg", APPDIR / "inkecho.svg")
-    (APPDIR / ".DirIcon").symlink_to("inkecho.svg")
+    shutil.copy2(ROOT / "src/inkecho/assets/inkecho-256.png", APPDIR / "inkecho.png")
+    (APPDIR / ".DirIcon").symlink_to("inkecho.png")
     version = tomllib.loads((ROOT / "pyproject.toml").read_text())["project"]["version"]
     write_inventory(
         APPDIR,

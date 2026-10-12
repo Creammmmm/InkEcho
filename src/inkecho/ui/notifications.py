@@ -2,6 +2,7 @@
 
 import asyncio
 from collections.abc import Callable
+from pathlib import Path
 
 from dbus_next import Message, MessageType, Variant
 from dbus_next.aio import MessageBus
@@ -67,7 +68,10 @@ class DesktopNotifications:
                         body=[
                             "InkEcho",
                             self.identifier,
-                            "audio-input-microphone",
+                            str(
+                                Path(__file__).resolve().parents[1]
+                                / "assets/inkecho.png"
+                            ),
                             "InkEcho · 语音输入",
                             message,
                             actions,
