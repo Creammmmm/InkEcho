@@ -61,3 +61,59 @@ checks instead of the stale Qt-window rejection. The full editor/recording/cloud
 workflow remains subject to real target focus, the target's `EditableText` support,
 and provider configuration. No universal Wayland compatibility claim is added.
 UI shortcut/notification validation is recorded separately below when completed.
+
+## Shortcut dispatch and Wayland status UI
+
+The shortcut handler no longer treats `QApplication.activeWindow()` as global
+desktop focus. It hides stale auxiliary notices and dispatches to the authoritative
+input backend, whose own-process rejection is described above. A retained Qt
+window pointer can therefore no longer reject an external editor before its real
+focus is checked.
+
+During a Wayland voice task, recording, processing and errors use standard
+`org.freedesktop.Notifications` messages. InkEcho does not map the error notice,
+waveform overlay, or floating recording controls. It also no longer activates the
+main window after an idle transition on Wayland. On X11 the existing auxiliary
+windows remain available, and the delayed idle callback checks that a new task
+has not started before showing settings.
+
+Notifications replace the previous notification, include stop/cancel actions
+where applicable, and use a two-second D-Bus deadline. Action tokens belong to a
+notification generation and carry the exact task ID; delayed actions cannot stop
+or cancel another task. A late notification reply cannot restore stale actions.
+Shutdown requests `CloseNotification` before disconnecting. Notification service
+failures retain an explicit status in the overview and never trigger an auxiliary
+window or automatic clipboard fallback. Desktop notification actions depend on
+the desktop's support; the shortcut can still stop recording and opening settings
+provides a cancel control.
+
+Focused automated validation:
+
+```sh
+.venv/bin/python -m pytest -q \
+  tests/test_ui.py tests/test_notifications.py tests/test_startup.py
+```
+
+Result: **22 passed**. These tests cover dispatch despite a stale app-local active
+window, no auxiliary or delayed main-window mapping on Wayland, replaced
+notification IDs, old actions, late replies, shutdown cleanup, task ownership, and
+preservation of the original error when the notification service fails.
+The Qt UI tests use the offscreen backend; they do not establish compositor focus
+retention. Ruff lint and formatting passed for the changed files.
+
+Native GNOME notification protocol validation:
+
+```sh
+.venv/bin/python scripts/validation/notifications_probe.py
+```
+
+Result: `recording_accepted = true`, `completion_accepted = true`,
+`notification_replaced = true`, `application_windows_created = 0`. This script
+creates no Qt application or window. It sends a labeled test notification with
+stop/cancel actions, replaces it, and closes it before exiting. No physical action
+click was performed, and no target document was read. Acceptance by GNOME's
+notification service does not by itself prove full dictation or notification
+visibility when notifications are disabled by the user.
+
+The earlier alpha2 check of `QApplication.activeWindow() is notice = false` was
+only an application-local observation and is not compositor focus evidence.

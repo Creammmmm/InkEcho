@@ -53,12 +53,16 @@ checks.
 ## Native acceptance boundary
 
 The notice was also launched directly on the actual Wayland desktop, without
-opening a user document or changing focus: `platform = wayland`, `visible = true`,
+opening a user document: `platform = wayland`, `visible = true`,
 and `QApplication.activeWindow() is notice = false` after 500 milliseconds. The
 test notice closed automatically after 1.8 seconds. An initial `ToolTip` design
 failed on Wayland because it lacked a parent surface; the accepted version uses
 a frameless top-level `Tool` window with `WindowDoesNotAcceptFocus` and
 `WA_ShowWithoutActivating`. No private compositor API or clipboard was involved.
+This app-local Qt activation observation did **not** verify compositor focus.
+The subsequent focus repair disables this notice and other auxiliary application
+windows during Wayland voice tasks and uses standard desktop notifications;
+see [focus-repair-validation.md](focus-repair-validation.md).
 
 ## Deployment and final registration readback
 

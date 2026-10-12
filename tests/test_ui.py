@@ -20,7 +20,8 @@ from inkecho.ui.window import MainWindow
 
 
 @pytest.fixture
-def window(tmp_path, qt_app):
+def window(tmp_path, qt_app, monkeypatch):
+    monkeypatch.setenv("XDG_SESSION_TYPE", "x11")
     store = ConfigStore(tmp_path / "config")
     store.initialize()
     session = Session(store)
@@ -89,13 +90,23 @@ def test_navigation_scroll_and_icon(window, qt_app):
         assert bar.value() == bar.maximum()
 
 
-def test_own_window_toggle_refused(window, qt_app):
-    window.activateWindow()
-    qt_app.processEvents()
-    window.handle_command("toggle")
-    assert not window.session.pending
-    assert "不能向 InkEcho 自身输入" in window.home.description.text()
-    assert window.problem_notice.isVisible()
+def test_app_local_active_window_does_not_block_authoritative_backend(window, qt_app):
+    async def scenario():
+        calls = []
+
+        async def toggle():
+            calls.append("backend")
+
+        window.session.toggle = toggle
+        window.activateWindow()
+        window.problem_notice.present("Old failure")
+        qt_app.processEvents()
+        window.handle_command("toggle")
+        await asyncio.gather(*window.session.pending)
+        assert calls == ["backend"]
+        assert not window.problem_notice.isVisible()
+
+    asyncio.run(scenario())
 
 
 def test_hidden_start_failure_is_visible_without_activating_settings(window, qt_app):
@@ -111,7 +122,53 @@ def test_hidden_start_failure_is_visible_without_activating_settings(window, qt_
         Qt.WidgetAttribute.WA_ShowWithoutActivating
     )
     # Offscreen has no compositor and ignores the native activation prohibition.
-    # Native Wayland activation is checked separately in the validation report.
+    # Wayland never maps this auxiliary window during the voice workflow.
+
+
+def test_wayland_status_never_maps_auxiliary_or_delayed_main_window(window, qt_app):
+    window.wayland = True
+    window.hide()
+    notices = []
+    window.notify = lambda message, **flags: notices.append((message, flags))
+    window.show_problem("Visible desktop notification")
+    for state in ("recording", "transcribing", "failed", "idle"):
+        window.update_state(state)
+    QTest.qWait(600)
+    assert notices
+    assert any(flags.get("recording") for _, flags in notices)
+    assert not window.isVisible()
+    assert not window.problem_notice.isVisible()
+    assert not window.overlay.isVisible()
+    assert not window.controls.isVisible()
+
+
+def test_notification_actions_cannot_control_a_different_task(window):
+    actions = []
+    window.session.active = lambda task_id: task_id == "current"
+    window.session.cancel = lambda: actions.append("cancel")
+    window.notification_action("cancel", "old")
+    assert actions == []
+    window.notification_action("cancel", "current")
+    assert actions == ["cancel"]
+
+
+def test_notification_service_failure_keeps_original_error_in_overview(window):
+    async def scenario():
+        async def unavailable(*args, **kwargs):
+            return False
+
+        window.wayland = True
+        window.notifications.show = unavailable
+        window.hide()
+        message = "当前文本控件不支持安全输入。"
+        window.show_problem(message)
+        await asyncio.gather(*window.session.ui_tasks)
+        assert message in window.home.description.text()
+        assert "系统通知不可用" in window.home.description.text()
+        assert not window.isVisible()
+        assert not window.problem_notice.isVisible()
+
+    asyncio.run(scenario())
 
 
 @pytest.mark.parametrize("failed", [False, True])

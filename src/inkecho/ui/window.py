@@ -1,5 +1,6 @@
 """Main desktop window, tray lifecycle and independent configuration pages."""
 
+import os
 import time
 from pathlib import Path
 
@@ -21,6 +22,7 @@ from PySide6.QtWidgets import (
 
 from inkecho.core import State
 from inkecho.ui.information import AboutPage, CompatibilityPage, StatisticsPage
+from inkecho.ui.notifications import DesktopNotifications
 from inkecho.ui.overlay import Overlay
 from inkecho.ui.prompts import PromptsPage
 from inkecho.ui.providers import ProviderPage
@@ -163,6 +165,10 @@ class MainWindow(QMainWindow):
         self.setWindowIcon(self.icon)
         self.overlay = Overlay(session.store)
         self.problem_notice = ProblemNotice()
+        self.wayland = os.environ.get(
+            "XDG_SESSION_TYPE"
+        ) == "wayland" or QApplication.platformName().startswith("wayland")
+        self.notifications = DesktopNotifications(self.notification_action)
         self.controls = RecordingControls(session)
         root = QWidget()
         layout = QHBoxLayout(root)
@@ -282,6 +288,9 @@ class MainWindow(QMainWindow):
 
     def show_problem(self, message):
         self.show_status(message)
+        if self.wayland:
+            self.notify(message)
+            return
         self.problem_notice.present(message)
         if self.tray.isVisible():
             self.tray.showMessage(
@@ -290,6 +299,30 @@ class MainWindow(QMainWindow):
                 QSystemTrayIcon.MessageIcon.Warning,
                 10000,
             )
+
+    def notification_action(self, action, task_id):
+        if not self.session.active(task_id):
+            return
+        if action == "stop" and self.session.controller.state == State.RECORDING:
+            self.session.recorder.stop()
+        elif action == "cancel":
+            self.session.cancel()
+
+    def notify(self, message, *, recording=False, processing=False):
+        task = self.session.controller.task
+        task_id = task.id if task else None
+        self.notifications.invalidate_actions()
+
+        async def display():
+            available = await self.notifications.show(
+                message, recording=recording, processing=processing, task_id=task_id
+            )
+            if not available:
+                self.show_status(
+                    message + "\n系统通知不可用；使用快捷键结束或打开设置取消。"
+                )
+
+        self.session.spawn_ui(display())
 
     def update_state(self, state):
         from inkecho.app import STATE_LABELS
@@ -304,20 +337,35 @@ class MainWindow(QMainWindow):
         self.home.record.setText("结束录音" if state == "recording" else "开始录音")
         self.home.record.setEnabled(state in {"idle", "recording"})
         try:
-            self.overlay.show_state(state)
+            if self.wayland:
+                self.overlay.hide()
+                self.controls.hide()
+                if state != "idle":
+                    self.notify(
+                        STATE_LABELS[State(state)],
+                        recording=state == "recording",
+                        processing=state in {"transcribing", "polishing", "injecting"},
+                    )
+            else:
+                self.overlay.show_state(state)
             self.log.record(state)
         except (ValueError, OSError):
             self.show_status("状态记录不可用，请检查本地数据目录。")
         if (
             state in {"recording", "transcribing", "polishing", "injecting"}
             and not self.tray.isVisible()
+            and not self.wayland
         ):
             self.controls.stop.setEnabled(state == "recording")
             self.controls.show()
         elif state == "idle":
             self.controls.hide()
-        if state == "idle" and not self.tray.isVisible():
-            QTimer.singleShot(500, self.show_window)
+        if state == "idle" and not self.tray.isVisible() and not self.wayland:
+            QTimer.singleShot(500, self.show_idle_window)
+
+    def show_idle_window(self):
+        if self.session.controller.state == State.IDLE and not self.session.preparing:
+            self.show_window()
 
     def record_statistics(self, metrics):
         try:
@@ -348,12 +396,11 @@ class MainWindow(QMainWindow):
         elif command == "quit":
             self.quit_requested.emit()
         elif command == "toggle":
-            if (
-                QApplication.activeWindow() is not None
-                and not self.session.controller.task
-            ):
-                self.show_problem("请先聚焦其他应用的文本框，不能向 InkEcho 自身输入。")
-                return
+            self.problem_notice.hide()
+            self.overlay.hide()
+            if self.wayland:
+                self.controls.hide()
+            # Only the platform backend knows the current external focus owner.
             self.session.spawn(self.session.toggle())
 
     def show_window(self):
@@ -385,5 +432,6 @@ class MainWindow(QMainWindow):
         self.tray.hide()
         self.overlay.close()
         self.problem_notice.close()
+        self.notifications.close()
         self.controls.close()
         self.close()
