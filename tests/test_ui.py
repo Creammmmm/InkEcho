@@ -24,6 +24,7 @@ from inkecho.ui.window import MainWindow
 @pytest.fixture
 def window(tmp_path, qt_app, monkeypatch):
     monkeypatch.setenv("XDG_SESSION_TYPE", "x11")
+    monkeypatch.setattr("inkecho.audio.Recorder.devices", lambda: [])
     store = ConfigStore(tmp_path / "config")
     store.initialize()
     session = Session(store)
@@ -45,7 +46,7 @@ def window(tmp_path, qt_app, monkeypatch):
     qt_app.processEvents()
     yield widget
     session.timer.stop()
-    session.inputs.close()
+    asyncio.run(session.inputs.aclose())
     widget.dispose()
     log.close()
     qt_app.processEvents()
@@ -144,18 +145,21 @@ def test_wayland_status_never_maps_auxiliary_or_delayed_main_window(window, qt_a
     assert not window.controls.isVisible()
 
 
-def test_focus_cancel_notifies_specific_reason_and_records_safe_code(window):
+def test_keyboard_failure_notifies_specific_reason_and_records_safe_code(window):
+    from inkecho.platform.keyboard import KeyboardError
+
     window.wayland = True
     window.hide()
     notices = []
     window.notify = lambda message, **flags: notices.append(message)
-    window.session.controller.failure = Failure.FOCUS
-    window.session._state(State.CANCELLED)
+    window.session.input_failure = KeyboardError("session_closed")
+    window.session.controller.failure = Failure.INJECTION
+    window.session._state(State.FAILED)
     window.session._state(State.IDLE)
     assert len(notices) == 1
-    assert "目标焦点或光标发生变化" in notices[0]
-    assert "重新点击编辑器正文" in window.home.description.text()
-    assert "ERROR error target_changed" in window.log.recent()
+    assert "键盘输入连接已断开" in notices[0]
+    assert "重新启用" in window.home.description.text()
+    assert "ERROR error session_closed" in window.log.recent()
     assert not window.problem_notice.isVisible()
     assert not window.controls.isVisible()
     assert not window.overlay.isVisible()

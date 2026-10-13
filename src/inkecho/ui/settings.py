@@ -134,7 +134,9 @@ class RecordingPage(Page):
                 self.message.setText(f"快捷键未启用：{error}")
             return
         if revision == self.shortcut_revision:
-            self.message.setText("GNOME 快捷键已配置。请在目标文本框中实测触发。")
+            self.message.setText(
+                "GNOME 快捷键已配置。请在任意应用中实测开始和结束录音。"
+            )
 
     async def disable(self):
         self.shortcut_revision += 1

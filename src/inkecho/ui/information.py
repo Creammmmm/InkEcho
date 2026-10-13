@@ -14,9 +14,7 @@ from inkecho.ui.widgets import Page, actions, button, card, label
 
 class CompatibilityPage(Page):
     def __init__(self, session):
-        super().__init__(
-            "输入与兼容性", "明确当前环境的能力，安全校验始终先于文字输入。"
-        )
+        super().__init__("输入与兼容性", "识别完成后，像键盘一样向当时的光标位置输入。")
         self.session = session
         frame, layout = card()
         self.environment = label("")
@@ -25,26 +23,27 @@ class CompatibilityPage(Page):
         layout.addWidget(self.availability)
         layout.addWidget(
             label(
-                "已验证的直接输入路径为 AT-SPI 可编辑文本控件。"
-                "中文、其他 Unicode 与换行在隔离 X11 编辑器中通过测试；"
-                "目标失焦、光标改变或任务取消后，迟到结果不会改投其他窗口。"
+                "录音前不用选择文本框；录音和识别期间可以切换窗口。"
+                "输出时请把光标放在希望接收文字的位置。"
+                "取消任务会停止后续输入，已经发送的按键无法撤回。"
             )
         )
         layout.addWidget(
             label(
-                "Chrome 和 VTE 终端在本机未提供所需的可编辑辅助功能接口。"
-                "Wayland 现允许实验性逐目标检查，完整原生输入链路仍未验证。"
-                "Ubuntu 24.04 的完整桌面、"
-                "不同桌面环境及物理 F13/F14 仍待验证。",
+                "当前键盘输入方式面向 X11 / XWayland 应用，无需远程控制授权。"
+                "原生 Wayland 应用（包括该模式下的 GNOME 文本编辑器）暂不支持；"
+                "Wayland 桌面中的 XWayland 应用可以使用。"
+                "未经实测的应用不保证兼容。",
                 muted=True,
             )
         )
-        layout.addWidget(
-            label("不读取或改写剪贴板，也不会在失败时改用粘贴。", muted=True)
-        )
+        layout.addWidget(label("不使用剪贴板，也不依赖系统输入法。", muted=True))
         self.body.addWidget(frame)
         self.body.addWidget(
-            actions(button("重新检查输入服务", lambda: self.run(self.recheck())))
+            actions(
+                button("启用键盘输入", lambda: self.run(self.enable())),
+                button("重新检查输入服务", lambda: self.run(self.recheck())),
+            )
         )
         self.finish()
         self.refresh()
@@ -55,24 +54,35 @@ class CompatibilityPage(Page):
             f"{environment.distribution} · {environment.desktop} "
             f"· {environment.session}"
         )
-        if environment.session == "wayland" and self.session.connected:
-            text = (
-                "辅助功能服务已连接。Wayland 输入为实验性：仅在目标明确可编辑、"
-                "窗口活动且光标焦点均通过校验时开始，失败时会显示原因。"
-            )
-        elif self.session.connected:
-            text = "辅助功能服务已连接。具体输入目标仍需通过可编辑性与焦点校验。"
+        if not self.session.connected:
+            text = "键盘输入服务尚未连接。"
+        elif getattr(self.session.inputs, "authorized", False):
+            text = "键盘输入已启用；输出时请使用兼容的 X11 / XWayland 应用。"
         else:
-            text = "辅助功能服务尚未连接，请检查桌面辅助功能服务后重试。"
+            text = "输入服务已连接，请点击「启用键盘输入」完成准备。"
         self.availability.setText(text)
+
+    async def enable(self):
+        if (
+            self.session.controller.task
+            or self.session.preparing
+            or self.session.testing
+        ):
+            self.message.setText("请先结束当前任务，再调整键盘输入连接。")
+            return
+        enabled = await self.session.authorize_input()
+        self.refresh()
+        self.message.setText(
+            "键盘输入已启用；此操作不会输入文字。"
+            if enabled
+            else "键盘输入尚未启用，请查看错误提示。"
+        )
 
     async def recheck(self):
         if not self.session.connected:
             await self.session.initialize()
         self.refresh()
-        self.message.setText(
-            "已更新状态。聚焦目标文本框后，用快捷键开始；此页不会注入文字。"
-        )
+        self.message.setText("已更新状态；此检查不会请求授权或输入文字。")
 
 
 class StatisticsPage(Page):
@@ -87,10 +97,10 @@ class StatisticsPage(Page):
         form = QFormLayout()
         names = {
             "recordings": "今日任务数",
-            "succeeded": "成功",
+            "succeeded": "已发送任务数",
             "failed": "失败",
             "cancelled": "取消",
-            "characters": "已输入字符数（Unicode 码点）",
+            "characters": "已发送字符数（Unicode 码点）",
             "audio_seconds": "累计录音",
             "transcription_calls": "转写调用次数",
             "transcription_seconds": "转写耗时",

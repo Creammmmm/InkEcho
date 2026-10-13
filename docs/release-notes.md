@@ -1,4 +1,30 @@
-# InkEcho 0.1.0a6 — specific audio error feedback
+# InkEcho 0.1.0a7 — input at the current cursor
+
+Recording no longer captures or requires an editable target. Windows and caret
+may change during recording, transcription and polishing without cancelling the
+task. The production keyboard backend resolves the X11/XWayland focus during
+output, so later characters may follow a window switch. Explicit cancellation
+and expired tasks still stop unsent text; already sent keys cannot be retracted.
+No clipboard or system input method is used.
+
+The final AppImage passed real microphone → verified local HTTPS → production
+notification → owned GTK XWayland output and late-reply cancellation on a GNOME
+Wayland host. Separate production checks covered switching windows mid-output,
+partial cancellation, destroyed-window errors and an owned raw VTE terminal
+without a shell. An owned Chrome XWayland diagnostic passed Unicode delivery.
+These results do not establish arbitrary application support: native Wayland
+GTK is unsupported by this backend, and the user's XWayland Codex input has not
+been exercised. “Keys sent” reports dispatch, not acknowledgement by every app.
+
+See [current-cursor acceptance](current-cursor-input-validation.md) for the final
+artifact hash, exact commands, results, deployment status and limitations;
+[keyboard transport evidence](keyboard-transport-validation.md) separates each
+native target measurement. Build instructions are in [packaging](packaging.md).
+Provider configuration, credentials and appearance are unchanged by this input
+revision. Earlier release sections below retain their original input policy and
+measurements; they do not describe alpha7's current behavior.
+
+## Historical 0.1.0a6 — specific audio error feedback
 
 This focused release preserves the recorder's specific, sanitized failure reason
 through normal recording and microphone-test feedback. Missing devices,

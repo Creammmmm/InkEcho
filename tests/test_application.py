@@ -15,23 +15,26 @@ from inkecho.providers import ProviderError, Result, Usage
 
 class Inputs:
     def __init__(self):
-        self.generation = 0
+        self.focus = None
+        self.authorized = False
+        self.authorizations = 0
+        self.destinations = []
         self.inserted = []
 
     async def connect(self):
         pass
 
-    async def capture_target(self):
-        return self.generation
+    async def authorize(self):
+        self.authorized = True
+        self.authorizations += 1
 
-    def target_is_current(self, target):
-        return target == self.generation
-
-    async def inject(self, target, text, can_continue):
-        if self.target_is_current(target) and can_continue():
+    async def insert(self, text, can_continue):
+        if can_continue():
+            self.destinations.append(self.focus)
             self.inserted.append(text)
+            return len(text)
 
-    def close(self):
+    async def aclose(self):
         pass
 
 
@@ -137,74 +140,63 @@ def test_provider_authentication_has_specific_safe_message(factory):
     asyncio.run(scenario())
 
 
-def test_focus_change_during_keyring_wait_cannot_retarget(factory):
+def test_focus_change_during_keyring_wait_does_not_cancel_recording(factory):
     async def scenario():
         session = factory()
-        await session.initialize()
 
         async def key(_reference):
-            session.inputs.generation += 1
+            session.inputs.focus = "another-window"
             await asyncio.sleep(0)
             return "disposable-test-key"
 
         session.key = key
         await session.toggle()
-        assert session.controller.task is None
-        assert not session.recorder.recording
-        assert not session.inputs.inserted
+        assert session.controller.state == State.RECORDING
+        session.inputs.focus = "final-window"
+        session.recorder.stop()
+        await complete(session)
+        assert session.inputs.destinations == ["final-window"]
         await session.close()
 
     asyncio.run(scenario())
 
 
-@pytest.mark.parametrize("transcribing", [False, True])
-def test_focus_cancellation_reports_reason_and_safe_diagnostic(factory, transcribing):
+@pytest.mark.parametrize(
+    "phase", [State.RECORDING, State.TRANSCRIBING, State.POLISHING]
+)
+def test_focus_switches_continue_and_deliver_to_final_focus(factory, phase):
     async def scenario():
-        session = factory()
-        problems, diagnostics = [], []
-        session.problem.connect(problems.append)
-        session.diagnostic.connect(diagnostics.append)
-        await session.initialize()
+        entered, release = asyncio.Event(), asyncio.Event()
+
+        class DelayedClient(Client):
+            async def transcribe(self, *args):
+                if phase == State.TRANSCRIBING:
+                    entered.set()
+                    await release.wait()
+                return await super().transcribe(*args)
+
+            async def polish(self, *args):
+                if phase == State.POLISHING:
+                    entered.set()
+                    await release.wait()
+                return await super().polish(*args)
+
+        session = factory(client=DelayedClient())
+        session.store.save_settings(replace(session.settings, polishing_enabled=True))
         await session.toggle()
-        if transcribing:
+        assert session.inputs.focus is None
+        if phase != State.RECORDING:
             session.recorder.stop()
-            assert session.controller.state == State.TRANSCRIBING
-        session.inputs.generation += 1
-        session._focus_lost()
-        await asyncio.gather(*session.pending, return_exceptions=True)
-        assert session.controller.outcome == State.CANCELLED
-        assert session.controller.failure == Failure.FOCUS
-        assert session.controller.state == State.IDLE
-        assert not session.recorder.recording
-        assert not session.inputs.inserted
-        assert diagnostics == ["target_changed"]
-        assert len(problems) == 1
-        assert "目标焦点或光标发生变化" in problems[0]
-        assert "重新点击编辑器正文" in problems[0]
-        await session.close()
-
-    asyncio.run(scenario())
-
-
-def test_captured_preparation_focus_loss_reports_reason(factory):
-    async def scenario():
-        session = factory()
-        problems, diagnostics = [], []
-        session.problem.connect(problems.append)
-        session.diagnostic.connect(diagnostics.append)
-
-        async def key(_reference):
-            session._focus_lost()
-            await asyncio.sleep(0)
-            return "disposable-test-key"
-
-        session.key = key
-        await session.toggle()
-        assert diagnostics == ["target_changed"]
-        assert len(problems) == 1
-        assert "目标焦点或光标发生变化" in problems[0]
-        assert not session.recorder.recording
-        assert session.controller.task is None
+            await entered.wait()
+        session.inputs.focus = "chosen-during-processing"
+        session.controller.tick()
+        assert session.controller.state == phase
+        release.set()
+        if phase == State.RECORDING:
+            session.recorder.stop()
+        await complete(session)
+        assert session.controller.outcome == State.SUCCEEDED
+        assert session.inputs.destinations == ["chosen-during-processing"]
         await session.close()
 
     asyncio.run(scenario())
@@ -270,11 +262,10 @@ def test_focus_switch_during_intentional_delay_is_allowed(factory):
         await session.initialize()
         pending = session.spawn(session.toggle(delay=0.02))
         await asyncio.sleep(0)
-        session.inputs.generation += 1
-        session._focus_lost()
+        session.inputs.focus = "different-window"
         await pending
         assert session.recorder.recording
-        assert session.controller.task.target == 1
+        assert session.controller.task is not None
         await session.close()
 
     asyncio.run(scenario())
@@ -383,7 +374,7 @@ def test_first_toggle_waits_for_input_connection(factory):
     asyncio.run(scenario())
 
 
-def test_wayland_valid_target_uses_same_guarded_recording_path(factory, monkeypatch):
+def test_wayland_recording_has_no_target_requirement(factory, monkeypatch):
     async def scenario():
         session = factory()
         monkeypatch.setenv("XDG_SESSION_TYPE", "wayland")
@@ -398,32 +389,27 @@ def test_wayland_valid_target_uses_same_guarded_recording_path(factory, monkeypa
     asyncio.run(scenario())
 
 
-def test_unsupported_wayland_target_is_visible_before_key_or_audio(
-    factory, monkeypatch
-):
-    from inkecho.platform.accessibility import UnsupportedTarget
+def test_denied_keyboard_permission_is_visible_before_key_or_audio(factory):
+    from inkecho.platform.keyboard import KeyboardError
 
     async def scenario():
         session = factory()
-        monkeypatch.setenv("XDG_SESSION_TYPE", "wayland")
         problems, diagnostics = [], []
         session.problem.connect(problems.append)
         session.diagnostic.connect(diagnostics.append)
 
-        async def unsupported():
-            raise UnsupportedTarget("No EditableText")
+        async def denied():
+            raise KeyboardError("permission_denied")
 
         async def unexpected_key(_reference):
-            raise AssertionError("Unsupported target must not read credentials")
+            raise AssertionError("Denied permission must not read credentials")
 
-        session.inputs.capture_target = unsupported
+        session.inputs.authorize = denied
         session.key = unexpected_key
-        await session.initialize()
         await session.toggle()
         assert not session.recorder.recording
-        assert len(problems) == 1
-        assert "可编辑辅助功能接口" in problems[0]
-        assert diagnostics == ["desktop_unavailable"]
+        assert len(problems) == 1 and "系统未允许键盘输入" in problems[0]
+        assert diagnostics == ["permission_denied"]
         await session.close()
 
     asyncio.run(scenario())
@@ -452,7 +438,9 @@ def test_cancel_during_input_connection_does_not_start_recording(factory):
     asyncio.run(scenario())
 
 
-def test_known_incompatible_protocol_is_rejected_before_target_key_and_audio(factory):
+def test_known_incompatible_protocol_is_rejected_before_permission_key_and_audio(
+    factory,
+):
     async def scenario():
         session = factory()
         provider = session.store.load_provider("qwen")
@@ -465,7 +453,7 @@ def test_known_incompatible_protocol_is_rejected_before_target_key_and_audio(fac
             raise AssertionError("Protocol preflight must run first")
 
         session.inputs.connect = forbidden
-        session.inputs.capture_target = forbidden
+        session.inputs.authorize = forbidden
         session.key = forbidden
         await session.toggle()
         assert not session.recorder.recording
@@ -581,5 +569,244 @@ def test_old_audio_reason_is_cleared_before_cancel_and_next_task(factory):
         assert "最长时限" in problems[0]
         assert "录音失败" in problems[1] and "最长时限" not in problems[1]
         await session.close()
+
+    asyncio.run(scenario())
+
+
+def test_initialize_does_not_request_permission_and_authorization_is_reused(factory):
+    async def scenario():
+        session = factory()
+        await session.initialize()
+        assert session.inputs.authorizations == 0
+        await session.toggle()
+        assert session.inputs.authorizations == 1 and session.recorder.recording
+        session.cancel()
+        session.last_toggle = 0
+        await session.toggle()
+        assert session.inputs.authorizations == 1 and session.recorder.recording
+        await session.close()
+
+    asyncio.run(scenario())
+
+
+@pytest.mark.parametrize("denied", [False, True])
+def test_cancel_during_authorization_cannot_start_late_recording(factory, denied):
+    from inkecho.platform.keyboard import KeyboardError
+
+    async def scenario():
+        session = factory()
+        entered, release = asyncio.Event(), asyncio.Event()
+        problems = []
+        session.problem.connect(problems.append)
+
+        async def authorize():
+            entered.set()
+            await release.wait()
+            if denied:
+                raise KeyboardError("permission_denied")
+            session.inputs.authorized = True
+
+        session.inputs.authorize = authorize
+        pending = asyncio.create_task(session.toggle())
+        await entered.wait()
+        session.cancel()
+        release.set()
+        await pending
+        assert not session.recorder.recording and session.controller.task is None
+        assert not problems
+        await session.close()
+
+    asyncio.run(scenario())
+
+
+def test_cancelled_pending_delivery_cannot_type_or_finish_a_new_task(factory):
+    async def scenario():
+        session = factory()
+        entered, release = asyncio.Event(), asyncio.Event()
+
+        async def delayed_insert(text, can_continue):
+            entered.set()
+            try:
+                await release.wait()
+            except asyncio.CancelledError:
+                await release.wait()
+            if can_continue():
+                session.inputs.inserted.append(text)
+
+        session.inputs.insert = delayed_insert
+        await session.toggle()
+        session.recorder.stop()
+        await entered.wait()
+        old_pending = list(session.pending)
+        session.cancel()
+        session.last_toggle = 0
+        await session.toggle()
+        new_id = session.controller.task.id
+        release.set()
+        await asyncio.gather(*old_pending, return_exceptions=True)
+        assert not session.inputs.inserted
+        assert session.controller.task.id == new_id
+        assert session.controller.state == State.RECORDING
+        await session.close()
+
+    asyncio.run(scenario())
+
+
+@pytest.mark.parametrize(
+    ("code", "message"),
+    [
+        ("session_closed", "键盘输入连接已断开"),
+        ("unsupported_target", "原生 Wayland 应用暂不支持"),
+        ("mapping_changed", "键盘布局发生变化"),
+    ],
+)
+def test_keyboard_delivery_error_has_one_specific_notice(factory, code, message):
+    from inkecho.platform.keyboard import KeyboardError
+
+    async def scenario():
+        session = factory()
+        problems, diagnostics = [], []
+        session.problem.connect(problems.append)
+        session.diagnostic.connect(diagnostics.append)
+
+        async def failed_insert(*_args):
+            raise KeyboardError(code)
+
+        session.inputs.insert = failed_insert
+        await session.toggle()
+        session.recorder.stop()
+        await complete(session)
+        assert session.controller.outcome == State.FAILED
+        assert diagnostics == [code]
+        assert len(problems) == 1 and message in problems[0]
+        assert session.input_failure is None
+        await session.close()
+
+    asyncio.run(scenario())
+
+
+def test_default_keyboard_lifecycle_does_not_inspect_focus(factory):
+    from inkecho.platform.keyboard import KeyboardInput
+
+    async def scenario():
+        template = factory()
+        await template.close()
+        session = Session(template.store, recorder=Recorder(), client=Client())
+        assert type(session.inputs) is KeyboardInput
+        assert not session.inputs.connected
+        calls = []
+
+        class DisplayOnly:
+            # Deliberately no focus, mapping or send API: preparation must not use it.
+            def __init__(self):
+                calls.append("connect")
+
+            def close(self):
+                calls.append("close")
+
+        session.inputs._factory = DisplayOnly
+        session.key = template.key
+        await session.initialize()
+        assert session.inputs.authorized and calls == ["connect"]
+        await session.toggle()
+        assert session.recorder.recording
+        assert session.controller.state == State.RECORDING
+        await session.close()
+        assert calls == ["connect", "close"]
+        assert not session.inputs.connected
+
+    asyncio.run(scenario())
+
+
+def test_display_failure_is_visible_before_credentials_or_recording(factory):
+    from inkecho.platform.keyboard import KeyboardError, KeyboardInput
+
+    async def scenario():
+        session = factory()
+        problems, diagnostics = [], []
+        session.problem.connect(problems.append)
+        session.diagnostic.connect(diagnostics.append)
+
+        def unavailable():
+            raise KeyboardError("display_unavailable")
+
+        async def forbidden_key(_reference):
+            pytest.fail("Display failure must not request credentials")
+
+        session.inputs = KeyboardInput(driver_factory=unavailable)
+        session.key = forbidden_key
+        await session.toggle()
+        assert not session.recorder.recording and not session.controller.task
+        assert diagnostics == ["display_unavailable"]
+        assert len(problems) == 1 and "无法连接桌面" in problems[0]
+        await session.close()
+
+    asyncio.run(scenario())
+
+
+def test_sent_character_metrics_use_keyboard_normalized_count(factory):
+    class NewlineClient(Client):
+        async def transcribe(self, *_args):
+            return Result("甲\r\n乙", Usage(), 0.1)
+
+    async def scenario():
+        session = factory(client=NewlineClient())
+        session.store.save_settings(replace(session.settings, polishing_enabled=False))
+        outcomes, statuses = [], []
+        session.finished.connect(outcomes.append)
+        session.status.connect(statuses.append)
+
+        async def normalized_insert(text, can_continue):
+            assert text == "甲\r\n乙" and can_continue()
+            return 3  # Keyboard emits one newline for the provider's CRLF pair.
+
+        session.inputs.insert = normalized_insert
+        await session.toggle()
+        session.recorder.stop()
+        await complete(session)
+        assert outcomes[0]["outcome"] == "succeeded"
+        assert outcomes[0]["characters"] == 3
+        assert "按键已发送" in statuses
+        assert all("已输入到目标" not in text for text in statuses)
+        await session.close()
+
+    asyncio.run(scenario())
+
+
+def test_keyboard_cleanup_failure_does_not_interrupt_application_shutdown(factory):
+    from inkecho.platform.keyboard import KeyboardError
+
+    async def scenario():
+        session = factory()
+        diagnostics, problems = [], []
+        session.diagnostic.connect(diagnostics.append)
+        session.problem.connect(problems.append)
+        await session.toggle()
+        assert session.recorder.recording
+
+        async def failed_close():
+            raise KeyboardError("mapping_changed")
+
+        session.inputs.aclose = failed_close
+        await session.close()
+        assert not session.timer.isActive()
+        assert not session.recorder.recording and not session.controller.task
+        assert diagnostics == ["mapping_changed"]
+        assert problems == []
+
+    asyncio.run(scenario())
+
+
+def test_unexpected_keyboard_cleanup_error_is_not_hidden(factory):
+    async def scenario():
+        session = factory()
+
+        async def failed_close():
+            raise ValueError("unexpected test failure")
+
+        session.inputs.aclose = failed_close
+        with pytest.raises(ValueError, match="unexpected test failure"):
+            await session.close()
+        assert not session.timer.isActive()
 
     asyncio.run(scenario())

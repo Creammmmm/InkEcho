@@ -4,6 +4,27 @@ Read [PROJECT_SPEC.md](PROJECT_SPEC.md) before choosing work. Its phase gates an
 privacy rules remain mandatory. The root agent assigns work and reviews results;
 subagents implement code. A passing unit test does not establish desktop support.
 
+## Input semantics revised by the user on 2026-10-14
+
+Recording starts independently of the current location or focus. Do not capture
+or require an editable target before recording. Moving focus or the caret during
+recording, transcription or polishing does not cancel the task. Output follows
+keyboard semantics: send text to the cursor that has focus at delivery time. If
+focus changes while text is being emitted, later characters may go to the new
+focus; do not pin delivery to a previously captured object or window.
+
+Use neither the clipboard nor a system input method. Transport availability and
+Unicode behavior require fresh platform evidence; historical targeted AT-SPI
+acceptance does not validate this revised behavior. Keep historical reports
+intact and record new results in
+[current cursor validation](current-cursor-input-validation.md).
+
+Explicit cancellation, expired task IDs/epochs and replaced tasks still stop
+unsent output at every asynchronous boundary and before each emission step.
+Focus changes alone do not expire a task. Already dispatched events cannot be
+retracted. Release owned held keys/resources during cleanup without dispatching
+remaining text, and never replay ambiguous partial output automatically.
+
 ## Simple, consistent Python
 
 - Use Python 3.12 or newer, four spaces, UTF-8 and an 88-character line limit.
@@ -22,7 +43,8 @@ subagents implement code. A passing unit test does not establish desktop support
 - Keep provider HTTP details outside UI code and platform APIs behind adapters.
   Raise specific errors at boundaries; never silently swallow failures.
 - Never log keys, audio, transcript text or user prompt contents. Never use the
-  clipboard as a fallback. Treat stale tasks and focus changes as hard stops.
+  clipboard or a system input method as a delivery path or fallback. Treat explicit
+  cancellation and stale tasks as hard stops, not focus changes.
 
 ## English commits with one purpose
 
@@ -40,7 +62,7 @@ verb, for example:
 
 ```text
 feat(audio): capture microphone samples
-fix(injection): reject results after focus changes
+fix(injection): stop output after task cancellation
 docs(workflow): define local validation gates
 ```
 
@@ -106,7 +128,16 @@ covered by the current HEAD receipt. Avoid bulk pushes with unrelated refs.
 
 - Phase 0 must have reproducible Chinese/Unicode injection evidence before full
   application development proceeds. Record unsupported sessions honestly.
-- Test cancellation, late replies and focus changes at each asynchronous boundary.
+- Test explicit cancellation, expired/replaced tasks and late replies at every
+  asynchronous boundary: none may dispatch further text. Test that recording
+  starts without an editable target, focus changes during recording/processing
+  do not cancel, output follows the current cursor, and switching focus during
+  emission permits subsequent characters to reach the new focus. Do not weaken
+  task-ID/epoch checks to achieve the focus behavior.
+- Verify keyboard transport and mixed Unicode in the actual desktop, with neither
+  clipboard nor system input method. Separately label synthetic/headless evidence,
+  owned test targets and measured application support. Record cancellation during
+  partial output, held-key cleanup and unavailable/denied transport behavior.
 - Test global shortcuts, F13/F14, microphone input, Unicode insertion and overlay
   focus in the actual target desktop session. Maintain the compatibility matrix.
 - For a provider, separate response parsing tests from an authenticated live

@@ -141,7 +141,7 @@ class GnomeShortcuts:
             or not os.access(registered[0], os.X_OK)
         ):
             return "快捷键启动路径已失效或指向其他版本，请重新保存并启用快捷键。"
-        return f"GNOME 已注册 {shortcut}。请在目标文本框中按键开始录音。"
+        return f"GNOME 已注册 {shortcut}。按下快捷键开始或结束录音。"
 
     def conflicts(self, binding: str) -> bool:
         settings = self.settings

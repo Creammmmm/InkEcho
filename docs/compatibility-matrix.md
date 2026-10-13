@@ -15,7 +15,29 @@ before interpreting a passed item as a complete application workflow.
 | Ubuntu 26.04.1 / isolated Xvfb lab (not full desktop) | Ctrl+Alt+K synthetic activation and conflict rejection passed | Synthetic activation with temporary/restored map passed; physical keys pending | Actual host microphone used in source and final bundled-runtime workflow | Real Chrome, GNOME editor and VTE received Unicode via diagnostic XTest; targeted GTK AT-SPI final packaged workflow passed Unicode/cancel/focus-away-back | Production overlay retained focus during real workflow; no compositor | Final alpha nine-page/IPC/config checks and bundled-runtime microphone-to-input workflow passed |
 | Ubuntu 24.04 / minimal offscreen container | Not applicable | Not applicable | Not tested | Not tested | Not tested | Final alpha full application: nine pages, bundled Chinese font, clean exit; nonroot/network-disabled/read-only |
 
-## Current input support boundary
+## Current a7 input support boundary
+
+The a7 keyboard route follows the output-time cursor and does not require an
+editable target before recording. Focus changes do not cancel; explicit
+cancellation and expired task IDs still stop later output. Host desktop protocol
+and target application protocol are distinct.
+
+| Backend/target | Current measured status | Limit |
+| --- | --- | --- |
+| XSendEvent / owned GTK XWayland on GNOME Wayland | Production keyboard and source/full-package microphone + local HTTPS workflow passed Unicode and cancellation | No arbitrary application or physical-shortcut claim |
+| XSendEvent / owned Chrome 154 XWayland | Diagnostic delivered exact 28-code-point Unicode sample, including newline | Actual user Codex editor not tested; per-application handling can differ |
+| Production KeyboardInput / owned VTE 0.84 XWayland | 28 code points, exact 53 raw PTY bytes and restored map; no shell started | Return is one CR byte in this raw PTY test, not an LF; user terminal applications not tested |
+| Keyboard route / native Wayland GTK, including native GNOME Text Editor | Unsupported by the a7 X11 transport | Native portal keysym route dropped characters; old AT-SPI tests used a different policy |
+| Current Codex XWayland window | Transport identity verified read-only; text delivery pending | Missing AT-SPI EditableText does not by itself determine new keyboard compatibility |
+| Other X11/XWayland targets and full X11 desktop | Backend intended for X11/XWayland; unmeasured target/desktop behavior pending | X server accepting an event does not acknowledge application editing |
+| Windows/macOS | Not implemented or tested | No compatibility claim |
+
+See [current-cursor acceptance](current-cursor-input-validation.md) and
+[keyboard transport evidence](keyboard-transport-validation.md). The following
+AT-SPI table and dated supplements preserve alpha6-and-earlier measurements and
+do not describe a7's active input policy.
+
+## Historical targeted AT-SPI boundary through alpha6
 
 | Backend/target | Status | Why |
 |---|---|---|
@@ -144,3 +166,20 @@ AT-SPI input backend. This does not establish the behavior of other Codex versio
 or configurations. See [Codex target evidence](codex-input-validation.md).
 Historical measurements above remain unchanged; these checks do not establish
 universal Wayland support.
+
+## 0.1.0a7 current-cursor supplement — 2026-10-14
+
+Source and versioned AppImage workflow checks passed on the real GNOME Wayland
+host with owned GTK XWayland targets: recording began on a noneditable button;
+a local HTTPS reply was delayed while focus moved to a second window; all 28
+Unicode code points arrived there; a second task was cancelled without late
+output. Production notifications stayed windowless and normalized keymaps were
+restored. No cloud call, user key, clipboard or system input method was used.
+
+Separate production backend checks passed switching between two owned windows
+mid-output, partial cancellation with a matching key release, and a destroyed
+owned-window error without process termination. Owned Chrome and VTE results
+above are separate transport checks, not additional full speech workflows.
+The a7 package also produced nine actual native Wayland settings screenshots
+using disposable defaults. Deployment confirmation is recorded separately in
+[current-cursor acceptance](current-cursor-input-validation.md).

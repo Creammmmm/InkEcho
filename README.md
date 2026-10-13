@@ -1,18 +1,20 @@
 # InkEcho
 
-InkEcho 是一个 Linux 桌面语音输入应用：录音后调用云端转写，可选按 Prompt 润色，再通过辅助功能接口向已校验的文本目标输入文字。默认不读取、修改或使用剪贴板。
+InkEcho 是一个 Linux 桌面语音输入应用：录音后调用云端转写，可选按 Prompt 润色，再输入文字。不使用剪贴板或系统输入法。
 
-当前版本为 **0.1.0a6 开发预览版**。已有可运行的中文设置界面、录音、供应商配置、任务取消、焦点保护、统计、桌面集成及 AppImage 构建。安全输入已在隔离 X11 的 GTK 可编辑控件实测；本机 GNOME Wayland 的自有 GTK3 测试窗口及 GNOME 文本编辑器 50.1（GTK4）的独立测试文档均通过了[实际麦克风、本机 HTTPS 测试服务、系统通知、Unicode 输入与主动取消](docs/native-voice-workflow-validation.md)。GTK3 测试窗口另通过了[公开音频样本、真实云端转写与润色、原生输入](docs/native-cloud-workflow-validation.md)。这些是独立验证，不能合称一次真实用户语音的云端完整流程；GNOME 文本编辑器本次未测试失焦场景。Wayland 仍为实验性逐目标支持；本机当前 Codex、Chrome 与 VTE 终端未提供可用的安全输入接口，不能据此宣称“任意应用均支持”。
+当前版本为 **0.1.0a7 开发预览版**，采用“输出到当前光标”的键盘输入方式：开始录音不要求先选文本框，录音、识别与润色期间可自由切换窗口；输出中切换窗口，后续字符也可进入新焦点。主动取消和过期任务仍停止未发送的文字，已经发送的按键无法撤回。
 
-本版保留并显示具体的音频错误原因，例如麦克风不可用、录音中断、空录音或超时，方便区分设备问题。目标失焦、光标变化和主动取消仍会停止输入；上一版的无关辅助功能事件过滤、供应商协议检查及深蓝白色界面保留不变。具体验证范围见[本版验收记录](docs/audio-feedback-validation.md)；取消修复与供应商能力验证分别见[alpha5 记录](docs/listening-repair-release.md)和[alpha4 记录](docs/provider-repair-release.md)。
+当前后端面向 **X11 / XWayland 应用**，不是所有 Wayland 桌面应用。实际 a7 包已在 GNOME Wayland 宿主的自有 GTK XWayland 窗口通过录音、本机 HTTPS 服务、处理中切窗、Unicode 输出与取消验证；Chrome XWayland 另通过输入诊断，VTE XWayland 的自有原始终端也通过生产键盘输入验证（未启动 shell）。原生 Wayland GTK（包括该模式下的 GNOME 文本编辑器）不支持这条新键盘路径。当前 Codex 窗口已确认为 XWayland，但尚未向用户的输入框发送测试文字，不能据此保证兼容。详见[当前光标验收](docs/current-cursor-input-validation.md)及[键盘传输实测](docs/keyboard-transport-validation.md)。
+
+版本化 a7 包已构建、验收并部署到原有稳定启动路径；用户的 Ctrl+F4 和三份 JSON 配置保持不变。此前 alpha6 的[原生 AT-SPI 验收](docs/native-voice-workflow-validation.md)、[独立云端验收](docs/native-cloud-workflow-validation.md)与[音频反馈修复](docs/audio-feedback-validation.md)保留为历史证据；旧版“失焦即取消”不再是 a7 的操作要求。
 
 ![InkEcho 开发预览版实际运行界面](docs/images/inkecho-home.png)
 
-截图来自 0.1.0a5 实际 AppImage，在 Ubuntu 26.04 GNOME Wayland 上以独立测试配置运行；检查结果见验收记录。
+截图来自 0.1.0a7 实际 AppImage，在 Ubuntu 26.04 GNOME Wayland 上以独立默认测试配置运行；图中的 F13 不代表用户当前快捷键设置。
 
 ## 运行
 
-需要 Linux 图形桌面、音频服务、AT-SPI 辅助功能服务，以及已解锁的系统 Secret Service（例如 GNOME Keyring）。云端功能需要自行配置对应供应商的有效密钥与模型。Ubuntu 24.04/26.04 的完整 Wayland/X11 桌面矩阵尚未全部实测。
+需要 Linux 图形桌面、X11 / XWayland 显示与 libX11、音频服务，以及已解锁的系统 Secret Service（例如 GNOME Keyring）。云端功能需要自行配置对应供应商的有效密钥与模型。Ubuntu 24.04/26.04 的完整 Wayland/X11 桌面矩阵尚未全部实测。
 
 源码运行需要 Python 3.12+ 和 uv：
 
@@ -21,13 +23,13 @@ uv sync --locked
 uv run python -m inkecho
 ```
 
-在界面中分别设置转录与润色服务，测试麦克风，选择 Prompt；GNOME 快捷键需要在录音设置页主动启用。其他桌面可自行将快捷键绑定到 `python -m inkecho --toggle`，使用实际安装的 Python 完整路径。失焦、取消或不支持的目标会停止流程，不会自动粘贴。
+在界面中分别设置转录与润色服务，测试麦克风，选择 Prompt；GNOME 快捷键需要在录音设置页主动启用。其他桌面可自行将快捷键绑定到 `python -m inkecho --toggle`，使用实际安装的 Python 完整路径。开始后可切换窗口，识别完成时将光标放在希望接收文字的位置。主动取消会停止后续发送；目标不支持时会提示错误，不会自动粘贴。
 
-本地发布产物为 `dist/InkEcho-0.1.0a6-x86_64.AppImage`（约 103 MiB）：
+本地发布产物为 `dist/InkEcho-0.1.0a7-x86_64.AppImage`（约 103 MiB）：
 
 ```sh
-chmod +x dist/InkEcho-0.1.0a6-x86_64.AppImage
-./dist/InkEcho-0.1.0a6-x86_64.AppImage
+chmod +x dist/InkEcho-0.1.0a7-x86_64.AppImage
+./dist/InkEcho-0.1.0a7-x86_64.AppImage
 ```
 
 构建步骤、校验和与运行依赖见[打包说明](docs/packaging.md)。桌面启动器、图标与自启动均由用户主动安装；移动 AppImage 后可在设置中修复路径。

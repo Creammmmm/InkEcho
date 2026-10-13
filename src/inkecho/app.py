@@ -9,7 +9,7 @@ from PySide6.QtCore import QObject, QTimer, Signal
 from inkecho.audio import Recorder
 from inkecho.config import ConfigStore
 from inkecho.core import Failure, State, TaskController
-from inkecho.platform.accessibility import AccessibilityInput, InputUnavailable
+from inkecho.platform.keyboard import KeyboardError, KeyboardInput
 from inkecho.providers import ProviderClient, ProviderError, validate_provider_protocol
 from inkecho.security import CredentialError, SecretStore
 
@@ -19,21 +19,17 @@ STATE_LABELS = {
     State.TRANSCRIBING: "正在转写",
     State.POLISHING: "正在润色",
     State.INJECTING: "正在输入",
-    State.SUCCEEDED: "已输入到目标",
+    State.SUCCEEDED: "按键已发送",
     State.FAILED: "本次任务失败",
     State.CANCELLED: "已取消",
 }
 ERROR_LABELS = {
-    Failure.TARGET: "未找到可安全输入的目标。请先聚焦可编辑文本框。",
-    Failure.FOCUS: (
-        "目标焦点或光标发生变化，本次输入已取消。请重新点击编辑器正文，再按快捷键录音。"
-    ),
     Failure.TIMEOUT: "任务超时，请缩短录音后重试。",
     Failure.AUDIO: "录音失败，请检查麦克风及音频设置。",
     Failure.TRANSCRIPTION: "转写失败，请检查服务配置、网络和账户权限。",
     Failure.POLISHING: "润色失败，当前已关闭原文回退。",
     Failure.EMPTY: "服务没有返回有效文字。",
-    Failure.INJECTION: "目标无法安全接收文字，未使用剪贴板回退。",
+    Failure.INJECTION: "键盘输入未完成，未使用剪贴板回退。",
 }
 PROVIDER_LABELS = {
     "protocol": (
@@ -53,6 +49,23 @@ PROVIDER_LABELS = {
     "empty": "云端没有返回有效文字。",
     "audio": "录音格式或大小不符合服务要求。",
 }
+KEYBOARD_LABELS = {
+    "display_unavailable": "无法连接桌面的 X11 / XWayland 输入服务。请检查桌面会话。",
+    "unsupported_target": (
+        "当前窗口暂不支持此键盘输入方式。请使用兼容的 X11 / XWayland 应用；"
+        "原生 Wayland 应用暂不支持。"
+    ),
+    "mapping_changed": "输入期间键盘布局发生变化，已停止剩余输入；未自动重试。",
+    "permission_required": "请先在「输入与兼容性」中启用键盘输入。",
+    "permission_denied": "系统未允许键盘输入。请重新启用并在系统提示中允许。",
+    "portal_unavailable": "当前桌面没有可用的键盘输入服务。请检查桌面环境支持。",
+    "session_closed": "键盘输入连接已断开。请重新启用键盘输入。",
+    "injection_failed": "键盘输入未完成，未使用剪贴板回退。",
+    "input_cancelled": "输入已停止，不会继续发送剩余文字。",
+    "unsupported_text": "结果含有当前键盘输入方式不支持的字符。",
+    "busy": "键盘输入服务正在处理其他操作，请稍后重试。",
+}
+
 AUDIO_LABELS = {
     "microphone_unavailable": "所选麦克风当前不可用，请刷新设备并重新选择。",
     "audio_format_unsupported": "麦克风不支持当前采样率，请在录音设置中调整。",
@@ -96,8 +109,8 @@ class Session(QObject):
     ):
         super().__init__()
         self.store = store or ConfigStore()
-        self.inputs = inputs or AccessibilityInput(self._focus_lost)
-        self.inputs.on_focus_lost = self._focus_lost
+        self.inputs = inputs or KeyboardInput()
+        self.authorization_lock = asyncio.Lock()
         self.recorder = recorder or Recorder(self)
         self.client = client or ProviderClient()
         self.secrets = secrets
@@ -106,7 +119,6 @@ class Session(QObject):
         self.ui_tasks: set[asyncio.Task] = set()
         self.epoch = 0
         self.preparing = False
-        self.captured_preparation = False
         self.testing = False
         self.connected = False
         self.last_toggle = 0.0
@@ -114,6 +126,7 @@ class Session(QObject):
         self.keys = {}
         self.task_context = None
         self.audio_failure = None
+        self.input_failure = None
         self.settings = self.store.load_settings()
         self.recorder.level.connect(self.level)
         self.recorder.finished.connect(self._recorded)
@@ -139,9 +152,8 @@ class Session(QObject):
         try:
             await self.inputs.connect()
             self.connected = True
-        except InputUnavailable:
-            self.diagnostic.emit("desktop_unavailable")
-            self.report_problem("系统输入服务暂不可用，设置与麦克风测试仍可使用。")
+        except KeyboardError as error:
+            self.input_problem(error)
 
     def report_problem(self, message: str) -> None:
         self.status.emit(message)
@@ -181,18 +193,45 @@ class Session(QObject):
 
         await asyncio.to_thread(save)
 
-    def target_is_current(self, target) -> bool:
-        return self.inputs.target_is_current(target)
+    def input_problem(self, error: KeyboardError) -> None:
+        self.diagnostic.emit(error.code)
+        self.report_problem(
+            KEYBOARD_LABELS.get(error.code, KEYBOARD_LABELS["injection_failed"])
+        )
 
-    def inject(self, task_id, target, text, can_continue) -> None:
+    async def authorize_input(self) -> bool:
+        """Only explicit recording or the enable action may request OS consent."""
+        epoch = self.epoch
+        async with self.authorization_lock:
+            if epoch != self.epoch:
+                return False
+            if not self.connected:
+                await self.initialize()
+            if not self.connected or epoch != self.epoch:
+                return False
+            try:
+                if not self.inputs.authorized:
+                    self.status.emit("正在启用键盘输入；如出现系统授权提示，请允许。")
+                    await self.inputs.authorize()
+                return self.inputs.authorized and epoch == self.epoch
+            except KeyboardError as error:
+                if epoch == self.epoch:
+                    self.input_problem(error)
+                return False
+
+    def inject(self, task_id, text, can_continue) -> None:
         async def deliver():
             try:
-                await self.inputs.inject(target, text, can_continue)
+                sent_characters = await self.inputs.insert(text, can_continue)
                 if can_continue():
-                    self.metrics["characters"] = len(text)
+                    self.metrics["characters"] = sent_characters
                     self.controller.injection_finished(task_id)
             except asyncio.CancelledError:
                 raise
+            except KeyboardError as error:
+                if self.active(task_id):
+                    self.input_failure = error
+                    self.controller.injection_failed(task_id)
             except Exception:
                 self.controller.injection_failed(task_id)
 
@@ -203,12 +242,13 @@ class Session(QObject):
         if state == State.IDLE:
             return
         message = ERROR_LABELS.get(self.controller.failure, STATE_LABELS[state])
-        if state == State.FAILED or (
-            state == State.CANCELLED and self.controller.failure == Failure.FOCUS
-        ):
+        if state == State.FAILED:
             code = self.controller.failure.value
             if self.controller.failure == Failure.AUDIO and self.audio_failure:
                 code, message = self.audio_failure.code, str(self.audio_failure)
+            elif self.controller.failure == Failure.INJECTION and self.input_failure:
+                code = self.input_failure.code
+                message = KEYBOARD_LABELS.get(code, KEYBOARD_LABELS["injection_failed"])
             self.diagnostic.emit(code)
             self.report_problem(message)
         else:
@@ -224,21 +264,13 @@ class Session(QObject):
             self.keys.clear()
             self.task_context = None
             self.audio_failure = None
+            self.input_failure = None
             self.finished.emit({"outcome": state.value, **self.metrics})
             self.metrics = {}
-
-    def _focus_lost(self):
-        if self.preparing and self.captured_preparation:
-            self.cancel()
-            self.diagnostic.emit(Failure.FOCUS.value)
-            self.report_problem(ERROR_LABELS[Failure.FOCUS])
-            return
-        self.controller.focus_changed()
 
     def cancel(self):
         self.epoch += 1
         self.preparing = False
-        self.captured_preparation = False
         self.recorder.cancel()
         self.controller.cancel()
         current = current_task()
@@ -261,7 +293,6 @@ class Session(QObject):
             self.status.emit("当前任务正在处理，请等待或取消。")
             return
         self.preparing = True
-        self.captured_preparation = False
         self.epoch += 1
         epoch = self.epoch
         try:
@@ -287,20 +318,14 @@ class Session(QObject):
                 raise CredentialError("请先选择转写模型并保存 API 密钥。")
             validate_provider_protocol(transcription)
             if delay:
-                self.status.emit("请切换到要输入的文本框，即将开始录音。")
+                self.status.emit(
+                    "即将开始录音。文字会在识别完成后输入到当时的光标位置。"
+                )
                 await asyncio.sleep(delay)
             if epoch != self.epoch:
                 return
-            if not self.connected:
-                await self.initialize()
-                if epoch != self.epoch:
-                    return
-                if not self.connected:
-                    return
-            target = await self.inputs.capture_target()
-            if epoch != self.epoch:
+            if not await self.authorize_input() or epoch != self.epoch:
                 return
-            self.captured_preparation = True
             key = await self.key(transcription.key_ref)
             if epoch != self.epoch:
                 return
@@ -326,7 +351,7 @@ class Session(QObject):
                 + self.settings.polishing_timeout_seconds
                 + 15
             )
-            task_id = self.controller.begin(target)
+            task_id = self.controller.begin()
             if task_id:
                 self.task_context = context
                 self.metrics = {"audio_seconds": 0.0, "characters": 0}
@@ -343,15 +368,10 @@ class Session(QObject):
                     self.controller.fail(task_id, Failure.AUDIO)
         except asyncio.CancelledError:
             raise
-        except InputUnavailable:
+        except KeyboardError as error:
             if epoch != self.epoch:
                 return
-            self.diagnostic.emit("desktop_unavailable")
-            self.report_problem(
-                "未找到可安全输入的文本框。请先点击文本编辑器的正文区域，"
-                "再按快捷键；当前控件也可能缺少可编辑辅助功能接口。"
-                "Wayland 逐目标输入仍属实验性支持；浏览器和终端可能无法使用。"
-            )
+            self.input_problem(error)
         except CredentialError as error:
             if epoch != self.epoch:
                 return
@@ -372,7 +392,6 @@ class Session(QObject):
         finally:
             if epoch == self.epoch:
                 self.preparing = False
-                self.captured_preparation = False
                 if not self.controller.task:
                     self.keys.clear()
 
@@ -495,4 +514,7 @@ class Session(QObject):
             return_exceptions=True,
         )
         self.timer.stop()
-        self.inputs.close()
+        try:
+            await self.inputs.aclose()
+        except KeyboardError as error:
+            self.diagnostic.emit(error.code)

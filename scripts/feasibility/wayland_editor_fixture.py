@@ -10,6 +10,7 @@ import gi
 gi.require_version("Gtk", "3.0")
 from gi.repository import Gio, Gtk  # noqa: E402
 
+events = Path(sys.argv[2]) if len(sys.argv) > 2 else None
 output = None if sys.argv[1] == "-" else Path(sys.argv[1])
 application = Gtk.Application(
     application_id="io.github.Creammmmm.InkEcho.InputFixture",
@@ -29,6 +30,22 @@ def activate(app):
         if output is not None:
             output.write_text(json.dumps(buffer.get_text(start, end, True)))
 
+    def key_event(_widget, event):
+        if events is not None:
+            with events.open("a") as stream:
+                stream.write(
+                    json.dumps(
+                        {
+                            "keyval": event.keyval,
+                            "hardware_keycode": event.hardware_keycode,
+                            "synthetic": bool(event.send_event),
+                        }
+                    )
+                    + "\n"
+                )
+        return False
+
+    widget.connect("key-press-event", key_event)
     buffer.connect("changed", changed)
     changed()
     window.add(widget)

@@ -20,7 +20,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from inkecho.core import Failure, State
+from inkecho.core import State
 from inkecho.ui.information import AboutPage, CompatibilityPage, StatisticsPage
 from inkecho.ui.notifications import DesktopNotifications
 from inkecho.ui.overlay import Overlay
@@ -34,7 +34,7 @@ class HomePage(Page):
     def __init__(self, session, start, cancel):
         super().__init__(
             "让表达自然发生",
-            "按下快捷键，说出想法。InkEcho 将文字送回你正在输入的位置。",
+            "按下快捷键，说出想法。识别完成后，文字输入到当时的光标位置。",
         )
         self.session = session
         panel, body = card()
@@ -66,8 +66,8 @@ class HomePage(Page):
         self.body.addWidget(summary)
         self.body.addWidget(
             label(
-                "点击开始后窗口会隐藏，请在 1.5 秒内选好目标文本框。"
-                "全局快捷键可直接从目标应用开始或结束录音。",
+                "开始录音不需要先选文本框，录音和识别期间可以切换窗口。"
+                "文字输出时请将光标放在希望接收的位置。",
                 muted=True,
             )
         )
@@ -344,10 +344,7 @@ class MainWindow(QMainWindow):
             if self.wayland:
                 self.overlay.hide()
                 self.controls.hide()
-                detailed_failure = state == "failed" or (
-                    state == "cancelled"
-                    and self.session.controller.failure == Failure.FOCUS
-                )
+                detailed_failure = state == "failed"
                 if state != "idle" and not detailed_failure:
                     self.notify(
                         STATE_LABELS[State(state)],
@@ -389,7 +386,7 @@ class MainWindow(QMainWindow):
         async def start():
             self.hide()
             try:
-                await self.session.toggle(delay=1.5)
+                await self.session.toggle()
             finally:
                 if not self.session.controller.task:
                     self.show_window()
@@ -408,7 +405,7 @@ class MainWindow(QMainWindow):
             self.overlay.hide()
             if self.wayland:
                 self.controls.hide()
-            # Only the platform backend knows the current external focus owner.
+            # Recording does not inspect focus; keyboard delivery uses focus later.
             self.session.spawn(self.session.toggle())
 
     def show_window(self):

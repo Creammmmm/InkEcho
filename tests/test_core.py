@@ -7,27 +7,23 @@ from inkecho.core import Failure, State, TaskController
 
 class Inputs:
     def __init__(self):
-        self.generation = 1
+        self.focus = "first"
+        self.destinations = []
         self.written = ""
         self.before_character = lambda: None
         self.controller = None
         self.pending = None
         self.defer = False
 
-    def capture_target(self):
-        return self.generation
-
-    def target_is_current(self, target):
-        return target == self.generation
-
-    def inject(self, task_id, target, text, can_continue):
+    def inject(self, task_id, text, can_continue):
         if self.defer:
-            self.pending = (task_id, target, text, can_continue)
+            self.pending = (task_id, text, can_continue)
             return
         for character in text:
             self.before_character()
-            if not can_continue() or not self.target_is_current(target):
+            if not can_continue():
                 return
+            self.destinations.append(self.focus)
             self.written += character
         self.controller.injection_finished(task_id)
 
@@ -43,7 +39,7 @@ def setup():
 
 
 def transcribing(core):
-    task_id = core.begin(core.inputs.capture_target())
+    task_id = core.begin()
     assert core.recording_stopped(task_id)
     return task_id
 
@@ -65,10 +61,10 @@ def test_success_records_all_states_then_clears_task(setup):
 
 def test_only_one_task_and_unique_ids(setup):
     core, _, _, _ = setup
-    first = core.begin(core.inputs.capture_target())
-    assert core.begin(core.inputs.capture_target()) is None
+    first = core.begin()
+    assert core.begin() is None
     core.cancel()
-    assert core.begin(core.inputs.capture_target()) != first
+    assert core.begin() != first
 
 
 @pytest.mark.parametrize("polish", [False, True])
@@ -78,7 +74,7 @@ def test_cancelled_and_stale_replies_never_inject(setup, polish):
     old = transcribing(core)
     core.transcribed(old, "first") if polish else None
     core.cancel()
-    new = core.begin(core.inputs.capture_target())
+    new = core.begin()
     core.transcribed(old, "late transcript")
     core.polished(old, "late polish")
     core.polishing_failed(old)
@@ -89,28 +85,24 @@ def test_cancelled_and_stale_replies_never_inject(setup, polish):
 @pytest.mark.parametrize(
     "phase", [State.RECORDING, State.TRANSCRIBING, State.POLISHING]
 )
-def test_focus_generation_change_even_away_and_back_cancels(setup, phase):
+def test_focus_changes_do_not_cancel_any_processing_phase(setup, phase):
     core, inputs, _, _ = setup
     core.polish = True
-    task_id = core.begin(core.inputs.capture_target())
+    task_id = core.begin()
     if phase != State.RECORDING:
         core.recording_stopped(task_id)
     if phase == State.POLISHING:
         core.transcribed(task_id, "original")
-    inputs.generation += 2  # Same window can return with a different generation.
+    inputs.focus = "second"
     core.tick()
-    core.transcribed(task_id, "late")
-    core.polished(task_id, "late")
-    assert core.outcome == State.CANCELLED and core.failure == Failure.FOCUS
-    assert inputs.written == ""
-
-
-def test_focus_event_permanently_invalidates_task(setup):
-    core, inputs, _, _ = setup
-    task_id = transcribing(core)
-    core.focus_changed()
-    core.transcribed(task_id, "late")
-    assert inputs.written == ""
+    assert core.task.id == task_id and core.state == phase
+    if phase == State.RECORDING:
+        core.recording_stopped(task_id)
+    if phase != State.POLISHING:
+        core.transcribed(task_id, "original")
+    core.polished(task_id, "result")
+    assert core.outcome == State.SUCCEEDED
+    assert inputs.written == "result" and set(inputs.destinations) == {"second"}
 
 
 @pytest.mark.parametrize("fallback", [True, False])
@@ -153,7 +145,7 @@ def test_late_results_past_deadline_cannot_inject(setup):
 
 def test_out_of_order_callbacks_are_ignored(setup):
     core, inputs, _, _ = setup
-    task_id = core.begin(core.inputs.capture_target())
+    task_id = core.begin()
     core.transcribed(task_id, "too early")
     core.polished(task_id, "too early")
     assert core.state == State.RECORDING and inputs.written == ""
@@ -166,11 +158,14 @@ def test_cancel_during_injection_stops_remaining_characters(setup):
     assert inputs.written == "a" and core.outcome == State.CANCELLED
 
 
-def test_last_moment_focus_loss_blocks_injection(setup):
+def test_final_focus_is_used_even_when_it_changes_while_typing(setup):
     core, inputs, _, _ = setup
-    inputs.before_character = lambda: setattr(inputs, "generation", 2)
+    inputs.before_character = lambda: (
+        setattr(inputs, "focus", "second") if inputs.written else None
+    )
     core.transcribed(transcribing(core), "abc")
-    assert inputs.written == "" and core.failure == Failure.FOCUS
+    assert inputs.written == "abc" and core.outcome == State.SUCCEEDED
+    assert inputs.destinations == ["first", "second", "second"]
 
 
 def test_adapter_exception_is_sanitized_and_new_task_can_start(setup):
@@ -183,7 +178,7 @@ def test_adapter_exception_is_sanitized_and_new_task_can_start(setup):
     core.transcribed(transcribing(core), "private text")
     assert core.failure == Failure.INJECTION and core.task is None
     assert "secret" not in str(core.failure)
-    assert core.begin(core.inputs.capture_target()) is not None
+    assert core.begin() is not None
 
 
 def test_state_callback_can_cancel_before_injection(setup):
@@ -197,13 +192,11 @@ def test_terminal_callback_cannot_restart_until_idle(setup):
     core, _, _, _ = setup
     restarts = []
     core.on_state = lambda state: (
-        restarts.append(core.begin(core.inputs.capture_target()))
-        if state == State.SUCCEEDED
-        else None
+        restarts.append(core.begin()) if state == State.SUCCEEDED else None
     )
     core.transcribed(transcribing(core), "done")
     assert restarts == [None] and core.state == State.IDLE
-    assert core.begin(core.inputs.capture_target()) is not None
+    assert core.begin() is not None
 
 
 def test_async_delivery_waits_for_matching_completion(setup):
@@ -226,7 +219,7 @@ def test_async_delivery_after_cancel_cannot_affect_next_task(setup, completion):
     core.transcribed(old, "queued")
     can_continue = inputs.pending[-1]
     core.cancel()
-    new = core.begin(inputs.capture_target())
+    new = core.begin()
     assert not can_continue()
     getattr(core, completion)(old)
     assert core.task.id == new and core.state == State.RECORDING
@@ -235,7 +228,7 @@ def test_async_delivery_after_cancel_cannot_affect_next_task(setup, completion):
 @pytest.mark.parametrize("raising_state", [State.CANCELLED, State.IDLE])
 def test_observer_exception_does_not_strand_lifecycle(setup, raising_state):
     core, _, _, _ = setup
-    core.begin(core.inputs.capture_target())
+    core.begin()
 
     def observe(state):
         if state == raising_state:
@@ -247,4 +240,4 @@ def test_observer_exception_does_not_strand_lifecycle(setup, raising_state):
     assert core.task is None and core.state == State.IDLE
     assert core.outcome == State.CANCELLED
     core.on_state = None
-    assert core.begin(core.inputs.capture_target()) is not None
+    assert core.begin() is not None

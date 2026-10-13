@@ -1,4 +1,4 @@
-"""Single-task lifecycle with cancellation and captured-target safety."""
+"""Single-task lifecycle with cancellation, deadlines and stale-reply protection."""
 
 import time
 import uuid
@@ -20,8 +20,6 @@ class State(StrEnum):
 
 
 class Failure(StrEnum):
-    TARGET = "target_unavailable"
-    FOCUS = "target_changed"
     TIMEOUT = "task_timed_out"
     AUDIO = "audio_failed"
     TRANSCRIPTION = "transcription_failed"
@@ -31,20 +29,16 @@ class Failure(StrEnum):
 
 
 class InputPort(Protocol):
-    """A target includes a focus generation invalidated even after focus returns.
+    """Deliver to current focus, checking task validity before each key event.
 
-    inject dispatches asynchronous work and returns immediately. The adapter
-    reports completion through injection_finished/injection_failed with task_id.
-    It must check can_continue and actual focus before every delivery chunk.
-    The callback alone cannot make an unverified backend safe. No clipboard use.
+    inject dispatches asynchronous work and reports completion with the task ID.
+    Focus changes are intentional; cancellation and expired tasks stop delivery.
+    No clipboard is used.
     """
-
-    def target_is_current(self, target: object) -> bool: ...
 
     def inject(
         self,
         task_id: str,
-        target: object,
         text: str,
         can_continue: Callable[[], bool],
     ) -> None: ...
@@ -53,7 +47,6 @@ class InputPort(Protocol):
 @dataclass
 class Task:
     id: str
-    target: object = field(repr=False)
     deadline: float
     original: str = field(default="", repr=False)
 
@@ -90,23 +83,17 @@ class TaskController:
         if self.on_state:
             self.on_state(state)
 
-    def begin(self, target: object) -> str | None:
-        """Start after the orchestrator has asynchronously captured the target."""
+    def begin(self) -> str | None:
+        """Start without inspecting or remembering a desktop input target."""
         if self.task or self._finishing:
             return None
         self.outcome = self.failure = None
-        try:
-            if not self.inputs.target_is_current(target):
-                raise ValueError("No active target")
-        except Exception:
-            self._finish(State.FAILED, Failure.TARGET)
-            return None
-        self.task = Task(uuid.uuid4().hex, target, self.clock() + self.timeout_seconds)
+        self.task = Task(uuid.uuid4().hex, self.clock() + self.timeout_seconds)
         self._state(State.RECORDING)
         return self.task.id if self.task else None
 
     def _finish(self, outcome: State, failure: Failure | None = None) -> None:
-        # Release text and target before notifying UI callbacks or starting new work.
+        # Release text before notifying UI callbacks or starting new work.
         self.task = None
         self.outcome, self.failure = outcome, failure
         self._finishing = True
@@ -122,10 +109,6 @@ class TaskController:
         if self.task:
             self._finish(State.CANCELLED)
 
-    def focus_changed(self) -> None:
-        if self.task:
-            self._finish(State.CANCELLED, Failure.FOCUS)
-
     def _valid(self, task_id: str, state: State | None = None) -> bool:
         if not self.task or self.task.id != task_id:
             return False
@@ -134,17 +117,10 @@ class TaskController:
         if self.clock() >= self.task.deadline:
             self._finish(State.FAILED, Failure.TIMEOUT)
             return False
-        try:
-            current = self.inputs.target_is_current(self.task.target)
-        except Exception:
-            current = False
-        if not current:
-            self.focus_changed()
-            return False
         return True
 
     def tick(self) -> None:
-        """Check deadline/focus while awaiting asynchronous recording or replies."""
+        """Check deadlines while awaiting asynchronous recording or replies."""
         if self.task:
             self._valid(self.task.id)
 
@@ -192,7 +168,6 @@ class TaskController:
         try:
             self.inputs.inject(
                 task_id,
-                self.task.target,
                 text,
                 lambda: self._valid(task_id, State.INJECTING),
             )

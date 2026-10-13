@@ -15,25 +15,23 @@ from inkecho.providers import ProviderError, Result, Usage
 
 class Inputs:
     def __init__(self):
-        self.generation = 0
+        self.focus = None
+        self.authorized = False
         self.delivered = []
-        self.on_focus_lost = lambda: None
 
     async def connect(self):
         pass
 
-    async def capture_target(self):
-        return self.generation
+    async def authorize(self):
+        self.authorized = True
 
-    def target_is_current(self, target):
-        return target == self.generation
-
-    async def inject(self, target, text, can_continue):
-        if not self.target_is_current(target) or not can_continue():
+    async def insert(self, text, can_continue):
+        if not can_continue():
             raise RuntimeError("Invalid task")
         self.delivered.append(text)
+        return len(text)
 
-    def close(self):
+    async def aclose(self):
         pass
 
 
@@ -77,7 +75,7 @@ def setup(tmp_path, monkeypatch, qt_app):
     return store, Inputs(), Recorder()
 
 
-def test_focus_change_during_key_lookup_cannot_recapture_another_target(setup):
+def test_focus_change_during_key_lookup_does_not_prevent_recording(setup):
     async def run():
         store, inputs, recorder = setup
         session = Session(store, inputs=inputs, recorder=recorder, secrets=Secrets())
@@ -93,12 +91,11 @@ def test_focus_change_during_key_lookup_cannot_recapture_another_target(setup):
         task = asyncio.create_task(session.toggle())
         try:
             await asyncio.wait_for(requested.wait(), 2)
-            inputs.generation += 1
-            inputs.on_focus_lost()
+            inputs.focus = "new-window"
             release.set()
             await task
-            assert recorder.starts == 0
-            assert session.controller.task is None
+            assert recorder.starts == 1
+            assert session.controller.state == State.RECORDING
         finally:
             await session.close()
 
@@ -126,6 +123,11 @@ def test_late_provider_reply_cannot_change_a_new_recording(setup):
             client=LateClient(),
             secrets=Secrets(),
         )
+
+        async def key(_reference):
+            return "temporary-test-key"
+
+        session.key = key
         try:
             await session.initialize()
             await session.toggle()
@@ -164,6 +166,11 @@ def test_polishing_failure_policy_reaches_delivery_or_failure(setup, fallback):
         session = Session(
             store, inputs=inputs, recorder=recorder, client=Client(), secrets=Secrets()
         )
+
+        async def key(_reference):
+            return "temporary-test-key"
+
+        session.key = key
         try:
             await session.initialize()
             await session.toggle()
