@@ -10,16 +10,15 @@ import tempfile
 import time
 from pathlib import Path
 
-from x11_probe import KeyboardMap
-from xsend_transport import XSendProbe
-
-from inkecho.platform.accessibility import (
+from historical_accessibility import (
     ACCESSIBLE,
     ACTIVE,
     ROOT,
     AccessibilityInput,
     has_state,
 )
+from x11_probe import KeyboardMap
+from xsend_transport import XSendProbe
 
 SAMPLE = "你好 InkEcho，世界！ café Ω 😀\n第二行。"
 

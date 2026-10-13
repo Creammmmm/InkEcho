@@ -10,9 +10,9 @@ import subprocess
 import tempfile
 from pathlib import Path
 
+from historical_accessibility import AccessibilityInput, InputUnavailable
 from x11_probe import KeyboardMap
 
-from inkecho.platform.accessibility import AccessibilityInput, InputUnavailable
 from inkecho.platform.keyboard import KeyboardError, KeyboardInput
 
 SAMPLE = "你好 InkEcho，世界！ café Ω 😀\n第二行。"

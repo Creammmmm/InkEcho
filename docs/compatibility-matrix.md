@@ -15,7 +15,7 @@ before interpreting a passed item as a complete application workflow.
 | Ubuntu 26.04.1 / isolated Xvfb lab (not full desktop) | Ctrl+Alt+K synthetic activation and conflict rejection passed | Synthetic activation with temporary/restored map passed; physical keys pending | Actual host microphone used in source and final bundled-runtime workflow | Real Chrome, GNOME editor and VTE received Unicode via diagnostic XTest; targeted GTK AT-SPI final packaged workflow passed Unicode/cancel/focus-away-back | Production overlay retained focus during real workflow; no compositor | Final alpha nine-page/IPC/config checks and bundled-runtime microphone-to-input workflow passed |
 | Ubuntu 24.04 / minimal offscreen container | Not applicable | Not applicable | Not tested | Not tested | Not tested | Final alpha full application: nine pages, bundled Chinese font, clean exit; nonroot/network-disabled/read-only |
 
-## Current a7 input support boundary
+## Current a8 input support boundary (keyboard behavior introduced in a7)
 
 The a7 keyboard route follows the output-time cursor and does not require an
 editable target before recording. Focus changes do not cancel; explicit
@@ -35,7 +35,7 @@ and target application protocol are distinct.
 See [current-cursor acceptance](current-cursor-input-validation.md) and
 [keyboard transport evidence](keyboard-transport-validation.md). The following
 AT-SPI table and dated supplements preserve alpha6-and-earlier measurements and
-do not describe a7's active input policy.
+do not describe the current input policy.
 
 ## Historical targeted AT-SPI boundary through alpha6
 
@@ -183,3 +183,15 @@ above are separate transport checks, not additional full speech workflows.
 The a7 package also produced nine actual native Wayland settings screenshots
 using disposable defaults. Deployment confirmation is recorded separately in
 [current-cursor acceptance](current-cursor-input-validation.md).
+
+
+## 0.1.0a8 retired-adapter cleanup — 2026-10-14
+
+The final alpha8 AppImage contains no retired AT-SPI adapter or historical test
+support, and all current application files match the cleaned source. Its exact
+packaged runtime passed the same native-host/owned-XWayland current-cursor
+microphone/local-HTTPS workflow: one success, one explicit late-reply cancellation,
+28 exact Unicode code points, seven accepted notifications and restored keymap.
+The actual AppImage also passed isolated native Qt Wayland startup. This confirms
+the cleanup preserves that measured workflow; it adds no new target or desktop
+matrix coverage. See [alpha8 release validation](focus-tracking-removal-release.md).

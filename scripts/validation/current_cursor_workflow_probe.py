@@ -28,7 +28,10 @@ from inkecho.config import ConfigStore
 from inkecho.core import State
 from inkecho.integration import DesktopIntegration
 from inkecho.logging import DiagnosticLog
-from inkecho.platform.accessibility import (
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "feasibility"))
+
+from historical_accessibility import (
     ACCESSIBLE,
     ACTIVE,
     EDITABLE,
@@ -38,6 +41,7 @@ from inkecho.platform.accessibility import (
     AccessibilityInput,
     has_state,
 )
+
 from inkecho.platform.keyboard import KeyboardError
 from inkecho.providers import ProviderClient
 from inkecho.statistics import Statistics

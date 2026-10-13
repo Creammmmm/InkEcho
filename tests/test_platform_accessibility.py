@@ -1,10 +1,12 @@
+"""Historical alpha6 captured-target behavior, excluded from production."""
+
 import asyncio
 import os
+from pathlib import Path
 
 import pytest
 from dbus_next import Message, MessageType
-
-from inkecho.platform.accessibility import (
+from historical_accessibility import (
     AccessibilityInput,
     AccessibleTarget,
     InputUnavailable,
@@ -105,7 +107,7 @@ def test_state_bitmask_spans_words():
 
 
 def owned_process_backend(process_id):
-    from inkecho.platform.accessibility import (
+    from historical_accessibility import (
         ACTIVE,
         EDITABLE_STATE,
         FOCUSED,
@@ -226,14 +228,17 @@ def test_live_process_ownership_without_desktop_document_access():
     import subprocess
     import sys
 
-    from inkecho.platform.accessibility import UnsupportedTarget
+    from historical_accessibility import UnsupportedTarget
 
-    child_code = """
+    child_code = f"""
 import asyncio
 import json
 import os
 import sys
-from inkecho.platform.accessibility import AccessibilityInput
+sys.path.insert(
+    0, {str(Path(__file__).resolve().parents[1] / "scripts" / "feasibility")!r}
+)
+from historical_accessibility import AccessibilityInput
 async def run():
     backend = AccessibilityInput()
     try:

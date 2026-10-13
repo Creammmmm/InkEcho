@@ -1,4 +1,8 @@
-"""Targeted AT-SPI insertion. No global key injection and no clipboard operations.
+"""Historical alpha6 AT-SPI validation support; never shipped in the application.
+
+This retains the superseded captured-target policy for historical probes and
+owned-fixture inspection only. Production uses current-focus KeyboardInput.
+No global key injection and no clipboard operations.
 
 The adapter runs on the application asyncio event loop. Callers must also
 invalidate their task when ``on_focus_lost`` runs. Focus notifications

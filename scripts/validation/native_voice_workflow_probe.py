@@ -3,6 +3,10 @@
 
 The hidden production MainWindow supplies the actual desktop notification policy.
 No physical shortcut, cloud quality, arbitrary application or clipboard is tested.
+
+
+Historical alpha6 workflow: requires the alpha6 packaged Session/Core API.
+Do not run this workflow against alpha7 or newer current-focus product code.
 """
 
 import argparse
@@ -23,10 +27,14 @@ from voice_workflow_probe import SAMPLE, LocalProvider, TestSecret, wait_for
 import inkecho
 from inkecho.app import Session
 from inkecho.config import ConfigStore
-from inkecho.core import State
+from inkecho.core import State, TaskController
 from inkecho.integration import DesktopIntegration
 from inkecho.logging import DiagnosticLog
-from inkecho.platform.accessibility import TEXT, AccessibilityInput, InputUnavailable
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "feasibility"))
+
+from historical_accessibility import TEXT, AccessibilityInput, InputUnavailable
+
 from inkecho.providers import ProviderClient
 from inkecho.statistics import Statistics
 from inkecho.ui.window import MainWindow
@@ -298,6 +306,11 @@ async def probe(args):
 
 
 def main():
+    if not hasattr(TaskController, "focus_changed"):
+        raise SystemExit(
+            "Historical workflow requires the alpha6 or earlier captured-target "
+            "Session/Core. Use its historical checkout or packaged runtime."
+        )
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--package-root", type=Path, required=True)
     parser.add_argument(

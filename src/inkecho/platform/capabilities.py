@@ -30,11 +30,14 @@ def detect_desktop(environ=None, release_path=Path("/etc/os-release")):
         reason = "This release implements Linux only."
     elif session == "wayland":
         reason = (
-            "Experimental per-target AT-SPI input requires fresh focus checks. "
-            "Native Wayland workflow is not yet verified; Chrome/VTE lack EditableText."
+            "Current-cursor keyboard delivery supports compatible XWayland apps. "
+            "Native Wayland applications are not supported by this transport."
         )
     elif session == "x11":
-        reason = "X11 must pass the selected backend's connection and focus checks."
+        reason = (
+            "X11 keyboard delivery requires a connection "
+            "and a supported receiver at output."
+        )
     else:
         reason = "The desktop session could not be verified."
     return DesktopCapabilities(

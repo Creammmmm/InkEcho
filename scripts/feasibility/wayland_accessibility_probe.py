@@ -13,7 +13,7 @@ import sys
 import tempfile
 from pathlib import Path
 
-from inkecho.platform.accessibility import AccessibilityInput, InputUnavailable
+from historical_accessibility import AccessibilityInput, InputUnavailable
 
 SAMPLE = "你好 InkEcho，世界！ café Ω 😀\n第二行。"
 

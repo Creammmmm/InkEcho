@@ -4,6 +4,10 @@
 Recorder is replaced by a public-file source. No ambient audio is captured.
 Transcripts and secrets stay in memory; only safe outcome metadata is printed.
 Run only after coordinating exclusive desktop focus with other validation agents.
+
+
+Historical alpha6 workflow: requires the alpha6 packaged Session/Core API.
+Do not run this workflow against alpha7 or newer current-focus product code.
 """
 
 import argparse
@@ -13,6 +17,7 @@ import io
 import json
 import os
 import subprocess
+import sys
 import time
 import wave
 from contextlib import contextmanager
@@ -29,8 +34,12 @@ import inkecho.config as configuration
 from inkecho import __version__
 from inkecho.app import Session
 from inkecho.config import ConfigStore
-from inkecho.core import State
-from inkecho.platform.accessibility import TEXT, AccessibilityInput, InputUnavailable
+from inkecho.core import State, TaskController
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "feasibility"))
+
+from historical_accessibility import TEXT, AccessibilityInput, InputUnavailable
+
 from inkecho.providers import ProviderClient
 
 PUBLIC_SHA256 = "0d650ab4f08bd3a5d3d59fd67d085fd0765ddabe4729294f4106fceece321fdf"
@@ -241,6 +250,11 @@ async def _probe(args):
 
 
 def main():
+    if not hasattr(TaskController, "focus_changed"):
+        raise SystemExit(
+            "Historical workflow requires the alpha6 or earlier captured-target "
+            "Session/Core. Use its historical checkout or packaged runtime."
+        )
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--sample", type=Path, required=True)
     parser.add_argument("--package-root", type=Path, required=True)

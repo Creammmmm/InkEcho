@@ -1,4 +1,8 @@
-"""Focused acceptance using extracted package code and disposable settings."""
+"""Focused acceptance using extracted package code and disposable settings.
+
+Historical alpha6 acceptance: its injected adapter uses the old Session API.
+Use the corresponding historical checkout/artifact, not current product code.
+"""
 
 import asyncio
 import json

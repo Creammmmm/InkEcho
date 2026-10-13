@@ -11,8 +11,7 @@ import tempfile
 from pathlib import Path
 
 from dbus_next import Message, MessageType
-
-from inkecho.platform.accessibility import AccessibilityInput, InputUnavailable
+from historical_accessibility import AccessibilityInput, InputUnavailable
 
 ROOT = Path(__file__).resolve().parents[2]
 SAMPLE = "独立焦点验证：你好，InkEcho 🌍。"

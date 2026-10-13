@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Actual AT-SPI Unicode/focus test on an isolated Xvfb + D-Bus session."""
+"""Actual AT-SPI Unicode/focus test on an isolated Xvfb + D-Bus session.
+
+Historical captured-target workflow: run against a pre-current-focus checkout.
+The current TaskController intentionally has no captured-target API.
+"""
 
 import argparse
 import asyncio
@@ -9,13 +13,19 @@ import subprocess
 import tempfile
 from pathlib import Path
 
+from historical_accessibility import AccessibilityInput, InputUnavailable
+
 from inkecho.core import State, TaskController
-from inkecho.platform.accessibility import AccessibilityInput, InputUnavailable
 
 SAMPLE = "你好 InkEcho，世界！ café Ω 😀\n第二行。"
 
 
 async def main():
+    if not hasattr(TaskController, "focus_changed"):
+        raise SystemExit(
+            "Historical workflow requires the alpha6 or earlier captured-target "
+            "Session/Core. Use its historical checkout or packaged runtime."
+        )
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--xdotool", default="xdotool")
     args = parser.parse_args()

@@ -7,8 +7,8 @@ def test_wayland_never_promises_unsupported_injection(tmp_path):
     result = detect_desktop({"XDG_SESSION_TYPE": "wayland"}, release)
     assert result.distribution == "Ubuntu 26.04 LTS"
     assert not result.injection_ready
-    assert "Experimental per-target" in result.reason
-    assert "not yet verified" in result.reason
+    assert "compatible XWayland apps" in result.reason
+    assert "Native Wayland applications are not supported" in result.reason
 
 
 def test_missing_session_is_explicit(tmp_path):

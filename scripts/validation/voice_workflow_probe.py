@@ -2,6 +2,11 @@
 """Actual microphone + HTTPS + Session + AT-SPI on an isolated X11 fixture.
 
 Only a local test provider receives RAM audio; fixed replies do not prove ASR quality.
+
+
+Historical alpha6 main workflow: requires its packaged Session/Core API.
+LocalProvider/TestSecret/wait_for remain shared fixture utilities; importing those
+utilities does not run this historical workflow.
 """
 
 import argparse

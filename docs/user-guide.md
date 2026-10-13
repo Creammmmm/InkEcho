@@ -1,10 +1,10 @@
 # InkEcho 使用指南
 
-本指南对应 **0.1.0a7** 的当前光标键盘输入：开始录音不用先选文本框，录音、识别与润色期间可自由切换窗口；结果送到输出当时的光标位置。输出途中切换窗口，后续字符也可进入新焦点。主动取消、过期或被替代的任务停止未发送文字，已经发送的按键无法撤回；不使用剪贴板或系统输入法。
+本指南对应 **0.1.0a8** 的当前光标键盘输入：开始录音不用先选文本框，录音、识别与润色期间可自由切换窗口；结果送到输出当时的光标位置。输出途中切换窗口，后续字符也可进入新焦点。主动取消、过期或被替代的任务停止未发送文字，已经发送的按键无法撤回；不使用剪贴板或系统输入法。
 
-当前路径面向 X11 / XWayland 应用。a7 包已在 GNOME Wayland 桌面的自有 GTK XWayland 窗口通过完整本机测试流程，Chrome XWayland 通过独立输入诊断，VTE XWayland 自有原始终端通过生产键盘验证（未启动 shell）；原生 Wayland GTK 暂不支持，其他应用不能仅凭桌面会话类型判断兼容。当前 Codex 是 XWayland 窗口，但实际输入尚未验证。详见[本版验收](current-cursor-input-validation.md)。设置、麦克风测试与云服务能力测试不依赖自动输入可用性。
+当前路径面向 X11 / XWayland 应用。a8 包已在 GNOME Wayland 桌面的自有 GTK XWayland 窗口通过完整本机测试流程，Chrome XWayland 通过独立输入诊断，VTE XWayland 自有原始终端通过生产键盘验证（未启动 shell）；原生 Wayland GTK 暂不支持，其他应用不能仅凭桌面会话类型判断兼容。当前 Codex 是 XWayland 窗口，但实际输入尚未验证。详见[本版验收](focus-tracking-removal-release.md)。设置、麦克风测试与云服务能力测试不依赖自动输入可用性。
 
-alpha6 的[原生 AT-SPI 记录](native-voice-workflow-validation.md)描述旧版目标绑定策略；不要按旧版失焦取消要求操作 a7。
+alpha6 的[原生 AT-SPI 记录](native-voice-workflow-validation.md)描述旧版目标绑定策略；不要按旧版失焦取消要求操作当前版本。
 
 ## 第一次使用
 

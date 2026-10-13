@@ -1,4 +1,18 @@
-# InkEcho 0.1.0a7 — input at the current cursor
+# InkEcho 0.1.0a8 — remove the retired focus-tracking adapter
+
+This cleanup removes the unused captured-target AT-SPI adapter from production
+source and packaging. Historical probes/tests keep that algorithm under test-only
+support; no production module imports it. Current-cursor keyboard behavior,
+explicit cancellation and stale-task protection remain unchanged. Recording does
+not bind a target, and moving focus does not cancel a task.
+
+See [source removal audit](focus-tracking-removal-audit.md) and
+[alpha8 package validation](focus-tracking-removal-release.md) for the actual
+artifact checks and deployment status. The supported transport remains X11 /
+XWayland; this cleanup does not add native Wayland target or arbitrary application
+support. Earlier acceptance results retain their measured versions below.
+
+## Historical 0.1.0a7 — input at the current cursor
 
 Recording no longer captures or requires an editable target. Windows and caret
 may change during recording, transcription and polishing without cancelling the

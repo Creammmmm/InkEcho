@@ -16,8 +16,7 @@ from pathlib import Path
 
 from dbus_next import Message, MessageType, Variant
 from dbus_next.aio import MessageBus
-
-from inkecho.platform.accessibility import AccessibilityInput, InputUnavailable
+from historical_accessibility import AccessibilityInput, InputUnavailable
 
 DEST = "org.freedesktop.portal.Desktop"
 PATH = "/org/freedesktop/portal/desktop"
