@@ -9,7 +9,8 @@ from PySide6.QtCore import QObject, QTimer, Signal
 from inkecho.audio import Recorder
 from inkecho.config import ConfigStore
 from inkecho.core import Failure, State, TaskController
-from inkecho.platform.keyboard import KeyboardError, KeyboardInput
+from inkecho.platform.keyboard import KeyboardError
+from inkecho.platform.wayland_keyboard import keyboard_for_desktop
 from inkecho.providers import ProviderClient, ProviderError, validate_provider_protocol
 from inkecho.security import CredentialError, SecretStore
 
@@ -50,7 +51,7 @@ PROVIDER_LABELS = {
     "audio": "录音格式或大小不符合服务要求。",
 }
 KEYBOARD_LABELS = {
-    "display_unavailable": "无法连接桌面的 X11 / XWayland 输入服务。请检查桌面会话。",
+    "display_unavailable": "无法连接桌面的键盘输入服务。请检查桌面会话。",
     "unsupported_target": (
         "当前窗口暂不支持此键盘输入方式。请使用兼容的 X11 / XWayland 应用；"
         "原生 Wayland 应用暂不支持。"
@@ -64,6 +65,10 @@ KEYBOARD_LABELS = {
     "input_cancelled": "输入已停止，不会继续发送剩余文字。",
     "unsupported_text": "结果含有当前键盘输入方式不支持的字符。",
     "busy": "键盘输入服务正在处理其他操作，请稍后重试。",
+    "keys_held": "请松开键盘上按住的键，再重新尝试输入。",
+    "caps_lock": "请关闭大写锁定，再重新尝试输入。",
+    "cleanup_pending": "键盘布局尚未恢复，输入已暂停。请先松开所有按键并稍候。",
+    "unsupported_layout": "当前键盘布局没有可用的兼容键位，暂时无法使用此输入方式。",
 }
 
 AUDIO_LABELS = {
@@ -109,8 +114,9 @@ class Session(QObject):
     ):
         super().__init__()
         self.store = store or ConfigStore()
-        self.inputs = inputs or KeyboardInput()
+        self.inputs = inputs or keyboard_for_desktop()
         self.authorization_lock = asyncio.Lock()
+        self.authorization_task = None
         self.recorder = recorder or Recorder(self)
         self.client = client or ProviderClient()
         self.secrets = secrets
@@ -135,6 +141,14 @@ class Session(QObject):
         self.timer.setInterval(100)
         self.timer.timeout.connect(self.controller.tick)
         self.timer.start()
+
+    @property
+    def connected(self):
+        return bool(getattr(self.inputs, "connected", self._connected))
+
+    @connected.setter
+    def connected(self, value):
+        self._connected = value
 
     def spawn(self, operation: Awaitable) -> asyncio.Task:
         task = asyncio.create_task(operation)
@@ -205,24 +219,36 @@ class Session(QObject):
         async with self.authorization_lock:
             if epoch != self.epoch:
                 return False
-            if not self.connected:
-                await self.initialize()
-            if not self.connected or epoch != self.epoch:
-                return False
+            self.authorization_task = current_task()
             try:
+                if not self.connected:
+                    await self.initialize()
+                if not self.connected or epoch != self.epoch:
+                    return False
                 if not self.inputs.authorized:
                     self.status.emit("正在启用键盘输入；如出现系统授权提示，请允许。")
                     await self.inputs.authorize()
                 return self.inputs.authorized and epoch == self.epoch
+            except asyncio.CancelledError:
+                if epoch != self.epoch:
+                    return False
+                raise
             except KeyboardError as error:
                 if epoch == self.epoch:
                     self.input_problem(error)
                 return False
+            finally:
+                self.authorization_task = None
 
     def inject(self, task_id, text, can_continue) -> None:
         async def deliver():
             try:
-                sent_characters = await self.inputs.insert(text, can_continue)
+                task = self.controller.task
+                if task is None or task.id != task_id:
+                    return
+                sent_characters = await self.inputs.insert(
+                    text, can_continue, deadline=task.deadline
+                )
                 if can_continue():
                     self.metrics["characters"] = sent_characters
                     self.controller.injection_finished(task_id)
@@ -274,6 +300,11 @@ class Session(QObject):
         self.recorder.cancel()
         self.controller.cancel()
         current = current_task()
+        if (
+            self.authorization_task is not None
+            and self.authorization_task is not current
+        ):
+            self.authorization_task.cancel()
         for task in list(self.pending):
             if task is not current:
                 task.cancel()

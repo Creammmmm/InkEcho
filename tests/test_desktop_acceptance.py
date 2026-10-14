@@ -25,7 +25,7 @@ class Inputs:
     async def authorize(self):
         self.authorized = True
 
-    async def insert(self, text, can_continue):
+    async def insert(self, text, can_continue, *, deadline=None):
         if not can_continue():
             raise RuntimeError("Invalid task")
         self.delivered.append(text)

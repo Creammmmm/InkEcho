@@ -28,7 +28,7 @@ class Inputs:
         self.authorized = True
         self.authorizations += 1
 
-    async def insert(self, text, can_continue):
+    async def insert(self, text, can_continue, *, deadline=None):
         if can_continue():
             self.destinations.append(self.focus)
             self.inserted.append(text)
@@ -624,7 +624,7 @@ def test_cancelled_pending_delivery_cannot_type_or_finish_a_new_task(factory):
         session = factory()
         entered, release = asyncio.Event(), asyncio.Event()
 
-        async def delayed_insert(text, can_continue):
+        async def delayed_insert(text, can_continue, *, deadline=None):
             entered.set()
             try:
                 await release.wait()
@@ -669,7 +669,7 @@ def test_keyboard_delivery_error_has_one_specific_notice(factory, code, message)
         session.problem.connect(problems.append)
         session.diagnostic.connect(diagnostics.append)
 
-        async def failed_insert(*_args):
+        async def failed_insert(*_args, **_kwargs):
             raise KeyboardError(code)
 
         session.inputs.insert = failed_insert
@@ -718,6 +718,42 @@ def test_default_keyboard_lifecycle_does_not_inspect_focus(factory):
     asyncio.run(scenario())
 
 
+def test_explicit_ui_authorization_is_cancelled_with_the_session(factory):
+    async def scenario():
+        session = factory()
+        entered, cancelled = asyncio.Event(), asyncio.Event()
+
+        async def authorize():
+            entered.set()
+            try:
+                await asyncio.Event().wait()
+            finally:
+                cancelled.set()
+
+        session.inputs.authorize = authorize
+        task = session.spawn_ui(session.authorize_input())
+        await entered.wait()
+        session.cancel()
+        assert not await task
+        assert cancelled.is_set() and not session.recorder.recording
+        await session.close()
+
+    asyncio.run(scenario())
+
+
+def test_session_connection_reflects_backend_disconnect(factory):
+    async def scenario():
+        session = factory()
+        session.inputs.connected = True
+        await session.initialize()
+        assert session.connected
+        session.inputs.connected = False
+        assert not session.connected
+        await session.close()
+
+    asyncio.run(scenario())
+
+
 def test_display_failure_is_visible_before_credentials_or_recording(factory):
     from inkecho.platform.keyboard import KeyboardError, KeyboardInput
 
@@ -756,7 +792,7 @@ def test_sent_character_metrics_use_keyboard_normalized_count(factory):
         session.finished.connect(outcomes.append)
         session.status.connect(statuses.append)
 
-        async def normalized_insert(text, can_continue):
+        async def normalized_insert(text, can_continue, *, deadline=None):
             assert text == "甲\r\n乙" and can_continue()
             return 3  # Keyboard emits one newline for the provider's CRLF pair.
 

@@ -3,6 +3,7 @@
 import asyncio
 from datetime import date
 
+from PySide6.QtCore import QTimer
 from PySide6.QtWidgets import QCheckBox, QFormLayout, QPlainTextEdit
 
 from inkecho import __version__
@@ -28,15 +29,8 @@ class CompatibilityPage(Page):
                 "取消任务会停止后续输入，已经发送的按键无法撤回。"
             )
         )
-        layout.addWidget(
-            label(
-                "当前键盘输入方式面向 X11 / XWayland 应用，无需远程控制授权。"
-                "原生 Wayland 应用（包括该模式下的 GNOME 文本编辑器）暂不支持；"
-                "Wayland 桌面中的 XWayland 应用可以使用。"
-                "未经实测的应用不保证兼容。",
-                muted=True,
-            )
-        )
+        self.scope = label("", muted=True)
+        layout.addWidget(self.scope)
         layout.addWidget(label("不使用剪贴板，也不依赖系统输入法。", muted=True))
         self.body.addWidget(frame)
         self.body.addWidget(
@@ -47,6 +41,10 @@ class CompatibilityPage(Page):
         )
         self.finish()
         self.refresh()
+        self.refresh_timer = QTimer(self)
+        self.refresh_timer.setInterval(1000)
+        self.refresh_timer.timeout.connect(self.refresh)
+        self.refresh_timer.start()
 
     def refresh(self):
         environment = detect_desktop()
@@ -54,10 +52,24 @@ class CompatibilityPage(Page):
             f"{environment.distribution} · {environment.desktop} "
             f"· {environment.session}"
         )
+        native = getattr(self.session.inputs, "backend", None) == "gnome-wayland"
+        self.scope.setText(
+            "GNOME Wayland 实验性键盘输入：同一路径用于原生与 XWayland 窗口。"
+            "支持中文等基本多文种字符；emoji 等扩展字符暂不支持，"
+            "含这些字符的结果会整段停止发送。输入前请松开按键并关闭大写锁定。"
+            "未经实测的应用不保证兼容。"
+            if native
+            else "当前键盘输入方式面向 X11 / XWayland 应用，无需远程控制授权。"
+            "此方式不支持原生 Wayland 应用；未经实测的应用不保证兼容。"
+        )
         if not self.session.connected:
             text = "键盘输入服务尚未连接。"
         elif getattr(self.session.inputs, "authorized", False):
-            text = "键盘输入已启用；输出时请使用兼容的 X11 / XWayland 应用。"
+            text = (
+                "GNOME 键盘输入已启用；文字将发送到输出当时的光标位置。"
+                if native
+                else "键盘输入已启用；输出时请使用兼容的 X11 / XWayland 应用。"
+            )
         else:
             text = "输入服务已连接，请点击「启用键盘输入」完成准备。"
         self.availability.setText(text)

@@ -30,8 +30,11 @@ def detect_desktop(environ=None, release_path=Path("/etc/os-release")):
         reason = "This release implements Linux only."
     elif session == "wayland":
         reason = (
-            "Current-cursor keyboard delivery supports compatible XWayland apps. "
-            "Native Wayland applications are not supported by this transport."
+            "GNOME Wayland has an experimental current-cursor keyboard route "
+            "for native and XWayland clients; BMP text and runtime checks required."
+            if "GNOME" in env.get("XDG_CURRENT_DESKTOP", "").upper().split(":")
+            else "Current-cursor keyboard delivery supports compatible XWayland apps. "
+            "Native delivery on this desktop has not been validated."
         )
     elif session == "x11":
         reason = (
