@@ -8,9 +8,10 @@ from pathlib import Path
 import gi
 
 gi.require_version("Gtk", "3.0")
-from gi.repository import Gio, Gtk  # noqa: E402
+from gi.repository import Gio, GLib, Gtk  # noqa: E402
 
 events = Path(sys.argv[2]) if len(sys.argv) > 2 else None
+state = Path(sys.argv[3]) if len(sys.argv) > 3 else None
 output = None if sys.argv[1] == "-" else Path(sys.argv[1])
 application = Gtk.Application(
     application_id="io.github.Creammmmm.InkEcho.InputFixture",
@@ -52,6 +53,22 @@ def activate(app):
     window.show_all()
     widget.grab_focus()
     window.present()
+    if state is not None:
+
+        def update_state():
+            temporary = state.with_suffix(".tmp")
+            temporary.write_text(
+                json.dumps(
+                    {
+                        "active": window.is_active(),
+                        "focused": widget.has_focus(),
+                    }
+                )
+            )
+            temporary.replace(state)
+            return True
+
+        GLib.timeout_add(50, update_state)
 
 
 application.connect("activate", activate)

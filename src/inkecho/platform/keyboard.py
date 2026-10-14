@@ -2,6 +2,7 @@
 
 import asyncio
 import ctypes
+import time
 from collections.abc import Callable
 from contextlib import contextmanager
 
@@ -22,6 +23,10 @@ class KeyboardError(RuntimeError):
             "unsupported_target",
             "mapping_changed",
             "display_unavailable",
+            "keys_held",
+            "caps_lock",
+            "cleanup_pending",
+            "unsupported_layout",
         }
     )
 
@@ -377,7 +382,9 @@ class KeyboardInput:
     def _send(self, window, keycode, pressed):
         self._driver.send(window, keycode, pressed)
 
-    async def insert(self, text: str, can_continue: Callable[[], bool]) -> int:
+    async def insert(
+        self, text: str, can_continue: Callable[[], bool], *, deadline=None
+    ) -> int:
         text = _text(text)
         if not self.connected:
             raise KeyboardError("session_closed")
@@ -387,7 +394,11 @@ class KeyboardInput:
         driver = self._driver
 
         def check():
-            if self._closing or not can_continue():
+            if (
+                self._closing
+                or not can_continue()
+                or (deadline is not None and time.monotonic() >= deadline)
+            ):
                 raise KeyboardError("input_cancelled")
 
         try:
