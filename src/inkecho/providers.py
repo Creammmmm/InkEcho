@@ -19,8 +19,8 @@ from inkecho.config import Provider
 ERRORS = {
     "configuration": "Check the provider URL, model and request parameters.",
     "credentials": "Add an API key in the system credential store.",
-    "protocol": "Choose a model for synchronous HTTP audio transcription; "
-    "realtime, streaming and filetrans protocols are not implemented.",
+    "protocol": "Choose an audio model matching the selected HTTP or Qwen realtime "
+    "protocol. Filetrans and other streaming protocols are not implemented.",
     "authentication": "The service rejected the API key or account permissions.",
     "rate_limit": "The service is busy or its request quota was reached.",
     "model": "The service does not support this model or request format.",
@@ -40,9 +40,30 @@ class ProviderError(RuntimeError):
 
 
 def validate_provider_protocol(provider: Provider) -> None:
-    """Reject known incompatible families without an allowlist of HTTP models."""
+    """Validate an explicitly selected protocol, without inferring a gateway."""
     if provider.role != "transcription" or provider.adapter != "qwen":
         return
+    if "asr_protocol" not in provider.parameters:
+        _validate_http_provider_protocol(provider)
+        return
+    from inkecho.realtime import RealtimeConfig
+
+    RealtimeConfig.from_provider(provider)
+    model = provider.model.strip().lower()
+    if (
+        {"streaming", "filetrans"}.intersection(model.split("-"))
+        or uses_dashscope_audio(model)
+        or re.fullmatch(r"qwen3-asr-flash(?:-\d{4}-\d{2}-\d{2})?", model)
+    ):
+        raise ProviderError("protocol")
+
+
+def _validate_http_provider_protocol(provider: Provider) -> None:
+    """Keep transcribe HTTP-only, even for otherwise valid realtime settings."""
+    if provider.role != "transcription" or provider.adapter != "qwen":
+        return
+    if "asr_protocol" in provider.parameters:
+        raise ProviderError("protocol")
     model = provider.model.strip().lower()
     if model.startswith(("qwen", "fun-asr")) and {
         "realtime",
@@ -408,7 +429,7 @@ class ProviderClient:
         return Connection(tuple(await self.models(provider, key)))
 
     async def transcribe(self, provider: Provider, key: str, audio: bytes) -> Result:
-        validate_provider_protocol(provider)
+        _validate_http_provider_protocol(provider)
         self._validate(provider, key)
         if provider.role != "transcription" or provider.adapter != "qwen":
             raise ProviderError("configuration")
@@ -520,14 +541,39 @@ class ProviderClient:
         return await polish_stream(self, provider, key, text, prompt, on_delta)
 
     async def test_capability(
-        self, provider: Provider, key: str, *, audio: bytes | None = None
+        self,
+        provider: Provider,
+        key: str,
+        *,
+        audio: bytes | None = None,
+        streaming: bool = False,
     ) -> Result:
         """Explicit potentially billable request; never run automatically."""
+        if self._pool.closed:
+            raise ProviderError("configuration")
         if provider.role == "transcription":
             validate_provider_protocol(provider)
             if audio is None:
                 raise ProviderError("audio")
+            if "asr_protocol" in provider.parameters:
+                from inkecho.provider_capability import realtime_capability
+
+                return await realtime_capability(
+                    provider, key, audio, timeout_seconds=self.timeout_seconds
+                )
             return await self.transcribe(provider, key, audio)
+        if streaming:
+
+            async def discard(_delta: str) -> None:
+                pass
+
+            return await self.polish_stream(
+                provider,
+                key,
+                "Connection test.",
+                "Return the input unchanged.",
+                discard,
+            )
         return await self.polish(
             provider, key, "Connection test.", "Return the input unchanged."
         )

@@ -4,6 +4,7 @@ import asyncio
 import json
 import ssl
 import subprocess
+import sys
 import threading
 import time
 from collections import deque
@@ -63,7 +64,18 @@ def certificate(tmp_path_factory):
 
 @pytest.fixture
 def server(certificate):
-    state = SimpleNamespace(requests=[], replies=deque(), accepted=0, completed=False)
+    state = SimpleNamespace(
+        requests=[], replies=deque(), accepted=0, completed=False, server_errors=[]
+    )
+
+    class Server(ThreadingHTTPServer):
+        daemon_threads = False
+
+        def handle_error(self, _request, _address):
+            error = sys.exception()
+            state.server_errors.append(
+                (type(error).__name__, getattr(error, "errno", None))
+            )
 
     class Handler(BaseHTTPRequestHandler):
         protocol_version = "HTTP/1.1"
@@ -78,7 +90,7 @@ def server(certificate):
         def handle(self):
             try:
                 super().handle()
-            except (ConnectionResetError, ssl.SSLError):
+            except (BrokenPipeError, ConnectionResetError, ssl.SSLError):
                 pass
 
         def do_POST(self):
@@ -108,7 +120,7 @@ def server(certificate):
             except (BrokenPipeError, ConnectionResetError, ssl.SSLError):
                 pass
 
-    httpd = ThreadingHTTPServer(("127.0.0.1", 0), Handler)
+    httpd = Server(("127.0.0.1", 0), Handler)
     context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
     context.load_cert_chain(*certificate)
     httpd.socket = context.wrap_socket(httpd.socket, server_side=True)
@@ -127,6 +139,7 @@ def server(certificate):
     httpd.shutdown()
     worker.join()
     httpd.server_close()
+    assert state.server_errors == []
 
 
 def run(server, operation, *, timeout=2):
@@ -191,6 +204,18 @@ def test_completed_sse_requests_do_not_close_shared_client(server):
 
     run(server, execute)
     assert len(server.requests) == 3
+
+
+def test_polishing_capability_can_exercise_actual_sse_not_buffered_chat(server):
+    result = run(
+        server,
+        lambda client: client.test_capability(
+            server.provider, "fixture-key", streaming=True
+        ),
+    )
+    assert result.text == "first"
+    assert server.requests[0]["body"]["stream"] is True
+    assert len(server.requests) == 1
 
 
 def test_done_returns_before_http_peer_finishes_without_emitting_tail(server):

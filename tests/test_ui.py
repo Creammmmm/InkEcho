@@ -1,7 +1,9 @@
 """Qt widget interactions, isolated persistence and asynchronous form ownership."""
 
 import asyncio
+import json
 import sys
+from dataclasses import replace
 from pathlib import Path
 
 import pytest
@@ -15,7 +17,8 @@ from inkecho.core import Failure, State
 from inkecho.integration import DesktopIntegration
 from inkecho.logging import DiagnosticLog
 from inkecho.platform.hotkeys import ShortcutError
-from inkecho.providers import ProviderError
+from inkecho.providers import ProviderError, Result, Usage
+from inkecho.realtime import PROTOCOL, RealtimeConfig
 from inkecho.statistics import Statistics
 from inkecho.ui.settings import AppearancePage
 from inkecho.ui.window import MainWindow
@@ -320,9 +323,9 @@ def test_realtime_capability_rejected_before_key_recording_or_network(window):
         window.session.sample_audio = forbidden
         window.session.provider_client = forbidden
         await page.run(page.capability())
-        assert "当前适配器不支持" in page.message.text()
-        assert "qwen3-asr-flash" in page.message.text()
-        assert "当前适配器不支持" in page.model_hint.text()
+        assert "当前连接方式与模型协议不匹配" in page.message.text()
+        assert "Qwen 实时 WebSocket" in page.message.text()
+        assert "当前连接方式与模型协议不匹配" in page.model_hint.text()
 
     asyncio.run(scenario())
 
@@ -421,6 +424,7 @@ def test_provider_save_snapshots_preferences_before_keyring_wait(window):
         window.session.save_key = save_key
         page.key.setText("temporary-test-secret")
         page.enabled.setChecked(True)
+        page.streaming.setChecked(False)
         page.fallback.setChecked(False)
         original = page.identifier
         request = asyncio.create_task(page.save())
@@ -428,6 +432,7 @@ def test_provider_save_snapshots_preferences_before_keyring_wait(window):
         assert page.key.text() == ""
         page.new()
         page.enabled.setChecked(False)
+        page.streaming.setChecked(True)
         page.fallback.setChecked(True)
         release.set()
         await request
@@ -435,11 +440,216 @@ def test_provider_save_snapshots_preferences_before_keyring_wait(window):
         assert settings.polishing_provider == original
         assert settings.polishing_enabled
         assert not settings.polishing_fallback
+        assert not settings.polishing_streaming
         assert page.identifier != original
         assert written[0][1] == "temporary-test-secret"
         assert (
             "temporary-test-secret"
             not in (window.session.store.root / "config.json").read_text()
         )
+
+    asyncio.run(scenario())
+
+
+def test_protocol_controls_preserve_json_model_rate_and_saved_configuration(window):
+    page = window.pages[2]
+    store = window.session.store
+    before = {p: p.read_bytes() for p in store.root.rglob("*.json")}
+    original_model = page.model.currentText()
+    original_rate = store.load_settings().sample_rate
+    assert page.protocol.currentData() == "http"
+    page.parameters.setPlainText('{"asr_options":{"enable_itn":false}}')
+    page.protocol.setCurrentIndex(page.protocol.findData(PROTOCOL))
+    page.realtime_url.setText("wss://asr.example.invalid/realtime")
+    assert page.parameter_values() == {
+        "asr_protocol": PROTOCOL,
+        "realtime_url": "wss://asr.example.invalid/realtime",
+        "asr_options": {"enable_itn": False},
+    }
+    page.protocol.setCurrentIndex(page.protocol.findData("http"))
+    assert page.parameter_values() == {"asr_options": {"enable_itn": False}}
+    assert page.model.currentText() == original_model
+    assert store.load_settings().sample_rate == original_rate
+    assert before == {p: p.read_bytes() for p in store.root.rglob("*.json")}
+
+
+def test_invalid_json_is_never_replaced_by_protocol_controls_or_save(window):
+    async def scenario():
+        page = window.pages[2]
+        stored = window.session.store.load_provider(page.identifier)
+        original = '{"unfinished":'
+        page.parameters.setPlainText(original)
+        page.protocol.setCurrentIndex(page.protocol.findData(PROTOCOL))
+        page.realtime_url.setText("wss://example.invalid/fixture")
+        assert page.parameters.toPlainText() == original
+        await page.run(page.save())
+        assert "JSON" in page.message.text()
+        assert page.parameters.toPlainText() == original
+        assert window.session.store.load_provider(page.identifier) == stored
+
+    asyncio.run(scenario())
+
+
+def test_advanced_protocol_json_updates_controls_without_discarding_unknown_data(
+    window,
+):
+    page = window.pages[2]
+    values = {"asr_protocol": PROTOCOL, "realtime_url": "wss://example.invalid/r"}
+    page.parameters.setPlainText(json.dumps(values))
+    assert page.protocol.currentData() == PROTOCOL
+    assert page.realtime_url.text() == values["realtime_url"]
+    values["asr_protocol"] = "future_protocol"
+    values["realtime_url"] = {"invalid": "preserved"}
+    page.parameters.setPlainText(json.dumps(values))
+    assert page.protocol.currentIndex() == -1
+    assert page.parameter_values() == values
+
+
+def test_explicit_official_realtime_controls_validate_without_changing_model(window):
+    page = window.pages[2]
+    page.model.setCurrentText("qwen3-asr-flash-realtime")
+    page.protocol.setCurrentIndex(page.protocol.findData(PROTOCOL))
+    config = RealtimeConfig.from_provider(page.provider())
+    assert config.url.startswith("wss://dashscope.aliyuncs.com/api-ws/v1/realtime?")
+    assert page.realtime_url.text() == ""
+    assert "已选择边录边识别" in page.model_hint.text()
+
+
+def test_custom_realtime_requires_wss_before_credentials_or_microphone(window):
+    async def scenario():
+        page = window.pages[2]
+        page.model.setCurrentText("qwen3-asr-flash-realtime")
+        page.url.setText("https://proxy.example.invalid/v1")
+        page.protocol.setCurrentIndex(page.protocol.findData(PROTOCOL))
+
+        async def forbidden(*_args, **_kwargs):
+            raise AssertionError("preflight must precede external access")
+
+        window.session.key = forbidden
+        window.session.sample_audio = forbidden
+        await page.run(page.capability())
+        assert "服务配置或请求参数不正确" in page.message.text()
+        page.realtime_url.setText("wss://proxy.example.invalid/realtime")
+        page.validate_protocol(page.provider())
+        assert page.provider().parameters["realtime_url"] == page.realtime_url.text()
+
+    asyncio.run(scenario())
+
+
+def test_realtime_sample_rate_preflight_does_not_change_settings_or_record(window):
+    async def scenario():
+        page = window.pages[2]
+        store = window.session.store
+        store.save_settings(replace(store.load_settings(), sample_rate=48000))
+        page.model.setCurrentText("qwen3-asr-flash-realtime")
+        page.protocol.setCurrentIndex(page.protocol.findData(PROTOCOL))
+
+        async def forbidden(*_args, **_kwargs):
+            raise AssertionError("sample rate preflight must run first")
+
+        window.session.key = forbidden
+        window.session.sample_audio = forbidden
+        await page.run(page.capability())
+        assert "16 kHz" in page.message.text()
+        assert store.load_settings().sample_rate == 48000
+
+    asyncio.run(scenario())
+
+
+def test_realtime_capability_page_passes_explicit_protocol_without_injection(window):
+    async def scenario():
+        page = window.pages[2]
+        page.model.setCurrentText("qwen3-asr-flash-realtime")
+        page.protocol.setCurrentIndex(page.protocol.findData(PROTOCOL))
+        calls = []
+
+        async def key(_reference):
+            return "fixture-key"
+
+        async def sample():
+            return b"fixture-audio"
+
+        class Client:
+            async def test_capability(self, provider, value, *, audio, streaming):
+                calls.append((provider.parameters, value, audio, streaming))
+                return Result("fixture result", Usage(), 0.01)
+
+        window.session.key = key
+        window.session.sample_audio = sample
+        window.session.provider_client = lambda _role: Client()
+        await page.capability()
+        assert calls == [
+            ({"asr_protocol": PROTOCOL}, "fixture-key", b"fixture-audio", False)
+        ]
+        assert "未向其他窗口输入" in page.message.text()
+
+    asyncio.run(scenario())
+
+
+@pytest.mark.parametrize("streaming", [False, True])
+def test_polish_capability_uses_saved_streaming_setting(window, streaming):
+    async def scenario():
+        page = window.pages[3]
+        store = window.session.store
+        store.save_settings(
+            replace(store.load_settings(), polishing_streaming=streaming)
+        )
+        calls = []
+
+        async def key(_reference):
+            return "fixture-key"
+
+        class Client:
+            async def test_capability(self, _provider, _key, **options):
+                calls.append(options)
+                return Result("fixture", Usage(), 0)
+
+        window.session.key = key
+        window.session.provider_client = lambda _role: Client()
+        await page.capability()
+        assert calls == [{"audio": None, "streaming": streaming}]
+
+    asyncio.run(scenario())
+
+
+def test_streaming_checkbox_roundtrips_and_warns_about_partial_output(window):
+    async def scenario():
+        page = window.pages[3]
+        assert page.streaming.isChecked()
+        page.streaming.setChecked(False)
+        await page.save()
+        assert not window.session.store.load_settings().polishing_streaming
+        assert not page.streaming.isChecked()
+
+    asyncio.run(scenario())
+
+
+@pytest.mark.parametrize("control", ["protocol", "endpoint", "json", "streaming"])
+def test_new_provider_controls_invalidate_late_status(window, control):
+    async def scenario():
+        page = window.pages[3 if control == "streaming" else 2]
+        if control == "endpoint":
+            page.protocol.setCurrentIndex(page.protocol.findData(PROTOCOL))
+        entered, release = asyncio.Event(), asyncio.Event()
+
+        async def failed():
+            entered.set()
+            await release.wait()
+            raise ProviderError("unavailable")
+
+        task = page.run(failed())
+        await entered.wait()
+        if control == "protocol":
+            page.protocol.setCurrentIndex(page.protocol.findData(PROTOCOL))
+        elif control == "endpoint":
+            page.realtime_url.setText("wss://example.invalid/realtime")
+        elif control == "json":
+            page.parameters.setPlainText('{"asr_options":{}}')
+        else:
+            page.streaming.setChecked(not page.streaming.isChecked())
+        page.message.setText("changed form")
+        release.set()
+        await task
+        assert page.message.text() == "changed form"
 
     asyncio.run(scenario())

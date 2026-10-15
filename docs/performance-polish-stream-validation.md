@@ -134,3 +134,25 @@ fixed public-text destination. This probe does not authorize a rejected audio
 upload. It also does not measure a provider's internal thinking process or prove
 audio transcription, streamed keyboard delivery, package acceptance or Ubuntu
 24.04 end-to-end speed.
+
+### Subsequent fixed-public-text live validation
+
+After the local module review, the parent agent obtained approval and ran the
+guarded live probe **once**, using its source-defined public sentence and prompt
+with the configured official `api.deepseek.com` / `deepseek-flash` polishing
+service. No audio, local-file body, user document, private prompt or transcript
+was sent. The credential was used from SecretStore only as Bearer authentication
+to that official service. No second cloud request or synchronous comparison was
+made.
+
+`build/performance-sse-live.json` records success: 14 characters in seven deltas,
+the exact public text returned, first delta at **781.643 ms**, completion at
+**789.380 ms**, first delta preceding completion, and token usage available.
+It contains no request/response body or key. This verifies one small authenticated
+SSE request using the verified request builder; it does not establish a general
+speedup, a synchronous baseline, Ubuntu 24.04 performance, speech recognition,
+or whether the service performed an internal thinking process.
+
+The earlier no-live statements above describe the initial local validation and
+remain historical facts. The separate blocked audio upload was not retried by
+this public-text probe.

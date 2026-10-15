@@ -415,6 +415,7 @@ class Session(QObject):
             }
             if not transcription.model:
                 raise CredentialError("请先选择转写模型并保存 API 密钥。")
+            validate_provider_protocol(transcription)
             realtime_config = None
             if transcription.parameters.get("asr_protocol") is not None:
                 if transcription.parameters["asr_protocol"] != PROTOCOL:
@@ -424,8 +425,6 @@ class Session(QObject):
                 )
                 if not hasattr(self.recorder, "pcm_ready"):
                     raise ProviderError("configuration")
-            else:
-                validate_provider_protocol(transcription)
             context["realtime_config"] = realtime_config
             if delay:
                 self.status.emit(

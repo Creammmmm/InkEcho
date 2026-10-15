@@ -6,6 +6,7 @@ import io
 import json
 import ssl
 import subprocess
+import sys
 import threading
 import time
 import wave
@@ -54,7 +55,18 @@ def certificate(tmp_path_factory):
 
 @pytest.fixture
 def server(certificate):
-    state = SimpleNamespace(requests=[], responses=deque(), accepted=0, active=0)
+    state = SimpleNamespace(
+        requests=[], responses=deque(), accepted=0, active=0, server_errors=[]
+    )
+
+    class Server(ThreadingHTTPServer):
+        daemon_threads = False
+
+        def handle_error(self, _request, _address):
+            error = sys.exception()
+            state.server_errors.append(
+                (type(error).__name__, getattr(error, "errno", None))
+            )
 
     class Handler(BaseHTTPRequestHandler):
         protocol_version = "HTTP/1.1"
@@ -76,7 +88,7 @@ def server(certificate):
         def handle(self):
             try:
                 super().handle()
-            except (ConnectionResetError, ssl.SSLError):
+            except (BrokenPipeError, ConnectionResetError, ssl.SSLError):
                 pass  # Cancellation/oversized replies can reset a keepalive socket.
 
         def do_GET(self):
@@ -111,7 +123,7 @@ def server(certificate):
             except (BrokenPipeError, ConnectionResetError, ssl.SSLError):
                 pass  # Expected when the client cancels a deliberately delayed reply.
 
-    httpd = ThreadingHTTPServer(("127.0.0.1", 0), Handler)
+    httpd = Server(("127.0.0.1", 0), Handler)
     context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
     context.load_cert_chain(*certificate)
     httpd.socket = context.wrap_socket(httpd.socket, server_side=True)
@@ -131,6 +143,7 @@ def server(certificate):
     httpd.shutdown()
     worker.join()
     httpd.server_close()
+    assert state.server_errors == []
 
 
 def wav():

@@ -289,3 +289,24 @@ def test_realtime_constructor_failure_does_not_leave_recording_task(sessions):
         await session.close()
 
     asyncio.run(scenario())
+
+
+def test_explicit_realtime_rejects_known_http_model_before_external_access(sessions):
+    async def scenario():
+        session, connections = sessions()
+        provider = session.store.load_provider("qwen")
+        session.store.save_provider(replace(provider, model="qwen3-asr-flash"))
+
+        async def forbidden(*_args, **_options):
+            pytest.fail("Protocol preflight must precede keys or desktop authorization")
+
+        session.key = forbidden
+        session.authorize_input = forbidden
+        diagnostics = []
+        session.diagnostic.connect(diagnostics.append)
+        await session.toggle()
+        assert diagnostics == ["protocol"]
+        assert not connections and not session.recorder.recording
+        await session.close()
+
+    asyncio.run(scenario())
