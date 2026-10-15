@@ -2,7 +2,7 @@
 
 InkEcho 是一个 Linux 桌面语音输入应用：录音后调用云端转写，可选按 Prompt 润色，再输入文字。不通过剪贴板或系统输入法接口提交文字。
 
-当前已构建预览包为 **0.1.0a12**，R8 源码变更正在实施、尚未验收；本机稳定启动入口仍为已部署的 a9。本应用采用“输出到当前光标”的键盘输入方式：开始录音不要求先选文本框，录音、识别与润色期间可自由切换窗口；输出中切换窗口，后续字符也可进入新焦点。主动取消和过期任务仍停止未发送的文字，已经发送的按键无法撤回。
+当前已构建预览包为 **0.1.0a13**，R8 源码与 a13 实际包的 Noble Xorg 限定检查均通过，主机检查仍待完成；本机稳定启动入口仍为已部署的 a9。本应用采用“输出到当前光标”的键盘输入方式：开始录音不要求先选文本框，录音、识别与润色期间可自由切换窗口；输出中切换窗口，后续字符也可进入新焦点。主动取消和过期任务仍停止未发送的文字，已经发送的按键无法撤回。
 
 a10 源码加入 Qwen 实时转录协议接入、流式润色与边接收边输出、连接复用和分段计时，并修复 X11 分段字符失真、调整实测等待。实时转录须显式选择相应连接方式；不支持流式润色的网关可关闭流式开关。官方纯生成静音协议已实测；真实语音准确率与云端端到端性能仍待验，详见[性能优化验收总览](docs/performance-validation.md)。
 
@@ -10,7 +10,9 @@ a11 的固定整段场景曾通过，但其 R2 长流准确输出、取消正确
 
 [R7 新源码](docs/ubuntu24-source-r7-validation.md)另行验证后，[实际 a12 包](docs/performance-a12-package-validation.md)在独立 Ubuntu 24.04.5 KVM Xorg 桌面通过首轮八种模式，包含四目标对照、取消、本地模拟服务、快速长流、首字不等待后续片段、切窗及提取后九页界面。单次快流清理后新 GTK/VTE 用 0.1747/0.3388 秒就绪，不代表任意流速或末字当刻响应。
 
-随后 a12 R2 夹具为每片段配置 70 ms 等待，虽文字和取消正确，新 GTK 仍需 **5.8435 秒**就绪，延迟验收未通过。不能称 a12 已整体解决；R8 源码和新包待验，主机检查暂缓。见[a12 慢流反例](docs/performance-a12-paced-validation.md)。GNOME 46 原生 Wayland 输入、VM 麦克风、物理快捷键、FUSE 和安装集成等限制仍保留。
+随后 a12 R2 夹具为每片段配置 70 ms 等待，虽文字和取消正确，新 GTK 仍需 **5.8435 秒**就绪，延迟验收未通过。不能称旧 a12 已整体解决；这份反例不会因后续修复而改写。见[a12 慢流反例](docs/performance-a12-paced-validation.md)。GNOME 46 原生 Wayland 输入、VM 麦克风、物理快捷键、FUSE 和安装集成等限制仍保留。
+
+[R8 源码](docs/ubuntu24-source-r8-validation.md)随后在同一 Noble Xorg 虚拟机通过慢流、快流和首字/切窗检查：每个正常流仅恢复一次映射，清理后新窗口就绪明显改善。这是新源码使用旧 a12 依赖的限定测试。随后[独立 a13 包](docs/performance-a13-package-validation.md)另行通过 Noble 七项实际检查：默认四目标、取消、普通/慢流/快流本地链路、首字与切窗、提取后九页界面。包内慢流清理后 GTK/VTE 就绪为 0.1753/0.2983 秒；主机检查仍待完成，不保证任意负载或末字当刻响应，也不证明云端语音性能。
 
 a9 新增 **GNOME 原生 Wayland 的实验性键盘输入路径**。本机 Ubuntu 26.04.1、GNOME/Mutter 50.1、Chrome 154 的独立测试窗口已接收完整的 26 字符中文、英文及符号样本，并恢复键盘映射和修饰键状态：源码验证了 textarea，实际 a9 AppImage 验证了 contenteditable。最终 a9 实际包还在同一输出任务中完成 contenteditable 的原生 Chrome → XWayland Chrome → 原生 Chrome 切换，26 字符全部进入对应窗口并恢复键盘状态。隔离 GNOME 环境另有 GTK 与 Chrome 证据；这些结果不代表所有 Wayland 应用或 Ubuntu 版本均已支持。详见[原生 Wayland 验证](docs/native-wayland-keymap-validation.md)。
 
@@ -37,14 +39,14 @@ uv run python -m inkecho
 
 在界面中分别设置转录与润色服务，测试麦克风，选择 Prompt；GNOME 快捷键需要在录音设置页主动启用。其他桌面可自行将快捷键绑定到 `python -m inkecho --toggle`，使用实际安装的 Python 完整路径。开始后可切换窗口，识别完成时将光标放在希望接收文字的位置。主动取消会停止后续发送；目标不支持时会提示错误，不会自动粘贴。
 
-独立本地 a12 预览包为 `dist/InkEcho-0.1.0a12-x86_64.AppImage`，Noble 首轮八种模式通过，但慢流 R2 暴露残余桌面延迟，整轮未完成、主机检查暂缓。**先从旧版托盘菜单正常退出，再启动 a12**；否则单实例通信可能只唤起仍在运行的 a9。此操作不替换原有 a9 稳定入口、自启动或公开 release：
+独立本地 a13 预览包为 `dist/InkEcho-0.1.0a13-x86_64.AppImage`，已通过 Noble 七项实际包检查，主机验证仍待完成。**先从旧版托盘菜单正常退出，再启动 a13**；否则单实例通信可能只唤起仍在运行的 a9。此操作不替换原有 a9 稳定入口、自启动或公开 release：
 
 ```sh
-chmod +x dist/InkEcho-0.1.0a12-x86_64.AppImage
-./dist/InkEcho-0.1.0a12-x86_64.AppImage
+chmod +x dist/InkEcho-0.1.0a13-x86_64.AppImage
+./dist/InkEcho-0.1.0a13-x86_64.AppImage
 ```
 
-a12 包的哈希与已完成范围见[a12 包记录](docs/performance-a12-package-validation.md)。[a11 包记录](docs/performance-a11-package-validation.md)与[a10 包报告](docs/performance-package-validation.md)保留各自版本的结果，不包含后续修复。通用构建步骤与运行依赖见[打包说明](docs/packaging.md)。桌面启动器、图标与自启动均由用户主动安装；移动 AppImage 后可在设置中修复路径。
+a13 的哈希与限定实测范围见[a13 包报告](docs/performance-a13-package-validation.md)和[性能总览](docs/performance-validation.md)，主机检查仍待完成。[a12 包记录](docs/performance-a12-package-validation.md)保留历史实测范围。[a11 包记录](docs/performance-a11-package-validation.md)与[a10 包报告](docs/performance-package-validation.md)保留各自版本的结果，不包含后续修复。通用构建步骤与运行依赖见[打包说明](docs/packaging.md)。桌面启动器、图标与自启动均由用户主动安装；移动 AppImage 后可在设置中修复路径。
 
 ## 验证与文档
 

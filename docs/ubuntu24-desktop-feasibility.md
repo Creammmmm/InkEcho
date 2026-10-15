@@ -25,11 +25,12 @@ this single case is not arbitrary-paced or immediate-after-output evidence.
 The actual a12 R2 stream, with fixture-configured 70 ms sleep per fragment,
 was exact and canceled safely but still
 needed 5.8435 seconds for a new GTK window after cleanup: latency acceptance
-failed. R8 task-scoped mapping lifecycle source/new-artifact validation is
-pending and host checks remain deferred. No
+failed. R8 task-scoped mapping lifecycle source checks have since passed
+separately. The new a13 actual artifact has now passed seven independently
+reviewed Noble modes; host checks remain pending. No
 complete Ubuntu 24.04, physical hardware or cloud speech-accuracy support is
 claimed. Historical a10/a11 artifacts, experimental R5, source R6/R7 and current
-a12 artifact evidence are separate; later success does not rewrite old failures.
+a12/a13 artifact evidence are separate; later success does not rewrite old failures.
 
 ## Historical survey boundary
 
@@ -328,7 +329,7 @@ checks were deferred in favor of the new artifact. The observed R2 limitation
 and its original artifact remain historical evidence.
 
 
-## R7 source and current a12 actual-artifact checkpoint
+## Historical R7 source and a12 actual-artifact checkpoint
 
 [The R7 source report](ubuntu24-source-r7-validation.md) records new read-only
 source origins using old a11 interpreter/dependencies. Its 150-codepoint long
@@ -411,10 +412,93 @@ boolean nor a short first-press time establishes an overall fix. The 50 ms
 observer and two-task/cleanup scope still preclude a last-character immediate
 responsiveness claim.
 
-An R8 task-scoped mapping-lifecycle change is now being implemented. Its actual source
-and new-artifact acceptance are pending; a12 host keyboard/microphone-to-local-
-TLS and native UI/IPC/profile-recovery checks remain deferred. No subsequent
-worktree change may retroactively repair this immutable a12 artifact.
+The subsequent R8 source and separate a13 Noble actual-package checks below
+have now passed; a13 host validation remains pending. Neither those source results
+nor later worktree changes retroactively repair this immutable a12 artifact.
+a12 host checks were deferred in favor of the replacement artifact.
+
+## R8 source and separate a13 Noble actual-package checks passed
+
+[The R8 source report](ubuntu24-source-r8-validation.md) separately validates
+the production Session's task-scoped X11 mapping lifetime. The source snapshot
+uses old a12 interpreter/Qt/dependencies, while ten application origins and
+hashes match the new source tree. There is no candidate restoration wrapper.
+Paced and fast use the same 150-codepoint sample with fixture-configured server
+sleep of 70 ms and 1 ms respectively, not measured client arrival intervals.
+
+| R8 actual source mode | Writes / normal restore calls / insertions | Post-cleanup GTK/VTE readiness |
+| --- | --- | --- |
+| Paced150 | 145 / 1 / 150 | 0.1734 / 0.3882 s |
+| Fast150 | 145 / 1 / 6 | 0.1706 / 0.2901 s |
+
+Both received exact text, rejected canceled tails, balanced events, cleaned up
+maps, had no server errors and closed fixture threads. The standalone source
+focus case confirmed a successful first press before queuing the next 55
+codepoints and exact [12,44] routing after changing windows, with 55 writes,
+one restore and completed output-session context exit. All source producers
+and readiness processes naturally exited 0; root reviewed raw results,
+origins and payload identity. Evidence has prefix `source-r8-output-session-`
+under the existing output directory. The source commit is `d13ebcd`.
+
+These are single matched source diagnostics. Full readback to complete process
+exit still included the second cancellation task, its tail observation and
+TLS/session cleanup: paced 2848.225 ms and fast 2795.182 ms. Readiness occurs
+after that cleanup, not immediately at the last normal character. Neither
+R8 source results nor boundary ScreenSaver queries prove arbitrary-paced/load
+reliability, an internal Mutter cause, glyph rendering or cloud speech latency.
+
+The versioned product is now a13, frozen source commit
+`eeb2d0ce8f8c5a6690b0ab54e0196da4254eb767`. Its exact clean workflow passed
+Ruff/format for 233 Python files and 1078 tests/three skips in 20.01 seconds;
+the receipt binds the R8 evidence report. The separately built artifact is
+`dist/InkEcho-0.1.0a13-x86_64.AppImage`, 108907000 bytes, SHA256
+`8dce4eedee71373a27e0e6507592b1240617412a8a6f114230b9a53f4d286a89`.
+Static audit matches all 43 source files, 3958 inventory files, 1048 symlinks,
+two license copies and ten application origins plus websockets. Source/build
+identity and preserved older artifacts/user JSON hashes are recorded in
+`build/performance-a13-artifact.json`; the non-GUI entry audit is
+`build/performance-a13-entry-audit.json`.
+
+[The independent a13 package report](performance-a13-package-validation.md)
+now records seven Noble modes, each naturally exited 0 and accepted by root:
+default20 four targets, cancel12, normal local TLS pipeline, paced/fast long
+pipelines, streamed first-character/focus and extracted AppRun UI. Its new
+snapshot manifest is
+`a62e0bc34f9fc738d5b8375e4981fbf2baabbf51eecda6238241b5110b8dd131`.
+All seven preview/run payloads match, and the six non-UI modes independently
+match ten package application origins plus websockets, including repaired
+Session and keyboard. No source-root override or restoration candidate is used.
+Records are `output/a13-r1-*`, separate from source R8 and old package evidence.
+
+Default20 delivered 140 exact codepoints in each of Chrome textarea,
+contenteditable, GTK and VTE, balanced events and restored maps with 136 writes
+and one restore; VTE bytes matched. No a13 40 ms control was run: a12 controls
+remain historical only. cancel12 delivered the exact prefix and had no tail
+over 0.5 seconds. Normal local TLS25 was exact with 25 writes/one restore/three
+insertions, stop to first press 47.844 ms and completion 1865.296 ms.
+
+| a13 actual-artifact long mode | Fixture sleep | Writes / normal restores / insertions | Post-cleanup GTK/VTE |
+| --- | --- | --- | --- |
+| Paced150 | 70 ms | 145 / 1 / 150 | 0.1753 / 0.2983 s |
+| Fast150 | 1 ms | 145 / 1 / 6 | 0.1602 / 0.2701 s |
+
+Both were exact and cancel-safe, with balanced events, restored mapping, no
+server errors and joined threads. Cancellation counters include a second
+successful cleanup call with no mapping write; two calls do not imply two
+actual map restorations. Full readback still precedes complete process exit by
+2798.888/2797.023 ms, including the second task and cleanup. Actual GTK fixtures
+spawn at exit +433.289/+419.036 ms. These are observed post-cleanup measurements,
+not immediate-last-character response, distributions or cloud latency evidence.
+
+The formal packaged output-session focus mode sent its first character before
+the remaining 55 were queued and routed all 56 exactly [12,44], with 55 writes,
+one restore and balanced events. AppRun/Xorg nine pages and normal exit were
+reviewed by root, including the contact sheet and long provider pages. This
+UI mode does not include IPC, damaged-profile, native Wayland or FUSE checks.
+Relevant Ubuntu 26 host tests remain pending. These Noble modes used only
+synthetic PCM and loopback fixtures, without cloud requests, credentials or a
+real microphone. No deployment, push or release occurred; a12's immutable
+negative history remains unchanged.
 
 ## Reproduction and outstanding acceptance
 
@@ -455,14 +539,14 @@ adapted VM probe must be present under the input path with its recorded manifest
 it is a lab fixture, not an unrecorded modification to production input code.
 This report does not claim that unreviewed future runs have passed.
 
-Remaining acceptance includes an actual R8 source and new-artifact repair for
-the observed paced-stream latency, then relevant host checks; arbitrary
-timing/load and immediate desktop response remain unproven.
+Remaining acceptance includes the relevant a13 host checks and the full
+platform matrix; arbitrary timing/load and immediate desktop response remain
+unproven. The seven Noble actual-package modes do not fill those gaps.
 Actual VM microphone/voice capture, physical shortcut/F13/F14 behavior,
 focus changes during recording/recognition, overlay focus, credentials,
 FUSE-mounted launch, desktop integration/autostart and unavailable-native-path
-cleanup/recovery. Output-time two-window focus switching has separate a11, R7 source and a12
-results above; it is not a test of every workflow phase. No cloud ASR request
+cleanup/recovery. Output-time two-window focus switching has separate historical package and
+R7/R8 source and a13 actual-package results above; it is not a test of every workflow phase. No cloud ASR request
 was part of these desktop checks. KVM with software-rendered virtual graphics
 is real guest desktop evidence, but physical GPU/seat/microphone behavior and
 a clean installed physical Ubuntu 24.04 machine remain untested. The separate
