@@ -69,6 +69,7 @@ class Settings:
     polishing_provider: str = "deepseek"
     polishing_enabled: bool = False
     polishing_fallback: bool = True
+    polishing_streaming: bool = True
     transcription_timeout_seconds: int = 30
     polishing_timeout_seconds: int = 30
     prompt: str = "builtin-faithful"
@@ -99,7 +100,12 @@ class Settings:
             1 <= self.recording_limit_seconds <= 300
         ):
             raise ConfigError("Recording limit must be between 1 and 300 seconds.")
-        for name in ("polishing_enabled", "polishing_fallback", "close_to_tray"):
+        for name in (
+            "polishing_enabled",
+            "polishing_fallback",
+            "polishing_streaming",
+            "close_to_tray",
+        ):
             if type(getattr(self, name)) is not bool:
                 raise ConfigError(f"{name} must be true or false.")
         for name in ("transcription_timeout_seconds", "polishing_timeout_seconds"):

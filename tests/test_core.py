@@ -59,6 +59,35 @@ def test_success_records_all_states_then_clears_task(setup):
     assert core.task is None and core.outcome == State.SUCCEEDED
 
 
+def test_streaming_transition_releases_original_and_has_no_automatic_replay(setup):
+    core, inputs, _states, _clock = setup
+    core.polish = True
+    task_id = transcribing(core)
+    core.transcribed(task_id, "original")
+    assert core.begin_streaming_output(task_id)
+    assert core.state == State.INJECTING and core.task.original == ""
+    core.polishing_failed(task_id)
+    assert inputs.written == "" and core.state == State.INJECTING
+    core.injection_finished(task_id)
+    assert core.outcome == State.SUCCEEDED
+
+
+@pytest.mark.parametrize("stale", ["cancelled", "expired", "wrong_id"])
+def test_streaming_transition_rejects_stale_or_expired_tasks(setup, stale):
+    core, inputs, _states, clock = setup
+    core.polish = True
+    task_id = transcribing(core)
+    core.transcribed(task_id, "original")
+    if stale == "cancelled":
+        core.cancel()
+    elif stale == "expired":
+        clock[0] = 1000
+    else:
+        task_id = "wrong-task"
+    assert not core.begin_streaming_output(task_id)
+    assert inputs.written == ""
+
+
 def test_only_one_task_and_unique_ids(setup):
     core, _, _, _ = setup
     first = core.begin()

@@ -42,6 +42,27 @@ def test_settings_roundtrip_and_reinitialization(tmp_path):
     assert store.load_settings() == settings
 
 
+def test_existing_settings_default_to_streaming_without_rewriting_user_file(tmp_path):
+    original = b'{"schema_version":1,"shortcut":"Ctrl+F4","polishing_enabled":true}'
+    path = tmp_path / "config.json"
+    path.write_bytes(original)
+    assert ConfigStore(tmp_path).load_settings().polishing_streaming is True
+    assert path.read_bytes() == original
+    assert not list(tmp_path.glob("*.bak"))
+
+
+def test_streaming_can_be_explicitly_disabled_and_roundtripped(tmp_path):
+    store = ConfigStore(tmp_path)
+    store.save_settings(replace(Settings(), polishing_streaming=False))
+    assert store.load_settings().polishing_streaming is False
+
+
+@pytest.mark.parametrize("value", [0, 1, None, "true"])
+def test_streaming_setting_requires_boolean(value):
+    with pytest.raises(ConfigError, match="polishing_streaming"):
+        Settings(polishing_streaming=value)
+
+
 def test_provider_roundtrip_and_delete(tmp_path):
     store = ConfigStore(tmp_path)
     provider = replace(

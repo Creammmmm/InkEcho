@@ -460,7 +460,7 @@ def test_known_incompatible_protocol_is_rejected_before_permission_key_and_audio
         assert session.controller.task is None
         assert diagnostics == ["protocol"]
         assert len(problems) == 1
-        assert "当前适配器不支持" in problems[0]
+        assert "连接方式与模型协议不匹配" in problems[0]
         await session.close()
 
     asyncio.run(scenario())

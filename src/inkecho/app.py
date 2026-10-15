@@ -20,6 +20,7 @@ from inkecho.realtime import (
     RealtimeConfig,
 )
 from inkecho.security import CredentialError, SecretStore
+from inkecho.streaming_output import StreamingOutput, TextDelta
 
 STATE_LABELS = {
     State.IDLE: "准备就绪",
@@ -35,15 +36,15 @@ ERROR_LABELS = {
     Failure.TIMEOUT: "任务超时，请缩短录音后重试。",
     Failure.AUDIO: "录音失败，请检查麦克风及音频设置。",
     Failure.TRANSCRIPTION: "转写失败，请检查服务配置、网络和账户权限。",
-    Failure.POLISHING: "润色失败，当前已关闭原文回退。",
+    Failure.POLISHING: "润色未完成；未继续输入或重放原文。",
     Failure.EMPTY: "服务没有返回有效文字。",
     Failure.INJECTION: "键盘输入未完成，未使用剪贴板回退。",
 }
 PROVIDER_LABELS = {
     "protocol": (
-        "当前适配器不支持实时或文件转写协议。"
-        "请从账户可用模型中选择同步录音转写模型"
-        "（如 qwen-audio-3.0-asr-flash 或 qwen3-asr-flash），保存后重试。"
+        "当前连接方式与模型协议不匹配。"
+        "实时模型请在转录服务中选择「Qwen 实时 WebSocket」；"
+        "同步模型使用 HTTP 录音转写。文件任务协议尚未实现。"
     ),
     "configuration": "服务配置或请求参数不正确。",
     "credentials": "请保存有效 API 密钥。",
@@ -410,6 +411,7 @@ class Session(QObject):
                     "transcription", self.settings
                 ),
                 "polishing_client": self.provider_client("polishing", self.settings),
+                "polishing_streaming": self.settings.polishing_streaming,
             }
             if not transcription.model:
                 raise CredentialError("请先选择转写模型并保存 API 密钥。")
@@ -623,6 +625,10 @@ class Session(QObject):
                     raise CredentialError("No polishing credential")
                 self.metrics["polishing_calls"] = 1
                 self.mark_timing(task_id, "polishing_started")
+                client = context["polishing_client"]
+                if context["polishing_streaming"] and hasattr(client, "polish_stream"):
+                    await self._stream_polish(task_id, context, key, result.text)
+                    return
                 polished = await context["polishing_client"].polish(
                     context["polishing"], key, result.text, context["prompt"].body
                 )
@@ -661,6 +667,107 @@ class Session(QObject):
             if isinstance(error, ProviderError):
                 self.diagnostic.emit(error.code)
                 self.report_problem(PROVIDER_LABELS[error.code])
+
+    async def _stream_polish(self, task_id, context, key, original) -> None:
+        started = time.monotonic()
+
+        def active():
+            self.controller.tick()
+            return self.active(task_id) and self.controller.state in {
+                State.POLISHING,
+                State.INJECTING,
+            }
+
+        async def send(text):
+            if not active():
+                raise asyncio.CancelledError
+            if self.controller.state == State.POLISHING:
+                if not self.controller.begin_streaming_output(task_id):
+                    raise asyncio.CancelledError
+            task = self.controller.task
+            options = {"deadline": task.deadline}
+            if getattr(self.inputs, "supports_first_sent_callback", False):
+                options["on_first_sent"] = lambda sent_at=None: self.mark_timing(
+                    task_id, "first_character_sent", at=sent_at
+                )
+            count = await self.inputs.insert(text, active, **options)
+            if not active():
+                raise asyncio.CancelledError
+            if type(count) is int and count == len(text):
+                self.metrics["characters"] += count
+            return count
+
+        output = StreamingOutput(send, active)
+        offset = 0
+
+        async def on_delta(text):
+            nonlocal offset
+            if not active():
+                raise asyncio.CancelledError
+            if text:
+                self.mark_timing(task_id, "polishing_first_segment")
+            await output.append(TextDelta(offset, text))
+            offset += len(text)
+
+        async def produce():
+            result = await context["polishing_client"].polish_stream(
+                context["polishing"], key, original, context["prompt"].body, on_delta
+            )
+            if not active():
+                raise asyncio.CancelledError
+            self.metrics["polishing_seconds"] = time.monotonic() - started
+            self.metrics["usage"] = result.usage
+            self.mark_timing(task_id, "polishing_completed")
+            await output.finish(result.text)
+
+        producer = self.spawn(produce())
+        consumer = self.spawn(output.run())
+
+        async def stop_operations():
+            output.close()
+            for operation in (producer, consumer):
+                if not operation.done():
+                    operation.cancel()
+            try:
+                await asyncio.gather(producer, consumer, return_exceptions=True)
+            finally:
+                output.close()
+
+        try:
+            done, _pending = await asyncio.wait(
+                {producer, consumer}, return_when=asyncio.FIRST_COMPLETED
+            )
+            if consumer in done:
+                consumer.result()
+            await producer
+            count = await consumer
+            if active():
+                self.metrics["characters"] = count
+                self.mark_timing(task_id, "output_completed")
+                self.controller.injection_finished(task_id)
+        except asyncio.CancelledError:
+            raise
+        except Exception as error:
+            await stop_operations()
+            if not active():
+                return
+            self.metrics["characters"] = output.sent_characters
+            self.metrics["polishing_seconds"] = time.monotonic() - started
+            if isinstance(error, KeyboardError):
+                self.input_failure = error
+                self.controller.fail(task_id, Failure.INJECTION)
+            elif output.attempted:
+                self.controller.fail(task_id, Failure.POLISHING)
+            else:
+                self.controller.polishing_failed(task_id)
+                if isinstance(error, ProviderError):
+                    self.diagnostic.emit(error.code)
+                    self.status.emit(
+                        PROVIDER_LABELS[error.code]
+                        + (" 已按设置使用原文。" if self.controller.fallback else "")
+                    )
+        finally:
+            await stop_operations()
 
     async def sample_audio(self, seconds: float = 3) -> bytes:
         if self.testing or self.preparing or self.controller.task:

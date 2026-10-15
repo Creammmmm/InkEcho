@@ -178,6 +178,14 @@ class TaskController:
         if self._valid(task_id, State.INJECTING):
             self._finish(State.SUCCEEDED)
 
+    def begin_streaming_output(self, task_id: str) -> bool:
+        """Enter output once; streamed text never has an original-text replay path."""
+        if not self._valid(task_id, State.POLISHING):
+            return False
+        self.task.original = ""
+        self._state(State.INJECTING)
+        return self._valid(task_id, State.INJECTING)
+
     def injection_failed(self, task_id: str) -> None:
         if self._valid(task_id, State.INJECTING):
             self._finish(State.FAILED, Failure.INJECTION)

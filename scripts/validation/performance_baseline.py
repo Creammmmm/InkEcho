@@ -45,8 +45,22 @@ class Client:
         return Result("中" * self.args.characters, Usage(), 0)
 
     async def polish(self, *_args):
-        await asyncio.sleep(self.args.polish_ms / 1000)
-        return Result("中" * self.args.characters, Usage(), 0)
+        pieces = [piece async for piece in self.parts()]
+        return Result("".join(pieces), Usage(), 0)
+
+    async def parts(self):
+        for _ in range(self.args.characters):
+            await asyncio.sleep(self.args.polish_ms / self.args.characters / 1000)
+            yield "中"
+
+
+class StreamingClient(Client):
+    async def polish_stream(self, _provider, _key, _text, _prompt, on_delta):
+        pieces = []
+        async for piece in self.parts():
+            pieces.append(piece)
+            await on_delta(piece)
+        return Result("".join(pieces), Usage(), 0)
 
 
 class Inputs:
@@ -75,19 +89,26 @@ class Inputs:
         pass
 
 
-async def baseline(args):
+async def baseline(args, *, streaming=False):
     with tempfile.TemporaryDirectory(prefix="inkecho-synthetic-timing-") as root:
         store = ConfigStore(Path(root))
         store.initialize()
         store.save_settings(
-            replace(store.load_settings(), polishing_enabled=not args.no_polishing)
+            replace(
+                store.load_settings(),
+                polishing_enabled=not args.no_polishing,
+                polishing_streaming=streaming,
+            )
         )
         store.save_provider(replace(store.load_provider("qwen"), model="synthetic-asr"))
         store.save_provider(
             replace(store.load_provider("deepseek"), model="synthetic-polish")
         )
         session = Session(
-            store, inputs=Inputs(args), recorder=Recorder(), client=Client(args)
+            store,
+            inputs=Inputs(args),
+            recorder=Recorder(),
+            client=StreamingClient(args) if streaming else Client(args),
         )
 
         async def no_credential(_reference):
@@ -115,6 +136,7 @@ async def baseline(args):
         "evidence_kind": "synthetic_headless",
         "desktop_validated": False,
         "cloud_validated": False,
+        "streaming": streaming,
         "parameters": vars(args),
         "samples": samples,
         "median_ms": {
@@ -126,7 +148,24 @@ async def baseline(args):
             for name in names
         },
     }
-    print(json.dumps(result, ensure_ascii=True, indent=2, allow_nan=False))
+    return result
+
+
+async def compare(args):
+    synchronous = await baseline(args)
+    streaming = await baseline(args, streaming=True)
+    return {
+        "evidence_kind": "synthetic_headless",
+        "desktop_validated": False,
+        "cloud_validated": False,
+        "same_generation_and_per_character_delays": True,
+        "synchronous": synchronous,
+        "streaming": streaming,
+        "difference_median_ms": {
+            name: synchronous["median_ms"][name] - streaming["median_ms"][name]
+            for name in synchronous["median_ms"]
+        },
+    }
 
 
 def main():
@@ -137,15 +176,24 @@ def main():
     parser.add_argument("--polish-ms", type=float, default=100)
     parser.add_argument("--char-ms", type=float, default=120)
     parser.add_argument("--no-polishing", action="store_true")
+    parser.add_argument("--streaming", action="store_true")
+    parser.add_argument("--compare-streaming", action="store_true")
     args = parser.parse_args()
     if not 1 <= args.samples <= 100 or not 1 <= args.characters <= 1000:
         parser.error("Samples/characters must be in the documented bounded range.")
     for value in (args.asr_ms, args.polish_ms, args.char_ms):
         if not 0 <= value <= 60_000:
             parser.error("Synthetic delays must be finite and between 0 and 60000 ms.")
+    if args.compare_streaming and args.no_polishing:
+        parser.error("A polishing comparison requires polishing to be enabled.")
     application = QApplication.instance() or QApplication([])
     application.setQuitOnLastWindowClosed(False)
-    asyncio.run(baseline(args))
+    result = asyncio.run(
+        compare(args)
+        if args.compare_streaming
+        else baseline(args, streaming=args.streaming)
+    )
+    print(json.dumps(result, ensure_ascii=True, indent=2, allow_nan=False))
 
 
 if __name__ == "__main__":
