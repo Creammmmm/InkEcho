@@ -846,3 +846,145 @@ def test_unexpected_keyboard_cleanup_error_is_not_hidden(factory):
         assert not session.timer.isActive()
 
     asyncio.run(scenario())
+
+
+def test_performance_is_separate_from_finished_statistics_and_missing_send_is_honest(
+    factory,
+):
+    from inkecho.statistics import Statistics
+
+    async def scenario():
+        session = factory()
+        session.store.save_settings(replace(session.settings, polishing_enabled=True))
+        reports, outcomes = [], []
+        session.performance.connect(reports.append)
+        session.finished.connect(outcomes.append)
+        await session.toggle()
+        session.last_toggle = 0
+        await session.toggle()
+        await complete(session)
+        assert len(reports) == 1
+        assert reports[0] == session.last_performance
+        events = reports[0]["events_ms"]
+        assert events["recording_stop_requested"] is not None
+        assert events["asr_completed"] >= events["asr_started"]
+        assert events["polishing_first_segment"] is not None
+        assert events["output_completed"] is not None
+        assert events["first_character_sent"] is None
+        assert reports[0]["durations_ms"]["stop_to_first_character_ms"] is None
+        Statistics(session.store.root / "test-statistics.json").record(**outcomes[0])
+        assert session.task_timing is None
+        await session.close()
+
+    asyncio.run(scenario())
+
+
+def test_send_callback_marks_dispatch_not_insert_call_and_ignores_stale_reply(factory):
+    async def scenario():
+        session = factory()
+        entered, sent, release = asyncio.Event(), asyncio.Event(), asyncio.Event()
+        callbacks = []
+
+        async def insert(text, can_continue, *, deadline=None, on_first_sent):
+            callbacks.append(on_first_sent)
+            entered.set()
+            await sent.wait()
+            assert can_continue()
+            on_first_sent()
+            await release.wait()
+            return len(text)
+
+        session.inputs.supports_first_sent_callback = True
+        session.inputs.insert = insert
+        await session.toggle()
+        old_id = session.controller.task.id
+        session.recorder.stop()
+        await entered.wait()
+        assert (
+            session.task_timing.snapshot()["events_ms"]["first_character_sent"] is None
+        )
+        sent.set()
+        await asyncio.sleep(0)
+        assert session.task_timing.snapshot()["events_ms"]["first_character_sent"] >= 0
+        release.set()
+        await complete(session)
+        old_snapshot = session.last_performance
+        callbacks[0]()
+        assert session.last_performance == old_snapshot
+        session.last_toggle = 0
+        await session.toggle()
+        session.mark_timing(old_id, "first_character_sent")
+        callbacks[0]()
+        assert (
+            session.task_timing.snapshot()["events_ms"]["first_character_sent"] is None
+        )
+        await session.close()
+
+    asyncio.run(scenario())
+
+
+@pytest.mark.parametrize("outcome", [State.CANCELLED, State.FAILED])
+def test_cancel_and_failure_emit_partial_performance_without_fake_completion(
+    factory, outcome
+):
+    async def scenario():
+        session = factory()
+        reports = []
+        session.performance.connect(reports.append)
+        await session.toggle()
+        task_id = session.controller.task.id
+        if outcome == State.CANCELLED:
+            session.cancel()
+        else:
+            session.controller.fail(task_id, Failure.AUDIO)
+        assert len(reports) == 1 and reports[0]["outcome"] == outcome.value
+        assert reports[0]["events_ms"]["recording_started"] is not None
+        assert reports[0]["events_ms"]["task_finished"] is not None
+        assert reports[0]["events_ms"]["output_completed"] is None
+        session.mark_timing(task_id, "first_character_sent")
+        assert reports[0]["events_ms"]["first_character_sent"] is None
+        await session.close()
+        assert len(reports) == 1
+
+    asyncio.run(scenario())
+
+
+def test_session_closes_provider_after_pending_and_ui_requests_are_cancelled(factory):
+    events = []
+
+    class ClosingClient(Client):
+        async def aclose(self):
+            events.append("closed")
+
+    async def scenario():
+        session = factory(client=ClosingClient())
+        started = [asyncio.Event(), asyncio.Event()]
+
+        async def pending(index):
+            started[index].set()
+            try:
+                await asyncio.Event().wait()
+            finally:
+                events.append(f"cancelled-{index}")
+
+        session.spawn(pending(0))
+        session.spawn_ui(pending(1))
+        await asyncio.gather(*(event.wait() for event in started))
+        await session.close()
+        assert set(events[:2]) == {"cancelled-0", "cancelled-1"}
+        assert events[2:] == ["closed"]
+
+    asyncio.run(scenario())
+
+
+def test_stop_button_path_records_request_before_synchronous_audio_ready(factory):
+    async def scenario():
+        session = factory()
+        await session.toggle()
+        session.stop_recording()
+        await complete(session)
+        events = session.last_performance["events_ms"]
+        assert events["recording_stop_requested"] <= events["recording_stopped"]
+        await session.close()
+
+    asyncio.run(scenario())

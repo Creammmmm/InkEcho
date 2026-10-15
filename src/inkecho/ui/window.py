@@ -106,7 +106,7 @@ class RecordingControls(QWidget):
         self.duration = label("00:00")
         layout.addWidget(self.duration)
         for text, callback in (
-            ("结束录音", session.recorder.stop),
+            ("结束录音", session.stop_recording),
             ("取消", session.cancel),
         ):
             item = button(text, callback)
@@ -255,6 +255,7 @@ class MainWindow(QMainWindow):
             lambda value: self.home.level.setValue(round(value * 100))
         )
         session.finished.connect(self.record_statistics)
+        session.performance.connect(self.record_performance)
         session.diagnostic.connect(self.record_diagnostic)
         self.recording_started = None
         self.duration_timer = QTimer(self)
@@ -274,6 +275,12 @@ class MainWindow(QMainWindow):
             self.log.record("error", code)
         except (ValueError, OSError):
             self.show_status("诊断日志写入失败，请检查本地数据目录。")
+
+    def record_performance(self, snapshot):
+        try:
+            self.log.record_performance(snapshot)
+        except (ValueError, OSError):
+            self.show_status("性能计时写入失败，请检查本地数据目录。")
 
     def select_page(self, index):
         self.stack.setCurrentIndex(index)
@@ -308,7 +315,7 @@ class MainWindow(QMainWindow):
         if not self.session.active(task_id):
             return
         if action == "stop" and self.session.controller.state == State.RECORDING:
-            self.session.recorder.stop()
+            self.session.stop_recording()
         elif action == "cancel":
             self.session.cancel()
 
@@ -380,7 +387,7 @@ class MainWindow(QMainWindow):
 
     def start_from_window(self):
         if self.session.controller.state == State.RECORDING:
-            self.session.recorder.stop()
+            self.session.stop_recording()
             return
 
         async def start():

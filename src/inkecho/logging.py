@@ -1,10 +1,12 @@
 """Rotating diagnostics accepting fixed event/error identifiers only."""
 
+import json
 import logging
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
 
 from inkecho.core import Failure, State
+from inkecho.performance import validate_snapshot
 from inkecho.providers import ERRORS
 from inkecho.statistics import state_directory
 
@@ -78,6 +80,11 @@ class DiagnosticLog:
         with self.path.open("rb") as stream:
             stream.seek(max(0, self.path.stat().st_size - 32_000))
             return stream.read().decode("utf-8", errors="replace")
+
+    def record_performance(self, snapshot: dict) -> None:
+        safe = validate_snapshot(snapshot)
+        self.logger.info("performance %s", json.dumps(safe, allow_nan=False))
+        self.path.chmod(0o600)
 
     def clear(self) -> None:
         self.handler.acquire()

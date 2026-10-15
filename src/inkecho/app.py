@@ -9,6 +9,7 @@ from PySide6.QtCore import QObject, QTimer, Signal
 from inkecho.audio import Recorder
 from inkecho.config import ConfigStore
 from inkecho.core import Failure, State, TaskController
+from inkecho.performance import TaskTiming
 from inkecho.platform.keyboard import KeyboardError
 from inkecho.platform.wayland_keyboard import keyboard_for_desktop
 from inkecho.providers import ProviderClient, ProviderError, validate_provider_protocol
@@ -106,6 +107,7 @@ class Session(QObject):
     state_changed = Signal(str)
     level = Signal(float)
     finished = Signal(dict)
+    performance = Signal(dict)
     diagnostic = Signal(str)
     problem = Signal(str)
 
@@ -129,6 +131,9 @@ class Session(QObject):
         self.connected = False
         self.last_toggle = 0.0
         self.metrics = {}
+        self.task_timing = None
+        self.timing_task_id = None
+        self.last_performance = None
         self.keys = {}
         self.task_context = None
         self.audio_failure = None
@@ -239,16 +244,35 @@ class Session(QObject):
             finally:
                 self.authorization_task = None
 
+    def mark_timing(self, task_id: str, event: str, *, at: float | None = None) -> None:
+        """Ignore callbacks from finished/replaced tasks without retaining text."""
+        if (
+            self.active(task_id)
+            and self.timing_task_id == task_id
+            and self.task_timing is not None
+        ):
+            try:
+                self.task_timing.mark(event, at=at)
+            except ValueError:
+                # Invalid observer metadata must not change delivery or its result.
+                return
+
     def inject(self, task_id, text, can_continue) -> None:
         async def deliver():
             try:
                 task = self.controller.task
                 if task is None or task.id != task_id:
                     return
+                options = {"deadline": task.deadline}
+                if getattr(self.inputs, "supports_first_sent_callback", False):
+                    options["on_first_sent"] = lambda sent_at=None: self.mark_timing(
+                        task_id, "first_character_sent", at=sent_at
+                    )
                 sent_characters = await self.inputs.insert(
-                    text, can_continue, deadline=task.deadline
+                    text, can_continue, **options
                 )
                 if can_continue():
+                    self.mark_timing(task_id, "output_completed")
                     self.metrics["characters"] = sent_characters
                     self.controller.injection_finished(task_id)
             except asyncio.CancelledError:
@@ -279,6 +303,11 @@ class Session(QObject):
         else:
             self.status.emit(message)
         if state in {State.SUCCEEDED, State.FAILED, State.CANCELLED}:
+            if self.task_timing is not None:
+                self.last_performance = self.task_timing.finish(state.value)
+                self.task_timing = None
+                self.timing_task_id = None
+                self.performance.emit(self.last_performance)
             self.epoch += 1
             self.preparing = False
             self.recorder.cancel()
@@ -311,13 +340,18 @@ class Session(QObject):
         self.task_context = None
         self.status.emit("已取消，迟到结果不会继续输入。")
 
+    def stop_recording(self) -> None:
+        if self.controller.state == State.RECORDING and self.controller.task:
+            self.mark_timing(self.controller.task.id, "recording_stop_requested")
+            self.recorder.stop()
+
     async def toggle(self, *, delay: float = 0) -> None:
         now = time.monotonic()
         if now - self.last_toggle < 0.35:
             return
         self.last_toggle = now
         if self.controller.state == State.RECORDING:
-            self.recorder.stop()
+            self.stop_recording()
             return
         if self.controller.task or self.preparing or self.testing:
             self.status.emit("当前任务正在处理，请等待或取消。")
@@ -383,6 +417,9 @@ class Session(QObject):
             )
             task_id = self.controller.begin()
             if task_id:
+                self.task_timing = TaskTiming()
+                self.timing_task_id = task_id
+                self.mark_timing(task_id, "recording_started")
                 self.task_context = context
                 self.metrics = {"audio_seconds": 0.0, "characters": 0}
                 device = (
@@ -433,6 +470,7 @@ class Session(QObject):
     def _recorded(self, audio: bytes, duration: float):
         task = self.controller.task
         if task and self.controller.recording_stopped(task.id):
+            self.mark_timing(task.id, "recording_stopped")
             self.metrics["audio_seconds"] = duration
             self.spawn(self._process(task.id, audio))
 
@@ -442,6 +480,7 @@ class Session(QObject):
         context = self.task_context
         started = time.monotonic()
         self.metrics["transcription_calls"] = 1
+        self.mark_timing(task_id, "asr_started")
         try:
             result = await context["transcription_client"].transcribe(
                 context["transcription"], self.keys["transcription"], audio
@@ -449,6 +488,7 @@ class Session(QObject):
             if not self.active(task_id):
                 return
             self.metrics["transcription_seconds"] = time.monotonic() - started
+            self.mark_timing(task_id, "asr_completed")
             self.controller.transcribed(task_id, result.text)
             if self.controller.task is None or self.controller.task.id != task_id:
                 return
@@ -460,12 +500,16 @@ class Session(QObject):
                 if not key:
                     raise CredentialError("No polishing credential")
                 self.metrics["polishing_calls"] = 1
+                self.mark_timing(task_id, "polishing_started")
                 polished = await context["polishing_client"].polish(
                     context["polishing"], key, result.text, context["prompt"].body
                 )
                 if not self.active(task_id):
                     return
                 self.metrics["polishing_seconds"] = time.monotonic() - started
+                if polished.text:
+                    self.mark_timing(task_id, "polishing_first_segment")
+                self.mark_timing(task_id, "polishing_completed")
                 self.metrics["usage"] = polished.usage
                 self.controller.polished(task_id, polished.text)
             except asyncio.CancelledError:
