@@ -1,7 +1,13 @@
 # Realtime ASR transport validation
 
-Date: 2026-10-15. Scope: independent Python transport, before application/audio
-integration. This is not a new Ubuntu 24.04 desktop or microphone acceptance.
+Current result (2026-10-16): the official TLS/Bearer-authenticated generated-silence
+exchange has passed through session finish; authenticated speech recognition and
+accuracy remain unverified. The final optional-metadata policy and cloud result
+are recorded at the end of this chronological report.
+
+Initial checkpoint: 2026-10-15. Scope: independent Python transport, before
+application/audio integration. This is not a new Ubuntu 24.04 desktop or
+microphone acceptance.
 Existing input feasibility evidence stays in `native-wayland-parent-validation.md`
 and `current-cursor-input-validation.md`; this transport never captures focus,
 uses a clipboard, talks to an input method, or dispatches desktop input.
@@ -33,8 +39,9 @@ Official primary sources checked on 2026-10-15:
   bytes per 100 ms. It sends PCM bytes, not a WAV container.
 
 Result: a dedicated WebSocket adapter is technically implementable. No HTTP
-`stream=true` substitution is used. Actual authenticated cloud acceptance remains
-pending as described below; a protocol fixture is not a model capability check.
+`stream=true` substitution is used. Authenticated cloud speech recognition and
+accuracy remain pending; the later official generated-silence protocol result is
+recorded below. A local fixture is not a cloud model capability check.
 
 ## Interface and constraints
 
@@ -66,8 +73,10 @@ rejected rather than silently changed. The recorder owns format correctness;
 interleaved stereo or compressed bytes cannot be detected from untyped raw PCM.
 No language/context option is claimed in this first slice.
 
-Session/update IDs and model are checked; one manually committed item belongs to
-this connection. Item/result mismatches, conflicting final results, duplicate
+Session/update IDs and model are checked; one manual commit belongs to this
+connection. Result item IDs and content index follow the final optional-metadata
+policy below; initial mandatory-field assumptions were superseded. Conflicting
+provided IDs, conflicting final results, duplicate
 server event IDs, unsolicited session completion, malformed events and errors
 fail closed. Repeated identical final text for the same item with distinct event
 IDs is deduplicated. No interim text reaches the caller. Active-task checks run at
