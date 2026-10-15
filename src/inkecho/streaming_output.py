@@ -1,6 +1,7 @@
 """Bounded, serial incremental output; Unicode offsets never identify content."""
 
 import asyncio
+from collections import deque
 from collections.abc import Awaitable, Callable
 from dataclasses import dataclass, field
 
@@ -34,7 +35,9 @@ class StreamingOutput:
     ) -> None:
         self._send = send
         self._active = active
-        self._queue: asyncio.Queue[TextDelta | None] = asyncio.Queue(QUEUE_CHUNKS)
+        self._queue: deque[TextDelta | None] = deque()
+        self._available = asyncio.Event()
+        self._space = asyncio.Event()
         self._text = ""
         self._pending_cr = False
         self._leading = ""
@@ -50,11 +53,44 @@ class StreamingOutput:
         if self._closed or not self._active():
             raise asyncio.CancelledError
 
+    async def _put(self, delta: TextDelta | None) -> None:
+        while len(self._queue) >= QUEUE_CHUNKS:
+            self._check()
+            self._space.clear()
+            await self._space.wait()
+        self._check()
+        self._queue.append(delta)
+        self._available.set()
+
+    async def _take(self) -> TextDelta | None:
+        while not self._queue:
+            self._check()
+            self._available.clear()
+            await self._available.wait()
+        self._check()
+        delta = self._queue.popleft()
+        if delta is not None:
+            parts = [delta.text]
+            length = len(delta.text)
+            # Inspect only queued blocks. Leave an oversized next block queued:
+            # a prefetched block would exceed the 4096 queued + 128 in-flight bound.
+            while self._queue and self._queue[0] is not None:
+                following = self._queue[0]
+                if length + len(following.text) > CHUNK_CHARACTERS:
+                    break
+                if following.offset != delta.offset + length:
+                    raise ProviderError("response")
+                parts.append(self._queue.popleft().text)
+                length += len(following.text)
+            delta = TextDelta(delta.offset, "".join(parts))
+        self._space.set()
+        return delta
+
     async def _enqueue(self, text: str) -> None:
         for offset in range(0, len(text), CHUNK_CHARACTERS):
             self._check()
             chunk = text[offset : offset + CHUNK_CHARACTERS]
-            await self._queue.put(TextDelta(self._queued_characters, chunk))
+            await self._put(TextDelta(self._queued_characters, chunk))
             self._check()
             self._queued_characters += len(chunk)
 
@@ -114,13 +150,13 @@ class StreamingOutput:
             self._pending_cr = False
             await self._enqueue("\n")
         self._finishing = True
-        await self._queue.put(None)
+        await self._put(None)
         self._check()
 
     async def run(self) -> int:
         while True:
             self._check()
-            delta = await self._queue.get()
+            delta = await self._take()
             self._check()
             if delta is None:
                 return self.sent_characters
@@ -138,5 +174,6 @@ class StreamingOutput:
         self._closed = True
         self._text = self._leading = ""
         self._pending_cr = False
-        while not self._queue.empty():
-            self._queue.get_nowait()
+        self._queue.clear()
+        self._available.set()
+        self._space.set()
