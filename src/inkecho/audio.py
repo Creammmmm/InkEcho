@@ -23,6 +23,7 @@ def wav_bytes(pcm: bytes, sample_rate: int) -> bytes:
 
 class Recorder(QObject):
     level = Signal(float)
+    pcm_ready = Signal(bytes)
     finished = Signal(bytes, float)
     failed = Signal(str)
 
@@ -33,6 +34,9 @@ class Recorder(QObject):
         self.pcm = bytearray()
         self.sample_rate = 16000
         self.max_bytes = 0
+        self.streaming = False
+        self._stream_tail = b""
+        self._captured_bytes = 0
         self.timer = QTimer(self)
         self.timer.setSingleShot(True)
         self.timer.timeout.connect(lambda: self._fail("recording_timed_out"))
@@ -50,6 +54,7 @@ class Recorder(QObject):
         *,
         sample_rate: int = 16000,
         max_seconds: float = 120,
+        streaming: bool = False,
     ) -> bool:
         if self.source is not None:
             return False
@@ -72,6 +77,9 @@ class Recorder(QObject):
             self.failed.emit("audio_format_unsupported")
             return False
         self.sample_rate = sample_rate
+        self.streaming = streaming
+        self._stream_tail = b""
+        self._captured_bytes = 0
         self.max_bytes = int(sample_rate * 2 * max_seconds)
         self.pcm.clear()
         self.source = QAudioSource(device, audio_format, self)
@@ -88,15 +96,24 @@ class Recorder(QObject):
         if self.stream is None:
             return
         data = bytes(self.stream.readAll())
-        if len(self.pcm) + len(data) > self.max_bytes:
+        captured = self._captured_bytes if self.streaming else len(self.pcm)
+        if captured + len(data) > self.max_bytes:
             self._fail("recording_timed_out")
             return
-        self.pcm.extend(data)
+        self._captured_bytes += len(data)
+        if not self.streaming:
+            self.pcm.extend(data)
         samples = len(data) // 2
         if samples:
             values = struct.unpack(f"<{samples}h", data[: samples * 2])
             rms = math.sqrt(sum(value * value for value in values) / samples) / 32768
             self.level.emit(min(rms, 1.0))
+        if self.streaming and self.source is not None:
+            complete = self._stream_tail + data
+            boundary = len(complete) - len(complete) % 2
+            self._stream_tail = complete[boundary:]
+            if boundary:
+                self.pcm_ready.emit(complete[:boundary])
 
     def _check_source(self) -> None:
         # PySide6 6.12 cannot marshal QAudioSource's legacy QAudio::State signal.
@@ -120,11 +137,15 @@ class Recorder(QObject):
             return
         self._release()
         self.pcm.clear()
+        self._stream_tail = b""
+        self._captured_bytes = 0
         self.failed.emit(reason)
 
     def cancel(self) -> None:
         self._release()
         self.pcm.clear()
+        self._stream_tail = b""
+        self._captured_bytes = 0
 
     def stop(self) -> bytes | None:
         if self.source is None:
@@ -136,11 +157,14 @@ class Recorder(QObject):
         if self.source is None:
             return None
         self._release()
-        pcm = bytes(self.pcm)
+        size = self._captured_bytes if self.streaming else len(self.pcm)
+        pcm = b"" if self.streaming else bytes(self.pcm)
         self.pcm.clear()
-        if not pcm or len(pcm) % 2:
+        self._stream_tail = b""
+        self._captured_bytes = 0
+        if not size or size % 2:
             self.failed.emit("empty_recording")
             return None
-        audio = wav_bytes(pcm, self.sample_rate)
-        self.finished.emit(audio, len(pcm) / (2 * self.sample_rate))
+        audio = b"" if self.streaming else wav_bytes(pcm, self.sample_rate)
+        self.finished.emit(audio, size / (2 * self.sample_rate))
         return audio

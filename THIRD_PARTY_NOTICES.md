@@ -22,6 +22,7 @@ the earlier stage-zero probe included a larger, untrimmed Qt distribution.
 | SecretStorage / jeepney | 3.5.0 / 0.9.0 | BSD-3-Clause / MIT |
 | cryptography / cffi / pycparser | 50.0.2 / 2.1.1 / 3.11 | Apache-2.0 OR BSD-3-Clause / MIT-0 / BSD-3-Clause |
 | httpx / httpcore / h11 | 0.28.1 / 1.0.9 / 0.16.0 | BSD-3-Clause / BSD-3-Clause / MIT |
+| websockets | 15.0.1, added 2026-10-15 | BSD-3-Clause; Aymeric Augustin and contributors; retained in `assets/licenses/websockets-LICENSE.txt` and wheel distribution metadata |
 | anyio / idna | 4.15.1 / 3.20 | MIT / BSD-3-Clause |
 | certifi | 2026.7.22 | MPL-2.0, including the certificate-bundle terms |
 | typing_extensions | 4.16.0 | PSF-2.0 |

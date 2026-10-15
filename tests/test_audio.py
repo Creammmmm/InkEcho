@@ -143,6 +143,69 @@ def test_unsupported_format_never_starts_source(recorder, monkeypatch):
     assert errors == ["audio_format_unsupported"] and recorder.source is None
 
 
+def test_streaming_pcm_is_sample_aligned_and_stop_skips_wav_encoding(
+    recorder, monkeypatch
+):
+    chunks, results = [], []
+    recorder.pcm_ready.connect(chunks.append)
+    recorder.finished.connect(lambda data, duration: results.append((data, duration)))
+    recorder.streaming = True
+    state = fake_source(recorder)
+    pieces = iter((b"\x01", b"\x00\x02", b"\x00", b""))
+    recorder.stream.readAll = lambda: next(pieces)
+
+    def no_encoding(*_):
+        pytest.fail("Realtime stop must not encode/upload a second WAV recording")
+
+    monkeypatch.setattr(audio, "wav_bytes", no_encoding)
+    for _ in range(3):
+        recorder._read()
+    assert chunks == [b"\x01\x00", b"\x02\x00"]
+    assert not recorder.pcm and recorder._captured_bytes == 4
+    assert not results
+    assert recorder.stop() == b""
+    assert results == [(b"", 4 / 32000)]
+    assert state.stopped and not recorder.pcm and not recorder._stream_tail
+
+
+def test_streaming_cancel_and_limit_emit_no_remaining_pcm(recorder):
+    chunks, results = [], []
+    recorder.pcm_ready.connect(chunks.append)
+    recorder.finished.connect(lambda *_: results.append(True))
+    recorder.streaming = True
+    fake_source(recorder, b"\x01")
+    recorder._read()
+    recorder.cancel()
+    assert not chunks and not results and not recorder._stream_tail
+    fake_source(recorder, b"\0" * 6)
+    recorder.max_bytes = 4
+    recorder._read()
+    assert not chunks and not results and not recorder.pcm
+
+
+@pytest.mark.skipif(
+    os.getenv("INKECHO_TEST_MICROPHONE") != "1",
+    reason="Requires real microphone access",
+)
+def test_live_streaming_capture_emits_pcm_before_stop_without_whole_audio(recorder):
+    sizes, durations, errors = [], [], []
+    recorder.pcm_ready.connect(lambda data: sizes.append(len(data)))
+    recorder.finished.connect(lambda _data, seconds: durations.append(seconds))
+    recorder.failed.connect(errors.append)
+    assert recorder.start(streaming=True, max_seconds=3)
+    loop = QEventLoop()
+    QTimer.singleShot(700, loop.quit)
+    loop.exec()
+    assert sizes and not durations
+    assert all(size > 0 and size % 2 == 0 for size in sizes)
+    assert not recorder.pcm and len(recorder._stream_tail) <= 1
+    assert recorder.stop() == b""
+    assert sum(sizes) == round(durations[0] * 32000)
+    assert not errors and recorder._captured_bytes == 0
+    assert not recorder.pcm and not recorder._stream_tail
+    print({"pcm_chunks": len(sizes), "duration_seconds": durations[0], "saved": False})
+
+
 @pytest.mark.skipif(
     os.getenv("INKECHO_TEST_MICROPHONE") != "1",
     reason="Requires real microphone access",

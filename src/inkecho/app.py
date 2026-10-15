@@ -13,6 +13,12 @@ from inkecho.performance import TaskTiming
 from inkecho.platform.keyboard import KeyboardError
 from inkecho.platform.wayland_keyboard import keyboard_for_desktop
 from inkecho.providers import ProviderClient, ProviderError, validate_provider_protocol
+from inkecho.realtime import (
+    MAX_FEED_BYTES,
+    PROTOCOL,
+    QwenRealtimeSession,
+    RealtimeConfig,
+)
 from inkecho.security import CredentialError, SecretStore
 
 STATE_LABELS = {
@@ -112,7 +118,14 @@ class Session(QObject):
     problem = Signal(str)
 
     def __init__(
-        self, store=None, *, inputs=None, recorder=None, client=None, secrets=None
+        self,
+        store=None,
+        *,
+        inputs=None,
+        recorder=None,
+        client=None,
+        secrets=None,
+        realtime_factory=QwenRealtimeSession,
     ):
         super().__init__()
         self.store = store or ConfigStore()
@@ -121,9 +134,11 @@ class Session(QObject):
         self.authorization_task = None
         self.recorder = recorder or Recorder(self)
         self.client = client or ProviderClient()
+        self.realtime_factory = realtime_factory
         self.secrets = secrets
         self.controller = TaskController(self, on_state=self._state)
         self.pending: set[asyncio.Task] = set()
+        self.cleanup_tasks: set[asyncio.Task] = set()
         self.ui_tasks: set[asyncio.Task] = set()
         self.epoch = 0
         self.preparing = False
@@ -142,6 +157,8 @@ class Session(QObject):
         self.recorder.level.connect(self.level)
         self.recorder.finished.connect(self._recorded)
         self.recorder.failed.connect(self._audio_failed)
+        if hasattr(self.recorder, "pcm_ready"):
+            self.recorder.pcm_ready.connect(self._pcm_ready)
         self.timer = QTimer(self)
         self.timer.setInterval(100)
         self.timer.timeout.connect(self.controller.tick)
@@ -166,6 +183,16 @@ class Session(QObject):
         self.ui_tasks.add(task)
         task.add_done_callback(self.ui_tasks.discard)
         return task
+
+    def _close_realtime(self, context) -> None:
+        if not context or context.get("realtime_closing"):
+            return
+        connection = context.get("realtime")
+        if connection is not None:
+            context["realtime_closing"] = True
+            task = self.spawn(connection.aclose())
+            self.cleanup_tasks.add(task)
+            task.add_done_callback(self.cleanup_tasks.discard)
 
     async def initialize(self):
         try:
@@ -303,6 +330,11 @@ class Session(QObject):
         else:
             self.status.emit(message)
         if state in {State.SUCCEEDED, State.FAILED, State.CANCELLED}:
+            if self.task_context and "asr_started" in self.task_context:
+                self.metrics.setdefault(
+                    "transcription_seconds",
+                    time.monotonic() - self.task_context["asr_started"],
+                )
             if self.task_timing is not None:
                 self.last_performance = self.task_timing.finish(state.value)
                 self.task_timing = None
@@ -313,8 +345,9 @@ class Session(QObject):
             self.recorder.cancel()
             current = current_task()
             for task in list(self.pending):
-                if task is not current:
+                if task is not current and task not in self.cleanup_tasks:
                     task.cancel()
+            self._close_realtime(self.task_context)
             self.keys.clear()
             self.task_context = None
             self.audio_failure = None
@@ -334,7 +367,7 @@ class Session(QObject):
         ):
             self.authorization_task.cancel()
         for task in list(self.pending):
-            if task is not current:
+            if task is not current and task not in self.cleanup_tasks:
                 task.cancel()
         self.keys.clear()
         self.task_context = None
@@ -380,7 +413,18 @@ class Session(QObject):
             }
             if not transcription.model:
                 raise CredentialError("请先选择转写模型并保存 API 密钥。")
-            validate_provider_protocol(transcription)
+            realtime_config = None
+            if transcription.parameters.get("asr_protocol") is not None:
+                if transcription.parameters["asr_protocol"] != PROTOCOL:
+                    raise ProviderError("configuration")
+                realtime_config = RealtimeConfig.from_provider(
+                    transcription, sample_rate=self.settings.sample_rate
+                )
+                if not hasattr(self.recorder, "pcm_ready"):
+                    raise ProviderError("configuration")
+            else:
+                validate_provider_protocol(transcription)
+            context["realtime_config"] = realtime_config
             if delay:
                 self.status.emit(
                     "即将开始录音。文字会在识别完成后输入到当时的光标位置。"
@@ -422,16 +466,33 @@ class Session(QObject):
                 self.mark_timing(task_id, "recording_started")
                 self.task_context = context
                 self.metrics = {"audio_seconds": 0.0, "characters": 0}
+                if realtime_config is not None:
+                    task = self.controller.task
+                    context["realtime"] = self.realtime_factory(
+                        realtime_config,
+                        key,
+                        timeout_seconds=self.settings.transcription_timeout_seconds,
+                        deadline=task.deadline,
+                        active=lambda: self.active(task_id),
+                    )
+                    context["asr_started"] = time.monotonic()
+                    self.mark_timing(task_id, "asr_started")
+                    self.metrics["transcription_calls"] = 1
+                    context["realtime_start"] = self.spawn(
+                        self._start_realtime(task_id, context)
+                    )
                 device = (
                     bytes.fromhex(self.settings.microphone)
                     if self.settings.microphone
                     else None
                 )
-                if not self.recorder.start(
-                    device,
-                    sample_rate=self.settings.sample_rate,
-                    max_seconds=self.settings.recording_limit_seconds,
-                ):
+                options = {
+                    "sample_rate": self.settings.sample_rate,
+                    "max_seconds": self.settings.recording_limit_seconds,
+                }
+                if realtime_config is not None:
+                    options["streaming"] = True
+                if not self.recorder.start(device, **options):
                     self.controller.fail(task_id, Failure.AUDIO)
         except asyncio.CancelledError:
             raise
@@ -447,6 +508,8 @@ class Session(QObject):
         except ProviderError as error:
             if epoch != self.epoch:
                 return
+            if self.controller.task:
+                self.controller.fail(self.controller.task.id, Failure.TRANSCRIPTION)
             self.diagnostic.emit(error.code)
             self.report_problem(PROVIDER_LABELS[error.code])
         except Exception:
@@ -467,6 +530,59 @@ class Session(QObject):
             self.audio_failure = AudioError(reason)
             self.controller.fail(self.controller.task.id, Failure.AUDIO)
 
+    def _transcription_failed(self, task_id: str, error: Exception) -> None:
+        if not self.active(task_id):
+            return
+        context = self.task_context
+        if context and "asr_started" in context:
+            self.metrics["transcription_seconds"] = (
+                time.monotonic() - context["asr_started"]
+            )
+        self.controller.fail(task_id, Failure.TRANSCRIPTION)
+        if isinstance(error, ProviderError):
+            self.diagnostic.emit(error.code)
+            self.report_problem(PROVIDER_LABELS[error.code])
+
+    async def _start_realtime(self, task_id: str, context: dict) -> None:
+        try:
+            await context["realtime"].start()
+            if self.active(task_id):
+                self.spawn(self._watch_realtime(task_id, context["realtime"]))
+        except asyncio.CancelledError:
+            raise
+        except Exception as error:
+            self._transcription_failed(task_id, error)
+
+    async def _watch_realtime(self, task_id: str, connection) -> None:
+        try:
+            await connection.wait_failure()
+        except asyncio.CancelledError:
+            raise
+        except Exception as error:
+            self._transcription_failed(task_id, error)
+
+    def _pcm_ready(self, pcm: bytes) -> None:
+        task = self.controller.task
+        context = self.task_context
+        if (
+            task is None
+            or context is None
+            or self.controller.state != State.RECORDING
+            or "realtime" not in context
+        ):
+            return
+        task_id = task.id
+        self.controller.tick()
+        if not self.active(task_id):
+            return
+        try:
+            for offset in range(0, len(pcm), MAX_FEED_BYTES):
+                context["realtime"].feed_nowait(pcm[offset : offset + MAX_FEED_BYTES])
+        except asyncio.CancelledError:
+            return
+        except Exception as error:
+            self._transcription_failed(task_id, error)
+
     def _recorded(self, audio: bytes, duration: float):
         task = self.controller.task
         if task and self.controller.recording_stopped(task.id):
@@ -478,13 +594,19 @@ class Session(QObject):
         if not self.active(task_id):
             return
         context = self.task_context
-        started = time.monotonic()
-        self.metrics["transcription_calls"] = 1
-        self.mark_timing(task_id, "asr_started")
+        started = context.get("asr_started", time.monotonic())
         try:
-            result = await context["transcription_client"].transcribe(
-                context["transcription"], self.keys["transcription"], audio
-            )
+            if "realtime" in context:
+                await context["realtime_start"]
+                if not self.active(task_id):
+                    return
+                result = await context["realtime"].finish()
+            else:
+                self.metrics["transcription_calls"] = 1
+                self.mark_timing(task_id, "asr_started")
+                result = await context["transcription_client"].transcribe(
+                    context["transcription"], self.keys["transcription"], audio
+                )
             if not self.active(task_id):
                 return
             self.metrics["transcription_seconds"] = time.monotonic() - started

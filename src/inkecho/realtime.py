@@ -271,6 +271,18 @@ class QwenRealtimeSession:
         except ProviderError:
             return
 
+    async def wait_failure(self) -> None:
+        """Observe recording-time transport failure without cancelling its state.
+
+        Intentional close or stale task ownership raises CancelledError. A monitor
+        being cancelled does not cancel the shared failure future or the socket.
+        """
+        self._check()
+        if self._failure is None:
+            raise ProviderError("configuration")
+        await asyncio.shield(self._failure)
+        self._check()
+
     async def _send(self, event_type: str, **body) -> None:
         self._check()
         await self._wait(

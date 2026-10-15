@@ -80,6 +80,13 @@ still apply its own task/epoch checks after this adapter returns.
 Environment: repository `.venv`, Python 3.13.15, websockets 15.0.1, OpenSSL-generated
 one-day loopback certificate. Dependencies changed only to add
 `websockets>=15,<16`, locked at 15.0.1; no existing locked version was upgraded.
+Its installed BSD-3-Clause license is retained verbatim in
+`assets/licenses/websockets-LICENSE.txt` and identified in
+`THIRD_PARTY_NOTICES.md`. The existing `scripts/packaging/bundle.py` walks runtime
+dependency distribution files (including wheel metadata/license files), and
+`build_appimage.py` also copies `assets/licenses`; a newly built artifact must
+still verify its generated inventory. This does not claim an existing AppImage
+already includes websockets.
 
 Run with loopback socket permission:
 

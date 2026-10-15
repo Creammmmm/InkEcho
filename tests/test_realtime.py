@@ -514,3 +514,35 @@ def test_real_wss_cancel_while_waiting_for_final(certificate):
         assert all(task.done() for task in session._tasks)
 
     asyncio.run(exercise(certificate, scenario, mode="finish_timeout"))
+
+
+def test_real_wss_failure_monitor_reports_disconnect_before_stop(certificate):
+    async def scenario(session, state):
+        await session.start()
+        monitor = asyncio.create_task(session.wait_failure())
+        session.feed_nowait(b"\x01\x00" * 1600)
+        with pytest.raises(ProviderError) as error:
+            await asyncio.wait_for(monitor, 1)
+        assert error.value.code == "unavailable"
+        assert not any(
+            event["type"] in {"input_audio_buffer.commit", "session.finish"}
+            for event in state.events
+        )
+
+    asyncio.run(exercise(certificate, scenario, mode="remote_error"))
+
+
+def test_cancelled_monitor_does_not_cancel_shared_transport_failure_state(certificate):
+    async def scenario(session, _state):
+        await session.start()
+        monitor = asyncio.create_task(session.wait_failure())
+        await asyncio.sleep(0)
+        monitor.cancel()
+        with pytest.raises(asyncio.CancelledError):
+            await monitor
+        session.feed_nowait(b"\x01\x00" * 160)
+        assert (await session.finish()).text == FINAL
+        with pytest.raises(asyncio.CancelledError):
+            await session.wait_failure()
+
+    asyncio.run(exercise(certificate, scenario))
