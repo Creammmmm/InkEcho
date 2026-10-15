@@ -11,6 +11,7 @@ from types import SimpleNamespace
 
 import pytest
 from websockets.asyncio.server import serve
+from websockets.exceptions import ConnectionClosed
 
 from inkecho.config import Provider
 from inkecho.providers import ProviderError
@@ -58,7 +59,7 @@ def certificate(tmp_path_factory):
 
 
 async def exercise(certificate, operation, *, mode="normal", timeout=1):
-    state = SimpleNamespace(events=[], headers=None, audio=[], connections=0)
+    state = SimpleNamespace(events=[], headers=None, audio=[], connections=0, errors=[])
 
     async def handler(ws):
         state.connections += 1
@@ -87,6 +88,14 @@ async def exercise(certificate, operation, *, mode="normal", timeout=1):
                         session["id"] = "other"
                     if mode == "wrong_format":
                         session["sample_rate"] = 48000
+                    if mode == "wrong_model":
+                        session["model"] = "other-model"
+                    if mode == "wrong_encoding":
+                        session["input_audio_format"] = "opus"
+                    if mode == "omit_turn_detection":
+                        del session["turn_detection"]
+                    if mode == "vad_object":
+                        session["turn_detection"] = {"type": "server_vad"}
                     await send("session.updated", session=session)
                     if mode == "early_finish":
                         await send("session.finished")
@@ -101,8 +110,30 @@ async def exercise(certificate, operation, *, mode="normal", timeout=1):
                             content_index=0,
                             transcript="do not return",
                         )
+                    if mode == "placeholder" and len(state.audio) == 1:
+                        await send(
+                            "conversation.item.created",
+                            item={"type": "message", "content": "never return this"},
+                        )
+                        await send(
+                            "conversation.item.input_audio_transcription.text",
+                            item_id="preview-without-commit",
+                            content_index=False,
+                            text="never return this preview",
+                        )
+                    if mode == "early_committed":
+                        await send("input_audio_buffer.committed", item_id="i1")
                 elif kind == "input_audio_buffer.commit":
-                    await send("input_audio_buffer.committed", item_id="i1")
+                    if mode.startswith("ack_missing") or mode == "all_optional_missing":
+                        await send("input_audio_buffer.committed")
+                    elif mode.startswith("ack_null") or mode == "all_optional_null":
+                        await send("input_audio_buffer.committed", item_id=None)
+                    elif mode == "no_ack":
+                        pass
+                    else:
+                        await send("input_audio_buffer.committed", item_id="i1")
+                    if mode == "changed_ack":
+                        await send("input_audio_buffer.committed", item_id="other")
                     await send(
                         "conversation.item.created",
                         item={"id": "i1", "role": "user", "type": "message"},
@@ -113,7 +144,7 @@ async def exercise(certificate, operation, *, mode="normal", timeout=1):
                     if mode == "invalid_json":
                         await ws.send("audio secret is not json")
                         continue
-                    if mode == "empty":
+                    if mode in {"empty", "ack_missing", "ack_null", "no_ack"}:
                         await send("session.finished")
                         continue
                     item = "other" if mode == "wrong_item" else "i1"
@@ -124,12 +155,25 @@ async def exercise(certificate, operation, *, mode="normal", timeout=1):
                         text="wrong preview",
                         stash="draft",
                     )
-                    await send(
-                        "conversation.item.input_audio_transcription.completed",
-                        item_id=item,
-                        content_index=0,
-                        transcript=FINAL,
+                    final_kind = (
+                        "conversation.item.input_audio_transcription.unknown"
+                        if mode == "unknown_transcription"
+                        else "conversation.item.input_audio_transcription.completed"
                     )
+                    final = {
+                        "item_id": item,
+                        "content_index": False if mode == "bool_index" else 0,
+                        "transcript": FINAL,
+                    }
+                    if mode in {"final_missing_id", "all_optional_missing"}:
+                        del final["item_id"]
+                    if mode in {"final_null_id", "all_optional_null"}:
+                        final["item_id"] = None
+                    if mode in {"final_missing_index", "all_optional_missing"}:
+                        del final["content_index"]
+                    if mode == "null_index":
+                        final["content_index"] = None
+                    await send(final_kind, **final)
                     if mode in {"duplicate", "changed_final"}:
                         await send(
                             "conversation.item.input_audio_transcription.completed",
@@ -138,8 +182,10 @@ async def exercise(certificate, operation, *, mode="normal", timeout=1):
                             transcript="changed" if mode == "changed_final" else FINAL,
                         )
                     await send("session.finished")
-        except Exception:
+        except ConnectionClosed:
             return  # Expected connection abort on intentionally invalid fixtures.
+        except Exception as error:
+            state.errors.append(type(error).__name__)
 
     async with serve(handler, "127.0.0.1", 0, ssl=certificate[0]) as server:
         port = server.sockets[0].getsockname()[1]
@@ -150,9 +196,11 @@ async def exercise(certificate, operation, *, mode="normal", timeout=1):
             timeout_seconds=timeout,
         )
         try:
-            return await operation(session, state)
+            result = await operation(session, state)
         finally:
             await session.aclose()
+    assert state.errors == []
+    return result
 
 
 def test_real_wss_buffers_during_start_chunks_tail_and_final(certificate):
@@ -189,11 +237,35 @@ def test_real_wss_buffers_during_start_chunks_tail_and_final(certificate):
     asyncio.run(exercise(certificate, scenario))
 
 
-@pytest.mark.parametrize("mode", ["duplicate", "normal"])
+@pytest.mark.parametrize(
+    "mode",
+    [
+        "duplicate",
+        "normal",
+        "omit_turn_detection",
+        "placeholder",
+        "ack_missing_with_final",
+        "ack_null_with_final",
+        "final_missing_id",
+        "final_null_id",
+        "final_missing_index",
+        "all_optional_missing",
+        "all_optional_null",
+    ],
+)
 def test_real_wss_only_final_and_deduplicated(certificate, mode):
     async def scenario(session, _):
         await session.start()
-        await session.feed(b"\x00\x00" * 160)
+        await session.feed(b"\x00\x00" * 1600)
+        if mode == "placeholder":
+            # Wait for the actual pre-commit notifications, not a synthetic unit call.
+            for _ in range(100):
+                if len(session._event_ids) >= 4:
+                    break
+                await asyncio.sleep(0.002)
+            assert len(session._event_ids) >= 4
+            assert session._item_id is None and session._transcript is None
+            assert not session._done.done() and not session._commit_sent
         assert (await session.finish()).text == FINAL
 
     asyncio.run(exercise(certificate, scenario, mode=mode))
@@ -209,6 +281,13 @@ def test_real_wss_only_final_and_deduplicated(certificate, mode):
         ("remote_error", "unavailable"),
         ("unsolicited_item", "response"),
         ("finish_timeout", "timeout"),
+        ("changed_ack", "response"),
+        ("bool_index", "response"),
+        ("unknown_transcription", "response"),
+        ("ack_missing", "empty"),
+        ("ack_null", "empty"),
+        ("no_ack", "response"),
+        ("null_index", "response"),
     ],
 )
 def test_real_wss_failures_never_return_partial(certificate, mode, code):
@@ -227,7 +306,17 @@ def test_real_wss_failures_never_return_partial(certificate, mode, code):
     asyncio.run(exercise(certificate, scenario, mode=mode, timeout=0.1))
 
 
-@pytest.mark.parametrize("mode", ["wrong_session", "wrong_format", "start_timeout"])
+@pytest.mark.parametrize(
+    "mode",
+    [
+        "wrong_session",
+        "wrong_format",
+        "wrong_model",
+        "wrong_encoding",
+        "vad_object",
+        "start_timeout",
+    ],
+)
 def test_real_wss_start_failure_cleans_prebuffer(certificate, mode):
     async def scenario(session, _):
         session.feed_nowait(b"\x00\x00" * 1600)
@@ -253,11 +342,150 @@ def test_real_wss_unsolicited_finish_rejected(certificate):
     asyncio.run(exercise(certificate, scenario, mode="early_finish"))
 
 
-@pytest.mark.parametrize("action", ["cancel", "stale", "deadline"])
-def test_real_wss_cancel_and_expiry_stop_remaining_audio(certificate, action):
+@pytest.mark.parametrize("mode", ["unsolicited_item", "early_committed"])
+def test_real_wss_result_or_ack_before_manual_commit_is_rejected(certificate, mode):
     async def scenario(session, state):
         await session.start()
-        session.feed_nowait(b"\x00\x00" * 160)
+        await session.feed(bytes(CHUNK_BYTES))
+        with pytest.raises(ProviderError) as caught:
+            await session.wait_failure()
+        assert caught.value.code == "response"
+        assert session._item_id is None and session._transcript is None
+        assert not session._commit_sent
+        assert not any(e["type"] == "input_audio_buffer.commit" for e in state.events)
+
+    asyncio.run(exercise(certificate, scenario, mode=mode))
+
+
+@pytest.mark.parametrize("item_id", ["", 42, "x" * 201])
+def test_commit_ack_requires_a_bounded_nonempty_string(item_id):
+    async def scenario():
+        session = QwenRealtimeSession(
+            RealtimeConfig("wss://test.invalid/ws", MODEL), "fixture-key"
+        )
+        session._ready = asyncio.get_running_loop().create_future()
+        session._ready.set_result(None)
+        session._commit_sent = True
+        with pytest.raises(ProviderError) as caught:
+            await session._event(
+                {"type": "input_audio_buffer.committed", "item_id": item_id}
+            )
+        assert caught.value.code == "response" and session._item_id is None
+        await session.aclose()
+
+    asyncio.run(scenario())
+
+
+@pytest.mark.parametrize("payload", [{}, {"item_id": None}])
+def test_optional_ack_identity_can_bind_at_final_and_is_never_erased(payload):
+    async def scenario():
+        session = QwenRealtimeSession(
+            RealtimeConfig("wss://test.invalid/ws", MODEL), "fixture-key"
+        )
+        session._ready = asyncio.get_running_loop().create_future()
+        session._ready.set_result(None)
+        session._commit_sent = True
+        await session._event({"type": "input_audio_buffer.committed", **payload})
+        assert session._commit_acknowledged and session._item_id is None
+        # Recognition can finish after commit but before session.finish is sent.
+        await session._event(
+            {
+                "type": "conversation.item.input_audio_transcription.completed",
+                "item_id": "i1",
+                "content_index": 0,
+                "transcript": FINAL,
+            }
+        )
+        await session._event({"type": "input_audio_buffer.committed", **payload})
+        assert session._item_id == "i1"
+        assert session._transcript == FINAL and not session._finish_sent
+        with pytest.raises(ProviderError):
+            await session._event(
+                {"type": "input_audio_buffer.committed", "item_id": "other"}
+            )
+        await session.aclose()
+
+    asyncio.run(scenario())
+
+
+@pytest.mark.parametrize("item_id", ["", False, 42, [], "x" * 201, "other"])
+@pytest.mark.parametrize("suffix", ["completed", "failed"])
+def test_final_supplied_id_must_be_valid_and_consistent(item_id, suffix):
+    async def scenario():
+        session = QwenRealtimeSession(
+            RealtimeConfig("wss://test.invalid/ws", MODEL), "fixture-key"
+        )
+        session._ready = asyncio.get_running_loop().create_future()
+        session._ready.set_result(None)
+        session._commit_sent = True
+        await session._event({"type": "input_audio_buffer.committed", "item_id": "i1"})
+        with pytest.raises(ProviderError) as caught:
+            await session._event(
+                {
+                    "type": "conversation.item.input_audio_transcription." + suffix,
+                    "item_id": item_id,
+                    "transcript": FINAL,
+                }
+            )
+        assert caught.value.code == "response" and session._transcript is None
+        await session.aclose()
+
+    asyncio.run(scenario())
+
+
+@pytest.mark.parametrize("index", [None, False, True, 1, -1, "0", []])
+@pytest.mark.parametrize("suffix", ["completed", "failed"])
+def test_final_optional_index_is_strict_when_supplied(index, suffix):
+    async def scenario():
+        session = QwenRealtimeSession(
+            RealtimeConfig("wss://test.invalid/ws", MODEL), "fixture-key"
+        )
+        session._ready = asyncio.get_running_loop().create_future()
+        session._ready.set_result(None)
+        session._commit_sent = True
+        await session._event({"type": "input_audio_buffer.committed"})
+        with pytest.raises(ProviderError) as caught:
+            await session._event(
+                {
+                    "type": "conversation.item.input_audio_transcription." + suffix,
+                    "content_index": index,
+                    "transcript": FINAL,
+                }
+            )
+        assert caught.value.code == "response" and session._transcript is None
+        await session.aclose()
+
+    asyncio.run(scenario())
+
+
+@pytest.mark.parametrize("item", [None, [], "message", {}, {"type": "other"}])
+def test_created_notification_still_requires_a_message_object(item):
+    async def scenario():
+        session = QwenRealtimeSession(
+            RealtimeConfig("wss://test.invalid/ws", MODEL), "fixture-key"
+        )
+        session._ready = asyncio.get_running_loop().create_future()
+        session._ready.set_result(None)
+        with pytest.raises(ProviderError) as caught:
+            await session._event({"type": "conversation.item.created", "item": item})
+        assert caught.value.code == "response" and session._item_id is None
+        await session.aclose()
+
+    asyncio.run(scenario())
+
+
+@pytest.mark.parametrize("action", ["cancel", "stale", "deadline"])
+@pytest.mark.parametrize("mode", ["normal", "omit_turn_detection", "placeholder"])
+def test_real_wss_cancel_and_expiry_stop_remaining_audio(certificate, action, mode):
+    async def scenario(session, state):
+        await session.start()
+        session.feed_nowait(b"\x00\x00" * (1600 if mode == "placeholder" else 160))
+        if mode == "placeholder":
+            for _ in range(100):
+                if len(session._event_ids) >= 4:
+                    break
+                await asyncio.sleep(0.002)
+            assert len(session._event_ids) >= 4
         if action == "cancel":
             await session.aclose()
         elif action == "stale":
@@ -272,10 +500,65 @@ def test_real_wss_cancel_and_expiry_stop_remaining_audio(certificate, action):
         await session.aclose()
         await asyncio.sleep(0.02)
         assert len(state.events) == before
-        assert not state.audio
+        assert len(state.audio) == (1 if mode == "placeholder" else 0)
         assert not any(e["type"] == "input_audio_buffer.commit" for e in state.events)
 
-    asyncio.run(exercise(certificate, scenario))
+    asyncio.run(exercise(certificate, scenario, mode=mode))
+
+
+@pytest.mark.parametrize("turn", [{}, {"type": "server_vad"}, False, "null", []])
+def test_nonnull_turn_detection_is_rejected_after_manual_update(turn):
+    async def scenario():
+        session = QwenRealtimeSession(
+            RealtimeConfig("wss://test.invalid/ws", MODEL), "fixture-key"
+        )
+        session._session_id = "s1"
+        session._manual_update_sent = True
+        session._ready = asyncio.get_running_loop().create_future()
+        with pytest.raises(ProviderError) as caught:
+            await session._event(
+                {
+                    "type": "session.updated",
+                    "event_id": "update",
+                    "session": {
+                        "id": "s1",
+                        "model": MODEL,
+                        "input_audio_format": "pcm",
+                        "sample_rate": 16000,
+                        "turn_detection": turn,
+                    },
+                }
+            )
+        assert caught.value.code == "response" and not session._ready.done()
+        await session.aclose()
+
+    asyncio.run(scenario())
+
+
+def test_omitted_turn_detection_requires_our_manual_update_sent_first():
+    async def scenario():
+        session = QwenRealtimeSession(
+            RealtimeConfig("wss://test.invalid/ws", MODEL), "fixture-key"
+        )
+        session._session_id = "s1"
+        session._ready = asyncio.get_running_loop().create_future()
+        with pytest.raises(ProviderError) as caught:
+            await session._event(
+                {
+                    "type": "session.updated",
+                    "event_id": "update",
+                    "session": {
+                        "id": "s1",
+                        "model": MODEL,
+                        "input_audio_format": "pcm",
+                        "sample_rate": 16000,
+                    },
+                }
+            )
+        assert caught.value.code == "response" and not session._ready.done()
+        await session.aclose()
+
+    asyncio.run(scenario())
 
 
 def test_queue_unit_bounded_overflow_is_terminal():

@@ -74,6 +74,8 @@ class ObservedSession(QwenRealtimeSession):
         item_id = item_values.get("id")
         event_item_id = event.get("item_id")
         provisional_id = getattr(self, "_provisional_item_id", None)
+        transcript = event.get("transcript")
+        index = event.get("content_index")
         self.event_diagnostic = {
             "event_kind": kind if isinstance(kind, str) and kind in known else "other",
             "event_id_present": "event_id" in event,
@@ -114,10 +116,24 @@ class ObservedSession(QwenRealtimeSession):
             "finishing": self._finishing,
             "event_item_id_valid": isinstance(event_item_id, str)
             and 0 < len(event_item_id) <= 200,
+            "event_item_id_missing": "item_id" not in event,
+            "event_item_id_null": "item_id" in event and event_item_id is None,
+            "event_item_id_empty": isinstance(event_item_id, str) and not event_item_id,
+            "event_item_id_invalid": event_item_id is not None
+            and (
+                not isinstance(event_item_id, str) or not 0 < len(event_item_id) <= 200
+            ),
             "event_item_id_matches_committed": self._item_id is not None
             and event_item_id == self._item_id,
             "event_item_id_matches_provisional": provisional_id is not None
             and event_item_id == provisional_id,
+            "transcript_string": isinstance(transcript, str),
+            "transcript_nonempty": isinstance(transcript, str)
+            and bool(transcript.strip()),
+            "content_index_missing": "content_index" not in event,
+            "content_index_int0": type(index) is int and index == 0,
+            "content_index_invalid": "content_index" in event
+            and (type(index) is not int or index != 0),
         }
         await super()._event(event)
         if kind == "session.created":

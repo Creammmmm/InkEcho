@@ -112,9 +112,9 @@ Separate queue unit checks cover terminal overflow, bounded backpressure timeout
 invalid sample bytes and pre-connection buffering. They do not measure network
 backpressure from Alibaba Cloud or microphone callback timing.
 
-## Authenticated cloud evidence: blocked, not passed
+## Initial public-speech cloud fixture: blocked, not passed
 
-The only proposed cloud fixture was the existing public WAV
+The initially proposed public-speech fixture was the existing public WAV
 `/tmp/inkecho-public-asr-fixture.wav`, SHA-256
 `0d650ab4f08bd3a5d3d59fd67d085fd0765ddabe4729294f4106fceece321fdf`.
 Local checks confirmed mono PCM16, 16 kHz, 282,322 frames. No private microphone
@@ -134,10 +134,229 @@ another tool. No authentic model transcript, cloud latency or accuracy claim is
 made. Explicit authorization and approval of that data transfer are required
 before a future live run. The probe itself has not been cloud-validated.
 
-## Remaining acceptance
+## Remaining acceptance at the initial transport checkpoint
 
-Application and recorder integration, model/protocol UI, final-result task guards,
-real microphone streaming, actual configured model access, cloud latency, Ubuntu
-24.04 desktop behavior and a rebuilt/running AppImage require their own evidence.
-This report does not claim lower end-to-end latency from a simulated server.
-The old deployed AppImage does not acquire this new dependency automatically.
+At this initial checkpoint, application/recorder integration, protocol UI,
+final-result task guards, microphone streaming and packaging needed separate
+evidence. Later application/UI tests and source microphone/local-server results
+are recorded in [performance validation](performance-validation.md) and
+[package validation](performance-package-validation.md). Those local results do
+not establish authenticated cloud speech recognition, cloud latency or Ubuntu
+24.04 desktop behavior. This transport report does not claim lower end-to-end
+latency from a simulated server. A deployed older AppImage does not acquire new
+dependencies automatically; the package report identifies the actual artifact
+under test.
+
+## Official manual-mode acknowledgement regression (2026-10-16)
+
+The historical public-WAV approval rejection above was not retried. The parent
+agent separately obtained approval for a different data transfer: a single
+connection using only one second of all-zero PCM generated in probe source, no
+microphone, WAV/local-audio file, user text or prompt. That attempt established a
+real official session but failed during configuration, before sending any audio.
+`build/performance-realtime-silence-live.json` is preserved: `response`, created
+true, updated false, zero frames, 96.050 ms, configuration unchanged. It is failed
+evidence, not realtime ASR support or recognized speech.
+
+Primary server-event documentation describes `session.updated` as the confirmed
+configuration, but its examples do not reliably describe this service's exact
+manual-mode echo (one example even names an unrelated model). Documentation alone
+did not justify relaxing validation. The parent agent then obtained approval for
+one separate **handshake-only**, no-audio diagnostic. The probe's test observer
+classified fields before validation into fixed booleans and whitelisted event
+kinds; it did not retain or print raw bodies, IDs, model values, credentials or
+free-form service errors. Its send layer refuses append, commit and finish in
+this mode.
+
+The retained `build/performance-realtime-handshake-diagnostic.json` isolates the
+failure: a `session.updated` event had a unique valid event ID, matching model
+and session, PCM encoding and integer 16000 sampling rate. Our explicit update
+had been sent. The `turn_detection` field was **absent**, rather than explicitly
+null. The operation therefore failed under the old `get(..., {})` check in
+81.926 ms; it sent zero frames and left configuration unchanged.
+
+The production fix is deliberately narrow. After successfully sending our own
+explicit `turn_detection: null` update, the acknowledgement may omit the field
+or return null. A dedicated `_manual_update_sent` flag prevents accepting an
+omitted field without that request first being sent. Any non-null value,
+including an object or an empty object, is still refused. Model/session/event-ID,
+encoding/rate, timeout, cancellation and expiry validation remain in place.
+The outgoing request and audio protocol were not changed to match a guess.
+
+Reproduce the focused local regression with loopback permission:
+
+```bash
+.venv/bin/ruff check src/inkecho/realtime.py tests/test_realtime.py
+.venv/bin/ruff format --check src/inkecho/realtime.py tests/test_realtime.py
+.venv/bin/python -m pytest tests/test_realtime.py \
+  tests/test_realtime_silence_probe.py tests/test_provider_capability.py \
+  tests/test_application_realtime.py -q --tb=short
+```
+
+Observed **119 passed in 2.39 s**, including the 33 handshake/silence probe guard
+cases. Ruff lint and format checks passed. Actual local TLS/WSS cases cover the
+omitted-field acknowledgement through final transcription, cancellation, stale
+activity and expired deadlines; invalid model/session/encoding/rate and a VAD
+object still fail at startup. Pure boundary cases reject non-null objects,
+booleans, strings and lists and refuse omission before our update is sent.
+The WSS fixture permits only expected connection closure and fails on any other
+server error, rather than silently accepting unexpected test exceptions.
+Raw ephemeral result: `/tmp/inkecho-realtime-manual-omission-tests.log`.
+
+No new live request was made by the implementing agent during diagnosis or this
+fix. A later separately approved generated-silence run may verify the corrected
+official handshake and commit/finish path; it still cannot establish speech
+recognition accuracy, microphone workflow quality or Ubuntu 24.04 performance.
+
+## Non-authoritative item notifications (2026-10-16)
+
+The parent agent subsequently obtained separate approval for a generated-silence
+retest of the acknowledgement fix. The official handshake passed, but a later
+notification exposed a second mismatch with our assumed event order. The retained
+`build/performance-realtime-silence-after-fix.json` records created and updated
+true, five frames sent, `conversation.item.created`, `response`, 603.046 ms, no
+commit or finish, and unchanged configuration. This was another failed protocol
+attempt, not a successful complete recognition exchange.
+
+A separately approved, bounded generated-silence diagnostic added only fixed
+item classifications to the test observer. The retained
+`build/performance-realtime-item-diagnostic.json` records the same notification
+after five frames, before commit/finishing, at 595.357 ms. Its item was an object
+with type message, but had no nonempty string item ID and did not classify as
+role user; there was also no valid top-level item ID. No item content, raw role
+value, identifier or service body was retained. This evidence does not establish
+whether individual absent values were omitted, null or another type. We do not
+need that distinction because these notifications never supply a final result.
+
+The [official server-event reference](https://www.alibabacloud.com/help/en/model-studio/qwen-asr-realtime-server-events)
+identifies committed.item_id as the associated user item after manual commit,
+and completed.transcript as the final recognition result. A created notification
+is therefore not used to authenticate a result. The adapter now checks only that
+created.item is a message object and ignores it, without reading its content,
+role or ID and without storing any provisional identity. Official `.text`
+previews are likewise ignored completely. These branches remain subject to the
+existing ready-state, event-ID, event-count, WebSocket-frame and task guards.
+
+At this intermediate checkpoint, a committed acknowledgement still required a
+nonempty string ID of at most 200 characters, and completed/failed required that
+identity and an integer-zero index. **Those mandatory metadata assumptions were
+later superseded by the final optional-metadata policy below.** The retained
+guards still reject conflicting supplied IDs, invalid supplied indexes, unknown
+transcription kinds and early results. Final text is returned only after
+session.finished; preview content and created-item contents cannot supply it.
+Explicit cancellation, expiry and replaced-task checks remain unchanged, with no
+automatic audio retry or partial-result fallback.
+
+Re-running the focused command above gave **145 passed in 2.64 s**, including
+41 standalone probe guard cases. Ruff lint and formatting passed. Actual local
+TLS/WSS cases include placeholder creation and unrelated preview before manual
+commit, subsequent acknowledged final completion, early acknowledgement/final
+rejection, conflicting acknowledgement IDs, boolean content indexes, unknown
+transcription events, and cancellation/stale/deadline after a pre-commit frame.
+Boundary tests cover invalid/oversized acknowledgement IDs and malformed created
+objects. Cancellation cases retain the already-sent fixture frame but send no
+remaining audio or commit. Raw result:
+`/tmp/inkecho-realtime-placeholder-tests.log`.
+
+All four historical failed/diagnostic receipts above remain preserved. The
+implementing agent made no live request for this fix. A later separately approved
+generated-silence request can test the complete official commit/finish exchange;
+it will still not measure speech accuracy or desktop/microphone performance.
+
+## Empty manual-commit acknowledgement (2026-10-16)
+
+The next separately approved full generated-silence test passed the handshake and
+placeholder-notification handling, sent all ten source-generated frames, then
+sent commit and finish. The retained
+`build/performance-realtime-silence-final.json` is still a failed result:
+`input_audio_buffer.committed` carried no valid nonempty string item ID, which
+the adapter required. It ended with `response` after 1113.328 ms; configuration
+was unchanged. The existing classification does not establish whether that field
+was omitted, null, empty or another type. This is not cloud-speech evidence.
+
+The initial additional compatibility boundary was restricted to an empty
+result (superseded by the final metadata policy below). A distinct acknowledgement
+flag records a committed event only after
+our own manual commit. A missing or null item ID may acknowledge that commit,
+without binding any result identity. Empty strings, oversized IDs and other
+types remain errors. A subsequent session.finished additionally requires both
+the acknowledgement and our own finish, so silence can complete with an empty
+result. Completed/failed events still require a valid ID bound by the commit
+acknowledgement, strict ID matching and integer-zero content index. They cannot
+introduce a new identity when the acknowledgement omitted one. A final can arrive
+after acknowledged commit and before finish is sent, but is not returned until
+the valid session.finished event. Missing IDs never erase an already-known ID.
+
+The observer now distinguishes missing/null/empty/invalid top-level item IDs using
+fixed booleans, without retaining values. Focused local TLS/WSS and application
+regressions gave **157 passed in 2.67 s**, including 47 probe guards; Ruff lint and
+formatting passed. These tests exercise missing/null acknowledgement through
+empty finish, rejection of any completed result without a bound identity,
+finish without acknowledgement, invalid IDs, and final arrival before finish.
+Raw result: `/tmp/inkecho-realtime-empty-ack-tests.log`.
+
+No live request was made by the implementing agent. A successful future
+generated-silence exchange would validate only its observed protocol path, not
+the identity schema of nonempty speech results or speech recognition accuracy.
+
+## Single-commit association with optional metadata (2026-10-16)
+
+The next separately approved generated-silence run passed that acknowledgement
+boundary and reached completed. The preserved
+`build/performance-realtime-silence-ack-final.json` records ten frames, valid
+handshake, acknowledgement received, finish requested and unchanged configuration.
+It still failed with `response` at 1198.117 ms: the completed event omitted
+item_id (`event_item_id_missing` true, invalid false). Its result body was not
+retained, so this failure establishes the metadata omission, not a speech result
+or recognition quality.
+
+Rather than infer a different schema one field at a time, the final adapter
+policy binds a result to its own isolated WebSocket session and its single
+manual commit. Completed/failed events require our commit and its acknowledged
+receipt. Optional item IDs may be absent or null; a supplied ID must be a nonempty
+string of at most 200 characters. The first supplied ID in an acknowledgement or
+final binds the identity, and all later supplied IDs must agree. Missing fields
+never erase that identity. This is the same policy for empty and nonempty text.
+Content index may be omitted because this session sends exactly one audio input;
+if present it must be integer zero. Null, booleans, strings and other indexes are
+refused. An otherwise valid failed event remains a failure, not an empty result.
+
+Only completed.transcript can populate the bounded final text; contradictory
+completed bodies still fail. Returning a result still requires the local finish
+and acknowledged session.finished, so earlier final text cannot escape early.
+Created message objects and previews remain non-authoritative and ignored;
+unknown transcription event types remain errors. Each session owns one fresh
+connection, no redirects/reconnects/replays, and its own audio/response state.
+Existing local task ownership, active/deadline checks, cancellation and cleanup
+are unchanged. Optional vendor metadata does not replace those isolation guards.
+
+The observer adds only transcript-string/nonempty and missing/int-zero/invalid
+content-index booleans, never text or raw service values. Focused local TLS/WSS,
+capability and application validation gave **205 passed in 2.71 s**, including
+63 probe guard cases. Ruff lint and formatting passed. Local encrypted fixtures
+cover optional acknowledgement/final IDs and omitted index independently and
+together, Unicode final text, ID binding first at final, retained/conflicting
+identities, early result rejection, empty/invalid/oversized IDs, strict provided
+indexes for both completed and failed, and unchanged cancellation/stale/deadline
+tests. Raw result: `/tmp/inkecho-realtime-optional-metadata-tests.log`.
+
+All six failed/diagnostic receipts remain preserved and are not successful
+protocol claims. No live request was made by the implementing agent.
+
+## Final official generated-silence protocol result
+
+The parent agent obtained approval for the final single generated-silence request
+after reviewing the optional-metadata policy. The preserved
+`build/performance-realtime-silence-optional-metadata.json` records
+`protocol_finished_without_speech`, with null error code. Session created,
+updated, commit acknowledged, commit sent, finish requested and session finished
+are all true; all ten source-generated frames were sent. Completion took
+**1241.349 ms**. Transcript nonempty is false and configuration unchanged is true.
+
+This is an actual TLS/Bearer-authenticated official-service result for one second
+of generated all-zero PCM, confirming the complete observed manual-mode protocol
+path. It does not establish recognized speech, accuracy, every nonempty speech
+response schema, microphone-to-cloud behavior, lower desktop latency or Ubuntu
+24.04 support. No WAV, microphone recording, local audio, user text or prompt was
+used. The earlier rejected public-speech fixture was not retried. Cloud testing
+has stopped; there are no further requests in this validation task.

@@ -251,8 +251,88 @@ def test_observer_does_not_mark_rejected_finish_as_received():
             await session._event({"type": "session.finished", "event_id": "early"})
         assert not session.finished
         session._finish_sent = True
+        with pytest.raises(ProviderError):
+            await session._event({"type": "session.finished", "event_id": "no-ack"})
+        assert not session.finished
+        session._commit_acknowledged = True
         await session._event({"type": "session.finished", "event_id": "valid"})
         assert session.finished
+        await session.aclose()
+
+    asyncio.run(execute())
+
+
+@pytest.mark.parametrize(
+    ("payload", "missing", "null", "empty", "invalid"),
+    [
+        ({}, True, False, False, False),
+        ({"item_id": None}, False, True, False, False),
+        ({"item_id": ""}, False, False, True, True),
+        ({"item_id": 42}, False, False, False, True),
+        ({"item_id": "x" * 201}, False, False, False, True),
+        ({"item_id": "private-item"}, False, False, False, False),
+    ],
+)
+def test_observer_classifies_optional_item_ids_without_retaining_values(
+    payload, missing, null, empty, invalid
+):
+    async def execute():
+        session = probe.ObservedSession(
+            probe.official_config(current_provider()), "synthetic-key"
+        )
+        session._ready = asyncio.get_running_loop().create_future()
+        session._ready.set_result(None)
+        session._commit_sent = True
+        try:
+            await session._event({"type": "input_audio_buffer.committed", **payload})
+        except ProviderError:
+            pass
+        diagnostic = session.event_diagnostic
+        assert diagnostic["event_item_id_missing"] is missing
+        assert diagnostic["event_item_id_null"] is null
+        assert diagnostic["event_item_id_empty"] is empty
+        assert diagnostic["event_item_id_invalid"] is invalid
+        assert "private-item" not in json.dumps(diagnostic)
+        await session.aclose()
+
+    asyncio.run(execute())
+
+
+@pytest.mark.parametrize(
+    "payload",
+    [{}, {"content_index": 0}, {"content_index": None}, {"content_index": False}],
+)
+@pytest.mark.parametrize("transcript", [None, "", "  ", "private-result"])
+def test_final_diagnostic_classifies_only_fixed_text_and_index_booleans(
+    payload, transcript
+):
+    async def execute():
+        session = probe.ObservedSession(
+            probe.official_config(current_provider()), "synthetic-key"
+        )
+        session._ready = asyncio.get_running_loop().create_future()
+        session._ready.set_result(None)
+        session._commit_sent = True
+        session._commit_acknowledged = True
+        try:
+            await session._event(
+                {
+                    "type": "conversation.item.input_audio_transcription.completed",
+                    "transcript": transcript,
+                    **payload,
+                }
+            )
+        except ProviderError:
+            pass
+        diagnostic = session.event_diagnostic
+        assert diagnostic["transcript_string"] is isinstance(transcript, str)
+        assert diagnostic["transcript_nonempty"] is (transcript == "private-result")
+        missing = "content_index" not in payload
+        valid = type(payload.get("content_index")) is int
+        assert diagnostic["content_index_missing"] is missing
+        assert diagnostic["content_index_int0"] is valid
+        assert diagnostic["content_index_invalid"] is (not missing and not valid)
+        assert "private-result" not in json.dumps(diagnostic)
         await session.aclose()
 
     asyncio.run(execute())

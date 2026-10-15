@@ -165,6 +165,8 @@ class QwenRealtimeSession:
         self._finishing = False
         self._finish_sent = False
         self._commit_sent = False
+        self._commit_acknowledged = False
+        self._manual_update_sent = False
         self._closed = False
         self._audio_bytes = 0
         self._began = 0.0
@@ -441,11 +443,15 @@ class QwenRealtimeSession:
                         "turn_detection": None,
                     },
                 )
+                self._manual_update_sent = True
             else:
+                # Official manual-mode confirmations can omit this field.
+                # Accept that only after sending our explicit null update.
                 if (
-                    self._session_id != session_id
+                    not self._manual_update_sent
+                    or self._session_id != session_id
                     or self._ready.done()
-                    or session.get("turn_detection", {}) is not None
+                    or session.get("turn_detection") is not None
                     or session.get("sample_rate", 16000) != 16000
                     or session.get("input_audio_format") not in {"pcm", "pcm16"}
                 ):
@@ -455,30 +461,35 @@ class QwenRealtimeSession:
         if self._ready is None or not self._ready.done():
             raise ProviderError("response")
         if kind == "input_audio_buffer.committed":
-            item = event.get("item_id")
-            if not self._commit_sent or not isinstance(item, str) or not item:
+            if not self._commit_sent:
                 raise ProviderError("response")
-            if self._item_id is not None and self._item_id != item:
-                raise ProviderError("response")
-            self._item_id = item
+            self._bind_item_id(event)
+            self._commit_acknowledged = True
         elif kind == "conversation.item.created":
-            item = event.get("item", {})
+            item = event.get("item")
+            if not isinstance(item, dict) or item.get("type") != "message":
+                raise ProviderError("response")
+            # The service can announce a placeholder before manual commit.
+            # Its contents and identity are not authoritative recognition data.
+        elif kind == "conversation.item.input_audio_transcription.text":
+            return  # Previews never contribute to the final result.
+        elif kind in {
+            "conversation.item.input_audio_transcription.completed",
+            "conversation.item.input_audio_transcription.failed",
+        }:
             if (
-                not isinstance(item, dict)
-                or item.get("id") != self._item_id
-                or item.get("role") != "user"
-                or item.get("type") != "message"
+                not self._commit_sent
+                or not self._commit_acknowledged
+                or (
+                    "content_index" in event
+                    and (
+                        type(event["content_index"]) is not int
+                        or event["content_index"] != 0
+                    )
+                )
             ):
                 raise ProviderError("response")
-        elif isinstance(kind, str) and kind.startswith(
-            "conversation.item.input_audio_transcription."
-        ):
-            if (
-                self._item_id is None
-                or event.get("item_id") != self._item_id
-                or event.get("content_index") != 0
-            ):
-                raise ProviderError("response")
+            self._bind_item_id(event)
             if kind.endswith(".failed"):
                 raise ProviderError("unavailable")
             if kind.endswith(".completed"):
@@ -490,11 +501,25 @@ class QwenRealtimeSession:
                 self._transcript = text
             # Partial text is deliberately never delivered or used as final text.
         elif kind == "session.finished":
-            if not self._finish_sent:
+            if not self._finish_sent or not self._commit_acknowledged:
                 raise ProviderError("response")
             self._done.set_result(self._transcript or "")
         else:
             raise ProviderError("response")
+
+    def _bind_item_id(self, event: dict) -> None:
+        # One connection carries one manual commit; optional service IDs add
+        # consistency checks but never replace this session's task ownership.
+        item = event.get("item_id")
+        if item is None:
+            return
+        if (
+            not isinstance(item, str)
+            or not 0 < len(item) <= 200
+            or (self._item_id is not None and self._item_id != item)
+        ):
+            raise ProviderError("response")
+        self._item_id = item
 
     async def aclose(self) -> None:
         """Cancel without commit, retries, partial fallback, or remaining audio."""
