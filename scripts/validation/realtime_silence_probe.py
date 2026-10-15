@@ -59,7 +59,9 @@ class ObservedSession(QwenRealtimeSession):
             "error",
             "input_audio_buffer.committed",
             "conversation.item.created",
+            "conversation.item.input_audio_transcription.text",
             "conversation.item.input_audio_transcription.completed",
+            "conversation.item.input_audio_transcription.failed",
         }
         session = event.get("session")
         values = session if isinstance(session, dict) else {}
@@ -67,6 +69,11 @@ class ObservedSession(QwenRealtimeSession):
         form = values.get("input_audio_format")
         rate = values.get("sample_rate")
         turn = values.get("turn_detection")
+        item = event.get("item")
+        item_values = item if isinstance(item, dict) else {}
+        item_id = item_values.get("id")
+        event_item_id = event.get("item_id")
+        provisional_id = getattr(self, "_provisional_item_id", None)
         self.event_diagnostic = {
             "event_kind": kind if isinstance(kind, str) and kind in known else "other",
             "event_id_present": "event_id" in event,
@@ -94,6 +101,23 @@ class ObservedSession(QwenRealtimeSession):
             "turn_detection_null": "turn_detection" in values and turn is None,
             "turn_detection_object": isinstance(turn, dict),
             "ready_already_done": self._ready is not None and self._ready.done(),
+            "item_present": "item" in event,
+            "item_object": isinstance(item, dict),
+            "item_id_nonempty": isinstance(item_id, str) and bool(item_id),
+            "item_id_length_valid": isinstance(item_id, str)
+            and 0 < len(item_id) <= 200,
+            "item_id_known": self._item_id is not None,
+            "item_id_match": self._item_id is not None and item_id == self._item_id,
+            "item_role_user": item_values.get("role") == "user",
+            "item_type_message": item_values.get("type") == "message",
+            "commit_sent": self._commit_sent,
+            "finishing": self._finishing,
+            "event_item_id_valid": isinstance(event_item_id, str)
+            and 0 < len(event_item_id) <= 200,
+            "event_item_id_matches_committed": self._item_id is not None
+            and event_item_id == self._item_id,
+            "event_item_id_matches_provisional": provisional_id is not None
+            and event_item_id == provisional_id,
         }
         await super()._event(event)
         if kind == "session.created":

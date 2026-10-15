@@ -427,3 +427,65 @@ def test_rejected_event_diagnostic_is_fixed_booleans_without_original_values():
         await session.aclose()
 
     asyncio.run(execute())
+
+
+@pytest.mark.parametrize("known", [False, True])
+@pytest.mark.parametrize("item_shape", ["valid", "missing", "wrong_type", "long_id"])
+def test_item_diagnostic_is_fixed_booleans_before_production_validation(
+    known, item_shape
+):
+    async def execute():
+        session = probe.ObservedSession(
+            probe.official_config(current_provider()), "synthetic-key"
+        )
+        session._ready = asyncio.get_running_loop().create_future()
+        session._ready.set_result(None)
+        session._item_id = "synthetic-private-item" if known else None
+        session._provisional_item_id = "synthetic-private-item" if not known else None
+        session._commit_sent = session._finishing = known
+        event = {
+            "type": "conversation.item.created",
+            "item_id": "synthetic-private-item",
+        }
+        if item_shape != "missing":
+            event["item"] = (
+                "private-non-object"
+                if item_shape == "wrong_type"
+                else {
+                    "id": "private-" * 30
+                    if item_shape == "long_id"
+                    else "synthetic-private-item",
+                    "role": "user",
+                    "type": "message",
+                    "content": [{"private": "private-body-never-retained"}],
+                }
+            )
+        try:
+            await session._event(event)
+        except ProviderError:
+            pass  # The diagnostic records metadata even when validation rejects it.
+        metadata = session.event_diagnostic
+        is_object = item_shape in {"valid", "long_id"}
+        assert metadata["item_present"] is (item_shape != "missing")
+        assert metadata["item_object"] is is_object
+        assert metadata["item_id_nonempty"] is is_object
+        assert metadata["item_id_length_valid"] is (item_shape == "valid")
+        assert metadata["item_id_known"] is known
+        assert metadata["item_id_match"] is (known and item_shape == "valid")
+        assert metadata["item_role_user"] is is_object
+        assert metadata["item_type_message"] is is_object
+        assert metadata["commit_sent"] is known
+        assert metadata["finishing"] is known
+        assert metadata["event_item_id_valid"]
+        assert metadata["event_item_id_matches_committed"] is known
+        assert metadata["event_item_id_matches_provisional"] is not known
+        assert all(
+            type(value) is bool
+            for key, value in metadata.items()
+            if key != "event_kind"
+        )
+        assert "private" not in json.dumps(metadata)
+        assert "synthetic-key" not in json.dumps(metadata)
+        await session.aclose()
+
+    asyncio.run(execute())
