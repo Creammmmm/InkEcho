@@ -19,9 +19,15 @@ from pathlib import Path
 
 
 class OwnedWaylandBrowser:
-    def __init__(self, field="textarea", switch_after=0, class_name=None):
+    def __init__(
+        self, field="textarea", switch_after=0, class_name=None, platform="wayland"
+    ):
         if field not in {"textarea", "contenteditable"}:
             raise ValueError("Unknown owned field")
+        if platform not in {"wayland", "x11"}:
+            raise ValueError("Unknown owned browser platform")
+        self.platform = platform
+        self.spawn_display = None
         self.field = field
         if not isinstance(switch_after, int) or not 0 <= switch_after <= 8192:
             raise ValueError("Switch position must be within [0, 8192]")
@@ -54,7 +60,7 @@ class OwnedWaylandBrowser:
         field = (
             '<textarea id="field" autofocus rows="8" cols="65"></textarea>'
             if self.field == "textarea"
-            else '<div id="field" contenteditable="true" role="textbox" '
+            else '<div id="field" contenteditable="true" autofocus role="textbox" '
             'aria-multiline="true" tabindex="0" style="min-height:160px"></div>'
         )
         second = (
@@ -80,13 +86,17 @@ class OwnedWaylandBrowser:
             "first_count:Array.from(first).length,"
             "second_count:Array.from(last).length,switch_done:switched,"
             "document_focused:document.hasFocus(),"
-            "field_focused:document.activeElement===(switched?second:field)})})}"
+            "field_focused:document.activeElement===(switched?second:field),"
+            "active_element_id:document.activeElement===field?'field':"
+            "document.activeElement===second?'second':'other'})})}"
             "field.addEventListener('input',()=>{"
             "if(second&&!switched&&Array.from(value(field)).length>=switchAfter){"
             "second.focus();switched=document.activeElement===second;}record()});"
             "if(second)second.addEventListener('input',record);"
             "for(const e of [window,field,second].filter(Boolean)){"
             "e.addEventListener('blur',record);e.addEventListener('focus',record);}"
+            "window.addEventListener('focus',()=>{"
+            "(switched?second:field).focus();record()});"
             "window.addEventListener('load',()=>{field.focus();record()});"
             "setInterval(record,100);</script>"
         ).encode()
@@ -151,17 +161,24 @@ class OwnedWaylandBrowser:
             )
             self.thread.start()
             env = dict(os.environ, WAYLAND_DEBUG="client")
-            for key in ("DISPLAY", "PYTHONHOME", "PYTHONPATH", "LD_LIBRARY_PATH"):
+            if self.platform == "x11" and not env.get("DISPLAY"):
+                raise RuntimeError("Owned XWayland Chrome requires an X display")
+            removed = ["PYTHONHOME", "PYTHONPATH", "LD_LIBRARY_PATH"]
+            removed += (
+                ["DISPLAY"] if self.platform == "wayland" else ["WAYLAND_DISPLAY"]
+            )
+            for key in removed:
                 env.pop(key, None)
             for key in ("XDG_CONFIG_HOME", "XDG_CACHE_HOME", "XDG_DATA_HOME"):
                 directory = self.root / key.lower()
                 directory.mkdir()
                 env[key] = str(directory)
+            self.spawn_display = env.get("DISPLAY")
             self.log = (self.root / "wayland.log").open("w")
             self.process = subprocess.Popen(
                 [
                     "google-chrome",
-                    "--ozone-platform=wayland",
+                    f"--ozone-platform={self.platform}",
                     *([f"--class={self.class_name}"] if self.class_name else []),
                     f"--user-data-dir={self.root / 'profile'}",
                     "--no-first-run",

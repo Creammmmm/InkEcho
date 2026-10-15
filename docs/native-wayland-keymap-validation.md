@@ -2,10 +2,11 @@
 
 This record follows isolated GNOME 50.1 experiments and the subsequent
 production-worker validation on 2026-10-15. Early prototype failures are retained
-below. The final default worker passed private native Chrome; an authorized host
-experiment passed the current desktop's Chrome contenteditable with libpinyin
-and an empty composition. Packaging and other application acceptance are tracked
-separately; this does not establish compatibility with every GNOME version or
+below. The final default worker passed private native Chrome and a separate XWayland
+VTE terminal. Authorized host checks passed the current desktop's Chrome textarea
+from source and contenteditable from the actual alpha9 AppImage with libpinyin
+and an empty composition. [Packaging and mixed-window acceptance](native-wayland-parent-validation.md)
+are tracked separately; this does not establish compatibility with every GNOME version or
 input engine.
 
 ## Isolation and scope
@@ -182,9 +183,10 @@ that session's `Closed` signal so parent readiness is invalidated immediately.
 EOF retains cleanup responsibility; only confirmed disappearance of the unique
 compositor owner proves that the old seat no longer exists.
 
-At this point private production integration is still being tested. Isolated
-prototype results above must not be presented as a completed packaged or host
-production acceptance run.
+At the historical checkpoint described above, private production integration
+was still being tested. Subsequent production, host and package results are
+recorded below and in the [acceptance overview](native-wayland-parent-validation.md);
+the isolated prototype results alone do not establish those later results.
 
 ## Production worker acceptance in the isolated desktop
 
@@ -247,7 +249,9 @@ input engine as the next hypothesis.
 
 A separately marked experiment maps *all* printable characters to Unicode
 keysyms, including Latin-1 and ASCII, while Return remains the real Return key.
-The existing/default representation is unchanged pending host validation. The
+At that experimental checkpoint, the default representation was unchanged
+pending host validation. The adopted default and subsequent checks are recorded
+below. The
 installed libxkbcommon is 1.13.1. Its [versioned conversion source](https://raw.githubusercontent.com/xkbcommon/libxkbcommon/xkbcommon-1.13.1/src/keysym-utf.c)
 explicitly retains the extended ASCII representation for longstanding backwards
 compatibility, despite it not being the preferred canonical encoding. Pure
@@ -283,7 +287,8 @@ Chrome without experimental flags and **passed** 26/26, no late output, original
 map restored and normal compositor cleanup:
 `build/nested-keymap-production-unicode-default.log`. The focused map, worker and
 EIS suite passed **79 tests**, and Ruff passed. This is the source freeze point;
-a separate packaged acceptance still has to use that exact final implementation.
+packaged acceptance subsequently used that exact implementation, as recorded
+in the [acceptance overview](native-wayland-parent-validation.md).
 
 The final default representation was then rechecked for both production
 interruption cases. `build/nested-keymap-production-unicode-cancel.log` and
@@ -300,3 +305,94 @@ press/releases, maintained owned fixture focus and restored map/modifiers exactl
 Together with the earlier contenteditable experiment this establishes the stated
 current-host evidence; it still does not claim arbitrary input engines, existing
 preedit, non-BMP text or all application types are supported.
+
+## Final default worker with private XWayland VTE
+
+The final production Unicode representation was independently tested against the
+owned XWayland VTE raw-PTY fixture:
+
+```sh
+.venv/bin/python scripts/feasibility/nested_keymap_probe.py --run-isolated --production-worker --target vte-xwayland --single-slot-bmp
+```
+
+The default restoration mode is `snapshot_fd`; this command does not request
+Shell policy reset. It exited **0**, received all **26/26** sample characters,
+matched Return to the expected raw-PTY CR, and observed no late output. The
+fixture reported owned active focus and `GdkX11Display`; the saved original map
+bytes were restored and the private compositor was alive before normal cleanup.
+Evidence: `build/nested-keymap-production-final-vte-xwayland.log`.
+
+This check used one target throughout one transaction. It establishes the final
+worker's separate XWayland terminal result; it does **not** replace the native ↔
+XWayland mixed-window GTK test or establish correctness across a focus switch.
+No production source, user setting, host keyboard or existing document was
+changed for this check.
+
+
+## Host mixed-window timing diagnosis
+
+The first alpha9 artifact passed separate native Chrome and XWayland VTE targets,
+but real-host mixed Chrome delivery exposed a timing failure. A controlled
+single-transaction native → XWayland → native experiment received the complete
+26-character sample only after adding test-only 30 ms waits after mapping and
+after key release. The diagnostic receipt records both direction changes,
+balanced events and exact restoration, while explicitly keeping default package
+acceptance false: `build/native-wayland-host-mixed-both30.json`.
+
+The production correction and rebuilt default artifact subsequently passed the
+real-host same-transaction test without diagnostic pacing flags: **5 native →
+5 XWayland → 16 native**, exact text in both fields, balanced 26 press/release
+attempts and exact map/modifier restoration. Evidence:
+`build/native-wayland-host-mixed-final.json`; its default acceptance flag is true. The [current overview](native-wayland-parent-validation.md)
+retains the failed one-wait controls and the separate private GTK fixture failure;
+none is replaced by this diagnostic pass.
+
+
+The adopted pacing worker was also rechecked in the private production path,
+with its hash matching the final package. Explicit cancellation after character
+5 and requester EOF after character 5 both exited 0: exactly five characters,
+21 unsent, no late output, original map restored, compositor alive until cleanup.
+Logs: `build/nested-keymap-production-final-pacing-cancel.log` and
+`build/nested-keymap-production-final-pacing-eof.log`. These rechecks cover the
+final implementation rather than relying only on the earlier no-pacing runs.
+
+
+The 30 ms package's later **contenteditable** mixed run failed: the XWayland
+prefix was `Echo`, missing its initial `k`, with owned focus still true. Its
+successful textarea mixed run therefore cannot establish contenteditable mixed
+support. A test-only extra 20 ms at both boundaries (50 ms total each) passed the
+full contenteditable sample; the formal 50 ms constants and rebuilt default
+artifact subsequently passed the same contenteditable requirement, as recorded
+below. Evidence and exact scope are retained in the
+[acceptance overview](native-wayland-parent-validation.md).
+
+
+The final 50 ms implementation and rebuilt package have matching worker hashes.
+Its cancellation-after-5 and EOF-after-5 checks both exited 0 with exactly five
+characters, 21 unsent, no late output, exact map restoration and a live compositor
+until deliberate cleanup. Evidence: `build/nested-keymap-production-pacing50-cancel.log`
+and `build/nested-keymap-production-pacing50-eof.log`. The actual rebuilt AppImage
+also passed the private FUSE parent-death test; the guardian restored map and
+modifiers, exited and allowed unmount with no remaining text:
+`build/native-wayland-alpha9-pacing50-fuse.log`.
+
+
+The final actual 50 ms AppImage passed **contenteditable** native → XWayland →
+native delivery in one `insert` transaction: 5/5/16 exact characters, both
+switches confirmed, 26 balanced press/release attempts, zero guard rejections,
+and exact map/group/modifier restoration. Evidence:
+`build/native-wayland-host-pacing50-ownedfield-final.json`, with
+`diagnostic_only: false` and `default_acceptance_passed: true`. Its fixture only
+focuses the owned editable field upon its own window-focus event and requires
+250 ms of continuous readiness; it neither activates OS windows nor periodically
+reclaims focus. Prior no-body/owned-focus-loss fixture runs remain rejected, and
+the separate 30 ms contenteditable `Echo` failure remains historical evidence.
+
+
+The accepted final artifact has SHA-256
+`3c18b8773ec95632fd864ffc21a63a08c465b4780c939237f5f27e2dddfc1d07`
+and was deployed locally after these checks. Configuration and Ctrl+F4 were
+preserved; the GitHub v0.1 release remains unchanged. The
+[acceptance and deployment overview](native-wayland-parent-validation.md)
+records the actual runtime, complete working-tree checks and deployment evidence;
+this does not claim a final clean-HEAD receipt or push before those steps occur.
