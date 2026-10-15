@@ -6,7 +6,6 @@ import io
 import json
 import subprocess
 import sys
-from contextlib import nullcontext
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -584,213 +583,131 @@ def test_scene_global_read_budget_stops_queries(scene_controls, monkeypatch):
     assert len(state.calls) == 1
 
 
-def candidate_keyboard(monkeypatch, action=lambda _count: None):
-    """Use production map/insert/restore with in-memory X hardware responses."""
-    from inkecho.platform.keyboard import KeyboardInput, _XDriver
-
-    rows = [(97, 65), (0, 0)]
-    driver = _XDriver.__new__(_XDriver)
-    driver.first, driver.count = 8, len(rows)
-    driver.width = driver.slot = driver.applied = driver.pending_symbol = None
-    driver._mapping = lambda: (2, tuple(value for row in rows for value in row))
-    driver._write = lambda values: rows.__setitem__(
-        driver.slot - driver.first, tuple(values)
+def test_mapping_counter_never_performs_or_defers_production_cleanup():
+    calls = []
+    driver = SimpleNamespace(
+        _write=lambda values: calls.append(("write", values)),
+        restore=lambda: calls.append(("restore",)),
     )
-    driver.focus = lambda: 21
-    driver._checked = nullcontext
-    driver.display = None
-    driver.x11 = SimpleNamespace(XKeysymToKeycode=lambda *_args: 36)
-    driver.send = lambda *_args: None
-    driver.close = lambda: None
-    inputs = KeyboardInput(driver_factory=lambda: driver)
-    events, codes, first = [], [], []
-    original_send = inputs._send
-
-    def send(window, code, pressed):
-        original_send(window, code, pressed)
-        events.append(pressed)
-        codes.append(code)
-
-    inputs._send = send
-    original_sleep = asyncio.sleep
-    calls = 0
-
-    async def sleep(_seconds):
-        nonlocal calls
-        calls += 1
-        action(calls)
-        await original_sleep(0)
-
-    monkeypatch.setattr(asyncio, "sleep", sleep)
-    return inputs, driver, rows, events, codes, first
-
-
-def empty_mapping_counts():
-    return {
-        "mapping_writes": 0,
-        "restore_calls": 0,
-        "successful_restore_calls": 0,
-        "deferred_restore_calls": 0,
+    original_write, original_restore = driver._write, driver.restore
+    counts = {"mapping_writes": 0, "restore_calls": 0, "successful_restore_calls": 0}
+    with probe.mapping_count_scope(driver, counts):
+        driver._write([1])
+        assert calls == [("write", [1])]
+        driver.restore()
+        assert calls[-1] == ("restore",)
+    assert calls == [("write", [1]), ("restore",)]
+    assert counts == {
+        "mapping_writes": 1,
+        "restore_calls": 1,
+        "successful_restore_calls": 1,
     }
+    assert driver._write == original_write and driver.restore == original_restore
+
+
+def test_mapping_counter_restores_methods_but_does_not_mask_product_cleanup_failure():
+    def fail():
+        raise RuntimeError("fixture cleanup failed")
+
+    driver = SimpleNamespace(_write=lambda _values: None, restore=fail)
+    original_write, original_restore = driver._write, driver.restore
+    counts = {"mapping_writes": 0, "restore_calls": 0, "successful_restore_calls": 0}
+    with pytest.raises(RuntimeError, match="fixture cleanup failed"):
+        with probe.mapping_count_scope(driver, counts):
+            driver.restore()
+    assert driver._write == original_write and driver.restore == original_restore
+    assert counts["restore_calls"] == 1 and counts["successful_restore_calls"] == 0
+
+
+def test_retired_candidate_cli_is_rejected(monkeypatch):
+    monkeypatch.setattr(
+        sys, "argv", [str(PATH), "--restore-policy", "end-of-insertion-candidate"]
+    )
+    with pytest.raises(SystemExit) as caught:
+        probe.main()
+    assert caught.value.code == 2
+
+
+def test_source_root_is_strict_and_precedes_runtime_imports(tmp_path, monkeypatch):
+    original_path = list(sys.path)
+    monkeypatch.setattr(sys, "path", list(original_path))
+    assert probe.prepare_source_root(tmp_path) == tmp_path.resolve()
+    assert sys.path[0] == str(tmp_path.resolve())
+    missing = tmp_path / "missing"
+    with pytest.raises(FileNotFoundError):
+        probe.prepare_source_root(missing)
+    file = tmp_path / "not-a-directory"
+    file.write_text("fixture")
+    with pytest.raises(RuntimeError, match="directory"):
+        probe.prepare_source_root(file)
 
 
 @pytest.mark.parametrize(
-    "policy", ["per-character-production", "end-of-insertion-candidate"]
+    "escape", [None, "inkecho", "inkecho.platform.keyboard", "inkecho.runtime"]
 )
-def test_restore_candidate_counts_real_production_methods_and_restores_scope(
-    monkeypatch, policy
+def test_runtime_origins_verify_all_three_actual_module_paths_and_hashes(
+    tmp_path, monkeypatch, escape
 ):
-    inputs, driver, rows, events, codes, first = candidate_keyboard(monkeypatch)
-    counts = empty_mapping_counts()
-    original_write, original_restore = driver._write, driver.restore
-
-    async def run():
-        await inputs.connect()
-        assert await probe.insert_sample(
-            inputs, "中\nΩ", events, first, restore_policy=policy, mapping_counts=counts
-        ) == (3, False)
-        assert rows == [(97, 65), (0, 0)]
-        assert driver._write == original_write and driver.restore == original_restore
-        assert codes == [9, 9, 36, 36, 9, 9]
-        assert events == [True, False] * 3
-        assert counts == {
-            "mapping_writes": 3 if policy.endswith("candidate") else 4,
-            "restore_calls": 1 if policy.endswith("candidate") else 4,
-            "successful_restore_calls": 1 if policy.endswith("candidate") else 4,
-            "deferred_restore_calls": 4 if policy.endswith("candidate") else 0,
-        }
-        await inputs.aclose()
-
-    asyncio.run(run())
-
-
-def test_restore_candidate_cancel_after_press_releases_and_cleans_owned_row(
-    monkeypatch,
-):
-    inputs, driver, rows, events, _codes, first = candidate_keyboard(monkeypatch)
-    counts = empty_mapping_counts()
-    original_write, original_restore = driver._write, driver.restore
-
-    async def run():
-        await inputs.connect()
-        assert await probe.insert_sample(
-            inputs,
-            "中文Ω",
-            events,
-            first,
-            1,
-            restore_policy="end-of-insertion-candidate",
-            mapping_counts=counts,
-        ) == (1, True)
-        assert events == [True, False] and rows[1] == (0, 0)
-        assert driver._write == original_write and driver.restore == original_restore
-        assert counts["mapping_writes"] == 2 and counts["restore_calls"] == 1
-        await inputs.aclose()
-
-    asyncio.run(run())
-
-
-@pytest.mark.parametrize("text", ["中文", "中\n", "中"])
-def test_restore_candidate_foreign_slot_change_is_never_overwritten(monkeypatch, text):
-    from inkecho.platform.keyboard import KeyboardError
-
-    rows = None
-
-    def change(count):
-        if count == 3:
-            rows[1] = (91, 92)
-
-    inputs, driver, rows, events, _codes, first = candidate_keyboard(
-        monkeypatch, change
+    root = tmp_path / "selected"
+    root.mkdir()
+    modules = {}
+    for index, name in enumerate(
+        ("inkecho", "inkecho.platform.keyboard", "inkecho.runtime")
+    ):
+        path = (tmp_path if escape == name else root) / f"module-{index}.py"
+        path.write_text("# fixed fixture source\n")
+        modules[name] = SimpleNamespace(__file__=str(path))
+    monkeypatch.setattr(probe.importlib, "import_module", lambda name: modules[name])
+    if escape is not None:
+        with pytest.raises(RuntimeError, match="escaped"):
+            probe.runtime_origins(root)
+        return
+    result = probe.runtime_origins(root)
+    assert result["runtime_kind"] == "source" and result["expected_source_root"] == str(
+        root
     )
-    original_write, original_restore = driver._write, driver.restore
-    counts = empty_mapping_counts()
-
-    async def run():
-        await inputs.connect()
-        with pytest.raises(KeyboardError) as caught:
-            await probe.insert_sample(
-                inputs,
-                text,
-                events,
-                first,
-                restore_policy="end-of-insertion-candidate",
-                mapping_counts=counts,
-            )
-        assert caught.value.code == "mapping_changed"
-        assert rows[1] == (91, 92) and events == [True, False]
-        assert driver._write == original_write and driver.restore == original_restore
-        assert counts["mapping_writes"] == 1
-        await inputs.aclose()
-
-    asyncio.run(run())
+    assert set(result["runtime_origins"]) == set(modules)
+    assert all(len(item["sha256"]) == 64 for item in result["runtime_origins"].values())
+    assert probe.runtime_origins(None)["runtime_kind"] == "unclassified"
 
 
-def test_restore_candidate_unexpected_async_cancel_cleans_before_propagating(
-    monkeypatch,
+def test_fixture_branch_ignores_source_root_to_keep_system_python_gi_clean(
+    tmp_path, monkeypatch
 ):
-    def cancel(count):
-        if count == 2:
-            raise asyncio.CancelledError
+    observed = []
+    monkeypatch.setattr(probe, "fixture", lambda args: observed.append(args.fixture))
 
-    inputs, driver, rows, events, _codes, first = candidate_keyboard(
-        monkeypatch, cancel
+    def forbidden(*_args):
+        raise AssertionError(
+            "Fixture must not prepare or import an application runtime"
+        )
+
+    monkeypatch.setattr(probe, "prepare_source_root", forbidden)
+    monkeypatch.setattr(probe, "runtime_origins", forbidden)
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            str(PATH),
+            "--fixture",
+            "gtk",
+            "--source-root",
+            str(tmp_path / "does-not-exist"),
+        ],
     )
-    original_write, original_restore = driver._write, driver.restore
-
-    async def run():
-        await inputs.connect()
-        with pytest.raises(asyncio.CancelledError):
-            await probe.insert_sample(
-                inputs,
-                "中文",
-                events,
-                first,
-                restore_policy="end-of-insertion-candidate",
-                mapping_counts=empty_mapping_counts(),
-            )
-        assert rows[1] == (0, 0) and events == [True, False]
-        assert driver._write == original_write and driver.restore == original_restore
-        await inputs.aclose()
-
-    asyncio.run(run())
+    probe.main()
+    assert observed == ["gtk"]
 
 
-def test_restore_candidate_failed_write_not_counted_and_wrappers_always_restored(
-    monkeypatch,
-):
-    from inkecho.platform.keyboard import KeyboardError
+def test_already_cached_foreign_application_module_is_rejected(tmp_path, monkeypatch):
+    from types import ModuleType
 
-    inputs, driver, rows, events, _codes, first = candidate_keyboard(monkeypatch)
-    original_write = driver._write
-    writes = 0
-
-    def failing(values):
-        nonlocal writes
-        writes += 1
-        if writes == 2:
-            raise KeyboardError("injection_failed")
-        original_write(values)
-
-    driver._write = failing
-    original_restore = driver.restore
-    counts = empty_mapping_counts()
-
-    async def run():
-        await inputs.connect()
-        with pytest.raises(KeyboardError) as caught:
-            await probe.insert_sample(
-                inputs,
-                "中文",
-                events,
-                first,
-                restore_policy="end-of-insertion-candidate",
-                mapping_counts=counts,
-            )
-        assert caught.value.code == "injection_failed"
-        assert rows[1] == (0, 0) and events == [True, False]
-        assert counts["mapping_writes"] == 2
-        assert driver._write == failing and driver.restore == original_restore
-        await inputs.aclose()
-
-    asyncio.run(run())
+    root = tmp_path / "selected"
+    root.mkdir()
+    outside = tmp_path / "cached-package.py"
+    outside.write_text("# cached foreign module\n")
+    cached = ModuleType("inkecho")
+    cached.__file__ = str(outside)
+    monkeypatch.setitem(sys.modules, "inkecho", cached)
+    with pytest.raises(RuntimeError, match="escaped"):
+        probe.runtime_origins(root)

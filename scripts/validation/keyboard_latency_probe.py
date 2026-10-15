@@ -7,6 +7,8 @@ its current target PID, process start time, and the exact owned X window.
 import argparse
 import asyncio
 import ctypes
+import hashlib
+import importlib
 import json
 import os
 import platform
@@ -24,6 +26,33 @@ from pathlib import Path
 
 SAMPLE = "你好 InkEcho，世界！ café Ω 😀\n第二行。"
 ROOT = Path(__file__).resolve().parents[2]
+
+
+def prepare_source_root(path):
+    if path is None:
+        return None
+    root = path.resolve(strict=True)
+    if not root.is_dir():
+        raise RuntimeError("Source root must be a directory")
+    sys.path.insert(0, str(root))
+    return root
+
+
+def runtime_origins(source_root):
+    origins = {}
+    for name in ("inkecho", "inkecho.platform.keyboard", "inkecho.runtime"):
+        module = importlib.import_module(name)
+        path = Path(module.__file__).resolve(strict=True)
+        if source_root is not None and not path.is_relative_to(source_root):
+            raise RuntimeError("Runtime module escaped selected source root")
+        with path.open("rb") as stream:
+            checksum = hashlib.file_digest(stream, "sha256").hexdigest()
+        origins[name] = {"path": str(path), "sha256": checksum}
+    return {
+        "runtime_kind": "source" if source_root is not None else "unclassified",
+        "expected_source_root": str(source_root) if source_root is not None else None,
+        "runtime_origins": origins,
+    }
 
 
 def start_time(pid):
@@ -568,9 +597,8 @@ class Browser:
 
 
 @contextmanager
-def restore_policy_scope(driver, policy, counts):
-    """Test-only method scope, never a replacement insertion implementation."""
-    candidate = policy == "end-of-insertion-candidate"
+def mapping_count_scope(driver, counts):
+    """Count successful production calls without adding or deferring cleanup."""
     original_restore, original_write = driver.restore, driver._write
 
     def write(values):
@@ -579,9 +607,6 @@ def restore_policy_scope(driver, policy, counts):
         return result
 
     def restore():
-        if candidate:
-            counts["deferred_restore_calls"] += 1
-            return None
         counts["restore_calls"] += 1
         result = original_restore()
         counts["successful_restore_calls"] += 1
@@ -591,15 +616,7 @@ def restore_policy_scope(driver, policy, counts):
     try:
         yield
     finally:
-        # Restore the real method before synchronous mandatory ownership cleanup.
-        driver.restore = original_restore
-        try:
-            if candidate:
-                counts["restore_calls"] += 1
-                original_restore()
-                counts["successful_restore_calls"] += 1
-        finally:
-            driver._write = original_write
+        driver.restore, driver._write = original_restore, original_write
 
 
 async def insert_sample(
@@ -609,7 +626,6 @@ async def insert_sample(
     first,
     cancel_after=None,
     *,
-    restore_policy=None,
     mapping_counts=None,
 ):
     """Cancel only after N successful presses; preserve backend cleanup."""
@@ -620,7 +636,7 @@ async def insert_sample(
 
     try:
         scope = (
-            restore_policy_scope(inputs._driver, restore_policy, mapping_counts)
+            mapping_count_scope(inputs._driver, mapping_counts)
             if mapping_counts is not None
             else nullcontext()
         )
@@ -657,13 +673,10 @@ async def measure(args):
         "pacing_override_used": args.pacing is not None,
         "targets": [],
         "passed": False,
-        "restore_policy": args.restore_policy,
-        "candidate_policy": args.restore_policy
-        if args.restore_policy == "end-of-insertion-candidate"
-        else None,
-        "production_behavior_modified": args.restore_policy
-        == "end-of-insertion-candidate",
+        "restore_policy": "production",
+        "production_behavior_modified": False,
     }
+    report.update(args.runtime_metadata)
     if args.environment == "ubuntu24-vm-x11":
         report["environment_metadata"] = args.environment_metadata
         if args.qt_loop:
@@ -849,7 +862,6 @@ async def measure(args):
                         "mapping_writes": 0,
                         "restore_calls": 0,
                         "successful_restore_calls": 0,
-                        "deferred_restore_calls": 0,
                     }
                     count, cancelled = await insert_sample(
                         inputs,
@@ -857,7 +869,6 @@ async def measure(args):
                         events,
                         first,
                         args.cancel_after,
-                        restore_policy=args.restore_policy,
                         mapping_counts=mapping_counts,
                     )
                     elapsed = time.monotonic() - began
@@ -1030,6 +1041,7 @@ def main():
         "--fixture", choices=("gtk", "vte", "raw-child"), help=argparse.SUPPRESS
     )
     parser.add_argument("--output", type=Path)
+    parser.add_argument("--source-root", type=Path)
     parser.add_argument("--wayland-callback", action="store_true")
     parser.add_argument("--qt-loop", action="store_true")
     parser.add_argument("--xdotool")
@@ -1040,11 +1052,6 @@ def main():
     )
     parser.add_argument("--pacing", nargs=3, type=float)
     parser.add_argument("--repeat", type=int, default=1)
-    parser.add_argument(
-        "--restore-policy",
-        choices=("per-character-production", "end-of-insertion-candidate"),
-        default="per-character-production",
-    )
     parser.add_argument("--cancel-after", type=int)
     parser.add_argument(
         "--targets",
@@ -1053,10 +1060,6 @@ def main():
         default=["chrome-textarea", "chrome-contenteditable", "gtk", "vte"],
     )
     args = parser.parse_args()
-    if args.restore_policy == "end-of-insertion-candidate" and (
-        args.fixture or args.wayland_callback
-    ):
-        parser.error("restore candidate is only for the owned X11 measurement")
     if args.cancel_after is not None and (
         args.fixture
         or args.wayland_callback
@@ -1070,10 +1073,13 @@ def main():
         fixture(args)
         return
     if args.wayland_callback:
+        if args.source_root is not None:
+            parser.error("source-root is only for the X11 measurement")
         if not args.output:
             parser.error("Wayland callback validation requires --output")
         wayland_callback_probe(args.output)
         return
+    source_root = prepare_source_root(args.source_root)
     if (
         not args.xdotool
         or not 1 <= args.repeat <= 10
@@ -1093,6 +1099,7 @@ def main():
     if args.environment == "ubuntu24-vm-x11":
         args.environment_metadata = verify_ubuntu24_vm_x11()
         args.verified_session_id = os.environ["XDG_SESSION_ID"]
+    args.runtime_metadata = runtime_origins(source_root)
     try:
         if args.qt_loop:
             from PySide6.QtWidgets import QApplication

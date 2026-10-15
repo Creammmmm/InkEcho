@@ -1,5 +1,7 @@
 import asyncio
 import ctypes
+from contextlib import nullcontext
+from types import SimpleNamespace
 
 import pytest
 
@@ -212,6 +214,165 @@ def mapping_driver(rows):
         driver.slot - driver.first, tuple(values)
     )
     return driver
+
+
+def mapped_keyboard(monkeypatch, action=lambda _count: None):
+    """Exercise production mapping/cleanup with only X hardware calls replaced."""
+    rows = [(97, 65), (0, 0)]
+    driver = mapping_driver(rows)
+    writes = []
+    original_write = driver._write
+
+    def write(values):
+        original_write(values)
+        writes.append(tuple(values))
+
+    driver._write = write
+    driver.focus = lambda: 21
+    driver._checked = nullcontext
+    driver.display = None
+    driver.x11 = SimpleNamespace(XKeysymToKeycode=lambda *_args: 36)
+    events = []
+    driver.send = lambda window, code, pressed: events.append((window, code, pressed))
+    driver.close = lambda: None
+    fast_sleep(monkeypatch, action)
+    return KeyboardInput(driver_factory=lambda: driver), driver, rows, writes, events
+
+
+def test_full_unicode_sample_uses_one_final_restore_not_per_character(monkeypatch):
+    inputs, driver, rows, writes, events = mapped_keyboard(monkeypatch)
+    text = "你好 InkEcho，世界！ café Ω 😀\n第二行。" * 5
+    assert len(text) == 140 and len(text.replace("\n", "")) == 135
+
+    async def run():
+        await inputs.connect()
+        assert await inputs.insert(text, lambda: True) == len(text)
+        assert len(writes) == 136 and writes[-1] == (0, 0)
+        # Every earlier write represents a real printable symbol, never a clear.
+        assert all(any(row) for row in writes[:-1])
+        assert rows == [(97, 65), (0, 0)]
+        assert [event[2] for event in events] == [True, False] * 140
+        assert driver.applied is None and inputs._task is None
+        await inputs.aclose()
+
+    asyncio.run(run())
+
+
+def test_consecutive_insertions_each_release_the_owned_mapping(monkeypatch):
+    inputs, driver, rows, writes, events = mapped_keyboard(monkeypatch)
+
+    async def run():
+        await inputs.connect()
+        for text in ("中\nΩ", "é你"):
+            before = len(writes)
+            assert await inputs.insert(text, lambda: True) == len(text)
+            assert len(writes) - before == len(text.replace("\n", "")) + 1
+            assert rows[1] == (0, 0) and driver.applied is None
+        assert [event[1] for event in events[:6]] == [9, 9, 36, 36, 9, 9]
+        await inputs.aclose()
+
+    asyncio.run(run())
+
+
+@pytest.mark.parametrize("action", ["cancel", "error"])
+def test_press_followed_by_cancel_or_error_releases_and_restores_real_row(
+    monkeypatch, action
+):
+    active = True
+
+    def stop(count):
+        nonlocal active
+        if count == 2:
+            if action == "error":
+                raise KeyboardError("injection_failed")
+            active = False
+
+    inputs, driver, rows, writes, events = mapped_keyboard(monkeypatch, stop)
+
+    async def run():
+        await inputs.connect()
+        with pytest.raises(KeyboardError) as caught:
+            await inputs.insert("中文", lambda: active)
+        assert caught.value.code == (
+            "input_cancelled" if action == "cancel" else "injection_failed"
+        )
+        assert events == [(21, 9, True), (21, 9, False)]
+        assert rows[1] == (0, 0) and len(writes) == 2
+        assert driver.applied is None and inputs._task is None
+        await inputs.aclose()
+
+    asyncio.run(run())
+
+
+@pytest.mark.parametrize("text", ["中文", "中\n", "中"])
+def test_production_retained_slot_foreign_change_is_never_overwritten(
+    monkeypatch, text
+):
+    rows = None
+
+    def change(count):
+        if count == 3:
+            rows[1] = (91, 92)
+
+    inputs, driver, rows, writes, events = mapped_keyboard(monkeypatch, change)
+
+    async def run():
+        await inputs.connect()
+        with pytest.raises(KeyboardError) as caught:
+            await inputs.insert(text, lambda: True)
+        assert caught.value.code == "mapping_changed"
+        assert rows[1] == (91, 92) and len(writes) == 1
+        assert events == [(21, 9, True), (21, 9, False)]
+        assert driver.applied is None and inputs._task is None
+        await inputs.aclose()
+
+    asyncio.run(run())
+
+
+def test_failed_next_symbol_write_restores_previous_owned_mapping(monkeypatch):
+    inputs, driver, rows, writes, events = mapped_keyboard(monkeypatch)
+    original_write = driver._write
+    calls = 0
+
+    def fail(values):
+        nonlocal calls
+        calls += 1
+        if calls == 2:
+            raise KeyboardError("injection_failed")
+        original_write(values)
+
+    driver._write = fail
+
+    async def run():
+        await inputs.connect()
+        with pytest.raises(KeyboardError) as caught:
+            await inputs.insert("中文", lambda: True)
+        assert caught.value.code == "injection_failed"
+        assert rows[1] == (0, 0) and len(writes) == 2
+        assert events == [(21, 9, True), (21, 9, False)]
+        assert driver.pending_symbol is None and inputs._task is None
+        await inputs.aclose()
+
+    asyncio.run(run())
+
+
+def test_async_cancel_during_press_restores_retained_production_row(monkeypatch):
+    def cancel(count):
+        if count == 2:
+            raise asyncio.CancelledError
+
+    inputs, driver, rows, writes, events = mapped_keyboard(monkeypatch, cancel)
+
+    async def run():
+        await inputs.connect()
+        with pytest.raises(asyncio.CancelledError):
+            await inputs.insert("中文", lambda: True)
+        assert events == [(21, 9, True), (21, 9, False)]
+        assert rows[1] == (0, 0) and len(writes) == 2
+        assert driver.applied is None and inputs._task is None
+        await inputs.aclose()
+
+    asyncio.run(run())
 
 
 def test_mapping_only_uses_empty_slot_and_restores_its_own_row():

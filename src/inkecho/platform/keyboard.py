@@ -434,7 +434,6 @@ class KeyboardInput:
                     self._send(window, code, False)
                 await asyncio.sleep(RELEASE_SETTLE_SECONDS)
                 check()
-                driver.restore()
         finally:
             try:
                 driver.restore()
