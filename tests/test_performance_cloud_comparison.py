@@ -19,6 +19,11 @@ probe = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(probe)
 
 
+@pytest.fixture(autouse=True)
+def script_import_path(monkeypatch):
+    monkeypatch.syspath_prepend(str(PATH.parent))
+
+
 @pytest.fixture
 def planned_files(tmp_path, monkeypatch):
     """Tiny local files test plan logic, not authenticity of a real artifact."""
@@ -300,3 +305,168 @@ def test_production_profiles_checked_with_no_socket(monkeypatch):
 
     monkeypatch.setattr(socket, "socket", forbidden)
     assert probe.verify_production_profiles()
+
+
+def test_owned_first_slice_rejects_other_scenarios_before_file_or_gui(monkeypatch):
+    monkeypatch.setattr(
+        probe, "make_plan", lambda *_a, **_k: pytest.fail("no file read")
+    )
+    with pytest.raises(SystemExit) as result:
+        probe.main(
+            [
+                "--package-root",
+                "/unread",
+                "--owned-gtk",
+                "--xdotool",
+                "/unread",
+                "--scenario",
+                "all",
+            ]
+        )
+    assert result.value.code == 2
+
+
+def test_owned_environment_preserves_only_explicit_desktop_connection(
+    tmp_path, monkeypatch
+):
+    monkeypatch.setenv("XDG_SESSION_TYPE", "wayland")
+    monkeypatch.setenv("XDG_CURRENT_DESKTOP", "GNOME")
+    monkeypatch.setenv("DISPLAY", ":88")
+    monkeypatch.setenv("XAUTHORITY", "/reviewed/auth")
+    monkeypatch.setenv("DBUS_SESSION_BUS_ADDRESS", "unix:path=/reviewed/bus")
+    monkeypatch.setenv("UNRELATED_PRIVATE_VALUE", "never inherit")
+    environment = probe.worker_environment(
+        tmp_path / "AppDir/packages", tmp_path, owned_gtk=True
+    )
+    assert environment["QT_QPA_PLATFORM"] == "xcb"
+    assert environment["DISPLAY"] == ":88"
+    assert environment["XAUTHORITY"] == "/reviewed/auth"
+    assert environment["DBUS_SESSION_BUS_ADDRESS"] == "unix:path=/reviewed/bus"
+    assert environment["HOME"] != str(Path.home())
+    assert "UNRELATED_PRIVATE_VALUE" not in environment
+
+
+def test_source_cannot_claim_owned_desktop_package_evidence():
+    with pytest.raises(
+        ValueError, match="owned_first_slice_requires_audited_package_normal"
+    ):
+        asyncio.run(probe.run_offline(["normal"], desktop={"fake": True}))
+
+
+def test_failed_first_arm_stops_before_second_arm(monkeypatch):
+    arms = []
+
+    async def failed(streaming, *_args, **_kwargs):
+        arms.append(streaming)
+        result = accepted_metadata()
+        result["exact_expected"] = False
+        return result
+
+    monkeypatch.setattr(probe, "run_arm", failed)
+    with pytest.raises(ValueError, match="comparison_acceptance_failed"):
+        asyncio.run(probe.run_offline(["normal"]))
+    assert arms == [False]
+
+
+def test_owned_worker_is_new_signal_session_and_only_owner_records_exit(
+    tmp_path, monkeypatch
+):
+    monkeypatch.syspath_prepend(str(PATH.parent))
+    from types import SimpleNamespace
+
+    process = SimpleNamespace(pid=probe.os.getpid(), returncode=None)
+    process.poll = lambda: process.returncode
+
+    def wait():
+        process.returncode = 7
+        return 7
+
+    process.wait = wait
+    options_seen = []
+
+    def popen(command, **options):
+        assert command == ["not-executed"]
+        options_seen.append(options)
+        return process
+
+    monkeypatch.setattr(probe.subprocess, "Popen", popen)
+    handle = tmp_path / "handle.json"
+    assert probe.launch_owned_worker(["not-executed"], {}, handle) == 7
+    assert options_seen[0]["start_new_session"] is True
+    metadata = json.loads(handle.read_text())
+    assert metadata["producer"]["exit_code"] == 7
+    assert metadata["producer"]["owner_observed_terminal"] is True
+
+
+def test_parent_integration_closes_session_before_target_using_simulated_display(
+    tmp_path, monkeypatch
+):
+    monkeypatch.syspath_prepend(str(PATH.parent))
+    from types import SimpleNamespace
+
+    import performance_memory_target as memory
+
+    from inkecho.app import Session
+    from inkecho.platform import keyboard
+
+    driver = probe.MemoryDriver()
+    driver.root, driver.active_atom, driver.pid_atom = 1, 2, 3
+    driver._property = lambda _window, atom: (
+        driver.window if atom == 2 else probe.os.getpid()
+    )
+    driver._mapping = lambda: ()
+    original_keyboard = keyboard.KeyboardInput
+    monkeypatch.setattr(
+        keyboard,
+        "KeyboardInput",
+        lambda: original_keyboard(driver_factory=lambda: driver),
+    )
+    events = []
+    original_close = Session.close
+
+    async def session_close(session):
+        events.append("session_closing")
+        await original_close(session)
+        assert not any(not task.done() for task in session.pending)
+        events.append("session_closed")
+
+    monkeypatch.setattr(Session, "close", session_close)
+
+    class Target:
+        def __init__(self, handle, _xdotool):
+            self.handle, self.window = handle, 21
+            self.process = SimpleNamespace(pid=probe.os.getpid(), poll=lambda: None)
+            self.item = {"start_ticks": memory.process_start(self.process.pid)}
+
+        async def open(self, _environment):
+            pass
+
+        async def activate(self):
+            driver.window = 21
+
+        async def text(self):
+            events.append("readback")
+            return "".join(character for _, character, _ in driver.sent)
+
+        async def close(self):
+            assert driver.closed and events[-1] == "session_closed"
+            events.append("target_close")
+            self.item.update(owner_observed_terminal=True, exit_code=0)
+
+    monkeypatch.setattr(memory, "MemoryTarget", Target)
+    handle = memory.RunHandle.create(tmp_path / "handle.json")
+    directory = tmp_path / "local-tls"
+    directory.mkdir()
+    result = asyncio.run(
+        probe.run_arm(
+            True,
+            "normal",
+            directory,
+            desktop={
+                "handle": handle,
+                "xdotool": Path("/not-executed"),
+            },
+        )
+    )
+    probe.validate_result(result)
+    assert events == ["readback", "session_closing", "session_closed", "target_close"]

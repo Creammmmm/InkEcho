@@ -1,5 +1,9 @@
 # Configuration comparison preparation — 2026-10-16
 
+Historical phase-one snapshot: commit `4e56c2b`; its fixed plan and raw results
+below describe that source. The entry now changes for phase two, so the old
+`4aab800…` fingerprint cannot execute the current source; generate its new plan.
+
 This is local preparation for the remaining real-speech end-to-end comparison.
 **No cloud execution path exists in this tool yet.** It does not access keyring,
 user configuration, microphone, desktop focus, clipboard or input methods.
