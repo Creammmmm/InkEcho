@@ -807,7 +807,14 @@ def test_cancel_invalidates_queued_epoch_but_allows_new_task(remote, queued_oper
             assert await response() == {"id": begin_id, "ok": True}
             assert not guardian.stopped and guardian.map is not None
             key_id = request("key", value="新")
-            assert await response() == {"id": key_id, "ok": True, "count": 1}
+            key_response = await response()
+            assert key_response == {
+                "id": key_id,
+                "ok": True,
+                "count": 1,
+                "sent_at": guardian.last_sent_at,
+            }
+            assert isinstance(key_response["sent_at"], float)
             finish_id = request("finish")
             assert await response() == {"id": finish_id, "ok": True}
             assert remote.events == [(124, True, False), (124, False, False)]
@@ -1071,5 +1078,49 @@ def test_map_settle_refreshes_new_modifier_state_before_press(
         await guardian.finish()
         assert remote.data == b"original\0"
         assert guardian.map is None
+
+    run(scenario())
+
+
+def test_successful_press_time_precedes_release_and_retains_pacing(remote):
+    async def scenario():
+        guardian = Guardian(remote)
+        await guardian.begin()
+        original = remote.key
+        release_at = None
+
+        async def key(code, pressed, *, newline=False):
+            nonlocal release_at
+            if not pressed:
+                release_at = time.monotonic()
+                assert guardian.last_sent_at is not None
+                assert guardian.last_sent_at <= release_at
+            await original(code, pressed, newline=newline)
+
+        remote.key = key
+        began = time.monotonic()
+        assert await guardian.key("中") == 1
+        done = time.monotonic()
+        assert began <= guardian.last_sent_at <= release_at <= done
+        assert done - release_at >= 0.045
+        await guardian.finish()
+
+    run(scenario())
+
+
+def test_failed_press_has_no_success_timestamp(remote):
+    async def scenario():
+        guardian = Guardian(remote)
+        await guardian.begin()
+
+        async def fail():
+            raise KeyboardError("injection_failed")
+
+        remote.on_press = fail
+        with pytest.raises(KeyboardError):
+            await guardian.key("中")
+        assert guardian.last_sent_at is None
+        assert remote.events == [(124, True, False), (124, False, False)]
+        await guardian.finish()
 
     run(scenario())

@@ -2,6 +2,7 @@
 
 import asyncio
 import json
+import math
 import os
 import sys
 import time
@@ -23,6 +24,7 @@ class WaylandKeyboardInput:
     """One guardian per application; stdout contains bounded fixed-code replies."""
 
     backend = "gnome-wayland"
+    supports_first_sent_callback = True
 
     def __init__(self, *, spawn=None, timeout=5, cleanup_timeout=5):
         self._spawn = spawn or asyncio.create_subprocess_exec
@@ -250,6 +252,7 @@ class WaylandKeyboardInput:
         can_continue: Callable[[], bool],
         *,
         deadline: float | None = None,
+        on_first_sent: Callable[[float | None], None] | None = None,
     ) -> int:
         normalized = text.replace("\r\n", "\n").replace("\r", "\n")
         if any(
@@ -282,10 +285,21 @@ class WaylandKeyboardInput:
             count = 0
             for character in normalized:
                 check()
+                request_start = time.monotonic()
                 result = await self._request("key", value=character)
+                acknowledged = time.monotonic()
                 check()
                 if type(result.get("count")) is not int or result["count"] != 1:
                     raise KeyboardError("injection_failed")
+                sent_at = result.get("sent_at")
+                if (
+                    type(sent_at) not in (float, int)
+                    or not request_start <= sent_at <= acknowledged
+                    or not math.isfinite(sent_at)
+                ):
+                    raise KeyboardError("injection_failed")
+                if count == 0 and on_first_sent is not None:
+                    on_first_sent(sent_at)
                 count += 1
             await self._request("finish", timeout=self.cleanup_timeout)
             check()

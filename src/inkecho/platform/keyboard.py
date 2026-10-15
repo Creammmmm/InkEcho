@@ -6,6 +6,12 @@ import time
 from collections.abc import Callable
 from contextlib import contextmanager
 
+# Retain twice the rejected 10 ms candidate after fresh-window application tests;
+# X11 timing evidence and platform limits are in performance-keyboard-validation.md.
+MAP_SETTLE_SECONDS = 0.02
+PRESS_SETTLE_SECONDS = 0.02
+RELEASE_SETTLE_SECONDS = 0.02
+
 
 class KeyboardError(RuntimeError):
     """Sanitized keyboard transport failure; never contains supplied text."""
@@ -350,6 +356,8 @@ def _text(text):
 class KeyboardInput:
     """Authorize at connection time, then emit only at the current X window."""
 
+    supports_first_sent_callback = True
+
     def __init__(self, *, driver_factory=_XDriver):
         self._factory = driver_factory
         self._driver = None
@@ -383,7 +391,12 @@ class KeyboardInput:
         self._driver.send(window, keycode, pressed)
 
     async def insert(
-        self, text: str, can_continue: Callable[[], bool], *, deadline=None
+        self,
+        text: str,
+        can_continue: Callable[[], bool],
+        *,
+        deadline=None,
+        on_first_sent: Callable[[float | None], None] | None = None,
     ) -> int:
         text = _text(text)
         if not self.connected:
@@ -402,21 +415,24 @@ class KeyboardInput:
                 raise KeyboardError("input_cancelled")
 
         try:
-            for character in text:
+            for index, character in enumerate(text):
                 check()
                 driver.focus()  # Reject native Wayland/proxy before changing map.
                 code = driver.map(character)
-                await asyncio.sleep(0.04)
+                await asyncio.sleep(MAP_SETTLE_SECONDS)
                 check()
                 window = driver.focus()  # Refresh after every asynchronous gap.
                 driver.verify()
                 check()
                 try:
                     self._send(window, code, True)
-                    await asyncio.sleep(0.04)
+                    sent_at = time.monotonic()
+                    if index == 0 and on_first_sent is not None:
+                        on_first_sent(sent_at)
+                    await asyncio.sleep(PRESS_SETTLE_SECONDS)
                 finally:
                     self._send(window, code, False)
-                await asyncio.sleep(0.04)
+                await asyncio.sleep(RELEASE_SETTLE_SECONDS)
                 check()
                 driver.restore()
         finally:

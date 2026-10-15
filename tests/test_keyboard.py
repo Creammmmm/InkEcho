@@ -339,3 +339,73 @@ def test_canonical_trailing_zero_width_change_does_not_leave_owned_mapping():
     driver.verify()
     driver.restore()
     assert rows == [(97, 65), (0, 0)]
+
+
+def test_first_sent_callback_is_once_after_successful_press(monkeypatch):
+    fast_sleep(monkeypatch)
+
+    async def run():
+        import time
+
+        driver = Driver()
+        inputs = KeyboardInput(driver_factory=lambda: driver)
+        await inputs.connect()
+        observed = []
+        began = time.monotonic()
+
+        def first_sent(sent_at):
+            assert driver.events == [(21, 248, True)]
+            assert began <= sent_at <= time.monotonic()
+            observed.append(sent_at)
+
+        assert inputs.supports_first_sent_callback
+        assert await inputs.insert("中文", lambda: True, on_first_sent=first_sent) == 2
+        assert len(observed) == 1
+        await inputs.aclose()
+
+    asyncio.run(run())
+
+
+def test_first_sent_callback_failure_still_releases_and_stops(monkeypatch):
+    fast_sleep(monkeypatch)
+
+    async def run():
+        driver = Driver()
+        inputs = KeyboardInput(driver_factory=lambda: driver)
+        await inputs.connect()
+
+        def failed(_sent_at):
+            raise RuntimeError("fixture callback failed")
+
+        with pytest.raises(RuntimeError, match="fixture callback failed"):
+            await inputs.insert("中文", lambda: True, on_first_sent=failed)
+        assert driver.events == [(21, 248, True), (21, 248, False)]
+        assert driver.mapped is None and inputs._task is None
+        await inputs.aclose()
+
+    asyncio.run(run())
+
+
+def test_no_first_sent_callback_when_press_fails(monkeypatch):
+    fast_sleep(monkeypatch)
+
+    async def run():
+        driver = Driver()
+        inputs = KeyboardInput(driver_factory=lambda: driver)
+        await inputs.connect()
+        observed = []
+        original = driver.send
+
+        def send(window, code, pressed):
+            if pressed:
+                raise KeyboardError("injection_failed")
+            original(window, code, pressed)
+
+        driver.send = send
+        with pytest.raises(KeyboardError):
+            await inputs.insert("中文", lambda: True, on_first_sent=observed.append)
+        assert observed == [] and driver.events == [(21, 248, False)]
+        assert driver.mapped is None
+        await inputs.aclose()
+
+    asyncio.run(run())

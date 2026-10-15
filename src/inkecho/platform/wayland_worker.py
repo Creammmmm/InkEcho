@@ -363,6 +363,7 @@ class Guardian:
         self.pending_map = None
         self.modified = False
         self.pressed = None
+        self.last_sent_at = None
         self.stopped = True
         self.permanent_stop = False
         self.deadline = 0.0
@@ -433,6 +434,7 @@ class Guardian:
             raise
 
     async def key(self, character):
+        self.last_sent_at = None
         if not self.map:
             raise KeyboardError("session_closed")
         if normalize_text(character) != character or len(character) != 1:
@@ -492,6 +494,7 @@ class Guardian:
         self.pressed = (code, newline)
         try:
             await self.remote.key(code, True, newline=newline)
+            self.last_sent_at = time.monotonic()
         finally:
             await self._release_key()
         self._continue()
@@ -672,6 +675,7 @@ async def serve(reader, reply, guardian=None):
                     await guardian.begin(request.get("deadline"))
                 elif operation == "key":
                     response["count"] = await guardian.key(request.get("value"))
+                    response["sent_at"] = guardian.last_sent_at
                 else:
                     await guardian.finish()
             except (KeyboardError, ObserverError) as error:

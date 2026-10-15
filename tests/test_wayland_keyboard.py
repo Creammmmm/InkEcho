@@ -1,5 +1,6 @@
 import asyncio
 import json
+import time
 
 import pytest
 
@@ -26,6 +27,8 @@ class Process:
             self.close()
 
     def reply(self, request, **fields):
+        if request["op"] == "key" and "sent_at" not in fields:
+            fields["sent_at"] = time.monotonic()
         self.stdout.feed_data(
             json.dumps({"id": request["id"], "ok": True, **fields}).encode() + b"\n"
         )
@@ -376,6 +379,77 @@ def test_idle_session_closed_event_invalidates_without_reauthorizing():
         await inputs._reader
         assert not inputs.connected and not inputs.authorized
         assert [item["op"] for item in process.requests] == ["connect", "authorize"]
+        await inputs.aclose()
+
+    asyncio.run(run())
+
+
+@pytest.mark.parametrize(
+    "sent_at", [None, True, float("nan"), float("inf"), "1", 0, 1e99]
+)
+def test_invalid_worker_press_timestamp_rejected_before_callback(sent_at):
+    async def run():
+        def handle(process, request):
+            if request["op"] == "key":
+                process.reply(request, count=1, sent_at=sent_at)
+                return True
+            return False
+
+        inputs, process = await connected(handle)
+        await inputs.authorize()
+        observed = []
+        with pytest.raises(KeyboardError, match="injection_failed"):
+            await inputs.insert("中文", lambda: True, on_first_sent=observed.append)
+        assert observed == []
+        assert [r["value"] for r in process.requests if r["op"] == "key"] == ["中"]
+        assert process.requests[-1]["op"] == "cancel"
+        await inputs.aclose()
+
+    asyncio.run(run())
+
+
+def test_first_sent_callback_uses_worker_press_not_delayed_ack():
+    async def run():
+        sent = []
+
+        def handle(process, request):
+            if request["op"] == "key":
+                stamp = time.monotonic()
+                sent.append(stamp)
+                asyncio.get_running_loop().call_later(
+                    0.02, lambda: process.reply(request, count=1, sent_at=stamp)
+                )
+                return True
+            return False
+
+        inputs, _ = await connected(handle)
+        await inputs.authorize()
+        observed = []
+
+        def first(stamp):
+            assert time.monotonic() - stamp >= 0.015
+            observed.append(stamp)
+
+        assert inputs.supports_first_sent_callback
+        assert await inputs.insert("中文", lambda: True, on_first_sent=first) == 2
+        assert observed == sent[:1]
+        await inputs.aclose()
+
+    asyncio.run(run())
+
+
+def test_first_sent_callback_failure_cleans_worker_and_sends_no_tail():
+    async def run():
+        inputs, process = await connected()
+        await inputs.authorize()
+
+        def failed(_stamp):
+            raise RuntimeError("fixture callback failed")
+
+        with pytest.raises(RuntimeError, match="fixture callback failed"):
+            await inputs.insert("中文", lambda: True, on_first_sent=failed)
+        assert [r["value"] for r in process.requests if r["op"] == "key"] == ["中"]
+        assert process.requests[-1]["op"] == "cancel"
         await inputs.aclose()
 
     asyncio.run(run())
