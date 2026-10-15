@@ -1,10 +1,48 @@
 # Compatibility matrix
 
-The first table preserves historical measurements from 2026-10-12; dated release
-supplements follow. The current input support table includes later target checks.
-**Pending is not supported.** Host GNOME Wayland and isolated
-Xvfb evidence are separate. Read [the feasibility report](feasibility-report.md)
-before interpreting a passed item as a complete application workflow.
+Updated: 2026-10-16. **Pending is not supported.** Evidence is specific to
+version, host/guest session, target and workflow. A passed keyboard fixture
+is not full voice-input or desktop support. No current path uses clipboard
+or system input-method submission, including as a fallback.
+
+## Current source and a11 first-round scope
+
+Current product source is a11 (`004b054`); its independent local preview is
+not deployed or released. R6 source checks and the a11 artifact's first eight
+modes passed in fixed scenarios. R2 long streaming was text-accurate but left
+material next-window latency after cleanup; it does not establish an overall
+repair. a11 Ubuntu 26 host rechecks are deferred. The queued-fragment aggregation
+change and planned a12 package still require actual R7 source/artifact validation.
+Read [a11 artifact evidence](performance-a11-package-validation.md)
+and [R6 source evidence](ubuntu24-source-r6-validation.md) for actual runtime
+origins and reproduction.
+
+| System/session and version | Actual measured result | Still outside that result |
+| --- | --- | --- |
+| Ubuntu 24.04.5 KVM / GNOME 46 actual Xorg / R6 source | New production source imported explicitly; complete Chrome textarea/contenteditable, GTK, VTE 40/20 ms groups each 140 exact; cancel after 12 and no tail over 0.5 s | Not a package test; old a10 interpreter/dependencies do not mean a10 contains the repair |
+| Same actual guest Xorg / a11 artifact R1 | Artifact's own modules: same four-target matched checks, cancellation, 56-codepoint two-window switch with exact 12/44 split, fixed local TLS WSS/SSE pipeline including fast25, extracted AppRun nine pages | No VM microphone/cloud speech, physical global shortcut/F13/F14, overlay-focus acceptance, FUSE mount, menu installation or autostart; R2 below shows that long-stream desktop latency remains |
+| Same actual guest Xorg / unchanged a11 artifact R2 | 150 streamed codepoints and cancellation exact; 288 mapping writes, 150 restores; fresh GTK readiness 6.0944 s after both tasks/cleanup, sequential VTE 0.285 s | Mechanical readiness gate passed but material desktop delay remains; not an overall fix, not R7/a12 acceptance |
+| Ubuntu 24.04.5 KVM / GNOME 46 native Wayland / historical a10 artifact | Extracted AppRun nine pages, normal exit; actual keyboard-worker authorization failed, missing SetKeymap/KeymapCapabilities | Current native input path unavailable in this measured installation; not proof that every alternative is impossible; no a11 native guest input success |
+| Ubuntu 26.04.1 / GNOME 50.1 / earlier a9 and a10 | Owned native/XWayland target and package results retained in [a9 acceptance](native-wayland-parent-validation.md) and [a10 package report](performance-package-validation.md) | Historical versions, not a11 host revalidation; native BMP restriction remains, arbitrary apps and complete desktop matrix unproven |
+| Ubuntu 24.04 / minimal offscreen container / earlier packages | Userspace startup and nine-page screenshots in the recorded container checks | No actual guest desktop/kernel, microphone or keyboard acceptance follows from the container |
+| Windows/macOS | Not implemented or tested | No compatibility claim |
+
+The actual Noble VM runs its own kernel, systemd and graphical login, distinct
+from the container smoke and from host XWayland. Its lock/network recovery,
+UI extraction method and initial a10 failures are retained in
+[VM feasibility](ubuntu24-desktop-feasibility.md) and
+[historical VM results](ubuntu24-vm-performance-validation.md). Do not backfill
+the fixed source/a11 results into the unchanged a10 artifact. Global shortcuts,
+F13/F14, actual microphone and overlay-focus cells remain unaccepted for this
+VM even when its keyboard, synthetic local pipeline and UI checks pass.
+
+## Historical stage 0 matrix — 2026-10-12
+
+The following table preserves the observations from its date; it does not
+override the version-specific current table above. Host GNOME Wayland,
+XWayland, Xvfb and offscreen userspace evidence are separate. Read
+[the feasibility report](feasibility-report.md) before interpreting a passed
+item as a complete application workflow.
 
 | System/session | Global shortcut | F13/F14 | Microphone | Chinese/Unicode without clipboard | Overlay focus | AppImage |
 |---|---|---|---|---|---|---|
@@ -15,14 +53,14 @@ before interpreting a passed item as a complete application workflow.
 | Ubuntu 26.04.1 / isolated Xvfb lab (not full desktop) | Ctrl+Alt+K synthetic activation and conflict rejection passed | Synthetic activation with temporary/restored map passed; physical keys pending | Actual host microphone used in source and final bundled-runtime workflow | Real Chrome, GNOME editor and VTE received Unicode via diagnostic XTest; targeted GTK AT-SPI final packaged workflow passed Unicode/cancel/focus-away-back | Production overlay retained focus during real workflow; no compositor | Final alpha nine-page/IPC/config checks and bundled-runtime microphone-to-input workflow passed |
 | Ubuntu 24.04 / minimal offscreen container | Not applicable | Not applicable | Not tested | Not tested | Not tested | Final alpha full application: nine pages, bundled Chinese font, clean exit; nonroot/network-disabled/read-only |
 
-## Current a8 input support boundary (keyboard behavior introduced in a7)
+## Historical a8 input boundary (keyboard behavior introduced in a7)
 
 The a7 keyboard route follows the output-time cursor and does not require an
 editable target before recording. Focus changes do not cancel; explicit
 cancellation and expired task IDs still stop later output. Host desktop protocol
 and target application protocol are distinct.
 
-| Backend/target | Current measured status | Limit |
+| Backend/target | Measured status at a8 | Limit |
 | --- | --- | --- |
 | XSendEvent / owned GTK XWayland on GNOME Wayland | Production keyboard and source/full-package microphone + local HTTPS workflow passed Unicode and cancellation | No arbitrary application or physical-shortcut claim |
 | XSendEvent / owned Chrome 154 XWayland | Diagnostic delivered exact 28-code-point Unicode sample, including newline | Actual user Codex editor not tested; per-application handling can differ |

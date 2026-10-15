@@ -2,10 +2,13 @@
 
 本轮完成分段计时、HTTP 连接复用、已核实模型的思考控制、Qwen 实时识别的协议接入、
 流式润色与串行增量输出，以及经过实际应用验证的 X11 键盘等待调整。
-**已经测得的实际提速限于当前 Ubuntu 26.04.1 主机的 XWayland 输出：
-四种独立目标的每字符输出耗时降低约 48%–49%。** 尚无 Ubuntu 24.04 桌面数据，
-也没有真实语音从停止录音到首字输出的云端前后对照；不能把该输出指标写成
-完整语音链路提速承诺。
+当前源码与独立预览包为 **0.1.0a11**。早期 Ubuntu 26.04.1 XWayland 四目标
+对照降低约 48%–49% 的每字符输出耗时；随后实际 Ubuntu 24.04.5 KVM Xorg 的
+R6 正式源码和 a11 包首轮四目标匹配对照也已通过。各结果按版本和环境分别记录，
+不把旧 a10 失败改写为通过。a11 的 R2 长流追加检查虽文字/取消正确，却发现清理后
+新 GTK 窗口仍延迟约 6.09 秒就绪，整轮尚未完成。增量合并的新源码与后续 a12 包
+仍待实际验收，a11 主机复测暂缓。没有真实语音从停止录音到首字输出的云端前后对照，不能将键盘耗时
+下降写成完整语音链路提速承诺。
 
 本轮基线为 `96b3b5d424b60b98070ef6c311e830ecdc9cd4a6`，工作分支为
 `codex/latency-pipeline`。实现按独立模块提交；本次授权不包含推送、发布或部署，
@@ -20,8 +23,8 @@
 | HTTP 生命周期与思考控制 | 应用持有一个连接池，角色独立超时，退出正确关闭；仅对已核实的官方地址/模型默认关闭不必要思考 | [供应商验证](performance-provider-validation.md)。实际本地 TLS 三次请求从三个连接变为一个；未知网关/模型不猜参数，未测得云端思考开关收益 |
 | Qwen 实时 ASR | 独立 WSS 手动提交协议；录音中分块发送，停止后只接受最终结果；录音中断网及时停止麦克风 | [协议验证](performance-realtime-validation.md)、[编排验证](performance-pipeline-validation.md)。本地 TLS/WSS、本机麦克风和官方纯生成静音的手动协议通过，真实语音准确率待验 |
 | 流式润色 | 严格 SSE、UTF-8、结束事件和用量解析；只向下游交付正文增量 | [SSE 验证](performance-polish-stream-validation.md)。本地真实 HTTPS 夹具通过；另有一次固定公开短句的官方 DeepSeek 实测，见下文 |
-| 串行增量输出 | 有界 Unicode 队列、跨段 CRLF、偏移校验、最终尾部、背压、取消与部分输出失败保护；可显式关闭流式 | [编排验证](performance-pipeline-validation.md)。合成对照显示生成与输出可重叠，不能据此声称实际云端或 Ubuntu 24.04 提速 |
-| 键盘等待与真实首发时间 | X11 三次等待各从 40 ms 改为 20 ms，统一可打印字符的 Unicode 映射；两种后端提供实际发送时点 | [初始键盘验证](performance-keyboard-validation.md)、[Qt 流式跟进验证](performance-x11-stream-validation.md)。真实 XWayland 四目标及 native Wayland 跨窗口验证通过；Wayland 两个 50 ms 等待未变 |
+| 串行增量输出 | 有界 Unicode 队列、跨段 CRLF、偏移校验、最终尾部、背压、取消与部分输出失败保护；可显式关闭流式 | [编排验证](performance-pipeline-validation.md)。合成对照显示生成与输出可重叠；实际 Noble Xorg 包检查另见下文，不能将合成结果当作云端或桌面实测 |
+| 键盘等待与真实首发时间 | X11 三次等待各从 40 ms 改为 20 ms，统一可打印字符的 Unicode 映射；两种后端提供实际发送时点 | [初始键盘验证](performance-keyboard-validation.md)、[Qt 流式跟进验证](performance-x11-stream-validation.md)、[R6 源码](ubuntu24-source-r6-validation.md)及[a11 包](performance-a11-package-validation.md)。a11 将 X11 映射恢复移至每次插入结束的同步清理；等待仍为 20 ms；Wayland 两个 50 ms 等待未变 |
 
 阶段 0 和平台范围继续以[可行性记录](feasibility-report.md)、
 [当前光标输入验收](current-cursor-input-validation.md)、
@@ -36,9 +39,9 @@
 
 ## 实际测量与未通过项
 
-### 真实桌面键盘输出
+### 早期 Ubuntu 26.04 主机测量，保留当时版本结果
 
-环境：Ubuntu 26.04.1、GNOME/Mutter 50.1、Chrome 154.0.8037.97、GTK 3.24.52、
+本节为 a11 恢复策略修改之前的证据，不替代 a11 主机复测。环境：Ubuntu 26.04.1、GNOME/Mutter 50.1、Chrome 154.0.8037.97、GTK 3.24.52、
 VTE 0.84.0。所有字段、浏览器配置、GTK 窗口与终端原始字节收集器均由测试新建；
 没有向用户页面、文档或命令行 shell 输出。每次按下事件均核实测试窗口所属进程及
 当前目标；释放事件始终执行。这些额外焦点限制只属于测试保护，不改变产品的
@@ -81,8 +84,69 @@ XWayland Chrome、16 字符回原生 Chrome，全部准确，映射/组/修饰�
 只触发一次。回调收到时间比 worker 的实际提交时点晚约 52.07 ms，验证了首字计时
 没有误用含释放等待的 ACK 时点。native Wayland 的等待和 BMP 字符范围没有放宽。
 
-这些测试没有测独立 Xorg 会话、Ubuntu 24.04、其他目标或高负载下可靠性，也没有
-测完整“录音停止 → 云端识别 → 润色 → 字符可见”的时间。
+上述早期主机组没有覆盖独立 Xorg 或 Ubuntu 24.04；随后新增的 Noble VM 数据见
+下一节，不能回填为这组旧测量。任一组都不证明其他目标、高负载下可靠性或完整
+“录音停止 → 云端识别 → 润色 → 字符可见”的时间。
+
+### Ubuntu 24.04 KVM：R6 正式源码与 a11 包首轮
+
+真实 guest 为 Ubuntu 24.04.5、独立内核 6.8.0-142、GNOME 46、GDM Xorg 会话 20，
+4 vCPU/4096 MiB；不是容器桌面、Xvfb 或 XWayland。旧 a10 的连续目标 20 ms 检查
+曾在下一窗口未映射、尚未发送按键时失败，不能用单目标成功替代整组通过。受控 R5
+实验减少每字恢复后整组通过，随后 R6 正式生产实现仅移除循环内恢复，保留插入结束
+的同步恢复、任务/焦点检查、释放和三次 20 ms 等待。旧失败与实验标记见
+[历史 VM 报告](ubuntu24-vm-performance-validation.md)，不改写为旧包已修复。
+
+[R6 源码验收](ubuntu24-source-r6-validation.md)在独立只读源码树执行，虽复用 a10 的
+解释器和依赖，实际导入路径/哈希均指向新源码；40/20 ms 两组四目标各 140 码点准确，
+部分取消 12 码点且 0.5 秒无尾部。它证明源码，不能证明新包。
+
+随后实际 a11 独立包首轮八种模式自然退出 0，原始结果及来源验收分别保存为
+`build/ubuntu24-perf-vm/output/a11-r1-*.json` 和 `*-acceptance.json`。
+四目标按 Chrome textarea → contenteditable → GTK → VTE 顺序在各自控制/默认进程
+内连续执行，每目标五份固定 Unicode 样本、140 码点，**未用单目标重跑替换整组**。
+包内解释器与模块路径、3958 文件哈希、1048 内部链接、43 个源码哈希、两份许可均通过。
+没有源码覆盖或实验恢复策略。完整步骤见[a11 包记录](performance-a11-package-validation.md)。
+
+| a11 实际 Noble Xorg 目标 | 40 ms 控制总输入 | 默认 20 ms 总输入 | 耗时下降 |
+| --- | ---: | ---: | ---: |
+| Chrome textarea | 18.1217 s | 9.4921 s | 47.62% |
+| Chrome contenteditable | 18.1981 s | 9.5629 s | 47.45% |
+| GTK | 18.1746 s | 9.5144 s | 47.65% |
+| VTE | 18.2284 s | 9.4727 s | 48.03% |
+
+两组共 1120 码点逐字准确，VTE 原始字节准确，按键配对、映射恢复均通过；每目标实际
+136 次映射写入、一次最终恢复。取消模式只收到 12 码点，0.5 秒无尾部。另一次 56 码点
+输出在第 12 次按下后切到第二个自建 GTK 窗口，实际分别收到精确 12/44，映射最终恢复，
+未因切窗取消。界面模式由该包提取后的 AppRun 生成九页并正常退出，主验收已检查图像。
+这些是一次匹配组中的固定样本，不是大量独立新窗口试验的可靠性分布。
+
+本地 TLS 流水线使用**合成 PCM**、固定 WSS 最终识别/预览事件、固定 HTTPS SSE，
+实际包向自建 GTK 输入；普通 40/20 ms 与每字 1 ms 的 fast25 模式均准确接收 25 码点，
+第二任务取消只多一个码点、无尾部。普通控制/默认的停止到首发分别 **52.452/54.087 ms**，
+停止到完成 **3261.422/1860.129 ms**；该首发并未更快，不把单次完成耗时改善扩成普遍
+首字提速。fast25 只证明该固定小样本的增量处理。所有 guest 模式均无真实麦克风、
+用户凭据读取或云请求。开始/结束 ScreenSaver 检查不证明整个输入期间桌面无延迟。
+
+R2 已提供反证，不能将 R1 整段固定场景改善写成整体修复。实际同一 a11 包完成
+150 码点的每字增量流，文字准确、取消无尾部、按键和映射清理正确，却发生
+**288 次映射写入、150 次恢复和 150 次插入调用**。首次观测到完整 150 字到整个流水线
+进程退出又相隔 **2766.534 ms**，其中包含第二次取消任务、1.2 秒尾部观察和会话/TLS
+清理，并非精确末键时点或人为额外等待。随后立即启动的不输入文字的新窗口探针中，GTK
+从其实际生成起仍用 **6.0944 秒** 就绪；顺序启动的 VTE 随后用 0.285 秒就绪，不能反推
+VTE 在更早时刻已可立即响应。R2 有 50 ms 父进程观察，不与无观察者的 R1 性能基线混为一谈。
+
+这些流水线和就绪探针虽机械判为 passed，GTK 已接近原 120 次轮询的名义 6 秒界限，属于
+实质未解决的桌面延迟。探针等待 session.pending 的 12 秒上限不是生产任务 deadline；
+没有延长生产期限或缩短样本来掩盖问题。完整原始/验收证据为
+`build/ubuntu24-perf-vm/output/a11-r2-long-{pipeline,next-window,acceptance}.json`，
+细节见[a11 包报告](performance-a11-package-validation.md)。a11 保留为历史检查点，
+主机链路/UI 复测已暂缓。后续修复只合并已经排队的最多 128 码点，不等待未来增量、
+不人为推迟首字；当前本地定向测试通过，**R7 实际源码及后续 a12 包尚待验收**，
+不能把新工作区行为回填到 a11 实际包。Noble 原生 Wayland 仅有旧 a10 提取后 UI 数据，GNOME 46 缺
+SetKeymap/KeymapCapabilities，当前原生键盘授权未通过。VM 麦克风、物理快捷键、
+F13/F14、完整录音中切焦点流程、悬浮窗、FUSE 启动、菜单安装、自启动和物理机均未由
+上述结果验证。来源、锁屏/网络恢复与界面运行方式见[可行性记录](ubuntu24-desktop-feasibility.md)。
 
 ### 云端、音频与合成证据分别记录
 
@@ -179,30 +243,34 @@ offscreen Qt 和本地 TLS 夹具；实际包显示与云端能力仍分别验�
 6. 构建并运行实际 AppImage，再核对来源、依赖、许可、界面及任务链路。包验收应
    区分真实采集/桌面、本地协议夹具和真正云端，不以解包后文件存在冒充运行成功。
 
-## 最终本地检查与包验收
+## 本地检查、历史 a10 与当前 a11 包范围
 
 | 检查 | 当前实际结果 | 证据 |
 | --- | --- | --- |
-| 定稿前源码/工作区集成检查 | 产品 `b963879` 与 observed-order 包探针工作区；全仓 Ruff lint/format **204 个 Python 文件**通过；**935 passed、3 skipped，17.81 秒** | `build/performance-final-integrated-source.log`；不是最终 clean HEAD 的正式记录 |
+| 历史 a10 定稿前源码/工作区集成检查 | 产品 `b963879` 与 observed-order 包探针工作区；全仓 Ruff lint/format **204 个 Python 文件**通过；**935 passed、3 skipped，17.81 秒** | `build/performance-final-integrated-source.log`；不是最终 clean HEAD 的正式记录 |
+| a11 产品源码检查 | 产品 `004b054` clean HEAD 全仓 lint/format 与 **1026 passed、3 skipped，19.36 秒**通过 | 验证绑定 [R6 源码报告](ubuntu24-source-r6-validation.md)；后续工具与文档提交需重新验证 |
+| a11 独立预览包 | 108907000 bytes；SHA256 `a61b2a036863d9c2ea1515055c7fadb7c9905e9a0139aa05e94936b32a67cb97` | `dist/InkEcho-0.1.0a11-x86_64.AppImage`；固定产品 `004b054`，不是改写旧 a10 |
+| a11 Noble Xorg 首轮 | 八种固定模式来源与功能通过；R2 长流后仍有显著桌面延迟，不能称整体修好 | [独立 a11 包报告](performance-a11-package-validation.md)；a11 主机复测暂缓，新源码/后续 a12 待实际验收 |
+| a11 R2 长流与后续窗口 | 150 码点及取消准确，但 288 写入/150 恢复，清理后新 GTK 仍 6.0944 秒就绪；机械门槛 passed 不等于响应问题已解决 | `a11-r2-long-{pipeline,next-window,acceptance}.json`；结果属于旧 a11，不是新修复验证 |
 | 最终 clean HEAD 工作流 | 按开发规范在本文定稿并提交后执行；正式结果以 `.git/validation/<HEAD>.json` 为准 | 记录绑定当时提交与本报告哈希；不复用前一检查点或未提交工作区的结果 |
-| 最终 a10 AppImage | r2 独立包验收通过；版本 0.1.0a10，108907000 bytes | `dist/InkEcho-0.1.0a10-x86_64.AppImage`；SHA-256：`5c515dd0e3ceb8eb910baa45f392d8be28bfda109c5e1d59865e5a0733b7d55a` |
-| 包内容与来源 | 产品 `b963879` 的 43 个源码哈希前后不变；3958 文件哈希、1048 内部符号链接、websockets 15.0.1 的两份 BSD 许可核对通过 | [完整包报告](performance-package-validation.md)，正式验收记录随 `aad9280` 提交 |
-| 实际包任务链路 | 包内解释器与模块运行；真实麦克风 → 本地模拟 WSS/SSE → 真实 XWayland GTK：25 字符准确，取消只增加 1 字符，无预览输出、无尾部，按键配对和映射恢复 | `build/performance-a10-package-live-mic-r2.{json,log}`；模拟识别/润色，不是真实云端识别 |
-| 实际包 UI/退出 | native Wayland 和 offscreen 各 9 页、IPC show/toggle/cancel/quit、异常配置保留通过；图像已人工核查 | `build/performance-a10-ui-{native,offscreen}-r2/`；包链路和主机 UI 日志无异步资源清理错误 |
-| Ubuntu 24.04 用户态 | 固定容器、非 root、无网络/主机 home/显示/音频；启动与 9 页包 UI 通过 | `build/performance-a10-ubuntu24-r2.log`；缺少音频后端提示符合隔离环境，不是 Ubuntu 24.04 桌面或麦克风通过 |
+| 历史 a10 AppImage | r2 独立包验收通过；版本 0.1.0a10，108907000 bytes | `dist/InkEcho-0.1.0a10-x86_64.AppImage`；SHA-256：`5c515dd0e3ceb8eb910baa45f392d8be28bfda109c5e1d59865e5a0733b7d55a` |
+| 历史 a10 包内容与来源 | 产品 `b963879` 的 43 个源码哈希前后不变；3958 文件哈希、1048 内部符号链接、websockets 15.0.1 的两份 BSD 许可核对通过 | [完整包报告](performance-package-validation.md)，正式验收记录随 `aad9280` 提交 |
+| 历史 a10 实际包任务链路 | 包内解释器与模块运行；真实麦克风 → 本地模拟 WSS/SSE → 真实 XWayland GTK：25 字符准确，取消只增加 1 字符，无预览输出、无尾部，按键配对和映射恢复 | `build/performance-a10-package-live-mic-r2.{json,log}`；模拟识别/润色，不是真实云端识别 |
+| 历史 a10 实际包 UI/退出 | native Wayland 和 offscreen 各 9 页、IPC show/toggle/cancel/quit、异常配置保留通过；图像已人工核查 | `build/performance-a10-ui-{native,offscreen}-r2/`；包链路和主机 UI 日志无异步资源清理错误 |
+| 历史 a10 Ubuntu 24.04 用户态 | 固定容器、非 root、无网络/主机 home/显示/音频；启动与 9 页包 UI 通过 | `build/performance-a10-ubuntu24-r2.log`；缺少音频后端提示符合隔离环境，不是 Ubuntu 24.04 桌面或麦克风通过 |
 | 部署与远程 | 主验收复核三份用户 JSON、a9 与稳定别名的哈希未变；本轮未部署、未推送或发布 | 稳定入口 a9、公开 v0.1 附件 a8 继续分别保留 |
 
-包内真实麦克风链路的本地固定 25 字符夹具，从停止到首发 **28.628 ms**，到输出完成
+上述历史 a10 包内真实麦克风链路的本地固定 25 字符夹具，从停止到首发 **28.628 ms**，到输出完成
 **1793.176 ms**；只衡量该本地模拟服务，不是云端延迟或语音识别准确率。包探针没有
 读取用户凭据，也没有发云端请求。官方静音协议通过属于另行记录的源码连接检查，
 不是从这个包执行的云端请求。包的独立依赖/来源、所有早期检查点及限制见
 [a10 包验收](performance-package-validation.md)。
 
-要试用本地预览包，先从正在运行的旧版托盘菜单正常退出，再启动 a10。否则单实例
-通信可能只唤起旧 a9，不能据此判断 a10 功能是否生效：
+要试用本地预览包，先从正在运行的旧版托盘菜单正常退出，再启动独立 a11。其首轮固定场景通过，但长流后桌面延迟尚存，整轮未验收完成；单实例
+通信可能只唤起旧 a9，不能据此判断 a11 功能是否生效：
 
 ```sh
-./dist/InkEcho-0.1.0a10-x86_64.AppImage
+./dist/InkEcho-0.1.0a11-x86_64.AppImage
 ```
 
 本次保留原有稳定入口、自启动和公开 release；独立包已验证不等于已替换用户正在

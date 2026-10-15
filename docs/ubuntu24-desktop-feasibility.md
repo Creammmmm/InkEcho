@@ -6,15 +6,24 @@ system has now actually booted its own kernel, systemd and GNOME desktop under
 KVM. The Docker container hosts QEMU; the tested desktop is a full guest VM,
 not a container desktop sharing the Ubuntu 26.04 host kernel.
 
-Native Wayland AppImage UI startup has been exercised. The current production
+The original a10 extracted runtime passed native Wayland UI startup, but its
 native keyboard worker did not authorize on this guest's GNOME 46 interface.
-An actual Xorg session has also passed an initial GTK/VTE keyboard check;
-repeated 40 ms versus 20 ms measurements and partial cancellation remain pending
-at the initial checkpoints retained below. Later controls, cancellation,
-browser and local-pipeline results are in the
-[VM performance report](ubuntu24-vm-performance-validation.md), which also
-records the unresolved combined-target 20 ms window-mapping failure. These
-results do not establish complete Ubuntu 24.04 desktop or voice-input support.
+Its initial Xorg checks and failed combined-target 20 ms runs remain historical
+evidence below and in [the a10 VM report](ubuntu24-vm-performance-validation.md).
+The reviewed R6 production-source repair has since passed the complete Xorg
+four-target 40/20 ms sequence and cancellation. A separately built a11 artifact
+has also passed its first eight desktop modes, including output-time focus
+switching and fixed local TLS pipeline checks. See [R6 source evidence](ubuntu24-source-r6-validation.md)
+and [a11 artifact evidence](performance-a11-package-validation.md).
+
+The a11 R2 long-stream extension now confirms exact text and cancellation but
+reveals material subsequent GTK readiness latency after cleanup. R1 improvement
+in the fixed whole-insertion scenarios is not an overall repair. The newer
+queued-fragment aggregation change still awaits actual R7 source and later a12
+artifact validation; a11 Ubuntu 26 host rechecks are deferred. No complete
+Ubuntu 24.04 desktop, physical hardware or cloud speech-accuracy support is
+claimed. Source, old a10 package, R5 experiment, a11 and the unvalidated next
+revision remain separate evidence categories.
 
 ## Historical survey boundary
 
@@ -52,7 +61,7 @@ are under `build/ubuntu24-perf-vm`; the container is
 | Provisioning | Initial boot receipt still has cloud-init running; subsequent `output/guest-provisioned.json` records `done`, exit 0 and boot finished |
 | Installed desktop | GNOME Shell `46.0-0ubuntu6~24.04.16`, GDM `46.2-1ubuntu1~24.04.9`, Xorg core `2:21.1.12-1ubuntu1.8`, XWayland `2:23.2.6-1ubuntu0.8`, VTE `0.76.0-1ubuntu0.1`, Python GI `3.48.2-1` |
 | Actual graphical identity | `output/identity-wayland.json` and `output/identity-isolated-wayland.json`: active owned logind Wayland session 7, UID 1000, GNOME Shell 46.0; `output/identity-x11.json`: actual X11 session 20, same guest OS/kernel |
-| AppImage | Local a10 preview SHA256 `5c515dd0e3ceb8eb910baa45f392d8be28bfda109c5e1d59865e5a0733b7d55a`; guest checks verify the artifact before using its extracted runtime |
+| Historical AppImage | Local a10 preview SHA256 `5c515dd0e3ceb8eb910baa45f392d8be28bfda109c5e1d59865e5a0733b7d55a`; guest checks verify the artifact before using its extracted runtime |
 
 The `mutter` command-package entry in the provisioning receipt is
 `not-installed`; this must not be interpreted as no running compositor. The
@@ -141,7 +150,7 @@ not prove that all future Noble updates or every alternative keyboard protocol
 are impossible. No alternative native delivery path has been implemented or
 accepted in this VM, and no clipboard or system input-method fallback was used.
 
-## Actual Xorg: initial phase 0 check only
+## Historical a10 Xorg: initial phase 0 check
 
 The guest has switched to an actual GNOME Xorg login session; this is distinct
 from an XWayland client under Wayland or a nested Xvfb display. The guest helper
@@ -166,7 +175,7 @@ receipts. Targets explicitly use `GTK_IM_MODULE=gtk-im-context-simple`,
 `QT_IM_MODULE=compose` and `XMODIFIERS=@im=none`; the producer uses the keyboard
 backend, not input-method submission.
 
-This is an initial feasibility result. The requested repeated GTK/VTE
+This was an initial feasibility checkpoint. At that time the requested repeated GTK/VTE
 **40 ms versus production 20 ms** comparison and partial-output cancellation
 have not yet been reviewed at this checkpoint. No speed improvement,
 no-late-tail cancellation result, browser support or full Ubuntu 24.04 Xorg
@@ -216,8 +225,104 @@ The revised adapter is recorded in `keyboard-probe-r3-manifest.json`, SHA256
 `1bb4ffd8b5781056eff6c4b3259e27866bf4c0b9e02611784107e9fad55b121b`.
 The original phase 0 adapter/hash and all failed attempt logs remain historical
 evidence; the diagnostic change is not a production keyboard pacing change.
-Repeated 40/20 ms comparisons and cancellation are being rerun in this unlocked
-session. Their final acceptance is still pending at this checkpoint.
+The repeated comparisons were subsequently rerun in this unlocked session.
+The a10 failures and explicit R5 experiment are retained in the historical VM
+report; the R6 source and a11 artifact results below are later, separate checks.
+
+## Later production repair and actual a11 first-round results
+
+The preserved a10 compound 20 ms failure was not fixed by unlocking alone:
+later diagnostics found the next target unmapped even in an unlocked session.
+The controlled R5 test-only restoration policy reduced map writes enough for
+the complete sequence to pass. This experiment did not modify the a10 artifact
+and did not prove every detail of the compositor mechanism or eliminate all
+observed desktop-query latency. Its experimental flags and failed production
+control are retained in [the historical VM report](ubuntu24-vm-performance-validation.md).
+
+The production change committed in `a7db97f` removes restoration from the
+per-character loop and retains the existing synchronous final cleanup per
+insertion. It preserves key release, current-focus and task/cancel checks and
+all three 20 ms settle waits. The R6 source runner explicitly imports the new
+read-only source tree while reusing the old package's interpreter/dependencies;
+it verifies all source hashes and runtime origins. Four consecutive owned
+targets at each of 40 and 20 ms received 140 exact codepoints; VTE bytes were
+exact. The partial-cancel check received exactly 12 codepoints, released keys,
+restored the map and observed no tail for 0.5 seconds. See [the R6 report](ubuntu24-source-r6-validation.md).
+This source result is not a retroactive acceptance of a10.
+
+The new a11 product snapshot is `004b054eb324d6c54b622db6df4d0e2ede106b57`.
+Its independent artifact is `dist/InkEcho-0.1.0a11-x86_64.AppImage`,
+108907000 bytes, SHA256
+`a61b2a036863d9c2ea1515055c7fadb7c9905e9a0139aa05e94936b32a67cb97`.
+The first actual-artifact round has eight naturally exited, passing modes:
+
+- Complete Chrome textarea → contenteditable → GTK → VTE, five 28-codepoint
+  samples per target, at 40 ms control and production 20 ms. All eight target
+  observations were 140 exact, with balanced events, final map restoration,
+  136 mapping writes and one successful restore. VTE raw bytes matched.
+- Partial cancellation after 12 successful presses, exact prefix and 0.5-second
+  tail-free observation, with balanced releases and restored map.
+- Local TLS normal 40/20 ms and `one-character-fast` 25-codepoint pipelines:
+  synthetic PCM, fixed WSS final/preview events, fixed HTTPS SSE and actual
+  production keyboard into owned GTK; exact output, ignored previews and
+  cancellation without a late tail. No real microphone or cloud is involved.
+- One 56-codepoint production insertion switching between owned GTK windows
+  after 12 presses: exact 12/44 split, balanced events and final restoration.
+- Nine Xorg UI pages and normal exit through this artifact's extracted AppRun;
+  main reviewed the screenshots. This is not FUSE mounting or installation.
+
+Receipts are `output/a11-r1-*.json` and separate `*-acceptance.json`, with
+payload manifests and fixture logs. The artifact's own interpreter and modules
+were used without a source-root override or candidate restoration wrapper.
+Every mode verifies 3958 inventory files, 1048 symlinks, 43 source hashes and
+two WebSocket licenses; actual production module origins are checked. The
+source/module identity gates prevent a working source tree from masquerading
+as the built artifact. No user credentials or cloud requests were used.
+
+These are R1 fixed-scenario results, not an overall repair. Boundary ScreenSaver
+false replies do not prove continuous responsiveness throughout input. Fixed
+five-copy samples are not a reliability distribution across many independent
+new windows. The following R2 result limits the earlier conclusions; all raw
+receipts remain in [the a11 package report](performance-a11-package-validation.md).
+Old a10, R5 experiment, source R6 and a11 must remain separately labelled.
+
+## R2 counterexample: accurate long output, residual desktop latency
+
+The actual unchanged a11 artifact's R2 stream delivered 150 codepoints exactly,
+with correct partial cancellation, balanced events and restored mapping. The
+normal task nevertheless made 288 mapping writes, 150 successful restores and
+150 completed insertions: a source fix within each insertion did not combine
+one-character streamed insertions. The pipeline naturally exited 0, without
+cloud, credentials or microphone use.
+
+The 50 ms parent observer first saw the full 150-character readback 2766.534 ms
+before the entire pipeline process's observed exit. That interval includes
+the second cancellation task, its 1.2-second tail observation and session/TLS
+cleanup; it is not an exact production last-key timestamp or a deliberate
+additional idle wait. The next-window probe launched 2.783 ms after the
+observed exit, with the actual GTK fixture spawning after interpreter startup
+at exit +414.118 ms. That fresh GTK fixture still took **6.0944 seconds** to
+become ready. The next VTE, started only after that sequential GTK check,
+became ready in 0.285 seconds. Its later success cannot prove immediate VTE
+responsiveness when long output ended.
+
+The unchanged 120-attempt readiness loop and pipeline checks mechanically
+passed, but the near-six-second GTK delay is a material unresolved result.
+The probe's 12-second wait for session.pending is an observation bound, not
+the production task deadline. No production deadline was extended or sample
+reduced to obtain a pass. This diagnostic observer differs from the unobserved
+R1 timing runs. Receipts are
+`output/a11-r2-long-{pipeline,next-window,acceptance}.json`; their passed flags
+must not be summarized as the absence of desktop latency.
+
+The next change aggregates only already-queued fragments up to 128 codepoints;
+it does not wait for future provider deltas or deliberately delay the first
+character. Focused local tests pass, but the actual R7 source check and planned
+independent a12 artifact acceptance are still pending. a11 is preserved as its
+measured historical artifact; its Ubuntu 26 host pipeline/UI rechecks are
+paused rather than repeating a version scheduled for replacement. Neither a
+unit-test pass nor the new worktree code retroactively repairs a11.
+
 
 ## Reproduction and outstanding acceptance
 
@@ -258,12 +363,16 @@ adapted VM probe must be present under the input path with its recorded manifest
 it is a lab fixture, not an unrecorded modification to production input code.
 This report does not claim that unreviewed future runs have passed.
 
-Remaining acceptance includes the repeated Xorg pacing comparison, partial
-cancellation and no late tail, browser targets, focus switching, physical
-shortcut/F13/F14 behavior, real microphone/voice pipeline, overlay focus,
-credentials, desktop integration/autostart, and cleanup/recovery of unavailable
-native transport. No cloud ASR request was part of these desktop checks. KVM
-with software-rendered virtual graphics is real guest desktop evidence, but
-physical hardware/GPU/seat/microphone behavior and a clean installed physical
-Ubuntu 24.04 machine remain untested. The separate userspace container and
-Ubuntu 26.04 host acceptance reports retain their original scope.
+Remaining acceptance includes resolving and retesting the observed long-stream
+desktop latency in actual R7 source and a new a12 artifact, followed by the
+relevant host checks; actual VM microphone/voice capture, physical shortcut/F13/F14 behavior,
+focus changes during recording/recognition, overlay focus, credentials,
+FUSE-mounted launch, desktop integration/autostart and unavailable-native-path
+cleanup/recovery. Output-time two-window focus switching has the separate a11
+result above; it is not a test of every workflow phase. No cloud ASR request
+was part of these desktop checks. KVM with software-rendered virtual graphics
+is real guest desktop evidence, but physical GPU/seat/microphone behavior and
+a clean installed physical Ubuntu 24.04 machine remain untested. The separate
+userspace container and earlier Ubuntu 26.04 host reports retain their original
+scope. The a9/stable installation and user configuration remain preserved; no
+push, release or deployment is part of these checks.

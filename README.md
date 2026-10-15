@@ -2,9 +2,13 @@
 
 InkEcho 是一个 Linux 桌面语音输入应用：录音后调用云端转写，可选按 Prompt 润色，再输入文字。不通过剪贴板或系统输入法接口提交文字。
 
-当前源码为 **0.1.0a10 开发预览版**；本机稳定启动入口仍为已部署的 a9。本应用采用“输出到当前光标”的键盘输入方式：开始录音不要求先选文本框，录音、识别与润色期间可自由切换窗口；输出中切换窗口，后续字符也可进入新焦点。主动取消和过期任务仍停止未发送的文字，已经发送的按键无法撤回。
+当前源码为 **0.1.0a11 开发预览版**；本机稳定启动入口仍为已部署的 a9。本应用采用“输出到当前光标”的键盘输入方式：开始录音不要求先选文本框，录音、识别与润色期间可自由切换窗口；输出中切换窗口，后续字符也可进入新焦点。主动取消和过期任务仍停止未发送的文字，已经发送的按键无法撤回。
 
-a10 源码加入 Qwen 实时转录协议接入、流式润色与边接收边输出、连接复用和分段计时，并修复 X11 分段字符失真、调整实测等待。实时转录须显式选择相应连接方式；不支持流式润色的网关可关闭流式开关。官方纯生成静音协议已实测，真实语音准确率、云端端到端性能及 Ubuntu 24.04 桌面仍待验，实际结果与限制见[性能优化验收总览](docs/performance-validation.md)。
+a10 源码加入 Qwen 实时转录协议接入、流式润色与边接收边输出、连接复用和分段计时，并修复 X11 分段字符失真、调整实测等待。实时转录须显式选择相应连接方式；不支持流式润色的网关可关闭流式开关。官方纯生成静音协议已实测；真实语音准确率与云端端到端性能仍待验，详见[性能优化验收总览](docs/performance-validation.md)。
+
+a11 的键盘恢复调整在 Ubuntu 24.04 GNOME Xorg 首轮固定整段场景中改善了连续目标就绪问题。独立 Ubuntu 24.04.5 KVM 桌面中，R6 正式源码和实际 a11 包首轮通过 Chrome 两类文本框、GTK、VTE 的 40/20 ms 对照及部分取消；a11 另通过输出中切窗、本地模拟识别/润色链路和提取后界面启动。
+
+追加 R2 测试发现：150 字长流虽准确输出、取消正确，结束并清理后新 GTK 窗口仍需约 6.09 秒就绪，说明桌面延迟尚未解决。新的增量合并修复及后续 a12 包仍待实际验收，a11 主机复测已暂缓，不能称整体修好或完整支持 Ubuntu 24。GNOME 46 原生 Wayland 当前输入路径缺少所需接口，未通过授权；实际 VM 麦克风、物理快捷键、FUSE 启动和自启动等仍未验证。见[R6 源码记录](docs/ubuntu24-source-r6-validation.md)和[a11 包记录](docs/performance-a11-package-validation.md)。
 
 a9 新增 **GNOME 原生 Wayland 的实验性键盘输入路径**。本机 Ubuntu 26.04.1、GNOME/Mutter 50.1、Chrome 154 的独立测试窗口已接收完整的 26 字符中文、英文及符号样本，并恢复键盘映射和修饰键状态：源码验证了 textarea，实际 a9 AppImage 验证了 contenteditable。最终 a9 实际包还在同一输出任务中完成 contenteditable 的原生 Chrome → XWayland Chrome → 原生 Chrome 切换，26 字符全部进入对应窗口并恢复键盘状态。隔离 GNOME 环境另有 GTK 与 Chrome 证据；这些结果不代表所有 Wayland 应用或 Ubuntu 版本均已支持。详见[原生 Wayland 验证](docs/native-wayland-keymap-validation.md)。
 
@@ -31,14 +35,14 @@ uv run python -m inkecho
 
 在界面中分别设置转录与润色服务，测试麦克风，选择 Prompt；GNOME 快捷键需要在录音设置页主动启用。其他桌面可自行将快捷键绑定到 `python -m inkecho --toggle`，使用实际安装的 Python 完整路径。开始后可切换窗口，识别完成时将光标放在希望接收文字的位置。主动取消会停止后续发送；目标不支持时会提示错误，不会自动粘贴。
 
-独立本地 a10 预览包为 `dist/InkEcho-0.1.0a10-x86_64.AppImage`。**先从旧版托盘菜单正常退出，再启动 a10**；否则单实例通信可能只唤起仍在运行的 a9。此操作不替换原有 a9 稳定入口、自启动或公开 release：
+独立本地 a11 预览包为 `dist/InkEcho-0.1.0a11-x86_64.AppImage`，首轮固定场景通过，R2 已发现长流后的桌面延迟，整轮验收未完成。**先从旧版托盘菜单正常退出，再启动 a11**；否则单实例通信可能只唤起仍在运行的 a9。此操作不替换原有 a9 稳定入口、自启动或公开 release：
 
 ```sh
-chmod +x dist/InkEcho-0.1.0a10-x86_64.AppImage
-./dist/InkEcho-0.1.0a10-x86_64.AppImage
+chmod +x dist/InkEcho-0.1.0a11-x86_64.AppImage
+./dist/InkEcho-0.1.0a11-x86_64.AppImage
 ```
 
-本次包的哈希与实际验证见[a10 包验收](docs/performance-package-validation.md)。通用构建步骤与运行依赖见[打包说明](docs/packaging.md)。桌面启动器、图标与自启动均由用户主动安装；移动 AppImage 后可在设置中修复路径。
+a11 包的哈希与已完成范围见[a11 包记录](docs/performance-a11-package-validation.md)。[a10 包报告](docs/performance-package-validation.md)保留为历史，它不包含本次键盘恢复修复。通用构建步骤与运行依赖见[打包说明](docs/packaging.md)。桌面启动器、图标与自启动均由用户主动安装；移动 AppImage 后可在设置中修复路径。
 
 ## 验证与文档
 
