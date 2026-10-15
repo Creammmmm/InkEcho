@@ -16,14 +16,20 @@ has also passed its first eight desktop modes, including output-time focus
 switching and fixed local TLS pipeline checks. See [R6 source evidence](ubuntu24-source-r6-validation.md)
 and [a11 artifact evidence](performance-a11-package-validation.md).
 
-The a11 R2 long-stream extension now confirms exact text and cancellation but
-reveals material subsequent GTK readiness latency after cleanup. R1 improvement
-in the fixed whole-insertion scenarios is not an overall repair. The newer
-queued-fragment aggregation change still awaits actual R7 source and later a12
-artifact validation; a11 Ubuntu 26 host rechecks are deferred. No complete
-Ubuntu 24.04 desktop, physical hardware or cloud speech-accuracy support is
-claimed. Source, old a10 package, R5 experiment, a11 and the unvalidated next
-revision remain separate evidence categories.
+The preserved a11 R2 long-stream test confirmed exact text and cancellation but
+found material GTK readiness latency after cleanup. The later queued-fragment
+aggregation change has since passed separate R7 source checks and the actual
+a12 artifact's eight Noble R1 modes. The a12 fast-arrival 150-codepoint check
+had GTK/VTE readiness of 0.1747/0.3388 seconds after both tasks and cleanup;
+this single case is not arbitrary-paced or immediate-after-output evidence.
+The actual a12 R2 stream, with fixture-configured 70 ms sleep per fragment,
+was exact and canceled safely but still
+needed 5.8435 seconds for a new GTK window after cleanup: latency acceptance
+failed. R8 task-scoped mapping lifecycle source/new-artifact validation is
+pending and host checks remain deferred. No
+complete Ubuntu 24.04, physical hardware or cloud speech-accuracy support is
+claimed. Historical a10/a11 artifacts, experimental R5, source R6/R7 and current
+a12 artifact evidence are separate; later success does not rewrite old failures.
 
 ## Historical survey boundary
 
@@ -315,14 +321,100 @@ R1 timing runs. Receipts are
 `output/a11-r2-long-{pipeline,next-window,acceptance}.json`; their passed flags
 must not be summarized as the absence of desktop latency.
 
-The next change aggregates only already-queued fragments up to 128 codepoints;
-it does not wait for future provider deltas or deliberately delay the first
-character. Focused local tests pass, but the actual R7 source check and planned
-independent a12 artifact acceptance are still pending. a11 is preserved as its
-measured historical artifact; its Ubuntu 26 host pipeline/UI rechecks are
-paused rather than repeating a version scheduled for replacement. Neither a
-unit-test pass nor the new worktree code retroactively repairs a11.
+The subsequent change aggregates only already-queued fragments up to 128
+codepoints, without waiting for future deltas. Its R7 source and separate a12
+artifact results below do not retroactively repair a11. a11's Ubuntu 26 host
+checks were deferred in favor of the new artifact. The observed R2 limitation
+and its original artifact remain historical evidence.
 
+
+## R7 source and current a12 actual-artifact checkpoint
+
+[The R7 source report](ubuntu24-source-r7-validation.md) records new read-only
+source origins using old a11 interpreter/dependencies. Its 150-codepoint long
+local pipeline was exact, with 150 writes, six restores and six insertions,
+correct cancellation and cleanup. Post-cleanup GTK/VTE readiness was
+0.1639/0.2216 seconds. A separate streamed cursor run successfully pressed
+one character before the rest were queued, then routed all 56 codepoints
+exactly [12,44] after a window switch. This is scoped source evidence, not a
+new package or proof of changed a11 contents.
+
+The separately built a12 is product
+`06f5600a57402335e97b3975afc38009d6233e58`, artifact
+`dist/InkEcho-0.1.0a12-x86_64.AppImage`, 108907000 bytes, SHA256
+`e31dbc6301318ab10632c12a7437ae7cd01482f2b1ee39655a82e43b6900eae9`.
+The exact clean artifact-source commit workflow passed Ruff/format for 225 Python files and
+1051 tests with three skipped in 19.90 seconds. Actual package checks use only
+its extracted AppDir modules and interpreter, with ten application module
+origins and WebSockets dependency origin/hash verified; no source-tree import
+override or candidate restoration wrapper is used. Its inventory validates
+3958 files, 1048 symlinks, 43 product source hashes and both license copies.
+
+All eight Noble R1 artifact modes naturally exited 0 and passed strict
+acceptance: four consecutive owned targets at each of 40 and 20 ms, cancel12,
+normal local TLS pipeline40/pipeline20, fastlong150, streamed cursor/focus and
+nine-page extracted AppRun UI. The four targets each received 140 exact
+codepoints per group; VTE bytes, events and final maps matched. Cancellation
+received the exact prefix and no tail during the observation. The cursor test
+pressed its lone first character before future content was queued and routed
+exactly [12,44]. Root independently reviewed raw/acceptance evidence and the
+nine-page contact sheet. UI is still extraction-based, not guest FUSE mounting,
+IPC, corrupt-config or installation acceptance.
+
+The actual a12 fastlong150 matched the R7 source counts: 150 writes/six
+restores/six insertions, exact text, proper cancellation, balanced events and
+map restoration. First press was at 48.700 ms, completion at 10164.228 ms from
+stop, using synthetic PCM and fixed loopback WSS/SSE. The 50 ms observer saw
+full readback 2797.501 ms before complete process exit, including the second
+cancel task, tail observation and TLS/session cleanup. The readiness process
+then spawned at observed exit +21.288 ms, its GTK fixture at +435.917 ms;
+GTK readiness took 0.1747 s and sequential VTE 0.3388 s. This is one observed
+post-cleanup fast-arrival case, not a distribution or an immediate response
+measurement at the last normal character. No microphone, cloud or credential
+store was used.
+
+Records are `output/a12-r1-*`, including distinct raw and acceptance JSON,
+source-origin audits, snapshots, exact preview/run payload hashes and original
+UI PNGs. [The a12 package report](performance-a12-package-validation.md)
+maintains the full reproduction and results. Preservation checks retain the
+old a11/a10/a9/stable artifacts and existing user JSON hashes.
+
+## a12 R2 paced counterexample: latency acceptance failed
+
+The same actual a12 artifact subsequently ran the 150-codepoint workload with
+a fixture-configured 70 ms server sleep between one-character fragments.
+This is not a measured client arrival interval. Text was exact, cancellation had no tail,
+events balanced and mapping cleaned up. The normal task nevertheless recorded
+288 mapping writes, 150 successful restores and 150 insertions. Stop to first
+press was 42.489 ms and stop to completion 10537.782 ms. These are fixed local
+TLS/synthetic-PCM results, not cloud speech or microphone measurements.
+
+The observer's full readback preceded complete process exit by 2767.659 ms,
+including the second cancel task and cleanup. After that exit and interpreter
+startup, a fresh GTK took **5.8435 seconds** to become ready. The following VTE
+then took 0.3393 seconds; that later sequential success cannot prove earlier
+immediate VTE responsiveness. The mechanical text/cleanup/readiness checks
+passed, but material desktop delay remains and **latency acceptance failed**.
+No sample, readiness gate, production deadline or 12-second probe observation
+bound was relaxed.
+
+The read-only R2 snapshot manifest is
+`c88deb05096c4a1681eb38eaafcfd8271d8251b1b511200995ee1652db5dc507`;
+the reviewed payload hash is
+`cd711f7e0329c3324858e1a9a04d000c52b11b4e8ec33fca13a984131837c699`.
+Actual raw, origin and acceptance evidence is under
+`output/a12-r2-paced-pipeline-long*.json`; reproduction and scope are in
+[the paced counterexample report](performance-a12-paced-validation.md).
+R1 fast-arrival positive evidence
+and R2 paced negative evidence must remain separate; neither the raw passed
+boolean nor a short first-press time establishes an overall fix. The 50 ms
+observer and two-task/cleanup scope still preclude a last-character immediate
+responsiveness claim.
+
+An R8 task-scoped mapping-lifecycle change is now being implemented. Its actual source
+and new-artifact acceptance are pending; a12 host keyboard/microphone-to-local-
+TLS and native UI/IPC/profile-recovery checks remain deferred. No subsequent
+worktree change may retroactively repair this immutable a12 artifact.
 
 ## Reproduction and outstanding acceptance
 
@@ -363,13 +455,14 @@ adapted VM probe must be present under the input path with its recorded manifest
 it is a lab fixture, not an unrecorded modification to production input code.
 This report does not claim that unreviewed future runs have passed.
 
-Remaining acceptance includes resolving and retesting the observed long-stream
-desktop latency in actual R7 source and a new a12 artifact, followed by the
-relevant host checks; actual VM microphone/voice capture, physical shortcut/F13/F14 behavior,
+Remaining acceptance includes an actual R8 source and new-artifact repair for
+the observed paced-stream latency, then relevant host checks; arbitrary
+timing/load and immediate desktop response remain unproven.
+Actual VM microphone/voice capture, physical shortcut/F13/F14 behavior,
 focus changes during recording/recognition, overlay focus, credentials,
 FUSE-mounted launch, desktop integration/autostart and unavailable-native-path
-cleanup/recovery. Output-time two-window focus switching has the separate a11
-result above; it is not a test of every workflow phase. No cloud ASR request
+cleanup/recovery. Output-time two-window focus switching has separate a11, R7 source and a12
+results above; it is not a test of every workflow phase. No cloud ASR request
 was part of these desktop checks. KVM with software-rendered virtual graphics
 is real guest desktop evidence, but physical GPU/seat/microphone behavior and
 a clean installed physical Ubuntu 24.04 machine remain untested. The separate

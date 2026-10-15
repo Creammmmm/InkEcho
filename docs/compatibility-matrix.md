@@ -5,25 +5,35 @@ version, host/guest session, target and workflow. A passed keyboard fixture
 is not full voice-input or desktop support. No current path uses clipboard
 or system input-method submission, including as a fallback.
 
-## Current source and a11 first-round scope
+## Current a12 artifact and source-evidence scope
 
-Current product source is a11 (`004b054`); its independent local preview is
-not deployed or released. R6 source checks and the a11 artifact's first eight
-modes passed in fixed scenarios. R2 long streaming was text-accurate but left
-material next-window latency after cleanup; it does not establish an overall
-repair. a11 Ubuntu 26 host rechecks are deferred. The queued-fragment aggregation
-change and planned a12 package still require actual R7 source/artifact validation.
-Read [a11 artifact evidence](performance-a11-package-validation.md)
-and [R6 source evidence](ubuntu24-source-r6-validation.md) for actual runtime
-origins and reproduction.
+The latest built artifact is a12, fixed to product source `06f5600`, with
+1051 tests/three skips and Ruff/format on that exact clean commit. The live R8
+worktree is under implementation and has not passed actual source/new-package
+acceptance; it is not immutable a12 content. The independent a12 preview is
+not deployed or released.
+Separate R7 source validation and all eight actual a12 Noble R1 modes passed.
+The preserved a11 R2 still has its original post-cleanup GTK delay. Current
+a12 fastlong150 readiness of 0.1747/0.3388 seconds is a single observed case,
+not arbitrary-paced or immediate-response proof. The actual a12 R2 workload,
+with fixture-configured 70 ms sleep per fragment, was exact and canceled safely
+but still needed 5.8435 seconds for a new GTK after cleanup; latency acceptance failed. R8 task-scoped mapping source
+and new-artifact acceptance are pending, and host checks are deferred.
+See [a12 artifact evidence](performance-a12-package-validation.md),
+[R7 source evidence](ubuntu24-source-r7-validation.md),
+[a12 paced counterexample](performance-a12-paced-validation.md) and
+[historical a11 evidence](performance-a11-package-validation.md).
 
 | System/session and version | Actual measured result | Still outside that result |
 | --- | --- | --- |
-| Ubuntu 24.04.5 KVM / GNOME 46 actual Xorg / R6 source | New production source imported explicitly; complete Chrome textarea/contenteditable, GTK, VTE 40/20 ms groups each 140 exact; cancel after 12 and no tail over 0.5 s | Not a package test; old a10 interpreter/dependencies do not mean a10 contains the repair |
-| Same actual guest Xorg / a11 artifact R1 | Artifact's own modules: same four-target matched checks, cancellation, 56-codepoint two-window switch with exact 12/44 split, fixed local TLS WSS/SSE pipeline including fast25, extracted AppRun nine pages | No VM microphone/cloud speech, physical global shortcut/F13/F14, overlay-focus acceptance, FUSE mount, menu installation or autostart; R2 below shows that long-stream desktop latency remains |
-| Same actual guest Xorg / unchanged a11 artifact R2 | 150 streamed codepoints and cancellation exact; 288 mapping writes, 150 restores; fresh GTK readiness 6.0944 s after both tasks/cleanup, sequential VTE 0.285 s | Mechanical readiness gate passed but material desktop delay remains; not an overall fix, not R7/a12 acceptance |
-| Ubuntu 24.04.5 KVM / GNOME 46 native Wayland / historical a10 artifact | Extracted AppRun nine pages, normal exit; actual keyboard-worker authorization failed, missing SetKeymap/KeymapCapabilities | Current native input path unavailable in this measured installation; not proof that every alternative is impossible; no a11 native guest input success |
-| Ubuntu 26.04.1 / GNOME 50.1 / earlier a9 and a10 | Owned native/XWayland target and package results retained in [a9 acceptance](native-wayland-parent-validation.md) and [a10 package report](performance-package-validation.md) | Historical versions, not a11 host revalidation; native BMP restriction remains, arbitrary apps and complete desktop matrix unproven |
+| Ubuntu 24.04.5 KVM / GNOME 46 actual Xorg / R7 new source, old a11 dependencies | 150 exact fast-stream codepoints, 150 writes/six restores, cancellation/cleanup, isolated first character and [12,44] focus route; post-cleanup GTK/VTE 0.1639/0.2216 s | Source-only with verified new origins; not a repaired a11 package or general responsiveness guarantee |
+| Same actual guest Xorg / a12 actual artifact R1 | Eight modes: four-target matched 40/20 checks, cancel12, normal local TLS 40/20, fastlong150, streamed first/focus and extracted AppRun nine pages; fastlong GTK/VTE 0.1747/0.3388 s after both tasks/cleanup | R2 paced-stream latency failed despite R1 success; no VM microphone/cloud, physical shortcut/F13/F14, overlay focus, FUSE, installation/autostart or arbitrary-paced/immediate-response claim |
+| Same actual guest Xorg / unchanged a12 artifact R2 | Fixture-configured 70 ms sleep per fragment; 150 exact and cancel-safe, but 288 writes/150 restores; after both tasks/cleanup new GTK needed 5.8435 s, sequential VTE 0.3393 s | Mechanical gates passed; latency acceptance failed. R8 actual source/new artifact unaccepted, host deferred; not an overall fix |
+| Historical Ubuntu 24.04.5 KVM / GNOME 46 actual Xorg / R6 source | New production source imported explicitly; complete Chrome textarea/contenteditable, GTK, VTE 40/20 ms groups each 140 exact; cancel after 12 and no tail over 0.5 s | Not a package test; old a10 interpreter/dependencies do not mean a10 contains the repair |
+| Historical same guest Xorg / a11 artifact R1 | Artifact's own modules: same four-target matched checks, cancellation, 56-codepoint two-window switch with exact 12/44 split, fixed local TLS WSS/SSE pipeline including fast25, extracted AppRun nine pages | No VM microphone/cloud speech, physical global shortcut/F13/F14, overlay-focus acceptance, FUSE mount, menu installation or autostart; R2 below shows that long-stream desktop latency remains |
+| Historical same guest Xorg / unchanged a11 artifact R2 | 150 streamed codepoints and cancellation exact; 288 mapping writes, 150 restores; fresh GTK readiness 6.0944 s after both tasks/cleanup, sequential VTE 0.285 s | Mechanical readiness gate passed but material desktop delay remains; not an overall fix; later R7/a12 results do not change this artifact |
+| Ubuntu 24.04.5 KVM / GNOME 46 native Wayland / historical a10 artifact | Extracted AppRun nine pages, normal exit; actual keyboard-worker authorization failed, missing SetKeymap/KeymapCapabilities | Current native input path unavailable in this measured installation; not proof that every alternative is impossible; no a12 native guest input success |
+| Ubuntu 26.04.1 / GNOME 50.1 / earlier a9 and a10 | Owned native/XWayland target and package results retained in [a9 acceptance](native-wayland-parent-validation.md) and [a10 package report](performance-package-validation.md) | Historical versions, not a12 host revalidation; native BMP restriction remains, arbitrary apps and complete desktop matrix unproven |
 | Ubuntu 24.04 / minimal offscreen container / earlier packages | Userspace startup and nine-page screenshots in the recorded container checks | No actual guest desktop/kernel, microphone or keyboard acceptance follows from the container |
 | Windows/macOS | Not implemented or tested | No compatibility claim |
 
@@ -32,7 +42,7 @@ from the container smoke and from host XWayland. Its lock/network recovery,
 UI extraction method and initial a10 failures are retained in
 [VM feasibility](ubuntu24-desktop-feasibility.md) and
 [historical VM results](ubuntu24-vm-performance-validation.md). Do not backfill
-the fixed source/a11 results into the unchanged a10 artifact. Global shortcuts,
+the later source/a11/a12 results into the unchanged a10 artifact. Global shortcuts,
 F13/F14, actual microphone and overlay-focus cells remain unaccepted for this
 VM even when its keyboard, synthetic local pipeline and UI checks pass.
 
