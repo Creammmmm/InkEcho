@@ -7,6 +7,7 @@ import json
 import re
 import time
 import wave
+from collections.abc import Awaitable, Callable
 from dataclasses import dataclass, field, replace
 from http.cookiejar import CookieJar, DefaultCookiePolicy
 from urllib.parse import urlsplit, urlunsplit
@@ -278,6 +279,19 @@ class ProviderClient:
         if provider.adapter not in {"qwen", "openai"}:
             raise ProviderError("configuration")
 
+    @staticmethod
+    def _check_status(status: int) -> None:
+        if status in {401, 403}:
+            raise ProviderError("authentication")
+        if status == 429:
+            raise ProviderError("rate_limit")
+        if status in {400, 404, 405, 422}:
+            raise ProviderError("model")
+        if status >= 500:
+            raise ProviderError("unavailable")
+        if status < 200 or status >= 300:
+            raise ProviderError("response")
+
     async def _request(
         self,
         provider: Provider,
@@ -313,17 +327,7 @@ class ProviderClient:
                         ):
                             await asyncio.sleep(0.2)
                             continue
-                        status = response.status_code
-                        if status in {401, 403}:
-                            raise ProviderError("authentication")
-                        if status == 429:
-                            raise ProviderError("rate_limit")
-                        if status in {400, 404, 405, 422}:
-                            raise ProviderError("model")
-                        if status >= 500:
-                            raise ProviderError("unavailable")
-                        if status < 200 or status >= 300:
-                            raise ProviderError("response")
+                        self._check_status(response.status_code)
                         data = bytearray()
                         async for chunk in response.aiter_bytes():
                             data.extend(chunk)
@@ -497,6 +501,23 @@ class ProviderClient:
         return self._result(
             await self._request(provider, key, "chat/completions", body), started
         )
+
+    async def polish_stream(
+        self,
+        provider: Provider,
+        key: str,
+        text: str,
+        prompt: str,
+        on_delta: Callable[[str], Awaitable[None]],
+    ) -> Result:
+        """Await each final-answer delta once; never replay a partial stream.
+
+        The callback supplies backpressure and must enforce task authorization
+        before delivery. The returned full text is for accounting, not replay.
+        """
+        from inkecho.polish_stream import polish_stream
+
+        return await polish_stream(self, provider, key, text, prompt, on_delta)
 
     async def test_capability(
         self, provider: Provider, key: str, *, audio: bytes | None = None
