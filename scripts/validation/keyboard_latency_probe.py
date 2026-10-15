@@ -9,11 +9,16 @@ import asyncio
 import ctypes
 import json
 import os
+import platform
+import re
+import shlex
 import signal
 import subprocess
+import sys
 import tempfile
 import threading
 import time
+from contextlib import contextmanager, nullcontext
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
@@ -29,6 +34,260 @@ def atomic_json(path, data):
     temporary = path.with_suffix(".tmp")
     temporary.write_text(json.dumps(data))
     temporary.replace(path)
+
+
+def fixture_environment():
+    """Launch system GTK/Chrome without inheriting a packaged Python runtime."""
+    environment = dict(os.environ)
+    for name in ("WAYLAND_DISPLAY", "PYTHONPATH", "PYTHONHOME", "LD_LIBRARY_PATH"):
+        environment.pop(name, None)
+    environment["GDK_BACKEND"] = "x11"
+    return environment
+
+
+class ProbeFailure(RuntimeError):
+    """Controlled failure metadata with any completed target results retained."""
+
+    def __init__(self, report):
+        self.report = report
+        super().__init__(json.dumps(report["failure"], sort_keys=True))
+
+
+class TargetReadinessError(RuntimeError):
+    def __init__(self, metadata):
+        self.metadata = metadata
+        super().__init__(json.dumps(metadata, sort_keys=True))
+
+
+def fixture_stderr(output, target):
+    if output is not None:
+        path = output.with_name(f"{output.stem}-fixture-{target}.log")
+        return path, path.open("xb")
+    descriptor, name = tempfile.mkstemp(
+        prefix=f"inkecho-fixture-{target}-", suffix=".log"
+    )
+    return Path(name), os.fdopen(descriptor, "wb")
+
+
+def readiness_metadata(target, reason, process, output, windows, began):
+    return {
+        "target": target,
+        "reason": reason,
+        "process_alive": process.poll() is None,
+        "readyfile_exists": output.exists(),
+        "visible_window_count": len(windows),
+        "elapsed_seconds": round(time.monotonic() - began, 3),
+    }
+
+
+def x_property_number(source, name):
+    if source is None:
+        return None
+    match = re.search(
+        rf"^{re.escape(name)}(?:\([^\n)]*\))?[ \t]*(?:=|:[ \t]*window id #)[ \t]*"
+        r"(0x[0-9a-fA-F]+|[0-9]+)[ \t]*$",
+        source,
+        re.MULTILINE,
+    )
+    if match:
+        value = int(match[1], 16 if match[1].startswith("0x") else 10)
+        return value if 0 <= value <= 0xFFFFFFFF else None
+    return None
+
+
+def readiness_scene(args, process, identity):
+    """Read only fixed state from verified owned windows, before their cleanup."""
+    deadline = time.monotonic() + 2
+
+    def read(command):
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            return None
+        try:
+            value = subprocess.check_output(
+                command,
+                text=True,
+                stderr=subprocess.DEVNULL,
+                env=fixture_environment(),
+                timeout=min(0.4, remaining),
+            )
+            return value if len(value) <= 16384 else None
+        except Exception:
+            return None  # Read-only diagnostics never replace the primary error.
+
+    root = read(
+        ["/usr/bin/xprop", "-root", "_NET_CURRENT_DESKTOP", "_NET_ACTIVE_WINDOW"]
+    )
+    scene = {
+        "current_desktop": x_property_number(root, "_NET_CURRENT_DESKTOP"),
+        "active_window": x_property_number(root, "_NET_ACTIVE_WINDOW"),
+        "locked_hint": None,
+        "screensaver_active": None,
+        "owned_windows": None,
+    }
+    session = getattr(args, "verified_session_id", None)
+    if (
+        args.environment == "ubuntu24-vm-x11"
+        and isinstance(session, str)
+        and re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_-]{0,63}", session)
+    ):
+        locked = read(
+            [
+                "/usr/bin/loginctl",
+                "show-session",
+                session,
+                "--property=LockedHint",
+                "--value",
+            ]
+        )
+        scene["locked_hint"] = (
+            {"yes": True, "no": False}.get(locked.strip())
+            if locked is not None
+            else None
+        )
+        active = read(
+            [
+                "/usr/bin/gdbus",
+                "call",
+                "--session",
+                "--dest",
+                "org.gnome.ScreenSaver",
+                "--object-path",
+                "/org/gnome/ScreenSaver",
+                "--method",
+                "org.gnome.ScreenSaver.GetActive",
+            ]
+        )
+        scene["screensaver_active"] = (
+            {"(true,)": True, "(false,)": False}.get(active.strip())
+            if active is not None
+            else None
+        )
+    candidates = read(
+        [args.xdotool, "search", "--limit", "8", "--pid", str(process.pid)]
+    )
+    if candidates is None:
+        return scene
+    scene["owned_windows"] = []
+    states = {
+        "_NET_WM_STATE_" + name
+        for name in (
+            "MODAL",
+            "STICKY",
+            "MAXIMIZED_VERT",
+            "MAXIMIZED_HORZ",
+            "SHADED",
+            "SKIP_TASKBAR",
+            "SKIP_PAGER",
+            "HIDDEN",
+            "FULLSCREEN",
+            "ABOVE",
+            "BELOW",
+            "DEMANDS_ATTENTION",
+            "FOCUSED",
+        )
+    }
+    for candidate in candidates.splitlines()[:8]:
+        if (
+            not re.fullmatch(r"[0-9]{1,10}", candidate)
+            or not 0 < int(candidate) <= 0xFFFFFFFF
+        ):
+            continue
+        candidate = str(int(candidate))
+        try:
+            if process.poll() is not None or start_time(process.pid) != identity:
+                break
+        except Exception:
+            break
+        pid = read(["/usr/bin/xprop", "-id", candidate, "_NET_WM_PID"])
+        if x_property_number(pid, "_NET_WM_PID") != process.pid:
+            continue  # Never collect a foreign window's state or title.
+        info = read(["/usr/bin/xwininfo", "-id", candidate, "-stats"])
+        properties = read(
+            [
+                "/usr/bin/xprop",
+                "-id",
+                candidate,
+                "WM_STATE",
+                "_NET_WM_STATE",
+                "_NET_WM_DESKTOP",
+            ]
+        )
+        entry = {
+            "window": int(candidate),
+            "pid_matches": True,
+            "map_state": None,
+            "wm_state": None,
+            "net_wm_state": None,
+            "desktop": x_property_number(properties, "_NET_WM_DESKTOP"),
+        }
+        if info is not None:
+            mapped = re.search(
+                r"^\s*Map State:\s*(IsUnMapped|IsUnviewable|IsViewable)\s*$",
+                info,
+                re.MULTILINE,
+            )
+            entry["map_state"] = mapped[1] if mapped else None
+        if properties is not None:
+            wm = re.search(
+                r"^\s*window state:\s*(Normal|Iconic|Withdrawn)\s*$",
+                properties,
+                re.MULTILINE,
+            )
+            entry["wm_state"] = wm[1] if wm else None
+            net = re.search(
+                r"^_NET_WM_STATE\(ATOM\)[ \t]*=[ \t]*([^\n]*)$",
+                properties,
+                re.MULTILINE,
+            )
+            if net:
+                tokens = [token.strip() for token in net[1].split(",") if token.strip()]
+                entry["net_wm_state"] = (
+                    tokens
+                    if len(tokens) <= 32 and all(token in states for token in tokens)
+                    else None
+                )
+        scene["owned_windows"].append(entry)
+    return scene
+
+
+def probe_failure(
+    report,
+    target,
+    phase,
+    error,
+    events,
+    first,
+    driver,
+    original_map,
+    log_path,
+    mapping_counts=None,
+):
+    from inkecho.platform.keyboard import KeyboardError
+
+    failure = {"target": target, "phase": phase, "reason": "target_failed"}
+    if isinstance(error, TargetReadinessError):
+        failure.update(error.metadata)
+    if isinstance(error, KeyboardError) and error.code in KeyboardError.CODES:
+        failure["keyboard_error_code"] = error.code
+    failure.update(
+        {
+            "presses_sent": sum(events),
+            "releases_sent": len(events) - sum(events),
+            "first_callback_count": len(first),
+            "map_restored": None,
+            "fixture_stderr_log": str(log_path) if log_path is not None else None,
+        }
+    )
+    try:
+        failure["map_restored"] = driver._mapping() == original_map
+    except Exception:
+        pass  # Diagnostics cannot replace the primary failure.
+    report["failure"] = failure
+    if mapping_counts is not None:
+        failure["mapping_counts"] = dict(mapping_counts)
+    report["passed"] = False
+    return ProbeFailure(report)
 
 
 def verify_private_xvfb():
@@ -62,6 +321,64 @@ def verify_private_xvfb():
         for line in Path("/proc/net/unix").read_text().splitlines()[1:]
     ):
         raise RuntimeError("Display socket is not owned by the private Xvfb")
+
+
+def verify_ubuntu24_vm_x11():
+    """Require guest OS/virtualization and a real, current-user X11 login."""
+    release = {}
+    with Path("/etc/os-release").open() as stream:
+        source = stream.read(65537)
+    if len(source) > 65536:
+        raise RuntimeError("OS release metadata is too large")
+    for line in source.splitlines():
+        key, separator, value = line.partition("=")
+        if separator and key in {"ID", "VERSION_ID", "PRETTY_NAME"}:
+            fields = shlex.split(value, comments=True)
+            if len(fields) != 1:
+                raise RuntimeError("Invalid OS release metadata")
+            release[key] = fields[0]
+    if release.get("ID") != "ubuntu" or release.get("VERSION_ID") != "24.04":
+        raise RuntimeError("Actual Ubuntu 24.04 guest required")
+    if (
+        os.environ.get("XDG_SESSION_TYPE") != "x11"
+        or "WAYLAND_DISPLAY" in os.environ
+        or not os.environ.get("DISPLAY")
+    ):
+        raise RuntimeError("Guest X11 environment without Wayland required")
+    session = os.environ.get("XDG_SESSION_ID", "")
+    if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_-]{0,63}", session):
+        raise RuntimeError("Actual graphical logind session ID required")
+    virtual = subprocess.check_output(
+        ["/usr/bin/systemd-detect-virt", "--vm"], text=True, timeout=3
+    ).strip()
+    if virtual not in {"kvm", "qemu"}:
+        raise RuntimeError("Actual KVM/QEMU guest required")
+    properties = subprocess.check_output(
+        [
+            "/usr/bin/loginctl",
+            "show-session",
+            session,
+            "--property=User",
+            "--property=Type",
+            "--property=Desktop",
+        ],
+        text=True,
+        timeout=3,
+    )
+    login = dict(line.split("=", 1) for line in properties.splitlines() if "=" in line)
+    if login.get("User") != str(os.getuid()) or login.get("Type") != "x11":
+        raise RuntimeError("Current user's actual graphical X11 login required")
+    return {
+        "os_id": release["ID"],
+        "os_version": release["VERSION_ID"],
+        "os_pretty_name": release.get("PRETTY_NAME", ""),
+        "kernel": platform.release(),
+        "virtualization": virtual,
+        "session_type": login["Type"],
+        "session_desktop": login.get("Desktop", ""),
+        "session_user_matches_process": True,
+        "wayland_display_present": False,
+    }
 
 
 def fixture(args):
@@ -153,10 +470,11 @@ def fixture(args):
 
 
 class Browser:
-    def __init__(self, field, folder):
+    def __init__(self, field, folder, stderr=subprocess.DEVNULL):
         self.field, self.folder, self.state = field, folder, None
         self.lock = threading.Lock()
         self.process = None
+        self.stderr = stderr
 
     def __enter__(self):
         target = (
@@ -209,9 +527,6 @@ class Browser:
         self.server = ThreadingHTTPServer(("127.0.0.1", 0), Handler)
         self.thread = threading.Thread(target=self.server.serve_forever, daemon=True)
         self.thread.start()
-        env = dict(os.environ)
-        for name in ("WAYLAND_DISPLAY", "PYTHONPATH", "PYTHONHOME", "LD_LIBRARY_PATH"):
-            env.pop(name, None)
         self.process = subprocess.Popen(
             [
                 "google-chrome",
@@ -229,9 +544,9 @@ class Browser:
                 "EXCLUDE 127.0.0.1, EXCLUDE localhost",
                 f"--app=http://127.0.0.1:{self.server.server_port}/",
             ],
-            env=env,
+            env=fixture_environment(),
             stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL,
+            stderr=self.stderr,
         )
         return self
 
@@ -252,6 +567,76 @@ class Browser:
         self.server.server_close()
 
 
+@contextmanager
+def restore_policy_scope(driver, policy, counts):
+    """Test-only method scope, never a replacement insertion implementation."""
+    candidate = policy == "end-of-insertion-candidate"
+    original_restore, original_write = driver.restore, driver._write
+
+    def write(values):
+        result = original_write(values)
+        counts["mapping_writes"] += 1
+        return result
+
+    def restore():
+        if candidate:
+            counts["deferred_restore_calls"] += 1
+            return None
+        counts["restore_calls"] += 1
+        result = original_restore()
+        counts["successful_restore_calls"] += 1
+        return result
+
+    driver.restore, driver._write = restore, write
+    try:
+        yield
+    finally:
+        # Restore the real method before synchronous mandatory ownership cleanup.
+        driver.restore = original_restore
+        try:
+            if candidate:
+                counts["restore_calls"] += 1
+                original_restore()
+                counts["successful_restore_calls"] += 1
+        finally:
+            driver._write = original_write
+
+
+async def insert_sample(
+    inputs,
+    text,
+    events,
+    first,
+    cancel_after=None,
+    *,
+    restore_policy=None,
+    mapping_counts=None,
+):
+    """Cancel only after N successful presses; preserve backend cleanup."""
+    from inkecho.platform.keyboard import KeyboardError
+
+    def active():
+        return cancel_after is None or sum(events) < cancel_after
+
+    try:
+        scope = (
+            restore_policy_scope(inputs._driver, restore_policy, mapping_counts)
+            if mapping_counts is not None
+            else nullcontext()
+        )
+        with scope:
+            count = await inputs.insert(text, active, on_first_sent=first.append)
+    except (asyncio.CancelledError, KeyboardError) as error:
+        if (
+            cancel_after is None
+            or sum(events) != cancel_after
+            or (isinstance(error, KeyboardError) and error.code != "input_cancelled")
+        ):
+            raise
+        return cancel_after, True
+    return count, False
+
+
 async def measure(args):
     from inkecho.platform import keyboard
 
@@ -267,11 +652,27 @@ async def measure(args):
     report = {
         "platform": args.environment,
         "event_loop": "qt" if args.qt_loop else "asyncio",
+        "event_loop_class": type(asyncio.get_running_loop()).__name__,
         "pacing_seconds": effective_pacing,
         "pacing_override_used": args.pacing is not None,
         "targets": [],
         "passed": False,
+        "restore_policy": args.restore_policy,
+        "candidate_policy": args.restore_policy
+        if args.restore_policy == "end-of-insertion-candidate"
+        else None,
+        "production_behavior_modified": args.restore_policy
+        == "end-of-insertion-candidate",
     }
+    if args.environment == "ubuntu24-vm-x11":
+        report["environment_metadata"] = args.environment_metadata
+        if args.qt_loop:
+            from PySide6.QtCore import qVersion
+
+            report["qt_version"] = qVersion()
+    if args.cancel_after is not None:
+        report["measurement"] = "partial_cancel"
+        report["cancel_after"] = args.cancel_after
     (
         keyboard.MAP_SETTLE_SECONDS,
         keyboard.PRESS_SETTLE_SECONDS,
@@ -313,6 +714,11 @@ async def measure(args):
         else:
             command("windowactivate", "--sync", str(window))
 
+    target = None
+    phase = "starting"
+    events, first = [], []
+    log_path = None
+    mapping_counts = None
     try:
         for target in args.targets:
             with tempfile.TemporaryDirectory(
@@ -322,10 +728,16 @@ async def measure(args):
                 output = folder / "text.json"
                 browser = None
                 process = None
+                stderr = None
+                phase = "starting"
+                events, first = [], []
+                log_path = None
+                mapping_counts = None
                 try:
+                    log_path, stderr = fixture_stderr(args.output, target)
                     if target.startswith("chrome-"):
                         browser = Browser(
-                            target.removeprefix("chrome-"), folder
+                            target.removeprefix("chrome-"), folder, stderr
                         ).__enter__()
                         process = browser.process
                     else:
@@ -338,15 +750,26 @@ async def measure(args):
                                 "--output",
                                 str(output),
                             ],
-                            env=dict(os.environ, GDK_BACKEND="x11"),
+                            env=fixture_environment(),
                             stdout=subprocess.DEVNULL,
-                            stderr=subprocess.DEVNULL,
+                            stderr=stderr,
                         )
                     identity = start_time(process.pid)
                     window = None
+                    windows = []
+                    waiting_since = time.monotonic()
                     for _ in range(120):
                         if process.poll() is not None:
-                            raise RuntimeError("Owned target exited")
+                            raise TargetReadinessError(
+                                readiness_metadata(
+                                    target,
+                                    "target_exited",
+                                    process,
+                                    output,
+                                    windows,
+                                    waiting_since,
+                                )
+                            )
                         try:
                             windows = command(
                                 "search", "--onlyvisible", "--pid", str(process.pid)
@@ -360,15 +783,27 @@ async def measure(args):
                                 window = int(windows[0])
                                 break
                         except subprocess.CalledProcessError:
-                            pass
+                            windows = []
                         await asyncio.sleep(0.05)
                     if window is None:
-                        raise RuntimeError("Owned target not ready")
+                        metadata = readiness_metadata(
+                            target,
+                            "target_not_ready",
+                            process,
+                            output,
+                            windows,
+                            waiting_since,
+                        )
+                        try:
+                            metadata["scene"] = readiness_scene(args, process, identity)
+                        except Exception:
+                            metadata["scene"] = None
+                        raise TargetReadinessError(metadata)
+                    phase = "focusing"
                     focus(window)
                     await asyncio.sleep(0.35)
                     if int(command("getwindowpid", str(window))) != process.pid:
                         raise RuntimeError("Owned target PID mismatch")
-                    events, first = [], []
                     original_send = inputs._send
 
                     def guard(
@@ -409,10 +844,24 @@ async def measure(args):
                     inputs._send = guard
                     text = SAMPLE * args.repeat
                     began = time.monotonic()
-                    count = await inputs.insert(
-                        text, lambda: True, on_first_sent=first.append
+                    phase = "inserting"
+                    mapping_counts = {
+                        "mapping_writes": 0,
+                        "restore_calls": 0,
+                        "successful_restore_calls": 0,
+                        "deferred_restore_calls": 0,
+                    }
+                    count, cancelled = await insert_sample(
+                        inputs,
+                        text,
+                        events,
+                        first,
+                        args.cancel_after,
+                        restore_policy=args.restore_policy,
+                        mapping_counts=mapping_counts,
                     )
                     elapsed = time.monotonic() - began
+                    phase = "readback"
                     await asyncio.sleep(0.2)
                     received = (
                         browser.snapshot()
@@ -422,7 +871,10 @@ async def measure(args):
                     actual = received["text"]
                     if target == "vte":
                         actual = actual.replace("\r", "\n")
-                    exact = actual == text
+                    expected = (
+                        text if args.cancel_after is None else text[: args.cancel_after]
+                    )
+                    exact = actual == expected
                     entry = {
                         "target": target,
                         "codepoints": len(text),
@@ -433,20 +885,37 @@ async def measure(args):
                             (
                                 index
                                 for index, pair in enumerate(
-                                    zip(text, actual, strict=False)
+                                    zip(expected, actual, strict=False)
                                 )
                                 if pair[0] != pair[1]
                             ),
-                            min(len(text), len(actual)) if not exact else None,
+                            min(len(expected), len(actual)) if not exact else None,
                         ),
                         "elapsed_seconds": round(elapsed, 4),
-                        "seconds_per_codepoint": round(elapsed / len(text), 5),
+                        "seconds_per_codepoint": round(elapsed / len(text), 5)
+                        if args.cancel_after is None
+                        else None,
                         "first_sent_seconds": round(first[0] - began, 5)
                         if first
                         else None,
-                        "balanced_events": events == [True, False] * len(text),
+                        "balanced_events": events == [True, False] * len(expected),
                         "map_restored": driver._mapping() == original_map,
+                        "mapping_counts": dict(mapping_counts),
                     }
+                    if args.cancel_after is not None:
+                        recorded_events = len(events)
+                        await asyncio.sleep(0.5)
+                        later = json.loads(output.read_text())["text"]
+                        entry.update(
+                            {
+                                "cancelled": cancelled,
+                                "expected_prefix": exact,
+                                "no_late_tail": later == actual == expected
+                                and len(events) == recorded_events,
+                                "late_tail_wait_seconds": 0.5,
+                            }
+                        )
+                        entry["map_restored"] = driver._mapping() == original_map
                     if target == "vte":
                         entry["raw_bytes_exact"] = (
                             bytes.fromhex(received["raw_hex"])
@@ -455,24 +924,61 @@ async def measure(args):
                     report["targets"].append(entry)
                     inputs._send = original_send
                 finally:
-                    if browser:
-                        browser.__exit__(None, None, None)
-                    elif process is not None:
-                        process.terminate()
-                        try:
-                            process.wait(timeout=3)
-                        except subprocess.TimeoutExpired:
-                            process.kill()
-                            process.wait()
+                    try:
+                        if browser:
+                            browser.__exit__(None, None, None)
+                        elif process is not None:
+                            process.terminate()
+                            try:
+                                process.wait(timeout=3)
+                            except subprocess.TimeoutExpired:
+                                process.kill()
+                                process.wait()
+                    except Exception:
+                        phase = "cleanup"
+                        raise
+                    finally:
+                        if stderr is not None:
+                            stderr.close()
         report["passed"] = bool(report["targets"]) and all(
             row["exact"]
             and row["balanced_events"]
             and row["map_restored"]
             and row.get("raw_bytes_exact", True)
+            and row.get("cancelled", True)
+            and row.get("expected_prefix", True)
+            and row.get("no_late_tail", True)
             for row in report["targets"]
         )
+    except Exception as error:
+        raise probe_failure(
+            report,
+            target,
+            phase,
+            error,
+            events,
+            first,
+            driver,
+            original_map,
+            log_path,
+            mapping_counts,
+        ) from error
     finally:
-        await inputs.aclose()
+        try:
+            await inputs.aclose()
+        except Exception as error:
+            raise probe_failure(
+                report,
+                target,
+                "cleanup",
+                error,
+                events,
+                first,
+                driver,
+                original_map,
+                log_path,
+                mapping_counts,
+            ) from error
     return report
 
 
@@ -529,11 +1035,17 @@ def main():
     parser.add_argument("--xdotool")
     parser.add_argument(
         "--environment",
-        choices=("host-xwayland", "private-xvfb"),
+        choices=("host-xwayland", "private-xvfb", "ubuntu24-vm-x11"),
         default="host-xwayland",
     )
     parser.add_argument("--pacing", nargs=3, type=float)
     parser.add_argument("--repeat", type=int, default=1)
+    parser.add_argument(
+        "--restore-policy",
+        choices=("per-character-production", "end-of-insertion-candidate"),
+        default="per-character-production",
+    )
+    parser.add_argument("--cancel-after", type=int)
     parser.add_argument(
         "--targets",
         nargs="+",
@@ -541,6 +1053,19 @@ def main():
         default=["chrome-textarea", "chrome-contenteditable", "gtk", "vte"],
     )
     args = parser.parse_args()
+    if args.restore_policy == "end-of-insertion-candidate" and (
+        args.fixture or args.wayland_callback
+    ):
+        parser.error("restore candidate is only for the owned X11 measurement")
+    if args.cancel_after is not None and (
+        args.fixture
+        or args.wayland_callback
+        or args.targets != ["gtk"]
+        or not 1 <= args.cancel_after < len(SAMPLE) * args.repeat
+    ):
+        parser.error(
+            "cancel-after requires only GTK and a proper nonempty sample prefix"
+        )
     if args.fixture:
         fixture(args)
         return
@@ -565,17 +1090,26 @@ def main():
         parser.error("coordinated host Wayland session required")
     if args.environment == "private-xvfb":
         verify_private_xvfb()
-    if args.qt_loop:
-        from PySide6.QtWidgets import QApplication
+    if args.environment == "ubuntu24-vm-x11":
+        args.environment_metadata = verify_ubuntu24_vm_x11()
+        args.verified_session_id = os.environ["XDG_SESSION_ID"]
+    try:
+        if args.qt_loop:
+            from PySide6.QtWidgets import QApplication
 
-        from inkecho.runtime import ManagedQtEventLoop
+            from inkecho.runtime import ManagedQtEventLoop
 
-        application = QApplication([])
-        application.setQuitOnLastWindowClosed(False)
-        with ManagedQtEventLoop(application) as loop:
-            report = loop.run_until_complete(measure(args))
-    else:
-        report = asyncio.run(measure(args))
+            application = QApplication([])
+            application.setQuitOnLastWindowClosed(False)
+            with ManagedQtEventLoop(application) as loop:
+                report = loop.run_until_complete(measure(args))
+        else:
+            report = asyncio.run(measure(args))
+    except ProbeFailure as error:
+        report = error.report
+        print(
+            "Owned keyboard validation failed; see failure metadata.", file=sys.stderr
+        )
     encoded = json.dumps(report, sort_keys=True)
     if args.output:
         atomic_json(args.output, report)
