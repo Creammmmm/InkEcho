@@ -3,7 +3,7 @@
 本轮完成分段计时、HTTP 连接复用、已核实模型的思考控制、Qwen 实时识别的协议接入、
 流式润色与串行增量输出，以及经过实际应用验证的 X11 键盘等待调整。
 最新已构建独立预览包为 **0.1.0a13**，固定产品来源 `eeb2d0c`，已完成构建和静态
-清单/来源审计；**a13 实际包 Noble 七项限定检查已独立通过，主机检查仍待完成**。
+清单/来源审计；**a13 实际包 Noble 七项及 Ubuntu 26.04 主机限定检查已分别通过**。
 R8 新源码和实际包各自有来源核验与原始证据，不能互相替代。
 早期 Ubuntu 26.04.1、a11 和 a12 测量按版本保留，尤其 a12 夹具配置每片段 70 ms
 sleep 时，新 GTK 仍延迟 5.8435 秒的反例不改写。R8 源码和 a13 实际包各自的
@@ -25,7 +25,7 @@ sleep 时，新 GTK 仍延迟 5.8435 秒的反例不改写。R8 源码和 a13 �
 | HTTP 生命周期与思考控制 | 应用持有一个连接池，角色独立超时，退出正确关闭；仅对已核实的官方地址/模型默认关闭不必要思考 | [供应商验证](performance-provider-validation.md)。实际本地 TLS 三次请求从三个连接变为一个；未知网关/模型不猜参数，未测得云端思考开关收益 |
 | Qwen 实时 ASR | 独立 WSS 手动提交协议；录音中分块发送，停止后只接受最终结果；录音中断网及时停止麦克风 | [协议验证](performance-realtime-validation.md)、[编排验证](performance-pipeline-validation.md)。本地 TLS/WSS、本机麦克风和官方纯生成静音的手动协议通过，真实语音准确率待验 |
 | 流式润色 | 严格 SSE、UTF-8、结束事件和用量解析；只向下游交付正文增量 | [SSE 验证](performance-polish-stream-validation.md)。本地真实 HTTPS 夹具通过；另有一次固定公开短句的官方 DeepSeek 实测，见下文 |
-| 串行增量输出 | 有界 Unicode 队列、跨段 CRLF、偏移校验、最终尾部、背压、取消与部分输出失败保护；可显式关闭流式 | [编排验证](performance-pipeline-validation.md)、[R7 源码](ubuntu24-source-r7-validation.md)、[a12 反例](performance-a12-paced-validation.md)及[R8 源码](ubuntu24-source-r8-validation.md)。R8 将 X11 映射生命周期覆盖一个流式输出任务；a13 Noble 实际包已独立通过，host 待验；历史合成/包数据分开 |
+| 串行增量输出 | 有界 Unicode 队列、跨段 CRLF、偏移校验、最终尾部、背压、取消与部分输出失败保护；可显式关闭流式 | [编排验证](performance-pipeline-validation.md)、[R7 源码](ubuntu24-source-r7-validation.md)、[a12 反例](performance-a12-paced-validation.md)及[R8 源码](ubuntu24-source-r8-validation.md)。R8 将 X11 映射生命周期覆盖一个流式输出任务；a13 Noble 与[主机限定检查](performance-a13-host-validation.md)分别通过；历史合成/包数据分开 |
 | 键盘等待与真实首发时间 | X11 三次等待各从 40 ms 改为 20 ms，统一可打印字符的 Unicode 映射；两种后端提供实际发送时点 | [初始键盘验证](performance-keyboard-validation.md)、[Qt 流式跟进验证](performance-x11-stream-validation.md)、[R6 源码](ubuntu24-source-r6-validation.md)及[a11 包](performance-a11-package-validation.md)。a11 将 X11 映射恢复移至每次插入结束的同步清理；等待仍为 20 ms；Wayland 两个 50 ms 等待未变 |
 
 阶段 0 和平台范围继续以[可行性记录](feasibility-report.md)、
@@ -210,7 +210,7 @@ reviewed payload 为 `cd711f7e0329c3324858e1a9a04d000c52b11b4e8ec33fca13a9841318
 原样本、生产期限及探针 12 秒等待界限均未延长。详情见[a12 慢流反例](performance-a12-paced-validation.md)。
 
 **后续状态：** R8 任务级映射生命周期新源码已完成单独实测，见下一节；旧 a12 不包含该修复。
-a13 新包已有独立 Noble 实际验收，见下文；主机检查仍待完成。
+a13 新包已有独立 Noble 和主机限定实际验收，见下文。
 Noble 流水线仅使用合成 PCM 和回环协议夹具，没有真实麦克风、凭据读取或云请求。
 物理快捷键/F13/F14、完整录音中切焦点流程、悬浮焦点、GNOME 46 原生输入、FUSE、
 安装/自启动与物理机也未由这些结果验证。后续修复不得回填为旧 a11 或 a12 已通过。
@@ -265,8 +265,24 @@ WebSockets 依赖来源；证据为 `build/performance-a13-{artifact,entry-audit
 
 正式输出 scope的首字在其余 55 码点入队前成功发送，56 码点精确 [12,44]切窗，55 写入/
 1 恢复，34.384 ms 首发、3.9288 秒完成。Xorg 提取后 AppRun 九页及正常退出已主审看图；
-不含 IPC、损坏配置、native Wayland或FUSE验收。主机麦克风/本地 TLS 及主机 UI/IPC/
-损坏配置/退出仍待完成。Noble 这七项仅用合成 PCM与回环服务，无云端、凭据或真实麦克风。
+此 Noble UI 检查不含 IPC、损坏配置、native Wayland或FUSE验收；主机另行检查见下节。
+Noble 这七项仅用合成 PCM与回环服务，无云端、凭据或真实麦克风。
+
+### a13 Ubuntu 26.04 主机限定验收通过
+
+同一 a13 包在 Ubuntu 26.04.1、GNOME 50.1 实际 Wayland 会话分别通过主机检查，
+见[a13 主机报告](performance-a13-host-validation.md)。默认 20 ms 的四个新建 XWayland
+目标（Chrome textarea/contenteditable、GTK、VTE）各 140 码点准确，事件配对且映射恢复；
+GTK 取消检查接收 12 码点精确前缀，0.5 秒观察无尾部。实际包内 Recorder 到本地 TLS/WSS/SSE
+固定 ASR/润色服务，再到自有 XWayland GTK 的链路输出 25 码点准确，取消任务仅多一字且无尾部。
+停止到实际首发 **36.749 ms**、输出完成 **1862.684 ms**，只属这次本地固定文本链路，
+不是真实云端识别、准确率或云端前后性能对照。
+
+原生 Wayland AppRun 九页、IPC show/toggle/cancel/quit 及损坏独立配置退出 1 并保留原字节均通过。
+UI toggle 前核对空模型，没有录音或密钥读取；这不验证原生 Wayland 输入，UI 日志也不称无告警。
+R2 的私有运行目录隔断宿主音频套接字，连接失败与超时证据原样保留；R3 只修验证工具，
+令麦克风模式使用经验证的宿主音频运行目录后通过。产品来源、a13 包和服务夹具未改，
+不据此解释所有用户的麦克风故障。a9 稳定入口、公开 v0.1 的 a8 附件和用户配置均未替换。
 
 
 ### 云端、音频与合成证据分别记录
@@ -376,9 +392,10 @@ offscreen Qt 和本地 TLS 夹具；实际包显示与云端能力仍分别验�
 | a12 固定来源提交的源码检查 | 产品 `06f5600` clean HEAD，Ruff lint/format **225 文件**；**1051 passed、3 skipped，19.90 秒** | 精确提交记录 `.git/validation/06f5600a57402335e97b3975afc38009d6233e58.json`，证据绑定 [R7 报告](ubuntu24-source-r7-validation.md)；后续提交需重验 |
 | 历史 a12 实际包 | 108907000 bytes，SHA256 `e31dbc6301318ab10632c12a7437ae7cd01482f2b1ee39655a82e43b6900eae9` | 产品 `06f5600`；[a12 包记录](performance-a12-package-validation.md)，独立包未部署 |
 | a12 Noble R1 八种模式 | 严格实际包来源和限定功能通过；fastlong150 清理后 GTK/VTE 0.1747/0.3388 秒 | `a12-r1-*`；只属固定快流场景，不代表慢流或立即响应 |
-| a12 R2 慢流 | 夹具每片段配置 70 ms sleep，文字/取消准确，却有 288 写入/150 恢复，新 GTK 5.8435 秒才就绪，延迟验收未通过 | `a12-r2-paced-pipeline-long*.json`；R8 源码已单独通过，a13 Noble 实际包另行通过，host 检查待验 |
+| a12 R2 慢流 | 夹具每片段配置 70 ms sleep，文字/取消准确，却有 288 写入/150 恢复，新 GTK 5.8435 秒才就绪，延迟验收未通过 | `a12-r2-paced-pipeline-long*.json`；R8 源码、a13 Noble 与主机限定检查另行通过，不改写此反例 |
 | 当前 a13 固定来源提交检查 | 产品 `eeb2d0c`，Ruff/format **233 文件**；**1078 passed、3 skipped，20.01 秒** | `.git/validation/eeb2d0ce8f8c5a6690b0ab54e0196da4254eb767.json`，绑定 [R8 报告](ubuntu24-source-r8-validation.md)；后续提交需重验 |
-| 当前 a13 构建及 Noble 实际包 | 108907000 bytes，SHA256 `8dce4eedee71373a27e0e6507592b1240617412a8a6f114230b9a53f4d286a89`；43 源码及完整清单/来源通过 | [a13 包报告](performance-a13-package-validation.md)；Noble 七项严格来源/功能通过，host、云语音及完整平台矩阵未验 |
+| 当前 a13 构建及 Noble 实际包 | 108907000 bytes，SHA256 `8dce4eedee71373a27e0e6507592b1240617412a8a6f114230b9a53f4d286a89`；43 源码及完整清单/来源通过 | [a13 包报告](performance-a13-package-validation.md)；Noble 七项严格来源/功能通过，云语音及完整平台矩阵未验 |
+| 当前 a13 主机实际包 | Ubuntu 26.04.1/GNOME 50.1：四个 XWayland 目标、cancel12、真实麦克风到本地固定服务及 GTK；原生 Wayland 九页/IPC/损坏配置保留通过 | [主机报告](performance-a13-host-validation.md)；R2 音频隔离失败保留，R3 仅修工具环境；未验原生输入或云语音 |
 | 最终 clean HEAD 工作流 | 按开发规范在本文定稿并提交后执行；正式结果以 `.git/validation/<HEAD>.json` 为准 | 记录绑定当时提交与本报告哈希；不复用前一检查点或未提交工作区的结果 |
 | 历史 a10 AppImage | r2 独立包验收通过；版本 0.1.0a10，108907000 bytes | `dist/InkEcho-0.1.0a10-x86_64.AppImage`；SHA-256：`5c515dd0e3ceb8eb910baa45f392d8be28bfda109c5e1d59865e5a0733b7d55a` |
 | 历史 a10 包内容与来源 | 产品 `b963879` 的 43 个源码哈希前后不变；3958 文件哈希、1048 内部符号链接、websockets 15.0.1 的两份 BSD 许可核对通过 | [完整包报告](performance-package-validation.md)，正式验收记录随 `aad9280` 提交 |
@@ -393,14 +410,14 @@ offscreen Qt 和本地 TLS 夹具；实际包显示与云端能力仍分别验�
 不是从这个包执行的云端请求。包的独立依赖/来源、所有早期检查点及限制见
 [a10 包验收](performance-package-validation.md)。
 
-要试用本地预览包，先从正在运行的旧版托盘菜单正常退出，再启动独立 a13。其 Noble 七项实际包检查已通过，主机检查仍待验；单实例
+要试用本地预览包，先从正在运行的旧版托盘菜单正常退出，再启动独立 a13。其 Noble 七项及主机限定实际包检查已通过；单实例
 通信可能只唤起旧 a9，不能据此判断 a13 功能是否生效：
 
 ```sh
 ./dist/InkEcho-0.1.0a13-x86_64.AppImage
 ```
 
-本次保留原有稳定入口、自启动和公开 release；a13 的 Noble 限定实际包检查
+本次保留原有稳定入口、自启动和公开 release；a13 的 Noble 与主机限定实际包检查
 不构成完整平台矩阵验收，也没有替换用户正在运行的版本。后续部署、推送或发布须使用各自的实际验收和授权范围。
 
 自动审批拒绝的是将指定本地 WAV 发送给外部 ASR 服务的试验，理由是当前人类指令

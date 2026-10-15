@@ -5,18 +5,20 @@ version, host/guest session, target and workflow. A passed keyboard fixture
 is not full voice-input or desktop support. No current path uses clipboard
 or system input-method submission, including as a fallback.
 
-## Current a13 Noble actual-package and R8 source scope
+## Current a13 Noble/host actual-package and R8 source scope
 
 The latest built artifact is a13, fixed to product source `eeb2d0c`. Its exact
 clean workflow passed Ruff/format for 233 files and 1078 tests/three skips in
 20.01 seconds. Seven Noble actual-package modes now naturally exited 0 and
-passed independent acceptance; **host checks remain pending**. R8 source checks
+passed independent acceptance; separate **Ubuntu 26.04 host limited checks also
+passed**. R8 source checks
 using old a12 dependencies passed separately; those source checks cannot
 substitute for a13 artifact validation. The independent a13 checks establish
 the limited package execution described above. Neither changes the preserved
 a12 artifact. R7/a12 fast-stream positives and
 a12 paced-stream latency failure remain separate historical results.
 See [a13 actual-package evidence](performance-a13-package-validation.md),
+[a13 host evidence](performance-a13-host-validation.md),
 [R8 source evidence](ubuntu24-source-r8-validation.md),
 [a12 artifact evidence](performance-a12-package-validation.md) and
 [a12 paced counterexample](performance-a12-paced-validation.md).
@@ -24,17 +26,25 @@ See [a13 actual-package evidence](performance-a13-package-validation.md),
 | System/session and version | Actual measured result | Still outside that result |
 | --- | --- | --- |
 | Ubuntu 24.04.5 KVM / GNOME 46 actual Xorg / R8 new source, old a12 dependencies | Paced/fast150 exact and cancel-safe; writes/restores/insertions 145/1/150 and 145/1/6; post-cleanup GTK/VTE 0.1734/0.3882 and 0.1706/0.2901 s; first press before future text, exact [12,44] routing | Verified source Session/task scope only; observer and two-task cleanup remain, not immediate response or broad reliability; a12 unchanged |
-| Same actual Noble guest Xorg / a13 artifact, product eeb2d0c | Seven modes passed with strict actual package origins: default four targets140exact, cancel12, normal/long-paced/long-fast local TLS, lone first press plus exact [12,44] focus, extracted AppRun nine pages; paced GTK/VTE 0.1753/0.2983 s after both tasks/cleanup | No new a13 40 ms control; host pending, no real VM mic/cloud/physical shortcut/overlay-focus/FUSE/installation claim; no distribution or immediate response guarantee |
+| Same actual Noble guest Xorg / a13 artifact, product eeb2d0c | Seven modes passed with strict actual package origins: default four targets140exact, cancel12, normal/long-paced/long-fast local TLS, lone first press plus exact [12,44] focus, extracted AppRun nine pages; paced GTK/VTE 0.1753/0.2983 s after both tasks/cleanup | No new a13 40 ms control; no real VM mic/cloud/physical shortcut/overlay-focus/FUSE/installation claim; no distribution or immediate response guarantee |
+| Ubuntu 26.04.1 / GNOME 50.1 Wayland host / a13 XWayland input | Default20 Chrome textarea/contenteditable, GTK and VTE each140exact; cancel12 prefix/no-tail; actual Recorder through fixed local TLS ASR/polish to owned GTK25exact/cancel+1, stop to first press/completion36.749/1862.684ms | Fixed local services, not cloud speech/accuracy or a latency distribution; native Wayland input and physical shortcuts not tested here |
+| Same host / a13 actual AppRun native Wayland UI | Nine visible pages, IPC show/toggle/cancel/quit and deliberately damaged private config exit1/preserved bytes passed | Empty model checked before UI toggle, no UI recording/key lookup; no native input acceptance; isolated audio/focus warnings retained |
 | Historical Ubuntu 24.04.5 KVM / GNOME 46 actual Xorg / R7 new source, old a11 dependencies | 150 exact fast-stream codepoints, 150 writes/six restores, cancellation/cleanup, isolated first character and [12,44] focus route; post-cleanup GTK/VTE 0.1639/0.2216 s | Source-only with verified new origins; not a repaired a11 package or general responsiveness guarantee |
 | Historical same guest Xorg / a12 artifact R1 | Eight modes: four-target matched 40/20 checks, cancel12, normal local TLS 40/20, fastlong150, streamed first/focus and extracted AppRun nine pages; fastlong GTK/VTE 0.1747/0.3388 s after both tasks/cleanup | R2 paced-stream latency failed despite R1 success; no VM microphone/cloud, physical shortcut/F13/F14, overlay focus, FUSE, installation/autostart or arbitrary-paced/immediate-response claim |
-| Historical same guest Xorg / unchanged a12 artifact R2 | Fixture-configured 70 ms sleep per fragment; 150 exact and cancel-safe, but 288 writes/150 restores; after both tasks/cleanup new GTK needed 5.8435 s, sequential VTE 0.3393 s | Mechanical gates passed; latency acceptance failed. R8 source passed separately, a13 Noble actual artifact passed separately; host pending; not an overall fix |
+| Historical same guest Xorg / unchanged a12 artifact R2 | Fixture-configured 70 ms sleep per fragment; 150 exact and cancel-safe, but 288 writes/150 restores; after both tasks/cleanup new GTK needed 5.8435 s, sequential VTE 0.3393 s | Mechanical gates passed; latency acceptance failed. R8 source and a13 Noble/host limited checks passed separately; not an overall fix of this old artifact |
 | Historical Ubuntu 24.04.5 KVM / GNOME 46 actual Xorg / R6 source | New production source imported explicitly; complete Chrome textarea/contenteditable, GTK, VTE 40/20 ms groups each 140 exact; cancel after 12 and no tail over 0.5 s | Not a package test; old a10 interpreter/dependencies do not mean a10 contains the repair |
 | Historical same guest Xorg / a11 artifact R1 | Artifact's own modules: same four-target matched checks, cancellation, 56-codepoint two-window switch with exact 12/44 split, fixed local TLS WSS/SSE pipeline including fast25, extracted AppRun nine pages | No VM microphone/cloud speech, physical global shortcut/F13/F14, overlay-focus acceptance, FUSE mount, menu installation or autostart; R2 below shows that long-stream desktop latency remains |
 | Historical same guest Xorg / unchanged a11 artifact R2 | 150 streamed codepoints and cancellation exact; 288 mapping writes, 150 restores; fresh GTK readiness 6.0944 s after both tasks/cleanup, sequential VTE 0.285 s | Mechanical readiness gate passed but material desktop delay remains; not an overall fix; later R7/a12 results do not change this artifact |
 | Ubuntu 24.04.5 KVM / GNOME 46 native Wayland / historical a10 artifact | Extracted AppRun nine pages, normal exit; actual keyboard-worker authorization failed, missing SetKeymap/KeymapCapabilities | Current native input path unavailable in this measured installation; not proof that every alternative is impossible; no a13 native guest input success |
-| Ubuntu 26.04.1 / GNOME 50.1 / earlier a9 and a10 | Owned native/XWayland target and package results retained in [a9 acceptance](native-wayland-parent-validation.md) and [a10 package report](performance-package-validation.md) | Historical versions, not a13 host revalidation; native BMP restriction remains, arbitrary apps and complete desktop matrix unproven |
+| Ubuntu 26.04.1 / GNOME 50.1 / earlier a9 and a10 | Owned native/XWayland target and package results retained in [a9 acceptance](native-wayland-parent-validation.md) and [a10 package report](performance-package-validation.md) | Separate historical versions; a13 native input not revalidated, native BMP restriction remains, arbitrary apps and complete desktop matrix unproven |
 | Ubuntu 24.04 / minimal offscreen container / earlier packages | Userspace startup and nine-page screenshots in the recorded container checks | No actual guest desktop/kernel, microphone or keyboard acceptance follows from the container |
 | Windows/macOS | Not implemented or tested | No compatibility claim |
+
+The host r2 microphone failure remains preserved: its private runtime hid the
+host audio sockets. The r3 tool-only follow-up retained the validated host audio
+runtime for microphone capture and passed, with private configuration unchanged.
+This did not alter the a13 product or establish a general fix for user audio
+failures. The a9 stable entry and public v0.1 a8 download remain unchanged.
 
 The actual Noble VM runs its own kernel, systemd and graphical login, distinct
 from the container smoke and from host XWayland. Its lock/network recovery,

@@ -27,8 +27,9 @@ was exact and canceled safely but still
 needed 5.8435 seconds for a new GTK window after cleanup: latency acceptance
 failed. R8 task-scoped mapping lifecycle source checks have since passed
 separately. The new a13 actual artifact has now passed seven independently
-reviewed Noble modes; host checks remain pending. No
-complete Ubuntu 24.04, physical hardware or cloud speech-accuracy support is
+reviewed Noble modes; separate
+[Ubuntu 26.04 host limited checks](performance-a13-host-validation.md) have also
+passed. No complete Ubuntu 24.04, physical hardware or cloud speech-accuracy support is
 claimed. Historical a10/a11 artifacts, experimental R5, source R6/R7 and current
 a12/a13 artifact evidence are separate; later success does not rewrite old failures.
 
@@ -413,8 +414,8 @@ observer and two-task/cleanup scope still preclude a last-character immediate
 responsiveness claim.
 
 The subsequent R8 source and separate a13 Noble actual-package checks below
-have now passed; a13 host validation remains pending. Neither those source results
-nor later worktree changes retroactively repair this immutable a12 artifact.
+have now passed; separate limited a13 host checks have also passed. Neither
+those source results nor later worktree changes retroactively repair this immutable a12 artifact.
 a12 host checks were deferred in favor of the replacement artifact.
 
 ## R8 source and separate a13 Noble actual-package checks passed
@@ -495,10 +496,29 @@ the remaining 55 were queued and routed all 56 exactly [12,44], with 55 writes,
 one restore and balanced events. AppRun/Xorg nine pages and normal exit were
 reviewed by root, including the contact sheet and long provider pages. This
 UI mode does not include IPC, damaged-profile, native Wayland or FUSE checks.
-Relevant Ubuntu 26 host tests remain pending. These Noble modes used only
+Separate Ubuntu 26 host results are linked below. These Noble modes used only
 synthetic PCM and loopback fixtures, without cloud requests, credentials or a
 real microphone. No deployment, push or release occurred; a12's immutable
 negative history remains unchanged.
+
+## Separate a13 Ubuntu 26.04 host checks
+
+The unchanged a13 artifact also passed limited checks on the Ubuntu 26.04.1,
+GNOME 50.1 actual Wayland host; see [the host report](performance-a13-host-validation.md).
+Four owned XWayland targets each received 140 exact codepoints at default20,
+and cancel12 had the exact prefix and no tail. Actual Recorder capture through
+fixed local TLS ASR/polish services to owned GTK delivered 25 exact codepoints,
+with cancellation adding only one character. Stop to first press/completion was
+36.749/1862.684 ms for this local fixture, not cloud speech or accuracy evidence.
+Native Wayland AppRun nine pages, IPC and preserved damaged configuration also
+passed; the empty-model UI toggle did not record or read keys, and native input
+was not tested. These are host results, not guest microphone acceptance.
+
+The original r2 host microphone failure remains preserved. Its private runtime
+hid the host audio sockets; r3 changed only the tool's microphone environment to
+retain the validated host audio runtime and passed, without changing product
+source, artifact or user settings. It does not explain all user audio failures.
+The a9 stable entry and public v0.1 a8 artifact remain unchanged.
 
 ## Reproduction and outstanding acceptance
 
@@ -539,9 +559,9 @@ adapted VM probe must be present under the input path with its recorded manifest
 it is a lab fixture, not an unrecorded modification to production input code.
 This report does not claim that unreviewed future runs have passed.
 
-Remaining acceptance includes the relevant a13 host checks and the full
-platform matrix; arbitrary timing/load and immediate desktop response remain
-unproven. The seven Noble actual-package modes do not fill those gaps.
+Remaining acceptance includes the full platform matrix; arbitrary timing/load
+and immediate desktop response remain unproven. The seven Noble modes and
+separately scoped Ubuntu 26 host checks do not fill those gaps.
 Actual VM microphone/voice capture, physical shortcut/F13/F14 behavior,
 focus changes during recording/recognition, overlay focus, credentials,
 FUSE-mounted launch, desktop integration/autostart and unavailable-native-path
