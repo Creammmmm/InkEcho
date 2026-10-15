@@ -168,6 +168,7 @@ def test_cli_rejects_two_desktop_modes_before_any_environment_or_qt(monkeypatch)
         ("normal", probe.PARTS, 0.35, probe.FINAL),
         ("one-character-fast", list(probe.FINAL), 0.001, probe.FINAL),
         ("one-character-fast-long", list(probe.FINAL * 6), 0.001, probe.FINAL * 6),
+        ("one-character-paced-long", list(probe.FINAL * 6), 0.07, probe.FINAL * 6),
     ],
 )
 def test_sse_profile_uses_only_fixed_fixture_text(name, parts, delay, expected):
@@ -184,14 +185,18 @@ def test_sse_profile_rejects_unknown_names(name):
 
 
 @pytest.mark.parametrize("overlap", [False, True])
-def test_normal_requires_overlap_but_fast_reports_the_actual_order(overlap):
+def test_normal_requires_overlap_but_character_profiles_report_actual_order(overlap):
     assert probe.streaming_timing_accepted("normal", overlap) is overlap
     assert probe.streaming_timing_accepted("one-character-fast", overlap) is True
     assert probe.streaming_timing_accepted("one-character-fast-long", overlap) is True
+    assert probe.streaming_timing_accepted("one-character-paced-long", overlap) is True
 
 
+@pytest.mark.parametrize(
+    "profile", ["one-character-fast-long", "one-character-paced-long"]
+)
 def test_long_sse_cli_profile_is_explicit_and_accepted_before_file_checks(
-    monkeypatch, tmp_path
+    monkeypatch, tmp_path, profile
 ):
     monkeypatch.setattr(
         sys,
@@ -203,7 +208,7 @@ def test_long_sse_cli_profile_is_explicit_and_accepted_before_file_checks(
             "--output",
             str(tmp_path / "not-written"),
             "--fixture-sse-profile",
-            "one-character-fast-long",
+            profile,
         ],
     )
     with pytest.raises(FileNotFoundError):

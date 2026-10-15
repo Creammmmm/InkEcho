@@ -134,6 +134,8 @@ def fixture_sse_profile(name):
         return list(FINAL), 0.001
     if name == "one-character-fast-long":
         return list(FINAL * 6), 0.001
+    if name == "one-character-paced-long":
+        return list(FINAL * 6), 0.07
     raise ValueError("Unknown fixed SSE fixture profile")
 
 
@@ -411,6 +413,7 @@ async def probe(args):
         folder = Path(folder_name)
         local = LocalHTTP(folder, args.fixture_sse_profile)
         fixture_final = "".join(local.parts)
+        report["fixture_sse_delta_delay_seconds"] = local.delta_delay
         report["fixture_final_codepoints"] = len(fixture_final)
         report["fixture_final_printable_codepoints"] = sum(
             character.isprintable() for character in fixture_final
@@ -933,7 +936,12 @@ def main():
     parser.add_argument("--pacing", type=float)
     parser.add_argument(
         "--fixture-sse-profile",
-        choices=("normal", "one-character-fast", "one-character-fast-long"),
+        choices=(
+            "normal",
+            "one-character-fast",
+            "one-character-fast-long",
+            "one-character-paced-long",
+        ),
         default="normal",
     )
     args = parser.parse_args()
