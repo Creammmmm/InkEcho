@@ -719,8 +719,15 @@ class Session(QObject):
             self.mark_timing(task_id, "polishing_completed")
             await output.finish(result.text)
 
+        async def consume():
+            output_session = getattr(self.inputs, "output_session", None)
+            if not callable(output_session):
+                return await output.run()
+            async with output_session():
+                return await output.run()
+
         producer = self.spawn(produce())
-        consumer = self.spawn(output.run())
+        consumer = self.spawn(consume())
 
         async def stop_operations():
             output.close()

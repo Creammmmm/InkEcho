@@ -3,8 +3,8 @@
 import asyncio
 import ctypes
 import time
-from collections.abc import Callable
-from contextlib import contextmanager
+from collections.abc import AsyncIterator, Callable
+from contextlib import asynccontextmanager, contextmanager
 
 # Retain twice the rejected 10 ms candidate after fresh-window application tests;
 # X11 timing evidence and platform limits are in performance-keyboard-validation.md.
@@ -362,6 +362,8 @@ class KeyboardInput:
         self._factory = driver_factory
         self._driver = None
         self._task = None
+        self._output_owner = None
+        self._output_failed = False
         self._closing = False
 
     @property
@@ -390,6 +392,30 @@ class KeyboardInput:
     def _send(self, window, keycode, pressed):
         self._driver.send(window, keycode, pressed)
 
+    @asynccontextmanager
+    async def output_session(self) -> AsyncIterator[None]:
+        """Retain our empty-row loan across fragments owned by one consumer task."""
+        if not self.connected:
+            raise KeyboardError("session_closed")
+        owner = asyncio.current_task()
+        if owner is None or self._task is not None or self._output_owner is not None:
+            raise KeyboardError("busy")
+        driver = self._driver
+        self._output_owner, self._output_failed = owner, False
+        try:
+            yield
+            if self._closing:
+                raise KeyboardError("session_closed")
+            if self._output_failed:
+                raise KeyboardError("injection_failed")
+        finally:
+            try:
+                # Same-owner aclose may already have restored and closed it.
+                if self._driver is driver:
+                    driver.restore()
+            finally:
+                self._output_owner, self._output_failed = None, False
+
     async def insert(
         self,
         text: str,
@@ -398,13 +424,25 @@ class KeyboardInput:
         deadline=None,
         on_first_sent: Callable[[float | None], None] | None = None,
     ) -> int:
-        text = _text(text)
+        current = asyncio.current_task()
+        try:
+            text = _text(text)
+        except BaseException:
+            if self._output_owner is current and self._driver is not None:
+                self._output_failed = True
+                self._driver.restore()
+            raise
         if not self.connected:
             raise KeyboardError("session_closed")
-        if self._task is not None:
+        if self._task is not None or (
+            self._output_owner is not None and self._output_owner is not current
+        ):
             raise KeyboardError("busy")
-        self._task = asyncio.current_task()
+        if self._output_failed:
+            raise KeyboardError("input_cancelled")
+        self._task = current
         driver = self._driver
+        completed = False
 
         def check():
             if (
@@ -434,22 +472,28 @@ class KeyboardInput:
                     self._send(window, code, False)
                 await asyncio.sleep(RELEASE_SETTLE_SECONDS)
                 check()
+            completed = True
         finally:
             try:
-                driver.restore()
+                if not completed and self._output_owner is current:
+                    self._output_failed = True
+                if not completed or self._output_owner is not current:
+                    driver.restore()
             finally:
                 self._task = None
         return len(text)
 
     async def aclose(self) -> None:
         self._closing = True
-        task = self._task
-        if task is not None and task is not asyncio.current_task():
-            task.cancel()
-            try:
-                await task
-            except (asyncio.CancelledError, KeyboardError):
-                pass
-        if self._driver is not None:
-            driver, self._driver = self._driver, None
-            driver.close()
+        task = self._output_owner or self._task
+        try:
+            if task is not None and task is not asyncio.current_task():
+                task.cancel()
+                try:
+                    await task
+                except (asyncio.CancelledError, KeyboardError):
+                    pass
+        finally:
+            if self._driver is not None:
+                driver, self._driver = self._driver, None
+                driver.close()

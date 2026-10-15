@@ -580,3 +580,323 @@ def test_printable_characters_use_literal_unicode_keysyms(character):
     assert rows[1] == (0x01000000 | ord(character),) * 2
     driver.restore()
     assert rows == [(97, 65), (0, 0)]
+
+
+def test_output_session_entry_and_idle_do_not_focus_or_map(monkeypatch):
+    inputs, driver, rows, writes, events = mapped_keyboard(monkeypatch)
+    driver.focus = lambda: pytest.fail("Idle sessions must not capture focus")
+
+    async def run():
+        await inputs.connect()
+        async with inputs.output_session():
+            await asyncio.sleep(0)
+            assert not writes and not events and rows[1] == (0, 0)
+        assert inputs._output_owner is None and driver.applied is None
+
+    asyncio.run(run())
+
+
+def test_output_session_retains_real_mapping_across_150_separate_insertions(
+    monkeypatch,
+):
+    inputs, driver, rows, writes, events = mapped_keyboard(monkeypatch)
+    sample = "你好，InkEcho！ café Ω 😀\n第二行。" * 6
+
+    async def run():
+        await inputs.connect()
+        async with inputs.output_session():
+            for character in sample:
+                assert await inputs.insert(character, lambda: True) == 1
+                await asyncio.sleep(0)  # A real suspension between all fragments.
+                assert driver.applied is not None and inputs._task is None
+                assert all(any(row) for row in writes)
+        assert len(sample) == 150 and len(writes) == 145
+        assert writes[-1] == (0, 0)
+        assert rows == [(97, 65), (0, 0)] and driver.applied is None
+        assert [event[2] for event in events] == [True, False] * 150
+        assert inputs._output_owner is None
+        # Outside a session the public single-insert cleanup remains unchanged.
+        assert await inputs.insert("外", lambda: True) == 1
+        assert len(writes) == 147 and rows[1] == (0, 0)
+
+    asyncio.run(run())
+
+
+def test_output_session_owner_blocks_nested_sessions_and_other_tasks(monkeypatch):
+    inputs, driver, rows, writes, _events = mapped_keyboard(monkeypatch)
+
+    async def run():
+        await inputs.connect()
+        async with inputs.output_session():
+            await inputs.insert("甲", lambda: True)
+            with pytest.raises(KeyboardError, match="busy"):
+                async with inputs.output_session():
+                    pytest.fail("Nested output session entered")
+
+            async def outsider():
+                with pytest.raises(KeyboardError, match="busy"):
+                    await inputs.insert("外", lambda: True)
+                with pytest.raises(KeyboardError, match="busy"):
+                    async with inputs.output_session():
+                        pytest.fail("Foreign output session entered")
+
+            await asyncio.create_task(outsider())
+            assert len(writes) == 1 and driver.applied is not None
+            await inputs.insert("乙", lambda: True)
+        assert len(writes) == 3 and rows[1] == (0, 0)
+
+    asyncio.run(run())
+
+
+@pytest.mark.parametrize("failure", ["invalid_text", "foreign_row", "expired"])
+def test_caught_fragment_failure_restores_and_poisoned_session_cannot_continue(
+    monkeypatch, failure
+):
+    inputs, driver, rows, writes, events = mapped_keyboard(monkeypatch)
+
+    async def run():
+        await inputs.connect()
+        with pytest.raises(KeyboardError, match="injection_failed"):
+            async with inputs.output_session():
+                await inputs.insert("甲", lambda: True)
+                if failure == "foreign_row":
+                    rows[1] = (91, 92)
+                with pytest.raises(KeyboardError) as caught:
+                    await inputs.insert(
+                        "\t" if failure == "invalid_text" else "乙",
+                        lambda: True,
+                        deadline=0 if failure == "expired" else None,
+                    )
+                assert (
+                    caught.value.code
+                    == {
+                        "invalid_text": "unsupported_text",
+                        "foreign_row": "mapping_changed",
+                        "expired": "input_cancelled",
+                    }[failure]
+                )
+                assert driver.applied is None
+                assert rows[1] == ((91, 92) if failure == "foreign_row" else (0, 0))
+                with pytest.raises(KeyboardError, match="input_cancelled"):
+                    await inputs.insert("不得继续", lambda: True)
+        assert len(writes) == (1 if failure == "foreign_row" else 2)
+        assert [event[2] for event in events] == [True, False]
+        assert inputs._output_owner is None and not inputs._output_failed
+
+    asyncio.run(run())
+
+
+def test_output_session_cleanup_failure_does_not_overwrite_foreign_row(monkeypatch):
+    inputs, driver, rows, writes, events = mapped_keyboard(monkeypatch)
+
+    async def run():
+        await inputs.connect()
+        with pytest.raises(KeyboardError, match="mapping_changed"):
+            async with inputs.output_session():
+                await inputs.insert("甲", lambda: True)
+                rows[1] = (91, 92)
+        assert rows[1] == (91, 92) and len(writes) == 1
+        assert driver.applied is None and inputs._output_owner is None
+        assert [event[2] for event in events] == [True, False]
+
+    asyncio.run(run())
+
+
+@pytest.mark.parametrize("failure", ["cancel", "callback_error"])
+def test_output_session_press_failure_releases_and_restores_real_row(
+    monkeypatch, failure
+):
+    inputs, driver, rows, writes, events = mapped_keyboard(monkeypatch)
+
+    async def run():
+        await inputs.connect()
+
+        def fail(_sent_at):
+            if failure == "cancel":
+                raise asyncio.CancelledError
+            raise RuntimeError("fixed callback failure")
+
+        expected = asyncio.CancelledError if failure == "cancel" else RuntimeError
+        with pytest.raises(expected):
+            async with inputs.output_session():
+                await inputs.insert("甲乙", lambda: True, on_first_sent=fail)
+        assert events == [(21, 9, True), (21, 9, False)]
+        assert len(writes) == 2 and rows[1] == (0, 0)
+        assert driver.applied is None and inputs._output_owner is None
+        assert inputs._task is None
+
+    asyncio.run(run())
+
+
+def test_output_session_refreshes_focus_between_fragments_and_after_mapping_wait(
+    monkeypatch,
+):
+    calls = 0
+    driver = None
+
+    def switch(_count):
+        nonlocal calls
+        calls += 1
+        if calls == 4:
+            driver.focus = lambda: 23
+
+    inputs, driver, rows, _writes, events = mapped_keyboard(monkeypatch, switch)
+
+    async def run():
+        await inputs.connect()
+        async with inputs.output_session():
+            await inputs.insert("甲", lambda: True)
+            driver.focus = lambda: 22
+            await inputs.insert("乙", lambda: True)
+        assert events == [(21, 9, True), (21, 9, False), (23, 9, True), (23, 9, False)]
+        assert rows[1] == (0, 0)
+
+    asyncio.run(run())
+
+
+@pytest.mark.parametrize("phase", ["idle", "pressed"])
+def test_aclose_joins_output_owner_before_closing_real_driver(monkeypatch, phase):
+    inputs, driver, rows, writes, events = mapped_keyboard(monkeypatch)
+    entered = asyncio.Event()
+    closed = []
+
+    def close_display(_display):
+        assert inputs._output_owner is None and rows[1] == (0, 0)
+        closed.append(True)
+
+    driver.x11.XCloseDisplay = close_display
+    driver.close = _XDriver.close.__get__(driver)
+
+    async def run():
+        await inputs.connect()
+
+        async def consume():
+            async with inputs.output_session():
+                await inputs.insert(
+                    "甲乙" if phase == "pressed" else "甲",
+                    lambda: True,
+                    on_first_sent=lambda _at: (
+                        entered.set() if phase == "pressed" else None
+                    ),
+                )
+                entered.set()
+                await asyncio.Event().wait()
+
+        owner = asyncio.create_task(consume())
+        await entered.wait()
+        await inputs.aclose()
+        assert owner.cancelled() and closed == [True]
+        assert inputs._driver is None and inputs._output_owner is None
+        assert events == [(21, 9, True), (21, 9, False)]
+        assert len(writes) == 2 and rows[1] == (0, 0)
+
+    asyncio.run(run())
+
+
+def test_same_owner_aclose_never_reuses_closed_driver_even_for_invalid_text(
+    monkeypatch,
+):
+    inputs, driver, rows, writes, _events = mapped_keyboard(monkeypatch)
+    closed = []
+
+    def close_display(_display):
+        closed.append(True)
+        driver.restore = lambda: pytest.fail("Closed driver accessed by context")
+
+    driver.x11.XCloseDisplay = close_display
+    driver.close = _XDriver.close.__get__(driver)
+
+    async def run():
+        await inputs.connect()
+        with pytest.raises(KeyboardError, match="session_closed"):
+            async with inputs.output_session():
+                await inputs.insert("甲", lambda: True)
+                await inputs.aclose()
+                with pytest.raises(KeyboardError, match="unsupported_text"):
+                    await inputs.insert("\t", lambda: True)
+                with pytest.raises(KeyboardError, match="session_closed"):
+                    await inputs.insert("乙", lambda: True)
+        assert closed == [True] and inputs._driver is None
+        assert inputs._output_owner is None and rows[1] == (0, 0) and len(writes) == 2
+
+    asyncio.run(run())
+
+
+def test_output_session_cannot_enter_during_standalone_insertion(monkeypatch):
+    inputs, driver, rows, writes, events = mapped_keyboard(monkeypatch)
+    entered = asyncio.Event()
+
+    async def blocked_mapping_wait(_delay):
+        entered.set()
+        await asyncio.Event().wait()
+
+    monkeypatch.setattr(asyncio, "sleep", blocked_mapping_wait)
+
+    async def run():
+        await inputs.connect()
+        pending = asyncio.create_task(inputs.insert("甲", lambda: True))
+        await entered.wait()
+        with pytest.raises(KeyboardError, match="busy"):
+            async with inputs.output_session():
+                pytest.fail("Session stole an in-flight standalone mapping")
+        pending.cancel()
+        with pytest.raises(asyncio.CancelledError):
+            await pending
+        assert not events and len(writes) == 2 and rows[1] == (0, 0)
+        assert driver.applied is None and inputs._output_owner is None
+
+    asyncio.run(run())
+
+
+def test_sequential_output_sessions_belong_to_distinct_tasks(monkeypatch):
+    inputs, driver, rows, writes, _events = mapped_keyboard(monkeypatch)
+
+    async def run():
+        await inputs.connect()
+
+        async def consume(character):
+            async with inputs.output_session():
+                assert inputs._output_owner is asyncio.current_task()
+                await inputs.insert(character, lambda: True)
+            assert inputs._output_owner is None and rows[1] == (0, 0)
+
+        first = asyncio.create_task(consume("甲"))
+        await first
+        second = asyncio.create_task(consume("乙"))
+        await second
+        assert first is not second and len(writes) == 4
+        assert driver.applied is None
+
+    asyncio.run(run())
+
+
+def test_aclose_still_closes_driver_if_cancelled_owner_raises_unexpected_error(
+    monkeypatch,
+):
+    inputs, driver, rows, writes, _events = mapped_keyboard(monkeypatch)
+    entered = asyncio.Event()
+    closed = []
+    driver.x11.XCloseDisplay = lambda _display: closed.append(True)
+    driver.close = _XDriver.close.__get__(driver)
+
+    async def run():
+        await inputs.connect()
+
+        async def consume():
+            async with inputs.output_session():
+                await inputs.insert("甲", lambda: True)
+                entered.set()
+                try:
+                    await asyncio.Event().wait()
+                finally:
+                    raise RuntimeError("fixed consumer failure")
+
+        owner = asyncio.create_task(consume())
+        await entered.wait()
+        with pytest.raises(RuntimeError, match="fixed consumer failure"):
+            await inputs.aclose()
+        assert owner.done() and closed == [True]
+        assert rows[1] == (0, 0) and len(writes) == 2
+        assert inputs._driver is None and inputs._output_owner is None
+
+    asyncio.run(run())

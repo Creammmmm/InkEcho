@@ -2,6 +2,7 @@
 
 import asyncio
 import time
+from contextlib import asynccontextmanager
 from dataclasses import replace
 
 import pytest
@@ -9,7 +10,7 @@ from PySide6.QtCore import QObject, Signal
 
 from inkecho.app import Session
 from inkecho.config import ConfigStore
-from inkecho.core import State
+from inkecho.core import Failure, State
 from inkecho.platform.keyboard import KeyboardError
 from inkecho.providers import ProviderError, Result, Usage
 
@@ -321,5 +322,225 @@ def test_invalid_later_unicode_or_changed_final_stops_after_prefix(sessions, mod
         assert session.inputs.written == "前缀"
         assert session.controller.outcome == State.FAILED
         await session.close()
+
+    asyncio.run(scenario())
+
+
+@pytest.mark.parametrize("provider_fails", [False, True])
+def test_output_session_cleanup_precedes_success_or_original_fallback(
+    sessions, provider_fails
+):
+    async def scenario():
+        lifecycle = []
+
+        class StreamClient(Client):
+            async def polish_stream(self, _provider, _key, _text, _prompt, on_delta):
+                if provider_fails:
+                    raise ProviderError("response")
+                await on_delta("甲")
+                return Result("甲", Usage(), 0)
+
+        class ScopedInputs(Inputs):
+            owner = None
+
+            @asynccontextmanager
+            async def output_session(self):
+                self.owner = asyncio.current_task()
+                lifecycle.append("enter")
+                try:
+                    yield
+                finally:
+                    lifecycle.append("cleanup")
+                    self.owner = None
+
+            async def insert(self, text, *arguments, **options):
+                if self.owner is None:
+                    assert lifecycle == ["enter", "cleanup"]
+                    lifecycle.append("fallback")
+                else:
+                    assert asyncio.current_task() is self.owner
+                return await super().insert(text, *arguments, **options)
+
+        session = sessions(StreamClient())
+        session.inputs = ScopedInputs()
+        session.finished.connect(
+            lambda _outcome: (
+                lifecycle.append("success_after_cleanup")
+                if session.inputs.owner is None and "cleanup" in lifecycle
+                else pytest.fail("Success emitted before consumer cleanup")
+            )
+        )
+        await session.toggle()
+        session.stop_recording()
+        await until(lambda: not session.pending)
+        assert session.inputs.written == ("原始识别文本" if provider_fails else "甲")
+        assert lifecycle == (
+            ["enter", "cleanup", "fallback", "success_after_cleanup"]
+            if provider_fails
+            else ["enter", "cleanup", "success_after_cleanup"]
+        )
+        assert session.controller.outcome == State.SUCCEEDED
+        await session.close()
+
+    asyncio.run(scenario())
+
+
+def test_real_output_session_keeps_one_mapping_loan_with_empty_queue_150_fragments(
+    sessions, monkeypatch
+):
+    from test_keyboard import mapped_keyboard
+
+    async def scenario():
+        inputs, driver, rows, writes, events = mapped_keyboard(monkeypatch)
+        await inputs.connect()
+        sample = "你好，InkEcho！ café Ω 😀\n第二行。" * 6
+        dispatched, fragments = [], []
+        original_send, original_insert = driver.send, inputs.insert
+
+        def sent(window, code, pressed):
+            original_send(window, code, pressed)
+            if pressed:
+                dispatched.append("\n" if code == 36 else chr(rows[1][0] & 0xFFFFFF))
+
+        async def inserted(text, *arguments, **options):
+            count = await original_insert(text, *arguments, **options)
+            fragments.append(text)
+            return count
+
+        driver.send, inputs.insert = sent, inserted
+
+        class PacedClient(Client):
+            async def polish_stream(self, _provider, _key, _text, _prompt, on_delta):
+                for index, character in enumerate(sample):
+                    await on_delta(character)
+                    # Deterministically model a provider slower than delivery:
+                    # every fragment finishes before the next one is available.
+                    await until(lambda index=index: len(fragments) == index + 1)
+                    assert inputs._task is None and driver.applied is not None
+                    assert all(any(row) for row in writes)
+                    assert inputs._output_owner is not asyncio.current_task()
+                return Result(sample, Usage(), 0)
+
+        session = sessions(PacedClient())
+        session.inputs = inputs
+        cleaned_at_success = []
+        session.finished.connect(
+            lambda _outcome: cleaned_at_success.append(
+                rows[1] == (0, 0) and inputs._output_owner is None
+            )
+        )
+        await session.toggle()
+        session.stop_recording()
+        for _ in range(1500):
+            if not session.pending:
+                break
+            await asyncio.sleep(0)
+        assert not session.pending
+        assert fragments == list(sample) and "".join(dispatched) == sample
+        assert len(writes) == 145 and writes[-1] == (0, 0)
+        assert sum(not any(row) for row in writes) == 1
+        assert [event[2] for event in events] == [True, False] * 150
+        assert cleaned_at_success == [True]
+        assert session.controller.outcome == State.SUCCEEDED
+        assert session.last_performance["events_ms"]["output_completed"] is not None
+        await session.close()
+
+    asyncio.run(scenario())
+
+
+@pytest.mark.parametrize("failure", ["provider", "cleanup"])
+def test_real_session_partial_or_cleanup_failure_restores_before_reporting_failure(
+    sessions, monkeypatch, failure
+):
+    from test_keyboard import mapped_keyboard
+
+    async def scenario():
+        inputs, driver, rows, writes, events = mapped_keyboard(monkeypatch)
+        await inputs.connect()
+
+        class StreamClient(Client):
+            async def polish_stream(self, _provider, _key, _text, _prompt, on_delta):
+                await on_delta("甲")
+                await until(lambda: len(events) == 2 and inputs._task is None)
+                assert driver.applied is not None
+                if failure == "provider":
+                    raise ProviderError("timeout")
+                rows[1] = (91, 92)
+                return Result("甲", Usage(), 0)
+
+        session = sessions(StreamClient())
+        session.inputs = inputs
+        outcomes = []
+        diagnostics = []
+        session.finished.connect(outcomes.append)
+        session.diagnostic.connect(diagnostics.append)
+        await session.toggle()
+        session.stop_recording()
+        await until(lambda: not session.pending)
+        assert events == [(21, 9, True), (21, 9, False)]
+        assert len(writes) == (2 if failure == "provider" else 1)
+        assert rows[1] == ((0, 0) if failure == "provider" else (91, 92))
+        assert driver.applied is None and inputs._output_owner is None
+        assert session.controller.outcome == State.FAILED
+        assert len(outcomes) == 1 and outcomes[0]["outcome"] == "failed"
+        assert session.last_performance["events_ms"]["output_completed"] is None
+        assert diagnostics == [
+            "mapping_changed" if failure == "cleanup" else Failure.POLISHING.value
+        ]
+        await session.close()
+
+    asyncio.run(scenario())
+
+
+@pytest.mark.parametrize("action", ["cancel", "expire", "replace", "close"])
+def test_real_output_session_idle_owner_is_cleaned_on_task_invalidation(
+    sessions, monkeypatch, action
+):
+    from test_keyboard import mapped_keyboard
+
+    async def scenario():
+        inputs, driver, rows, writes, events = mapped_keyboard(monkeypatch)
+        await inputs.connect()
+        release = asyncio.Event()
+
+        class LateClient(Client):
+            async def polish_stream(self, _provider, _key, _text, _prompt, on_delta):
+                await on_delta("甲")
+                try:
+                    await release.wait()
+                except asyncio.CancelledError:
+                    await release.wait()
+                await on_delta("迟到")
+                return Result("甲迟到", Usage(), 0)
+
+        session = sessions(LateClient())
+        session.inputs = inputs
+        await session.toggle()
+        session.stop_recording()
+        await until(lambda: len(events) == 2 and inputs._task is None)
+        assert driver.applied is not None and inputs._output_owner is not None
+        if action == "expire":
+            session.controller.task.deadline = time.monotonic() - 1
+            session.controller.tick()
+        elif action == "close":
+            close_task = asyncio.create_task(session.close())
+        else:
+            session.cancel()
+            if action == "replace":
+                session.last_toggle = 0
+                await session.toggle()
+                replacement_id = session.controller.task.id
+        release.set()
+        await until(lambda: inputs._output_owner is None)
+        assert events == [(21, 9, True), (21, 9, False)]
+        assert len(writes) == 2 and rows[1] == (0, 0) and driver.applied is None
+        if action == "replace":
+            assert session.controller.task.id == replacement_id
+            assert session.controller.state == State.RECORDING
+        if action == "close":
+            await close_task
+            assert inputs._driver is None
+        else:
+            await session.close()
 
     asyncio.run(scenario())
