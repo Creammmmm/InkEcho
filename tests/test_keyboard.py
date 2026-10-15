@@ -409,3 +409,13 @@ def test_no_first_sent_callback_when_press_fails(monkeypatch):
         await inputs.aclose()
 
     asyncio.run(run())
+
+
+@pytest.mark.parametrize("character", ["A", " ", "é", "Ω", "😀"])
+def test_printable_characters_use_literal_unicode_keysyms(character):
+    rows = [(97, 65), (0, 0)]
+    driver = mapping_driver(rows)
+    assert driver.map(character) == 9
+    assert rows[1] == (0x01000000 | ord(character),) * 2
+    driver.restore()
+    assert rows == [(97, 65), (0, 0)]

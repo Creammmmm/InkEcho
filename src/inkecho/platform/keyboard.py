@@ -277,9 +277,9 @@ class _XDriver:
             raise KeyboardError("mapping_changed")
         if self.applied is None and any(self._row()):
             raise KeyboardError("mapping_changed")
-        symbol = ord(character)
-        if symbol > 255:
-            symbol |= 0x01000000
+        # Use literal Unicode for Latin as well as other scripts, including
+        # across separate streaming insertions. Return remains a real key above.
+        symbol = 0x01000000 | ord(character)
         # Keep ownership intent before the write: an X error while reading back
         # must not leave a successful mapping write without a cleanup candidate.
         self.pending_symbol = symbol

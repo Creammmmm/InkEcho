@@ -266,6 +266,7 @@ async def measure(args):
     ]
     report = {
         "platform": args.environment,
+        "event_loop": "qt" if args.qt_loop else "asyncio",
         "pacing_seconds": effective_pacing,
         "pacing_override_used": args.pacing is not None,
         "targets": [],
@@ -524,6 +525,7 @@ def main():
     )
     parser.add_argument("--output", type=Path)
     parser.add_argument("--wayland-callback", action="store_true")
+    parser.add_argument("--qt-loop", action="store_true")
     parser.add_argument("--xdotool")
     parser.add_argument(
         "--environment",
@@ -563,7 +565,17 @@ def main():
         parser.error("coordinated host Wayland session required")
     if args.environment == "private-xvfb":
         verify_private_xvfb()
-    report = asyncio.run(measure(args))
+    if args.qt_loop:
+        from PySide6.QtWidgets import QApplication
+
+        from inkecho.runtime import ManagedQtEventLoop
+
+        application = QApplication([])
+        application.setQuitOnLastWindowClosed(False)
+        with ManagedQtEventLoop(application) as loop:
+            report = loop.run_until_complete(measure(args))
+    else:
+        report = asyncio.run(measure(args))
     encoded = json.dumps(report, sort_keys=True)
     if args.output:
         atomic_json(args.output, report)

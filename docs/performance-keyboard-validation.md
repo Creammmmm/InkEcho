@@ -1,5 +1,12 @@
 # Keyboard pacing and first-send timing validation
 
+This is the initial pacing/callback checkpoint. Subsequent real Qt streaming
+workflow checks found a text difference with the previous mixed Latin/Unicode
+mapping at both 20 ms and 40 ms. The corrected representation, current Qt-loop
+timings and complete local microphone workflow are documented in
+[the follow-up validation](performance-x11-stream-validation.md). The original
+measurements below remain historical evidence, not the final pipeline claim.
+
 Date: 2026-10-15. This module changes only X11 pacing and first-send timing
 metadata. No clipboard, input-method submission, recording-start target capture,
 text replay, target pinning, or focus-change cancellation was introduced.
