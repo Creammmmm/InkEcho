@@ -1,7 +1,8 @@
 """Package-runtime smoke with loopback TLS and fixed simulated recognition.
 
-Default capture and delivery are synthetic. The explicit desktop option uses a
-real microphone and the production X11 backend only in a newly owned GTK window.
+Default capture and delivery are synthetic. The host desktop option uses a real
+microphone; the Ubuntu 24 VM option keeps fixed synthetic audio. Both desktop
+modes use the production X11 backend only in a newly owned GTK window.
 Audio stays in RAM and goes only to the loopback fixture, never a cloud service.
 """
 
@@ -37,6 +38,35 @@ QUIET.disabled = True
 def digest(path):
     with path.open("rb") as stream:
         return hashlib.file_digest(stream, "sha256").hexdigest()
+
+
+def configure_environment(args):
+    """Verify the selected desktop before starting Qt or owned input fixtures."""
+    from keyboard_latency_probe import verify_ubuntu24_vm_x11
+
+    real_microphone = args.owned_xwayland_live_mic
+    real_desktop_input = real_microphone or args.owned_ubuntu24_vm_x11
+    if real_microphone and args.owned_ubuntu24_vm_x11:
+        raise RuntimeError("Choose one owned desktop mode")
+    metadata = None
+    if args.owned_ubuntu24_vm_x11:
+        if not args.xdotool:
+            raise RuntimeError("Ubuntu VM owned input requires xdotool")
+        metadata = verify_ubuntu24_vm_x11()
+        if os.environ.get("QT_QPA_PLATFORM", "xcb") != "xcb":
+            raise RuntimeError(
+                "Ubuntu VM owned input requires the actual X11 Qt platform"
+            )
+    elif real_microphone:
+        if not args.xdotool or os.environ.get("XDG_SESSION_TYPE") != "wayland":
+            raise RuntimeError("Coordinated host Wayland/XWayland and xdotool required")
+    else:
+        os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
+    return {
+        "real_microphone": real_microphone,
+        "real_desktop_input": real_desktop_input,
+        "environment_metadata": metadata,
+    }
 
 
 def audit_appdir(appdir):
@@ -244,7 +274,8 @@ class LocalHTTP:
 
 async def probe(args):
     import httpx
-    from PySide6.QtCore import QObject, Signal
+    from PySide6.QtCore import QObject, Signal, qVersion
+    from PySide6.QtWidgets import QApplication
     from websockets.asyncio.server import serve
     from websockets.exceptions import ConnectionClosed
 
@@ -258,16 +289,26 @@ async def probe(args):
     from inkecho.realtime import QwenRealtimeSession
     from inkecho.ui.providers import ProviderPage
 
+    real_microphone = args.execution["real_microphone"]
+    real_desktop_input = args.execution["real_desktop_input"]
     report = {
         "version": inkecho.__version__,
         "passed": False,
-        "real_microphone": args.owned_xwayland_live_mic,
-        "real_desktop_input": args.owned_xwayland_live_mic,
+        "real_microphone": real_microphone,
+        "real_desktop_input": real_desktop_input,
         "cloud_requests": 0,
         "user_credentials_read": False,
         "runtime_kind": "source" if args.package_root == ROOT / "src" else "package",
         "pacing_override_seconds": args.pacing,
     }
+    if args.owned_ubuntu24_vm_x11:
+        report["environment"] = "ubuntu24-vm-x11"
+        report["environment_metadata"] = args.execution["environment_metadata"]
+        report["qt_platform"] = QApplication.instance().platformName()
+        report["qt_version"] = qVersion()
+        report["event_loop_class"] = type(asyncio.get_running_loop()).__name__
+        if report["qt_platform"] != "xcb":
+            raise RuntimeError("Actual X11 Qt application required")
     if report["runtime_kind"] == "package":
         appdir = args.package_root.parent
         if not Path(sys.executable).resolve().is_relative_to(appdir / "usr"):
@@ -474,15 +515,9 @@ async def probe(args):
                     pcm = b"\x01\x00" * 3200
                     report["audio_wav_encoding"] = wav.startswith(b"RIFF")
                     inputs = (
-                        KeyboardInput()
-                        if args.owned_xwayland_live_mic
-                        else SyntheticInputs()
+                        KeyboardInput() if real_desktop_input else SyntheticInputs()
                     )
-                    recorder = (
-                        Recorder()
-                        if args.owned_xwayland_live_mic
-                        else SyntheticRecorder()
-                    )
+                    recorder = Recorder() if real_microphone else SyntheticRecorder()
 
                     def realtime(config, key, **options):
                         return QwenRealtimeSession(
@@ -503,7 +538,7 @@ async def probe(args):
                     session.key = key
                     diagnostics = []
                     session.diagnostic.connect(diagnostics.append)
-                    if args.owned_xwayland_live_mic:
+                    if real_desktop_input:
                         owned = OwnedTarget(args.xdotool, folder, inputs)
                         await owned.open()
                     await session.initialize()
@@ -522,7 +557,7 @@ async def probe(args):
                         baseline_text = read()
                         before_audio = ws_counts["audio_bytes"]
                         await session.toggle()
-                        if not args.owned_xwayland_live_mic:
+                        if not real_microphone:
                             recorder.pcm_ready.emit(pcm)
                         await wait_for(
                             lambda before=before_audio: (
@@ -706,9 +741,8 @@ class OwnedTarget:
         )
 
     async def open(self):
-        env = dict(os.environ, GDK_BACKEND="x11")
-        for name in ("PYTHONPATH", "PYTHONHOME", "LD_LIBRARY_PATH"):
-            env.pop(name, None)
+        from keyboard_latency_probe import fixture_environment
+
         self.process = subprocess.Popen(
             [
                 "/usr/bin/python3",
@@ -718,7 +752,7 @@ class OwnedTarget:
                 "--output",
                 str(self.output),
             ],
-            env=env,
+            env=fixture_environment(),
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
         )
@@ -827,7 +861,9 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--package-root", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
-    parser.add_argument("--owned-xwayland-live-mic", action="store_true")
+    desktop = parser.add_mutually_exclusive_group()
+    desktop.add_argument("--owned-xwayland-live-mic", action="store_true")
+    desktop.add_argument("--owned-ubuntu24-vm-x11", action="store_true")
     parser.add_argument("--xdotool")
     parser.add_argument("--pacing", type=float)
     args = parser.parse_args()
@@ -835,13 +871,7 @@ def main():
     if args.pacing is not None and not 0.005 <= args.pacing <= 0.04:
         parser.error("test-only pacing must be in [0.005, 0.04]")
     sys.path.insert(0, str(args.package_root))
-    if args.owned_xwayland_live_mic:
-        if not args.xdotool or os.environ.get("XDG_SESSION_TYPE") != "wayland":
-            parser.error(
-                "Coordinated host Wayland/XWayland desktop and xdotool required"
-            )
-    else:
-        os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
+    args.execution = configure_environment(args)
     from PySide6.QtWidgets import QApplication
 
     from inkecho.runtime import ManagedQtEventLoop
