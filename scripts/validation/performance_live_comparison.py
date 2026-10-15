@@ -554,7 +554,9 @@ async def run_arm(
     await inputs.connect()
     mapping_before = inputs._driver._mapping() if desktop else None
     if desktop:
-        target = MemoryTarget(desktop["handle"], desktop["xdotool"])
+        target = MemoryTarget(
+            desktop["handle"], desktop["xdotool"], **desktop.get("target_options", {})
+        )
         try:
             await target.open(os.environ)
             await target.activate()  # Preparation, before the recording clock starts.

@@ -402,14 +402,16 @@ def child_environment(environment):
 
 
 class MemoryTarget:
-    def __init__(self, handle, xdotool):
+    def __init__(self, handle, xdotool, *, verifier=None, child_path=None):
         self.handle, self.xdotool = handle, xdotool
+        self.verifier = verifier or verify_controls
+        self.child_path = child_path if child_path is not None else CHILD
         self.window = None
 
     async def open(self, environment):
-        verify_controls(self.xdotool)
+        self.verifier(self.xdotool)
         parent, child = socket.socketpair(socket.AF_UNIX, socket.SOCK_STREAM)
-        argv = ["/usr/bin/python3", str(CHILD), "--fd", str(child.fileno())]
+        argv = ["/usr/bin/python3", str(self.child_path), "--fd", str(child.fileno())]
         try:
             self.process = subprocess.Popen(
                 argv,
@@ -445,7 +447,7 @@ class MemoryTarget:
         self.handle.save()
 
     async def activate(self):
-        verify_controls(self.xdotool)
+        self.verifier(self.xdotool)
         await self.handle.observe(
             asyncio.to_thread(
                 subprocess.run,
