@@ -653,3 +653,56 @@ def test_new_provider_controls_invalidate_late_status(window, control):
         assert page.message.text() == "changed form"
 
     asyncio.run(scenario())
+
+
+@pytest.mark.parametrize("selected", [False, True])
+@pytest.mark.parametrize(
+    "endpoint",
+    [
+        "wss://fake-user:fake-secret@asr.example.invalid/realtime",
+        "wss://asr.example.invalid/realtime?api_key=fake-secret",
+        "wss://asr.example.invalid/realtime?model=qwen3-asr-flash-realtime&token=fake-secret",
+        "wss://asr.example.invalid/realtime#fake-secret",
+    ],
+)
+def test_secret_bearing_realtime_url_is_rejected_before_any_save(
+    window, selected, endpoint
+):
+    async def scenario():
+        page = window.pages[2]
+        store = window.session.store
+        before = {p: p.read_bytes() for p in store.root.rglob("*.json")}
+        page.model.setCurrentText("qwen3-asr-flash-realtime")
+        values = {"realtime_url": endpoint}
+        if selected:
+            values["asr_protocol"] = PROTOCOL
+        original = json.dumps(values)
+        page.parameters.setPlainText(original)
+        page.key.setText("fake-key-input-not-to-be-saved")
+        calls = []
+
+        async def save_key(*args):
+            calls.append(args)
+            raise AssertionError("Invalid URL must fail before keyring access")
+
+        window.session.save_key = save_key
+        await page.run(page.save())
+        assert calls == []
+        assert page.key.text() == "fake-key-input-not-to-be-saved"
+        assert page.parameters.toPlainText() == original
+        assert before == {p: p.read_bytes() for p in store.root.rglob("*.json")}
+        assert "服务配置或请求参数不正确" in page.message.text()
+
+    asyncio.run(scenario())
+
+
+def test_http_draft_without_model_remains_saveable(window):
+    async def scenario():
+        page = window.pages[2]
+        page.new()
+        assert page.model.currentText() == ""
+        await page.save()
+        stored = window.session.store.load_provider(page.identifier)
+        assert stored.model == "" and stored.parameters == {}
+
+    asyncio.run(scenario())

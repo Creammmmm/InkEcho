@@ -303,6 +303,12 @@ class ProviderPage(Page):
 
     async def save(self):
         provider = self.provider()
+        # Reject secret-bearing/invalid endpoints before touching credentials or
+        # persisting any parameter string, including an unselected URL draft.
+        if "asr_protocol" in provider.parameters:
+            self.validate_protocol(provider)
+        if "realtime_url" in provider.parameters:
+            RealtimeConfig(provider.parameters["realtime_url"], provider.model)
         revision = self.revision
         value = self.key.text()
         self.key.clear()

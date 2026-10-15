@@ -118,3 +118,23 @@ request, audio upload or credential access was performed for this UI stage.
 Realtime vendor audio capability, packaged voice workflow, actual Ubuntu 24.04
 desktops and numerical end-to-end latency gains retain their separate acceptance
 requirements; local fixture success does not establish those claims.
+
+## Saving realtime URLs safely (2026-10-16)
+
+Review found that rejecting a credential-bearing WSS URL only at startup was
+too late: the string could first be saved inside provider JSON. The save action
+now validates an explicit realtime protocol and every `realtime_url` value before
+reading/clearing the key field, writing the keyring or saving any configuration.
+An unselected advanced-JSON URL is also checked, so removing the protocol flag
+cannot make a credential URL saveable. Ordinary HTTP drafts without a model
+remain saveable.
+
+Reproduction: `.venv/bin/python -m pytest tests/test_ui.py -q --tb=short`.
+Observed **43 passed in 3.93 s**, with Ruff lint and format checks passing.
+Eight isolated cases cover selected/unselected realtime URLs containing fake
+userinfo, API-key/token queries or fragments. Each preserves all original JSON
+file bytes and the form's malformed URL, leaves the unsaved fake key in its
+input field, and proves zero keyring-save calls. The HTTP blank-model draft
+regression also passes. Only temporary fixture configuration and fake secret
+strings are used; no user configuration, real keyring, cloud service or audio
+is accessed. Raw ephemeral result: `/tmp/inkecho-ui-url-save-tests.log`.
