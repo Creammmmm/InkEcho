@@ -27,6 +27,8 @@ from pathlib import Path
 
 FINAL = "你好，InkEcho！ café Ω 😀\n第二行。"
 PARTS = ["你好，", "InkEcho！", " café Ω 😀\n第二行。"]
+ASR_FINAL = "固定转写"
+ASR_PREVIEW = "不会输出的预览"
 ROOT = Path(__file__).resolve().parents[2]
 QUIET = logging.Logger("inkecho.package.fixture")
 QUIET.disabled = True
@@ -126,6 +128,7 @@ class LocalHTTP:
         self.ports = []
         self.streams = 0
         self.completed_streams = 0
+        self.final_asr_inputs = []
         self.errors = []
         owner = self
 
@@ -171,10 +174,15 @@ class LocalHTTP:
                 body = json.loads(self.rfile.read(int(self.headers["Content-Length"])))
                 owner.ports.append(self.client_address[1])
                 streaming = body.get("stream") is True
+                if streaming:
+                    owner.final_asr_inputs.append(
+                        body.get("messages", [])[-1]
+                        == {"role": "user", "content": ASR_FINAL}
+                    )
                 del body
                 if not streaming:
                     encoded = json.dumps(
-                        {"choices": [{"message": {"content": "固定转写"}}]}
+                        {"choices": [{"message": {"content": ASR_FINAL}}]}
                     ).encode()
                     self.send_response(200)
                     self.send_header("Content-Type", "application/json")
@@ -341,11 +349,19 @@ async def probe(args):
     ) as folder_name:
         folder = Path(folder_name)
         local = LocalHTTP(folder)
-        ws_counts = {"connections": 0, "audio_bytes": 0, "finish": 0}
+        ws_counts = {
+            "connections": 0,
+            "audio_bytes": 0,
+            "finish": 0,
+            "manual_confirmation_omitted": 0,
+            "placeholder_created": 0,
+            "early_preview": 0,
+        }
 
         async def websocket(ws):
             ws_counts["connections"] += 1
             number = 0
+            first_append = True
 
             async def send(kind, **fields):
                 nonlocal number
@@ -363,16 +379,32 @@ async def probe(args):
                     event = json.loads(encoded)
                     kind = event["type"]
                     if kind == "session.update":
+                        confirmation = {
+                            "id": "s1",
+                            "model": "qwen3-asr-flash-realtime",
+                            **event["session"],
+                        }
+                        if confirmation.pop("turn_detection", "unexpected") is not None:
+                            raise ValueError("Fixture requires explicit manual mode")
                         await send(
                             "session.updated",
-                            session={
-                                "id": "s1",
-                                "model": "qwen3-asr-flash-realtime",
-                                **event["session"],
-                            },
+                            session=confirmation,
                         )
+                        ws_counts["manual_confirmation_omitted"] += 1
                     elif kind == "input_audio_buffer.append":
                         audio = base64.b64decode(event["audio"], validate=True)
+                        if first_append:
+                            first_append = False
+                            # Observed official notifications are not commit IDs.
+                            await send(
+                                "conversation.item.created", item={"type": "message"}
+                            )
+                            ws_counts["placeholder_created"] += 1
+                            await send(
+                                "conversation.item.input_audio_transcription.text",
+                                text=ASR_PREVIEW,
+                            )
+                            ws_counts["early_preview"] += 1
                         ws_counts["audio_bytes"] += len(audio)
                         del audio
                     elif kind == "input_audio_buffer.commit":
@@ -383,7 +415,7 @@ async def probe(args):
                             "conversation.item.input_audio_transcription.completed",
                             item_id="i1",
                             content_index=0,
-                            transcript="固定转写",
+                            transcript=ASR_FINAL,
                         )
                         await send("session.finished")
                     else:
@@ -486,6 +518,8 @@ async def probe(args):
                     for cancelled in (False, True):
                         if owned:
                             owned.intervals.clear()
+                        read = owned.text if owned else lambda: inputs.inserted
+                        baseline_text = read()
                         before_audio = ws_counts["audio_bytes"]
                         await session.toggle()
                         if not args.owned_xwayland_live_mic:
@@ -498,9 +532,10 @@ async def probe(args):
                         report.setdefault("uploaded_before_stop", []).append(
                             ws_counts["audio_bytes"] - before_audio
                         )
-                        if args.owned_xwayland_live_mic:
-                            await asyncio.sleep(0.3)
-                        baseline_text = owned.text() if owned else inputs.inserted
+                        preview_ignored = await stable_text(read) == baseline_text
+                        report.setdefault("preview_ignored_before_stop", []).append(
+                            preview_ignored
+                        )
                         if cancelled:
                             if owned:
                                 owned.cancel_callback = session.cancel
@@ -510,7 +545,6 @@ async def probe(args):
                         await wait_for(lambda: not session.pending, seconds=12)
                         if cancelled:
                             await asyncio.sleep(1.2)
-                        read = owned.text if owned else lambda: inputs.inserted
                         actual = await stable_text(read)
                         expected = baseline_text + (FINAL[:1] if cancelled else FINAL)
                         report.setdefault("readback", []).append(
@@ -583,6 +617,16 @@ async def probe(args):
                         session.last_toggle = 0
                     report["wss_connections"] = ws_counts["connections"]
                     report["wss_finish_events"] = ws_counts["finish"]
+                    report["manual_confirmation_without_turn_detection"] = (
+                        ws_counts["manual_confirmation_omitted"] == 2
+                    )
+                    report["precommit_placeholder_and_preview"] = (
+                        ws_counts["placeholder_created"] == 2
+                        and ws_counts["early_preview"] == 2
+                    )
+                    report["only_final_asr_reached_polishing"] = (
+                        local.final_asr_inputs == [True, True]
+                    )
                     report["diagnostics_empty"] = diagnostics == []
                     report["diagnostic_codes"] = diagnostics
                     if owned:
@@ -595,22 +639,29 @@ async def probe(args):
                         )
                     await session.close()
                     session = None
-                report["passed"] = all(
-                    report[name]
-                    for name in (
-                        "http_connection_reused",
-                        "audio_wav_encoding",
-                        "ui_protocol_and_stream_loaded",
-                        "final_text_exact",
-                        "cancel_no_tail",
-                        "first_send_before_polish_completed",
-                        "timing_fields_present",
-                        "cancelled_outcome",
-                        "diagnostics_empty",
+                report["passed"] = (
+                    all(
+                        report[name]
+                        for name in (
+                            "http_connection_reused",
+                            "audio_wav_encoding",
+                            "ui_protocol_and_stream_loaded",
+                            "final_text_exact",
+                            "cancel_no_tail",
+                            "first_send_before_polish_completed",
+                            "timing_fields_present",
+                            "cancelled_outcome",
+                            "diagnostics_empty",
+                            "manual_confirmation_without_turn_detection",
+                            "precommit_placeholder_and_preview",
+                            "only_final_asr_reached_polishing",
+                        )
                     )
-                ) and all(
-                    report.get(name, True)
-                    for name in ("balanced_desktop_events", "desktop_map_restored")
+                    and all(report["preview_ignored_before_stop"])
+                    and all(
+                        report.get(name, True)
+                        for name in ("balanced_desktop_events", "desktop_map_restored")
+                    )
                 )
         finally:
             if session:
