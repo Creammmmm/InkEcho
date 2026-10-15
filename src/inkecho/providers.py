@@ -8,6 +8,7 @@ import re
 import time
 import wave
 from dataclasses import dataclass, field, replace
+from http.cookiejar import CookieJar, DefaultCookiePolicy
 from urllib.parse import urlsplit, urlunsplit
 
 import httpx
@@ -103,8 +104,113 @@ class Connection:
     capability_verified: bool = False
 
 
+def polishing_request_body(
+    provider: Provider, text: str, prompt: str, *, stream: bool = False
+) -> dict:
+    """Build one chat request, including only verified vendor thinking controls.
+
+    Provider IDs and model names alone cannot establish a gateway's protocol.
+    Unknown origins keep ordinary chat parameters and receive no thinking flags.
+    Explicit supported thinking settings take precedence over the low-latency default.
+    """
+    if provider.role != "polishing" or provider.adapter != "openai":
+        raise ProviderError("configuration")
+    if not text.strip() or not prompt.strip():
+        raise ProviderError("empty")
+    url = urlsplit(provider.base_url)
+    control = None
+    if (
+        url.hostname == "api.deepseek.com"
+        and url.port in {None, 443}
+        and url.path.rstrip("/") in {"", "/v1"}
+        and provider.model in {"deepseek-flash", "deepseek-v4-flash", "deepseek-v4-pro"}
+    ):
+        control = "thinking"
+    # Deliberately narrow: thinking-only models and unverified future revisions
+    # must not inherit controls from an arbitrary model prefix.
+    qwen_models = {
+        "qwen-plus",
+        "qwen-plus-latest",
+        "qwen-plus-2025-04-28",
+        "qwen-flash",
+        "qwen-flash-2025-07-28",
+        "qwen3.6-plus",
+        "qwen3.6-plus-2026-04-02",
+    }
+    qwen_host = url.hostname in {
+        "dashscope.aliyuncs.com",
+        "dashscope-intl.aliyuncs.com",
+        "dashscope-us.aliyuncs.com",
+    } or re.fullmatch(
+        r"[a-z0-9-]+\.(?:cn-beijing|ap-southeast-1)\.maas\.aliyuncs\.com",
+        url.hostname or "",
+    )
+    if (
+        qwen_host
+        and url.port in {None, 443}
+        and url.path.rstrip("/") == "/compatible-mode/v1"
+        and provider.model in qwen_models
+    ):
+        control = "enable_thinking"
+    allowed = {
+        "temperature",
+        "top_p",
+        "max_tokens",
+        "frequency_penalty",
+        "presence_penalty",
+    }
+    if control:
+        allowed.add(control)
+    if set(provider.parameters) - allowed:
+        raise ProviderError("configuration")
+    controls = {}
+    if control == "thinking":
+        value = provider.parameters.get("thinking", {"type": "disabled"})
+        if (
+            not isinstance(value, dict)
+            or set(value) != {"type"}
+            or value["type"] not in ("enabled", "disabled")
+        ):
+            raise ProviderError("configuration")
+        controls[control] = dict(value)
+    elif control == "enable_thinking":
+        value = provider.parameters.get(control, False)
+        if type(value) is not bool:
+            raise ProviderError("configuration")
+        controls[control] = value
+    return {
+        "model": provider.model,
+        "messages": [
+            {"role": "system", "content": prompt},
+            {"role": "user", "content": text},
+        ],
+        "stream": stream,
+        **provider.parameters,
+        **controls,
+    }
+
+
+@dataclass
+class _HttpPool:
+    http: httpx.AsyncClient | None = None
+    external: bool = False
+    closed: bool = False
+    closing: asyncio.Task | None = None
+
+
+class _NoCookies(DefaultCookiePolicy):
+    def set_ok(self, cookie, request) -> bool:
+        # HTTP API credentials are per request, never an implicit pooled session.
+        return False
+
+
 class ProviderClient:
-    """An optional HTTP client supports testing with a trusted local TLS server."""
+    """Lifecycle-owned connection pool; injected HTTP clients remain caller-owned.
+
+    Use one owner per application/event loop, then ``with_timeout`` for request
+    policies sharing its pool. Close the owner after cancelling pending calls.
+    Closing a borrowed policy never closes the shared transport.
+    """
 
     def __init__(
         self, *, timeout_seconds: float = 30, http: httpx.AsyncClient | None = None
@@ -112,7 +218,56 @@ class ProviderClient:
         if not 0.05 <= timeout_seconds <= 120:
             raise ValueError("Request timeout must be between 0.05 and 120 seconds.")
         self.timeout_seconds = timeout_seconds
-        self.http = http
+        self._pool = _HttpPool(http=http, external=http is not None)
+        self._owner = True
+
+    @property
+    def http(self) -> httpx.AsyncClient | None:
+        return self._pool.http
+
+    def with_timeout(self, seconds: float) -> "ProviderClient":
+        """Borrow this lifecycle's pool with an independent request deadline."""
+        borrowed = ProviderClient(timeout_seconds=seconds)
+        borrowed._pool = self._pool
+        borrowed._owner = False
+        return borrowed
+
+    def _http_client(self) -> httpx.AsyncClient:
+        if self._pool.closed:
+            raise ProviderError("configuration")
+        if self._pool.http is None:
+            self._pool.http = httpx.AsyncClient(
+                verify=True,
+                trust_env=False,
+                follow_redirects=False,
+                cookies=CookieJar(policy=_NoCookies()),
+                limits=httpx.Limits(
+                    max_connections=20,
+                    max_keepalive_connections=10,
+                    keepalive_expiry=90,
+                ),
+            )
+        if self._pool.http.is_closed:
+            raise ProviderError("configuration")
+        return self._pool.http
+
+    async def aclose(self) -> None:
+        """Close an owned pool once; never close an injected HTTP transport."""
+        if not self._owner:
+            return
+        self._pool.closed = True
+        if self._pool.http is None or self._pool.external:
+            return
+        if self._pool.closing is None:
+            self._pool.closing = asyncio.create_task(self._pool.http.aclose())
+        # Cancellation of a shutdown caller must not abandon transport cleanup.
+        await asyncio.shield(self._pool.closing)
+
+    async def __aenter__(self) -> "ProviderClient":
+        return self
+
+    async def __aexit__(self, *_args) -> None:
+        await self.aclose()
 
     @staticmethod
     def _validate(provider: Provider, key: str, *, model: bool = True) -> None:
@@ -132,7 +287,7 @@ class ProviderClient:
         *,
         headers: dict | None = None,
     ) -> dict:
-        client = self.http or httpx.AsyncClient(verify=True, trust_env=False)
+        client = self._http_client()
         try:
             async with asyncio.timeout(self.timeout_seconds):
                 # Only idempotent discovery retries. Never repeat a billable POST.
@@ -185,9 +340,6 @@ class ProviderClient:
             raise ProviderError("timeout") from None
         except httpx.HTTPError:
             raise ProviderError("network") from None
-        finally:
-            if self.http is None:
-                await client.aclose()
 
     @staticmethod
     def _result(data: dict, started: float) -> Result:
@@ -340,28 +492,7 @@ class ProviderClient:
         self, provider: Provider, key: str, text: str, prompt: str
     ) -> Result:
         self._validate(provider, key)
-        if provider.role != "polishing" or provider.adapter != "openai":
-            raise ProviderError("configuration")
-        if not text.strip() or not prompt.strip():
-            raise ProviderError("empty")
-        allowed = {
-            "temperature",
-            "top_p",
-            "max_tokens",
-            "frequency_penalty",
-            "presence_penalty",
-        }
-        if set(provider.parameters) - allowed:
-            raise ProviderError("configuration")
-        body = {
-            "model": provider.model,
-            "messages": [
-                {"role": "system", "content": prompt},
-                {"role": "user", "content": text},
-            ],
-            "stream": False,
-            **provider.parameters,
-        }
+        body = polishing_request_body(provider, text, prompt)
         started = time.monotonic()
         return self._result(
             await self._request(provider, key, "chat/completions", body), started

@@ -179,9 +179,8 @@ class Session(QObject):
     def provider_client(self, role: str, settings=None):
         if type(self.client) is ProviderClient:
             settings = settings or self.store.load_settings()
-            return ProviderClient(
-                timeout_seconds=getattr(settings, role + "_timeout_seconds"),
-                http=self.client.http,
+            return self.client.with_timeout(
+                getattr(settings, role + "_timeout_seconds")
             )
         return self.client
 
@@ -549,3 +548,7 @@ class Session(QObject):
             await self.inputs.aclose()
         except KeyboardError as error:
             self.diagnostic.emit(error.code)
+        finally:
+            close_client = getattr(self.client, "aclose", None)
+            if close_client is not None:
+                await close_client()

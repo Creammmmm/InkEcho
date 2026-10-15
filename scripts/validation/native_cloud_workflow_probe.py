@@ -120,9 +120,10 @@ class BoundedClient(ProviderClient):
         if self.calls["transcription"]:
             raise RuntimeError("ASR call limit")
         self.calls["transcription"] += 1
-        result = await ProviderClient(
+        async with ProviderClient(
             timeout_seconds=self.settings.transcription_timeout_seconds
-        ).transcribe(provider, key, audio)
+        ) as client:
+            result = await client.transcribe(provider, key, audio)
         self.expected = result.text
         return result
 
@@ -130,9 +131,10 @@ class BoundedClient(ProviderClient):
         if self.calls["polishing"]:
             raise RuntimeError("Polishing call limit")
         self.calls["polishing"] += 1
-        result = await ProviderClient(
+        async with ProviderClient(
             timeout_seconds=self.settings.polishing_timeout_seconds
-        ).polish(provider, key, text, prompt)
+        ) as client:
+            result = await client.polish(provider, key, text, prompt)
         self.expected = result.text
         self.polish_succeeded = True
         return result
