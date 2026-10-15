@@ -989,7 +989,7 @@ def test_stop_during_settle_never_acknowledges_or_sends_a_tail(
         assert remote.data == b"original\0"
         assert guardian.map is None
         assert remote.events == expected_events
-        assert sleeps == [0.03] * (1 if boundary == "map" else 2)
+        assert sleeps == [0.05] * (1 if boundary == "map" else 2)
 
     run(scenario())
 

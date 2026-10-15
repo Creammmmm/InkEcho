@@ -28,8 +28,8 @@ ROOT = "/org/gnome/Mutter/RemoteDesktop"
 INTERFACE = SERVICE + ".Session"
 # XWayland adds an input queue and client mapping notifications between the
 # compositor and application. Keep each map stable before and after its key.
-MAP_SETTLE_SECONDS = 0.03
-RELEASE_SETTLE_SECONDS = 0.03
+MAP_SETTLE_SECONDS = 0.05
+RELEASE_SETTLE_SECONDS = 0.05
 
 
 class MutterSession:
