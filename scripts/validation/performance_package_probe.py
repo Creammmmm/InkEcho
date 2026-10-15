@@ -127,8 +127,25 @@ async def stable_text(read):
     return previous
 
 
+def fixture_sse_profile(name):
+    if name == "normal":
+        return list(PARTS), 0.35
+    if name == "one-character-fast":
+        return list(FINAL), 0.001
+    if name == "one-character-fast-long":
+        return list(FINAL * 6), 0.001
+    raise ValueError("Unknown fixed SSE fixture profile")
+
+
+def streaming_timing_accepted(profile, first_send_before_completed):
+    # A short, fast response can finish before the first real key press.
+    fixture_sse_profile(profile)
+    return profile != "normal" or first_send_before_completed
+
+
 class LocalHTTP:
-    def __init__(self, folder):
+    def __init__(self, folder, sse_profile="normal"):
+        self.parts, self.delta_delay = fixture_sse_profile(sse_profile)
         self.cert, self.key = folder / "cert.pem", folder / "key.pem"
         subprocess.run(
             [
@@ -158,6 +175,7 @@ class LocalHTTP:
         self.ports = []
         self.streams = 0
         self.completed_streams = 0
+        self.deltas_sent = 0
         self.final_asr_inputs = []
         self.errors = []
         owner = self
@@ -225,7 +243,7 @@ class LocalHTTP:
                 self.send_header("Content-Type", "text/event-stream")
                 self.send_header("Connection", "close")
                 self.end_headers()
-                for text in PARTS:
+                for text in owner.parts:
                     message = {
                         "id": "local-fixed",
                         "choices": [
@@ -242,7 +260,8 @@ class LocalHTTP:
                         ).encode()
                     )
                     self.wfile.flush()
-                    time.sleep(0.35)
+                    owner.deltas_sent += 1
+                    time.sleep(owner.delta_delay)
                 message = {
                     "id": "local-fixed",
                     "choices": [{"index": 0, "delta": {}, "finish_reason": "stop"}],
@@ -300,6 +319,7 @@ async def probe(args):
         "user_credentials_read": False,
         "runtime_kind": "source" if args.package_root == ROOT / "src" else "package",
         "pacing_override_seconds": args.pacing,
+        "fixture_sse_profile": args.fixture_sse_profile,
     }
     if args.owned_ubuntu24_vm_x11:
         report["environment"] = "ubuntu24-vm-x11"
@@ -389,7 +409,12 @@ async def probe(args):
         prefix="inkecho-package-performance-"
     ) as folder_name:
         folder = Path(folder_name)
-        local = LocalHTTP(folder)
+        local = LocalHTTP(folder, args.fixture_sse_profile)
+        fixture_final = "".join(local.parts)
+        report["fixture_final_codepoints"] = len(fixture_final)
+        report["fixture_final_printable_codepoints"] = sum(
+            character.isprintable() for character in fixture_final
+        )
         ws_counts = {
             "connections": 0,
             "audio_bytes": 0,
@@ -553,6 +578,7 @@ async def probe(args):
                     for cancelled in (False, True):
                         if owned:
                             owned.intervals.clear()
+                            before_mapping = dict(owned.mapping_counts)
                         read = owned.text if owned else lambda: inputs.inserted
                         baseline_text = read()
                         before_audio = ws_counts["audio_bytes"]
@@ -581,7 +607,9 @@ async def probe(args):
                         if cancelled:
                             await asyncio.sleep(1.2)
                         actual = await stable_text(read)
-                        expected = baseline_text + (FINAL[:1] if cancelled else FINAL)
+                        expected = baseline_text + (
+                            fixture_final[:1] if cancelled else fixture_final
+                        )
                         report.setdefault("readback", []).append(
                             {
                                 "expected_codepoints": len(expected),
@@ -626,6 +654,12 @@ async def probe(args):
                                 and timeline["first_character_sent"]
                                 < timeline["polishing_completed"]
                             )
+                            report["streaming_timing_accepted"] = (
+                                streaming_timing_accepted(
+                                    args.fixture_sse_profile,
+                                    report["first_send_before_polish_completed"],
+                                )
+                            )
                             report["timing_fields_present"] = all(
                                 timeline[name] is not None
                                 for name in (
@@ -633,6 +667,7 @@ async def probe(args):
                                     "asr_completed",
                                     "recording_stopped",
                                     "polishing_first_segment",
+                                    "polishing_completed",
                                     "first_character_sent",
                                     "output_completed",
                                 )
@@ -640,7 +675,7 @@ async def probe(args):
                             if owned:
                                 report["keyboard_actual_waits_ms"] = owned.summary()
                                 report["backend_received_exact_text"] = (
-                                    owned.requested_text == FINAL
+                                    owned.requested_text == fixture_final
                                 )
                         else:
                             report["cancelled_outcome"] = (
@@ -649,6 +684,13 @@ async def probe(args):
                         report.setdefault("task_performance", []).append(
                             session.last_performance
                         )
+                        if owned:
+                            report.setdefault("keyboard_mapping_counts", []).append(
+                                {
+                                    name: value - before_mapping[name]
+                                    for name, value in owned.mapping_counts.items()
+                                }
+                            )
                         session.last_toggle = 0
                     report["wss_connections"] = ws_counts["connections"]
                     report["wss_finish_events"] = ws_counts["finish"]
@@ -668,7 +710,7 @@ async def probe(args):
                         report["balanced_desktop_events"] = owned.events == [
                             True,
                             False,
-                        ] * (len(FINAL) + 1)
+                        ] * (len(fixture_final) + 1)
                         report["desktop_map_restored"] = (
                             owned.original_map == inputs._driver._mapping()
                         )
@@ -683,7 +725,7 @@ async def probe(args):
                             "ui_protocol_and_stream_loaded",
                             "final_text_exact",
                             "cancel_no_tail",
-                            "first_send_before_polish_completed",
+                            "streaming_timing_accepted",
                             "timing_fields_present",
                             "cancelled_outcome",
                             "diagnostics_empty",
@@ -704,6 +746,10 @@ async def probe(args):
             if owned:
                 owned.close()
             local.close()
+            report["fixture_sse_deltas_per_completed_stream"] = len(local.parts)
+            # Flushed by the fixture, not necessarily received before cancellation.
+            report["fixture_sse_deltas_sent"] = local.deltas_sent
+            report["fixture_sse_completed_streams"] = local.completed_streams
             report["server_errors"] = list(local.errors)
             report["fixture_threads_closed"] = not local.thread.is_alive() and not any(
                 thread.is_alive() for thread in local.server._threads
@@ -726,6 +772,11 @@ class OwnedTarget:
         self.mapped_at = self.pressed_at = self.released_at = None
         self.cancel_callback = None
         self.requested_text = ""
+        self.mapping_counts = {
+            "mapping_writes": 0,
+            "successful_restore_calls": 0,
+            "completed_insert_calls": 0,
+        }
 
     def command(self, *parts):
         return subprocess.check_output(
@@ -777,9 +828,18 @@ class OwnedTarget:
         await asyncio.sleep(0.3)
         await self.inputs.connect()
         self.original_map = self.inputs._driver._mapping()
+        self.observe_input()
+
+    def observe_input(self):
         original = self.inputs._send
         driver = self.inputs._driver
         original_map, original_restore = driver.map, driver.restore
+        original_write = driver._write
+
+        def written(values):
+            result = original_write(values)
+            self.mapping_counts["mapping_writes"] += 1
+            return result
 
         def mapped(character):
             code = original_map(character)
@@ -792,9 +852,12 @@ class OwnedTarget:
                     ("release_to_restore", time.monotonic() - self.released_at)
                 )
                 self.released_at = None
-            return original_restore()
+            result = original_restore()
+            self.mapping_counts["successful_restore_calls"] += 1
+            return result
 
         driver.map, driver.restore = mapped, restored
+        driver._write = written
 
         def guarded(window, code, pressed):
             driver = self.inputs._driver
@@ -826,7 +889,9 @@ class OwnedTarget:
 
         async def insert(text, *arguments, **options):
             self.requested_text += text
-            return await original_insert(text, *arguments, **options)
+            result = await original_insert(text, *arguments, **options)
+            self.mapping_counts["completed_insert_calls"] += 1
+            return result
 
         self.inputs.insert = insert
 
@@ -866,6 +931,11 @@ def main():
     desktop.add_argument("--owned-ubuntu24-vm-x11", action="store_true")
     parser.add_argument("--xdotool")
     parser.add_argument("--pacing", type=float)
+    parser.add_argument(
+        "--fixture-sse-profile",
+        choices=("normal", "one-character-fast", "one-character-fast-long"),
+        default="normal",
+    )
     args = parser.parse_args()
     args.package_root = args.package_root.resolve(strict=True)
     if args.pacing is not None and not 0.005 <= args.pacing <= 0.04:
