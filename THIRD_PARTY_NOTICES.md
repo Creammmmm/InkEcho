@@ -28,13 +28,14 @@ the earlier stage-zero probe included a larger, untrimmed Qt distribution.
 | jaraco.classes / jaraco.context / jaraco.functools | 3.4.0 / 6.1.2 / 4.6.0 | MIT |
 | more-itertools | 11.1.0 | MIT |
 | Noto Sans CJK font, if bundled | installed Noto CJK regular collection | Original upstream copyright and SIL Open Font License in `assets/licenses/Noto-CJK-copyright.txt` |
+| libei client library | Ubuntu libei1 1.5.0-3, added 2026-10-15 | Expat (MIT); package copyright retained at `usr/share/doc/inkecho/system/libei1/copyright` |
 
 Python wheel distribution metadata and license directories must be copied with
 their runtime modules. The installed PySide wheels in this environment did not
 contain actual license text files, so the project retains their official
 license texts under `assets/licenses` for inclusion in the AppImage. The `assets/licenses/qt` directory additionally retains the official component
 attribution pages, with URL and checksum provenance. Exact bundled Ubuntu
-package notices accompany Noto, XCB utility and Kerberos libraries in
+package notices accompany Noto, XCB utility, Kerberos and libei libraries in
 `usr/share/doc/inkecho/system`. Generated `inventory.json` records the actual
 files, links, dependency versions and downloaded asset hashes.
 
@@ -54,6 +55,10 @@ files, links, dependency versions and downloaded asset hashes.
   libfuse, squashfuse, zstd and zlib components and their upstream terms.
 - [Noto CJK source](https://github.com/notofonts/noto-cjk) provides the font and
   corresponding open-font notices.
+- [libei source](https://gitlab.freedesktop.org/libinput/libei) provides the client
+  library and Expat-license copyright notices. The exact Ubuntu package is pinned
+  by URL and SHA-256 in `scripts/packaging/system-deps.json`; its copyright file
+  was inspected directly from that verified package.
 
 Qt remains dynamically loaded, and the build does not deliberately prevent
 replacement of its shared libraries in an extracted AppImage. Source/build
