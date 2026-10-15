@@ -12,12 +12,12 @@ from PySide6.QtCore import QLockFile, QObject, QStandardPaths, Signal
 from PySide6.QtGui import QFontDatabase
 from PySide6.QtNetwork import QLocalServer, QLocalSocket
 from PySide6.QtWidgets import QApplication, QMessageBox
-from qasync import QEventLoop
 
 from inkecho.app import Session
 from inkecho.config import ConfigError, ConfigStore
 from inkecho.integration import DesktopIntegration
 from inkecho.logging import DiagnosticLog
+from inkecho.runtime import ManagedQtEventLoop
 from inkecho.statistics import Statistics
 from inkecho.ui.window import MainWindow
 
@@ -212,7 +212,7 @@ def main():
             instance.close()
             return
         store.initialize()
-        with QEventLoop(app) as loop:
+        with ManagedQtEventLoop(app) as loop:
             asyncio.set_event_loop(loop)
             loop.run_until_complete(run(app, store, instance, args))
     except (ConfigError, OSError, RuntimeError) as error:

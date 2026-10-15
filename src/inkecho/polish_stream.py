@@ -5,6 +5,7 @@ import json
 import re
 import time
 from collections.abc import Awaitable, Callable, Iterator
+from contextlib import aclosing
 
 import httpx
 
@@ -199,15 +200,16 @@ async def polish_stream(
                 content_type = response.headers.get("content-type", "")
                 if content_type.split(";", 1)[0].strip().lower() != "text/event-stream":
                     raise ProviderError("response")
-                async for chunk in response.aiter_bytes():
-                    for payload in events.feed(chunk):
-                        await consume(payload)
-                        if chat.done:
-                            # DONE terminates this protocol. Do not wait for an
-                            # HTTP peer that keeps the response open afterward.
-                            return client._text_result(
-                                "".join(chat.parts), chat.usage, started
-                            )
+                async with aclosing(response.aiter_bytes()) as chunks:
+                    async for chunk in chunks:
+                        for payload in events.feed(chunk):
+                            await consume(payload)
+                            if chat.done:
+                                # DONE terminates this protocol. Do not wait for an
+                                # HTTP peer that keeps the response open afterward.
+                                return client._text_result(
+                                    "".join(chat.parts), chat.usage, started
+                                )
                 for payload in events.feed(b"", eof=True):
                     await consume(payload)
                     if chat.done:
