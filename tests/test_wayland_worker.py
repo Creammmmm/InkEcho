@@ -941,3 +941,135 @@ def test_authorization_subscription_timeout_is_sanitized_and_reclaims_session():
         assert remote.path is None and remote.bus is None
 
     run(scenario())
+
+
+@pytest.mark.parametrize("boundary", ["map", "release"])
+@pytest.mark.parametrize("stop_kind", ["cancel", "deadline"])
+def test_stop_during_settle_never_acknowledges_or_sends_a_tail(
+    remote, monkeypatch, boundary, stop_kind
+):
+    from inkecho.platform import wayland_worker
+
+    async def scenario():
+        guardian = Guardian(remote)
+        await guardian.begin()
+        reached, resume = asyncio.Event(), asyncio.Event()
+        sleeps = []
+        original_sleep = asyncio.sleep
+
+        async def controlled_sleep(duration):
+            sleeps.append(duration)
+            target = 1 if boundary == "map" else 2
+            if len(sleeps) == target:
+                reached.set()
+                await resume.wait()
+            else:
+                await original_sleep(0)
+
+        monkeypatch.setattr(wayland_worker.asyncio, "sleep", controlled_sleep)
+        delivery = asyncio.create_task(guardian.key("a"))
+        await asyncio.wait_for(reached.wait(), 1)
+        expected_events = (
+            [] if boundary == "map" else [(124, True, False), (124, False, False)]
+        )
+        assert remote.events == expected_events
+        assert remote.data == b"a\0"
+        if stop_kind == "cancel":
+            guardian.stop()
+        else:
+            guardian.deadline = time.monotonic() - 1
+        assert not delivery.done()
+        resume.set()
+        with pytest.raises(KeyboardError, match="input_cancelled"):
+            await delivery
+        with pytest.raises(KeyboardError, match="input_cancelled"):
+            await guardian.key("b")
+        assert remote.events == expected_events
+        await guardian.finish()
+        assert remote.data == b"original\0"
+        assert guardian.map is None
+        assert remote.events == expected_events
+        assert sleeps == [0.03] * (1 if boundary == "map" else 2)
+
+    run(scenario())
+
+
+def test_failed_release_settles_before_cleanup_retry_or_restore(remote, monkeypatch):
+    from inkecho.platform import wayland_worker
+
+    async def scenario():
+        guardian = Guardian(remote)
+        await guardian.begin()
+        sequence = []
+        original_key = remote.key
+        original_set = remote.set_map
+        fail_release = True
+
+        async def key(code, pressed, *, newline=False):
+            nonlocal fail_release
+            await original_key(code, pressed, newline=newline)
+            sequence.append("press" if pressed else "release")
+            if not pressed and fail_release:
+                fail_release = False
+                raise KeyboardError("injection_failed")
+
+        async def set_map(data, group):
+            sequence.append("restore" if data == b"original\0" else "map")
+            await original_set(data, group)
+
+        async def settle(duration):
+            sequence.append("settle")
+
+        monkeypatch.setattr(wayland_worker.asyncio, "sleep", settle)
+        remote.key, remote.set_map = key, set_map
+        with pytest.raises(KeyboardError, match="injection_failed"):
+            await guardian.key("a")
+        assert guardian.pressed == (124, False)
+        await guardian.finish()
+        assert sequence == [
+            "map",
+            "settle",
+            "press",
+            "release",
+            "settle",
+            "release",
+            "settle",
+            "restore",
+        ]
+        assert guardian.pressed is None
+        assert guardian.map is None
+        assert remote.data == b"original\0"
+
+    run(scenario())
+
+
+@pytest.mark.parametrize(
+    "field,value,error",
+    [
+        ("depressed", 4, "keys_held"),
+        ("latched", 4, "keys_held"),
+        ("locked", 18, "caps_lock"),
+    ],
+)
+def test_map_settle_refreshes_new_modifier_state_before_press(
+    remote, monkeypatch, field, value, error
+):
+    from inkecho.platform import wayland_worker
+
+    async def scenario():
+        guardian = Guardian(remote)
+        await guardian.begin()
+
+        async def settle(duration):
+            remote.state[field] = value
+
+        monkeypatch.setattr(wayland_worker.asyncio, "sleep", settle)
+        with pytest.raises(KeyboardError, match=error):
+            await guardian.key("a")
+        assert remote.events == []
+        remote.state.update(depressed=0, latched=0, locked=16)
+        await guardian.finish()
+        assert remote.data == b"original\0"
+        assert guardian.map is None
+
+    run(scenario())

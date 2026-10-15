@@ -26,6 +26,10 @@ from inkecho.platform.wayland_keymap import Keymap, normalize_text
 SERVICE = "org.gnome.Mutter.RemoteDesktop"
 ROOT = "/org/gnome/Mutter/RemoteDesktop"
 INTERFACE = SERVICE + ".Session"
+# XWayland adds an input queue and client mapping notifications between the
+# compositor and application. Keep each map stable before and after its key.
+MAP_SETTLE_SECONDS = 0.03
+RELEASE_SETTLE_SECONDS = 0.03
 
 
 class MutterSession:
@@ -470,6 +474,8 @@ class Guardian:
             await self.remote.set_map(mapping.data, self.group)
             self.modified = True
             self._continue()
+            await asyncio.sleep(MAP_SETTLE_SECONDS)
+            self._continue()
             state, data = await self.remote.snapshot(refresh=True)
             if data != mapping.data or state["group"] != self.group:
                 raise KeyboardError("mapping_changed")
@@ -487,9 +493,22 @@ class Guardian:
         try:
             await self.remote.key(code, True, newline=newline)
         finally:
-            await self.remote.key(code, False, newline=newline)
-            self.pressed = None
+            await self._release_key()
+        self._continue()
         return 1
+
+    async def _release_key(self):
+        """Release owned input and let its consumers drain before another map."""
+        if self.pressed is None:
+            return
+        code, newline = self.pressed
+        try:
+            await self.remote.key(code, False, newline=newline)
+        finally:
+            # Cleanup must retain the same pacing even after cancellation or an
+            # ambiguous release failure. It sends no additional body character.
+            await asyncio.sleep(RELEASE_SETTLE_SECONDS)
+        self.pressed = None
 
     def _clear(self):
         if self.map:
@@ -500,10 +519,8 @@ class Guardian:
     async def finish(self):
         self.stop()
         if self.pressed:
-            code, newline = self.pressed
             try:
-                await self.remote.key(code, False, newline=newline)
-                self.pressed = None
+                await self._release_key()
             except KeyboardError as error:
                 if error.code == "session_closed":
                     self.pressed = None
