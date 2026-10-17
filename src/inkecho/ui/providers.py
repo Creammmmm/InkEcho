@@ -210,15 +210,20 @@ class ProviderPage(Page):
     def update_model_hint(self):
         from inkecho.app import PROVIDER_LABELS
 
+        provider = None
         try:
             provider = self.provider()
             self.validate_protocol(provider)
         except ProviderError as error:
             self.model_hint.setText(PROVIDER_LABELS[error.code])
+            if error.code != "protocol":
+                provider = None
         except ConfigError as error:
             self.model_hint.setText(str(error))
+            provider = None
         except (ValueError, AttributeError):
             self.model_hint.setText("请填写有效的服务配置，再检查模型协议。")
+            provider = None
         else:
             if self.role == "polishing":
                 hint = "模型列表不等于能力验证；请测试当前模型能否完成润色。"
@@ -232,6 +237,38 @@ class ProviderPage(Page):
                     "模型列表不等于能力验证。"
                 )
             self.model_hint.setText(hint)
+        self.update_model_annotations(provider)
+
+    def update_model_annotations(self, provider: Provider | None) -> None:
+        """Refresh local compatibility only; never infer verified cloud ability."""
+        for index in range(self.model.count()):
+            self.model.setItemData(index, None, Qt.ItemDataRole.ToolTipRole)
+            self.model.setItemData(index, None, Qt.ItemDataRole.ForegroundRole)
+            if provider is None:
+                continue
+            model = self.model.itemText(index)
+            try:
+                validate_provider_protocol(replace(provider, model=model))
+            except ProviderError as error:
+                if error.code != "protocol":
+                    # A bad URL/JSON configuration isn't a model capability.
+                    continue
+                parts = model.strip().lower().split("-")
+                if "filetrans" in parts:
+                    hint = "文件转写任务协议尚未实现，请选择其他模型。"
+                elif "streaming" in parts:
+                    hint = "此流式协议尚未实现，请选择其他模型。"
+                elif provider.parameters.get("asr_protocol") == PROTOCOL:
+                    hint = "此模型不匹配 Qwen 实时方式，请切换为 HTTP 录音转写。"
+                else:
+                    hint = (
+                        "此模型需要实时转写，请选择「边录边识别 · Qwen 实时 WebSocket」"
+                        "后测试该服务的模型能力。"
+                    )
+                self.model.setItemData(index, hint, Qt.ItemDataRole.ToolTipRole)
+                self.model.setItemData(
+                    index, QColor("#aa3434"), Qt.ItemDataRole.ForegroundRole
+                )
 
     def refresh(self, identifier=None):
         self.selector.blockSignals(True)
@@ -369,28 +406,16 @@ class ProviderPage(Page):
         if revision != self.revision:
             return
         selected = self.model.currentText()
-        self.model.clear()
-        self.model.addItems(models)
-        unsupported = 0
-        for index, model in enumerate(models):
-            try:
-                validate_provider_protocol(replace(provider, model=model))
-            except ProviderError:
-                unsupported += 1
-                self.model.setItemData(
-                    index,
-                    "当前配置或转写方式与此模型协议不匹配",
-                    Qt.ItemDataRole.ToolTipRole,
-                )
-                self.model.setItemData(
-                    index, QColor("#aa3434"), Qt.ItemDataRole.ForegroundRole
-                )
-        self.model.setCurrentText(selected)
+        with QSignalBlocker(self.model):
+            self.model.clear()
+            self.model.addItems(models)
+            self.model.setCurrentText(selected)
+        self.update_model_hint()
         self.message.setText(
             f"连接成功，发现 {len(models)} 个模型；尚未验证模型能力。"
             + (
-                f"其中 {unsupported} 个模型的协议尚不支持，已标红。"
-                if unsupported
+                "红色项仅表示与当前转写方式不匹配，请查看模型提示。"
+                if self.role == "transcription"
                 else ""
             )
         )

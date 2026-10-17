@@ -405,7 +405,215 @@ def test_discovery_marks_incompatible_protocols_without_switching_model(window):
         assert page.model.itemData(1, Qt.ItemDataRole.ToolTipRole)
         assert page.model.itemData(2, Qt.ItemDataRole.ToolTipRole)
         assert page.model.itemData(0, Qt.ItemDataRole.ToolTipRole) is None
+        assert "3 个模型" in page.message.text()
+        assert "当前转写方式不匹配" in page.message.text()
+        assert "协议尚不支持" not in page.message.text()
+
+    asyncio.run(scenario())
+
+
+@pytest.fixture
+def discovered_protocol_models(window):
+    page = window.pages[2]
+    store = window.session.store
+    before = {p: p.read_bytes() for p in store.root.rglob("*.json")}
+    requests = []
+    page.model.setCurrentText("qwen3-asr-flash-realtime")
+
+    async def key(_reference):
+        return "fixture-only"
+
+    class Client:
+        async def models(self, *_args):
+            requests.append("models")
+            return [
+                "qwen3-asr-flash",
+                "qwen3-asr-flash-realtime",
+                "qwen3-asr-flash-filetrans",
+            ]
+
+    window.session.key = key
+    window.session.provider_client = lambda _role: Client()
+    asyncio.run(page.discover())
+    return page, requests, before
+
+
+def test_protocol_switch_relabels_existing_models_without_network_or_config_save(
+    window, discovered_protocol_models
+):
+    page, requests, before = discovered_protocol_models
+    tooltip, foreground = Qt.ItemDataRole.ToolTipRole, Qt.ItemDataRole.ForegroundRole
+    page.key.setText("unsaved-fixture-key")
+    model = page.model.currentText()
+    rate = window.session.store.load_settings().sample_rate
+    assert page.model.itemData(0, foreground) is None
+    assert "Qwen 实时 WebSocket" in page.model.itemData(1, tooltip)
+    assert "文件转写任务协议尚未实现" in page.model.itemData(2, tooltip)
+
+    page.protocol.setCurrentIndex(page.protocol.findData(PROTOCOL))
+    assert "HTTP 录音转写" in page.model.itemData(0, tooltip)
+    assert page.model.itemData(0, foreground) is not None
+    assert page.model.itemData(1, tooltip) is None
+    assert page.model.itemData(1, foreground) is None
+    assert "文件转写任务协议尚未实现" in page.model.itemData(2, tooltip)
+    assert "已选择边录边识别" in page.model_hint.text()
+    assert "协议尚不支持" not in page.message.text()
+
+    page.protocol.setCurrentIndex(page.protocol.findData("http"))
+    assert page.model.itemData(0, tooltip) is None
+    assert page.model.itemData(0, foreground) is None
+    assert page.model.itemData(1, foreground) is not None
+    assert "Qwen 实时 WebSocket" in page.model.itemData(1, tooltip)
+    assert page.model.itemData(2, foreground) is not None
+    assert page.model.currentText() == model
+    assert page.key.text() == "unsaved-fixture-key"
+    assert window.session.store.load_settings().sample_rate == rate
+    assert before == {
+        p: p.read_bytes() for p in window.session.store.root.rglob("*.json")
+    }
+    assert requests == ["models"]
+
+
+@pytest.mark.parametrize("field", ["url", "endpoint", "model", "json"])
+def test_invalid_configuration_clears_old_model_marks_and_repair_refreshes(
+    window, discovered_protocol_models, field
+):
+    page, requests, before = discovered_protocol_models
+    page.protocol.setCurrentIndex(page.protocol.findData(PROTOCOL))
+    if field == "url":
+        page.url.setText("https://dashscope.aliyuncs.com:invalid")
+    elif field == "endpoint":
+        page.realtime_url.setText("wss://fixture-user:fixture-secret@example.invalid/r")
+    elif field == "model":
+        page.model.setCurrentText("")
+    else:
+        page.parameters.setPlainText(
+            json.dumps({"asr_protocol": PROTOCOL, "asr_options": {}})
+        )
+    for index in range(page.model.count()):
+        assert page.model.itemData(index, Qt.ItemDataRole.ToolTipRole) is None
+        assert page.model.itemData(index, Qt.ItemDataRole.ForegroundRole) is None
+    assert "已选择边录边识别" not in page.model_hint.text()
+    assert "协议尚不支持" not in page.message.text()
+
+    if field == "url":
+        page.url.setText("https://dashscope.aliyuncs.com/compatible-mode/v1")
+    elif field == "endpoint":
+        page.realtime_url.setText("")
+    elif field == "model":
+        page.model.setCurrentText("qwen3-asr-flash-realtime")
+    else:
+        page.parameters.setPlainText(json.dumps({"asr_protocol": PROTOCOL}))
+    assert "已选择边录边识别" in page.model_hint.text()
+    assert page.model.itemData(0, Qt.ItemDataRole.ForegroundRole) is not None
+    assert page.model.itemData(1, Qt.ItemDataRole.ForegroundRole) is None
+    assert "文件转写" in page.model.itemData(2, Qt.ItemDataRole.ToolTipRole)
+    assert requests == ["models"]
+    assert before == {
+        p: p.read_bytes() for p in window.session.store.root.rglob("*.json")
+    }
+
+
+def test_protocol_json_relabels_models_but_bad_json_remains_untouched(
+    window, discovered_protocol_models
+):
+    page, requests, before = discovered_protocol_models
+    page.parameters.setPlainText(json.dumps({"asr_protocol": PROTOCOL}))
+    assert page.model.itemData(1, Qt.ItemDataRole.ForegroundRole) is None
+    bad = '{"unfinished":'
+    page.parameters.setPlainText(bad)
+    assert "JSON" in page.model_hint.text()
+    assert all(
+        page.model.itemData(i, Qt.ItemDataRole.ForegroundRole) is None
+        for i in range(page.model.count())
+    )
+    page.url.setText("https://proxy.example.invalid/v1")
+    page.protocol.setCurrentIndex(page.protocol.findData("http"))
+    assert page.parameters.toPlainText() == bad
+    assert "JSON" in page.model_hint.text()
+    page.parameters.setPlainText("{}")
+    assert page.protocol.currentData() == "http"
+    assert page.model.itemData(1, Qt.ItemDataRole.ForegroundRole) is not None
+    assert page.model.currentText() == "qwen3-asr-flash-realtime"
+    assert requests == ["models"]
+    assert before == {
+        p: p.read_bytes() for p in window.session.store.root.rglob("*.json")
+    }
+
+
+def test_discovery_with_missing_custom_wss_does_not_mark_all_models_unsupported(
+    window,
+):
+    async def scenario():
+        page = window.pages[2]
+        page.model.setCurrentText("qwen3-asr-flash-realtime")
+        page.protocol.setCurrentIndex(page.protocol.findData(PROTOCOL))
+        page.url.setText("https://proxy.example.invalid/v1")
+        requests = []
+
+        async def key(_reference):
+            return "fixture-only"
+
+        class Client:
+            async def models(self, *_args):
+                requests.append("models")
+                return ["qwen3-asr-flash", "qwen3-asr-flash-realtime"]
+
+        window.session.key = key
+        window.session.provider_client = lambda _role: Client()
+        await page.discover()
+        assert "服务配置或请求参数不正确" in page.model_hint.text()
         assert "2 个模型" in page.message.text()
+        assert "协议尚不支持" not in page.message.text()
+        for index in range(page.model.count()):
+            assert page.model.itemData(index, Qt.ItemDataRole.ToolTipRole) is None
+            assert page.model.itemData(index, Qt.ItemDataRole.ForegroundRole) is None
+        page.realtime_url.setText("wss://proxy.example.invalid/realtime")
+        assert "已选择边录边识别" in page.model_hint.text()
+        assert page.model.itemData(0, Qt.ItemDataRole.ForegroundRole) is not None
+        assert page.model.itemData(1, Qt.ItemDataRole.ForegroundRole) is None
+        assert requests == ["models"]
+
+    asyncio.run(scenario())
+
+
+@pytest.mark.parametrize("control", ["protocol", "json"])
+def test_pending_discovery_cannot_mark_or_replace_models_after_protocol_edit(
+    window, control
+):
+    async def scenario():
+        page = window.pages[2]
+        page.model.addItem("existing-model")
+        page.model.setCurrentText("qwen3-asr-flash-realtime")
+        entered, release = asyncio.Event(), asyncio.Event()
+
+        async def key(_reference):
+            return "fixture-only"
+
+        class Client:
+            async def models(self, *_args):
+                entered.set()
+                await release.wait()
+                return ["late-model", "qwen3-asr-flash-filetrans"]
+
+        window.session.key = key
+        window.session.provider_client = lambda _role: Client()
+        pending = asyncio.create_task(page.discover())
+        await entered.wait()
+        if control == "protocol":
+            page.protocol.setCurrentIndex(page.protocol.findData(PROTOCOL))
+        else:
+            page.parameters.setPlainText(json.dumps({"asr_protocol": PROTOCOL}))
+        page.message.setText("edited form")
+        release.set()
+        await pending
+        assert page.message.text() == "edited form"
+        assert page.model.findText("existing-model") >= 0
+        assert page.model.findText("late-model") == -1
+        assert page.model.findText("qwen3-asr-flash-filetrans") == -1
+        assert page.model.currentText() == "qwen3-asr-flash-realtime"
+        assert page.protocol.currentData() == PROTOCOL
+        assert "已选择边录边识别" in page.model_hint.text()
 
     asyncio.run(scenario())
 
