@@ -4,6 +4,7 @@ import time
 
 import pytest
 
+from inkecho.platform.hybrid_keyboard import HybridKeyboardInput
 from inkecho.platform.keyboard import KeyboardError, KeyboardInput
 from inkecho.platform.wayland_keyboard import WaylandKeyboardInput, keyboard_for_desktop
 
@@ -58,14 +59,32 @@ async def connected(handler=None):
     return inputs, process
 
 
-def test_desktop_selection_does_not_classify_current_focus():
+def test_desktop_selection_does_not_classify_current_focus(monkeypatch):
+    def forbidden(*_args):
+        pytest.fail("desktop selection must not connect or classify focus")
+
+    monkeypatch.setattr(HybridKeyboardInput, "_x_selected", forbidden)
+    monkeypatch.setattr(KeyboardInput, "connect", forbidden)
+    monkeypatch.setattr(WaylandKeyboardInput, "connect", forbidden)
     assert isinstance(
         keyboard_for_desktop(
             {"XDG_SESSION_TYPE": "wayland", "XDG_CURRENT_DESKTOP": "ubuntu:GNOME"}
         ),
-        WaylandKeyboardInput,
+        HybridKeyboardInput,
     )
     assert isinstance(keyboard_for_desktop({"XDG_SESSION_TYPE": "x11"}), KeyboardInput)
+
+
+@pytest.mark.parametrize(
+    "environ",
+    [
+        {},
+        {"XDG_SESSION_TYPE": "wayland", "XDG_CURRENT_DESKTOP": "KDE"},
+        {"XDG_SESSION_TYPE": "x11", "XDG_CURRENT_DESKTOP": "GNOME"},
+    ],
+)
+def test_other_desktops_keep_x11_adapter(environ):
+    assert type(keyboard_for_desktop(environ)) is KeyboardInput
 
 
 def test_connect_is_non_authorizing_and_output_is_sequential_normalized():
@@ -450,6 +469,26 @@ def test_first_sent_callback_failure_cleans_worker_and_sends_no_tail():
             await inputs.insert("中文", lambda: True, on_first_sent=failed)
         assert [r["value"] for r in process.requests if r["op"] == "key"] == ["中"]
         assert process.requests[-1]["op"] == "cancel"
+        await inputs.aclose()
+
+    asyncio.run(run())
+
+
+def test_private_prefix_finishes_without_sending_unselected_tail():
+    async def run():
+        inputs, process = await connected()
+        await inputs.authorize()
+
+        def selected():
+            return not any(item["op"] == "key" for item in process.requests)
+
+        assert await inputs._insert_prefix("中ab", lambda: True, selected=selected) == 1
+        assert [item["value"] for item in process.requests if item["op"] == "key"] == [
+            "中"
+        ]
+        assert [item["op"] for item in process.requests].count("begin") == 1
+        assert [item["op"] for item in process.requests].count("finish") == 1
+        assert not any(item["op"] == "cancel" for item in process.requests)
         await inputs.aclose()
 
     asyncio.run(run())

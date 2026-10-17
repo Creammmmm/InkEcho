@@ -16,7 +16,9 @@ def keyboard_for_desktop(environ: Mapping[str, str] | None = None):
     if env.get("XDG_SESSION_TYPE", "").lower() == "wayland" and "GNOME" in env.get(
         "XDG_CURRENT_DESKTOP", ""
     ).upper().split(":"):
-        return WaylandKeyboardInput()
+        from inkecho.platform.hybrid_keyboard import HybridKeyboardInput
+
+        return HybridKeyboardInput()
     return KeyboardInput()
 
 
@@ -254,6 +256,19 @@ class WaylandKeyboardInput:
         deadline: float | None = None,
         on_first_sent: Callable[[float | None], None] | None = None,
     ) -> int:
+        return await self._insert_prefix(
+            text, can_continue, deadline=deadline, on_first_sent=on_first_sent
+        )
+
+    async def _insert_prefix(
+        self,
+        text: str,
+        can_continue: Callable[[], bool],
+        *,
+        deadline: float | None = None,
+        on_first_sent: Callable[[float | None], None] | None = None,
+        selected: Callable[[], bool] | None = None,
+    ) -> int:
         normalized = text.replace("\r\n", "\n").replace("\r", "\n")
         if any(
             (ord(char) < 32 and char != "\n")
@@ -285,6 +300,8 @@ class WaylandKeyboardInput:
             count = 0
             for character in normalized:
                 check()
+                if selected is not None and not selected():
+                    break
                 request_start = time.monotonic()
                 result = await self._request("key", value=character)
                 acknowledged = time.monotonic()

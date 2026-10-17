@@ -13,6 +13,7 @@ class Driver:
         self.window = 21
         self.events = []
         self.mapped = None
+        self.applied = None
         self.closed = False
         self.conflict = False
 
@@ -23,6 +24,8 @@ class Driver:
 
     def map(self, character):
         self.mapped = character
+        if character != "\n":
+            self.applied = character
         return 36 if character == "\n" else 248
 
     def verify(self):
@@ -34,6 +37,7 @@ class Driver:
 
     def restore(self):
         self.mapped = None
+        self.applied = None
 
     def close(self):
         self.closed = True
@@ -898,5 +902,56 @@ def test_aclose_still_closes_driver_if_cancelled_owner_raises_unexpected_error(
         assert owner.done() and closed == [True]
         assert rows[1] == (0, 0) and len(writes) == 2
         assert inputs._driver is None and inputs._output_owner is None
+
+    asyncio.run(run())
+
+
+def test_first_real_mapping_grace_survives_newline_and_stream_fragments(monkeypatch):
+    delays = []
+    original = asyncio.sleep
+
+    async def sleep(delay):
+        delays.append(delay)
+        await original(0)
+
+    monkeypatch.setattr(asyncio, "sleep", sleep)
+
+    async def run():
+        driver = Driver()
+        inputs = KeyboardInput(driver_factory=lambda: driver)
+        await inputs.connect()
+        async with inputs.output_session():
+            await inputs.insert("\n", lambda: True)
+            await inputs.insert("中", lambda: True)
+            await inputs.insert("文", lambda: True)
+        assert delays == [0.02] * 3 + [0.1, 0.02, 0.02] + [0.02] * 3
+        assert driver.applied is None
+        delays.clear()
+        await inputs.insert("a", lambda: True)
+        await inputs.insert("b", lambda: True)
+        assert delays == [0.1, 0.02, 0.02] * 2
+
+    asyncio.run(run())
+
+
+def test_cancel_during_initial_mapping_grace_emits_nothing(monkeypatch):
+    active = True
+    original = asyncio.sleep
+
+    async def sleep(delay):
+        nonlocal active
+        assert delay == 0.1
+        active = False
+        await original(0)
+
+    monkeypatch.setattr(asyncio, "sleep", sleep)
+
+    async def run():
+        driver = Driver()
+        inputs = KeyboardInput(driver_factory=lambda: driver)
+        await inputs.connect()
+        with pytest.raises(KeyboardError, match="input_cancelled"):
+            await inputs.insert("中文", lambda: active)
+        assert driver.events == [] and driver.applied is None
 
     asyncio.run(run())

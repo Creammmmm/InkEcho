@@ -247,6 +247,10 @@ class CountingDriver:
         self.events = []
         self.fail_write = self.fail_restore = False
 
+    @property
+    def applied(self):
+        return self.mapping
+
     def _property(self, _window, atom):
         return self.window if atom == self.active_atom else 42
 

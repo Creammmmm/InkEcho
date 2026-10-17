@@ -229,6 +229,7 @@ class MemoryDriver:
     def __init__(self):
         self.window = None
         self.mapped = None
+        self.applied = None
         self.sent = []
         self.releases = 0
         self.focus_reads = 0
@@ -243,6 +244,8 @@ class MemoryDriver:
 
     def map(self, character):
         self.mapped = character
+        if character != "\n":
+            self.applied = character
         return 248
 
     def verify(self):
@@ -257,6 +260,7 @@ class MemoryDriver:
 
     def restore(self):
         self.mapped = None
+        self.applied = None
 
     def close(self):
         self.closed = True

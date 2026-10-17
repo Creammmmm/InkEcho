@@ -8,6 +8,9 @@ from contextlib import asynccontextmanager, contextmanager
 
 # Retain twice the rejected 10 ms candidate after fresh-window application tests;
 # X11 timing evidence and platform limits are in performance-keyboard-validation.md.
+# Candidate grace for the first real mapping in each owned empty-row loan.
+# This does not acknowledge application consumption; fresh-window testing is required.
+INITIAL_MAP_SETTLE_SECONDS = 0.1
 MAP_SETTLE_SECONDS = 0.02
 PRESS_SETTLE_SECONDS = 0.02
 RELEASE_SETTLE_SECONDS = 0.02
@@ -421,8 +424,21 @@ class KeyboardInput:
         text: str,
         can_continue: Callable[[], bool],
         *,
+        deadline: float | None = None,
+        on_first_sent: Callable[[float | None], None] | None = None,
+    ) -> int:
+        return await self._insert_prefix(
+            text, can_continue, deadline=deadline, on_first_sent=on_first_sent
+        )
+
+    async def _insert_prefix(
+        self,
+        text: str,
+        can_continue: Callable[[], bool],
+        *,
         deadline=None,
         on_first_sent: Callable[[float | None], None] | None = None,
+        selected: Callable[[], bool] | None = None,
     ) -> int:
         current = asyncio.current_task()
         try:
@@ -443,6 +459,7 @@ class KeyboardInput:
         self._task = current
         driver = self._driver
         completed = False
+        count = 0
 
         def check():
             if (
@@ -455,11 +472,28 @@ class KeyboardInput:
         try:
             for index, character in enumerate(text):
                 check()
-                driver.focus()  # Reject native Wayland/proxy before changing map.
+                if selected is not None and not selected():
+                    break
+                try:
+                    driver.focus()
+                except KeyboardError as error:
+                    if selected is not None and error.code == "unsupported_target":
+                        break
+                    raise
+                first_mapping = character != "\n" and driver.applied is None
                 code = driver.map(character)
-                await asyncio.sleep(MAP_SETTLE_SECONDS)
+                await asyncio.sleep(
+                    INITIAL_MAP_SETTLE_SECONDS if first_mapping else MAP_SETTLE_SECONDS
+                )
                 check()
-                window = driver.focus()  # Refresh after every asynchronous gap.
+                if selected is not None and not selected():
+                    break  # No press has been attempted for this character.
+                try:
+                    window = driver.focus()
+                except KeyboardError as error:
+                    if selected is not None and error.code == "unsupported_target":
+                        break
+                    raise
                 driver.verify()
                 check()
                 try:
@@ -472,6 +506,7 @@ class KeyboardInput:
                     self._send(window, code, False)
                 await asyncio.sleep(RELEASE_SETTLE_SECONDS)
                 check()
+                count += 1
             completed = True
         finally:
             try:
@@ -481,7 +516,7 @@ class KeyboardInput:
                     driver.restore()
             finally:
                 self._task = None
-        return len(text)
+        return count
 
     async def aclose(self) -> None:
         self._closing = True

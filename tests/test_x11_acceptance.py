@@ -28,6 +28,10 @@ class Driver:
         self.pid, self.character, self.loan, self.closed = 0, "", False, False
         self.text, self.events = {}, []
 
+    @property
+    def applied(self):
+        return (1,) if self.loan else None
+
     def _checked(self):
         return nullcontext()
 
