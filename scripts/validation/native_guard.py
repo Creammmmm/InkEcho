@@ -7,8 +7,12 @@ import signal
 import sys
 import time
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from natural_owned_browser import parent_pid, process_start
+
+if TYPE_CHECKING:
+    from inkecho.platform.wayland_worker import MutterSession
 
 
 def save(path: Path, value: dict) -> None:
@@ -33,14 +37,18 @@ def guard_allowed(state: dict, owner: int, now: float) -> bool:
         return False
 
 
-async def worker(guard_path: Path, count_path: Path, owner: int) -> None:
+def guarded_remote(
+    guard_path: Path, count_path: Path, owner: int, counts: dict
+) -> "MutterSession":
+    """Return a test-only remote with a known-unsent guard rejection boundary."""
     from inkecho.platform.keyboard import KeyboardError
-    from inkecho.platform.wayland_worker import Guardian, MutterSession, serve
-
-    counts = {"press_success": 0, "release_success": 0, "guard_rejections": 0}
-    save(count_path, counts)
+    from inkecho.platform.wayland_worker import MutterSession
 
     class GuardedRemote(MutterSession):
+        def __init__(self):
+            super().__init__()
+            self.refused_press = None
+
         async def key(self, code, pressed, *, newline=False):
             if pressed:
                 try:
@@ -48,17 +56,40 @@ async def worker(guard_path: Path, count_path: Path, owner: int) -> None:
                 except (OSError, ValueError):
                     state = {}
                 if not guard_allowed(state, owner, time.monotonic()):
+                    self.refused_press = (code, newline)
                     counts["guard_rejections"] += 1
                     save(count_path, counts)
                     raise KeyboardError("input_cancelled")
+                self.refused_press = None
+            elif self.refused_press == (code, newline):
+                # This test seam proves no press reached Mutter. Its matching
+                # cleanup release must not create an unmatched real event.
+                self.refused_press = None
+                counts["suppressed_unattempted_release"] += 1
+                save(count_path, counts)
+                return
             result = await super().key(code, pressed, newline=newline)
             counts["press_success" if pressed else "release_success"] += 1
             save(count_path, counts)
             return result
 
+    return GuardedRemote()
+
+
+async def worker(guard_path: Path, count_path: Path, owner: int) -> None:
+    from inkecho.platform.wayland_worker import Guardian, serve
+
+    counts = {
+        "press_success": 0,
+        "release_success": 0,
+        "guard_rejections": 0,
+        "suppressed_unattempted_release": 0,
+    }
+    save(count_path, counts)
+
     # This is the production protocol and mapping/cancel/cleanup algorithm, with
     # an explicit remote dependency. No production class or API is monkeypatched.
-    guardian = Guardian(remote=GuardedRemote())
+    guardian = Guardian(remote=guarded_remote(guard_path, count_path, owner, counts))
     reader = asyncio.StreamReader(limit=4096)
     protocol = asyncio.StreamReaderProtocol(reader)
     loop = asyncio.get_running_loop()

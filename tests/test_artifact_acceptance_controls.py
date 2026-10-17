@@ -461,3 +461,95 @@ def test_current_hybrid_tamper_rejected(fake_package):
     path.write_text("changed")
     with pytest.raises(ValueError, match="module_inventory_mismatch"):
         artifact.audit_package(packages, source, "0.1.0a14")
+
+
+def test_guard_rejected_unsent_press_never_sends_unmatched_cleanup_release(
+    tmp_path, monkeypatch
+):
+    import asyncio
+
+    from inkecho.platform.keyboard import KeyboardError
+    from inkecho.platform.wayland_worker import MutterSession
+
+    guard = load("native_guard")
+    state, count_path = tmp_path / "guard.json", tmp_path / "counts.json"
+    state.write_text("{}")
+    allowed = False
+    events = []
+    counts = dict(
+        press_success=0,
+        release_success=0,
+        guard_rejections=0,
+        suppressed_unattempted_release=0,
+    )
+    monkeypatch.setattr(guard, "guard_allowed", lambda *_a: allowed)
+
+    async def key(_self, code, pressed, *, newline=False):
+        events.append((code, pressed))
+
+    monkeypatch.setattr(MutterSession, "key", key)
+    remote = guard.guarded_remote(state, count_path, 77, counts)
+
+    async def scenario():
+        nonlocal allowed
+        with pytest.raises(KeyboardError, match="input_cancelled"):
+            await remote.key(124, True)
+        await remote.key(124, False)
+        assert events == []
+        assert counts == dict(
+            press_success=0,
+            release_success=0,
+            guard_rejections=1,
+            suppressed_unattempted_release=1,
+        )
+        allowed = True
+        await remote.key(124, True)
+        await remote.key(124, False)
+        assert events == [(124, True), (124, False)]
+        assert counts == dict(
+            press_success=1,
+            release_success=1,
+            guard_rejections=1,
+            suppressed_unattempted_release=1,
+        )
+
+    asyncio.run(scenario())
+
+
+def test_guard_does_not_suppress_release_after_attempted_remote_failure(
+    tmp_path, monkeypatch
+):
+    import asyncio
+
+    from inkecho.platform.keyboard import KeyboardError
+    from inkecho.platform.wayland_worker import MutterSession
+
+    guard = load("native_guard")
+    state = tmp_path / "guard.json"
+    state.write_text("{}")
+    monkeypatch.setattr(guard, "guard_allowed", lambda *_a: True)
+    events = []
+
+    async def key(_self, code, pressed, *, newline=False):
+        events.append((code, pressed))
+        if pressed:
+            raise KeyboardError("injection_failed")
+
+    monkeypatch.setattr(MutterSession, "key", key)
+    counts = dict(
+        press_success=0,
+        release_success=0,
+        guard_rejections=0,
+        suppressed_unattempted_release=0,
+    )
+    remote = guard.guarded_remote(state, tmp_path / "counts.json", 77, counts)
+
+    async def scenario():
+        with pytest.raises(KeyboardError, match="injection_failed"):
+            await remote.key(124, True)
+        await remote.key(124, False)
+        assert events == [(124, True), (124, False)]
+        assert counts["suppressed_unattempted_release"] == 0
+        assert counts["release_success"] == 1
+
+    asyncio.run(scenario())
