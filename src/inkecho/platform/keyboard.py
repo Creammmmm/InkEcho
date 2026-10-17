@@ -6,14 +6,13 @@ import time
 from collections.abc import AsyncIterator, Callable
 from contextlib import asynccontextmanager, contextmanager
 
-# Retain twice the rejected 10 ms candidate after fresh-window application tests;
-# X11 timing evidence and platform limits are in performance-keyboard-validation.md.
-# Candidate grace for the first real mapping in each owned empty-row loan.
-# This does not acknowledge application consumption; fresh-window testing is required.
+# Keep the first mapping stable for fresh X clients and retain 20 ms for later
+# map changes. The 10 ms press/release profile has bounded fresh-window evidence
+# in input-speed-optimization.md; it does not acknowledge application consumption.
 INITIAL_MAP_SETTLE_SECONDS = 0.1
 MAP_SETTLE_SECONDS = 0.02
-PRESS_SETTLE_SECONDS = 0.02
-RELEASE_SETTLE_SECONDS = 0.02
+PRESS_SETTLE_SECONDS = 0.01
+RELEASE_SETTLE_SECONDS = 0.01
 
 
 class KeyboardError(RuntimeError):

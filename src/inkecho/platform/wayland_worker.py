@@ -28,8 +28,9 @@ ROOT = "/org/gnome/Mutter/RemoteDesktop"
 INTERFACE = SERVICE + ".Session"
 # XWayland adds an input queue and client mapping notifications between the
 # compositor and application. Keep each map stable before and after its key.
-MAP_SETTLE_SECONDS = 0.05
-RELEASE_SETTLE_SECONDS = 0.05
+INITIAL_MAP_SETTLE_SECONDS = 0.05
+MAP_SETTLE_SECONDS = 0.03
+RELEASE_SETTLE_SECONDS = 0.03
 
 
 class MutterSession:
@@ -491,12 +492,15 @@ class Guardian:
             code = self.last_keycode
         elif not newline:
             mapping = self.map.character(character)
+            first_mapping = not self.modified
             self.pending_map = mapping.data
             self._continue()
             await self.remote.set_map(mapping.data, self.group)
             self.modified = True
             self._continue()
-            await asyncio.sleep(MAP_SETTLE_SECONDS)
+            await asyncio.sleep(
+                INITIAL_MAP_SETTLE_SECONDS if first_mapping else MAP_SETTLE_SECONDS
+            )
             self._continue()
             state, data = await self.remote.snapshot(refresh=True)
             if data != mapping.data or state["group"] != self.group:

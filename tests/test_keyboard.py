@@ -924,12 +924,12 @@ def test_first_real_mapping_grace_survives_newline_and_stream_fragments(monkeypa
             await inputs.insert("\n", lambda: True)
             await inputs.insert("中", lambda: True)
             await inputs.insert("文", lambda: True)
-        assert delays == [0.02] * 3 + [0.1, 0.02, 0.02] + [0.02] * 3
+        assert delays == [0.02, 0.01, 0.01] + [0.1, 0.01, 0.01] + [0.02, 0.01, 0.01]
         assert driver.applied is None
         delays.clear()
         await inputs.insert("a", lambda: True)
         await inputs.insert("b", lambda: True)
-        assert delays == [0.1, 0.02, 0.02] * 2
+        assert delays == [0.1, 0.01, 0.01] * 2
 
     asyncio.run(run())
 

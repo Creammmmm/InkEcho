@@ -996,7 +996,7 @@ def test_stop_during_settle_never_acknowledges_or_sends_a_tail(
         assert remote.data == b"original\0"
         assert guardian.map is None
         assert remote.events == expected_events
-        assert sleeps == [0.05] * (1 if boundary == "map" else 2)
+        assert sleeps == ([0.05] if boundary == "map" else [0.05, 0.03])
 
     run(scenario())
 
@@ -1102,7 +1102,7 @@ def test_successful_press_time_precedes_release_and_retains_pacing(remote):
         assert await guardian.key("中") == 1
         done = time.monotonic()
         assert began <= guardian.last_sent_at <= release_at <= done
-        assert done - release_at >= 0.045
+        assert done - release_at >= 0.025
         await guardian.finish()
 
     run(scenario())
@@ -1229,5 +1229,38 @@ def test_cache_hit_rechecks_state_after_awaited_source_query(remote, change):
         remote.data = guardian.last_confirmed
         await guardian.finish()
         assert remote.data == b"original\0"
+
+    run(scenario())
+
+
+def test_first_mapping_grace_ignores_newlines_and_cache_and_resets_per_begin(
+    remote, monkeypatch
+):
+    from inkecho.platform import wayland_worker
+
+    async def scenario():
+        guardian = Guardian(remote)
+        sleeps = []
+        original_sleep = asyncio.sleep
+
+        async def settle(duration):
+            sleeps.append(duration)
+            await original_sleep(0)
+
+        monkeypatch.setattr(wayland_worker.asyncio, "sleep", settle)
+        await guardian.begin()
+        for char in "\nAA\nAB":
+            await guardian.key(char)
+        assert sleeps == [0.03, 0.05, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03]
+        assert remote.writes == [(b"A\0", 1), (b"B\0", 1)]
+        assert len(remote.events) == 12
+        await guardian.finish()
+        assert remote.data == b"original\0" and guardian.map is None
+        sleeps.clear()
+        await guardian.begin()
+        await guardian.key("A")
+        assert sleeps == [0.05, 0.03]
+        await guardian.finish()
+        assert remote.data == b"original\0" and guardian.map is None
 
     run(scenario())

@@ -68,7 +68,12 @@ def audit_package(
     audit = inventory_probe.audit_appdir(appdir)
     sys.path.insert(0, str(package_root))
     origins = {}
-    for name in MODULES:
+    modules = list(MODULES)
+    hybrid = "inkecho.platform.hybrid_keyboard"
+    if (package_root / "inkecho/platform/hybrid_keyboard.py").is_file():
+        if hybrid not in modules:
+            modules.append(hybrid)
+    for name in modules:
         module = importlib.import_module(name)
         path = Path(module.__file__).resolve(strict=True)
         if not path.is_relative_to(package_root):

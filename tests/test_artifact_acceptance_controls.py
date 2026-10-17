@@ -431,3 +431,33 @@ def test_browser_environment_accepts_actual_backend_without_relabeling(
     else:
         with pytest.raises(ValueError, match="actual_graphical_session_required"):
             browser.browser_environment(tmp_path, platform)
+
+
+def add_hybrid_to_package(fake_package):
+    root, packages, _source, modules, _calls = fake_package
+    path = packages / "inkecho/platform/hybrid_keyboard.py"
+    path.write_text("# synthetic current package hybrid module\n")
+    modules["inkecho.platform.hybrid_keyboard"] = SimpleNamespace(__file__=str(path))
+    inventory = root / "usr/share/doc/inkecho/inventory.json"
+    value = json.loads(inventory.read_text())
+    value["files"][str(path.relative_to(root))] = artifact.checksum(path)
+    inventory.write_text(json.dumps(value))
+    return path
+
+
+def test_current_package_checks_optional_hybrid_origin(
+    fake_package,
+):
+    add_hybrid_to_package(fake_package)
+    _root, packages, source, _modules, _calls = fake_package
+    result = artifact.audit_package(packages, source, "0.1.0a14")
+    assert len(result["origins"]) == len(artifact.MODULES) + 1
+    assert "inkecho.platform.hybrid_keyboard" in result["origins"]
+
+
+def test_current_hybrid_tamper_rejected(fake_package):
+    path = add_hybrid_to_package(fake_package)
+    _root, packages, source, _modules, _calls = fake_package
+    path.write_text("changed")
+    with pytest.raises(ValueError, match="module_inventory_mismatch"):
+        artifact.audit_package(packages, source, "0.1.0a14")

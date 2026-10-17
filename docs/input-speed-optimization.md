@@ -8,9 +8,10 @@
 scope限制保留。**阶段2源码有限实际验收已通过**：主 Agent独立工作树全套1513项
 通过，24项单后端对照及B的4项受控跨后端交接均通过。普通文本事务由7次减少为
 1次，原生重复文本在本次70ms供给下约14.5秒→7秒；受控交接不证明无暂停切窗原子性。
-不把单对差异作普遍速度或可靠性分布结论。阶段3、新包同SHA双系统验收及
-稳定入口更新仍未完成。本节记录提交前实际验收；提交后的完整检查由绑定本报告的
-clean-HEAD回执确认。
+不把单对差异作普遍速度或可靠性分布结论。阶段2检查点1cffa59的完整clean-HEAD
+工作流已通过1513项；阶段3参数实验56项实际通过，当前源码采用X3/N3等待设置。
+可复用CLI的R1烟测第3项失败/例外SIGINT终exit1保留；R2当前defaults真实factory四项通过。
+最终源码完整检查、新包同SHA双系统验收及稳定入口更新仍未完成。
 
 ## 已有基线与本轮边界
 
@@ -42,7 +43,7 @@ a14产品来源为 `43c20edcd652020bfe51b959b85f2f90d8b75059`，包SHA256为
 | --- | --- | --- | --- |
 | 1 安全X11/XWayland路由 | 对可识别的X11目标使用其路径；原生目标仍走原生路径；验证跨后端切窗、取消、任务隔离、映射独立恢复及不重放 | factory最小接线完成；188focused及完整1478测试通过；早期102项只属合成证据 | 阶段1源码有限验收通过；A显式Hybrid实际证据不替代最终包默认factory桌面验收，历史false保留 |
 | 2 原生重复事务/最近映射复用 | 跨SSE片段复用输出scope与单项最近映射；保留所有权、deadline和键盘状态检查 | 实现/合成审核完成；子Agent224测试通过，主Agent独立1513全套通过 | 提交前源码有限实际验收通过：24单后端case+B受控交接4case；提交后完整检查以绑定本报告的clean-HEAD回执为准；非最终包factory验收，未打包/部署 |
-| 3 逐阶段等待校准 | 分别研究映射、按下、释放等待，记录每个候选的准确性和成本 | 待前两阶段验收后实施 | 待验，不预设零等待可用 |
+| 3 逐阶段等待校准 | 分别研究映射、按下、释放等待，记录每个候选的准确性和成本 | 单变量及组合profile获审；修复后工具26纯测试、采用后六模块282项检查通过 | 56参数case及当前defaults真实factory四项实际通过；源码采用X3/N3；CLI R1失败保留，最终检查/新包待验 |
 | 新候选包 | 将最终获审源码打成独立版本；同一包与SHA分别在Ubuntu24.04/26.04实际验收 | 版本/产品来源/包SHA待确定 | 待验，完成前不能替换稳定入口 |
 | 稳定入口更新 | 双系统包验收及主 Agent审核通过后，执行并核对实际版本与配置保留 | 尚未执行本轮提速版本部署 | 待验，不因源码或合成测试通过提前更新 |
 
@@ -68,7 +69,7 @@ a14产品来源为 `43c20edcd652020bfe51b959b85f2f90d8b75059`，包SHA256为
 | 阶段2实现/合成检查 | 输出scope/最近缓存与取消清理修复；224相关测试、1513完整测试 | 通过；纯调用数不作真实吞吐或缓存收益 |
 | 阶段2实际源码对照 | `build/input-speed-stage2-preparation/stage2-matrix-summary-r1.json`及其24份raw指纹 | 24项通过，单后端scope/取消/empty与恢复；重复文本实际收益受70ms供给限制，不作intrinsic-cache速度或重复可靠性分布 |
 | 阶段2 B受控mixed | 同目录 `stage2-mixed-summary-r1.json`及其4份raw指纹 | 双向normal23/取消14精确，epoch互斥/恢复/原owner终态通过；显式Hybrid、ACK/cap10暂停边界，非factory/无暂停post-map原子证明 |
-| 阶段3校准 | 待记录各等待候选与匹配对照 | 待验，失败候选也保留 |
+| 阶段3校准 | `build/input-speed-stage3-preparation/stage3-measurement-summary-r1.json` | 56项通过；full100单insert，非70ms流式供给；X3/N3已采用至源码，未打新包/部署 |
 | 新包Ubuntu24.04 | 待同一新包版本/SHA、实际会话、清单、origins及raw | 待验；GNOME46原生限制不得由Xorg通过抹去 |
 | 新包Ubuntu26.04 | 待同一新包版本/SHA、实际会话、清单、origins及raw | 待验；native/XWayland范围分别记录 |
 | 稳定部署 | 待实际目标/SHA、备份、配置保留和正常启动观察 | 待验 |
@@ -448,8 +449,140 @@ X前缀cap10暂停，自然启动新字段并等待fields-ready后继续；不�
 相同，keyboard/worker仍byte-identical；类型补齐后子Agent224 focused通过，5.99秒。
 当前Hybrid SHA为 `4005f609b46a3e4bafef5cddf27e0672830f1d07b5611a0b29bcbd1c97b4c987`，
 native parent SHA为 `908d5c61d0dec8066385554db7652d06e83a42dd5e736f3d96f7aa54c00cbf69`。
-B快照保持原四pins/44源/19origins不变，不重标为当前tree。提交后的完整检查由绑定
-本报告的clean-HEAD回执确认，不提前宣称该回执已通过。
+B快照保持原四pins/44源/19origins不变，不重标为当前tree。此后提交
+`1cffa59cbf80eb56e0c2bd93f5adbf2fb29fb390`的完整clean-HEAD工作流已通过：
+**1513 passed、3 skipped，41.50秒**。实际receipt为
+`.git/validation/1cffa59cbf80eb56e0c2bd93f5adbf2fb29fb390.json`，绑定当时本报告SHA
+`8f604a376d04fd962ca41d55d393577044b9672d64b9db280e6aa7759b0da219`；
+该历史回执不绑定本次新增阶段3文字或替代后续最终提交检查。
+
+## 阶段3：56项实际参数实验与当前采用设置
+
+本轮实际来源为 `build/input-speed-stage3-preparation/stage3_probe.py` 与独立物理
+源码快照，使用a14包依赖。baseline精确来自类型标注前的旧B四pins，不是当前tree
+回填、不是新AppImage或默认factory自动GUI验收。单次公开insert直接接收完整
+100BMP样本，无SSE或70ms供给等待，不与阶段2流式scope混为同口径。
+
+初始四个单变量profile/registry获审、10项纯测试通过；初始registry SHA为
+`b74eac095d60a1766a284c0706f23c2ae6cf4b51956983506aef73206154d6e9`。
+组合候选另经r2/r3审查，最终 `candidate-registry-r3.json` SHA为
+`03abfab9cbac5003f8d1b539c6659131494842b312e4fea4ad6ce93739be571b`。
+下表单位毫秒，未列等待保持baseline：
+
+| profile | 等待设置 | 实际状态 |
+| --- | --- | --- |
+| baseline | X首次map100、后续map/press/release各20；native首次/后续map及release各50 | 14项通过 |
+| x1 | 仅X press 20→10 | 7项通过 |
+| x2 | 仅X release 20→10 | 7项通过 |
+| n1 | 仅native release 50→30，首次map50不变 | 7项通过 |
+| n2 | 仅native后续map 50→30，首次map50不变 | 7项通过 |
+| x3 | X press/release各10，首次map100/后续map20不变 | 7项通过；当前源码采用 |
+| n3 | native后续map/release各30，首次map50不变 | 7项通过；当前源码采用 |
+
+主 Agent逐raw独立验收全部56项，本报告另只读重算聚合列出的56份raw指纹均匹配。
+完整逐例路径、SHA和owner保留在同目录聚合，不逐项重复展开：
+
+| 汇总 | SHA256 |
+| --- | --- |
+| `stage3-measurement-summary-r1.json`（56项） | `0441646c0d21777c1ae4f5930189985810d68c0d39900aeb2fcc705a0e787f43` |
+| `stage3-x3-summary-r1.json` | `da4f771b4dded12a97a4aaa787aaf5319bc2fd65574f0ce6f0a1800da2271401` |
+| `stage3-n3-summary-r1.json` | `59ad57ecddf72c95550f358384511449f2e1b39980324cb2302934a4473a24b8` |
+
+每个后端/profile执行fresh textarea正常3次、contenteditable正常2次，分别cancel8
+一次。正常项100exact、100对按键、callback1；取消项8exact、8对按键、callback1。
+正确路由/guard0、preclose与final native map/modifiers及X映射恢复、原probe/
+worker/Chrome自然exit0、preservation均通过。取消不计入下表正常scope中位数：
+
+| XWayland字段 | baseline毫秒 | x1毫秒 | x2毫秒 | x3毫秒 |
+| --- | ---: | ---: | ---: | ---: |
+| textarea | 6914.326 | 5803.176 | 5804.492 | 4779.377 |
+| contenteditable | 6906.167 | 5801.487 | 5833.986 | 4795.190 |
+
+| native字段 | baseline毫秒 | n1毫秒 | n2毫秒 | n3毫秒 |
+| --- | ---: | ---: | ---: | ---: |
+| textarea | 14182.158 | 12120.486 | 12246.988 | 10035.368 |
+| contenteditable | 14213.435 | 12178.658 | 12260.369 | 10082.764 |
+
+本次X3约4.779/4.795秒，相对匹配baseline约减少31%；N3约10.035/10.083秒，
+约减少29%。只代表本次样本/字段/有限次数，不外推所有应用、任意切窗或可靠性
+分布，不覆盖历史10ms/30ms负例。当前源码采用X3/N3，类型标注保留；X11与实测
+X3仅注释不同，worker与实测N3仍byte-identical，SHA为
+`9ecacec1dc36c34c52bbbec66cdf088712e5f0488c2d0dd02781557dfa6edd43`。
+最终源码完整clean-HEAD回执、同SHA双OS新包与部署仍待，不提前宣称新HEAD通过。
+
+### 长期CLI与独立烟测边界
+
+tracked `scripts/validation/input_speed_probe.py`最初有主 Agent23项纯测试通过，它
+不是上述56项来源。独立证据 `build/tool-smoke-preparation/` 前2项native normal100/
+cancel8通过，使用旧baseline B真实factory，不是当前新defaults或新包。第3项
+XWayland normal raw为false：protocol confirmed=false，X PID/class尚未出现，
+native baseline未建立，无正文投递证据；setup记录ValueError、target cleanup记录
+FileNotFoundError；原raw SHA为
+`391bf7a6dbefaeb16f7b29f96ace456c2c2f802c439b51f1935ec53dedced0ce`。
+原worker自然0；原Chrome经一次正常Browser.close回收exit0，证据
+`xwayland-r1-normal-close-recovery.json` SHA为
+`44fd77570a5346ad002e13edaa41246650b6a38eeed463fc2b155ae236f96c92`。
+原probe809730/start45024477残留non-daemon HTTP线程，按主 Agent批准的精确
+清理例外发送SIGINT；原handle16166最终exit1，第四项未启动。例外记录
+`xwayland-r1-probe-cleanup-exception.json` SHA为
+`b785c2000df9d410ab8ef7824706325fc0868a6bba96ee9cb7075d00e8b49469`。
+旧terminal中的natural字段只表示原owner的wait观测，必须合读SIGINT例外，不能
+把该项写为自然退出通过；无baseline的false也不证明映射恢复失败。
+
+tracked工具随后补X protocol初始化until、端点等待及finally HTTP清理；冻结SHA
+`8e8d3333f00bb47a26d4ba04bea3f916ae8648c0c1d6f5a2dfeca4ea510b640a`，
+主 Agent26项纯测试通过，0.16秒；采用设置后的六模块282项相关检查独立通过，
+4.95秒，均不替代实际工具烟测。R2使用当前新defaults的44源快照，manifest SHA为
+`5c9b251b4dc2223bead87ca8bd0f4bb1b601d65460853a1e70c2db80f8cdf9da`，
+完整四pins与审定命令在 `tool-smoke-preview-r2.json`，SHA为
+`c36ae22b4616e09806cbd619853561259ccad481dfcc7d845675d7bd2ce44899`。
+R2四项由主 Agent逐raw独立验收通过，原handle48081经原owner确认自然exit0。
+当前44源manifest/19实际origins、正确路由、按键平衡、guard0、scope仍open与final
+双后端映射恢复、cleanup空、原Chrome/worker/probe终态0及preservation均通过。
+汇总 `tool-smoke-progress-r2.json` SHA为
+`0fb971a32be104a344edd0a652310e69b8ad0f6fc32fb7130269ce5528ac0d24`，
+本报告另重算四份raw SHA与progress逐项匹配。仅是当前源码factory与旧a14依赖：
+
+| R2 textarea case | 精确字数 / press与release各自计数 | output scope |
+| --- | --- | ---: |
+| native normal | 100 / 100 / 100 | 9974.449ms |
+| native cancel8 | 8 / 8 / 8 | 821.259ms |
+| XWayland normal | 100 / 100 / 100 | 4790.427ms |
+| XWayland cancel8 | 8 / 8 / 8 | 462.138ms |
+
+取消为完整100字请求在第8次成功按下停止，不能将短前缀吞吐作为正常100字性能。
+R1失败与SIGINT例外保持，不因R2通过重标自然成功；a15尚未构建，本节非新包验收。
+R2实际结束后，artifact_scope才补动态Hybrid第19来源审计，旧MODULES18及无Hybrid的旧a14仍保持18；新增来源/tamper拒绝两项纯测试和相关45项纯测试通过，不改旧实际工具SHA，也不代表新包实际验收。
+
+以下为长期CLI source-mode参数模板，默认仅audit/preview；非56项历史argv。
+只有另行审核后才加 `--run-reviewed`，实际运行须真实桌面和fresh自有目标。
+此处指定获审并实际烟测的R2当前defaults manifest与a14依赖，不替代最终包验收：
+
+```sh
+task_appdir=/home/lth/github/InkEcho/build/performance-a14-extracted-j1fjrht6/squashfs-root
+task_source=/home/lth/github/InkEcho/build/tool-smoke-preparation/source-current-r2
+env -u APPIMAGE -u APPDIR -u QT_PLUGIN_PATH \
+  APPDIR="$task_appdir" PYTHONHOME="$task_appdir/usr" \
+  PYTHONPATH="$task_appdir/packages" \
+  LD_LIBRARY_PATH="$task_appdir/usr/lib/inkecho" \
+  QT_PLUGIN_PATH="$task_appdir/packages/PySide6/Qt/plugins" \
+  PYTHONNOUSERSITE=1 PYTHONDONTWRITEBYTECODE=1 QT_QPA_PLATFORM=wayland \
+  "$task_appdir/usr/bin/python3" -B scripts/validation/input_speed_probe.py \
+  --runtime source \
+  --artifact /home/lth/github/InkEcho/dist/InkEcho-0.1.0a14-x86_64.AppImage \
+  --artifact-sha bce09c895d51c01c11c73b67aef709632a7514545f0a7fdb6114748c70c8cc96 \
+  --package-root "$task_appdir/packages" --source-root "$task_source/src" \
+  --manifest "$task_source/manifest.json" \
+  --manifest-sha 5c9b251b4dc2223bead87ca8bd0f4bb1b601d65460853a1e70c2db80f8cdf9da \
+  --backend native --field textarea \
+  --output /home/lth/github/InkEcho/build/input-speed-reviewed-fresh-result.json \
+  --work-root /home/lth/github/InkEcho/build/input-speed-reviewed-fresh-work
+```
+
+每例须新的exclusive output/work；`--backend xwayland`选择X目标协议，
+`--field contenteditable`选择另一字段，`--cancel`在完整100字请求的第8次成功
+按下后取消。package模式另选获审包，改 `--runtime package`并删除source-root/
+manifest/manifest-sha，不用source结果替代实际包验收。以上无云/录音/密钥/剪贴板/IME。
 
 ## 实测口径
 
