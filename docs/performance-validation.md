@@ -1,4 +1,4 @@
-# 性能优化验收总览 — 2026-10-16
+# 性能优化验收总览 — 2026-10-17
 
 本轮完成分段计时、HTTP 连接复用、已核实模型的思考控制、Qwen 实时识别的协议接入、
 流式润色与串行增量输出，以及经过实际应用验证的 X11 键盘等待调整。
@@ -8,9 +8,10 @@ R8 新源码和实际包各自有来源核验与原始证据，不能互相替�
 早期 Ubuntu 26.04.1、a11 和 a12 测量按版本保留，尤其 a12 夹具配置每片段 70 ms
 sleep 时，新 GTK 仍延迟 5.8435 秒的反例不改写。R8 源码和 a13 实际包各自的
 改善均来自单次匹配诊断，窗口就绪都在两任务及完整清理后测量，不是任意流速或
-末字当刻响应保证。整轮尚未完成。
-没有真实语音从停止录音到首字/完成的云端前后对照，不能将键盘或窗口指标写成
-完整语音链路提速承诺。
+末字当刻响应保证。随后经明确组合授权，**同一 a13 在真实 Noble 的一次公开语音
+云端配置 A/B 已通过**，见[有限云端验收](performance-noble-cloud-validation.md)：
+停止到首发 1972.286 → 855.314 ms。它不是旧版本/新版本对照；输出长度 143/122
+不同，不能把完整耗时差都归因于流水线，也不构成识别准确率或普遍提速承诺。
 
 本轮基线为 `96b3b5d424b60b98070ef6c311e830ecdc9cd4a6`，工作分支为
 `codex/latency-pipeline`。实现按独立模块提交；本次授权不包含推送、发布或部署，
@@ -23,7 +24,7 @@ sleep 时，新 GTK 仍延迟 5.8435 秒的反例不改写。R8 源码和 a13 �
 | --- | --- | --- |
 | 分段计时 | 单任务录音停止请求、音频就绪、ASR、润色首段/完成、首字发送、输出结束；取消/失败也保留已观测部分 | [计时验证](performance-timing-validation.md)。固定名称、结果和数值；缺失项为 null，不以开始 `insert()` 冒充首字 |
 | HTTP 生命周期与思考控制 | 应用持有一个连接池，角色独立超时，退出正确关闭；仅对已核实的官方地址/模型默认关闭不必要思考 | [供应商验证](performance-provider-validation.md)。实际本地 TLS 三次请求从三个连接变为一个；未知网关/模型不猜参数，未测得云端思考开关收益 |
-| Qwen 实时 ASR | 独立 WSS 手动提交协议；录音中分块发送，停止后只接受最终结果；录音中断网及时停止麦克风 | [协议验证](performance-realtime-validation.md)、[编排验证](performance-pipeline-validation.md)。本地 TLS/WSS、本机麦克风和官方纯生成静音的手动协议通过，真实语音准确率待验 |
+| Qwen 实时 ASR | 独立 WSS 手动提交协议；录音中分块发送，停止后只接受最终结果；录音中断网及时停止麦克风 | [协议验证](performance-realtime-validation.md)、[编排验证](performance-pipeline-validation.md)。本地 TLS/WSS、本机麦克风、官方生成静音及[单公开语音云端 A/B](performance-noble-cloud-validation.md)分别通过；未做语音准确率评估 |
 | 流式润色 | 严格 SSE、UTF-8、结束事件和用量解析；只向下游交付正文增量 | [SSE 验证](performance-polish-stream-validation.md)。本地真实 HTTPS 夹具通过；另有一次固定公开短句的官方 DeepSeek 实测，见下文 |
 | 串行增量输出 | 有界 Unicode 队列、跨段 CRLF、偏移校验、最终尾部、背压、取消与部分输出失败保护；可显式关闭流式 | [编排验证](performance-pipeline-validation.md)、[R7 源码](ubuntu24-source-r7-validation.md)、[a12 反例](performance-a12-paced-validation.md)及[R8 源码](ubuntu24-source-r8-validation.md)。R8 将 X11 映射生命周期覆盖一个流式输出任务；a13 Noble 与[主机限定检查](performance-a13-host-validation.md)分别通过；历史合成/包数据分开 |
 | 键盘等待与真实首发时间 | X11 三次等待各从 40 ms 改为 20 ms，统一可打印字符的 Unicode 映射；两种后端提供实际发送时点 | [初始键盘验证](performance-keyboard-validation.md)、[Qt 流式跟进验证](performance-x11-stream-validation.md)、[R6 源码](ubuntu24-source-r6-validation.md)及[a11 包](performance-a11-package-validation.md)。a11 将 X11 映射恢复移至每次插入结束的同步清理；等待仍为 20 ms；Wayland 两个 50 ms 等待未变 |
@@ -211,7 +212,7 @@ reviewed payload 为 `cd711f7e0329c3324858e1a9a04d000c52b11b4e8ec33fca13a9841318
 
 **后续状态：** R8 任务级映射生命周期新源码已完成单独实测，见下一节；旧 a12 不包含该修复。
 a13 新包已有独立 Noble 和主机限定实际验收，见下文。
-Noble 流水线仅使用合成 PCM 和回环协议夹具，没有真实麦克风、凭据读取或云请求。
+上述历史 a12 流水线仅使用合成 PCM 和回环协议夹具，没有真实麦克风、凭据读取或云请求。
 物理快捷键/F13/F14、完整录音中切焦点流程、悬浮焦点、GNOME 46 原生输入、FUSE、
 安装/自启动与物理机也未由这些结果验证。后续修复不得回填为旧 a11 或 a12 已通过。
 
@@ -294,9 +295,17 @@ R2 的私有运行目录隔断宿主音频套接字，连接失败与超时证�
   7 个正文增量、首段 781.643 ms、请求完成 789.38 ms，用量可用且结果符合固定公开
   样本。`build/performance-sse-live.json`。它证明当前服务的 SSE 能力，不是速度前后
   对照，也不证明 ASR、实际键盘投递或思考开关的耗时收益。
-- **指定公开 WAV 的云端试验：未执行。** 拟使用固定 SHA-256 的公开 WAV，但自动审批在命令
-  执行前拒绝；没有读取该请求的凭据、连接云端或上传音频，未换路径重试。协议夹具
-  和麦克风通过不能替代真实账户/模型的能力或准确率验证，详见实时协议报告。
+- **早期指定公开 WAV 试验：被拒，未执行。** 当时自动审批在命令执行前拒绝了固定
+  音频/目的地/存储密钥组合，没有读取该请求的凭据、连接云端或上传音频，未换路径
+  重试。此历史记录保留；后续新增的明确人类授权与唯一正式运行另见下一项。
+- **获准的 Noble 官方云端 A/B：一次有限通过。** 同一 a13、17.645125 秒固定公开
+  WAV，A 为 HTTP/同步润色，B 为 WSS/SSE；各一次 ASR 与一次润色，共四次请求。
+  停止到首发 **1972.286 → 855.314 ms**，本样本相差 1116.972 ms（56.63%）；
+  首次 GTK 缓冲非空为 2005.753/916.844 ms，完整输出为 11606.427/9001.440 ms。
+  两组分别精确接收服务输出 143/122 码点，长度不同，不能把完整耗时差全部归因于
+  提速；B 首发比润色完成早 23.696 ms。真实输入、资源清理和网络归还通过，未新增
+  持久化音频/正文，没有真实麦克风、物理快捷键或准确率评分。授权经过、来源、
+  20 ms 轮询与指标边界及原始哈希见[云端有限验收](performance-noble-cloud-validation.md)。
 - **官方 Qwen 手动协议：纯生成静音通过，非语音准确率验证。** 获准探针仅在程序内
   生成一秒全零 PCM，不读取 WAV、麦克风或私有正文。最终回执为
   `protocol_finished_without_speech`：created、updated、手动 commit、ACK、finish
@@ -394,9 +403,10 @@ offscreen Qt 和本地 TLS 夹具；实际包显示与云端能力仍分别验�
 | a12 Noble R1 八种模式 | 严格实际包来源和限定功能通过；fastlong150 清理后 GTK/VTE 0.1747/0.3388 秒 | `a12-r1-*`；只属固定快流场景，不代表慢流或立即响应 |
 | a12 R2 慢流 | 夹具每片段配置 70 ms sleep，文字/取消准确，却有 288 写入/150 恢复，新 GTK 5.8435 秒才就绪，延迟验收未通过 | `a12-r2-paced-pipeline-long*.json`；R8 源码、a13 Noble 与主机限定检查另行通过，不改写此反例 |
 | 当前 a13 固定来源提交检查 | 产品 `eeb2d0c`，Ruff/format **233 文件**；**1078 passed、3 skipped，20.01 秒** | `.git/validation/eeb2d0ce8f8c5a6690b0ab54e0196da4254eb767.json`，绑定 [R8 报告](ubuntu24-source-r8-validation.md)；后续提交需重验 |
-| 当前 a13 构建及 Noble 实际包 | 108907000 bytes，SHA256 `8dce4eedee71373a27e0e6507592b1240617412a8a6f114230b9a53f4d286a89`；43 源码及完整清单/来源通过 | [a13 包报告](performance-a13-package-validation.md)；Noble 七项严格来源/功能通过，云语音及完整平台矩阵未验 |
+| 当前 a13 构建及 Noble 实际包 | 108907000 bytes，SHA256 `8dce4eedee71373a27e0e6507592b1240617412a8a6f114230b9a53f4d286a89`；43 源码及完整清单/来源通过 | [a13 包报告](performance-a13-package-validation.md)；本行 Noble 七项为本地夹具，官方云 A/B 另列，未验完整平台矩阵 |
+| 当前 a13 Noble 官方云端 A/B | 一个固定公开样本、A/B 各两次 API；首发 1972.286/855.314 ms，143/122 码点精确读回；原 owner 终态、清理与 network none 归还通过 | [云端报告](performance-noble-cloud-validation.md)；同版本配置组合、单样本且输出长度不同，不是识别准确率或普遍性能承诺 |
 | 当前 a13 主机实际包 | Ubuntu 26.04.1/GNOME 50.1：四个 XWayland 目标、cancel12、真实麦克风到本地固定服务及 GTK；原生 Wayland 九页/IPC/损坏配置保留通过 | [主机报告](performance-a13-host-validation.md)；R2 音频隔离失败保留，R3 仅修工具环境；未验原生输入或云语音 |
-| 最终 clean HEAD 工作流 | 按开发规范在本文定稿并提交后执行；正式结果以 `.git/validation/<HEAD>.json` 为准 | 记录绑定当时提交与本报告哈希；不复用前一检查点或未提交工作区的结果 |
+| 最终 clean HEAD 工作流 | 正式结果以 `.git/validation/<HEAD>.json` 为准 | 本次最终 evidence 为[云端报告](performance-noble-cloud-validation.md)，记录绑定当时提交与所选 evidence 哈希，不复用前一 checkpoint |
 | 历史 a10 AppImage | r2 独立包验收通过；版本 0.1.0a10，108907000 bytes | `dist/InkEcho-0.1.0a10-x86_64.AppImage`；SHA-256：`5c515dd0e3ceb8eb910baa45f392d8be28bfda109c5e1d59865e5a0733b7d55a` |
 | 历史 a10 包内容与来源 | 产品 `b963879` 的 43 个源码哈希前后不变；3958 文件哈希、1048 内部符号链接、websockets 15.0.1 的两份 BSD 许可核对通过 | [完整包报告](performance-package-validation.md)，正式验收记录随 `aad9280` 提交 |
 | 历史 a10 实际包任务链路 | 包内解释器与模块运行；真实麦克风 → 本地模拟 WSS/SSE → 真实 XWayland GTK：25 字符准确，取消只增加 1 字符，无预览输出、无尾部，按键配对和映射恢复 | `build/performance-a10-package-live-mic-r2.{json,log}`；模拟识别/润色，不是真实云端识别 |
@@ -420,7 +430,9 @@ offscreen Qt 和本地 TLS 夹具；实际包显示与云端能力仍分别验�
 本次保留原有稳定入口、自启动和公开 release；a13 的 Noble 与主机限定实际包检查
 不构成完整平台矩阵验收，也没有替换用户正在运行的版本。后续部署、推送或发布须使用各自的实际验收和授权范围。
 
-自动审批拒绝的是将指定本地 WAV 发送给外部 ASR 服务的试验，理由是当前人类指令
-未明确批准这份音频、该目的地及所存凭据的组合使用。因此这份公开语音的云端识别
-验收仍待相应授权；独立生成静音检查已获准且最终通过手动协议，但不能用它替代语音
-识别准确率验收。已完成的本地协议、麦克风和键盘验证不受此限制影响。
+早期自动审批拒绝将指定本地 WAV 发给外部 ASR 服务，理由是当时人类指令未明确批准
+这份音频、该目的地及所存凭据的组合；当时的未执行记录保留。2026-10-17，人类在
+此前具体四请求/音频/官方目的地/临时联网请求的上下文中明确允许使用密钥，主 Agent
+审查后授权唯一正式 A/B，有限结果见[云端报告](performance-noble-cloud-validation.md)。
+这是后续新增授权，不是绕过旧拒绝；这次通过和此前独立生成静音都不能替代语音
+准确率评估或授权后无限次重跑。本轮未部署、推送或发布。

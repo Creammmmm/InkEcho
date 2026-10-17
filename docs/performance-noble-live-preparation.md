@@ -1,15 +1,24 @@
 # Noble live A/B controller: implementation preparation
 
-This stage prepares [a new controller/node tool](../scripts/validation/performance_noble_live.py)
-and its [local tests](../tests/test_performance_noble_live.py). Root has accepted
+This report preserves the preparation checkpoint. On 2026-10-17, subsequent
+explicit contextual human authorization and one actual Noble cloud A/B run were
+accepted separately; see [the bounded cloud validation](performance-noble-cloud-validation.md).
+The preparation-only boundaries below describe their original checkpoint, not
+the later live result.
+
+This stage prepared [a new controller/node tool](../scripts/validation/performance_noble_live.py)
+and its [local tests](../tests/test_performance_noble_live.py). At this checkpoint root had accepted
 the actual Noble read-only plan and one actual SSH/launcher/a13-worker offline
 handoff, recorded below. No guest GUI, real SecretStore access, public-WAV
-handoff/upload, external connection or network mutation occurred. Existing
+handoff/upload, external connection or network mutation had occurred at that point. Existing
 [Noble local TLS acceptance](performance-noble-comparison-validation.md) remains
 separate evidence. A valid plan hash or `--live` flag is not human authorization.
 The earlier automatic refusal of the public-WAV / official destination / stored
-key combination remains effective. Actual cloud execution requires explicit
-human authorization after the full preparation and local guest handoff review.
+key combination remained binding throughout preparation. On 2026-10-17, the
+human's explicit permission to use keys, in context of the preceding fixed
+sample/destinations/four-request/temporary-network request, was reviewed by root
+before the single later run. Preparation, a plan hash or `--live` never supplied
+that authorization themselves.
 
 ## Fixed experiment and staging
 
@@ -115,7 +124,7 @@ SSH loss or unproven terminal/cleanup preserves identities, profiles and pending
 state; it does not authorize starting another mode. The controller may wait for
 natural completion instead of imposing a new deadline.
 
-## Scoped network operation, still unexecuted
+## Scoped network operation, unexecuted at preparation checkpoint
 
 Only the existing container ID
 `0582fbea0288c17e40759c823892d60c750f51b43d1de17722cabf33bd136a2f`,
@@ -183,9 +192,9 @@ After its review, the host-owned local handoff used this command template:
 This used actual SSH/launcher/shipped worker but only fixed generated PCM
 and fake keys; it did not construct a provider SDK client, QApplication, owned
 window or microphone. That actual guest step subsequently passed as recorded
-below. Any future
-`--mode live --live --accept-plan-sha EXACT_LIVE_PLAN_SHA` additionally requires
-the still-missing explicit human authorization covering the WAV, both official
+below. At that preparation checkpoint, a future
+`--mode live --live --accept-plan-sha EXACT_LIVE_PLAN_SHA` still required
+explicit human authorization covering the WAV, both official
 destinations, stored keys and necessary temporary network operation. Prepared
 argv, code review and offline success cannot provide that consent.
 
@@ -275,6 +284,9 @@ that future command succeeds. The intended command is:
 .venv/bin/python scripts/validation/workflow.py run --module performance-noble-live --evidence docs/performance-noble-live-preparation.md
 ```
 
-Still pending: explicit human live authorization and sole-executor cloud A/B
-observation plus cleanup/network receipts.
-Nothing here establishes cloud accuracy or Ubuntu24 performance improvement.
+At this preparation checkpoint, human live authorization and sole-executor cloud
+A/B observation plus cleanup/network receipts were still pending. They were
+subsequently accepted for one bounded run, documented in
+[Noble cloud validation](performance-noble-cloud-validation.md); the earlier
+preparation evidence is retained unchanged in scope. Neither preparation nor
+that single sample establishes cloud accuracy or general Ubuntu24 performance.
