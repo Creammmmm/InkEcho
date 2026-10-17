@@ -105,6 +105,25 @@ def test_repair_upgrades_known_managed_icons_and_removes_old_svg(integration):
     assert len(list(integration.data_home.glob("icons/hicolor/*/apps/*"))) == 8
 
 
+def test_repair_upgrades_previous_blue_icon(integration):
+    integration.install()
+    source, destination = integration._icons()[0]
+    fixture = Path(__file__).parent / "fixtures/blue-inkecho-16.png"
+    destination.write_bytes(fixture.read_bytes())
+    integration.repair()
+    assert destination.read_bytes() == source.read_bytes()
+
+
+def test_previous_blue_icon_requires_managed_launcher(integration):
+    destination = integration._icons()[0][1]
+    fixture = Path(__file__).parent / "fixtures/blue-inkecho-16.png"
+    destination.parent.mkdir(parents=True)
+    destination.write_bytes(fixture.read_bytes())
+    with pytest.raises(IntegrationError):
+        integration.install()
+    assert destination.read_bytes() == fixture.read_bytes()
+
+
 def test_repair_preserves_unknown_scalable_icon(integration):
     integration.install()
     old_svg = integration._legacy_svg()

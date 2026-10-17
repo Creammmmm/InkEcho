@@ -63,3 +63,48 @@ Chinese labels remain readable, and longer forms retain their scrollbars.
 These are source/offscreen visual checks, not proof of native desktop icon-cache
 refresh or of the final AppImage. Final package and installed-icon checks are
 recorded by the release acceptance workflow.
+
+## Replacement artwork, 2026-10-18
+
+The user supplied a new [blue microphone-and-calligraphy-brush icon](https://chatgpt.com/s/m_6ad3c3ff06c8819192fdb6247d09c26d).
+The original PNG replaces `src/inkecho/assets/inkecho.png` byte for byte:
+1254 × 1254, RGBA, SHA-256
+`42449d99f4fb0f87bc14aaa89e68f118ef8568bdb53be8a1fc5bc177a45947a5`.
+The transparent outer area and translucent pixels are preserved; the corner
+alpha is 0. No cropping, redrawing, recoloring or background removal was applied.
+The earlier sections above describe the previous artwork and historical checks.
+
+PySide6 6.12.0 `QImage.scaled(size, size, KeepAspectRatio,
+SmoothTransformation)` followed by `save(path, "PNG")` regenerated all eight
+existing sizes (16, 24, 32, 48, 64, 128, 256, 512). Repeating this operation on
+the original produces pixel-identical images at every size. The 256-pixel PNG
+SHA-256 is `f694df1872697f875d6e4c226e4f9dd39e20c2243dc3a10570330807600b7d2f`.
+It was visually inspected: the microphone, brush, ink stroke and rounded white
+background remain intact. Existing window, sidebar, tray and notification
+references use the original PNG. Desktop integration uses all eight sizes;
+AppImage construction copies the 256-pixel PNG and links `.DirIcon` to it.
+No reference paths or application palette needed changing.
+
+Desktop repair also recognizes the exact eight retired blue PNG hashes. This
+permits an explicitly requested repair of managed launchers without treating the
+old application icon as an unrelated file. The managed-launcher requirement,
+unknown-file rejection and symlink protection remain intact. The old 16-pixel
+PNG is retained only as a real migration-test fixture.
+
+Resource checks used Qt to verify PNG decoding, exact dimensions, alpha support,
+and pixel equality with a fresh smooth resize. Focused validation:
+
+```sh
+.venv/bin/python -m pytest -q \
+  tests/test_integration.py tests/test_ui.py tests/test_notifications.py \
+  tests/test_packaging.py
+.venv/bin/ruff check src/inkecho/integration.py tests/test_integration.py
+.venv/bin/ruff format --check src/inkecho/integration.py tests/test_integration.py
+```
+
+Result: **71 passed**; Ruff lint and format checks passed. Integration tests use
+isolated temporary paths and cover previous-blue migration and refusal to replace
+an unowned previous-blue icon, alongside existing unknown-file protections.
+These are source-resource and automated checks. No installed files, icon caches,
+user configuration or existing AppImage were changed. A newly built package
+still requires the same-hash Ubuntu 24.04 and 26.04 acceptance before delivery.

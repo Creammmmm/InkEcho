@@ -12,7 +12,7 @@ from inkecho.config import atomic_write
 APP_ID = "io.github.Creammmmm.InkEcho"
 MARKER = "X-InkEcho-Managed=true"
 SIZES = (16, 24, 32, 48, 64, 128, 256, 512)
-# Exact assets shipped before the blue branding. Never replace unknown artwork.
+# Exact retired assets. Never replace unknown or unowned artwork.
 LEGACY_ICON_SHA256 = {
     "inkecho-16.png": (
         "d26847979e9f027f02d5c46849875c5c47382878b24fe787229184a4a43637ed"
@@ -36,6 +36,32 @@ LEGACY_ICON_SHA256 = {
         "3e40b7eb151d90b9176f9799573d2ee7fe27f15e292d2eb663b790aab9d1b1c2"
     ),
     "inkecho.svg": "df9f4e49cbfe80a6754ff133b2548968550ba74965b69388c6ccdf0ce64a5cc6",
+}
+PREVIOUS_BLUE_ICON_SHA256 = {
+    "inkecho-128.png": (
+        "977eb2c4626fedb81e2c495b254e538f95f397d92cdf6d3bf1dd22e3e1cfb334"
+    ),
+    "inkecho-16.png": (
+        "1bf1fc3351a6222de719c3a6c1be706575c54350bbc25b6dd41019c41a94a311"
+    ),
+    "inkecho-24.png": (
+        "2c426a0e63c23768791248f688c2ccca16d10615e0e8e1cd151279c5c34e92b0"
+    ),
+    "inkecho-256.png": (
+        "aea5d885b344b99fe13054848f1de175a49abf8c0188e61f9fdded15ddb27053"
+    ),
+    "inkecho-32.png": (
+        "744580cd8614192ffdbd336f5a99117a3977b3a09919a25336698f8f37c8d0ef"
+    ),
+    "inkecho-48.png": (
+        "0a4c211f5d1631e27a2defd5a8543035d06537ececd2a40288c0633e86e8f03f"
+    ),
+    "inkecho-512.png": (
+        "71ad95e734e0e18816da789a82b40ab4a064ff0e567ba5eda7fd925cd40a291e"
+    ),
+    "inkecho-64.png": (
+        "75f7579f5465df306058f6b886c1cec8116ebe5beb05a422bc7702b52b0d5dd5"
+    ),
 }
 
 
@@ -136,7 +162,7 @@ class DesktopIntegration:
             path.is_file()
             and not path.is_symlink()
             and hashlib.sha256(path.read_bytes()).hexdigest()
-            == LEGACY_ICON_SHA256.get(name)
+            in (LEGACY_ICON_SHA256.get(name), PREVIOUS_BLUE_ICON_SHA256.get(name))
         )
 
     def install(self) -> None:
