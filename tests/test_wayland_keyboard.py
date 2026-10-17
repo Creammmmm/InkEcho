@@ -492,3 +492,398 @@ def test_private_prefix_finishes_without_sending_unselected_tail():
         await inputs.aclose()
 
     asyncio.run(run())
+
+
+def test_output_scope_is_lazy_and_reuses_transaction_across_fragments():
+    async def run():
+        inputs, process = await connected()
+        await inputs.authorize()
+        async with inputs.output_session():
+            assert await inputs.insert("", lambda: True) == 0
+        assert not any(r["op"] == "begin" for r in process.requests)
+        callbacks = []
+        async with inputs.output_session():
+            assert (
+                await inputs.insert("中", lambda: True, on_first_sent=callbacks.append)
+                == 1
+            )
+            await asyncio.sleep(0)
+            assert (
+                await inputs.insert("文", lambda: True, on_first_sent=callbacks.append)
+                == 1
+            )
+            assert not any(r["op"] == "finish" for r in process.requests)
+        assert [r["op"] for r in process.requests].count("begin") == 1
+        assert [r["op"] for r in process.requests].count("finish") == 1
+        assert len(callbacks) == 2
+        await inputs.aclose()
+
+    asyncio.run(run())
+
+
+@pytest.mark.parametrize("failure", ["preflight", "deadline", "callback"])
+def test_failed_owner_scope_cannot_resume_after_swallowed_error(failure):
+    async def run():
+        inputs, process = await connected()
+        await inputs.authorize()
+        deadline = time.monotonic() + 20
+        with pytest.raises(KeyboardError, match="injection_failed"):
+            async with inputs.output_session():
+                await inputs.insert("中", lambda: True, deadline=deadline)
+                with pytest.raises((KeyboardError, ValueError)):
+                    if failure == "preflight":
+                        await inputs.insert("😀", lambda: True)
+                    elif failure == "deadline":
+                        await inputs.insert("a", lambda: True, deadline=deadline + 1)
+                    else:
+
+                        def fail(_at):
+                            raise ValueError("synthetic_callback")
+
+                        await inputs.insert("a", lambda: True, on_first_sent=fail)
+                count = sum(r["op"] == "key" for r in process.requests)
+                with pytest.raises(KeyboardError, match="input_cancelled"):
+                    await inputs.insert("tail", lambda: True)
+                assert sum(r["op"] == "key" for r in process.requests) == count
+        assert sum(r["op"] == "cancel" for r in process.requests) == 1
+        await inputs.aclose()
+
+    asyncio.run(run())
+
+
+def test_foreign_busy_does_not_poison_idle_scope_and_close_cancels_owner():
+    async def run():
+        inputs, process = await connected()
+        await inputs.authorize()
+        ready = asyncio.Event()
+        resume = asyncio.Event()
+
+        async def owner():
+            async with inputs.output_session():
+                await inputs.insert("中", lambda: True)
+                ready.set()
+                await resume.wait()
+                await inputs.insert("文", lambda: True)
+                await asyncio.Event().wait()
+
+        task = asyncio.create_task(owner())
+        await ready.wait()
+        with pytest.raises(KeyboardError, match="busy"):
+            await inputs.insert("foreign", lambda: True)
+        resume.set()
+        while sum(r["op"] == "key" for r in process.requests) < 2:
+            await asyncio.sleep(0)
+        await inputs.aclose()
+        assert task.cancelled()
+        assert sum(r["op"] == "cancel" for r in process.requests) == 1
+        assert process.returncode == 0
+
+    asyncio.run(run())
+
+
+def test_begin_yield_reclassifies_before_first_key():
+    async def run():
+        selected = True
+
+        def handler(_process, request):
+            nonlocal selected
+            if request["op"] == "begin":
+                selected = False
+            return False
+
+        inputs, process = await connected(handler)
+        await inputs.authorize()
+        assert (
+            await inputs._insert_prefix("中", lambda: True, selected=lambda: selected)
+            == 0
+        )
+        assert not any(r["op"] == "key" for r in process.requests)
+        assert sum(r["op"] == "finish" for r in process.requests) == 1
+        await inputs.aclose()
+
+    asyncio.run(run())
+
+
+@pytest.mark.parametrize("operation", ["begin", "key"])
+def test_late_ack_after_process_replacement_never_cleans_new_process(operation):
+    async def run():
+        replacement = Process()
+        inputs = None
+
+        def handler(process, request):
+            if request["op"] == operation:
+                inputs._process = replacement
+            return False
+
+        inputs, original = await connected(handler)
+        await inputs.authorize()
+        with pytest.raises(KeyboardError, match="input_cancelled"):
+            await inputs.insert("中文", lambda: True)
+        assert original.returncode == 0
+        assert replacement.requests == [] and replacement.returncode is None
+        # Restore the test reference only to reap the original reply reader.
+        inputs._process = original
+        await inputs.aclose()
+
+    asyncio.run(run())
+
+
+def test_slow_streaming_output_uses_one_native_transaction_and_fixed_deadline():
+    from inkecho.streaming_output import StreamingOutput, TextDelta
+
+    async def run():
+        inputs, process = await connected()
+        await inputs.authorize()
+        deadline = time.monotonic() + 10
+
+        async def send(text):
+            return await inputs.insert(text, lambda: True, deadline=deadline)
+
+        output = StreamingOutput(send, lambda: True)
+
+        async def consume():
+            async with inputs.output_session():
+                return await output.run()
+
+        consumer = asyncio.create_task(consume())
+        await output.append(TextDelta(0, "中"))
+        while not any(r["op"] == "key" for r in process.requests):
+            await asyncio.sleep(0)
+        assert not any(r["op"] == "finish" for r in process.requests)
+        await output.append(TextDelta(1, "文"))
+        await output.finish("中文")
+        assert await consumer == 2
+        assert [r["value"] for r in process.requests if r["op"] == "key"] == [
+            "中",
+            "文",
+        ]
+        assert [r["deadline"] for r in process.requests if r["op"] == "begin"] == [
+            deadline
+        ]
+        assert sum(r["op"] == "finish" for r in process.requests) == 1
+        await inputs.aclose()
+
+    asyncio.run(run())
+
+
+def test_scope_default_deadline_is_not_renewed_after_idle_expiry(monkeypatch):
+    async def run():
+        inputs, process = await connected()
+        await inputs.authorize()
+        clock = time.monotonic()
+        from types import SimpleNamespace
+
+        monkeypatch.setattr(
+            "inkecho.platform.wayland_keyboard.time",
+            SimpleNamespace(monotonic=lambda: clock),
+        )
+        with pytest.raises(KeyboardError, match="injection_failed"):
+            async with inputs.output_session():
+                await inputs.insert("中", lambda: True, deadline=clock + 10)
+                clock += 11
+                with pytest.raises(KeyboardError, match="input_cancelled"):
+                    await inputs.insert("tail", lambda: True)
+                assert [r["value"] for r in process.requests if r["op"] == "key"] == [
+                    "中"
+                ]
+                assert sum(r["op"] == "cancel" for r in process.requests) == 1
+        await inputs.aclose()
+
+    asyncio.run(run())
+
+
+def test_second_owner_cancel_keeps_cleanup_exclusive_until_ack():
+    async def run():
+        cleanup_started = asyncio.Event()
+        ready = asyncio.Event()
+
+        def handler(_process, request):
+            if request["op"] == "cancel":
+                cleanup_started.set()
+                return True
+            return False
+
+        inputs, process = await connected(handler)
+        await inputs.authorize()
+
+        async def owner():
+            async with inputs.output_session():
+                await inputs.insert("中", lambda: True)
+                ready.set()
+                await asyncio.Event().wait()
+
+        task = asyncio.create_task(owner())
+        await ready.wait()
+        task.cancel()
+        await cleanup_started.wait()
+        task.cancel()
+        with pytest.raises(asyncio.CancelledError):
+            await task
+        cancel = next(r for r in process.requests if r["op"] == "cancel")
+        before = len(process.requests)
+        try:
+            assert not inputs.connected and not inputs.authorized
+            with pytest.raises(KeyboardError, match="cleanup_pending"):
+                await inputs.connect()
+            with pytest.raises(KeyboardError, match="cleanup_pending"):
+                await inputs.authorize()
+            with pytest.raises(KeyboardError, match="busy|cleanup_pending"):
+                await inputs.insert("tail", lambda: True)
+            assert len(process.requests) == before
+        finally:
+            process.reply(cancel)
+            await asyncio.sleep(0)
+            await inputs.aclose()
+        assert [r["value"] for r in process.requests if r["op"] == "key"] == ["中"]
+
+    asyncio.run(run())
+
+
+def test_cleanup_failure_keeps_backend_unavailable_without_new_body():
+    async def run():
+        def handler(process, request):
+            if request["op"] == "cancel":
+                process.stdout.feed_data(
+                    json.dumps(
+                        {
+                            "id": request["id"],
+                            "ok": False,
+                            "error": "mapping_changed",
+                        }
+                    ).encode()
+                    + b"\n"
+                )
+                return True
+            return False
+
+        inputs, process = await connected(handler)
+        await inputs.authorize()
+        with pytest.raises(KeyboardError, match="cleanup_pending"):
+            await inputs._cancel_and_clean(process)
+        assert inputs._cleanup_pending and inputs._cleanup_task is None
+        assert not inputs.connected and not inputs.authorized
+        count = len(process.requests)
+        with pytest.raises(KeyboardError, match="cleanup_pending"):
+            await inputs.authorize()
+        with pytest.raises(KeyboardError, match="cleanup_pending"):
+            await inputs.insert("tail", lambda: True)
+        assert len(process.requests) == count
+        await inputs.aclose()
+
+    asyncio.run(run())
+
+
+@pytest.mark.parametrize("old_failure", [False, True])
+def test_old_cleanup_completion_cannot_unlock_or_poison_replacement(old_failure):
+    async def run():
+        def hold_cancel(_process, request):
+            return request["op"] == "cancel"
+
+        inputs, original = await connected(hold_cancel)
+        await inputs.authorize()
+        old_reader = inputs._reader
+        old_cleanup = asyncio.create_task(inputs._cancel_and_clean(original))
+        while not any(r["op"] == "cancel" for r in original.requests):
+            await asyncio.sleep(0)
+        old_request = next(r for r in original.requests if r["op"] == "cancel")
+        replacement = Process(hold_cancel)
+        inputs._process = replacement
+        inputs._pending = {}
+        inputs._reader = asyncio.create_task(
+            inputs._read_replies(replacement, inputs._pending)
+        )
+        new_cleanup = asyncio.create_task(inputs._cancel_and_clean(replacement))
+        while not replacement.requests:
+            await asyncio.sleep(0)
+        new_lock = inputs._cleanup_task
+        if old_failure:
+            original.stdout.feed_data(
+                json.dumps(
+                    {
+                        "id": old_request["id"],
+                        "ok": False,
+                        "error": "mapping_changed",
+                    }
+                ).encode()
+                + b"\n"
+            )
+            with pytest.raises(KeyboardError, match="cleanup_pending"):
+                await old_cleanup
+        else:
+            original.reply(old_request)
+            await old_cleanup
+        assert inputs._cleanup_task is new_lock
+        assert inputs._cleanup_process is replacement
+        assert not inputs._cleanup_pending and not inputs.connected
+        assert replacement.returncode is None
+        with pytest.raises(KeyboardError, match="cleanup_pending"):
+            await inputs.insert("tail", lambda: True)
+        assert [r["op"] for r in replacement.requests] == ["cancel"]
+        # Repeated requests for this process share the same cleanup and ACK.
+        repeated = asyncio.create_task(inputs._cancel_and_clean(replacement))
+        await asyncio.sleep(0)
+        assert inputs._cleanup_task is new_lock and len(replacement.requests) == 1
+        replacement.reply(replacement.requests[0])
+        await asyncio.gather(new_cleanup, repeated)
+        assert inputs._cleanup_task is None and inputs.connected and inputs.authorized
+        assert original.returncode is None or original.returncode == 0
+        original.close()
+        await old_reader
+        await inputs.aclose()
+
+    asyncio.run(run())
+
+
+def test_failed_cleanup_reconnects_only_after_original_guardian_exits():
+    async def run():
+        def handler(process, request):
+            if request["op"] == "cancel":
+                process.stdout.feed_data(
+                    json.dumps(
+                        {
+                            "id": request["id"],
+                            "ok": False,
+                            "error": "mapping_changed",
+                        }
+                    ).encode()
+                    + b"\n"
+                )
+                return True
+            return False
+
+        inputs, original = await connected(handler)
+        await inputs.authorize()
+        original_reader = inputs._reader
+        pipe_closed = []
+        original.close = lambda: pipe_closed.append(True)
+        replacement = Process()
+        spawned = []
+
+        async def spawn(*_args, **_kwargs):
+            spawned.append(replacement)
+            return replacement
+
+        inputs._spawn = spawn
+        with pytest.raises(KeyboardError, match="cleanup_pending"):
+            await inputs._cancel_and_clean(original)
+        assert pipe_closed and original.returncode is None
+        assert inputs._cleanup_pending
+        with pytest.raises(KeyboardError, match="cleanup_pending"):
+            await inputs.connect()
+        assert spawned == []
+        # Simulate the guardian's eventual natural restoration and exit.
+        original.returncode = 0
+        original.stdout.feed_eof()
+        original.closed.set()
+        await original_reader
+        await inputs.connect()
+        await inputs.authorize()
+        assert spawned == [replacement]
+        assert inputs.connected and inputs.authorized and not inputs._cleanup_pending
+        assert [r["op"] for r in replacement.requests] == ["connect", "authorize"]
+        assert not any(r["op"] == "key" for r in original.requests)
+        assert await inputs.insert("新", lambda: True) == 1
+        assert [r["value"] for r in replacement.requests if r["op"] == "key"] == ["新"]
+        await inputs.aclose()
+
+    asyncio.run(run())

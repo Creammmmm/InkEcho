@@ -363,6 +363,7 @@ class Guardian:
         self.pending_map = None
         self.modified = False
         self.pressed = None
+        self.last_character = self.last_keycode = None
         self.last_sent_at = None
         self.stopped = True
         self.permanent_stop = False
@@ -377,6 +378,7 @@ class Guardian:
             self.closed_callback()
 
     def stop(self, *, permanent=False):
+        self.last_character = self.last_keycode = None
         self.stopped = True
         self.permanent_stop |= permanent
 
@@ -403,6 +405,7 @@ class Guardian:
                 ) from None
 
     async def begin(self, deadline=None):
+        self.last_character = self.last_keycode = None
         if self.map:
             raise KeyboardError("cleanup_pending")
         if self.permanent_stop:
@@ -434,6 +437,13 @@ class Guardian:
             raise
 
     async def key(self, character):
+        try:
+            return await self._key(character)
+        except BaseException:
+            self.last_character = self.last_keycode = None
+            raise
+
+    async def _key(self, character):
         self.last_sent_at = None
         if not self.map:
             raise KeyboardError("session_closed")
@@ -469,7 +479,17 @@ class Guardian:
             self.stop()
             raise KeyboardError("mapping_changed")
         newline = character == "\n"
-        if not newline:
+        cached = (
+            not newline
+            and character == self.last_character
+            and self.last_keycode is not None
+            and self.modified
+            and self.pending_map is None
+            and data == self.last_confirmed
+        )
+        if cached:
+            code = self.last_keycode
+        elif not newline:
             mapping = self.map.character(character)
             self.pending_map = mapping.data
             self._continue()
@@ -488,6 +508,7 @@ class Guardian:
             if state["locked"] & self.map.caps_mask:
                 raise KeyboardError("caps_lock")
             code = mapping.keycode
+            self.last_character, self.last_keycode = character, code
         else:
             code = 0xFF0D
         self._continue()
@@ -514,6 +535,7 @@ class Guardian:
         self.pressed = None
 
     def _clear(self):
+        self.last_character = self.last_keycode = None
         if self.map:
             self.map.close()
         self.map = self.group = self.last_confirmed = self.pending_map = None

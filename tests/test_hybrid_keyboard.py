@@ -1,5 +1,6 @@
 import asyncio
 import time
+from contextlib import asynccontextmanager
 
 import pytest
 
@@ -60,24 +61,29 @@ class Native:
     async def authorize(self, parent_window=""):
         pass
 
+    @asynccontextmanager
+    async def output_session(self):
+        assert self.driver.mapped is None
+        self.events.append(("begin",))
+        try:
+            yield
+        finally:
+            self.events.append(("finish",))
+
     async def _insert_prefix(
         self, text, can_continue, *, deadline, on_first_sent, selected
     ):
         assert self.driver.mapped is None
-        self.events.append(("begin",))
         count = 0
-        try:
-            for char in text:
-                if not selected():
-                    break
-                assert can_continue() and time.monotonic() < deadline
-                self.events.append(("native", char))
-                on_first_sent(time.monotonic())
-                count += 1
-                if self.after_key:
-                    self.after_key()
-        finally:
-            self.events.append(("finish",))
+        for char in text:
+            if not selected():
+                break
+            assert can_continue() and time.monotonic() < deadline
+            self.events.append(("native", char))
+            on_first_sent(time.monotonic())
+            count += 1
+            if self.after_key:
+                self.after_key()
         return count
 
     async def aclose(self):
@@ -352,5 +358,116 @@ def test_initial_grace_switch_and_reentry_create_new_mapping_loans(monkeypatch):
         assert driver.applied is None
         assert events.index(("restore", "中")) < events.index(("begin",))
         assert events.index(("finish",)) < events.index(("map", "文"))
+
+    asyncio.run(run())
+
+
+def test_output_session_retains_backend_until_route_changes_between_fragments():
+    async def run():
+        hybrid, driver, _native, events = await setup()
+        driver.is_x = False
+        callbacks = []
+        async with hybrid.output_session():
+            assert events == []
+            await hybrid.insert("中", lambda: True, on_first_sent=callbacks.append)
+            await hybrid.insert("文", lambda: True, on_first_sent=callbacks.append)
+            assert events.count(("begin",)) == 1
+            assert events.count(("finish",)) == 0
+            driver.is_x = True
+            await hybrid.insert("a", lambda: True)
+            assert events.index(("finish",)) < events.index(("map", "a"))
+            driver.is_x = False
+            await hybrid.insert("字", lambda: True)
+            assert events.index(("restore", "a")) < len(events) - 1
+        assert events.count(("begin",)) == events.count(("finish",)) == 2
+        assert len(callbacks) == 2
+        await hybrid.aclose()
+
+    asyncio.run(run())
+
+
+def test_empty_scope_never_reads_focus_and_failed_owner_cannot_resume():
+    async def run():
+        hybrid, driver, _native, events = await setup()
+        driver.error = "mapping_changed"
+        async with hybrid.output_session():
+            assert await hybrid.insert("", lambda: True) == 0
+        assert events == []
+        driver.error = None
+        with pytest.raises(KeyboardError, match="injection_failed"):
+            async with hybrid.output_session():
+                await hybrid.insert("中", lambda: True)
+                with pytest.raises(KeyboardError, match="unsupported_text"):
+                    await hybrid.insert("😀", lambda: True)
+                assert driver.applied is None
+                with pytest.raises(KeyboardError, match="input_cancelled"):
+                    await hybrid.insert("tail", lambda: True)
+        await hybrid.aclose()
+
+    asyncio.run(run())
+
+
+def test_idle_scope_foreign_busy_preserves_owner_and_close_cleans_loan():
+    async def run():
+        hybrid, driver, _native, events = await setup()
+        ready = asyncio.Event()
+        resume = asyncio.Event()
+
+        async def owner():
+            async with hybrid.output_session():
+                await hybrid.insert("中", lambda: True)
+                ready.set()
+                await resume.wait()
+                await hybrid.insert("文", lambda: True)
+                await asyncio.Event().wait()
+
+        task = asyncio.create_task(owner())
+        await ready.wait()
+        assert driver.applied == "中"
+        with pytest.raises(KeyboardError, match="busy"):
+            await hybrid.insert("foreign", lambda: True)
+        resume.set()
+        while not any(e == ("x", "文", False) for e in events):
+            await asyncio.sleep(0)
+        await hybrid.aclose()
+        assert task.cancelled()
+        assert driver.applied is None
+
+    asyncio.run(run())
+
+
+@pytest.mark.parametrize("deadline", [True, float("nan"), float("inf")])
+def test_nonfinite_scope_deadline_never_acquires_mapping(deadline):
+    async def run():
+        hybrid, _driver, _native, events = await setup()
+        with pytest.raises(KeyboardError, match="input_cancelled"):
+            await hybrid.insert("中", lambda: True, deadline=deadline)
+        assert events == []
+        await hybrid.aclose()
+
+    asyncio.run(run())
+
+
+def test_scope_default_deadline_is_not_renewed_after_idle_expiry(monkeypatch):
+    async def run():
+        hybrid, driver, _native, events = await setup()
+        clock = time.monotonic()
+        from types import SimpleNamespace
+
+        monkeypatch.setattr(
+            "inkecho.platform.hybrid_keyboard.time",
+            SimpleNamespace(monotonic=lambda: clock),
+        )
+        with pytest.raises(KeyboardError, match="injection_failed"):
+            async with hybrid.output_session():
+                await hybrid.insert("中", lambda: True, deadline=clock + 10)
+                clock += 11
+                with pytest.raises(KeyboardError, match="input_cancelled"):
+                    await hybrid.insert("tail", lambda: True)
+                assert driver.applied is None
+                assert [e for e in events if e[0] == "x" and e[2]] == [
+                    ("x", "中", True)
+                ]
+        await hybrid.aclose()
 
     asyncio.run(run())

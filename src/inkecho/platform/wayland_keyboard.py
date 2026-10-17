@@ -6,7 +6,8 @@ import math
 import os
 import sys
 import time
-from collections.abc import Callable, Mapping
+from collections.abc import AsyncIterator, Callable, Mapping
+from contextlib import asynccontextmanager
 
 from inkecho.platform.keyboard import KeyboardError, KeyboardInput
 
@@ -41,8 +42,19 @@ class WaylandKeyboardInput:
         self._authorized = False
         self._closing = False
         self._busy = False
+        self._output_owner = None
+        self._output_failed = False
+        self._output_deadline = None
+        self._output_process = None
+        self._begun = False
+        self._output_check = None
         self._cleanup_pending = False
+        self._cleanup_task = None
+        self._cleanup_process = None
         self._connect_lock = asyncio.Lock()
+
+    def _cleaning(self):
+        return self._cleanup_task is not None and self._cleanup_process is self._process
 
     @property
     def connected(self) -> bool:
@@ -50,6 +62,7 @@ class WaylandKeyboardInput:
             self._connected
             and not self._closing
             and not self._cleanup_pending
+            and not self._cleaning()
             and self._process is not None
             and self._process.returncode is None
         )
@@ -143,6 +156,11 @@ class WaylandKeyboardInput:
 
     async def connect(self) -> None:
         async with self._connect_lock:
+            if self._cleaning() or (
+                self._cleanup_pending
+                and (self._process is None or self._process.returncode is None)
+            ):
+                raise KeyboardError("cleanup_pending")
             if self._closing:
                 raise KeyboardError("session_closed")
             if self.connected:
@@ -199,33 +217,50 @@ class WaylandKeyboardInput:
                 raise KeyboardError("display_unavailable") from None
 
     async def _cancel_and_clean(self, process):
-        if process is not self._process:
+        if self._cleanup_process is process and self._cleanup_task is not None:
+            cleanup = self._cleanup_task
+        elif process is not self._process:
             self._close_pipe(process)
             return
-        pending = self._pending
+        else:
+            pending = self._pending
 
-        async def clean():
-            if process is not self._process:
-                self._close_pipe(process)
-                return
-            try:
-                await self._request(
-                    "cancel",
-                    timeout=self.cleanup_timeout,
-                    process=process,
-                    pending=pending,
-                )
-            except KeyboardError:
-                if process is self._process:
-                    self._cleanup_pending = True
-                self._close_pipe(process)
-                raise KeyboardError("cleanup_pending") from None
+            async def clean():
+                current = asyncio.current_task()
+                try:
+                    if process is not self._process:
+                        self._close_pipe(process)
+                        return
+                    await self._request(
+                        "cancel",
+                        timeout=self.cleanup_timeout,
+                        process=process,
+                        pending=pending,
+                    )
+                except KeyboardError:
+                    if (
+                        process is self._process
+                        and self._cleanup_task is current
+                        and self._cleanup_process is process
+                    ):
+                        self._cleanup_pending = True
+                    self._close_pipe(process)
+                    raise KeyboardError("cleanup_pending") from None
+                finally:
+                    # A replaced process may already own another cleanup task.
+                    # Completing this older generation must never unlock it.
+                    if (
+                        self._cleanup_task is current
+                        and self._cleanup_process is process
+                    ):
+                        self._cleanup_task = self._cleanup_process = None
 
-        cleanup = asyncio.create_task(clean())
+            self._cleanup_process = process
+            cleanup = self._cleanup_task = asyncio.create_task(clean())
         try:
             await asyncio.shield(cleanup)
         except asyncio.CancelledError:
-            # A second caller cancellation must not cancel guardian cleanup.
+            # The process-bound lock outlives a twice-cancelled requester.
             cleanup.add_done_callback(
                 lambda task: task.exception() if not task.cancelled() else None
             )
@@ -233,6 +268,8 @@ class WaylandKeyboardInput:
 
     async def authorize(self, parent_window: str = "") -> None:
         del parent_window  # This GNOME route does not fabricate a target/window handle.
+        if self._cleaning() or self._cleanup_pending:
+            raise KeyboardError("cleanup_pending")
         if not self.connected:
             raise KeyboardError("session_closed")
         if self.authorized:
@@ -247,6 +284,41 @@ class WaylandKeyboardInput:
             self._authorized = False
             await self._cancel_and_clean(process)
             raise
+
+    @asynccontextmanager
+    async def output_session(self) -> AsyncIterator[None]:
+        if self._cleaning() or self._cleanup_pending:
+            raise KeyboardError("cleanup_pending")
+        owner = asyncio.current_task()
+        if owner is None or self._busy or self._output_owner is not None:
+            raise KeyboardError("busy")
+        if not self.authorized:
+            raise KeyboardError("permission_required")
+        self._output_owner = owner
+        self._output_process = self._process
+        self._output_deadline = None
+        self._output_failed = False
+        self._begun = False
+        try:
+            yield
+            if self._closing or self._output_failed:
+                raise KeyboardError("injection_failed")
+            if self._begun:
+                if self._process is not self._output_process:
+                    raise KeyboardError("session_closed")
+                await self._request("finish", timeout=self.cleanup_timeout)
+                self._begun = False
+                if self._output_check is not None:
+                    self._output_check()
+        except BaseException:
+            if self._begun:
+                self._begun = False
+                await self._cancel_and_clean(self._output_process)
+            raise
+        finally:
+            self._output_owner = self._output_process = self._output_deadline = None
+            self._output_failed = False
+            self._output_check = None
 
     async def insert(
         self,
@@ -269,21 +341,52 @@ class WaylandKeyboardInput:
         on_first_sent: Callable[[float | None], None] | None = None,
         selected: Callable[[], bool] | None = None,
     ) -> int:
-        normalized = text.replace("\r\n", "\n").replace("\r", "\n")
-        if any(
-            (ord(char) < 32 and char != "\n")
-            or 0x7F <= ord(char) <= 0x9F
-            or 0xD800 <= ord(char) <= 0xDFFF
-            or ord(char) > 0xFFFF
-            for char in normalized
+        current = asyncio.current_task()
+        if self._busy or (
+            self._output_owner is not None and self._output_owner is not current
         ):
-            raise KeyboardError("unsupported_text")
-        if self._busy:
             raise KeyboardError("busy")
-        if not self.authorized:
-            raise KeyboardError("permission_required")
+        if self._output_owner is None:
+            async with self.output_session():
+                return await self._insert_prefix(
+                    text,
+                    can_continue,
+                    deadline=deadline,
+                    on_first_sent=on_first_sent,
+                    selected=selected,
+                )
+        process = self._output_process
+        try:
+            normalized = text.replace("\r\n", "\n").replace("\r", "\n")
+            if any(
+                (ord(char) < 32 and char != "\n")
+                or 0x7F <= ord(char) <= 0x9F
+                or 0xD800 <= ord(char) <= 0xDFFF
+                or ord(char) > 0xFFFF
+                for char in normalized
+            ):
+                raise KeyboardError("unsupported_text")
+            if self._output_failed:
+                raise KeyboardError("input_cancelled")
+            if not self.authorized:
+                raise KeyboardError("permission_required")
+            if deadline is None:
+                deadline = self._output_deadline
+                if deadline is None:
+                    deadline = time.monotonic() + 60
+            if type(deadline) not in (int, float) or not math.isfinite(deadline):
+                raise KeyboardError("input_cancelled")
+            if self._output_deadline is not None and deadline != self._output_deadline:
+                raise KeyboardError("input_cancelled")
+            if normalized:
+                self._output_deadline = deadline
+        except BaseException:
+            self._output_failed = True
+            if self._begun:
+                self._begun = False
+                await self._cancel_and_clean(process)
+            raise
         self._busy = True
-        process = self._process
 
         def check():
             if (
@@ -294,14 +397,20 @@ class WaylandKeyboardInput:
             ):
                 raise KeyboardError("input_cancelled")
 
+        self._output_check = check
         try:
             check()
-            await self._request("begin", deadline=deadline)
             count = 0
             for character in normalized:
                 check()
                 if selected is not None and not selected():
                     break
+                if not self._begun:
+                    self._begun = True
+                    await self._request("begin", deadline=deadline)
+                    check()
+                    if selected is not None and not selected():
+                        break
                 request_start = time.monotonic()
                 result = await self._request("key", value=character)
                 acknowledged = time.monotonic()
@@ -318,11 +427,13 @@ class WaylandKeyboardInput:
                 if count == 0 and on_first_sent is not None:
                     on_first_sent(sent_at)
                 count += 1
-            await self._request("finish", timeout=self.cleanup_timeout)
             check()
             return count
         except BaseException:
-            await self._cancel_and_clean(process)
+            self._output_failed = True
+            if self._begun:
+                self._begun = False
+                await self._cancel_and_clean(process)
             raise
         finally:
             self._busy = False
@@ -330,6 +441,18 @@ class WaylandKeyboardInput:
     async def aclose(self) -> None:
         self._closing = True
         self._authorized = self._connected = False
+        owner = self._output_owner
+        try:
+            if owner is not None and owner is not asyncio.current_task():
+                owner.cancel()
+                try:
+                    await owner
+                except (asyncio.CancelledError, KeyboardError):
+                    pass
+        finally:
+            await self._close_process()
+
+    async def _close_process(self):
         process = self._process
         if process is None:
             return

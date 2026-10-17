@@ -1124,3 +1124,110 @@ def test_failed_press_has_no_success_timestamp(remote):
         await guardian.finish()
 
     run(scenario())
+
+
+@pytest.mark.parametrize("text,maps", [("AA", 1), ("A\nA", 1), ("ABA", 3)])
+def test_latest_confirmed_character_cache_keeps_real_events(
+    remote, monkeypatch, text, maps
+):
+    async def scenario():
+        compiled = []
+        original = FakeMap.character
+
+        def compile_character(self, char):
+            compiled.append(char)
+            return original(self, char)
+
+        monkeypatch.setattr(FakeMap, "character", compile_character)
+        guardian = Guardian(remote)
+        await guardian.begin()
+        for char in text:
+            await guardian.key(char)
+        assert len(compiled) == len(remote.writes) == maps
+        assert len(remote.events) == len(text) * 2
+        assert guardian.pending_map is None
+        await guardian.finish()
+        assert remote.data == b"original\0"
+        assert guardian.last_character is guardian.last_keycode is None
+        await guardian.begin()
+        await guardian.key("A")
+        assert len(compiled) == maps + 1
+        await guardian.finish()
+
+    run(scenario())
+
+
+@pytest.mark.parametrize(
+    "change,code",
+    [
+        ("source", "mapping_changed"),
+        ("group", "mapping_changed"),
+        ("map", "mapping_changed"),
+        ("depressed", "keys_held"),
+        ("latched", "keys_held"),
+        ("locked", "caps_lock"),
+        ("deadline", "input_cancelled"),
+    ],
+)
+def test_cached_character_still_checks_actual_ownership_and_state(remote, change, code):
+    async def scenario():
+        guardian = Guardian(remote)
+        await guardian.begin()
+        await guardian.key("A")
+        owned_map = guardian.last_confirmed
+        if change == "source":
+            remote.origin = 0
+        elif change == "group":
+            remote.state["group"] = 0
+        elif change == "map":
+            remote.data = b"external\0"
+        elif change == "deadline":
+            guardian.deadline = time.monotonic() - 1
+        else:
+            remote.state[change] = 2
+        with pytest.raises(KeyboardError, match=code):
+            await guardian.key("A")
+        assert len(remote.events) == 2
+        assert len(remote.writes) == 1
+        assert guardian.last_character is guardian.last_keycode is None
+        # Cache invalidation must retain existing recovery ownership state.
+        assert guardian.last_confirmed == owned_map
+        assert guardian.map is not None and guardian.modified
+        remote.state.update(depressed=0, latched=0, locked=16, group=1)
+        remote.data, remote.origin = owned_map, 1
+        await guardian.finish()
+        assert remote.data == b"original\0"
+
+    run(scenario())
+
+
+@pytest.mark.parametrize("change", ["modifier", "deadline", "map"])
+def test_cache_hit_rechecks_state_after_awaited_source_query(remote, change):
+    async def scenario():
+        guardian = Guardian(remote)
+        await guardian.begin()
+        await guardian.key("A")
+        original_source = remote.source
+
+        async def source():
+            await asyncio.sleep(0)
+            if change == "modifier":
+                remote.state["depressed"] = 1
+            elif change == "deadline":
+                guardian.deadline = time.monotonic() - 1
+            else:
+                remote.data = b"external\0"
+            return await original_source()
+
+        remote.source = source
+        with pytest.raises(KeyboardError):
+            await guardian.key("A")
+        assert len(remote.events) == 2 and len(remote.writes) == 1
+        assert guardian.last_character is guardian.last_keycode is None
+        remote.source = original_source
+        remote.state["depressed"] = 0
+        remote.data = guardian.last_confirmed
+        await guardian.finish()
+        assert remote.data == b"original\0"
+
+    run(scenario())

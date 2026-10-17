@@ -5,7 +5,12 @@
 不重放语义。**阶段1源码有限验收已通过**：冻结A稳态和受控mixed提供有限实际
 输出证据，当前默认factory接线、188项focused检查及1478项完整自动测试通过。
 实际A测试是显式构造Hybrid，不是最终包默认factory的自动桌面验收；历史false和
-scope限制保留。阶段2/3、新包同SHA双系统验收及稳定入口更新仍未完成。
+scope限制保留。**阶段2源码有限实际验收已通过**：主 Agent独立工作树全套1513项
+通过，24项单后端对照及B的4项受控跨后端交接均通过。普通文本事务由7次减少为
+1次，原生重复文本在本次70ms供给下约14.5秒→7秒；受控交接不证明无暂停切窗原子性。
+不把单对差异作普遍速度或可靠性分布结论。阶段3、新包同SHA双系统验收及
+稳定入口更新仍未完成。本节记录提交前实际验收；提交后的完整检查由绑定本报告的
+clean-HEAD回执确认。
 
 ## 已有基线与本轮边界
 
@@ -36,7 +41,7 @@ a14产品来源为 `43c20edcd652020bfe51b959b85f2f90d8b75059`，包SHA256为
 | 阶段 | 目的与验证重点 | 当前实现/合成证据 | 实际验收状态 |
 | --- | --- | --- | --- |
 | 1 安全X11/XWayland路由 | 对可识别的X11目标使用其路径；原生目标仍走原生路径；验证跨后端切窗、取消、任务隔离、映射独立恢复及不重放 | factory最小接线完成；188focused及完整1478测试通过；早期102项只属合成证据 | 阶段1源码有限验收通过；A显式Hybrid实际证据不替代最终包默认factory桌面验收，历史false保留 |
-| 2 原生重复事务/最近映射复用 | 减少流式片段间重复begin/finish和可安全复用的映射工作；保留外来修改与修饰键检查 | 待阶段1干净提交检查后实施 | 待验，不预设收益 |
+| 2 原生重复事务/最近映射复用 | 跨SSE片段复用输出scope与单项最近映射；保留所有权、deadline和键盘状态检查 | 实现/合成审核完成；子Agent224测试通过，主Agent独立1513全套通过 | 提交前源码有限实际验收通过：24单后端case+B受控交接4case；提交后完整检查以绑定本报告的clean-HEAD回执为准；非最终包factory验收，未打包/部署 |
 | 3 逐阶段等待校准 | 分别研究映射、按下、释放等待，记录每个候选的准确性和成本 | 待前两阶段验收后实施 | 待验，不预设零等待可用 |
 | 新候选包 | 将最终获审源码打成独立版本；同一包与SHA分别在Ubuntu24.04/26.04实际验收 | 版本/产品来源/包SHA待确定 | 待验，完成前不能替换稳定入口 |
 | 稳定入口更新 | 双系统包验收及主 Agent审核通过后，执行并核对实际版本与配置保留 | 尚未执行本轮提速版本部署 | 待验，不因源码或合成测试通过提前更新 |
@@ -60,7 +65,9 @@ a14产品来源为 `43c20edcd652020bfe51b959b85f2f90d8b75059`，包SHA256为
 | 阶段1受控mixed r1 | `candidate-a-mixed-result-r1.json` | 前3项精确/恢复通过，第4项首次按下前被测试guard拒绝，整组false；受控边界不是连续post-map切窗证据 |
 | 受控mixed R2第四场景 | `candidate-a-mixed-result-r2.json` | setup ValueError，0insert/guard/press/release/maps；formal baseline未建立，第四场景仍未验 |
 | 受控mixed R4第四场景 | `candidate-a-mixed-result-r4.json` | X10→native4/cancel14两字段exact、恢复与终态通过；仅受控边界，默认工厂/连续竞态仍未验 |
-| 阶段2实际源码 | 待阶段1干净提交检查后记录候选及同样口径的raw | 待验 |
+| 阶段2实现/合成检查 | 输出scope/最近缓存与取消清理修复；224相关测试、1513完整测试 | 通过；纯调用数不作真实吞吐或缓存收益 |
+| 阶段2实际源码对照 | `build/input-speed-stage2-preparation/stage2-matrix-summary-r1.json`及其24份raw指纹 | 24项通过，单后端scope/取消/empty与恢复；重复文本实际收益受70ms供给限制，不作intrinsic-cache速度或重复可靠性分布 |
+| 阶段2 B受控mixed | 同目录 `stage2-mixed-summary-r1.json`及其4份raw指纹 | 双向normal23/取消14精确，epoch互斥/恢复/原owner终态通过；显式Hybrid、ACK/cap10暂停边界，非factory/无暂停post-map原子证明 |
 | 阶段3校准 | 待记录各等待候选与匹配对照 | 待验，失败候选也保留 |
 | 新包Ubuntu24.04 | 待同一新包版本/SHA、实际会话、清单、origins及raw | 待验；GNOME46原生限制不得由Xorg通过抹去 |
 | 新包Ubuntu26.04 | 待同一新包版本/SHA、实际会话、清单、origins及raw | 待验；native/XWayland范围分别记录 |
@@ -261,7 +268,7 @@ cleanup/fixture错误为空。自然启动新字段，不使用CDP焦点激活�
 R1具体guard拒绝或R2 setup失败，不覆写它们的false，也不宣称连续无损焦点切换已验。
 post保留原失败raw、fresh配置/artifact、冻结源/依赖与工具；没有新云、录音或密钥访问。
 该次实际A仍是显式构造Hybrid，不是factory自动GUI；后续源码factory/回归有限验收
-如下。阶段2/3、新包及部署仍未完成，R4的有限scope不因此扩大。
+如下。当时阶段2/3、新包及部署仍未完成，R4的有限scope不因此扩大。
 
 ## 阶段1默认接线与当前自动检查
 
@@ -308,6 +315,141 @@ performance_cloud_comparison的模拟normal/focus/cancel/expire及parent显示�
    映射epoch互斥，并读取原target/worker终态与post保留证据。
 4. 稳态100BMP速度与正常/取消边界另作上述独立组，不把受控暂停用时算成生产吞吐；
    新factory的自动桌面路径待最终新包同SHA双OS验收，不能从显式构造测试中外推。
+
+## 阶段2：实现与合成审核及24项实际源码证据
+
+本节是阶段2新工作树；阶段1节的“当前tree/算法未变”仅指阶段1当时的检查点。
+当前Hybrid/native输出scope可跨SSE片段复用；空scope保持懒惰，不查询焦点或begin。
+事务使用固定、有限的绝对deadline，片段到达不会续期或在片段间过期后再加60秒。
+owner发生异常后scope被poison，不能被catch后继续复用；外来任务busy，切换backend
+先restore再交接。开始录音不捕获目标和当前光标语义不变。
+
+Guardian增加单项“最近确认character/code”缓存，独立于 `last_confirmed` 与
+`pending_map`：合成检查中AA及A/换行/A复用，ABA仍执行3次map；不宣称多字符
+预映射或无界cache。每次source/group/modifiers/map检查与真实key release保留，
+原生50/50ms和X11等待常量均不变。减少纯测试中的map调用数不是实际速度证据。
+
+审查与新增失败测试复现后，修正了两项实现缺陷：
+
+- cleanup ACK仍待确认时double cancel曾使旧owner过早释放，新任务可begin/key。
+  现在清理task绑定进程且排他；旧任务不能修改新generation锁，重入取消不提前
+  放行未清理的guardian。已有测试覆盖失败时序，不用忽略异常或放宽断言通过。
+- 初版修正又会在cleanup_pending后永久阻止connect。现在只有旧guardian确认退出
+  后才允许显式新generation connect；不自动重连、恢复正文或重放未确认输入。
+
+新增检查包括片段间expiry不续期、double cancel、cleanup失败、旧/新进程互不干扰，
+以及旧guardian自然终态后的显式恢复。相关子Agent执行**224 passed，6.03秒**；
+主 Agent最终独立完整工作树复跑为**1513 passed、3 skipped，41.56秒**，
+Ruff check全部通过、format检查283文件通过。此为最终锁修正后的结果，不把此前
+锁修正前的中间检查当作最终验收；阶段1各次历史与false原样保留。
+
+本节记录阶段2提交前实际验收，没有新包或稳定部署。下述24项实际源码对照已核实普通/
+重复文本、单后端片段间取消及empty；另4项B受控交接已独立验收，合计28项提供
+阶段2源码有限实际通过证据。保留旧A历史，不用A的mixed替代B的实际回执。
+
+### 24项实际源码对照：native/XWayland与两类字段
+
+主 Agent独立逐一读取24份raw的counts、请求、精确读回、恢复与原owner终态。
+本报告另只读重算24份raw指纹并核对passed/exact均true；汇总及进度指纹如下，
+完整逐例raw路径、哈希、时间和owner保留在汇总中，不在此展开24组日志。
+证据均位于 `build/input-speed-stage2-preparation/`：
+
+| 证据 | SHA256 |
+| --- | --- |
+| `stage2-matrix-summary-r1.json` | `a1bea53ee8f71c629129f146a04ec5db59301526b6a1286c83971df74926ed60` |
+| `remaining-matrix-progress-r1.json` | `8576d135642c87ea8525e9db74478b58e92f01c60ad25a7b5621f1811bf7a113` |
+
+对照A为冻结A44；候选B的 `source-b-r1/manifest.json` SHA256为
+`db9c92962ad0ef12d19c8fe40b98269576858a9772d3d142cad04ad898e44cb1`。
+B实际审计的四处源码指纹如下，不回填A的origins：
+
+| `inkecho/platform/`下源码 | B SHA256 |
+| --- | --- |
+| `hybrid_keyboard.py` | `6b6b8ab3e23b2a2aeb0e71aca37743526825c06cb2d93d14d35bbe7b1b6172f7` |
+| `wayland_keyboard.py` | `e8301f4c002a460f186d48db275314553394995e5021e34c1ac7ae62f68edf20` |
+| `wayland_worker.py` | `c7bf083c2841163f2c16fad0440f1c35e2a9f9fbcb382ad1e6ab9c4338ccff9d` |
+| `keyboard.py` | `4281c1e1480e870cd3fd26858e1494d81f7d352fe356e5784c67e016c970ec58` |
+
+实际GNOME Wayland自有Chrome分别使用native/XWayland、textarea/contenteditable，
+显式构造Hybrid，使用候选源码与a14依赖；不是新包，也不是factory自动GUI验收。
+普通100BMP样本SHA为
+`92a3e661ef711faaf474ced4b3c6418aa06d3242333a976a87ed1328d1f9387d`。
+重复100BMP样本SHA为
+`c995e6dc89306882cbd51772f896d366bad9bcc9a88f925d5e4c319c392613bf`。
+生成片段计划间隔70ms，实际通过生产StreamingOutput排队与合并，未等待未来片段
+制造批次；没有云、录音、密钥、剪贴板或IME操作。
+
+| 后端/字段/100字模式 | A scope毫秒 | B scope毫秒 | A→B映射写入计数 |
+| --- | ---: | ---: | --- |
+| native textarea ordinary | 14467.017 | 14173.502 | SetMap ACK 107→101 |
+| native contenteditable ordinary | 14662.620 | 14284.808 | SetMap ACK 107→101 |
+| native textarea repeat | 14499.446 | 6990.237 | SetMap ACK 107→6 |
+| native contenteditable repeat | 14427.092 | 6994.535 | SetMap ACK 107→6 |
+| XWayland textarea ordinary | 7875.188 | 6974.227 | write 114→101 |
+| XWayland contenteditable ordinary | 7990.061 | 6955.469 | write 115→101 |
+| XWayland textarea repeat | 7899.159 | 6953.591 | write 114→101 |
+| XWayland contenteditable repeat | 7992.097 | 6991.033 | write 115→101 |
+
+上表16个case均100exact、100对press/release、guard0，非选中后端没有按键。
+native正常任务A均7begin/7finish，B均1begin/1finish；X11 write包含最后恢复，
+不是全都叫“字符map”：A各14或15次restore，B均1次。实际批次随排队变化，
+callback严格每insert一次；例如首对普通textarea A7批、B8批，并非每scope仅一次。
+
+另8项是textarea的单后端取消/empty（A/B×native/XWayland）：取消均8字exact、
+8对按键且无尾部；native B为1begin/1cancel、9SetMap ACK，XWayland B为9write/
+1restore。empty均0字符、0按键/映射/首字callback，也无begin，不把0字算正常吞吐。
+4项empty不创建Chrome；20个Chrome、24个worker及24个probe原owner均自然wait0，
+48份stdout/stderr日志为空，cleanup_errors和fixture_errors均空。
+
+24项均在scope结束、inputs仍open时核对native map/modifiers与baseline一致；
+close之后原native metadata仍相同，X11 before/after映射也相同。相邻preservation
+核对用户配置、旧artifact、A/B源码与工具before/after一致。
+
+普通native两字段只见单对约0.29/0.38秒差异，不作普遍显著提速结论；实际事务7→1
+是明确证据。重复native两字段约14.5秒→7秒且ACK107→6，是本次固定样本与供给的
+有限实际收益。70ms供给约14.3码点/秒，实际排队间隔另有记录；scope含供给等待与
+监督开销，不能据约7秒测出缓存自身的intrinsic吞吐上限。XWayland约8秒→7秒同样
+受该供给口径约束。24项是不同条件各单例，不是重复可靠性分布；B的新scope跨后端
+受控交接见下节，阶段3/新包/部署仍待。
+
+最早operator在写保留证据时因 `Path.open(opener=...)` 返回TypeError，发生在Popen
+之前：probe、Chrome、worker均未启动、0GUI/0输入。原
+`control-native-textarea-ordinary-operator-failure-r1.json`保留；改用builtins.open后
+才开始上述首次真实case，不称为产品失败或产品重试。
+
+### B的4项受控跨后端交接
+
+主 Agent独立逐一验收4份raw；汇总
+`build/input-speed-stage2-preparation/stage2-mixed-summary-r1.json` SHA256为
+`81b5cf00005df59cc76bf47f100bf81ba5c40b748639770ad47acb7d86993baf`。
+本报告另只读重算汇总与4份raw指纹，均匹配：
+
+| case（`candidate-mixed-…-result-r1.json`） | 两字段精确字数 / press与release各自合计 | raw SHA256 |
+| --- | --- | --- |
+| native-to-x-normal | 10 / 13，23对 | `daca1a7774f9a71d3ab89f62c7446795c2a1e795b394b08df7746d0797e48311` |
+| x-to-native-normal | 10 / 13，23对 | `896020b1e21d03beb2a21827287015552c51eecdddbe43e03df8ef84d6f8fada` |
+| native-to-x-cancel14 | 10 / 4，14对 | `0edc38529e59abfa9dfbad7a6729287964fcaac242d57dc3d0071b6bc15498cc` |
+| x-to-native-cancel14 | 10 / 4，14对 | `a7b6608273edb40c6cd8c53524f3c36b4368f984f86ca542e48e0e53f62d3ac4` |
+
+各任务guard0、callback1，取消后0.5秒无尾部；native/X11映射epoch无重叠。
+每项 `ready_native == scope_after_native == after_native`（包含map与modifiers），
+X11 before/after一致，scope后仍open与close后恢复均通过。原4probe、4worker与
+8Chrome均自然exit0；cleanup/fixture为空，preservation和19origins核验通过。
+
+native→X取消项的restore计数2仅为wrapper成功返回次数，含幂等noop，不是两次
+真实映射rewrite；该项5次map write是4次字符map加1次实际restore。
+
+这些是B冻结四pins、source+a14依赖、显式Hybrid的独立证据：沿真实native ACK或
+X前缀cap10暂停，自然启动新字段并等待fields-ready后继续；不含CDP激活，不作
+无暂停post-map竞态、切窗原子性或切换吞吐证明，也不改写旧A的失败与origins。
+
+提交前当前tree另为两个公开 `output_session` 补齐 `AsyncIterator[None]` 标注及导入。
+主 Agent逐AST移除仅该导入与返回标注后，Hybrid/native parent与实测B的AST完全
+相同，keyboard/worker仍byte-identical；类型补齐后子Agent224 focused通过，5.99秒。
+当前Hybrid SHA为 `4005f609b46a3e4bafef5cddf27e0672830f1d07b5611a0b29bcbd1c97b4c987`，
+native parent SHA为 `908d5c61d0dec8066385554db7652d06e83a42dd5e736f3d96f7aa54c00cbf69`。
+B快照保持原四pins/44源/19origins不变，不重标为当前tree。提交后的完整检查由绑定
+本报告的clean-HEAD回执确认，不提前宣称该回执已通过。
 
 ## 实测口径
 

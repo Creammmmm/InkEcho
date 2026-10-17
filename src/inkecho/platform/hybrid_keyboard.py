@@ -3,7 +3,8 @@
 import asyncio
 import math
 import time
-from collections.abc import Callable
+from collections.abc import AsyncIterator, Callable
+from contextlib import asynccontextmanager
 
 from inkecho.platform.keyboard import KeyboardError, KeyboardInput, _text
 from inkecho.platform.wayland_keyboard import WaylandKeyboardInput
@@ -25,6 +26,12 @@ class HybridKeyboardInput:
         self._busy = False
         self._closing = False
         self._task = None
+        self._output_owner = None
+        self._output_failed = False
+        self._output_deadline = None
+        self._scope = None
+        self._backend = None
+        self._output_check = None
 
     @property
     def connected(self) -> bool:
@@ -56,6 +63,45 @@ class HybridKeyboardInput:
             raise
         return True
 
+    async def _release_scope(self, error=None):
+        scope, self._scope = self._scope, None
+        self._backend = None
+        if scope is not None:
+            await scope.__aexit__(
+                type(error) if error is not None else None,
+                error,
+                error.__traceback__ if error is not None else None,
+            )
+
+    @asynccontextmanager
+    async def output_session(self) -> AsyncIterator[None]:
+        owner = asyncio.current_task()
+        if owner is None or self._output_owner is not None or self._busy:
+            raise KeyboardError("busy")
+        if not self.authorized:
+            raise KeyboardError("permission_required")
+        self._output_owner = owner
+        self._output_failed = False
+        self._output_deadline = None
+        try:
+            yield
+            if self._closing or self._output_failed:
+                raise KeyboardError("injection_failed")
+            await self._release_scope()
+            if self._output_check is not None:
+                self._output_check()
+        except BaseException as error:
+            await self._release_scope(error)
+            raise
+        finally:
+            try:
+                await self._release_scope()
+            finally:
+                self._output_owner = None
+                self._output_deadline = None
+                self._output_failed = False
+                self._output_check = None
+
     async def insert(
         self,
         text: str,
@@ -64,16 +110,38 @@ class HybridKeyboardInput:
         deadline: float | None = None,
         on_first_sent: Callable[[float | None], None] | None = None,
     ) -> int:
-        normalized = _text(text)
-        if any(ord(char) > 0xFFFF for char in normalized):
-            raise KeyboardError("unsupported_text")
-        if self._busy:
+        current = asyncio.current_task()
+        if self._busy or (
+            self._output_owner is not None and self._output_owner is not current
+        ):
             raise KeyboardError("busy")
-        if not self.authorized:
-            raise KeyboardError("permission_required")
-        deadline = time.monotonic() + 60 if deadline is None else deadline
-        if type(deadline) not in (int, float) or not math.isfinite(deadline):
-            raise KeyboardError("input_cancelled")
+        if self._output_owner is None:
+            async with self.output_session():
+                return await self.insert(
+                    text, can_continue, deadline=deadline, on_first_sent=on_first_sent
+                )
+        try:
+            normalized = _text(text)
+            if any(ord(char) > 0xFFFF for char in normalized):
+                raise KeyboardError("unsupported_text")
+            if self._output_failed:
+                raise KeyboardError("input_cancelled")
+            if not self.authorized:
+                raise KeyboardError("permission_required")
+            if deadline is None:
+                deadline = self._output_deadline
+                if deadline is None:
+                    deadline = time.monotonic() + 60
+            if type(deadline) not in (int, float) or not math.isfinite(deadline):
+                raise KeyboardError("input_cancelled")
+            if self._output_deadline is not None and deadline != self._output_deadline:
+                raise KeyboardError("input_cancelled")
+            if normalized:
+                self._output_deadline = deadline
+        except BaseException as error:
+            self._output_failed = True
+            await self._release_scope(error)
+            raise
         self._busy = True
         self._task = asyncio.current_task()
         offset = 0
@@ -96,6 +164,8 @@ class HybridKeyboardInput:
             check()
             return self._x_selected() == x11
 
+        if normalized:
+            self._output_check = check
         try:
             while offset < len(normalized):
                 check()
@@ -106,17 +176,16 @@ class HybridKeyboardInput:
                     on_first_sent=first_sent,
                     selected=lambda use_x11=use_x11: selected(use_x11),
                 )
-                if use_x11:
-                    # Exit restores the X row before native can acquire its map.
-                    async with self.x11.output_session():
-                        count = await backend._insert_prefix(
-                            normalized[offset:], can_continue, **options
-                        )
-                else:
-                    # The native prefix performs its own begin/finish restoration.
-                    count = await backend._insert_prefix(
-                        normalized[offset:], can_continue, **options
-                    )
+                if self._backend is not backend:
+                    await self._release_scope()
+                    check()
+                    scope = backend.output_session()
+                    await scope.__aenter__()
+                    self._scope, self._backend = scope, backend
+                    check()
+                count = await backend._insert_prefix(
+                    normalized[offset:], can_continue, **options
+                )
                 check()
                 if type(count) is not int or not 0 <= count <= len(normalized) - offset:
                     raise KeyboardError("injection_failed")
@@ -127,6 +196,10 @@ class HybridKeyboardInput:
                     await asyncio.sleep(0.001)
                     check()
             return offset
+        except BaseException as error:
+            self._output_failed = True
+            await self._release_scope(error)
+            raise
         finally:
             self._task = None
             self._busy = False
@@ -134,10 +207,11 @@ class HybridKeyboardInput:
     async def aclose(self) -> None:
         self._closing = True
         try:
-            if self._task is not None and self._task is not asyncio.current_task():
-                self._task.cancel()
+            task = self._output_owner or self._task
+            if task is not None and task is not asyncio.current_task():
+                task.cancel()
                 try:
-                    await self._task
+                    await task
                 except (asyncio.CancelledError, KeyboardError):
                     pass
         finally:
