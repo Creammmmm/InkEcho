@@ -887,3 +887,90 @@ def test_failed_cleanup_reconnects_only_after_original_guardian_exits():
         await inputs.aclose()
 
     asyncio.run(run())
+
+
+def test_parent_only_attaches_one_nonemitting_hint_and_not_across_newline():
+    async def run():
+        inputs, process = await connected()
+        await inputs.authorize()
+        assert await inputs.insert("ab\ncd", lambda: True) == 5
+        keys = [r for r in process.requests if r["op"] == "key"]
+        assert [(r["value"], r.get("hint")) for r in keys] == [
+            ("a", "b"),
+            ("b", None),
+            ("\n", None),
+            ("c", "d"),
+            ("d", None),
+        ]
+        await inputs.aclose()
+
+    asyncio.run(run())
+
+
+@pytest.mark.parametrize("cancel", [False, True])
+def test_hint_cannot_emit_after_native_to_x_switch_or_cancel(cancel):
+    async def run():
+        allowed = True
+        native_borrowed = False
+        events = []
+
+        class Driver:
+            is_x = False
+            mapped = None
+            applied = None
+
+            def focus(self):
+                if not self.is_x:
+                    raise KeyboardError("unsupported_target")
+                return 42
+
+            def map(self, char):
+                assert not native_borrowed
+                self.mapped = self.applied = char
+                return 248
+
+            def verify(self):
+                pass
+
+            def send(self, window, code, pressed):
+                events.append((self.mapped, pressed))
+
+            def restore(self):
+                self.mapped = self.applied = None
+
+            def close(self):
+                self.restore()
+
+        driver = Driver()
+
+        def handler(_process, request):
+            nonlocal allowed, native_borrowed
+            if request["op"] == "begin":
+                native_borrowed = True
+            elif request["op"] in {"finish", "cancel", "close"}:
+                native_borrowed = False
+            elif request["op"] == "key":
+                assert request["value"] == "a" and request["hint"] == "b"
+                driver.is_x = True
+                if cancel:
+                    allowed = False
+            return False
+
+        native, process = await connected(handler)
+        hybrid = HybridKeyboardInput(
+            native=native, x11=KeyboardInput(driver_factory=lambda: driver)
+        )
+        await hybrid.connect()
+        await hybrid.authorize()
+        if cancel:
+            with pytest.raises(KeyboardError, match="input_cancelled"):
+                await hybrid.insert("ab", lambda: allowed)
+            assert events == []
+        else:
+            assert await hybrid.insert("ab", lambda: allowed) == 2
+            assert events == [("b", True), ("b", False)]
+        assert [r["value"] for r in process.requests if r["op"] == "key"] == ["a"]
+        assert not native_borrowed
+        await hybrid.aclose()
+
+    asyncio.run(run())

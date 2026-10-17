@@ -1,9 +1,10 @@
 """GNOME keyboard guardian: bounded requests, no queued text, restore on EOF.
 
-The requester sends one character and waits for its acknowledgement. A concurrent
-reader marks cancellation/EOF immediately, including while a map request is in
-flight. Only this process owns the session and its recovery state. No text,
-credentials or map data are logged or persisted.
+The requester sends one current character and waits for its acknowledgement.
+An optional single-character hint only prepares a map; it never emits input.
+A concurrent reader marks cancellation/EOF immediately, including while a map
+request is in flight. Only this process owns the session and its recovery state.
+No text, credentials or map data are logged or persisted.
 """
 
 import asyncio
@@ -365,6 +366,7 @@ class Guardian:
         self.modified = False
         self.pressed = None
         self.last_character = self.last_keycode = None
+        self.prepared_codes: dict[str, int] = {}
         self.last_sent_at = None
         self.stopped = True
         self.permanent_stop = False
@@ -379,6 +381,7 @@ class Guardian:
             self.closed_callback()
 
     def stop(self, *, permanent=False):
+        self.prepared_codes.clear()
         self.last_character = self.last_keycode = None
         self.stopped = True
         self.permanent_stop |= permanent
@@ -437,18 +440,23 @@ class Guardian:
             self.stopped = True
             raise
 
-    async def key(self, character):
+    async def key(self, character: str, hint: str | None = None) -> int:
         try:
-            return await self._key(character)
+            return await self._key(character, hint)
         except BaseException:
+            self.prepared_codes.clear()
             self.last_character = self.last_keycode = None
             raise
 
-    async def _key(self, character):
+    async def _key(self, character, hint=None):
         self.last_sent_at = None
         if not self.map:
             raise KeyboardError("session_closed")
         if normalize_text(character) != character or len(character) != 1:
+            raise KeyboardError("unsupported_text")
+        if hint is not None and (
+            normalize_text(hint) != hint or len(hint) != 1 or hint == "\n"
+        ):
             raise KeyboardError("unsupported_text")
         self._continue()
         state, data = await self.remote.snapshot()
@@ -482,16 +490,20 @@ class Guardian:
         newline = character == "\n"
         cached = (
             not newline
-            and character == self.last_character
-            and self.last_keycode is not None
+            and character in self.prepared_codes
             and self.modified
             and self.pending_map is None
             and data == self.last_confirmed
         )
         if cached:
-            code = self.last_keycode
+            code = self.prepared_codes[character]
+            self.last_character, self.last_keycode = character, code
         elif not newline:
-            mapping = self.map.character(character)
+            mapping = (
+                self.map.character(character)
+                if hint is None
+                else self.map.prepare(character, hint)
+            )
             first_mapping = not self.modified
             self.pending_map = mapping.data
             self._continue()
@@ -512,6 +524,9 @@ class Guardian:
             if state["locked"] & self.map.caps_mask:
                 raise KeyboardError("caps_lock")
             code = mapping.keycode
+            self.prepared_codes = dict(
+                getattr(mapping, "prepared", ()) or ((character, code),)
+            )
             self.last_character, self.last_keycode = character, code
         else:
             code = 0xFF0D
@@ -539,6 +554,7 @@ class Guardian:
         self.pressed = None
 
     def _clear(self):
+        self.prepared_codes.clear()
         self.last_character = self.last_keycode = None
         if self.map:
             self.map.close()
@@ -700,7 +716,9 @@ async def serve(reader, reply, guardian=None):
                 elif operation == "begin":
                     await guardian.begin(request.get("deadline"))
                 elif operation == "key":
-                    response["count"] = await guardian.key(request.get("value"))
+                    response["count"] = await guardian.key(
+                        request.get("value"), request.get("hint")
+                    )
                     response["sent_at"] = guardian.last_sent_at
                 else:
                     await guardian.finish()

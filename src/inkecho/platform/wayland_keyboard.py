@@ -401,7 +401,7 @@ class WaylandKeyboardInput:
         try:
             check()
             count = 0
-            for character in normalized:
+            for index, character in enumerate(normalized):
                 check()
                 if selected is not None and not selected():
                     break
@@ -412,7 +412,11 @@ class WaylandKeyboardInput:
                     if selected is not None and not selected():
                         break
                 request_start = time.monotonic()
-                result = await self._request("key", value=character)
+                hint = normalized[index + 1 : index + 2]
+                fields = {"value": character}
+                if character != "\n" and hint and hint != "\n":
+                    fields["hint"] = hint
+                result = await self._request("key", **fields)
                 acknowledged = time.monotonic()
                 check()
                 if type(result.get("count")) is not int or result["count"] != 1:

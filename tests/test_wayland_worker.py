@@ -20,6 +20,14 @@ class FakeMap:
     def character(self, char):
         return SimpleNamespace(data=char.encode() + b"\0", keycode=124)
 
+    def prepare(self, char, hint):
+        values = (char,) if hint == char else (char, hint)
+        return SimpleNamespace(
+            data=("|".join(values)).encode() + b"\0",
+            keycode=124,
+            prepared=tuple(zip(values, (124, 89), strict=False)),
+        )
+
     def close(self):
         self.closed = True
 
@@ -1262,5 +1270,103 @@ def test_first_mapping_grace_ignores_newlines_and_cache_and_resets_per_begin(
         assert sleeps == [0.05, 0.03]
         await guardian.finish()
         assert remote.data == b"original\0" and guardian.map is None
+
+    run(scenario())
+
+
+@pytest.mark.parametrize("hint", ["", "ab", "\n", "😀", 1, False, [], {}])
+def test_invalid_nonemitting_hint_rejects_before_any_map_or_event(remote, hint):
+    async def scenario():
+        guardian = Guardian(remote)
+        await guardian.begin()
+        with pytest.raises(KeyboardError, match="unsupported_text"):
+            await guardian.key("a", hint)
+        assert remote.writes == remote.events == []
+        assert not guardian.prepared_codes
+        await guardian.finish()
+
+    run(scenario())
+
+
+def test_hint_never_dispatches_and_mismatch_only_emits_requested_character(remote):
+    async def scenario():
+        guardian = Guardian(remote)
+        await guardian.begin()
+        assert await guardian.key("a", "b") == 1
+        assert remote.events == [(124, True, False), (124, False, False)]
+        assert guardian.prepared_codes == {"a": 124, "b": 89}
+        assert await guardian.key("b", "c") == 1
+        assert len(remote.writes) == 1
+        assert remote.events[-2:] == [(89, True, False), (89, False, False)]
+        # The new hint c was not added to an already confirmed map or emitted.
+        assert "c" not in guardian.prepared_codes
+        assert await guardian.key("x", "y") == 1
+        assert len(remote.writes) == 2 and len(remote.events) == 6
+        assert guardian.prepared_codes == {"x": 124, "y": 89}
+        await guardian.finish()
+        assert not guardian.prepared_codes
+        assert remote.data == b"original\0"
+
+    run(scenario())
+
+
+@pytest.mark.parametrize(
+    "change,code",
+    [
+        ("source", "mapping_changed"),
+        ("group", "mapping_changed"),
+        ("map", "mapping_changed"),
+        ("depressed", "keys_held"),
+        ("latched", "keys_held"),
+        ("locked", "caps_lock"),
+        ("deadline", "input_cancelled"),
+    ],
+)
+def test_prepared_hint_hit_still_requires_real_state_and_current_task(
+    remote, change, code
+):
+    async def scenario():
+        guardian = Guardian(remote)
+        await guardian.begin()
+        await guardian.key("a", "b")
+        owned = guardian.last_confirmed
+        if change == "source":
+            remote.origin = 0
+        elif change == "map":
+            remote.data = b"external\0"
+        elif change == "group":
+            remote.state["group"] = 0
+        elif change == "deadline":
+            guardian.deadline = time.monotonic() - 1
+        elif change == "locked":
+            remote.state["locked"] = 18
+        else:
+            remote.state[change] = 4
+        with pytest.raises(KeyboardError, match=code):
+            await guardian.key("b", "c")
+        assert len(remote.events) == 2 and len(remote.writes) == 1
+        assert not guardian.prepared_codes
+        remote.state.update(depressed=0, latched=0, locked=16, group=1)
+        remote.data, remote.origin = owned, 1
+        await guardian.finish()
+        assert remote.data == b"original\0"
+
+    run(scenario())
+
+
+def test_cancel_after_current_key_never_dispatches_prepared_hint(remote):
+    async def scenario():
+        guardian = Guardian(remote)
+        await guardian.begin()
+        await guardian.key("a", "b")
+        guardian.stop()
+        with pytest.raises(KeyboardError, match="input_cancelled"):
+            await guardian.key("b")
+        assert len(remote.events) == 2 and not guardian.prepared_codes
+        await guardian.finish()
+        assert remote.data == b"original\0"
+        await guardian.begin()
+        assert not guardian.prepared_codes
+        await guardian.finish()
 
     run(scenario())

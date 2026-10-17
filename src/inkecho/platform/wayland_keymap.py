@@ -13,6 +13,8 @@ from inkecho.platform.keyboard import KeyboardError
 MAX_MAP_BYTES = 4_000_000
 # AE13 is the empty INTL_YEN slot exercised with native GTK and Chromium.
 COMPATIBLE_CODES = (132,)
+# AB11 was separately verified with direct keycodes in native Chrome/GTK/VTE.
+LOOKAHEAD_CODE = 97
 
 
 def normalize_text(text: str) -> str:
@@ -95,6 +97,7 @@ def _section_end(text):
 class KeyMapping:
     data: bytes
     keycode: int
+    prepared: tuple[tuple[str, int], ...] = ()
 
 
 class Keymap:
@@ -153,34 +156,49 @@ class Keymap:
             raise
 
     def character(self, character: str) -> KeyMapping:
-        """Return a canonical map assigning the same one-level key in all groups."""
+        """Return one direct-Unicode physical key in every group."""
+        return self.prepare(character)
+
+    def prepare(self, character: str, hint: str | None = None) -> KeyMapping:
+        """Map current plus at most one non-emitting hint into verified empty slots."""
+        for value in (character,) if hint is None else (character, hint):
+            if normalize_text(value) != value or len(value) != 1 or value == "\n":
+                raise KeyboardError("unsupported_text")
+        entries = [(character, self.slot, self.name)]
+        name = self.lib.xkb_keymap_key_get_name(self.pointer, LOOKAHEAD_CODE)
         if (
-            normalize_text(character) != character
-            or len(character) != 1
-            or character == "\n"
+            hint is not None
+            and hint != character
+            and LOOKAHEAD_CODE != self.slot
+            and name
+            and not any(_symbols(self.lib, self.pointer, LOOKAHEAD_CODE))
         ):
-            raise KeyboardError("unsupported_text")
-        # Direct Unicode keysyms avoid ordinary Latin keyvals being interpreted
-        # as new composition in the verified host libpinyin configuration.
-        symbol = ord(character) | 0x01000000
-        if self.lib.xkb_keysym_to_utf32(symbol) != ord(character):
-            raise KeyboardError("unsupported_text")
-        entries = ", ".join(
-            f'type[Group{group}]="ONE_LEVEL", symbols[Group{group}]=[0x{symbol:08x}]'
-            for group in range(1, self.groups + 1)
-        )
-        addition = f"key <{self.name}> {{ {entries} }};\n"
+            name = name.decode("ascii")
+            if re.fullmatch(r"[A-Za-z0-9_]+", name):
+                entries.append((hint, LOOKAHEAD_CODE, name))
+        additions = []
+        for value, _, name in entries:
+            symbol = ord(value) | 0x01000000
+            if self.lib.xkb_keysym_to_utf32(symbol) != ord(value):
+                raise KeyboardError("unsupported_text")
+            groups = ", ".join(
+                f'type[Group{group}]="ONE_LEVEL", '
+                f"symbols[Group{group}]=[0x{symbol:08x}]"
+                for group in range(1, self.groups + 1)
+            )
+            additions.append(f"key <{name}> {{ {groups} }};\n")
         raw = (
-            self.text[: self.end] + addition + self.text[self.end :]
+            self.text[: self.end] + "".join(additions) + self.text[self.end :]
         ).encode() + b"\0"
         candidate = self.lib.xkb_keymap_new_from_string(self.context, raw, 1, 0)
         if not candidate:
             raise KeyboardError("unsupported_layout")
         serialized = None
         try:
-            if self.lib.xkb_keymap_num_layouts(candidate) != self.groups or set(
-                _symbols(self.lib, candidate, self.slot)
-            ) != {symbol}:
+            if self.lib.xkb_keymap_num_layouts(candidate) != self.groups or any(
+                set(_symbols(self.lib, candidate, code)) != {ord(value) | 0x01000000}
+                for value, code, _ in entries
+            ):
                 raise KeyboardError("unsupported_layout")
             serialized = self.lib.xkb_keymap_get_as_string(candidate, 1)
             if not serialized:
@@ -188,7 +206,11 @@ class Keymap:
             result = c.string_at(serialized) + b"\0"
             if len(result) > MAX_MAP_BYTES:
                 raise KeyboardError("unsupported_layout")
-            return KeyMapping(result, self.slot - 8)
+            return KeyMapping(
+                result,
+                self.slot - 8,
+                tuple((value, code - 8) for value, code, _ in entries),
+            )
         finally:
             if serialized:
                 free = c.CDLL(None).free

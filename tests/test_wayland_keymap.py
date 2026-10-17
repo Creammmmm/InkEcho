@@ -114,3 +114,98 @@ def test_runtime_without_direct_latin_unicode_conversion_is_rejected(
     monkeypatch.setattr(wayland_keymap, "_library", IncompatibleLibrary)
     with pytest.raises(KeyboardError, match="unsupported_layout"):
         Keymap(original_map)
+
+
+def test_two_prepared_slots_preserve_all_other_keys_and_groups(original_map):
+    mapper = Keymap(original_map)
+    try:
+        mapping = mapper.prepare("中", "é")
+        assert mapping.prepared == (("中", 124), ("é", 89))
+        changed = mapper.lib.xkb_keymap_new_from_string(
+            mapper.context, mapping.data, 1, 0
+        )
+        try:
+            assert mapper.lib.xkb_keymap_num_layouts(changed) == mapper.groups
+            for name in ("xkb_keymap_min_keycode", "xkb_keymap_max_keycode"):
+                function = getattr(mapper.lib, name)
+                function.argtypes, function.restype = [c.c_void_p], c.c_uint32
+            minimum = mapper.lib.xkb_keymap_min_keycode(mapper.pointer)
+            maximum = mapper.lib.xkb_keymap_max_keycode(mapper.pointer)
+            assert mapper.lib.xkb_keymap_min_keycode(changed) == minimum
+            assert mapper.lib.xkb_keymap_max_keycode(changed) == maximum
+            for code in range(minimum, maximum + 1):
+                actual = _symbols(mapper.lib, changed, code)
+                if code in (132, 97):
+                    value = "中" if code == 132 else "é"
+                    assert actual == [ord(value) | 0x01000000] * mapper.groups
+                else:
+                    assert actual == _symbols(mapper.lib, mapper.pointer, code)
+                    assert mapper.lib.xkb_keymap_num_layouts_for_key(
+                        changed, code
+                    ) == mapper.lib.xkb_keymap_num_layouts_for_key(mapper.pointer, code)
+                    for group in range(
+                        mapper.lib.xkb_keymap_num_layouts_for_key(changed, code)
+                    ):
+                        assert mapper.lib.xkb_keymap_num_levels_for_key(
+                            changed, code, group
+                        ) == mapper.lib.xkb_keymap_num_levels_for_key(
+                            mapper.pointer, code, group
+                        )
+                        for level in range(
+                            mapper.lib.xkb_keymap_num_levels_for_key(
+                                changed, code, group
+                            )
+                        ):
+                            values = []
+                            for pointer in (mapper.pointer, changed):
+                                symbols = c.c_void_p()
+                                count = mapper.lib.xkb_keymap_key_get_syms_by_level(
+                                    pointer, code, group, level, c.byref(symbols)
+                                )
+                                values.append(
+                                    list(c.cast(symbols, c.POINTER(c.c_uint32))[:count])
+                                    if count
+                                    else []
+                                )
+                            assert values[0] == values[1]
+        finally:
+            mapper.lib.xkb_keymap_unref(changed)
+        assert mapper.prepare("a", "a").prepared == (("a", 124),)
+        assert mapper.prepare("a").prepared == (("a", 124),)
+    finally:
+        mapper.close()
+
+
+@pytest.mark.parametrize("hint", ["", "ab", "\n", "😀", 1, False, [], {}])
+def test_prepared_mapping_rejects_entire_invalid_hint(original_map, hint):
+    mapper = Keymap(original_map)
+    try:
+        with pytest.raises(KeyboardError, match="unsupported_text"):
+            mapper.prepare("a", hint)
+        assert mapper.original == original_map
+    finally:
+        mapper.close()
+
+
+def test_nonempty_second_slot_is_preserved_and_falls_back_to_one(
+    original_map, monkeypatch
+):
+    from inkecho.platform import wayland_keymap
+
+    mapper = Keymap(original_map)
+    try:
+        monkeypatch.setattr(wayland_keymap, "LOOKAHEAD_CODE", 38)  # Existing AC01.
+        assert any(_symbols(mapper.lib, mapper.pointer, 38))
+        mapping = mapper.prepare("中", "é")
+        assert mapping.prepared == (("中", 124),)
+        changed = mapper.lib.xkb_keymap_new_from_string(
+            mapper.context, mapping.data, 1, 0
+        )
+        try:
+            assert _symbols(mapper.lib, changed, 38) == _symbols(
+                mapper.lib, mapper.pointer, 38
+            )
+        finally:
+            mapper.lib.xkb_keymap_unref(changed)
+    finally:
+        mapper.close()
