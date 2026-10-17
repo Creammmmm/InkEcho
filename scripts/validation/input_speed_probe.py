@@ -255,9 +255,15 @@ async def direct_case(args, report):
     )
     inputs = keyboard_for_desktop()
     native_inputs = (
-        getattr(inputs, "native", inputs) if inputs.backend == "gnome-wayland" else None
+        getattr(inputs, "native", inputs)
+        if getattr(inputs, "backend", None) == "gnome-wayland"
+        else None
     )
     x_inputs = getattr(inputs, "x11", None) if native_inputs else inputs
+    report["native_observer_applicable"] = native_inputs is not None
+    report["native_mapping_evidence"] = (
+        "measured" if native_inputs is not None else "not_applicable_xorg_factory"
+    )
     counts = {
         name: 0
         for name in (

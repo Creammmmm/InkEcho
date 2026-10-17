@@ -235,7 +235,6 @@ def test_single_case_uses_factory_and_verifies_partial_cancel_cleanup(
             calls.append("observer_close")
 
     class Inputs:
-        backend = "x11"
         connected = True
         _driver = Driver()
 
@@ -455,3 +454,41 @@ def test_missing_close_endpoint_stops_http_and_waits_original_terminal(
     finally:
         stopped.set()
         thread.join(timeout=1)
+
+
+def test_actual_xorg_factory_reaches_controlled_connect_without_backend_attribute(
+    probe, monkeypatch, tmp_path
+):
+    import asyncio
+
+    from inkecho.platform.keyboard import KeyboardError, KeyboardInput
+    from inkecho.platform.wayland_keyboard import keyboard_for_desktop
+
+    # Use the real factory and actual class, stopping at its first desktop I/O.
+    actual = keyboard_for_desktop({"XDG_SESSION_TYPE": "x11"})
+    assert isinstance(actual, KeyboardInput)
+    assert not hasattr(actual, "backend")
+    connected = []
+
+    async def unavailable(self):
+        connected.append(type(self))
+        raise KeyboardError("input_unavailable")
+
+    monkeypatch.setenv("XDG_SESSION_TYPE", "x11")
+    monkeypatch.setattr(KeyboardInput, "connect", unavailable)
+    args = SimpleNamespace(
+        work_root=tmp_path,
+        output=tmp_path / "result.json",
+        field="textarea",
+        backend="xwayland",
+        cancel=False,
+    )
+    report = {"worker_owners": []}
+    asyncio.run(probe.direct_case(args, report))
+    assert connected == [KeyboardInput]
+    assert report["failed_phase"] == "input_connect"
+    assert report["safe_error_type"] == "KeyboardError"
+    assert report["native_observer_applicable"] is False
+    assert report["native_mapping_evidence"] == "not_applicable_xorg_factory"
+    assert report["worker_owners"] == []
+    assert not (tmp_path / "browser/owner.json").exists()

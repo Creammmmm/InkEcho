@@ -192,3 +192,13 @@ cmp build/first.sha256 "$artifact.sha256"
 Python, wheels, assets, build file permissions and `mksquashfs` must also match;
 this is same-host repeatability, not universal cross-host reproducibility.
 Final measured results and limitations are in [release notes](release-notes.md).
+
+## Latest same-artifact acceptance
+
+The [a15 dual-Ubuntu report](a15-dual-ubuntu-validation.md) records the same
+`0.1.0a15` AppImage and SHA-256 on the actual Ubuntu 24.04 Xorg guest and
+Ubuntu 26.04 native Wayland/XWayland host. The root agent reviewed 9 guest and
+20 host package modes, retained validator failures, and the stated limitations.
+Stable deployment and its final verification remain separate pending steps.
+The [a14 report](a14-dual-ubuntu-validation.md) remains the first historical
+same-artifact dual-Ubuntu acceptance; its results are not reused for a15.
