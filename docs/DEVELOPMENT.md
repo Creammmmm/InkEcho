@@ -150,3 +150,35 @@ covered by the current HEAD receipt. Avoid bulk pushes with unrelated refs.
   not prove portability.
 - Record each stage's actual results, reproducible steps and unresolved problems.
   Incomplete requirements remain incomplete even when the automated suite passes.
+
+## Every AppImage: Ubuntu 24.04 and 26.04
+
+A packaging task finishes only after the **same versioned AppImage and SHA-256**
+passes actual-package acceptance on both Ubuntu 24.04 and 26.04. Building may
+produce a separate candidate first. Until both checks and root-agent review are
+complete, keep that candidate distinct; do not replace the stable entry, update
+autostart or publish it. Do not create separate distro branches/packages without
+a demonstrated technical need. See PROJECT_SPEC sections 18 and 24.3 and the
+[packaging procedure](packaging.md).
+
+One per-artifact report must bind the product source, artifact hash, packaged
+version/inventory/origins and both environments' actual results. In each system,
+exercise packaged startup/UI, the declared provider protocol including Qwen
+realtime configuration/local WebSocket flow, mixed Unicode/current-cursor output,
+partial cancellation and cleanup. Reuse the existing owned-target/local-TLS
+probes where applicable; do not use a source launch or container smoke as desktop
+acceptance. Keep all mutable test configuration isolated.
+
+Identify actual Xorg, XWayland and native Wayland scopes separately. Record
+microphone, physical shortcuts, overlay, integration/autostart and authenticated
+cloud checks individually, including untested or unavailable cases. In
+particular, GNOME 46's measured missing native-keyboard API is not a pass;
+a separately verified Xorg path does not establish native Wayland support.
+No packaging check automatically authorizes keyring access or cloud requests.
+If the image changes, both previous artifact-hash acceptances become historical.
+
+After the report is reviewed, run the existing complete clean-HEAD workflow
+using that report as evidence. Its receipt verifies source checks and report
+identity, not the truth of manual desktop tests; the root agent reviews those.
+This additional product-delivery gate does not require every ordinary source
+push to build an image or open a GUI. Existing hook requirements remain unchanged.

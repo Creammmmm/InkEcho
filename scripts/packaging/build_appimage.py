@@ -1,5 +1,6 @@
 """Build a real type-2 AppImage using a standalone Python and pinned runtime."""
 
+import ast
 import hashlib
 import os
 import platform
@@ -23,6 +24,45 @@ RUNTIME_URL = (
 )
 # Official release asset digest, inspected 2026-10-12. Fail closed on upstream change.
 RUNTIME_SHA256 = "156f4bdbde9c52d01814600013e0a273f0118dc2de98975f3c8c63427ec79074"
+
+
+def project_version(root: Path) -> str:
+    """Read version literals without importing the application or changing files."""
+    try:
+        project = tomllib.loads((root / "pyproject.toml").read_text())["project"][
+            "version"
+        ]
+        source = ast.parse((root / "src/inkecho/__init__.py").read_text())
+        application = []
+        for node in source.body:
+            if isinstance(node, ast.Assign) and any(
+                isinstance(target, ast.Name) and target.id == "__version__"
+                for target in node.targets
+            ):
+                application.append(ast.literal_eval(node.value))
+        lock = tomllib.loads((root / "uv.lock").read_text())
+        if type(lock["package"]) is not list or any(
+            type(package) is not dict for package in lock["package"]
+        ):
+            raise ValueError
+        locked = [
+            package["version"]
+            for package in lock["package"]
+            if package.get("name") == "inkecho"
+        ]
+        if (
+            type(project) is not str
+            or not project
+            or application != [project]
+            or locked != [project]
+        ):
+            raise ValueError
+    except (OSError, KeyError, TypeError, ValueError, SyntaxError):
+        raise SystemExit(
+            "Version metadata must agree in pyproject.toml, "
+            "src/inkecho/__init__.py and uv.lock before building."
+        ) from None
+    return project
 
 
 def publish_appimage(runtime: Path, squashfs: Path, artifact: Path) -> str:
@@ -60,6 +100,7 @@ def publish_appimage(runtime: Path, squashfs: Path, artifact: Path) -> str:
 
 
 def main() -> None:
+    version = project_version(ROOT)
     if platform.machine() != "x86_64" or sys.platform != "linux":
         raise SystemExit("This build recipe currently supports Linux x86_64 only.")
     if not shutil.which("mksquashfs"):
@@ -113,7 +154,6 @@ def main() -> None:
     )
     shutil.copy2(ROOT / "src/inkecho/assets/inkecho-256.png", APPDIR / "inkecho.png")
     (APPDIR / ".DirIcon").symlink_to("inkecho.png")
-    version = tomllib.loads((ROOT / "pyproject.toml").read_text())["project"]["version"]
     write_inventory(
         APPDIR,
         {
