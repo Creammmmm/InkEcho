@@ -2,9 +2,9 @@
 
 InkEcho 是一个 Linux 桌面语音输入应用：录音后调用云端转写，可选按 Prompt 润色，再输入文字。不通过剪贴板或系统输入法接口提交文字。
 
-当前已构建预览包为 **0.1.0a13**，R8 源码、a13 实际包的 Noble Xorg 与 Ubuntu 26.04 主机限定检查均通过；本机稳定启动入口仍为已部署的 a9。本应用采用“输出到当前光标”的键盘输入方式：开始录音不要求先选文本框，录音、识别与润色期间可自由切换窗口；输出中切换窗口，后续字符也可进入新焦点。主动取消和过期任务仍停止未发送的文字，已经发送的按键无法撤回。
+当前已构建预览包为 **0.1.0a14**，同一 AppImage 已在 Ubuntu 24.04.5 GNOME 46 Xorg 和 Ubuntu 26.04.1 GNOME 50.1 Wayland 主机通过限定实际包验收：两系统的界面、实时协议配置、本地加密协议夹具、X11/XWayland 文字输入和取消；本机另通过自有原生 Wayland Chrome 字段检查。Ubuntu 26.04 的一次官方 Qwen 实时公开音频能力请求也成功，详见[a14 双系统报告](docs/a14-dual-ubuntu-validation.md)。这不代表全部桌面会话或应用均兼容。本机稳定入口已部署 a14，Qwen 已切为实时模型/协议；正常稳定入口启动已核验为实际 a14，现保留运行供使用。本应用采用“输出到当前光标”的键盘输入方式：开始录音不要求先选文本框，录音、识别与润色期间可自由切换窗口；输出中切换窗口，后续字符也可进入新焦点。主动取消和过期任务仍停止未发送的文字，已经发送的按键无法撤回。
 
-a10 源码加入 Qwen 实时转录协议接入、流式润色与边接收边输出、连接复用和分段计时，并修复 X11 分段字符失真、调整实测等待。实时转录须显式选择相应连接方式；不支持流式润色的网关可关闭流式开关。官方纯生成静音协议已实测；真实语音准确率与云端端到端性能仍待验，详见[性能优化验收总览](docs/performance-validation.md)。
+a10 源码加入 Qwen 实时转录协议接入、流式润色与边接收边输出、连接复用和分段计时，并修复 X11 分段字符失真、调整实测等待。实时转录须显式选择相应连接方式；不支持流式润色的网关可关闭流式开关。官方生成静音协议及 a13 的一次已授权 Noble 公开音频 A/B 已实测；a14 本机另有一次 Qwen 实时能力请求成功。它们不构成语音准确率或性能分布评估，详见[性能优化验收总览](docs/performance-validation.md)及[a14 报告](docs/a14-dual-ubuntu-validation.md)。
 
 a11 的固定整段场景曾通过，但其 R2 长流准确输出、取消正确后，新 GTK 窗口仍需 6.0944 秒就绪。这份负面结果保留为[历史 a11 记录](docs/performance-a11-package-validation.md)。
 
@@ -22,7 +22,7 @@ a9 新增 **GNOME 原生 Wayland 的实验性键盘输入路径**。本机 Ubunt
 
 X11 / XWayland 路径保留；其历史录音、切窗、Unicode 和取消证据见[当前光标验收](docs/current-cursor-input-validation.md)、[键盘传输实测](docs/keyboard-transport-validation.md)及[a8 包验收](docs/focus-tracking-removal-release.md)。a8 的[焦点追踪清理审计](docs/focus-tracking-removal-audit.md)和此前 alpha6 的[原生 AT-SPI 验收](docs/native-voice-workflow-validation.md)、[独立云端验收](docs/native-cloud-workflow-validation.md)、[音频反馈修复](docs/audio-feedback-validation.md)保留为历史记录；旧版“失焦即取消”不再是当前操作要求。
 
-**安装与下载状态：** 本机稳定启动入口已更新为最终 a9，Ctrl+F4 和三份用户配置保持不变，凭据继续由系统密钥服务管理。[GitHub v0.1 发布页](https://github.com/Creammmmm/InkEcho/releases/tag/v0.1)仍提供 a8，尚未更新为 a9。完整实测与部署证据见[当前验收报告](docs/native-wayland-parent-validation.md)。
+**安装与下载状态：** 本机稳定启动入口已更新为 a14，Qwen 已配置 `qwen3-asr-flash-realtime` 与实时协议；现有 **F4** 和16 kHz保留。只修改 Qwen 模型/协议，密钥引用、settings、DeepSeek、桌面入口、图标及自启动均保持原样，备份与部署证据见[a14 报告](docs/a14-dual-ubuntu-validation.md)。本机正常 FUSE 挂载启动已核验，现保留运行；本次没有测试物理快捷键。此前 Ctrl+F4 的当前状态描述不符合本次读取的真实设置。[GitHub v0.1 发布页](https://github.com/Creammmmm/InkEcho/releases/tag/v0.1)仍提供 a8，本次未更新公开 release。
 
 ![InkEcho 开发预览版实际运行界面](docs/images/inkecho-home.png)
 
@@ -41,14 +41,16 @@ uv run python -m inkecho
 
 在界面中分别设置转录与润色服务，测试麦克风，选择 Prompt；GNOME 快捷键需要在录音设置页主动启用。其他桌面可自行将快捷键绑定到 `python -m inkecho --toggle`，使用实际安装的 Python 完整路径。开始后可切换窗口，识别完成时将光标放在希望接收文字的位置。主动取消会停止后续发送；目标不支持时会提示错误，不会自动粘贴。
 
-独立本地 a13 预览包为 `dist/InkEcho-0.1.0a13-x86_64.AppImage`，已通过 Noble 七项及上述主机限定检查。**先从旧版托盘菜单正常退出，再启动 a13**；否则单实例通信可能只唤起仍在运行的 a9。此操作不替换原有 a9 稳定入口、自启动或公开 release：
+独立本地 a14 预览包为 `dist/InkEcho-0.1.0a14-x86_64.AppImage`，同一 SHA 已通过上述两系统限定检查。**先从旧版托盘菜单正常退出，再启动 a14**；否则单实例通信可能只唤起旧进程。本机稳定入口也已指向这一 a14 包；直接运行下面的版本文件不会另改自启动或公开 release：
 
 ```sh
-chmod +x dist/InkEcho-0.1.0a13-x86_64.AppImage
-./dist/InkEcho-0.1.0a13-x86_64.AppImage
+chmod +x dist/InkEcho-0.1.0a14-x86_64.AppImage
+./dist/InkEcho-0.1.0a14-x86_64.AppImage
 ```
 
-a13 的哈希与限定实测范围见[a13 包报告](docs/performance-a13-package-validation.md)、[主机验收](docs/performance-a13-host-validation.md)和[性能总览](docs/performance-validation.md)。[a12 包记录](docs/performance-a12-package-validation.md)保留历史实测范围。[a11 包记录](docs/performance-a11-package-validation.md)与[a10 包报告](docs/performance-package-validation.md)保留各自版本的结果，不包含后续修复。通用构建步骤与运行依赖见[打包说明](docs/packaging.md)。桌面启动器、图标与自启动均由用户主动安装；移动 AppImage 后可在设置中修复路径。
+a14 的 SHA256 为 `bce09c895d51c01c11c73b67aef709632a7514545f0a7fdb6114748c70c8cc96`，详见[双系统报告](docs/a14-dual-ubuntu-validation.md)。使用 `qwen3-asr-flash-realtime` 时，需明确选择「边录边识别 · Qwen 实时 WebSocket」、16 kHz 并保存；一般升级不会自动把旧 `qwen3-asr-flash`/HTTP 配置改为实时，本机此次是按修复授权明确切换；模型列表中的红色表示与当前转写方式不匹配。旧 a9 没有实时选择器，不是 Ubuntu 26.04 禁用该模型。
+
+a13 的历史哈希与限定实测范围见[a13 包报告](docs/performance-a13-package-validation.md)、[主机验收](docs/performance-a13-host-validation.md)和[性能总览](docs/performance-validation.md)。[a12 包记录](docs/performance-a12-package-validation.md)保留历史实测范围。[a11 包记录](docs/performance-a11-package-validation.md)与[a10 包报告](docs/performance-package-validation.md)保留各自版本的结果，不包含后续修复。通用构建步骤与运行依赖见[打包说明](docs/packaging.md)。桌面启动器、图标与自启动均由用户主动安装；移动 AppImage 后可在设置中修复路径。
 
 ## 验证与文档
 

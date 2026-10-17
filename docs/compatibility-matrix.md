@@ -1,13 +1,43 @@
 # Compatibility matrix
 
-Updated: 2026-10-16. **Pending is not supported.** Evidence is specific to
+Updated: 2026-10-17. **Pending is not supported.** Evidence is specific to
 version, host/guest session, target and workflow. A passed keyboard fixture
 is not full voice-input or desktop support. No current path uses clipboard
 or system input-method submission, including as a fallback.
 
-## Current a13 Noble/host actual-package and R8 source scope
+## Current a14 same-artifact dual-Ubuntu scope
 
-The latest built artifact is a13, fixed to product source `eeb2d0c`. Its exact
+The same a14 AppImage (product `43c20ed`, SHA-256
+`bce09c895d51c01c11c73b67aef709632a7514545f0a7fdb6114748c70c8cc96`)
+passed the following bounded actual-package checks. Full inventory and 18 actual
+module origins were checked for the acceptance tools; static acceptance separately
+verified 3958 files, 1048 links, 43 source files and 71 license files. See the
+[a14 dual-system report](a14-dual-ubuntu-validation.md) for owners, raw hashes,
+commands and limits. The host stable entry is now a14; Qwen explicitly uses the
+realtime model/protocol, with existing F4/16kHz and key reference retained.
+Normal user-profile launch is verified from the actual FUSE-mounted a14 and
+intentionally remains running; deployment is not a physical shortcut or full
+voice-input acceptance.
+
+| System/session | Actual a14 result | Outside this result |
+| --- | --- | --- |
+| Ubuntu 24.04.5 KVM / own kernel 6.8.0-142 / GNOME 46 actual Xorg session20 | Visible provider UI five checks/private save-reload; local TLS/WSS/SSE synthetic capture/input25exact + cancellation; owned Chrome X11 textarea/contenteditable31exact, cancel8/no-tail, current-cursor split5/26 with mapping restoration; extracted AppRun nine visible XCB pages | Not native Wayland or bare metal; no a14 real VM microphone, physical shortcut, FUSE or integration/autostart claim |
+| Ubuntu 26.04.1 / GNOME 50.1 actual Wayland host, XWayland targets | Same UI/local-protocol gates; owned Chrome XWayland two fields31exact, cancel8/no-tail and current-cursor split5/26; mapping restored, targets/workers terminal0 | Not a separate full Xorg login or arbitrary applications; local protocol uses synthetic capture/input, not desktop voice E2E |
+| Same host / native Wayland owned Chrome | textarea/contenteditable29 BMP characters each; cancel8/no-tail; three-segment single-task native/XWayland route24/5 with29exact; map/group/modifiers restored | Non-BMP/emoji explicitly rejected before any key; no claim for arbitrary native apps or other compositors |
+| Same host / actual AppRun native UI | Nine visible pages, normal timed quit, about page confirms a14 | UI is separate from input; extracted AppRun is not FUSE mounting |
+| Same host / deployed stable AppImage | Normal desktop Exec launches actual FUSE-mounted a14;3958files/1048links/43frozen sources match; saved RT/16kHz/F4, key reference retained; intentional user app remains running | No terminal0 claim for the persistent user app; no new physical shortcut, mic/cloud E2E, autostart or path-repair check |
+| Same host / official Qwen realtime capability | One fixed public17.645125s WAV,202characters,954.919ms completed-WAV request, ASR1/max1,0polish/retry | Not stop-to-first latency, live microphone, desktop output or accuracy/distribution; other accounts/gateways not established |
+
+Noble's historically measured missing native Mutter keymap APIs remain a native
+Wayland limitation; its new Xorg pass does not change that. Desktop fixtures use
+no clipboard or system input-method submission. Physical shortcuts, ambient
+microphone are not established by these a14 tests. Deployment has its separate
+reviewed receipt in the report; no public release was updated.
+
+## Historical a13 Noble/host actual-package and R8 source scope
+
+At this earlier checkpoint the built artifact was a13, fixed to product source
+`eeb2d0c`. Its exact
 clean workflow passed Ruff/format for 233 files and 1078 tests/three skips in
 20.01 seconds. Seven Noble actual-package modes now naturally exited 0 and
 passed independent acceptance; separate **Ubuntu 26.04 host limited checks also
@@ -44,7 +74,8 @@ The host r2 microphone failure remains preserved: its private runtime hid the
 host audio sockets. The r3 tool-only follow-up retained the validated host audio
 runtime for microphone capture and passed, with private configuration unchanged.
 This did not alter the a13 product or establish a general fix for user audio
-failures. The a9 stable entry and public v0.1 a8 download remain unchanged.
+failures. At that checkpoint the a9 stable entry and public v0.1 a8 download were
+unchanged; current deployment status is recorded in the a14 report.
 
 The actual Noble VM runs its own kernel, systemd and graphical login, distinct
 from the container smoke and from host XWayland. Its lock/network recovery,

@@ -18,7 +18,7 @@ needs the uv-managed standalone runtime:
 ```sh
 uv python install 3.13.15
 uv sync --frozen --python 3.13.15
-uv run python scripts/packaging/build_appimage.py
+env -u SOURCE_DATE_EPOCH uv run python scripts/packaging/build_appimage.py
 ```
 
 Before downloading dependencies, creating a runtime directory or removing an old
@@ -118,6 +118,15 @@ versions and limits. The image does not provide desktop services. Initial
 clean-image trials caught missing Kerberos dependencies (now bundled) and
 PulseAudio client libraries (now declared in the container baseline).
 
+The first artifact accepted under the following same-image rule is
+[a14](a14-dual-ubuntu-validation.md): Ubuntu 24.04.5 GNOME 46 Xorg and
+Ubuntu 26.04.1 GNOME 50.1 Wayland host with XWayland and bounded native Chrome
+checks. Its local WSS flow uses synthetic capture/input; cloud capability and
+deployment are recorded separately. The host stable entry later launched the
+actual FUSE-mounted a14 with matching inventory and source hashes; Noble used
+extracted AppRun only and did not validate FUSE. This does not establish every
+session below.
+
 ## Mandatory same-artifact dual-system acceptance
 
 Every packaging task must validate the same version and SHA-256 on Ubuntu 24.04
@@ -167,13 +176,16 @@ check to ordinary source-only pushes and does not itself authorize publication.
 
 ## Repeatability
 
-`SOURCE_DATE_EPOCH` normalizes filesystem/inode times (default zero) and xattrs
-are omitted. Compare two complete builds with unchanged source and dependencies:
+The builder passes explicit epoch timestamps (default zero) to `mksquashfs` and
+omits xattrs. Unset inherited `SOURCE_DATE_EPOCH` for the build: supplying it as
+well as those explicit timestamp flags caused the preserved a14 r1 build failure;
+r2 with the variable unset succeeded. Compare two complete builds with unchanged
+source and dependencies:
 
 ```sh
-uv run python scripts/packaging/build_appimage.py
+env -u SOURCE_DATE_EPOCH uv run python scripts/packaging/build_appimage.py
 cp "$artifact.sha256" build/first.sha256
-uv run python scripts/packaging/build_appimage.py
+env -u SOURCE_DATE_EPOCH uv run python scripts/packaging/build_appimage.py
 cmp build/first.sha256 "$artifact.sha256"
 ```
 
