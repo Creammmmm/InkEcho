@@ -5,8 +5,10 @@ Ubuntu26.04.1 GNOME50.1 Wayland 主机的限定实际包验收；主机分别验
 与 XWayland 接收方。主 Agent已独立审查必需原始结果和两系统九页截图，确认本节
 所列同包门通过。这不表示所有会话、应用、麦克风或云端语音链路均已支持。
 
-当前仍未部署、推送或发布 a15，稳定入口保持 a14。最终干净提交完整检查及稳定入口
-更新/私有配置 FUSE 启动另为待完成事项，不能用下列实际包结果冒充已部署。
+双系统结果与升级前完整检查经主 Agent审核后，稳定入口已更新为受验 a15，托管图标
+已替换；同一路径的私有配置实际 FUSE 启动与自退出也已通过。用户配置和旧版本保留，
+没有控制原用户应用实例。本轮未创建新的 GitHub release。最终文档提交的完整检查仍
+以精确HEAD回执为准。
 
 ## 已完成：候选构建与来源核对
 
@@ -50,8 +52,11 @@ origins、桌面输入或实际双系统兼容性。原构建、提取与保留�
 `.git/validation/d49c64d37be41e56904ad1056f930a131ede0910.json`，绑定当时证据
 `docs/input-speed-optimization.md` SHA256
 `df27df9f40181f5f2f046e864ca34d5ee3a67594a9557afba9d7861c6ca10920`。
-此回执不覆盖后续版本元数据提交27aef8c；该提交尚无最终完整检查回执，不提前称
-a15来源的完整检查已全部完成。后续正式结果以精确HEAD及选定evidence绑定回执为准。
+此历史回执不覆盖后续提交。升级前验证器与同包报告提交
+`71b58cd97c23bfae845a23da9ee0994017986b44` 已完成clean-HEAD完整检查：
+**1542 passed、3 skipped，39.70秒**，receipt绑定当时a15报告SHA256
+`d8cd0551ed5dace6a0eb8e6958b461496dca150dff6e7143f3b2897ad3a3c9be`。
+它不自动覆盖本次部署后文档更新；最终文档提交仍须自己的精确HEAD/evidence回执。
 
 ## 同 SHA 双系统实际包结果
 
@@ -143,6 +148,51 @@ Guest最后两项使用独立验证器修正树 `guest-factory-r2/frozen`，226�
 两次失败均未kill、重放正文或覆盖历史证据，也未修改产品包。更早源码测速工具的
 r1自有测试线程残留及已授权清理例外保留在输入提速报告，不能混为本次包成功结果。
 
+## 已完成：稳定入口、托管图标与私有 FUSE 启动
+
+双系统同包必需门、原始证据审查及71b58cd完整检查通过后，主 Agent批准精确部署计划，
+仅更新13个白名单文件：稳定AppImage及sidecar、managed launcher、8尺寸图标、两个
+正常桌面缓存（mimeinfo.cache与icon-theme.cache）。实际包的
+`DesktopIntegration(STABLE).install()` 使用正常PATH并正常刷新缓存，没有改产品实现。
+此前managed launcher的_owned与_entry精确一致，8旧blue图标均被识别，未知图标/符号
+链接会在写入前拒绝。旧autostart和scalable SVG均不存在，部署后仍不存在。
+
+实际apply原owner835489/start45218367正常退出0；
+`build/a15-acceptance-preparation/deployment-r1/result.json` SHA256：
+`3eae3f4aecceeffce3fa472cf7c1471f0ec7eff5bfe99bd7d3585e2dde1351ab`。
+稳定入口 `dist/InkEcho-0.1.0-alpha-x86_64.AppImage` 与sidecar现为受验b92完整SHA。
+13个原文件已逐字节备份在deployment-r1/backups，目录0700、文件0600；backups.json
+记录原路径、mode和SHA，所有备份均与原值匹配。原versioned a14文件仍为bce09c…cc96，
+versioned a15仍为b92ffd…a598，没有删除旧产物。launcher保持正确稳定路径，8图标
+逐个匹配新包资源；两个derived缓存分别记录部署前后SHA，不假定其内容不变。
+
+三个用户配置文件前后SHA完全不变，仅作hash核对，不读取或记录凭据正文：
+
+| 文件 | 保留的SHA256 |
+| --- | --- |
+| config.json | `d4c65ca0558163fe56baf344ce10d2769cc0e25c9e8d05bea15b773ef9d16287` |
+| providers/qwen.json | `54a3fafcb898192e19782d6b25daefb2add196036c21e2de79587c95ac66bf9d` |
+| providers/deepseek.json | `ac458a84ae771564ffafa6529fee231c8813b9ab7082124f80ded7acf04c3306` |
+
+没有更改快捷键、API配置、自启动或用户实例状态，没有IPC退出/强杀原用户应用。
+没有为部署访问keyring、云服务或启动录音。
+
+随后从同一稳定路径启动唯一私有配置实例，使用新独占config/data/HOME/XDG、清除六个
+开发变量，截图九页并由`--quit-after 3`自行退出。原producer837474/start45225918
+退出0，实际观察到FUSE挂载 `/tmp/.mount_InkEchgcpDFB` 的包内Python与a15版本；
+完整3959文件/1048链接清单和44产品源均匹配，13部署文件/原配置/旧版本保留检查通过。
+这不是提取AppRun冒充FUSE。结果 `private-fuse-r1/result.json` SHA256：
+`2827a5af9928486e13964473b14975fde1272a9faedecf5cd46275a53e69446f`；
+原终态SHA256为
+`97807daa62fba844040347bb7e5182df39b2a152a07777afade0f9f75e2e71fd`。
+stdout确认screenshots9/platform wayland/visible true；stderr400字节仅Qt FFmpeg启动
+信息和两条Wayland textinput disableSurface焦点警告，无异常。该Qt警告不表示本应用
+采用系统输入法投递文字。
+
+主 Agent已查看私有FUSE的about页，a15、新图标和实际稳定路径清楚可见。该私有XDG
+没有安装launcher，界面显示“尚未安装”是隔离配置预期，不代表真实用户目录的managed
+launcher未安装；真实13路径已独立核对。没有因此再打开普通用户配置实例。
+
 ## 可复现入口与最终检查
 
 先核对同包SHA、来源与已审快照；为每次运行选择新独占工作/结果目录。保留真实已
@@ -175,7 +225,8 @@ native-to-x-normal、x-to-native-normal、native-to-x-cancel14、x-to-native-can
 UI/local协议/九页与Xorg/原生后端的完整模板保留在host/guest计划，不从源码启动产品。
 
 验证器修复与受验mixed辅助的相关正式测试本地结果为66 passed，0.19秒，Ruff通过；
-这是纯测试，不替代上列实际包结果。最终新HEAD完整本地检查仍待干净提交后执行：
+这是纯测试，不替代上列实际包结果。71b58cd升级前完整检查已通过，部署后最终文档
+提交仍须执行自己的干净HEAD完整检查：
 
 ```sh
 .venv/bin/python scripts/validation/workflow.py run \
@@ -183,7 +234,7 @@ UI/local协议/九页与Xorg/原生后端的完整模板保留在host/guest计�
 ```
 
 以精确HEAD的receipt及本报告SHA绑定为准；未产生最终receipt前不宣称此检查完成。
-稳定入口替换/私有FUSE启动尚未执行，将由主 Agent审具体部署计划后另记事实。
+稳定入口替换与私有FUSE启动已按上节完成；不把升级前回执冒充部署后文档提交回执。
 
 ## 范围与未验限制
 
@@ -194,6 +245,7 @@ UI/local协议/九页与Xorg/原生后端的完整模板保留在host/guest计�
   旧a14官方Qwen能力成功不能回填a15云验收，更不代表语音准确率。
 - 本地生成音频、固定协议服务、真实桌面键盘输入是独立检查，不能组合称为真实
   麦克风到官方云再输入的全链路端到端测试。密钥/keyring读取、云请求均为0。
-- 两系统当前包验收都使用提取后AppRun，未据此宣称FUSE挂载、桌面安装/自启动、
-  managed图标部署已完成。旧稳定a14、用户配置/供应商及旧artifacts全部保留。
+- 双系统前置包验收使用提取后AppRun；部署后host真实FUSE及managed launcher/图标
+  更新另已实测。Guest FUSE、路径迁移修复和登录自启动仍未验，自启动保持原缺省状态。
+  原versioned a14、用户配置/供应商及旧artifacts全部保留，稳定别名现为a15。
 - 原生非BMP仍明确不支持；不回退剪贴板或系统输入法，不重放不确定的已尝试输入。

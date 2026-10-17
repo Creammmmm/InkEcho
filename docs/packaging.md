@@ -199,6 +199,12 @@ The [a15 dual-Ubuntu report](a15-dual-ubuntu-validation.md) records the same
 `0.1.0a15` AppImage and SHA-256 on the actual Ubuntu 24.04 Xorg guest and
 Ubuntu 26.04 native Wayland/XWayland host. The root agent reviewed 9 guest and
 20 host package modes, retained validator failures, and the stated limitations.
-Stable deployment and its final verification remain separate pending steps.
+After the pre-deployment full checks passed, the reviewed stable entry, managed
+launcher, eight icons and two normal caches were updated with backups. A private
+profile then launched that stable AppImage through actual FUSE, verified version
+a15 and its inventory, captured nine pages, and exited normally. User settings,
+old versioned artifacts and autostart state were preserved. Guest FUSE and real
+microphone/physical shortcut/cloud checks remain untested; no new GitHub release
+was created. The final documentation commit still requires its own full checks.
 The [a14 report](a14-dual-ubuntu-validation.md) remains the first historical
 same-artifact dual-Ubuntu acceptance; its results are not reused for a15.

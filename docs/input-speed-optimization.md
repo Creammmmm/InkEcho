@@ -15,7 +15,9 @@ scope限制保留。**阶段2源码有限实际验收已通过**：主 Agent独�
 [a15同包验收](a15-dual-ubuntu-validation.md)已由主 Agent审查：产品来源27aef8c，
 同SHA `b92ffd979f2faa979a22e9fd9a0be8cd187607009bd42313ef34fd91e660a598`，
 host20项与guest9项实际包门通过；范围分别为host原生Wayland/XWayland与guestXorg。
-稳定入口仍为a14，新报告/验证器最终提交检查及部署尚待完成。
+验证器/同包报告提交71b58cd完整1542 passed、3 skipped（39.70秒）已通过；
+稳定入口现为受验a15，8托管图标及正常缓存已更新，私有配置实际FUSE/九页/自退出通过。
+用户配置与旧版本保留，最终部署后文档提交检查仍以精确HEAD回执为准。
 
 ## 已有基线与本轮边界
 
@@ -46,10 +48,10 @@ a14产品来源为 `43c20edcd652020bfe51b959b85f2f90d8b75059`，包SHA256为
 | 阶段 | 目的与验证重点 | 当前实现/合成证据 | 实际验收状态 |
 | --- | --- | --- | --- |
 | 1 安全X11/XWayland路由 | 对可识别的X11目标使用其路径；原生目标仍走原生路径；验证跨后端切窗、取消、任务隔离、映射独立恢复及不重放 | factory最小接线完成；188focused及完整1478测试通过；早期102项只属合成证据 | 阶段1源码有限验收通过；A显式Hybrid实际证据不替代最终包默认factory桌面验收，历史false保留 |
-| 2 原生重复事务/最近映射复用 | 跨SSE片段复用输出scope与单项最近映射；保留所有权、deadline和键盘状态检查 | 实现/合成审核完成；子Agent224测试通过，主Agent独立1513全套通过 | 提交前源码有限实际验收通过：24单后端case+B受控交接4case；提交后完整检查以绑定本报告的clean-HEAD回执为准；非最终包factory验收，未打包/部署 |
+| 2 原生重复事务/最近映射复用 | 跨SSE片段复用输出scope与单项最近映射；保留所有权、deadline和键盘状态检查 | 实现/合成审核完成；子Agent224测试通过，主Agent独立1513全套通过 | 提交前源码有限实际验收通过：24单后端case+B受控交接4case；提交后完整检查以绑定本报告的clean-HEAD回执为准；该证据限阶段2源码，最终a15包验收另列 |
 | 3 逐阶段等待校准 | 分别研究映射、按下、释放等待，记录每个候选的准确性和成本 | 单变量及组合profile获审；修复后工具26纯测试、采用后六模块282项检查通过 | 56参数case及当前defaults真实factory四项实际通过；源码采用X3/N3；d49c64d完整1536/3通过；CLI R1失败保留，新a15实际包另见下行 |
-| 新候选包 | 将最终获审源码打成独立版本；同一包与SHA分别在Ubuntu24.04/26.04实际验收 | a15 / 产品27aef8c / SHA b92ffd…a598 | [实际包报告](a15-dual-ubuntu-validation.md)：host20+guest9通过，主 Agent已审；稳定部署待执行 |
-| 稳定入口更新 | 双系统包验收及主 Agent审核通过后，执行并核对实际版本与配置保留 | 尚未执行本轮提速版本部署 | 待验，不因源码或合成测试通过提前更新 |
+| 新候选包 | 将最终获审源码打成独立版本；同一包与SHA分别在Ubuntu24.04/26.04实际验收 | a15 / 产品27aef8c / SHA b92ffd…a598 | [实际包报告](a15-dual-ubuntu-validation.md)：host20+guest9通过，主 Agent已审；受验stable部署及私有FUSE启动已通过 |
+| 稳定入口更新 | 双系统包验收及主 Agent审核通过后，执行并核对实际版本与配置保留 | a15稳定路径/sidecar、managed launcher/8icons/2cache已更新，13备份及配置保留通过 | 私有配置真实FUSE/a15/3959files1048links44source/九页/退出0通过；不控制用户实例 |
 
 每阶段先完成项目规范第25节要求的实际可行性检查，再交主 Agent审查验收。
 明确记录未通过的候选，不用后续通过覆盖前次失败。若某项没有收益或不能安全实施，
@@ -76,7 +78,7 @@ a14产品来源为 `43c20edcd652020bfe51b959b85f2f90d8b75059`，包SHA256为
 | 阶段3校准 | `build/input-speed-stage3-preparation/stage3-measurement-summary-r1.json` | 56项通过；full100单insert，非70ms流式供给；该56项属源码参数证据，后续a15包验收另列 |
 | 新包Ubuntu24.04 | a15同b92 SHA、真实KVM/GNOME46/Xorg，19origins/44产品源 | 9项通过；含独立修正验证器factory2；GNOME46原生仍未支持，失败历史见a15报告 |
 | 新包Ubuntu26.04 | a15同b92 SHA、GNOME50.1/Wayland，19origins/44产品源 | 20项通过；native/XWayland、factory4/受控mixed4分别记录，主 Agent已审 |
-| 稳定部署 | 待实际目标/SHA、备份、配置保留和正常启动观察 | 待验 |
+| 稳定部署 | a15同b92 stable、13路径备份/更新、3配置SHA不变、私有FUSE启动 | 已通过主 Agent审核，实际范围和未验项见a15报告 |
 
 ## 阶段1 phase0：真实只读焦点分类
 
@@ -555,7 +557,8 @@ R2四项由主 Agent逐raw独立验收通过，原handle48081经原owner确认�
 | XWayland cancel8 | 8 / 8 / 8 | 462.138ms |
 
 取消为完整100字请求在第8次成功按下停止，不能将短前缀吞吐作为正常100字性能。
-R1失败与SIGINT例外保持，不因R2通过重标自然成功；a15尚未构建，本节非新包验收。
+R1失败与SIGINT例外保持，不因R2通过重标自然成功；这次源码R2结束时a15尚未构建，
+本节仍是历史源码证据，最终包验收另见a15报告。
 R2实际结束后，artifact_scope才补动态Hybrid第19来源审计，旧MODULES18及无Hybrid的旧a14仍保持18；新增来源/tamper拒绝两项纯测试和相关45项纯测试通过，不改旧实际工具SHA，也不代表新包实际验收。
 
 以下为长期CLI source-mode参数模板，默认仅audit/preview；非56项历史argv。
@@ -624,5 +627,6 @@ X11历史10ms候选第二轮新Chrome textarea仅139/140，未保存丢字位置
 [同包双Ubuntu实际报告](a15-dual-ubuntu-validation.md)记录host20+guest9门通过、
 19origins/44产品源、两次验证器前置失败与明确新实验、有限速度及未验范围；主 Agent
 已核原始结果和截图。最终新HEAD完整检查仍以其receipt及绑定evidence为准。
-阶段3d49c64d的1536 passed/3 skipped为已完成历史；稳定入口仍a14，部署尚未执行，
-未推送或发布。本段不回写旧实验或借其替代新包验收。
+阶段3d49c64d的1536 passed/3 skipped与71b58cd升级前1542 passed/3 skipped
+均为已完成历史；稳定入口现为受验a15，13路径更新/备份、3配置保留、私有FUSE启动
+已通过审核，未创建新GitHub release。本段不回写旧实验或借其替代新包验收。
