@@ -15,6 +15,11 @@ from urllib.parse import urlsplit, urlunsplit
 import httpx
 
 from inkecho.config import Provider
+from inkecho.provider_catalog import (
+    HTTP_ASR_ADAPTERS,
+    STATIC_MODEL_ADAPTERS,
+    WS_ASR_ADAPTERS,
+)
 
 ERRORS = {
     "configuration": "Check the provider URL, model and request parameters.",
@@ -49,6 +54,11 @@ def validate_provider_protocol(provider: Provider) -> None:
             == "unsupported"
         ):
             raise ProviderError("protocol")
+    if provider.adapter == "stepfun-realtime":
+        from inkecho.step_realtime import StepRealtimeConfig
+
+        StepRealtimeConfig.from_provider(provider)
+        return
     if provider.role != "transcription" or provider.adapter != "qwen":
         return
     if "asr_protocol" not in provider.parameters:
@@ -308,10 +318,8 @@ class ProviderClient:
         if provider.adapter not in {
             "qwen",
             "openai",
-            "multipart",
-            "elevenlabs",
-            "mimo-asr",
-            "openrouter-asr",
+            *HTTP_ASR_ADAPTERS,
+            *WS_ASR_ADAPTERS,
         }:
             raise ProviderError("configuration")
 
@@ -426,7 +434,7 @@ class ProviderClient:
 
     async def models(self, provider: Provider, key: str) -> list[str]:
         self._validate(provider, key, model=False)
-        if provider.adapter in {"elevenlabs", "mimo-asr"}:
+        if provider.adapter in STATIC_MODEL_ADAPTERS:
             raise ProviderError("configuration")
         result = await self._request(provider, key, "models")
         models = result.get("data")
@@ -449,12 +457,7 @@ class ProviderClient:
         validate_provider_protocol(provider)
         _validate_http_provider_protocol(provider)
         self._validate(provider, key)
-        if provider.role == "transcription" and provider.adapter in {
-            "multipart",
-            "elevenlabs",
-            "mimo-asr",
-            "openrouter-asr",
-        }:
+        if provider.role == "transcription" and provider.adapter in HTTP_ASR_ADAPTERS:
             from inkecho.http_asr import transcribe
 
             return await transcribe(self, provider, key, audio)

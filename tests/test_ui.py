@@ -323,9 +323,9 @@ def test_realtime_capability_rejected_before_key_recording_or_network(window):
         window.session.sample_audio = forbidden
         window.session.provider_client = forbidden
         await page.run(page.capability())
-        assert "当前连接方式与模型协议不匹配" in page.message.text()
-        assert "Qwen 实时 WebSocket" in page.message.text()
-        assert "当前连接方式与模型协议不匹配" in page.model_hint.text()
+        assert "当前连接方式与模型能力或协议不匹配" in page.message.text()
+        assert "语音识别模型与对应转写方式" in page.message.text()
+        assert "当前连接方式与模型能力或协议不匹配" in page.model_hint.text()
 
     asyncio.run(scenario())
 
@@ -970,3 +970,15 @@ def test_realtime_preset_switch_resets_protocol_and_endpoint_draft(window):
     assert page.protocol.currentData() == "http" and page.protocol.isEnabled()
     assert page.provider().parameters == {}
     page.validate_protocol(page.provider())
+
+
+def test_step_realtime_preset_has_own_protocol_and_16khz_validation(window):
+    page = window.pages[2]
+    page.apply_preset(page.preset.findData("stepfun-realtime"))
+    assert page.protocol.currentData() == "stepfun_realtime"
+    assert page.provider().adapter == "stepfun-realtime"
+    assert page.provider().model == "stepaudio-2.5-asr-stream"
+    assert page.provider().parameters == {"asr_protocol": "stepfun_realtime"}
+    page.validate_protocol(page.provider())
+    page.apply_preset(page.preset.findData("groq"))
+    assert page.protocol.currentData() == "http" and page.provider().parameters == {}

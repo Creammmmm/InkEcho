@@ -16,7 +16,7 @@ from PySide6.QtWidgets import (
 )
 
 from inkecho.config import ConfigError, Provider
-from inkecho.provider_catalog import PRESETS, asr_capability
+from inkecho.provider_catalog import PRESETS, STATIC_MODEL_ADAPTERS, asr_capability
 from inkecho.providers import ProviderError, validate_provider_protocol
 from inkecho.realtime import PROTOCOL, RealtimeConfig
 from inkecho.ui.widgets import Page, actions, button, card, label
@@ -55,6 +55,7 @@ class ProviderPage(Page):
             self.protocol = QComboBox()
             self.protocol.addItem("录音结束后上传 · HTTP", "http")
             self.protocol.addItem("边录边识别 · Qwen 实时 WebSocket", PROTOCOL)
+            self.protocol.addItem("边录边识别 · 阶跃 ASR WebSocket", "stepfun_realtime")
             self.protocol.setPlaceholderText("请修正请求参数中的转写方式")
             self.realtime_url = QLineEdit()
             self.realtime_url.setPlaceholderText(
@@ -151,6 +152,7 @@ class ProviderPage(Page):
         self.update_model_hint()
 
     def apply_preset(self, index):
+        self.preset.setCurrentIndex(index)
         preset = next(
             item for item in PRESETS if item.id == self.preset.itemData(index)
         )
@@ -159,17 +161,19 @@ class ProviderPage(Page):
         self.adapter = preset.adapter
         if self.role == "transcription":
             with QSignalBlocker(self.protocol), QSignalBlocker(self.realtime_url):
-                self.protocol.setCurrentIndex(self.protocol.findData("http"))
+                self.protocol.setCurrentIndex(self.protocol.findData(preset.protocol))
                 self.realtime_url.clear()
-                self.realtime_url.setEnabled(False)
+                self.realtime_url.setEnabled(preset.protocol != "http")
                 self.protocol.setEnabled(self.adapter == "qwen")
         self.name.setText(preset.label)
         self.url.setText(preset.base_url)
-        self.parameters.setPlainText("{}")
+        values = {} if preset.protocol == "http" else {"asr_protocol": preset.protocol}
+        self.parameters.setPlainText(json.dumps(values))
         self.key.clear()
         with QSignalBlocker(self.model):
             self.model.clear()
             self.model.addItems(preset.models)
+            self.model.setCurrentText(preset.models[0] if preset.models else "")
         self.available_models = preset.models
         self.filter_models()
         self.model_changed()
@@ -225,12 +229,14 @@ class ProviderPage(Page):
                 displayed_endpoint = endpoint if isinstance(endpoint, str) else ""
                 if self.realtime_url.text() != displayed_endpoint:
                     self.realtime_url.setText(displayed_endpoint)
-                self.realtime_url.setEnabled(mode == PROTOCOL)
+                self.realtime_url.setEnabled(mode in {PROTOCOL, "stepfun_realtime"})
         self.update_model_hint()
 
     def protocol_changed(self):
         self.revision += 1
-        self.realtime_url.setEnabled(self.protocol.currentData() == PROTOCOL)
+        self.realtime_url.setEnabled(
+            self.protocol.currentData() in {PROTOCOL, "stepfun_realtime"}
+        )
         try:
             values = self.parameter_values()
         except ConfigError:
@@ -240,8 +246,8 @@ class ProviderPage(Page):
         if mode == "http":
             values.pop("asr_protocol", None)
             values.pop("realtime_url", None)
-        elif mode == PROTOCOL:
-            values["asr_protocol"] = PROTOCOL
+        elif mode in {PROTOCOL, "stepfun_realtime"}:
+            values["asr_protocol"] = mode
             endpoint = self.realtime_url.text().strip()
             if endpoint:
                 values["realtime_url"] = endpoint
@@ -263,6 +269,12 @@ class ProviderPage(Page):
                     "当前采样率未被修改。"
                 )
             RealtimeConfig.from_provider(provider, sample_rate=sample_rate)
+        elif provider.adapter == "stepfun-realtime":
+            from inkecho.step_realtime import StepRealtimeConfig
+
+            StepRealtimeConfig.from_provider(
+                provider, sample_rate=self.session.store.load_settings().sample_rate
+            )
 
     def update_model_hint(self):
         from inkecho.app import PROVIDER_LABELS
@@ -284,7 +296,10 @@ class ProviderPage(Page):
         else:
             if self.role == "polishing":
                 hint = "模型列表不等于能力验证；请测试当前模型能否完成润色。"
-            elif provider.parameters.get("asr_protocol") == PROTOCOL:
+            elif provider.parameters.get("asr_protocol") in {
+                PROTOCOL,
+                "stepfun_realtime",
+            }:
                 hint = (
                     "已选择边录边识别；需 16 kHz 录音。请测试所选服务和模型的实时能力。"
                 )
@@ -325,12 +340,17 @@ class ProviderPage(Page):
                     hint = "文件转写任务协议尚未实现，请选择其他模型。"
                 elif "streaming" in parts:
                     hint = "此流式协议尚未实现，请选择其他模型。"
-                elif provider.parameters.get("asr_protocol") == PROTOCOL:
-                    hint = "此模型不匹配 Qwen 实时方式，请切换为 HTTP 录音转写。"
+                elif provider.parameters.get("asr_protocol") in {
+                    PROTOCOL,
+                    "stepfun_realtime",
+                }:
+                    hint = (
+                        "此模型与当前转写协议不匹配，请选择对应语音模型或供应商预设。"
+                    )
                 else:
                     hint = (
-                        "此模型需要实时转写，请选择「边录边识别 · Qwen 实时 WebSocket」"
-                        "后测试该服务的模型能力。"
+                        "此模型与当前转写协议不匹配，请选择对应语音模型或供应商预设。"
+                        "模型列表不等于能力验证。"
                     )
                 self.model.setItemData(index, hint, Qt.ItemDataRole.ToolTipRole)
                 self.model.setItemData(
@@ -433,7 +453,7 @@ class ProviderPage(Page):
         # persisting any parameter string, including an unselected URL draft.
         if "asr_protocol" in provider.parameters:
             self.validate_protocol(provider)
-        if "realtime_url" in provider.parameters:
+        if "realtime_url" in provider.parameters and provider.adapter == "qwen":
             RealtimeConfig(provider.parameters["realtime_url"], provider.model)
         revision = self.revision
         value = self.key.text()
@@ -487,7 +507,7 @@ class ProviderPage(Page):
     async def discover(self):
         provider = self.provider()
         revision = self.revision
-        if provider.adapter in {"elevenlabs", "mimo-asr"}:
+        if provider.adapter in STATIC_MODEL_ADAPTERS:
             models = next(
                 (p.models for p in PRESETS if p.adapter == provider.adapter), ()
             )

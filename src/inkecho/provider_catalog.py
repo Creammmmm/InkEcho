@@ -13,7 +13,26 @@ class Preset:
     base_url: str
     models: tuple[str, ...] = ()
     credential_fields: tuple[str, ...] = ("api_key",)
+    protocol: str = "http"
 
+
+WS_ASR_ADAPTERS = frozenset({"stepfun-realtime"})
+HTTP_ASR_ADAPTERS = frozenset(
+    {
+        "multipart",
+        "elevenlabs",
+        "mimo-asr",
+        "openrouter-asr",
+        "stepfun-http",
+        "zhipu-asr",
+        "minimax-asr",
+        "zenmux-asr",
+        "orca-audio",
+    }
+)
+STATIC_MODEL_ADAPTERS = frozenset(
+    {"elevenlabs", "mimo-asr", "minimax-asr", "zhipu-asr"}
+)
 
 PRESETS = (
     Preset(
@@ -73,6 +92,55 @@ PRESETS = (
         ("mimo-v2.5-asr",),
     ),
     Preset(
+        "stepfun-realtime",
+        "阶跃星辰 · 实时语音识别",
+        "transcription",
+        "stepfun-realtime",
+        "https://api.stepfun.com/v1",
+        ("stepaudio-2.5-asr-stream",),
+        protocol="stepfun_realtime",
+    ),
+    Preset(
+        "stepfun-http",
+        "阶跃星辰 · 录音转写",
+        "transcription",
+        "stepfun-http",
+        "https://api.stepfun.com/v1",
+        ("stepaudio-2.5-asr", "step-asr"),
+    ),
+    Preset(
+        "zhipu-asr",
+        "智谱 · 录音转写",
+        "transcription",
+        "zhipu-asr",
+        "https://open.bigmodel.cn/api/paas/v4",
+        ("glm-asr-2512",),
+    ),
+    Preset(
+        "minimax-asr",
+        "MiniMax · 录音转写",
+        "transcription",
+        "minimax-asr",
+        "https://api.minimax.cn/v1",
+        ("asr-1.0",),
+    ),
+    Preset(
+        "zenmux-asr",
+        "ZenMux · 录音转写",
+        "transcription",
+        "zenmux-asr",
+        "https://zenmux.ai/api/v1",
+        ("qwen/qwen3-asr-flash",),
+    ),
+    Preset(
+        "orca-audio",
+        "OrcaRouter · 音频理解转写",
+        "transcription",
+        "orca-audio",
+        "https://api.orcarouter.ai/v1",
+        ("google/gemini-2.5-pro",),
+    ),
+    Preset(
         "custom-asr", "自定义 · multipart 录音转写", "transcription", "multipart", ""
     ),
     Preset(
@@ -90,6 +158,7 @@ def asr_capability(model: str, adapter: str, parameters: dict) -> str:
     """Return supported/unsupported/unknown, never a verified capability claim."""
     value = model.strip().lower()
     realtime = parameters.get("asr_protocol") == "qwen_realtime"
+    http = parameters.get("asr_protocol", "http") == "http"
     if re.search(
         r"(?:tts|text-to-speech|embedding|rerank|image|dall-e|stable-diffusion|flux|vision)",
         value,
@@ -110,18 +179,33 @@ def asr_capability(model: str, adapter: str, parameters: dict) -> str:
             value,
         )
     )
+    step_live = value in {"stepaudio-2.5-asr-stream", "step-asr-1.1-stream"}
+    step_http = value in {"stepaudio-2.5-asr", "step-asr"}
+    orca_audio = value == "google/gemini-2.5-pro"
+    zenmux = value == "qwen/qwen3-asr-flash"
     known = (
-        qwen_live
+        step_live
+        or step_http
+        or orca_audio
+        or zenmux
+        or qwen_live
         or qwen_http
         or multipart
         or value in {"scribe_v1", "scribe_v2", "mimo-v2.5-asr"}
     )
     match = {
-        "qwen": qwen_live if realtime else qwen_http,
-        "multipart": multipart and not realtime,
-        "openrouter-asr": multipart and not realtime,
-        "elevenlabs": value in {"scribe_v1", "scribe_v2"} and not realtime,
-        "mimo-asr": value == "mimo-v2.5-asr" and not realtime,
+        "qwen": qwen_live if realtime else qwen_http and http,
+        "multipart": multipart and http,
+        "openrouter-asr": multipart and http,
+        "stepfun-http": step_http and http,
+        "stepfun-realtime": step_live
+        and parameters.get("asr_protocol") == "stepfun_realtime",
+        "zhipu-asr": value == "glm-asr-2512" and http,
+        "minimax-asr": value == "asr-1.0" and http,
+        "zenmux-asr": zenmux and http,
+        "orca-audio": orca_audio and http,
+        "elevenlabs": value in {"scribe_v1", "scribe_v2"} and http,
+        "mimo-asr": value == "mimo-v2.5-asr" and http,
     }.get(adapter, False)
     if match:
         return "supported"
@@ -132,7 +216,7 @@ def asr_capability(model: str, adapter: str, parameters: dict) -> str:
     ):
         return "unsupported"
     if (
-        value.startswith(
+        value.rsplit("/", 1)[-1].startswith(
             (
                 "deepseek",
                 "claude",

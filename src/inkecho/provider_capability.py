@@ -19,9 +19,18 @@ async def realtime_capability(
     This test does not inject text and is not proof of live microphone streaming.
     """
     ProviderClient._validate(provider, key)
-    if provider.role != "transcription" or provider.adapter != "qwen":
+    if provider.role != "transcription":
         raise ProviderError("configuration")
-    config = RealtimeConfig.from_provider(provider)
+    factory = QwenRealtimeSession
+    if provider.adapter == "stepfun-realtime":
+        from inkecho.step_realtime import StepRealtimeConfig, StepRealtimeSession
+
+        config = StepRealtimeConfig.from_provider(provider)
+        factory = StepRealtimeSession
+    elif provider.adapter == "qwen":
+        config = RealtimeConfig.from_provider(provider)
+    else:
+        raise ProviderError("configuration")
     if not isinstance(audio, bytes) or not audio or len(audio) > 7_499_970:
         raise ProviderError("audio")
     try:
@@ -42,7 +51,7 @@ async def realtime_capability(
     except (wave.Error, EOFError, ValueError, TypeError, struct.error):
         raise ProviderError("audio") from None
     deadline = time.monotonic() + timeout_seconds
-    connection = QwenRealtimeSession(
+    connection = factory(
         config, key, timeout_seconds=timeout_seconds, deadline=deadline
     )
     try:

@@ -310,3 +310,39 @@ def test_explicit_realtime_rejects_known_http_model_before_external_access(sessi
         await session.close()
 
     asyncio.run(scenario())
+
+
+def test_step_protocol_uses_its_factory_without_changing_qwen_injection_contract(
+    sessions, monkeypatch
+):
+    async def scenario():
+        session, qwen_connections = sessions()
+        old = session.store.load_provider("qwen")
+        session.store.save_provider(
+            replace(
+                old,
+                adapter="stepfun-realtime",
+                model="stepaudio-2.5-asr-stream",
+                base_url="https://api.stepfun.com/v1",
+                parameters={"asr_protocol": "stepfun_realtime"},
+            )
+        )
+        step_connections = []
+
+        def connect(config, key, **kwargs):
+            assert config.url == "wss://api.stepfun.com/v1/realtime/asr/stream"
+            connection = Connection(config, key, **kwargs)
+            step_connections.append(connection)
+            return connection
+
+        monkeypatch.setattr("inkecho.step_realtime.StepRealtimeSession", connect)
+        await session.toggle()
+        await step_connections[0].started.wait()
+        session.recorder.pcm_ready.emit(b"\1\0" * 2000)
+        session.stop_recording()
+        await settle(session)
+        assert session.inputs.inserted == ["实时识别。"]
+        assert not qwen_connections and step_connections[0].closed
+        await session.close()
+
+    asyncio.run(scenario())

@@ -42,9 +42,9 @@ ERROR_LABELS = {
 }
 PROVIDER_LABELS = {
     "protocol": (
-        "当前连接方式与模型协议不匹配。"
-        "实时模型请在转录服务中选择「Qwen 实时 WebSocket」；"
-        "同步模型使用 HTTP 录音转写。文件任务协议尚未实现。"
+        "当前连接方式与模型能力或协议不匹配。"
+        "请选择所选供应商支持的语音识别模型与对应转写方式。"
+        "文件任务协议尚未实现。"
     ),
     "configuration": "服务配置或请求参数不正确。",
     "credentials": "请保存有效 API 密钥。",
@@ -420,12 +420,24 @@ class Session(QObject):
                 raise CredentialError("请先选择转写模型并保存 API 密钥。")
             validate_provider_protocol(transcription)
             realtime_config = None
+            realtime_factory = self.realtime_factory
             if transcription.parameters.get("asr_protocol") is not None:
-                if transcription.parameters["asr_protocol"] != PROTOCOL:
+                if transcription.parameters["asr_protocol"] == PROTOCOL:
+                    realtime_config = RealtimeConfig.from_provider(
+                        transcription, sample_rate=self.settings.sample_rate
+                    )
+                elif transcription.parameters["asr_protocol"] == "stepfun_realtime":
+                    from inkecho.step_realtime import (
+                        StepRealtimeConfig,
+                        StepRealtimeSession,
+                    )
+
+                    realtime_config = StepRealtimeConfig.from_provider(
+                        transcription, sample_rate=self.settings.sample_rate
+                    )
+                    realtime_factory = StepRealtimeSession
+                else:
                     raise ProviderError("configuration")
-                realtime_config = RealtimeConfig.from_provider(
-                    transcription, sample_rate=self.settings.sample_rate
-                )
                 if not hasattr(self.recorder, "pcm_ready"):
                     raise ProviderError("configuration")
             context["realtime_config"] = realtime_config
@@ -472,7 +484,7 @@ class Session(QObject):
                 self.metrics = {"audio_seconds": 0.0, "characters": 0}
                 if realtime_config is not None:
                     task = self.controller.task
-                    context["realtime"] = self.realtime_factory(
+                    context["realtime"] = realtime_factory(
                         realtime_config,
                         key,
                         timeout_seconds=self.settings.transcription_timeout_seconds,

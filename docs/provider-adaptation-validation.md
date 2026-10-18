@@ -72,3 +72,20 @@ OAuth与本地LMStudio不在本轮云API-key适配范围，不读取Codex凭据�
 MiMo两份已读官方文档（usage更新2026-07-16、API更新2026-07-17）明确请求地址`https://api.xiaomimimo.com/v1/chat/completions`，支持Bearer或api-key鉴权；预设依据此地址，不猜测迁移域名。OpenAI协议核查使用OpenAI Docs技能与上述官方API reference。
 
 批1最终组合加入`tests/test_config.py`，263 passed/12.39s；最后显式测试Qwen实时→Groq→Qwen预设草稿重置HTTP/WSS，不复用原ref。配置层补拒绝api_secret/secret_key/secret_id/access_key/app_key及nested字段，普通region/resource_id保持可用。尚无真实账户云测试。
+
+
+## 批2：余HTTP与StepFun专用实时ASR
+
+新增独立协议选择：StepFun同步multipart、Zhipu同步multipart（30秒前置限制）、MiniMax `speech_to_text`（language为受限header，不放form）、ZenMux JSON input_audio、OrcaRouter显式音频理解转写。Orca不是专用ASR，以官方模型页audio输入/text输出及OpenAI-compatible chat契约选择`google/gemini-2.5-pro`；其标准input_audio字段属该兼容契约推断，真实云端未验证，不将任意Gemini文本模型列为ASR。MiMo与Orca仅接受`finish_reason=stop`且message为dict，无tool_calls；length/filter/缺失或畸形终态一律response错误，不输出截断文本。未知namespace保留未知，但openai/gpt-4o、anthropic/claude等已知纯文本末段不再误放行。
+
+官方Zhipu索引定位[语音转文本](https://docs.bigmodel.cn/api-reference/模型-api/语音转文本.md)：hotwords是最多100字符串数组。其[官方SDK multipart编码](https://github.com/MetaGLM/zhipuai-sdk-python-v4/blob/main/zhipuai/core/_http_client.py)使用`hotwords[]`；这里独立用httpx生成重复该字段，本地TLS按真实multipart逐项核对，不做格式fallback或额外POST。StepFun hotwords则按其文档发送JSON数组字符串，不能混同。
+
+StepFun以[当前ASR专属WS](https://platform.stepfun.com/docs/zh/api-reference/audio/asr-stream)为准，地址`/v1/realtime/asr/stream`、model `stepaudio-2.5-asr-stream`，不同于参考项目旧`.ai/v1/realtime`对话端点。session.update明确PCM16k/16-bit/mono、不启用server_vad；一次manual commit，经committed item_id匹配后仅completed.transcript作为最终结果，不发送session.finish、不使用累计delta/stash兜底。官方append段写WAV而format字段明确PCM存在文档歧义；当前依据格式配置发送原始PCM，本地WSS检查实际字节，未宣称已通过认证云端。meta/session_id在出现时一致性校验；连接所有权、更新确认与item门始终存在，不将示例meta字段自行升为强制字段。
+
+复用关系明确：`StepRealtimeSession`仅继承成熟Qwen的有界队列、单连接TLS `_open(config.url)`、JSON receive循环、deadline/active检查、finish等待_done和close；独立覆盖_event及_send_audio。其config.url不带Qwen model query；sender仅一次Step commit，无Qwen session.finish。禁用提前completed callback，Session用Step专属factory，Qwen原注入factory保持。cancel/active失效/绝对deadline在等待commit结果期间均清理全部任务、关闭连接、不重连，不输出部分文字。
+
+官方依据补充：[StepFun同步](https://platform.stepfun.com/docs/zh/api-reference/audio/transcriptions)、[MiniMax当前文档](https://platform.minimax.cn/docs/api-reference/speech-to-text)（预设api.minimax.cn，旧调试页api.minimaxi.com不擅自重写用户配置）、[Orca chat](https://docs.orcarouter.ai/api-reference/chat/create-a-chat-completion)、[Orca音频模型](https://www.orcarouter.ai/models/google/gemini-2.5-pro)。
+
+根对批1精确e58c798独立完整workflow：Ruff/306format、1662 passed/3 skipped，44.37s，未push。本轮后续提交仍需最终HEAD新收据。
+
+批2冻结组合命令：`QT_QPA_PLATFORM=offscreen .venv/bin/pytest -q tests/test_step_realtime.py tests/test_http_asr.py tests/test_provider_catalog.py tests/test_providers.py tests/test_provider_capability.py tests/test_ui.py tests/test_application_realtime.py tests/test_application_early_realtime.py --tb=short`，284 passed/17.66s。根独立本批核心143 passed/12.13s。新增9个HTTP适配的实际TLS逐字段检查（包含base64、model、Orca文本+音频/no-asr_options、streamfalse、MiniMax语言header、Zhipu bracket-array）及Step实际WSS正常/可选meta/握手与收尾超时/早完成/错item/布尔index/empty/VAD拒绝/有界队列/取消与绝对deadline。新增Session测试证明Step走其专属factory且不调用Qwen注入factory，旧Qwen相关回归保持。第一次批2组合仅旧UI错误提示断言未随新多协议提示更新失败；后一次新增Step UI发现预设未显式选默认模型而空白，已修并加入默认ID断言，最终命令通过。无云认证、用户窗口或麦克风操作。余下DashScope任务WS、火山/讯飞/腾讯及Responses/Messages/Gemini仍待后续实现，不将此批当完整目标完成。

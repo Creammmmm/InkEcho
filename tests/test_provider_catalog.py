@@ -11,6 +11,9 @@ from inkecho.security import CredentialError
     "model",
     [
         "deepseek-chat",
+        "openai/gpt-4o",
+        "deepseek/deepseek-chat",
+        "anthropic/claude-sonnet-4",
         "gpt-4o",
         "qwen-plus",
         "text-embedding-3-small",
