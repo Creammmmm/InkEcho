@@ -161,3 +161,7 @@ signed本地WSS夹具现在经共享streaming_config/create_streaming_session实
 第二次实际包隔离收集R2保留为失败：226个ID已收集、0个测试调用，但后置来源审计将PySide6内嵌模块的虚拟`shibokensupport/...py`当作物理文件，触发FileNotFoundError，原owner终态1；未进入协议测试。`protocol-host-r2-collection`原始输出及保全收据保留，不改旧包或冻结来源。
 
 修复仅限诊断来源门：精确PySide6.support别名必须绑定真实signature_bootstrap.EmbeddableZipImporter、原模块身份和_mod2path，嵌入zip必须与其16段base64向量一致；每段均须存在库存逐hash验证的实际libshiboken载体，其SHA-256为`2b3d9767d69da0afabe4a383dc241a110fac4c0bb63cdeb3d01314e9c702241e`。记录logical origin、member/archive/carrier hash，不开放其他虚拟或外部来源。实际0.2.10包Python `-I`只读验证`build/provider-acceptance-preparation/verify-embedded-origin-r1.py`终态0，结果`verified-embedded-origin-r1.json`为11个嵌入alias、17个runtime origins全部通过；这不是226协议测试通过。嵌入archive为44302字节，SHA-256为`366442b9b65c9f6d1af0109aaedd553429e93183e4a5e3b5a6c290d36798f428`。关联三个诊断测试文件80 passed/0.20s，Ruff/format通过；根独立controls23 passed/0.09s。下一轮用独立helper/provenance及fresh路径继续同一产品包的隔离收集与协议测试，旧R1/R2不改写。
+
+实际包Host R3已通过隔离收集（226 IDs、0call测试）及随后独立226协议测试：226 passed/0 skipped/0 failed，20.61s，原两owner均wait0；30 before/after origins、55产品源、286实际加载依赖（含精确嵌入来源）、57保全及413冻源一致。原始材料位于`build/provider-acceptance-preparation/protocol-host-r3-{collection,tests}`，helper来源a6f34da，产品仍de504c6/0.2.10/18b6ad26，不把后继诊断版本称产品版本。
+
+桌面Host R1首UI门原wait1并停整批，其余24项未执行；旧诊断要求不兼容模型仍在列表并有tooltip，实际新需求已将其过滤，因而两个旧tooltip检查为false，私有保存/重载检查为true、stderr空。保留results-r1原始失败，不归为产品模型过滤失败。更新诊断检查实际HTTP/实时协议切换无需重新发现就重过滤，固定发现同时加入纯文本与TTS负例；仍仅一次发现、不写真实凭据、手填实时模型后正确协议保存/重载。新增真实ProviderPage私有ConfigStore回归，关联新诊断测试与UI为72 passed/6.15s；产品、旧冻源与AppImage不改。

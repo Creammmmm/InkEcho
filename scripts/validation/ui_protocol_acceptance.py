@@ -11,22 +11,19 @@ from native_guard import save
 
 
 async def exercise(page, store):
-    from PySide6.QtCore import Qt
-
     from inkecho.realtime import PROTOCOL
 
     await page.discover()
-    page.model.setCurrentText("qwen3-asr-flash-realtime")
-    index = page.model.findText("qwen3-asr-flash-realtime")
 
-    def tooltip():
-        return page.model.itemData(index, Qt.ItemDataRole.ToolTipRole)
+    def choices():
+        return {page.model.itemText(i) for i in range(page.model.count())}
 
-    before = bool(tooltip())
+    http = choices() == {"qwen3-asr-flash"}
     page.protocol.setCurrentIndex(page.protocol.findData(PROTOCOL))
-    enabled_without_rediscovery = tooltip() is None
+    live = choices() == {"qwen3-asr-flash-realtime"}
     page.protocol.setCurrentIndex(page.protocol.findData("http"))
-    rejected_again_without_rediscovery = bool(tooltip())
+    returned = choices() == {"qwen3-asr-flash"}
+    page.model.setCurrentText("qwen3-asr-flash-realtime")
     page.protocol.setCurrentIndex(page.protocol.findData(PROTOCOL))
     await page.save()
     provider = store.load_provider(page.identifier)
@@ -36,11 +33,9 @@ async def exercise(page, store):
     )
     page.load()
     return {
-        "http_realtime_mismatch_annotated": before,
-        "realtime_annotation_cleared_without_rediscovery": enabled_without_rediscovery,
-        "http_annotation_returns_without_rediscovery": (
-            rejected_again_without_rediscovery
-        ),
+        "http_only_compatible_asr_models": http,
+        "realtime_refiltered_without_rediscovery": live,
+        "http_refiltered_without_rediscovery": returned,
         "private_config_saved_and_reloaded": saved
         and page.protocol.currentData() == PROTOCOL,
         "warning_does_not_claim_os_unsupported": "系统不支持"
@@ -85,7 +80,12 @@ def main():
     class Client:
         async def models(self, _provider, _key):
             counters["in_memory_model_lists"] += 1
-            return ["qwen3-asr-flash", "qwen3-asr-flash-realtime"]
+            return [
+                "qwen3-asr-flash",
+                "qwen3-asr-flash-realtime",
+                "qwen-plus",
+                "qwen3-tts-flash",
+            ]
 
     async def fake_key(_reference):
         return "fixed-local-widget-test-only"
