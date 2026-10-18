@@ -412,9 +412,9 @@ class WaylandKeyboardInput:
                     if selected is not None and not selected():
                         break
                 request_start = time.monotonic()
-                hint = normalized[index + 1 : index + 2]
+                hint = normalized[index + 1 : index + 4].split("\n", 1)[0]
                 fields = {"value": character}
-                if character != "\n" and hint and hint != "\n":
+                if character != "\n" and hint:
                     fields["hint"] = hint
                 result = await self._request("key", **fields)
                 acknowledged = time.monotonic()

@@ -1,7 +1,7 @@
 """GNOME keyboard guardian: bounded requests, no queued text, restore on EOF.
 
 The requester sends one current character and waits for its acknowledgement.
-An optional single-character hint only prepares a map; it never emits input.
+An optional bounded hint only prepares a map; it never emits input.
 A concurrent reader marks cancellation/EOF immediately, including while a map
 request is in flight. Only this process owns the session and its recovery state.
 No text, credentials or map data are logged or persisted.
@@ -455,7 +455,7 @@ class Guardian:
         if normalize_text(character) != character or len(character) != 1:
             raise KeyboardError("unsupported_text")
         if hint is not None and (
-            normalize_text(hint) != hint or len(hint) != 1 or hint == "\n"
+            normalize_text(hint) != hint or not 1 <= len(hint) <= 3 or "\n" in hint
         ):
             raise KeyboardError("unsupported_text")
         self._continue()

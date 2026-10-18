@@ -889,7 +889,7 @@ def test_failed_cleanup_reconnects_only_after_original_guardian_exits():
     asyncio.run(run())
 
 
-def test_parent_only_attaches_one_nonemitting_hint_and_not_across_newline():
+def test_parent_bounds_nonemitting_hint_and_never_crosses_newline():
     async def run():
         inputs, process = await connected()
         await inputs.authorize()
@@ -972,5 +972,28 @@ def test_hint_cannot_emit_after_native_to_x_switch_or_cancel(cancel):
         assert [r["value"] for r in process.requests if r["op"] == "key"] == ["a"]
         assert not native_borrowed
         await hybrid.aclose()
+
+    asyncio.run(run())
+
+
+def test_parent_lookahead_is_at_most_three_and_stops_at_newline():
+    async def run():
+        inputs, process = await connected()
+        await inputs.authorize()
+        assert await inputs.insert("abcde\nfghi", lambda: True) == 10
+        keys = [r for r in process.requests if r["op"] == "key"]
+        assert [(r["value"], r.get("hint")) for r in keys] == [
+            ("a", "bcd"),
+            ("b", "cde"),
+            ("c", "de"),
+            ("d", "e"),
+            ("e", None),
+            ("\n", None),
+            ("f", "ghi"),
+            ("g", "hi"),
+            ("h", "i"),
+            ("i", None),
+        ]
+        await inputs.aclose()
 
     asyncio.run(run())

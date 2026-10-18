@@ -116,11 +116,14 @@ def test_runtime_without_direct_latin_unicode_conversion_is_rejected(
         Keymap(original_map)
 
 
-def test_two_prepared_slots_preserve_all_other_keys_and_groups(original_map):
+@pytest.mark.parametrize("hint", ["é", "éΩ文"])
+def test_prepared_slots_preserve_all_other_keys_and_groups(original_map, hint):
     mapper = Keymap(original_map)
     try:
-        mapping = mapper.prepare("中", "é")
-        assert mapping.prepared == (("中", 124), ("é", 89))
+        mapping = mapper.prepare("中", hint)
+        expected = tuple(zip("中" + hint, (124, 89, 189, 194), strict=False))
+        assert mapping.prepared == expected
+        changed_values = {code + 8: value for value, code in expected}
         changed = mapper.lib.xkb_keymap_new_from_string(
             mapper.context, mapping.data, 1, 0
         )
@@ -135,8 +138,8 @@ def test_two_prepared_slots_preserve_all_other_keys_and_groups(original_map):
             assert mapper.lib.xkb_keymap_max_keycode(changed) == maximum
             for code in range(minimum, maximum + 1):
                 actual = _symbols(mapper.lib, changed, code)
-                if code in (132, 97):
-                    value = "中" if code == 132 else "é"
+                if code in changed_values:
+                    value = changed_values[code]
                     assert actual == [ord(value) | 0x01000000] * mapper.groups
                 else:
                     assert actual == _symbols(mapper.lib, mapper.pointer, code)
@@ -176,7 +179,7 @@ def test_two_prepared_slots_preserve_all_other_keys_and_groups(original_map):
         mapper.close()
 
 
-@pytest.mark.parametrize("hint", ["", "ab", "\n", "😀", 1, False, [], {}])
+@pytest.mark.parametrize("hint", ["", "abcd", "a\nb", "\n", "😀", 1, False, [], {}])
 def test_prepared_mapping_rejects_entire_invalid_hint(original_map, hint):
     mapper = Keymap(original_map)
     try:
@@ -194,7 +197,7 @@ def test_nonempty_second_slot_is_preserved_and_falls_back_to_one(
 
     mapper = Keymap(original_map)
     try:
-        monkeypatch.setattr(wayland_keymap, "LOOKAHEAD_CODE", 38)  # Existing AC01.
+        monkeypatch.setattr(wayland_keymap, "LOOKAHEAD_CODES", (38,))  # Existing AC01.
         assert any(_symbols(mapper.lib, mapper.pointer, 38))
         mapping = mapper.prepare("中", "é")
         assert mapping.prepared == (("中", 124),)
@@ -207,5 +210,21 @@ def test_nonempty_second_slot_is_preserved_and_falls_back_to_one(
             )
         finally:
             mapper.lib.xkb_keymap_unref(changed)
+    finally:
+        mapper.close()
+
+
+def test_four_slots_deduplicate_and_omit_nonempty_or_missing_slots(
+    original_map, monkeypatch
+):
+    from inkecho.platform import wayland_keymap
+
+    mapper = Keymap(original_map)
+    try:
+        assert mapper.prepare("中", "中éé").prepared == (("中", 124), ("é", 89))
+        monkeypatch.setattr(wayland_keymap, "LOOKAHEAD_CODES", (38, 0, 197, 202))
+        mapping = mapper.prepare("中", "éΩ文")
+        assert mapping.prepared == (("中", 124), ("é", 189), ("Ω", 194))
+        assert len(mapping.prepared) <= 4
     finally:
         mapper.close()

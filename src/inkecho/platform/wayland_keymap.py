@@ -13,8 +13,9 @@ from inkecho.platform.keyboard import KeyboardError
 MAX_MAP_BYTES = 4_000_000
 # AE13 is the empty INTL_YEN slot exercised with native GTK and Chromium.
 COMPATIBLE_CODES = (132,)
-# AB11 was separately verified with direct keycodes in native Chrome/GTK/VTE.
-LOOKAHEAD_CODE = 97
+# These empty physical slots passed direct native Chrome/GTK/VTE probes.
+LOOKAHEAD_CODES = (97, 197, 202)
+MAX_HINT_CHARACTERS = 3
 
 
 def normalize_text(text: str) -> str:
@@ -160,22 +161,35 @@ class Keymap:
         return self.prepare(character)
 
     def prepare(self, character: str, hint: str | None = None) -> KeyMapping:
-        """Map current plus at most one non-emitting hint into verified empty slots."""
-        for value in (character,) if hint is None else (character, hint):
-            if normalize_text(value) != value or len(value) != 1 or value == "\n":
-                raise KeyboardError("unsupported_text")
-        entries = [(character, self.slot, self.name)]
-        name = self.lib.xkb_keymap_key_get_name(self.pointer, LOOKAHEAD_CODE)
+        """Map current and bounded non-emitting hints into verified empty slots."""
         if (
-            hint is not None
-            and hint != character
-            and LOOKAHEAD_CODE != self.slot
-            and name
-            and not any(_symbols(self.lib, self.pointer, LOOKAHEAD_CODE))
+            normalize_text(character) != character
+            or len(character) != 1
+            or character == "\n"
         ):
-            name = name.decode("ascii")
-            if re.fullmatch(r"[A-Za-z0-9_]+", name):
-                entries.append((hint, LOOKAHEAD_CODE, name))
+            raise KeyboardError("unsupported_text")
+        if hint is not None and (
+            normalize_text(hint) != hint
+            or not 1 <= len(hint) <= MAX_HINT_CHARACTERS
+            or "\n" in hint
+        ):
+            raise KeyboardError("unsupported_text")
+        slots = [(self.slot, self.name)]
+        for code in LOOKAHEAD_CODES:
+            name = self.lib.xkb_keymap_key_get_name(self.pointer, code)
+            if (
+                code != self.slot
+                and name
+                and not any(_symbols(self.lib, self.pointer, code))
+            ):
+                name = name.decode("ascii")
+                if re.fullmatch(r"[A-Za-z0-9_]+", name):
+                    slots.append((code, name))
+        values = dict.fromkeys(character + (hint or ""))
+        entries = [
+            (value, code, name)
+            for value, (code, name) in zip(values, slots, strict=False)
+        ]
         additions = []
         for value, _, name in entries:
             symbol = ord(value) | 0x01000000

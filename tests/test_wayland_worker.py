@@ -21,11 +21,11 @@ class FakeMap:
         return SimpleNamespace(data=char.encode() + b"\0", keycode=124)
 
     def prepare(self, char, hint):
-        values = (char,) if hint == char else (char, hint)
+        values = tuple(dict.fromkeys(char + hint))
         return SimpleNamespace(
             data=("|".join(values)).encode() + b"\0",
             keycode=124,
-            prepared=tuple(zip(values, (124, 89), strict=False)),
+            prepared=tuple(zip(values, (124, 89, 189, 194), strict=False)),
         )
 
     def close(self):
@@ -1274,7 +1274,7 @@ def test_first_mapping_grace_ignores_newlines_and_cache_and_resets_per_begin(
     run(scenario())
 
 
-@pytest.mark.parametrize("hint", ["", "ab", "\n", "😀", 1, False, [], {}])
+@pytest.mark.parametrize("hint", ["", "abcd", "a\nb", "\n", "😀", 1, False, [], {}])
 def test_invalid_nonemitting_hint_rejects_before_any_map_or_event(remote, hint):
     async def scenario():
         guardian = Guardian(remote)
@@ -1370,3 +1370,24 @@ def test_cancel_after_current_key_never_dispatches_prepared_hint(remote):
         await guardian.finish()
 
     run(scenario())
+
+
+@pytest.mark.parametrize("cancel_after", [1, 2, 3])
+def test_four_slot_unused_hints_never_emit_after_stop(remote, cancel_after):
+    async def run():
+        guardian = Guardian(remote)
+        await guardian.begin()
+        assert await guardian.key("a", "bcd") == 1
+        for character in "bcd"[: cancel_after - 1]:
+            assert await guardian.key(character) == 1
+        assert len(guardian.prepared_codes) == 4
+        assert len(remote.events) == cancel_after * 2
+        guardian.stop()
+        with pytest.raises(KeyboardError):
+            await guardian.key("b", "xyz")
+        assert len(remote.events) == cancel_after * 2
+        assert not guardian.prepared_codes
+        await guardian.finish()
+        assert remote.data == b"original\0"
+
+    asyncio.run(run())
