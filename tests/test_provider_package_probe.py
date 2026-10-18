@@ -107,3 +107,36 @@ def test_namespace_import_paths_are_checked_without_file_attribute(tmp_path, pre
             {},
             {prefix: SimpleNamespace(__path__=[str(tmp_path)])},
         )
+
+
+def test_pytest_owned_py_shim_and_alias_files_have_individual_pins(tmp_path):
+    framework = tmp_path / "framework"
+    shim = framework / "py.py"
+    alias = framework / "_pytest/_py/path.py"
+    alias.parent.mkdir(parents=True)
+    shim.write_text("# pytest-owned compatibility shim\n")
+    alias.write_text("# pytest-owned alias target\n")
+    files = {
+        str(path.relative_to(framework)): PROBE.checksum(path) for path in (shim, alias)
+    }
+    PROBE.verify_framework(framework, files)
+    modules = {
+        "py": SimpleNamespace(__file__=str(shim)),
+        "py.path": SimpleNamespace(__file__=str(alias)),
+    }
+    origins = PROBE.dependency_origins(
+        tmp_path / "packages", framework, {}, files, modules
+    )
+    assert set(origins) == {"py", "py.path"}
+    alias.write_text("changed")
+    with pytest.raises(ValueError, match="framework_import_not_pinned"):
+        PROBE.dependency_origins(tmp_path / "packages", framework, {}, files, modules)
+
+
+def test_allowing_py_shim_does_not_allow_a_separate_py_package(tmp_path):
+    framework = tmp_path / "framework"
+    path = framework / "py/__init__.py"
+    path.parent.mkdir(parents=True)
+    path.write_text("# not the distribution-owned shim\n")
+    with pytest.raises(ValueError, match="diagnostic_framework_namespace_forbidden"):
+        PROBE.verify_framework(framework, {"py/__init__.py": PROBE.checksum(path)})

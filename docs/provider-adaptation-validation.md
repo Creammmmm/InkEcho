@@ -153,3 +153,7 @@ UI预设每次分配新provider/ref，原配置与凭据不覆盖；润色提示
 薄`provider_package_probe.py`只用于后续实际包：真实AppDir Python `-I`、独立pytest配置、不加src overlay、固定五个协议测试模块及精确node IDs；框架pytest/pluggy/iniconfig/packaging/pygments按distribution文件清单另行冻结，仅为诊断例外，不进入AppImage。禁自动插件并清用户pytest环境；前后audit+所有实际加载inkecho.*与runtime dependencies的origin/inventory必须包内，框架与namespace路径也核独立hash/目录。任何失败停、不自动重跑，当前尚未运行新包，不将此工具的纯测试称作AppImage结果。
 
 signed本地WSS夹具现在经共享streaming_config/create_streaming_session实际工厂选路，独立服务端断言不变；根复测45 passed/4.90s。诊断最终关联命令`.venv/bin/pytest -q tests/test_provider_package_probe.py tests/test_artifact_acceptance_controls.py tests/test_package_factory_mixed.py tests/test_signed_asr.py`为115 passed/5.02s，包括完整源set/hash、缺新module同计数替换、未知extra origin、源码预加载来源、框架overlay/namespace与清单篡改拒绝。无新build、GUI、stable变更或推送；下一步固定同包双Ubuntu实际验证，旧冻结工具不改写。
+
+诊断框架实际失败保留：初次准备R1因pytest distribution含顶层`py.py`而停止；R2错误推断它是未用compat shim而显式排除。随后实际`18b6ad26a39032d930a2f319cd497641639910f69cb3402da8ac75ee7d2a63bd`的0.2.10包Python `-I`首次host协议运行，在`_pytest.compat`导入`py`时ModuleNotFoundError，原子进程及外层owner均终态1，0测试/无协议请求/无GUI或输入；`protocol-host-r1`原始stderr、terminal与57保全记录保留。Host环境collect-only成功不能证明隔离框架齐全，不能写为包协议通过。旧包、55产品源和frozen-r1没有修改或重建。
+
+最小修正仅诊断工具：允许pytest distribution-owned顶层`py.py`，不允许另一个`py/`包；`py.error`/`py.path`别名必须仍指向冻结`_pytest/_py`文件并逐hash核。增加真实包可用的显式`--collect-only`，结果标识`execution_kind=collection_only`且call passed=0，绝不冒充226实际测试；下一次先用包`-I`完成隔离收集，再经审核原owner运行同ID集合。纯controls关联72 passed/0.21s，根独立pyshim相关15 passed/0.08s。这是诊断后继修复，产品协议/0.2.10产物不变；后续新helper与framework独立pin，旧失败材料不改。

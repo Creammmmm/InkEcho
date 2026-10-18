@@ -16,7 +16,7 @@ SELECTED = (
     "tests/test_signed_asr.py",
     "tests/test_polish_protocols.py",
 )
-FRAMEWORK = {"pytest", "_pytest", "pluggy", "iniconfig", "packaging", "pygments"}
+FRAMEWORK = {"pytest", "_pytest", "pluggy", "iniconfig", "packaging", "pygments", "py"}
 RUNTIME = {
     "httpx",
     "httpcore",
@@ -71,7 +71,7 @@ def verify_files(root: Path, expected: dict, *, exact: bool) -> None:
 def verify_framework(root: Path, expected: dict) -> None:
     for name in expected:
         top = Path(name).parts[0]
-        if top not in FRAMEWORK and not re.fullmatch(
+        if top not in (FRAMEWORK - {"py"}) | {"py.py"} and not re.fullmatch(
             r"(?:pytest|pluggy|iniconfig|packaging|pygments)-[A-Za-z0-9_.+-]+\.dist-info",
             top,
         ):
@@ -195,6 +195,7 @@ def run(args) -> dict:
     code = int(
         pytest.main(
             [
+                *(["--collect-only"] if args.collect_only else []),
                 "-c",
                 str(configuration),
                 "--rootdir",
@@ -222,9 +223,10 @@ def run(args) -> dict:
     return {
         "passed": code == 0
         and results.collected == nodeids
-        and results.passed == len(nodeids)
+        and results.passed == (0 if args.collect_only else len(nodeids))
         and not results.skipped
         and not results.failed,
+        "execution_kind": "collection_only" if args.collect_only else "protocol_tests",
         "artifact": artifact,
         "interpreter": str(Path(sys.executable).resolve()),
         "pytest_exit_code": code,
@@ -257,6 +259,11 @@ def main() -> int:
         parser.add_argument("--" + name, type=Path, required=True)
     for name in ("expected-sha", "expected-version", "framework-sha", "tests-sha"):
         parser.add_argument("--" + name, required=True)
+    parser.add_argument(
+        "--collect-only",
+        action="store_true",
+        help="Validate isolated collection without executing protocol tests.",
+    )
     args = parser.parse_args()
     if args.output.exists():
         raise ValueError("fresh_output_required")
