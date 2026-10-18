@@ -3,9 +3,11 @@
 InkEcho 是 Linux 桌面语音输入应用：录音后调用云端转写，可选按 Prompt 润色，
 再把文字输入到输出当时的光标位置。不使用剪贴板或系统输入法。
 
-## v0.3.0
+## v0.4.0
 
-v0.3.0的历史包仍使用原存储方式；当前源码的本地明文凭据变更须以新包验收为准。
+本版将全部供应商凭据明文保存到当前配置目录的 `credentials.json`，不再依赖系统
+密钥环。目录0700、文件0600；旧密钥环不读取或迁移，升级后需重新填写。
+旧v0.3.0资产保持原样，行为见[历史验收](docs/v0.3.0-dual-ubuntu-validation.md)。
 
 本版整合18项云ASR供应商/参考入口与四种润色线协议：Chat Completions、Responses、
 Anthropic Messages、Gemini。语音模型列表按所选供应商和协议过滤ASR候选，排除纯文本、
@@ -17,19 +19,20 @@ TTS、图像、embedding及协议不匹配模型；仍可手填未知模型，�
 跟随新光标。主动取消、过期或被替代后停止未发送文字，已发按键不可撤回或自动重放。
 
 供应商/协议范围、官方依据与本地测试见[适配记录](docs/provider-adaptation-validation.md)。
-同一0.3.0 AppImage的版本、SHA-256与实际包结果见[双系统验收](docs/v0.3.0-dual-ubuntu-validation.md)。
+本版独立构建0.4.0 AppImage，须完成同一SHA的双系统凭据、界面及输入验收后发布；
+验证方法见[凭据交付记录](docs/plaintext-credentials-package-validation.md)，该历史包不代替本版验收。
 本地TLS/WSS/SSE及合成音频测试不代表真实云账户、模型权限或语音准确率认证。
 
 ## 下载与运行
 
 发布包为Linux x86_64。从[正式版本列表](https://github.com/Creammmmm/InkEcho/releases)或
-[v0.3.0发布页](https://github.com/Creammmmm/InkEcho/releases/tag/v0.3.0)
+[v0.4.0发布页](https://github.com/Creammmmm/InkEcho/releases/tag/v0.4.0)
 下载AppImage和同名`.sha256`文件；实际发布状态及最新版以GitHub为准。
 
 ```sh
-sha256sum -c InkEcho-0.3.0-x86_64.AppImage.sha256
-chmod +x InkEcho-0.3.0-x86_64.AppImage
-./InkEcho-0.3.0-x86_64.AppImage
+sha256sum -c InkEcho-0.4.0-x86_64.AppImage.sha256
+chmod +x InkEcho-0.4.0-x86_64.AppImage
+./InkEcho-0.4.0-x86_64.AppImage
 ```
 
 若旧实例仍运行，请通过其托盘或界面正常退出再启动新版；单实例通信可能只唤起旧实例。

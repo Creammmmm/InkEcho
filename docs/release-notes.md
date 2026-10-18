@@ -1,3 +1,42 @@
+# InkEcho v0.4.0 — 配置目录明文凭据
+
+所有供应商认证字段现在明文保存到所选配置目录的专用 `credentials.json`，
+不再使用系统密钥环。普通 API Key 与 App ID/API Secret/Secret ID/Access Key 等组合
+凭据都走同一本地存储；普通供应商参数仍只保留引用，不将秘密混入参数或日志。
+文件使用 0600、目录 0700，原子写并拒绝符号链接。
+
+- 移除 keyring、SecretStorage、jeepney 等 11 个专用依赖分发。
+- 旧密钥环条目不会读取、迁移或删除；升级后需要在界面重新填写凭据。
+  切换供应商不复用旧引用，`--config-dir` 同时隔离配置与凭据。
+- 保留 18 项云 ASR 供应商/参考入口、四种润色协议及模型能力过滤，
+  四槽原生输出、10ms 释放等待和整句 ASR 收尾重叠行为不变。
+  不使用剪贴板或系统输入法；本地协议测试不代表真实云账户认证。
+
+发布范围为 Linux x86_64：Ubuntu 24.04 Xorg 与 Ubuntu 26.04 GNOME 原生 Wayland/
+XWayland 的限定实测路径。GNOME 46 原生 Wayland 仍不支持；不声称真实麦克风、
+物理快捷键、任意应用、Windows/macOS 或本地模型已验证。
+
+本版必须由精确 0.4.0 源码构建独立 AppImage，同一 SHA 在双系统完成实际凭据九门、
+11 模块缺失、九页界面及正常/取消输入，并通过候选私有 FUSE 后才发布。
+不能使用已验 0.3.2 包改名代替。旧 0.3.0 发布资产与旧凭据保持原样。
+
+下载 AppImage 与同名 `.sha256` 后：
+
+```sh
+sha256sum -c InkEcho-0.4.0-x86_64.AppImage.sha256
+chmod +x InkEcho-0.4.0-x86_64.AppImage
+./InkEcho-0.4.0-x86_64.AppImage
+```
+
+正式 tag 指向精确 0.4.0 发布源码，后继验收报告提交按规则使用 0.4.1，
+不改变冻结产物身份。源码须先合入主分支；实际发布状态以 GitHub 为准。
+[凭据源码记录](plaintext-credentials-validation.md)与[0.3.2 历史包验收](plaintext-credentials-package-validation.md)
+提供验证方法，本版产物仍须独立验收。
+
+以下历史记录保留原文。
+
+---
+
 # InkEcho v0.3.0 — 云供应商与协议适配
 
 本次版本整合18项云ASR供应商/参考入口与四种润色线协议，并改进语音模型选择。

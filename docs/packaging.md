@@ -264,3 +264,30 @@ The 2026-10-19 source revision removes the keyring runtime dependency. Supplier
 credentials use the selected config root's plaintext credentials.json. This does
 not retrofit historical AppImages: a new same-SHA dual-Ubuntu candidate must be
 accepted before updating the stable entry; old versioned packages stay intact.
+
+
+## Formal v0.4.0 plaintext-credential release
+
+Prepare on `codex/release-0.4.0` from accepted main
+`50d096f70be1b4c89c1e33ae9ed54aa2724252ed`, using the explicit release bump
+from 0.3.3 to 0.4.0. This changes metadata and release documentation only; retain
+all old artifacts and evidence. Build a genuine new 0.4.0 package from its exact
+clean source commit, with all 55 source files and complete inventory bound by SHA.
+
+Reuse the reviewed 0.3.2 minimal acceptance: both actual Ubuntu systems run the
+private file/Session/ProviderPage nine-check gate, verify the eleven removed
+modules/distributions are absent, and capture nine AppRun pages. Host GNOME
+Wayland checks real factory native and XWayland normal/cancel output; guest
+Ubuntu24.04 Xorg checks normal/cancel. Then observe one private versioned
+candidate's real FUSE mount. Do not repeat unchanged protocol/performance suites
+or substitute old package results. Preserve real credentials.json by hash only,
+never read its body or copy it into frozen/build materials; user-driven edits
+require a fresh baseline, never restoration over the user's new value.
+
+Only after both OSes, candidate FUSE and report review may the stable artifact
+and sidecar be updated with backups and all other protected paths unchanged.
+The focused successor report uses 0.4.1; it does not rebuild the frozen 0.4.0
+package. Before GitHub publication the exact release commit must be reachable
+from main. Draft only the versioned AppImage and SHA-256 sidecar, verify remote
+download hashes, then publish formal/latest after review, preserving v0.3.0.
+No real keyring, cloud account, microphone or user-window control is involved.
