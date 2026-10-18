@@ -29,7 +29,7 @@ from inkecho.config import (
 )
 from inkecho.providers import ProviderError
 from inkecho.realtime import PROTOCOL, QwenRealtimeSession, RealtimeConfig
-from inkecho.security import CredentialError, SecretStore
+from inkecho.security import CredentialError, FileCredentialStore
 
 MODEL = "qwen3-asr-flash-realtime"
 SILENCE_CHUNK = bytes(3200)  # 100 ms mono PCM16 at 16 kHz, generated here.
@@ -297,7 +297,9 @@ async def probe(root: Path, *, handshake_only=False) -> dict:
     if provider.id != settings.transcription_provider:
         raise ProviderError("configuration")
     config = official_config(provider)
-    key = await asyncio.to_thread(lambda: SecretStore().get(provider.key_ref))
+    key = await asyncio.to_thread(
+        lambda: FileCredentialStore(root).get(provider.key_ref)
+    )
     if not key:
         raise ProviderError("credentials")
     result = await exercise(config, key, handshake_only=handshake_only)

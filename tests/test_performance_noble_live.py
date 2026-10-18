@@ -577,7 +577,7 @@ def test_host_end_to_end_pipe_control_gates_keys_and_preserves_failure_cleanup(
     monkeypatch.setattr(node, "expected_origins", lambda _: origins)
 
     class Store:
-        def __init__(self):
+        def __init__(self, root):
             events.append("store")
 
         def get(self, reference):
@@ -589,7 +589,7 @@ def test_host_end_to_end_pipe_control_gates_keys_and_preserves_failure_cleanup(
         node.importlib,
         "import_module",
         lambda name: (
-            SimpleNamespace(__file__=str(security_path), SecretStore=Store)
+            SimpleNamespace(__file__=str(security_path), FileCredentialStore=Store)
             if name == "inkecho.security"
             else original_import(name)
         ),
@@ -699,7 +699,10 @@ def test_host_end_to_end_pipe_control_gates_keys_and_preserves_failure_cleanup(
 
     monkeypatch.setattr(node.subprocess, "Popen", Process)
     args = SimpleNamespace(
-        mode=mode, accept_plan_sha=reviewed["plan_sha256"], package_root=package_root
+        mode=mode,
+        accept_plan_sha=reviewed["plan_sha256"],
+        package_root=package_root,
+        config_root=tmp_path / "private-config",
     )
     if exit_code or bad_ready or changed_plan or cleanup_fails:
         with pytest.raises(node.ControlError) as caught:

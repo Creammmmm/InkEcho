@@ -1,41 +1,38 @@
 #!/usr/bin/env python3
-"""Opt-in live Secret Service check using only a disposable unique credential."""
+"""Synthetic local-file credential roundtrip in a disposable private config."""
 
 import argparse
 import json
 import secrets
-import uuid
+import tempfile
 from pathlib import Path
 
-from inkecho.security import SecretStore
+from inkecho.security import FileCredentialStore
 
 
 def probe() -> dict:
-    store = SecretStore()
-    reference = "diagnostic/" + uuid.uuid4().hex
-    value = secrets.token_urlsafe(32)
-    if store.get(reference) is not None:
-        raise RuntimeError("The new diagnostic reference unexpectedly exists.")
-    try:
+    """Never read the user's config or a system keyring."""
+    with tempfile.TemporaryDirectory(prefix="inkecho-credentials-") as directory:
+        root = Path(directory) / "config"
+        store = FileCredentialStore(root)
+        reference = "diagnostic/local"
+        value = secrets.token_urlsafe(32)
+        assert store.get(reference) is None
         store.set(reference, value)
-        if store.get(reference) != value:
-            raise RuntimeError("The saved diagnostic credential could not be verified.")
+        assert store.get(reference) == value
         store.set(reference, value + "updated")
-        if store.get(reference) != value + "updated":
-            raise RuntimeError(
-                "The updated diagnostic credential could not be verified."
-            )
-    finally:
+        assert store.get(reference) == value + "updated"
+        assert store.path.stat().st_mode & 0o777 == 0o600
+        assert root.stat().st_mode & 0o777 == 0o700
         store.delete(reference)
-    if store.get(reference) is not None:
-        raise RuntimeError("The diagnostic credential was not deleted.")
+        assert store.get(reference) is None
     return {
-        "backend": type(store.backend).__module__ + "." + type(store.backend).__name__,
-        "created_unique_disposable_item": True,
+        "backend": "config_directory_plaintext_json",
+        "disposable_private_config": True,
         "read_exact_match": True,
         "updated_exact_match": True,
         "deleted": True,
-        "unrelated_items_accessed": False,
+        "real_credentials_or_keyring_accessed": False,
     }
 
 

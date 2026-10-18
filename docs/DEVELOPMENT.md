@@ -242,7 +242,7 @@ microphone, physical shortcuts, overlay, integration/autostart and authenticated
 cloud checks individually, including untested or unavailable cases. In
 particular, GNOME 46's measured missing native-keyboard API is not a pass;
 a separately verified Xorg path does not establish native Wayland support.
-No packaging check automatically authorizes keyring access or cloud requests.
+No packaging check automatically authorizes real credential-file access or cloud requests.
 If the image changes, both previous artifact-hash acceptances become historical.
 
 After the report is reviewed, run the existing complete clean-HEAD workflow
@@ -250,3 +250,17 @@ using that report as evidence. Its receipt verifies source checks and report
 identity, not the truth of manual desktop tests; the root agent reviews those.
 This additional product-delivery gate does not require every ordinary source
 push to build an image or open a GUI. Existing hook requirements remain unchanged.
+
+
+## Plaintext credentials revised by the user on 2026-10-19
+
+Use the selected ConfigStore root's dedicated credentials.json for all supplier
+authentication fields. It is intentionally plaintext, not encrypted. Provider
+records retain key_ref; do not relax provider-parameter secret rejection. Bind
+FileCredentialStore explicitly to that root, including --config-dir and probes.
+Never read/import/delete old system-keyring entries automatically. Existing
+references without a local value require re-entry. Keep directory0700/file0600,
+owned regular files, no symbolic links, atomic writes and sanitized errors.
+Never commit real credentials or log their content. Historical package reports
+retain their original storage facts; only a newly validated package changes the
+installed runtime behavior.

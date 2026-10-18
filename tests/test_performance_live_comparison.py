@@ -280,13 +280,13 @@ def test_wss_reserve_precedes_start_and_failure_does_not_reconnect(probe, monkey
 
 
 def test_credentials_fake_offline_and_revalidate_before_lazy_backend(
-    probe, monkeypatch
+    probe, monkeypatch, tmp_path
 ):
     from inkecho import security
 
     events = []
     monkeypatch.setattr(
-        security, "SecretStore", lambda: pytest.fail("no actual keyring")
+        security, "FileCredentialStore", lambda: pytest.fail("no actual keyring")
     )
     assert (
         probe.Credentials(lambda: pytest.fail("offline no live validation")).get(
@@ -297,12 +297,15 @@ def test_credentials_fake_offline_and_revalidate_before_lazy_backend(
     with pytest.raises(probe.ProbeError):
         probe.Credentials(lambda: None).get("misfilled-ref")
 
-    def fake_backend():
+    def fake_backend(root):
+        assert root == tmp_path
         events.append("backend")
         return SimpleNamespace(get=lambda ref: events.append(ref) or "fake-key")
 
-    monkeypatch.setattr(security, "SecretStore", fake_backend)
-    credentials = probe.Credentials(lambda: events.append("validated"), live=True)
+    monkeypatch.setattr(security, "FileCredentialStore", fake_backend)
+    credentials = probe.Credentials(
+        lambda: events.append("validated"), live=True, config_root=tmp_path
+    )
     assert credentials.backend is None
     assert credentials.get("provider/qwen") == "fake-key"
     assert events == ["validated", "backend", "provider/qwen"]
@@ -310,18 +313,20 @@ def test_credentials_fake_offline_and_revalidate_before_lazy_backend(
     assert events[-2:] == ["validated", "provider/deepseek"]
 
 
-def test_revalidation_failure_never_initializes_keyring(probe, monkeypatch):
+def test_revalidation_failure_never_initializes_credentials(
+    probe, monkeypatch, tmp_path
+):
     from inkecho import security
 
     monkeypatch.setattr(
-        security, "SecretStore", lambda: pytest.fail("must not initialize")
+        security, "FileCredentialStore", lambda: pytest.fail("must not initialize")
     )
 
     def changed():
         raise probe.ProbeError("reviewed_plan_changed")
 
     with pytest.raises(probe.ProbeError, match="reviewed_plan_changed"):
-        probe.Credentials(changed, live=True).get("provider/qwen")
+        probe.Credentials(changed, live=True, config_root=tmp_path).get("provider/qwen")
 
 
 def test_original_wav_not_reencoded_and_pcm_tail_has_full_timeline(probe, monkeypatch):
@@ -400,7 +405,7 @@ def test_real_local_tls_session_pipelines_never_initialize_keyring(
 
     monkeypatch.setattr(
         security,
-        "SecretStore",
+        "FileCredentialStore",
         lambda: pytest.fail("offline must never initialize keyring"),
     )
     report = asyncio.run(probe.offline(scenario))

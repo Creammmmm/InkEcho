@@ -302,6 +302,8 @@ async def run_arm(streaming, scenario, directory, *, desktop=None):
             pass
 
     class Store:
+        root = directory
+
         def load_settings(self):
             return Settings(
                 polishing_enabled=True,

@@ -1,4 +1,4 @@
-"""Field bundles belong only in SecretStore values, never provider parameters."""
+"""Credential bundles belong in the local file, never provider parameters."""
 
 import json
 from collections.abc import Mapping

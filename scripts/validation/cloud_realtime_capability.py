@@ -23,6 +23,7 @@ def main():
     parser.add_argument("--expected-version", required=True)
     parser.add_argument("--expected-provider-sha", required=True)
     parser.add_argument("--run-cloud", action="store_true")
+    parser.add_argument("--config-root", type=Path)
     args = parser.parse_args()
     if not args.run_cloud or args.output.exists():
         raise SystemExit(2) from None
@@ -30,12 +31,13 @@ def main():
     audit = audit_package(
         args.package_root, args.frozen_source_root, args.expected_version
     )
-    from inkecho.config import Provider
+    from inkecho.config import ConfigStore, Provider
     from inkecho.provider_capability import realtime_capability
     from inkecho.providers import ProviderError, validate_provider_protocol
     from inkecho.realtime import RealtimeConfig
 
-    path = Path("/home/lth/.config/inkecho/providers/qwen.json")
+    root = args.config_root or ConfigStore().root
+    path = root / "providers/qwen.json"
 
     def validate_inputs():
         if checksum(path) != args.expected_provider_sha:
@@ -77,9 +79,9 @@ def main():
     key = audio = result = None
     try:
         validate_inputs()
-        from inkecho.security import SecretStore
+        from inkecho.security import FileCredentialStore
 
-        key = SecretStore().get("provider/qwen")
+        key = FileCredentialStore(root).get("provider/qwen")
         if not key:
             raise ValueError("credential_unavailable")
         validate_inputs()

@@ -421,8 +421,11 @@ class ExpectedOutput:
 
 
 class Credentials:
-    def __init__(self, revalidate, *, live=False):
+    def __init__(self, revalidate, *, live=False, config_root=None):
         self.revalidate, self.live, self.backend = revalidate, live, None
+        if live and config_root is None:
+            raise ProbeError("config_root_required")
+        self.config_root = config_root
 
     def get(self, reference):
         if reference not in REFS.values():
@@ -431,9 +434,9 @@ class Credentials:
             return "local-fixture-not-a-cloud-key"
         self.revalidate()  # Complete static/config fingerprint before backend init.
         if self.backend is None:
-            from inkecho.security import SecretStore
+            from inkecho.security import FileCredentialStore
 
-            self.backend = SecretStore()
+            self.backend = FileCredentialStore(self.config_root)
         return self.backend.get(reference)
 
 
@@ -906,7 +909,7 @@ async def live_pair(args, reviewed, desktop):
         if current["plan_sha256"] != reviewed["plan_sha256"]:
             raise ProbeError("reviewed_plan_changed")
 
-    credentials = Credentials(revalidate, live=True)
+    credentials = Credentials(revalidate, live=True, config_root=args.config_root)
 
     def checkpoint(arm, role, counts):
         handle = desktop["handle"]

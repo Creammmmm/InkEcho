@@ -25,7 +25,7 @@ from inkecho.config import (
     require_id,
 )
 from inkecho.providers import ProviderClient, ProviderError
-from inkecho.security import CredentialError, SecretStore
+from inkecho.security import CredentialError, FileCredentialStore
 
 TEXT = "今天是晴天，我们去公园散步。"
 PROMPT = "Return the user's text unchanged. Output only that text."
@@ -62,7 +62,9 @@ async def probe(root: Path) -> dict:
         raise ProviderError("configuration")
     # Probe policy is fixed and does not alter persisted provider parameters.
     provider = replace(provider, parameters={"max_tokens": 64})
-    key = await asyncio.to_thread(lambda: SecretStore().get(provider.key_ref))
+    key = await asyncio.to_thread(
+        lambda: FileCredentialStore(root).get(provider.key_ref)
+    )
     if not key:
         raise ProviderError("credentials")
     started = time.monotonic()

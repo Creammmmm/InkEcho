@@ -109,7 +109,7 @@ default. They are historical transcripts, not current instructions; supply the
 selected image's explicit path when using today's entry.
 
 Linux desktops must provide compatible glibc, graphics/display libraries,
-PipeWire/PulseAudio, D-Bus, Secret Service, and libX11 with an X11/XWayland
+PipeWire/PulseAudio, D-Bus, and libX11 with an X11/XWayland
 display for that keyboard backend. The experimental native GNOME Wayland backend
 also needs its measured Mutter keymap APIs, libei and libxkbcommon; it is not
 universal Wayland support. The measured GNOME 46 installation lacks the required
@@ -258,3 +258,9 @@ local hashes, then publish as formal/latest after review. Preserve old releases;
 unknown publication results require a read-only state check, not blind retries.
 The official-account and GNOME46 native-Wayland limitations in the release notes
 remain explicit.
+
+
+The 2026-10-19 source revision removes the keyring runtime dependency. Supplier
+credentials use the selected config root's plaintext credentials.json. This does
+not retrofit historical AppImages: a new same-SHA dual-Ubuntu candidate must be
+accepted before updating the stable entry; old versioned packages stay intact.

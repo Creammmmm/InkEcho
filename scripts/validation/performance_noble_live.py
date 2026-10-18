@@ -795,7 +795,7 @@ def execute_host(args, reviewed):
                 != expected_origins(args.package_root)["inkecho.security"]
             ):
                 raise ControlError("identity_mismatch")
-            backend = security.SecretStore()
+            backend = security.FileCredentialStore(args.config_root)
         return backend.get(reference)
 
     def read_audio():

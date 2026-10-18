@@ -7,6 +7,7 @@ inside the installed application or AppImage.
 ```text
 inkecho/
 ├── config.json
+├── credentials.json  # plaintext authentication values
 ├── providers/
 │   ├── qwen.json
 │   └── deepseek.json
@@ -48,10 +49,9 @@ Ports must be valid and nonzero. Local protocol tests also use HTTPS.
 Parameters contain ordinary JSON values; recognized credential fields, including
 nested `api_key`, `x-api-key`, `client_secret` or `Authorization`, are rejected.
 This field-name check cannot identify a secret placed under an arbitrary name.
-Credentials belong in the
-keyring. `key_ref`, such as `provider/qwen`, identifies an item and is not a key.
+Credentials belong only in the dedicated plaintext credentials.json. `key_ref`, such as `provider/qwen`, identifies an item and is not a key.
 
-Deleting a provider record does not remove its keyring item automatically; use
+Deleting a provider record does not remove its local credential value automatically; use
 the explicit credential operation when the user chooses it. The caller must
 update selected provider IDs when deleting a selected record.
 
@@ -78,16 +78,23 @@ must show the problem and a recovery path instead of discarding user data.
 
 ## Credentials
 
-`SecretStore` explicitly selects `keyring.backends.SecretService.Keyring` on
-Linux. It does not select automatic backends or fall back to plaintext files.
-Keys use service `io.github.Creammmmm.InkEcho` and the provider's `key_ref`.
-Operations are `get`, `set` and `delete`; `get` returns `None` for a missing item.
-Deleting a missing item is safe.
+`FileCredentialStore(config_root)` uses only `<config_root>/credentials.json`.
+The root is always the selected ConfigStore root, including --config-dir.
+It never imports a system keyring or migrates/deletes old entries. A missing old
+reference requires re-entry in the provider form. The file is intentionally
+plaintext, not encrypted; copying it also copies all stored authentication data.
 
-An unavailable or locked service raises a short `CredentialError`. Backend
-exception details are suppressed to avoid exposing keys. A desktop Secret
-Service, such as GNOME Keyring, must be available and unlocked. Tests may inject
-a backend; production code uses the default constructor.
+The schema is `{"schema_version":1,"credentials":{"provider/<id>":"value"}}`.
+Single API keys remain strings; existing multi-field bundles remain JSON-encoded
+strings, including AppID/APISecret/SecretID/access fields. Provider parameters
+still reject credentials, and provider records retain key_ref. A preset gets its
+own reference rather than reusing a different supplier's credential.
+
+Owned config directories/files are tightened to0700/0600. Symbolic links,
+hard-linked/nonregular files, wrong owners, invalid/duplicate JSON fields and
+oversized data fail with sanitized CredentialError. Writes use an exclusive0600
+temporary file within an opened config directory and atomic replacement. A
+single store serializes concurrent operations; malformed data is preserved.
 
 ## Module validation
 
@@ -98,22 +105,21 @@ python -m pytest tests/test_config.py tests/test_security.py -q
 Tests cover first-run defaults, separate records, permissions, saved settings,
 prompt copies and deletion, version migration and byte-for-byte backups,
 damaged/future-file preservation, atomic replacement failure, rejected credential
-fields, path traversal, backend errors and absence of a plaintext fallback.
-Fake backends prove application behavior, not desktop availability.
+fields, path traversal, local storage errors, explicit config isolation and no system-keyring access.
+These tests do not validate real supplier accounts.
 
-On Ubuntu 26.04.1 in the current GNOME session, actual Secret Service was tested
-with a new random diagnostic reference and generated temporary credential:
-create, exact read, update, exact read, delete and missing-item verification all
-passed. Only that new item was addressed; existing user secrets were not
-inspected. No provider request or user credential was involved. Other desktop
-environments remain unverified.
+## Historical Secret Service evidence
 
-Reproduce the opt-in live keyring check in a desktop session with:
+The following result describes the previous implementation, not current runtime
+requirements. On Ubuntu26.04.1 a disposable system Secret Service item was once
+created/read/updated/deleted successfully without accessing user secrets. That
+historical result is retained; the current credentials_probe.py instead tests a
+fresh disposable local config file and never opens a system keyring:
 
 ```sh
-python scripts/validation/credentials_probe.py --output /tmp/inkecho-keyring-check.json
+python scripts/validation/credentials_probe.py --output /tmp/inkecho-file-credentials-check.json
 ```
 
-It generates a new reference and temporary value, never prints the value, and
-deletes the diagnostic item in a `finally` block. A failure exits nonzero; it
-does not authorize a fallback backend or access another application's keys.
+The probe uses only generated test values and removes its temporary directory.
+Old keyring entries remain untouched and unused. Existing AppImages are not
+changed by the source or project-venv update.

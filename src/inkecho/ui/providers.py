@@ -34,7 +34,8 @@ class ProviderPage(Page):
         polishing = role == "polishing"
         super().__init__(
             "文字润色" if polishing else "语音转写",
-            "服务配置独立保存；API 密钥只进入系统密钥环。",
+            "服务配置独立保存；凭据以明文保存到当前配置目录的 credentials.json。"
+            "旧版凭据需重新填写。",
         )
         self.session, self.role = session, role
         self.revision = 0
@@ -654,7 +655,7 @@ class ProviderPage(Page):
         if revision != self.revision:
             return
         self.refresh(provider.id)
-        self.message.setText("服务配置已保存；密钥保存在系统密钥环。")
+        self.message.setText("服务配置已保存；凭据明文保存在 credentials.json。")
 
     async def delete_key(self):
         revision = self.revision
@@ -662,7 +663,7 @@ class ProviderPage(Page):
         if revision != self.revision:
             return
         self.clear_credentials()
-        self.message.setText("此供应商的密钥已从系统密钥环删除。")
+        self.message.setText("此供应商的凭据已从本地 credentials.json 删除。")
 
     def delete(self):
         providers = [

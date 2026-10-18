@@ -1057,7 +1057,9 @@ def test_partial_credential_bundle_does_not_write_anything(window):
         page.credential_inputs["app_id"].setText("123")
 
         async def forbidden(*args):
-            pytest.fail("partial credentials must be rejected before SecretStore")
+            pytest.fail(
+                "partial credentials must be rejected before FileCredentialStore"
+            )
 
         window.session.save_key = forbidden
         before = window.session.store.providers()
@@ -1151,3 +1153,39 @@ def test_qwen_protocol_picker_disables_other_vendor_protocols(window):
     page.parameters.setPlainText(json.dumps({"asr_protocol": "unsupported-mode"}))
     assert page.protocol.currentIndex() == -1
     assert page.parameter_values()["asr_protocol"] == "unsupported-mode"
+
+
+def test_provider_page_persists_bundle_in_own_config_file(window):
+    from inkecho.provider_credentials import decode_credentials
+    from inkecho.security import FileCredentialStore
+
+    async def scenario():
+        page = window.pages[2]
+        page.apply_preset(page.preset.findData("volcengine-app"))
+        page.model.setCurrentText("bigmodel")
+        page.resource_id.setText("synthetic-resource")
+        page.credential_inputs["app_key"].setText("synthetic-app")
+        page.credential_inputs["access_key"].setText("synthetic-access")
+        await page.save()
+        reference = page.reference
+        saved = FileCredentialStore(window.session.store.root).get(reference)
+        assert decode_credentials(saved, ("app_key", "access_key")) == {
+            "app_key": "synthetic-app",
+            "access_key": "synthetic-access",
+        }
+        assert await window.session.key(reference) == saved
+        ordinary = (
+            window.session.store.root / "providers" / f"{page.identifier}.json"
+        ).read_text()
+        assert "synthetic-access" not in ordinary and "synthetic-app" not in ordinary
+        page.load()
+        assert not any(widget.text() for widget in page.credential_inputs.values())
+        page.apply_preset(page.preset.findData("groq"))
+        assert page.reference != reference
+        await page.save()
+        assert (
+            FileCredentialStore(window.session.store.root).get(page.reference) is None
+        )
+        assert FileCredentialStore(window.session.store.root).get(reference) == saved
+
+    asyncio.run(scenario())

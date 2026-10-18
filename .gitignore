@@ -4,6 +4,8 @@
 .aws/
 .env
 .env.*
+credentials.json
+.credentials.*
 !.env.example
 
 # Python environments and caches

@@ -16,7 +16,7 @@ from pathlib import Path
 from inkecho.config import ConfigStore, Provider, require_id
 from inkecho.providers import ProviderError
 from inkecho.realtime import CHUNK_BYTES, QwenRealtimeSession, RealtimeConfig
-from inkecho.security import SecretStore
+from inkecho.security import FileCredentialStore
 
 AUDIO = Path("/tmp/inkecho-public-asr-fixture.wav")
 AUDIO_SHA = "0d650ab4f08bd3a5d3d59fd67d085fd0765ddabe4729294f4106fceece321fdf"
@@ -71,7 +71,7 @@ async def probe() -> dict:
             model="qwen3-asr-flash-realtime",
             parameters={"asr_protocol": "qwen_realtime"},
         )
-        key = SecretStore().get(provider.key_ref)
+        key = FileCredentialStore(root).get(provider.key_ref)
         if not key:
             raise ProviderError("credentials")
         session = QwenRealtimeSession(

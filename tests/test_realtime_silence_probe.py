@@ -54,7 +54,7 @@ def test_no_live_flag_reads_no_config_key_or_network(monkeypatch, capsys, option
         raise AssertionError("opt-in guard must run before access")
 
     monkeypatch.setattr(probe, "ConfigStore", forbidden)
-    monkeypatch.setattr(probe, "SecretStore", forbidden)
+    monkeypatch.setattr(probe, "FileCredentialStore", forbidden)
     monkeypatch.setattr(probe, "ObservedSession", forbidden)
     assert probe.main(options) == 2
     assert json.loads(capsys.readouterr().out)["reason"] == "live_opt_in_required"
@@ -95,7 +95,7 @@ def test_unapproved_origin_fails_before_key_or_network(tmp_path, monkeypatch, ba
     def forbidden(*_args, **_kwargs):
         raise AssertionError("origin guard must run first")
 
-    monkeypatch.setattr(probe, "SecretStore", forbidden)
+    monkeypatch.setattr(probe, "FileCredentialStore", forbidden)
     monkeypatch.setattr(probe, "ObservedSession", forbidden)
     with pytest.raises(ProviderError) as caught:
         asyncio.run(probe.probe(tmp_path))
@@ -207,8 +207,8 @@ def test_probe_only_reads_current_records_and_preserves_all_files(
     monkeypatch.setattr(probe, "exercise", exercise)
     monkeypatch.setattr(
         probe,
-        "SecretStore",
-        lambda: SimpleNamespace(
+        "FileCredentialStore",
+        lambda root: SimpleNamespace(
             get=lambda ref: "synthetic-key" if ref == "synthetic-ref" else None
         ),
     )

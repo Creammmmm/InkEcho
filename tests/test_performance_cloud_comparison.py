@@ -152,7 +152,7 @@ def test_runtime_requires_selected_shipped_python(tmp_path):
 
 def test_comparison_fixture_has_no_sensitive_persistence_calls():
     text = PATH.with_name("performance_comparison_fixture.py").read_text()
-    assert "SecretStore" not in text and "keyring" not in text
+    assert "FileCredentialStore" not in text and "keyring" not in text
     assert "write_text" not in text and "write_bytes" not in text
 
 

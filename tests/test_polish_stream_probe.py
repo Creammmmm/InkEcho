@@ -22,7 +22,7 @@ def test_without_live_flag_no_config_credentials_or_network(monkeypatch, capsys)
         raise AssertionError("guard must run first")
 
     monkeypatch.setattr(probe, "ConfigStore", forbidden)
-    monkeypatch.setattr(probe, "SecretStore", forbidden)
+    monkeypatch.setattr(probe, "FileCredentialStore", forbidden)
     monkeypatch.setattr(probe, "ProviderClient", forbidden)
     assert probe.main([]) == 2
     assert json.loads(capsys.readouterr().out)["reason"] == "live_opt_in_required"
@@ -68,8 +68,8 @@ def test_fake_live_path_only_fixed_public_text_metadata(tmp_path, monkeypatch):
     monkeypatch.setattr(probe, "ProviderClient", Client)
     monkeypatch.setattr(
         probe,
-        "SecretStore",
-        lambda: SimpleNamespace(
+        "FileCredentialStore",
+        lambda root: SimpleNamespace(
             get=lambda reference: (
                 "synthetic-not-real-key" if reference == "synthetic-ref" else None
             )

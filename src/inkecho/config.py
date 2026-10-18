@@ -58,7 +58,9 @@ def reject_secrets(value) -> None:
             if not isinstance(key, str):
                 raise ConfigError("Configuration field names must be text.")
             if re.sub(r"[^a-z]", "", key.lower()) in SECRET_FIELDS:
-                raise ConfigError("Store API credentials in the system keyring only.")
+                raise ConfigError(
+                    "Store credentials in credentials.json, not provider parameters."
+                )
             reject_secrets(child)
     elif isinstance(value, list):
         for child in value:

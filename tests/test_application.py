@@ -989,3 +989,35 @@ def test_stop_button_path_records_request_before_synchronous_audio_ready(factory
         await session.close()
 
     asyncio.run(scenario())
+
+
+def test_session_credentials_use_only_explicit_config_root(tmp_path, monkeypatch):
+    from inkecho.security import CredentialError, FileCredentialStore
+
+    monkeypatch.setenv("XDG_SESSION_TYPE", "x11")
+    monkeypatch.setenv("XDG_CONFIG_HOME", str(tmp_path / "unrelated"))
+
+    async def scenario():
+        sessions = [
+            Session(ConfigStore(tmp_path / name), inputs=Inputs(), client=Client())
+            for name in ("first", "second")
+        ]
+        first, second = sessions
+        try:
+            assert first.secrets.root == first.store.root
+            await first.save_key("provider/synthetic", "synthetic-key")
+            assert await first.key("provider/synthetic") == "synthetic-key"
+            assert FileCredentialStore(first.store.root).get("provider/synthetic") == (
+                "synthetic-key"
+            )
+            with pytest.raises(CredentialError, match="重新填写"):
+                await second.key("provider/synthetic")
+            await first.save_key("provider/synthetic", None)
+            with pytest.raises(CredentialError, match="重新填写"):
+                await first.key("provider/synthetic")
+            assert not (tmp_path / "unrelated").exists()
+        finally:
+            for session in sessions:
+                await session.close()
+
+    asyncio.run(scenario())

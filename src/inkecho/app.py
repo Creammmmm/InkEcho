@@ -17,7 +17,7 @@ from inkecho.realtime import (
     MAX_FEED_BYTES,
     QwenRealtimeSession,
 )
-from inkecho.security import CredentialError, SecretStore
+from inkecho.security import CredentialError, FileCredentialStore
 from inkecho.streaming_output import StreamingOutput, TextDelta
 
 STATE_LABELS = {
@@ -134,7 +134,9 @@ class Session(QObject):
         self.recorder = recorder or Recorder(self)
         self.client = client or ProviderClient()
         self.realtime_factory = realtime_factory
-        self.secrets = secrets
+        self.secrets = (
+            secrets if secrets is not None else FileCredentialStore(self.store.root)
+        )
         self.controller = TaskController(self, on_state=self._state)
         self.pending: set[asyncio.Task] = set()
         self.cleanup_tasks: set[asyncio.Task] = set()
@@ -220,19 +222,17 @@ class Session(QObject):
 
     async def key(self, reference: str) -> str:
         def read():
-            if self.secrets is None:
-                self.secrets = SecretStore()
             return self.secrets.get(reference)
 
         value = await asyncio.to_thread(read)
         if not value:
-            raise CredentialError("请先在服务设置中保存 API 密钥。")
+            raise CredentialError(
+                "当前配置目录未保存此供应商凭据。请重新填写并保存；旧版凭据不会自动迁移。"
+            )
         return value
 
     async def save_key(self, reference: str, value: str | None) -> None:
         def save():
-            if self.secrets is None:
-                self.secrets = SecretStore()
             if value is None:
                 self.secrets.delete(reference)
             else:

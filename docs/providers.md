@@ -4,7 +4,7 @@
 `check_connection`, streamed `polish_stream` and explicit `test_capability`
 methods. It consumes the
 separate `config.Provider` record and a key fetched by the caller from
-`SecretStore`; it never persists keys. `Result` contains text, duration and
+`FileCredentialStore`; it never persists keys. `Result` contains text, duration and
 optional supplier token counts. Text is excluded from its representation.
 
 ## Supported protocols and configuration

@@ -22,7 +22,7 @@ flowchart LR
 
 `Session` in `app.py` coordinates adapters. `TaskController` in `core.py` owns a
 unique task ID and permits only one active task. Every post-await result must still
-belong to that task. Capture occurs before credential lookup so a slow keyring
+belong to that task. Capture occurs before credential lookup so slow local credential access
 cannot silently retarget a different window. Starting from the settings window
 includes an explicit delay to let the user select a target before capture.
 
@@ -41,7 +41,7 @@ application's already-accepted insertion cannot be retracted.
 | `core` | Platform-independent states, task identity, cancellation and completion |
 | `audio` | Qt input devices, PCM capture and RAM WAV encoding |
 | `providers` | Separate Qwen transcription and OpenAI-compatible polishing/model protocols |
-| `config`, `security` | Versioned separate JSON records and explicit Secret Service storage |
+| `config`, `security` | Versioned separate JSON records and config-root-bound plaintext credential JSON |
 | `platform/accessibility` | Target capture, event invalidation and guarded Unicode delivery |
 | `platform/hotkeys` | Explicit GNOME GSettings shortcut registration with conflict checks |
 | `statistics`, `logging` | Numeric aggregates and bounded diagnostic codes without content |

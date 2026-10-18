@@ -189,7 +189,7 @@ class AboutPage(Page):
         layout.addWidget(
             label(
                 "图标与启动器安装到当前用户目录。移动 AppImage 后可在此修复路径；"
-                "移除桌面集成不会删除应用配置或系统密钥环中的凭据。",
+                "移除桌面集成不会删除应用配置或 credentials.json 中的明文凭据。",
                 muted=True,
             )
         )

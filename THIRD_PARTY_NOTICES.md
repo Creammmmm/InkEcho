@@ -5,7 +5,9 @@ Dependencies retain their own copyright, license and redistribution terms.
 The project's MIT license does not relicense Python, Qt, fonts or other bundled
 components. Preserve their notices when redistributing a package.
 
-This inventory was inspected from the locked environment on 2026-10-12.
+This current dependency inventory includes the 2026-10-19 removal of keyring
+and its exclusive dependency chain. Historical AppImages retain their original
+bundled notices and contents.
 Development/test tools are not intended to be shipped with the application.
 Actual final contents must be checked against the generated package inventory;
 the earlier stage-zero probe included a larger, untrimmed Qt distribution.
@@ -18,16 +20,11 @@ the earlier stage-zero probe included a larger, untrimmed Qt distribution.
 | AppImage type-2 runtime | commit `8f39b89` | MIT plus bundled runtime-library terms recorded in its original license |
 | qasync | 0.28.0 | BSD-2-Clause |
 | dbus-next | 0.2.3 | MIT |
-| keyring | 25.7.0 | MIT |
-| SecretStorage / jeepney | 3.5.0 / 0.9.0 | BSD-3-Clause / MIT |
-| cryptography / cffi / pycparser | 50.0.2 / 2.1.1 / 3.11 | Apache-2.0 OR BSD-3-Clause / MIT-0 / BSD-3-Clause |
 | httpx / httpcore / h11 | 0.28.1 / 1.0.9 / 0.16.0 | BSD-3-Clause / BSD-3-Clause / MIT |
 | websockets | 15.0.1, added 2026-10-15 | BSD-3-Clause; Aymeric Augustin and contributors; retained in `assets/licenses/websockets-LICENSE.txt` and wheel distribution metadata |
 | anyio / idna | 4.15.1 / 3.20 | MIT / BSD-3-Clause |
 | certifi | 2026.7.22 | MPL-2.0, including the certificate-bundle terms |
 | typing_extensions | 4.16.0 | PSF-2.0 |
-| jaraco.classes / jaraco.context / jaraco.functools | 3.4.0 / 6.1.2 / 4.6.0 | MIT |
-| more-itertools | 11.1.0 | MIT |
 | Noto Sans CJK font, if bundled | installed Noto CJK regular collection | Original upstream copyright and SIL Open Font License in `assets/licenses/Noto-CJK-copyright.txt` |
 | libei client library | Ubuntu libei1 1.5.0-3, added 2026-10-15 | Expat (MIT); package copyright retained at `usr/share/doc/inkecho/system/libei1/copyright` |
 
