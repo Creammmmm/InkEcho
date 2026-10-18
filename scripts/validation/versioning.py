@@ -1,4 +1,4 @@
-"""Require an explicit, synchronized patch increment in each staged commit."""
+"""Require synchronized patch increments or explicit minor release preparation."""
 
 import argparse
 import ast
@@ -39,41 +39,46 @@ def version(contents: list[str]) -> str:
     return project
 
 
-def next_version(parent: str, previous: str) -> str:
-    """Allow exactly one reviewed transition, then only same-X.Y patch + 1."""
+def next_version(parent: str, previous: str, release: bool = False) -> str:
+    """Allow the bootstrap, ordinary patch + 1, or next-minor release at patch 0."""
     if parent == BOOTSTRAP_PARENT and previous == "0.1.0a18":
         return "0.2.0"
     match = SEMVER.fullmatch(previous)
     if not match:
         raise ValueError("Parent version must be X.Y.Z; no prerelease bypass exists.")
     major, minor, patch = match.groups()
+    if release:
+        return f"{major}.{int(minor) + 1}.0"
     return f"{major}.{minor}.{int(patch) + 1}"
 
 
-def expected() -> tuple[str, str]:
+def expected(release: bool = False) -> tuple[str, str]:
     parent = git("rev-parse", "HEAD")
     previous = version([git("show", f"HEAD:{name}") for name in FILES])
-    return previous, next_version(parent, previous)
+    return previous, next_version(parent, previous, release)
 
 
 def check_staged() -> None:
     """Inspect the index, never substitute unstaged working-tree values."""
     _previous, required = expected()
+    _previous, release_required = expected(release=True)
     for name in FILES:
         entries = git("ls-files", "--stage", "--", name).splitlines()
         if len(entries) != 1 or entries[0].split()[:3:2] != ["100644", "0"]:
             raise ValueError("Version metadata must be regular, merged index files.")
     staged = version([git("show", f":{name}") for name in FILES])
-    if staged != required:
+    if staged not in {required, release_required}:
         raise ValueError(
-            f"Every commit requires version {required}; staged version is {staged}. "
-            "Run versioning.py bump, review and stage all three metadata files."
+            f"Every commit requires version {required} or release {release_required}; "
+            f"staged version is {staged}. "
+            "Run versioning.py bump (or bump --release for release preparation), "
+            "review and stage all three metadata files."
         )
 
 
-def bump() -> None:
+def bump(release: bool = False) -> None:
     """Change only three working files; never stage, commit or change a Git ref."""
-    previous, required = expected()
+    previous, required = expected(release)
     paths = [Path(name) for name in FILES]
     contents = [path.read_text(encoding="utf-8") for path in paths]
     current = version(contents)
@@ -103,9 +108,14 @@ def bump() -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("action", choices=["check", "bump"])
+    parser.add_argument(
+        "--release", action="store_true", help="Prepare next minor.0 only with bump."
+    )
     args = parser.parse_args()
+    if args.release and args.action != "bump":
+        parser.error("--release is only valid with bump")
     try:
-        check_staged() if args.action == "check" else bump()
+        check_staged() if args.action == "check" else bump(args.release)
     except (
         ValueError,
         KeyError,

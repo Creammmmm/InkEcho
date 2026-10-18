@@ -62,7 +62,7 @@ def test_bootstrap_has_exact_parent_and_old_version():
 
 
 @pytest.mark.parametrize(
-    "value", ["1.2.3", "1.2.5", "1.3.0", "2.0.0", "1.2.4a1", "01.2.4"]
+    "value", ["1.2.3", "1.2.5", "1.3.1", "1.4.0", "2.0.0", "1.2.4a1", "01.2.4"]
 )
 def test_staged_missing_skipped_or_other_version_is_rejected(repo, value):
     metadata(repo, value)
@@ -131,3 +131,40 @@ def test_empty_commit_is_not_exempt(repo):
         check=False,
     )
     assert rejected.returncode and "requires version 1.2.4" in rejected.stderr
+
+
+def test_release_bump_is_explicit_and_changes_only_working_metadata(repo):
+    before = git(repo, "rev-parse", "HEAD").stdout
+    command = ["python3", "scripts/validation/versioning.py", "bump", "--release"]
+    subprocess.run(command, check=True)
+    assert (
+        versioning.version([Path(n).read_text() for n in versioning.FILES]) == "1.3.0"
+    )
+    assert git(repo, "diff", "--cached", "--name-only").stdout == ""
+    assert git(repo, "rev-parse", "HEAD").stdout == before
+    subprocess.run(command, check=True)  # Idempotent before staging.
+    git(repo, "add", ".")
+    versioning.check_staged()
+    git(repo, "commit", "-m", "build(release): prepare next minor release")
+    assert versioning.expected() == ("1.3.0", "1.3.1")
+    versioning.bump()
+    git(repo, "add", *versioning.FILES)
+    versioning.check_staged()
+
+
+def test_release_flag_cannot_change_check_behavior(repo):
+    result = subprocess.run(
+        ["python3", "scripts/validation/versioning.py", "check", "--release"],
+        text=True,
+        capture_output=True,
+    )
+    assert result.returncode and "only valid with bump" in result.stderr
+
+
+def test_release_bump_does_not_overwrite_prepared_patch(repo):
+    versioning.bump()
+    with pytest.raises(ValueError, match="neither the parent nor next"):
+        versioning.bump(release=True)
+    assert (
+        versioning.version([Path(n).read_text() for n in versioning.FILES]) == "1.2.4"
+    )

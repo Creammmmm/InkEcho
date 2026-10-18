@@ -128,9 +128,15 @@ covered by the current HEAD receipt. Avoid bulk pushes with unrelated refs.
 
 The release-preparation commit moves the exact reviewed parent
 `76d8d5591017820caafed55e3741ab998fc44de7` from `0.1.0a18` to `0.2.0` once.
-Afterward every new commit, including documentation and empty commits, must keep
-X.Y and increment Z by exactly one. No skipped patch, prerelease or general
-major/minor exception is accepted. Future policy changes require explicit review.
+Afterward ordinary commits, including documentation and empty commits, keep X.Y
+and increment Z by exactly one: X.Y.Z becomes X.Y.(Z+1). A release-preparation
+commit is the explicit exception: keep X, increment Y by one and reset Z to zero
+(X.(Y+1).0). For example, 0.2.2 becomes 0.2.3 for an ordinary commit or 0.3.0
+for the next release preparation. X changes only when the user explicitly
+specifies it; there is no automatic major bump. Such a user-directed change must
+synchronize the three metadata fields and deliberately adjust the validation
+rule; the current gate rejects major changes. No skipped patch/minor or
+prerelease transition is accepted.
 
 Before staging a commit, run:
 
@@ -138,12 +144,25 @@ Before staging a commit, run:
 python3 scripts/validation/versioning.py bump
 ```
 
-This explicit helper modifies only the working copies of `pyproject.toml`,
+For an explicitly requested release, prepare its source commit with:
+
+```sh
+python3 scripts/validation/versioning.py bump --release
+```
+
+This prepares the next minor version with patch zero; it does not build, tag,
+create a GitHub release or publish anything. Release publication still requires
+the normal actual-package acceptance and authorization.
+
+Either explicit helper modifies only the working copies of `pyproject.toml`,
 `src/inkecho/__init__.py` and the local `inkecho` package entry in `uv.lock`.
 It neither stages files nor creates a commit. Review and stage all three version
 changes with the focused feature or documentation. The executable pre-commit
 hook checks those three **index blobs**, not unstaged working files; omissions,
-unsynchronized versions and a nonconsecutive patch reject the commit. Hooks never
+unsynchronized versions and transitions other than the next patch or next
+minor.0 reject the commit. The hook validates numbers, not whether a release is
+actually being published; agents must use the minor exception only for an
+explicitly requested release-preparation commit. Hooks never
 silently edit files. Do not use `--no-verify`.
 
 There is no special amend detection or exemption. A bare `git commit --amend`

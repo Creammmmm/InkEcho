@@ -217,8 +217,11 @@ Ubuntu 24.04 Xorg and Ubuntu 26.04 native Wayland/XWayland package gates before
 publishing. GNOME 46 native Wayland remains unsupported. Reuse the verified a18
 readiness and local pipeline checks; a renamed a18 image is not a 0.2.0 build.
 
-Every subsequent commit, including the package-report commit, increments only
+Ordinary subsequent commits, including package-report commits, increment only
 the patch version under the [development version policy](DEVELOPMENT.md#per-commit-application-versions).
+Future release-preparation commits instead keep X, increment Y by one and reset
+Z to zero (`bump --release`); X changes only when explicitly specified by the
+user. This does not automatically build or publish a release.
 Thus a 0.2.1 report successor may document the frozen 0.2.0 release artifact;
 the release tag still targets its exact 0.2.0 product commit. Do not rebuild
 0.2.1 merely to make the development HEAD equal the released version.
