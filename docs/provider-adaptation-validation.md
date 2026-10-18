@@ -10,24 +10,24 @@
 
 | 供应商/参考ID | 线协议 | 凭据 | 实施与验证状态 |
 | --- | --- | --- | --- |
-| 火山/volcengine | gzip/二进制序列WebSocket，大模型ASR | API key或app/access/resource组合 | pending，专属节奏/负末包/长度校验 |
-| ElevenLabs | multipart speech-to-text，xi-api-key/model_id | API key | 批1实现中，pending本地协议测试 |
-| 百炼/bailian | run-task/binary PCM/finish-task WS | API key | pending，与Qwen协议分开 |
+| 火山/volcengine | gzip/二进制序列WebSocket，大模型ASR | API key或app/access/resource组合 | 批4本地WSS/二进制界限通过，云认证未验 |
+| ElevenLabs | multipart speech-to-text，xi-api-key/model_id | API key | 批1本地TLS通过，云认证未验 |
+| 百炼/bailian | run-task/binary PCM/finish-task WS | API key | 批3独立任务WS本地通过，云认证未验 |
 | 百炼Qwen realtime | session/append/commit/finished WS | API key | 已有实现，待本轮回归 |
 | 百炼fun-asr-flash | multimodal-generation HTTP JSON | API key | 已有实现，待本轮回归 |
-| SiliconFlow | audio/transcriptions multipart | API key | 批1实现中，pending |
-| StepFun | ASR专用realtime WS；HTTP按官方能力另列 | API key | pending，不将对话语音回答作转写 |
-| Zhipu | audio/transcriptions HTTP | API key | pending官方字段与模型限制 |
-| MiniMax | speech_to_text multipart | API key | pending专属endpoint/响应 |
-| Groq | audio/transcriptions multipart | API key | 批1实现中，pending |
-| OpenAI/whisper | audio/transcriptions multipart | API key | 批1实现中，pending |
-| OpenRouter | audio/transcriptions JSON input_audio或multipart | API key | 批1实现中，pending；官方支持两种 |
-| OrcaRouter | 待核官方音频chat请求 | API key | pending，不由网关名称推断协议 |
-| ZenMux | audio/transcriptions JSON input_audio | API key | pending官方请求校验 |
+| SiliconFlow | audio/transcriptions multipart | API key | 批1本地TLS通过，云认证未验 |
+| StepFun | ASR专用realtime WS；HTTP按官方能力另列 | API key | 批2专用ASR WS/HTTP本地通过，云认证未验 |
+| Zhipu | audio/transcriptions HTTP | API key | 批2本地TLS/30秒限制通过，云认证未验 |
+| MiniMax | speech_to_text multipart | API key | 批2本地TLS通过，云认证未验 |
+| Groq | audio/transcriptions multipart | API key | 批1本地TLS通过，云认证未验 |
+| OpenAI/whisper | audio/transcriptions multipart | API key | 批1本地TLS通过，云认证未验 |
+| OpenRouter | audio/transcriptions JSON input_audio或multipart | API key | 批1显式JSON本地TLS通过，官方支持两种；云未验 |
+| OrcaRouter | 显式audio chat请求 | API key | 批2本地TLS通过；兼容字段推断，云未验 |
+| ZenMux | audio/transcriptions JSON input_audio | API key | 批2本地TLS通过，云认证未验 |
 | openai-compatible | 显式自选协议+端点 | API key | 批1 multipart基础，unknown模型未验证 |
-| MiMo | chat/completions input_audio/asr_options JSON | API key | 批1实现中，pending |
-| 讯飞/iflytek | HMAC-SHA256签名WS，status0/1/2与替换结果 | appID/API key/API secret | pending，多字段SecretStore bundle |
-| 腾讯/tencent-cloud | HMAC-SHA1签名WS，voice_id/index/final | appID/secretID/secretKey | pending，40ms/1280B@16k节奏 |
+| MiMo | chat/completions input_audio/asr_options JSON | API key | 批1本地TLS通过，云认证未验 |
+| 讯飞/iflytek | HMAC-SHA256签名WS，status0/1/2与替换结果 | appID/API key/API secret | 批4本地WSS/bundle通过，云认证未验 |
+| 腾讯/tencent-cloud | HMAC-SHA1签名WS，voice_id/index/final | appID/secretID/secretKey | 批4本地WSS/40ms分帧通过，云认证未验 |
 
 ## 润色矩阵
 
@@ -100,3 +100,20 @@ StepFun以[当前ASR专属WS](https://platform.stepfun.com/docs/zh/api-reference
 第一轮WIP测试发现重叠检查未实际插入，以及保存未选realtime_url时模型门遮蔽了URL配置错误。两项已修：明确区间相交检查，所有URL先做对应协议构造校验，再能力门；四项旧secret-URL断言不变。相关实时组合255 passed/9.60s（修复后的本地TLS/WSS与离屏UI），补充测试结果随后记录；不作为真实云认证或整个供应商目标完成。
 
 批3根独立R1为116 passed/5 failed（8.27s），R2保持旧断言不变后121 passed/8.13s。新增empty与两个未选WS URL门的补充组合首次106 passed/2 failed，错误在测试于事件循环外调用page.run；改为async scenario内await，产品代码未为此改变，最终108 passed/7.96s。原255 passed/9.60s实时组合与此补充门分别保留，不虚加成独立可靠性样本。
+
+
+## 批4：讯飞、腾讯与火山实时语音
+
+新增独立签名/二进制协议，复用Qwen仅限有界队列、active/deadline、finish等待与连接清理；各自覆盖_open/_send_audio/_event，火山另覆盖二进制_receive，不调用Qwen session.update/append/commit/session.finish或model-query。提前completed回调禁用，不将片段绕过完整终态。共享asr_wire只做direct TLS连接、受限凭据解码及精确分帧节奏，不自动重连/重发。
+
+讯飞按host/date/request-line HMAC-SHA256签名，40ms/1280B@16k分帧，status0带配置、status1音频、status2一次收尾。60秒累计PCM上限前置拒绝，不自动拆成多次付费连接。只取每词首候选；apd/rpl闭区间修订，已处理sn摘要保留，重复不复活已替换片段、冲突拒绝。首sn可0或1，随后新sn必须连续；WebSocket本身有序，缺口/乱序失败而不猜重建。sid第一响应锁定，后续可省略、出现则一致，最终status2必须在已发送收尾后。
+
+腾讯按官方HMAC-SHA1排序查询签名；握手code0及voice_id匹配后发送40ms二进制PCM，重组capture的3200B块为1280B帧及最后余尾，总字节精确不填充。只聚合slice_type2的indexed最终分句，去重/冲突/缺片/pending检查，最终final1且已发送一次end后才返回。目录仅旧WS实际engine类型，不把TokenHub的Hy-ASR HTTP型号冒充此族。
+
+火山依据[大模型ASR原始帧](https://docs.volcengine.com/docs/DoubaoVoice/LargemodelstreamingautomaticspeechrecognitionAPI?lang=zh)、[新版双向ASR](https://docs.volcengine.com/docs/DoubaoVoice/bidirectional-streaming-automatic-speech-recognition-websocket?lang=zh)、[错误码](https://docs.volcengine.com/docs/DoubaoVoice/error-code-query?lang=zh)：init为JSON/gzip，音频为raw/gzip，100ms分帧。无逐帧ACK等待，兼容async无新识别时不返回。末包按flags2/3判断，不把sequence符号当唯一条件（示例正sequence3也测）；压缩前后长度、gzip eof/尾随数据均有限额。只最终result.text返回，不拼接累计delta。原始payload示例是result/audio_info；不误把SDK解析包装层字段当必需。若payload显式含code，只接受0或20000000，不沿用旧协议1000。API Key或app/access鉴权头分别测试，资源ID显式填授权值，Request/Connect ID独立生成，不猜默认资源。
+
+界面为每字段密码输入；单API key仍保存裸值兼容旧Qwen/润色，多字段完整bundle只存SecretStore。全留空保留整组，部分填写在任何写入前拒绝；切换火山凭据模式必须完整新组并分配新provider/ref，旧服务不覆盖。预设仍只改草稿。资源ID专用输入、静态目录明确未联网验证，不访问凭据或伪造连接成功。
+
+本批真实本机WSS由测试服务器独立解析原始header/PCM及重算HMAC，另固定date/nonce/path排序和篡改向量，覆盖两种火山鉴权、错identity/remote error/close、取消/active失效/deadline、gzip炸弹/截断/尾随、sn修订及60秒门。`QT_QPA_PLATFORM=offscreen .venv/bin/pytest -q tests/test_signed_asr.py tests/test_ui.py tests/test_provider_catalog.py tests/test_application_realtime.py`，136 passed/10.33s。历史WIP：三正常用例最初仅因测试错误要求_socket=None而失败，改为验证已await关闭的close_code；未改成熟Qwen。app/access测试首次夹具仍选API模式导致1失败，修夹具选择后39 passed/4.88s；60秒测试首次无eventloop调用生命周期导致135 passed/1 failed，改async测试后136通过。尚无云账户、麦克风、桌面输出或新包验证；Responses/Messages/Gemini等润色族仍继续实现。
+
+根对同组合独立复测136 passed/10.28s。最后补充畸形JSON类型门（Tencent模型与Volc凭据模式）及静态发现汇总：同role/adapter/protocol聚合兼容内置模型，Paraformer不再误显示仅Fun列表，仍不读密钥、不声称连接成功。最后UI/catalog 86 passed/5.62s，纯边界选定16 passed/0.11s；这些补充与完整组合分列，不累加作独立样本。

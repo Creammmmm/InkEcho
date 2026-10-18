@@ -6,6 +6,9 @@ from inkecho.config import Provider
 from inkecho.providers import ProviderError
 
 ADAPTERS = {
+    "xfyun": ("inkecho.xfyun_realtime", "XfyunConfig", "XfyunSession"),
+    "tencent-asr": ("inkecho.tencent_realtime", "TencentConfig", "TencentSession"),
+    "volcengine": ("inkecho.volc_realtime", "VolcConfig", "VolcSession"),
     "qwen": ("inkecho.realtime", "RealtimeConfig", "QwenRealtimeSession"),
     "stepfun-realtime": (
         "inkecho.step_realtime",

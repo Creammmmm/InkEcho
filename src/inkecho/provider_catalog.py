@@ -16,7 +16,9 @@ class Preset:
     protocol: str = "http"
 
 
-WS_ASR_ADAPTERS = frozenset({"stepfun-realtime", "dashscope-ws"})
+WS_ASR_ADAPTERS = frozenset(
+    {"stepfun-realtime", "dashscope-ws", "xfyun", "tencent-asr", "volcengine"}
+)
 HTTP_ASR_ADAPTERS = frozenset(
     {
         "multipart",
@@ -31,10 +33,50 @@ HTTP_ASR_ADAPTERS = frozenset(
     }
 )
 STATIC_MODEL_ADAPTERS = frozenset(
-    {"elevenlabs", "mimo-asr", "minimax-asr", "zhipu-asr"}
+    {"elevenlabs", "mimo-asr", "minimax-asr", "zhipu-asr", *WS_ASR_ADAPTERS}
 )
 
 PRESETS = (
+    Preset(
+        "xfyun",
+        "讯飞 · 实时听写",
+        "transcription",
+        "xfyun",
+        "https://iat-api.xfyun.cn",
+        ("iat",),
+        ("app_id", "api_key", "api_secret"),
+        "xfyun_iat",
+    ),
+    Preset(
+        "tencent-asr",
+        "腾讯云 · 实时识别",
+        "transcription",
+        "tencent-asr",
+        "https://asr.cloud.tencent.com",
+        ("16k_zh", "16k_en", "16k_zh_large"),
+        ("app_id", "secret_id", "secret_key"),
+        "tencent_asr",
+    ),
+    Preset(
+        "volcengine-key",
+        "火山 · API Key 实时识别",
+        "transcription",
+        "volcengine",
+        "https://openspeech.bytedance.com",
+        ("bigmodel",),
+        ("api_key",),
+        "volc_binary",
+    ),
+    Preset(
+        "volcengine-app",
+        "火山 · App / Access 实时识别",
+        "transcription",
+        "volcengine",
+        "https://openspeech.bytedance.com",
+        ("bigmodel",),
+        ("app_key", "access_key"),
+        "volc_binary",
+    ),
     Preset(
         "qwen",
         "阿里云百炼 · HTTP / Qwen 实时",
@@ -208,7 +250,8 @@ def asr_capability(model: str, adapter: str, parameters: dict) -> str:
     orca_audio = value == "google/gemini-2.5-pro"
     zenmux = value == "qwen/qwen3-asr-flash"
     known = (
-        dashscope
+        value in {"iat", "16k_zh", "16k_en", "16k_zh_large", "bigmodel"}
+        or dashscope
         or step_live
         or step_http
         or orca_audio
@@ -219,6 +262,11 @@ def asr_capability(model: str, adapter: str, parameters: dict) -> str:
         or value in {"scribe_v1", "scribe_v2", "mimo-v2.5-asr"}
     )
     match = {
+        "xfyun": value == "iat" and parameters.get("asr_protocol") == "xfyun_iat",
+        "tencent-asr": value in {"16k_zh", "16k_en", "16k_zh_large"}
+        and parameters.get("asr_protocol") == "tencent_asr",
+        "volcengine": value == "bigmodel"
+        and parameters.get("asr_protocol") == "volc_binary",
         "qwen": qwen_live if realtime else qwen_http and http,
         "multipart": multipart and http,
         "openrouter-asr": multipart and http,

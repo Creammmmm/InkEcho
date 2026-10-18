@@ -22,8 +22,10 @@ from inkecho.provider_catalog import (
     WS_ASR_ADAPTERS,
     asr_capability,
 )
+from inkecho.provider_credentials import encode_credentials
 from inkecho.providers import ProviderError, validate_provider_protocol
 from inkecho.realtime import PROTOCOL, RealtimeConfig
+from inkecho.security import CredentialError
 from inkecho.ui.widgets import Page, actions, button, card, label
 
 
@@ -54,6 +56,22 @@ class ProviderPage(Page):
         self.key = QLineEdit()
         self.key.setEchoMode(QLineEdit.EchoMode.Password)
         self.key.setPlaceholderText("留空保留现有密钥；不会显示已保存密钥")
+        self.credential_inputs = {"api_key": self.key}
+        for field in (
+            "app_id",
+            "api_secret",
+            "secret_id",
+            "secret_key",
+            "app_key",
+            "access_key",
+        ):
+            widget = QLineEdit()
+            widget.setEchoMode(QLineEdit.EchoMode.Password)
+            widget.setPlaceholderText("全部留空保留；修改时须完整填写本组凭据")
+            self.credential_inputs[field] = widget
+        self.resource_id = QLineEdit()
+        self.resource_id.setPlaceholderText("按控制台授权填写，不自动猜测资源")
+        self.credential_labels = {}
         self.parameters = QPlainTextEdit("{}")
         self.parameters.setMaximumHeight(100)
         if not polishing:
@@ -62,6 +80,9 @@ class ProviderPage(Page):
             self.protocol.addItem("边录边识别 · Qwen 实时 WebSocket", PROTOCOL)
             self.protocol.addItem("边录边识别 · 阶跃 ASR WebSocket", "stepfun_realtime")
             self.protocol.addItem("边录边识别 · 百炼任务 WebSocket", "dashscope_task")
+            self.protocol.addItem("边录边识别 · 讯飞听写", "xfyun_iat")
+            self.protocol.addItem("边录边识别 · 腾讯云识别", "tencent_asr")
+            self.protocol.addItem("边录边识别 · 火山识别", "volc_binary")
             self.protocol.setPlaceholderText("请修正请求参数中的转写方式")
             self.realtime_url = QLineEdit()
             self.realtime_url.setPlaceholderText(
@@ -96,6 +117,13 @@ class ProviderPage(Page):
         )
         for title, widget in rows:
             form.addRow(title, widget)
+        self.credential_labels["api_key"] = form.labelForField(self.key)
+        for field, widget in self.credential_inputs.items():
+            if field != "api_key":
+                form.addRow(field.replace("_", " ").title(), widget)
+                self.credential_labels[field] = form.labelForField(widget)
+        form.addRow("资源 ID · 火山授权资源", self.resource_id)
+        self.resource_label = form.labelForField(self.resource_id)
         body.addLayout(form)
         self.model_hint = label("", muted=True)
         body.addWidget(self.model_hint)
@@ -149,6 +177,7 @@ class ProviderPage(Page):
         self.model.currentTextChanged.connect(self.model_changed)
         self.url.textChanged.connect(self.model_changed)
         self.parameters.textChanged.connect(self.parameters_changed)
+        self.resource_id.textChanged.connect(self.model_changed)
         if polishing:
             self.streaming.toggled.connect(self.model_changed)
         else:
@@ -174,8 +203,14 @@ class ProviderPage(Page):
         self.name.setText(preset.label)
         self.url.setText(preset.base_url)
         values = {} if preset.protocol == "http" else {"asr_protocol": preset.protocol}
+        if self.adapter == "volcengine":
+            values["credential_mode"] = (
+                "app_access" if preset.id == "volcengine-app" else "api_key"
+            )
+        self.resource_id.clear()
         self.parameters.setPlainText(json.dumps(values))
-        self.key.clear()
+        self.configure_credentials()
+        self.clear_credentials()
         with QSignalBlocker(self.model):
             self.model.clear()
             self.model.addItems(preset.models)
@@ -228,6 +263,7 @@ class ProviderPage(Page):
             except ConfigError:
                 self.update_model_hint()
                 return
+            self.configure_credentials()
             mode = values.get("asr_protocol", "http")
             endpoint = values.get("realtime_url", "")
             with QSignalBlocker(self.protocol), QSignalBlocker(self.realtime_url):
@@ -236,7 +272,15 @@ class ProviderPage(Page):
                 if self.realtime_url.text() != displayed_endpoint:
                     self.realtime_url.setText(displayed_endpoint)
                 self.realtime_url.setEnabled(
-                    mode in {PROTOCOL, "stepfun_realtime", "dashscope_task"}
+                    mode
+                    in {
+                        PROTOCOL,
+                        "stepfun_realtime",
+                        "dashscope_task",
+                        "xfyun_iat",
+                        "tencent_asr",
+                        "volc_binary",
+                    }
                 )
         self.update_model_hint()
 
@@ -244,7 +288,14 @@ class ProviderPage(Page):
         self.revision += 1
         self.realtime_url.setEnabled(
             self.protocol.currentData()
-            in {PROTOCOL, "stepfun_realtime", "dashscope_task"}
+            in {
+                PROTOCOL,
+                "stepfun_realtime",
+                "dashscope_task",
+                "xfyun_iat",
+                "tencent_asr",
+                "volc_binary",
+            }
         )
         try:
             values = self.parameter_values()
@@ -255,7 +306,14 @@ class ProviderPage(Page):
         if mode == "http":
             values.pop("asr_protocol", None)
             values.pop("realtime_url", None)
-        elif mode in {PROTOCOL, "stepfun_realtime", "dashscope_task"}:
+        elif mode in {
+            PROTOCOL,
+            "stepfun_realtime",
+            "dashscope_task",
+            "xfyun_iat",
+            "tencent_asr",
+            "volc_binary",
+        }:
             values["asr_protocol"] = mode
             endpoint = self.realtime_url.text().strip()
             if endpoint:
@@ -393,6 +451,16 @@ class ProviderPage(Page):
                 if p.role == self.role
                 and p.adapter == provider.adapter
                 and p.base_url == provider.base_url
+                and p.protocol == provider.parameters.get("asr_protocol", "http")
+                and (not p.models or provider.model in p.models)
+                and (
+                    provider.adapter != "volcengine"
+                    or (p.id == "volcengine-app")
+                    == (
+                        provider.parameters.get("credential_mode", "api_key")
+                        == "app_access"
+                    )
+                )
             ),
             None,
         )
@@ -403,7 +471,9 @@ class ProviderPage(Page):
         self.parameters.setPlainText(
             json.dumps(provider.parameters, ensure_ascii=False, indent=2)
         )
-        self.key.clear()
+        self.clear_credentials()
+        self.resource_id.setText(provider.parameters.get("resource_id", ""))
+        self.configure_credentials()
         settings = self.session.store.load_settings()
         if self.role == "polishing":
             self.streaming.setChecked(settings.polishing_streaming)
@@ -436,11 +506,56 @@ class ProviderPage(Page):
         )
         self.model.setCurrentText("")
         self.parameters.setPlainText("{}")
-        self.key.clear()
+        self.clear_credentials()
+        self.resource_id.clear()
+        self.configure_credentials()
         self.current.setChecked(True)
         self.update_model_hint()
 
+    def credential_fields(self):
+        if self.adapter == "xfyun":
+            return ("app_id", "api_key", "api_secret")
+        if self.adapter == "tencent-asr":
+            return ("app_id", "secret_id", "secret_key")
+        if (
+            self.adapter == "volcengine"
+            and self.parameter_values().get("credential_mode") == "app_access"
+        ):
+            return ("app_key", "access_key")
+        return ("api_key",)
+
+    def clear_credentials(self):
+        for widget in self.credential_inputs.values():
+            widget.clear()
+
+    def configure_credentials(self):
+        fields = self.credential_fields()
+        if getattr(self, "_visible_credential_fields", fields) != fields:
+            self.clear_credentials()
+        self._visible_credential_fields = fields
+        for field, widget in self.credential_inputs.items():
+            widget.setVisible(field in fields)
+            if field in self.credential_labels:
+                self.credential_labels[field].setVisible(field in fields)
+        self.resource_id.setVisible(self.adapter == "volcengine")
+        self.resource_label.setVisible(self.adapter == "volcengine")
+
+    def credential_value(self):
+        fields = self.credential_fields()
+        values = {field: self.credential_inputs[field].text() for field in fields}
+        if not any(values.values()):
+            return ""
+        if fields == ("api_key",):
+            return values["api_key"]
+        try:
+            return encode_credentials(values, fields)
+        except CredentialError:
+            raise ConfigError("请完整填写本组凭据，或全部留空保留现有凭据。") from None
+
     def provider(self):
+        values = self.parameter_values()
+        if self.adapter == "volcengine":
+            values["resource_id"] = self.resource_id.text().strip()
         return Provider(
             self.identifier,
             self.name.text().strip(),
@@ -449,7 +564,7 @@ class ProviderPage(Page):
             self.url.text().strip(),
             self.model.currentText().strip(),
             self.reference,
-            self.parameter_values(),
+            values,
         )
 
     async def save(self):
@@ -460,15 +575,32 @@ class ProviderPage(Page):
             if provider.adapter == "qwen":
                 RealtimeConfig(provider.parameters["realtime_url"], provider.model)
             else:
-                from inkecho.asr_streaming import classes
+                from inkecho.asr_wire import validate_endpoint
 
-                config_type, _ = classes(provider.adapter)
-                config_type(provider.parameters["realtime_url"], provider.model)
+                validate_endpoint(provider.parameters["realtime_url"])
         if "asr_protocol" in provider.parameters or provider.adapter in WS_ASR_ADAPTERS:
             self.validate_protocol(provider)
         revision = self.revision
-        value = self.key.text()
-        self.key.clear()
+        value = self.credential_value()
+        if provider.adapter == "volcengine":
+            previous = next(
+                (
+                    item
+                    for item in self.session.store.providers()
+                    if item.id == provider.id
+                ),
+                None,
+            )
+            if previous and previous.parameters.get(
+                "credential_mode", "api_key"
+            ) != provider.parameters.get("credential_mode", "api_key"):
+                if not value:
+                    raise ConfigError("切换凭据模式须完整填写新凭据；原服务保持不变。")
+                identifier = "provider-" + uuid.uuid4().hex
+                provider = replace(
+                    provider, id=identifier, key_ref=f"provider/{identifier}"
+                )
+        self.clear_credentials()
         updates = {self.role + "_timeout_seconds": self.timeout.value()}
         if self.current.isChecked():
             updates[self.role + "_provider"] = provider.id
@@ -493,7 +625,7 @@ class ProviderPage(Page):
         await self.session.save_key(self.reference, None)
         if revision != self.revision:
             return
-        self.key.clear()
+        self.clear_credentials()
         self.message.setText("此供应商的密钥已从系统密钥环删除。")
 
     def delete(self):
@@ -519,8 +651,19 @@ class ProviderPage(Page):
         provider = self.provider()
         revision = self.revision
         if provider.adapter in STATIC_MODEL_ADAPTERS:
-            models = next(
-                (p.models for p in PRESETS if p.adapter == provider.adapter), ()
+            models = tuple(
+                dict.fromkeys(
+                    model
+                    for preset in PRESETS
+                    if preset.role == provider.role
+                    and preset.adapter == provider.adapter
+                    and preset.protocol
+                    == provider.parameters.get("asr_protocol", "http")
+                    for model in preset.models
+                    if provider.role != "transcription"
+                    or asr_capability(model, provider.adapter, provider.parameters)
+                    == "supported"
+                )
             )
             self.available_models = models
             selected = self.model.currentText()

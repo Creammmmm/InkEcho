@@ -12,7 +12,7 @@ from PySide6.QtTest import QTest
 from PySide6.QtWidgets import QPushButton
 
 from inkecho.app import AudioError, Session
-from inkecho.config import BUILTIN_PROMPT, ConfigStore
+from inkecho.config import BUILTIN_PROMPT, ConfigError, ConfigStore
 from inkecho.core import Failure, State
 from inkecho.integration import DesktopIntegration
 from inkecho.logging import DiagnosticLog
@@ -1008,3 +1008,113 @@ def test_unselected_ws_url_secret_is_rejected_before_credential_save(window, pre
     assert before == {
         p: p.read_bytes() for p in window.session.store.root.rglob("*.json")
     }
+
+
+@pytest.mark.parametrize(
+    "preset,fields",
+    [
+        ("xfyun", ("app_id", "api_key", "api_secret")),
+        ("tencent-asr", ("app_id", "secret_id", "secret_key")),
+        ("volcengine-app", ("app_key", "access_key")),
+    ],
+)
+def test_multi_credentials_save_one_secret_bundle_and_blank_preserves(
+    window, preset, fields
+):
+    async def scenario():
+        page = window.pages[2]
+        page.apply_preset(page.preset.findData(preset))
+        if preset.startswith("volcengine"):
+            page.resource_id.setText("synthetic-resource")
+        saved = []
+
+        async def save_key(reference, value):
+            saved.append((reference, value))
+
+        window.session.save_key = save_key
+        for name in fields:
+            page.credential_inputs[name].setText(
+                "123" if name == "app_id" else "test-" + name
+            )
+        reference = page.reference
+        await page.save()
+        assert len(saved) == 1 and saved[0][0] == reference
+        bundle = json.loads(saved[0][1])
+        assert set(bundle) == set(fields)
+        assert all(not widget.text() for widget in page.credential_inputs.values())
+        await page.save()
+        assert len(saved) == 1
+        provider = window.session.store.load_provider(page.identifier)
+        assert not any(name in provider.parameters for name in fields)
+
+    asyncio.run(scenario())
+
+
+def test_partial_credential_bundle_does_not_write_anything(window):
+    async def scenario():
+        page = window.pages[2]
+        page.apply_preset(page.preset.findData("xfyun"))
+        page.credential_inputs["app_id"].setText("123")
+
+        async def forbidden(*args):
+            pytest.fail("partial credentials must be rejected before SecretStore")
+
+        window.session.save_key = forbidden
+        before = window.session.store.providers()
+        with pytest.raises(ConfigError):
+            await page.save()
+        assert window.session.store.providers() == before
+
+    asyncio.run(scenario())
+
+
+def test_volc_credential_mode_requires_new_ref_and_complete_bundle(window):
+    async def scenario():
+        page = window.pages[2]
+        page.apply_preset(page.preset.findData("volcengine-key"))
+        page.resource_id.setText("synthetic-resource")
+        page.key.setText("old-synthetic")
+        saved = []
+
+        async def save_key(reference, value):
+            saved.append((reference, value))
+
+        window.session.save_key = save_key
+        await page.save()
+        old_id, old_ref = page.identifier, page.reference
+        values = page.parameter_values()
+        values["credential_mode"] = "app_access"
+        page.parameters.setPlainText(json.dumps(values))
+        assert page.credential_inputs["app_key"].isHidden() is False
+        assert page.key.isHidden()
+        with pytest.raises(ConfigError):
+            await page.save()
+        page.credential_inputs["app_key"].setText("new-app")
+        page.credential_inputs["access_key"].setText("new-access")
+        await page.save()
+        assert page.identifier != old_id and page.reference != old_ref
+        assert window.session.store.load_provider(old_id).key_ref == old_ref
+        assert len(saved) == 2 and saved[-1][0] != old_ref
+        page.load()
+        assert page.preset.currentData() == "volcengine-app"
+        assert page.credential_fields() == ("app_key", "access_key")
+        assert page.parameter_values()["credential_mode"] == "app_access"
+
+    asyncio.run(scenario())
+
+
+def test_dashscope_static_discovery_includes_paraformer_without_secret_access(window):
+    async def scenario():
+        page = window.pages[2]
+        page.apply_preset(page.preset.findData("dashscope-paraformer"))
+
+        async def forbidden(*args):
+            pytest.fail("static discovery must not read credentials")
+
+        window.session.key = forbidden
+        await page.discover()
+        assert "paraformer-realtime-v2" in page.available_models
+        assert "尚未联网验证" in page.message.text()
+        assert "连接成功" not in page.message.text()
+
+    asyncio.run(scenario())
