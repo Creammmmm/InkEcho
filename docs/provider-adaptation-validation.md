@@ -89,3 +89,14 @@ StepFun以[当前ASR专属WS](https://platform.stepfun.com/docs/zh/api-reference
 根对批1精确e58c798独立完整workflow：Ruff/306format、1662 passed/3 skipped，44.37s，未push。本轮后续提交仍需最终HEAD新收据。
 
 批2冻结组合命令：`QT_QPA_PLATFORM=offscreen .venv/bin/pytest -q tests/test_step_realtime.py tests/test_http_asr.py tests/test_provider_catalog.py tests/test_providers.py tests/test_provider_capability.py tests/test_ui.py tests/test_application_realtime.py tests/test_application_early_realtime.py --tb=short`，284 passed/17.66s。根独立本批核心143 passed/12.13s。新增9个HTTP适配的实际TLS逐字段检查（包含base64、model、Orca文本+音频/no-asr_options、streamfalse、MiniMax语言header、Zhipu bracket-array）及Step实际WSS正常/可选meta/握手与收尾超时/早完成/错item/布尔index/empty/VAD拒绝/有界队列/取消与绝对deadline。新增Session测试证明Step走其专属factory且不调用Qwen注入factory，旧Qwen相关回归保持。第一次批2组合仅旧UI错误提示断言未随新多协议提示更新失败；后一次新增Step UI发现预设未显式选默认模型而空白，已修并加入默认ID断言，最终命令通过。无云认证、用户窗口或麦克风操作。余下DashScope任务WS、火山/讯飞/腾讯及Responses/Messages/Gemini仍待后续实现，不将此批当完整目标完成。
+
+
+## 批3：百炼任务式实时与统一路由
+
+`asr_streaming.py`为Session、录音能力测试、UI协议验证共用显式内置config/factory映射，禁止用户JSON指定import模块。Qwen保持原注入factory契约与成熟实现；Step和百炼不回退为Qwen。百炼默认Fun-ASR-Realtime及Paraformer-Realtime-v2，16k实现不列8k-only型号；QwenAudio streaming在未核同事件schema前不放行此新族。自定义WSS须显式填写并验证，运行时不拼model查询或复用Qwen append JSON。
+
+依据[Fun客户端事件](https://help.aliyun.com/en/model-studio/fun-asr-client-events)、[Paraformer服务端事件](https://help.aliyun.com/zh/model-studio/paraformer-server-events)、[官方模型目录](https://help.aliyun.com/en/model-studio/asr-model)：run-task UUID与task-started/所有结果/finish-task/task-finished严格匹配；task-started前不发音频；二进制PCM帧至多3200字节，按16k单声道100ms节奏，预录探测同样限速。仅sentence_end=true汇总、heartbeat忽略；按begin_time排序，完全相同重复不增字、冲突重复或不同begin的区间重叠拒绝。未最终确认片段不能被task-finished提升为成功；task-failed/错ID/早关闭/取消/过期不返回部分结果。
+
+第一轮WIP测试发现重叠检查未实际插入，以及保存未选realtime_url时模型门遮蔽了URL配置错误。两项已修：明确区间相交检查，所有URL先做对应协议构造校验，再能力门；四项旧secret-URL断言不变。相关实时组合255 passed/9.60s（修复后的本地TLS/WSS与离屏UI），补充测试结果随后记录；不作为真实云认证或整个供应商目标完成。
+
+批3根独立R1为116 passed/5 failed（8.27s），R2保持旧断言不变后121 passed/8.13s。新增empty与两个未选WS URL门的补充组合首次106 passed/2 failed，错误在测试于事件循环外调用page.run；改为async scenario内await，产品代码未为此改变，最终108 passed/7.96s。原255 passed/9.60s实时组合与此补充门分别保留，不虚加成独立可靠性样本。

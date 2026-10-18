@@ -16,7 +16,7 @@ class Preset:
     protocol: str = "http"
 
 
-WS_ASR_ADAPTERS = frozenset({"stepfun-realtime"})
+WS_ASR_ADAPTERS = frozenset({"stepfun-realtime", "dashscope-ws"})
 HTTP_ASR_ADAPTERS = frozenset(
     {
         "multipart",
@@ -90,6 +90,24 @@ PRESETS = (
         "mimo-asr",
         "https://api.xiaomimimo.com/v1",
         ("mimo-v2.5-asr",),
+    ),
+    Preset(
+        "dashscope-fun",
+        "百炼 · Fun-ASR 实时任务",
+        "transcription",
+        "dashscope-ws",
+        "https://dashscope.aliyuncs.com/api/v1",
+        ("fun-asr-realtime", "fun-asr-realtime-2026-02-28"),
+        protocol="dashscope_task",
+    ),
+    Preset(
+        "dashscope-paraformer",
+        "百炼 · Paraformer 实时任务",
+        "transcription",
+        "dashscope-ws",
+        "https://dashscope.aliyuncs.com/api/v1",
+        ("paraformer-realtime-v2",),
+        protocol="dashscope_task",
     ),
     Preset(
         "stepfun-realtime",
@@ -179,12 +197,19 @@ def asr_capability(model: str, adapter: str, parameters: dict) -> str:
             value,
         )
     )
+    dashscope = bool(
+        re.fullmatch(
+            r"(?:fun-asr-realtime|paraformer-realtime-v2)(?:-\d{4}-\d{2}-\d{2})?",
+            value,
+        )
+    )
     step_live = value in {"stepaudio-2.5-asr-stream", "step-asr-1.1-stream"}
     step_http = value in {"stepaudio-2.5-asr", "step-asr"}
     orca_audio = value == "google/gemini-2.5-pro"
     zenmux = value == "qwen/qwen3-asr-flash"
     known = (
-        step_live
+        dashscope
+        or step_live
         or step_http
         or orca_audio
         or zenmux
@@ -197,6 +222,8 @@ def asr_capability(model: str, adapter: str, parameters: dict) -> str:
         "qwen": qwen_live if realtime else qwen_http and http,
         "multipart": multipart and http,
         "openrouter-asr": multipart and http,
+        "dashscope-ws": dashscope
+        and parameters.get("asr_protocol") == "dashscope_task",
         "stepfun-http": step_http and http,
         "stepfun-realtime": step_live
         and parameters.get("asr_protocol") == "stepfun_realtime",

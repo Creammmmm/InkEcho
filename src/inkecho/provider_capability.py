@@ -8,7 +8,7 @@ import wave
 
 from inkecho.config import Provider
 from inkecho.providers import ProviderClient, ProviderError, Result
-from inkecho.realtime import MAX_FEED_BYTES, QwenRealtimeSession, RealtimeConfig
+from inkecho.realtime import MAX_FEED_BYTES, QwenRealtimeSession
 
 
 async def realtime_capability(
@@ -21,16 +21,9 @@ async def realtime_capability(
     ProviderClient._validate(provider, key)
     if provider.role != "transcription":
         raise ProviderError("configuration")
-    factory = QwenRealtimeSession
-    if provider.adapter == "stepfun-realtime":
-        from inkecho.step_realtime import StepRealtimeConfig, StepRealtimeSession
+    from inkecho.asr_streaming import create_streaming_session, streaming_config
 
-        config = StepRealtimeConfig.from_provider(provider)
-        factory = StepRealtimeSession
-    elif provider.adapter == "qwen":
-        config = RealtimeConfig.from_provider(provider)
-    else:
-        raise ProviderError("configuration")
+    config = streaming_config(provider)
     if not isinstance(audio, bytes) or not audio or len(audio) > 7_499_970:
         raise ProviderError("audio")
     try:
@@ -51,8 +44,13 @@ async def realtime_capability(
     except (wave.Error, EOFError, ValueError, TypeError, struct.error):
         raise ProviderError("audio") from None
     deadline = time.monotonic() + timeout_seconds
-    connection = factory(
-        config, key, timeout_seconds=timeout_seconds, deadline=deadline
+    connection = create_streaming_session(
+        provider,
+        config,
+        key,
+        qwen_factory=QwenRealtimeSession,
+        timeout_seconds=timeout_seconds,
+        deadline=deadline,
     )
     try:
         async with asyncio.timeout(timeout_seconds):

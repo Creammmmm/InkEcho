@@ -16,7 +16,12 @@ from PySide6.QtWidgets import (
 )
 
 from inkecho.config import ConfigError, Provider
-from inkecho.provider_catalog import PRESETS, STATIC_MODEL_ADAPTERS, asr_capability
+from inkecho.provider_catalog import (
+    PRESETS,
+    STATIC_MODEL_ADAPTERS,
+    WS_ASR_ADAPTERS,
+    asr_capability,
+)
 from inkecho.providers import ProviderError, validate_provider_protocol
 from inkecho.realtime import PROTOCOL, RealtimeConfig
 from inkecho.ui.widgets import Page, actions, button, card, label
@@ -56,6 +61,7 @@ class ProviderPage(Page):
             self.protocol.addItem("录音结束后上传 · HTTP", "http")
             self.protocol.addItem("边录边识别 · Qwen 实时 WebSocket", PROTOCOL)
             self.protocol.addItem("边录边识别 · 阶跃 ASR WebSocket", "stepfun_realtime")
+            self.protocol.addItem("边录边识别 · 百炼任务 WebSocket", "dashscope_task")
             self.protocol.setPlaceholderText("请修正请求参数中的转写方式")
             self.realtime_url = QLineEdit()
             self.realtime_url.setPlaceholderText(
@@ -229,13 +235,16 @@ class ProviderPage(Page):
                 displayed_endpoint = endpoint if isinstance(endpoint, str) else ""
                 if self.realtime_url.text() != displayed_endpoint:
                     self.realtime_url.setText(displayed_endpoint)
-                self.realtime_url.setEnabled(mode in {PROTOCOL, "stepfun_realtime"})
+                self.realtime_url.setEnabled(
+                    mode in {PROTOCOL, "stepfun_realtime", "dashscope_task"}
+                )
         self.update_model_hint()
 
     def protocol_changed(self):
         self.revision += 1
         self.realtime_url.setEnabled(
-            self.protocol.currentData() in {PROTOCOL, "stepfun_realtime"}
+            self.protocol.currentData()
+            in {PROTOCOL, "stepfun_realtime", "dashscope_task"}
         )
         try:
             values = self.parameter_values()
@@ -246,7 +255,7 @@ class ProviderPage(Page):
         if mode == "http":
             values.pop("asr_protocol", None)
             values.pop("realtime_url", None)
-        elif mode in {PROTOCOL, "stepfun_realtime"}:
+        elif mode in {PROTOCOL, "stepfun_realtime", "dashscope_task"}:
             values["asr_protocol"] = mode
             endpoint = self.realtime_url.text().strip()
             if endpoint:
@@ -261,20 +270,16 @@ class ProviderPage(Page):
 
     def validate_protocol(self, provider):
         validate_provider_protocol(provider)
-        if provider.parameters.get("asr_protocol") == PROTOCOL:
+        if provider.parameters.get("asr_protocol") is not None:
+            from inkecho.asr_streaming import streaming_config
+
             sample_rate = self.session.store.load_settings().sample_rate
             if sample_rate != 16000:
                 raise ConfigError(
-                    "Qwen 实时需要 16 kHz 录音；请在录音设置中手动选择。"
+                    "实时识别需要 16 kHz 录音；请在录音设置中手动选择。"
                     "当前采样率未被修改。"
                 )
-            RealtimeConfig.from_provider(provider, sample_rate=sample_rate)
-        elif provider.adapter == "stepfun-realtime":
-            from inkecho.step_realtime import StepRealtimeConfig
-
-            StepRealtimeConfig.from_provider(
-                provider, sample_rate=self.session.store.load_settings().sample_rate
-            )
+            streaming_config(provider, sample_rate=sample_rate)
 
     def update_model_hint(self):
         from inkecho.app import PROVIDER_LABELS
@@ -451,10 +456,16 @@ class ProviderPage(Page):
         provider = self.provider()
         # Reject secret-bearing/invalid endpoints before touching credentials or
         # persisting any parameter string, including an unselected URL draft.
-        if "asr_protocol" in provider.parameters:
+        if "realtime_url" in provider.parameters:
+            if provider.adapter == "qwen":
+                RealtimeConfig(provider.parameters["realtime_url"], provider.model)
+            else:
+                from inkecho.asr_streaming import classes
+
+                config_type, _ = classes(provider.adapter)
+                config_type(provider.parameters["realtime_url"], provider.model)
+        if "asr_protocol" in provider.parameters or provider.adapter in WS_ASR_ADAPTERS:
             self.validate_protocol(provider)
-        if "realtime_url" in provider.parameters and provider.adapter == "qwen":
-            RealtimeConfig(provider.parameters["realtime_url"], provider.model)
         revision = self.revision
         value = self.key.text()
         self.key.clear()

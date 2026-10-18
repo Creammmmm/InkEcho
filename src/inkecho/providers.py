@@ -54,10 +54,10 @@ def validate_provider_protocol(provider: Provider) -> None:
             == "unsupported"
         ):
             raise ProviderError("protocol")
-    if provider.adapter == "stepfun-realtime":
-        from inkecho.step_realtime import StepRealtimeConfig
+    if provider.adapter in WS_ASR_ADAPTERS:
+        from inkecho.asr_streaming import streaming_config
 
-        StepRealtimeConfig.from_provider(provider)
+        streaming_config(provider)
         return
     if provider.role != "transcription" or provider.adapter != "qwen":
         return

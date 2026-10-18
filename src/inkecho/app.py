@@ -15,9 +15,7 @@ from inkecho.platform.wayland_keyboard import keyboard_for_desktop
 from inkecho.providers import ProviderClient, ProviderError, validate_provider_protocol
 from inkecho.realtime import (
     MAX_FEED_BYTES,
-    PROTOCOL,
     QwenRealtimeSession,
-    RealtimeConfig,
 )
 from inkecho.security import CredentialError, SecretStore
 from inkecho.streaming_output import StreamingOutput, TextDelta
@@ -420,24 +418,12 @@ class Session(QObject):
                 raise CredentialError("请先选择转写模型并保存 API 密钥。")
             validate_provider_protocol(transcription)
             realtime_config = None
-            realtime_factory = self.realtime_factory
             if transcription.parameters.get("asr_protocol") is not None:
-                if transcription.parameters["asr_protocol"] == PROTOCOL:
-                    realtime_config = RealtimeConfig.from_provider(
-                        transcription, sample_rate=self.settings.sample_rate
-                    )
-                elif transcription.parameters["asr_protocol"] == "stepfun_realtime":
-                    from inkecho.step_realtime import (
-                        StepRealtimeConfig,
-                        StepRealtimeSession,
-                    )
+                from inkecho.asr_streaming import streaming_config
 
-                    realtime_config = StepRealtimeConfig.from_provider(
-                        transcription, sample_rate=self.settings.sample_rate
-                    )
-                    realtime_factory = StepRealtimeSession
-                else:
-                    raise ProviderError("configuration")
+                realtime_config = streaming_config(
+                    transcription, sample_rate=self.settings.sample_rate
+                )
                 if not hasattr(self.recorder, "pcm_ready"):
                     raise ProviderError("configuration")
             context["realtime_config"] = realtime_config
@@ -484,9 +470,13 @@ class Session(QObject):
                 self.metrics = {"audio_seconds": 0.0, "characters": 0}
                 if realtime_config is not None:
                     task = self.controller.task
-                    context["realtime"] = realtime_factory(
+                    from inkecho.asr_streaming import create_streaming_session
+
+                    context["realtime"] = create_streaming_session(
+                        transcription,
                         realtime_config,
                         key,
+                        qwen_factory=self.realtime_factory,
                         timeout_seconds=self.settings.transcription_timeout_seconds,
                         deadline=task.deadline,
                         active=lambda: self.active(task_id),

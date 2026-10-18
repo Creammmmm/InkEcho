@@ -982,3 +982,29 @@ def test_step_realtime_preset_has_own_protocol_and_16khz_validation(window):
     page.validate_protocol(page.provider())
     page.apply_preset(page.preset.findData("groq"))
     assert page.protocol.currentData() == "http" and page.provider().parameters == {}
+
+
+@pytest.mark.parametrize("preset", ["dashscope-fun", "stepfun-realtime"])
+def test_unselected_ws_url_secret_is_rejected_before_credential_save(window, preset):
+    page = window.pages[2]
+    page.apply_preset(page.preset.findData(preset))
+    page.parameters.setPlainText(
+        json.dumps({"realtime_url": "wss://user:secret@fixture.invalid/asr"})
+    )
+    page.key.setText("not-to-save")
+    before = {p: p.read_bytes() for p in window.session.store.root.rglob("*.json")}
+
+    async def forbidden(*_):
+        pytest.fail("invalid endpoint must precede secret access")
+
+    window.session.save_key = forbidden
+
+    async def scenario():
+        await page.run(page.save())
+
+    asyncio.run(scenario())
+    assert "服务配置或请求参数不正确" in page.message.text()
+    assert page.key.text() == "not-to-save"
+    assert before == {
+        p: p.read_bytes() for p in window.session.store.root.rglob("*.json")
+    }
