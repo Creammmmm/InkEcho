@@ -181,7 +181,14 @@ async def exercise(certificate, operation, *, mode="normal", timeout=1):
                             content_index=0,
                             transcript="changed" if mode == "changed_final" else FINAL,
                         )
-                    await send("session.finished")
+                    if mode == "completed_no_finished":
+                        continue
+                    if mode in {"delayed_finished", "error_after_completed"}:
+                        await state.release_finished.wait()
+                    if mode == "error_after_completed":
+                        await send("error", error={"message": "synthetic"})
+                    else:
+                        await send("session.finished")
         except ConnectionClosed:
             return  # Expected connection abort on intentionally invalid fixtures.
         except Exception as error:
@@ -829,3 +836,66 @@ def test_cancelled_monitor_does_not_cancel_shared_transport_failure_state(certif
             await session.wait_failure()
 
     asyncio.run(exercise(certificate, scenario))
+
+
+@pytest.mark.parametrize("mode", ["delayed_finished", "error_after_completed"])
+def test_completed_observer_precedes_closure_but_does_not_replace_it(certificate, mode):
+    async def operation(session, state):
+        state.release_finished = asyncio.Event()
+        observed = asyncio.Event()
+        values = []
+
+        def completed(result):
+            values.append(result.text)
+            observed.set()
+
+        session.set_completed_callback(completed)
+        await session.start()
+        session.feed_nowait(b"\1\0" * 2000)
+        task = asyncio.create_task(session.finish())
+        await asyncio.wait_for(observed.wait(), 1)
+        assert values == [FINAL] and not task.done()
+        state.release_finished.set()
+        if mode == "error_after_completed":
+            with pytest.raises(ProviderError, match="unavailable"):
+                await task
+        else:
+            assert (await task).text == FINAL
+
+    asyncio.run(exercise(certificate, operation, mode=mode))
+
+
+@pytest.mark.parametrize(
+    "mode", ["duplicate", "changed_final", "bool_index", "wrong_item"]
+)
+def test_completed_observer_is_once_and_only_validated(certificate, mode):
+    async def operation(session, state):
+        values = []
+        session.set_completed_callback(lambda result: values.append(result.text))
+        await session.start()
+        session.feed_nowait(b"\1\0" * 2000)
+        if mode == "duplicate":
+            assert (await session.finish()).text == FINAL
+        else:
+            with pytest.raises(ProviderError, match="response"):
+                await session.finish()
+        assert values == ([FINAL] if mode in {"duplicate", "changed_final"} else [])
+
+    asyncio.run(exercise(certificate, operation, mode=mode))
+
+
+def test_completed_callback_does_not_turn_missing_finished_into_success(certificate):
+    async def operation(session, state):
+        values = []
+        session.set_completed_callback(lambda result: values.append(result.text))
+        await session.start()
+        session.feed_nowait(b"\1\0" * 2000)
+        with pytest.raises(ProviderError) as caught:
+            await session.finish()
+        assert caught.value.code == "timeout"
+        assert values == [FINAL]
+        assert session._closed
+
+    asyncio.run(
+        exercise(certificate, operation, mode="completed_no_finished", timeout=0.1)
+    )

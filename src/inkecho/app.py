@@ -188,6 +188,9 @@ class Session(QObject):
     def _close_realtime(self, context) -> None:
         if not context or context.get("realtime_closing"):
             return
+        completed = context.get("asr_completed_result")
+        if completed is not None and not completed.done():
+            completed.cancel()
         connection = context.get("realtime")
         if connection is not None:
             context["realtime_closing"] = True
@@ -476,6 +479,23 @@ class Session(QObject):
                         deadline=task.deadline,
                         active=lambda: self.active(task_id),
                     )
+                    observe = getattr(
+                        context["realtime"], "set_completed_callback", None
+                    )
+                    if callable(observe):
+                        completed = asyncio.get_running_loop().create_future()
+                        context["asr_completed_result"] = completed
+
+                        def on_completed(result):
+                            self.controller.tick()
+                            if (
+                                self.active(task_id)
+                                and self.task_context is context
+                                and not completed.done()
+                            ):
+                                completed.set_result(result)
+
+                        observe(on_completed)
                     context["asr_started"] = time.monotonic()
                     self.mark_timing(task_id, "asr_started")
                     self.metrics["transcription_calls"] = 1
@@ -596,12 +616,32 @@ class Session(QObject):
             return
         context = self.task_context
         started = context.get("asr_started", time.monotonic())
+        asr_finish = None
         try:
             if "realtime" in context:
                 await context["realtime_start"]
                 if not self.active(task_id):
                     return
-                result = await context["realtime"].finish()
+                completed = context.get("asr_completed_result")
+                if (
+                    completed is not None
+                    and self.controller.polish
+                    and context["polishing_streaming"]
+                    and callable(
+                        getattr(context["polishing_client"], "polish_stream", None)
+                    )
+                ):
+                    asr_finish = self.spawn(context["realtime"].finish())
+                    done, _ = await asyncio.wait(
+                        {asr_finish, completed}, return_when=asyncio.FIRST_COMPLETED
+                    )
+                    result = (
+                        asr_finish.result()
+                        if asr_finish in done
+                        else completed.result()
+                    )
+                else:
+                    result = await context["realtime"].finish()
             else:
                 self.metrics["transcription_calls"] = 1
                 self.mark_timing(task_id, "asr_started")
@@ -626,7 +666,9 @@ class Session(QObject):
                 self.mark_timing(task_id, "polishing_started")
                 client = context["polishing_client"]
                 if context["polishing_streaming"] and hasattr(client, "polish_stream"):
-                    await self._stream_polish(task_id, context, key, result.text)
+                    await self._stream_polish(
+                        task_id, context, key, result.text, asr_finish=asr_finish
+                    )
                     return
                 polished = await context["polishing_client"].polish(
                     context["polishing"], key, result.text, context["prompt"].body
@@ -645,6 +687,20 @@ class Session(QObject):
                 if not self.active(task_id):
                     return
                 self.metrics["polishing_seconds"] = time.monotonic() - started
+                # Even an error before streaming starts cannot release the
+                # original-text fallback until the same ASR finish is valid.
+                if asr_finish is not None:
+                    try:
+                        confirmed = await asr_finish
+                        if confirmed.text != result.text:
+                            raise ProviderError("response")
+                    except asyncio.CancelledError:
+                        raise
+                    except Exception as asr_error:
+                        self._transcription_failed(task_id, asr_error)
+                        return
+                    if not self.active(task_id):
+                        return
                 self.controller.polishing_failed(task_id)
                 if isinstance(error, ProviderError):
                     self.diagnostic.emit(error.code)
@@ -667,7 +723,15 @@ class Session(QObject):
                 self.diagnostic.emit(error.code)
                 self.report_problem(PROVIDER_LABELS[error.code])
 
-    async def _stream_polish(self, task_id, context, key, original) -> None:
+        finally:
+            if asr_finish is not None:
+                if not asr_finish.done():
+                    asr_finish.cancel()
+                await asyncio.gather(asr_finish, return_exceptions=True)
+
+    async def _stream_polish(
+        self, task_id, context, key, original, *, asr_finish=None
+    ) -> None:
         started = time.monotonic()
 
         def active():
@@ -729,24 +793,45 @@ class Session(QObject):
         producer = self.spawn(produce())
         consumer = self.spawn(consume())
 
-        async def stop_operations():
+        async def confirm_asr():
+            result = await asr_finish
+            if result.text != original:
+                raise ProviderError("response")
+
+        confirmation = self.spawn(confirm_asr()) if asr_finish is not None else None
+
+        async def stop_operations(*, keep_confirmation=False):
             output.close()
-            for operation in (producer, consumer):
+            operations = [producer, consumer]
+            if confirmation is not None and not keep_confirmation:
+                operations.append(confirmation)
+            for operation in operations:
                 if not operation.done():
                     operation.cancel()
             try:
-                await asyncio.gather(producer, consumer, return_exceptions=True)
+                await asyncio.gather(*operations, return_exceptions=True)
             finally:
                 output.close()
 
         try:
-            done, _pending = await asyncio.wait(
-                {producer, consumer}, return_when=asyncio.FIRST_COMPLETED
-            )
-            if consumer in done:
-                consumer.result()
-            await producer
-            count = await consumer
+            pending = {producer, consumer}
+            if confirmation is not None:
+                pending.add(confirmation)
+            while pending:
+                done, pending = await asyncio.wait(
+                    pending, return_when=asyncio.FIRST_COMPLETED
+                )
+                # Closure errors retain transcription classification and cannot
+                # be mistaken for a polishing fallback opportunity.
+                if confirmation in done:
+                    try:
+                        confirmation.result()
+                    except Exception as error:
+                        self._transcription_failed(task_id, error)
+                        raise
+                for operation in done:
+                    operation.result()
+            count = consumer.result()
             if active():
                 self.metrics["characters"] = count
                 self.mark_timing(task_id, "output_completed")
@@ -754,7 +839,18 @@ class Session(QObject):
         except asyncio.CancelledError:
             raise
         except Exception as error:
-            await stop_operations()
+            fallback_possible = not output.attempted and not isinstance(
+                error, KeyboardError
+            )
+            await stop_operations(keep_confirmation=fallback_possible)
+            if fallback_possible and confirmation is not None:
+                try:
+                    await confirmation
+                except asyncio.CancelledError:
+                    raise
+                except Exception as asr_error:
+                    self._transcription_failed(task_id, asr_error)
+                    return
             if not active():
                 return
             self.metrics["characters"] = output.sent_characters

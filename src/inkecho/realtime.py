@@ -160,6 +160,7 @@ class QwenRealtimeSession:
         self._session_id: str | None = None
         self._item_id: str | None = None
         self._transcript: str | None = None
+        self._on_completed: Callable[[Result], None] | None = None
         self._event_ids: set[str] = set()
         self._started = False
         self._finishing = False
@@ -171,6 +172,12 @@ class QwenRealtimeSession:
         self._audio_bytes = 0
         self._began = 0.0
         self._feed_lock = asyncio.Lock()
+
+    def set_completed_callback(self, callback: Callable[[Result], None]) -> None:
+        """Observe one validated final utterance; finish still confirms closure."""
+        if self._started or self._closed or not callable(callback):
+            raise ProviderError("configuration")
+        self._on_completed = callback
 
     def _check(self) -> None:
         if self._closed or not self.active():
@@ -498,7 +505,11 @@ class QwenRealtimeSession:
                     raise ProviderError("response")
                 if self._transcript is not None and self._transcript != text:
                     raise ProviderError("response")
+                first = self._transcript is None
                 self._transcript = text
+                if first and text.strip() and self._on_completed is not None:
+                    callback, self._on_completed = self._on_completed, None
+                    callback(Result(text, Usage(), time.monotonic() - self._began))
             # Partial text is deliberately never delivered or used as final text.
         elif kind == "session.finished":
             if not self._finish_sent or not self._commit_acknowledged:
@@ -534,4 +545,5 @@ class QwenRealtimeSession:
             with contextlib.suppress(Exception):
                 await self._socket.close()
         self._transcript = None
+        self._on_completed = None
         self._event_ids.clear()
