@@ -140,3 +140,100 @@ def test_allowing_py_shim_does_not_allow_a_separate_py_package(tmp_path):
     path.write_text("# not the distribution-owned shim\n")
     with pytest.raises(ValueError, match="diagnostic_framework_namespace_forbidden"):
         PROBE.verify_framework(framework, {"py/__init__.py": PROBE.checksum(path)})
+
+
+@pytest.fixture
+def embedded_qt(tmp_path):
+    import base64
+    import io
+    import zipfile
+
+    package = tmp_path / "appdir/packages"
+    carrier = package / "shiboken6/libshiboken6.abi3.so.6.12"
+    carrier.parent.mkdir(parents=True)
+    logical = "shibokensupport/signature/errorhandler.py"
+    memory = io.BytesIO()
+    with zipfile.ZipFile(memory, "w") as archive:
+        archive.writestr(logical, "# synthetic embedded Qt support\n")
+    data = memory.getvalue()
+    encoded = base64.b64encode(data).decode()
+    vector = [encoded[n : n + 64] + "\n" for n in range(0, len(encoded), 64)]
+    namespace = {"__name__": "signature_bootstrap", "zipstring_sequence": vector}
+    exec(
+        "class EmbeddableZipImporter:\n"
+        "    def __init__(self, archive, mapping):\n"
+        "        self.zfile = archive\n"
+        "        self._mod2path = mapping\n",
+        namespace,
+    )
+    loader = namespace["EmbeddableZipImporter"](
+        zipfile.ZipFile(io.BytesIO(data)),
+        {"shibokensupport.signature.errorhandler": logical},
+    )
+    module = SimpleNamespace(
+        __name__="shibokensupport.signature.errorhandler",
+        __file__=logical,
+        __loader__=loader,
+    )
+    modules = {
+        "shibokensupport.signature.errorhandler": module,
+        "PySide6.support.signature.errorhandler": module,
+    }
+    carrier.write_bytes(
+        b"synthetic carrier\0" + b"\0".join(value.encode() for value in vector)
+    )
+    inventory = {str(carrier.relative_to(package.parent)): PROBE.checksum(carrier)}
+    yield package, carrier, loader, module, modules, inventory
+    loader.zfile.close()
+
+
+def test_exact_qt_embedded_source_and_carrier_are_reported(embedded_qt, tmp_path):
+    package, _carrier, _loader, _module, modules, inventory = embedded_qt
+    result = PROBE.dependency_origins(
+        package, tmp_path / "framework", inventory, {}, modules
+    )
+    item = result["PySide6.support.signature.errorhandler"]
+    assert item["logical_origin"] == "shibokensupport/signature/errorhandler.py"
+    assert (
+        len(item["embedded_member_sha256"])
+        == len(item["embedded_archive_sha256"])
+        == 64
+    )
+    assert item["carrier_sha256"] in inventory.values()
+
+
+@pytest.mark.parametrize(
+    "change",
+    [
+        "alias",
+        "loader",
+        "logical",
+        "vector",
+        "carrier_hash",
+        "carrier_payload",
+        "namespace",
+    ],
+)
+def test_unverified_qt_virtual_modules_are_not_skipped(embedded_qt, tmp_path, change):
+    package, carrier, loader, module, modules, inventory = embedded_qt
+    if change == "alias":
+        modules["shibokensupport.signature.errorhandler"] = SimpleNamespace()
+    elif change == "loader":
+        module.__loader__ = SimpleNamespace()
+    elif change == "logical":
+        module.__file__ = "shibokensupport/other.py"
+    elif change == "vector":
+        type(loader).__init__.__globals__["zipstring_sequence"] = ["not base64"]
+    elif change == "carrier_hash":
+        carrier.write_bytes(b"changed carrier")
+    elif change == "carrier_payload":
+        carrier.write_bytes(b"different but inventory updated")
+        inventory[str(carrier.relative_to(package.parent))] = PROBE.checksum(carrier)
+    else:
+        modules["PySide6.other"] = modules.pop("PySide6.support.signature.errorhandler")
+    with pytest.raises(
+        ValueError, match="qt_embedded_(origin_unverified|alias_mismatch)"
+    ):
+        PROBE.dependency_origins(
+            package, tmp_path / "framework", inventory, {}, modules
+        )

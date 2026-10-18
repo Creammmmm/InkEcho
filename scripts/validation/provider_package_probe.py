@@ -1,12 +1,15 @@
 """Run frozen local protocol tests with the selected package's own interpreter."""
 
 import argparse
+import base64
+import binascii
 import hashlib
 import importlib
 import json
 import os
 import re
 import sys
+import zipfile
 from pathlib import Path
 
 SELECTED = (
@@ -79,6 +82,89 @@ def verify_framework(root: Path, expected: dict) -> None:
     verify_files(root, expected, exact=True)
 
 
+def _qt_embedded_origin(name, module, modules, package_root, inventory):
+    """Authenticate only the observed Qt support aliases carried in libshiboken."""
+    if name == "PySide6.support.feature":
+        original = "shibokensupport.feature"
+    elif name == "PySide6.support.signature" or name.startswith(
+        "PySide6.support.signature."
+    ):
+        original = name.replace("PySide6.support", "shibokensupport", 1)
+    else:
+        raise ValueError("qt_embedded_alias_mismatch")
+    try:
+        loader = module.__loader__
+        cls = type(loader)
+        if (
+            cls.__module__ != "signature_bootstrap"
+            or cls.__name__ != "EmbeddableZipImporter"
+            or modules.get(original) is not module
+            or module.__name__ != original
+        ):
+            raise ValueError
+        namespace = cls.__init__.__globals__
+        if namespace.get("EmbeddableZipImporter") is not cls:
+            raise ValueError
+        logical = loader._mod2path[original]
+        if (
+            logical != module.__file__
+            or not logical.startswith("shibokensupport/")
+            or ".." in Path(logical).parts
+        ):
+            raise ValueError
+        vector = namespace["zipstring_sequence"]
+        if (
+            not isinstance(vector, list)
+            or not 0 < len(vector) <= 128
+            or any(
+                not isinstance(value, str) or not 0 < len(value) <= 8192
+                for value in vector
+            )
+        ):
+            raise ValueError
+        encoded = "".join(vector).encode("ascii")
+        archive = base64.b64decode(b"".join(encoded.split()), validate=True)
+        if (
+            len(archive) > 1048576
+            or not isinstance(loader.zfile, zipfile.ZipFile)
+            or loader.zfile.fp.getvalue() != archive
+        ):
+            raise ValueError
+        info = loader.zfile.getinfo(logical)
+        if info.file_size > 1048576:
+            raise ValueError
+        member = loader.zfile.read(logical)
+        carriers = list((package_root / "shiboken6").glob("libshiboken6.abi3.so*"))
+        if len(carriers) != 1:
+            raise ValueError
+        carrier = carriers[0].resolve(strict=True)
+        if not carrier.is_relative_to(package_root):
+            raise ValueError
+        digest = checksum(carrier)
+        if inventory.get(str(carrier.relative_to(package_root.parent))) != digest:
+            raise ValueError
+        data = carrier.read_bytes()
+        if not all(value.encode("ascii") in data for value in vector):
+            raise ValueError
+        return {
+            "logical_origin": logical,
+            "embedded_member_sha256": hashlib.sha256(member).hexdigest(),
+            "embedded_archive_sha256": hashlib.sha256(archive).hexdigest(),
+            "carrier": str(carrier),
+            "carrier_sha256": digest,
+        }
+    except (
+        AttributeError,
+        KeyError,
+        ValueError,
+        TypeError,
+        OSError,
+        binascii.Error,
+        zipfile.BadZipFile,
+    ):
+        raise ValueError("qt_embedded_origin_unverified") from None
+
+
 def dependency_origins(
     package_root: Path,
     framework_root: Path,
@@ -88,7 +174,8 @@ def dependency_origins(
 ) -> dict:
     result = {}
     appdir = package_root.parent
-    for name, module in tuple((sys.modules if modules is None else modules).items()):
+    loaded = sys.modules if modules is None else modules
+    for name, module in tuple(loaded.items()):
         prefix = name.partition(".")[0]
         if prefix not in FRAMEWORK | RUNTIME | {"inkecho"}:
             continue
@@ -101,6 +188,11 @@ def dependency_origins(
             if not paths or any(not path.is_relative_to(allowed) for path in paths):
                 raise ValueError("dependency_namespace_outside_scope")
             result[name] = {"namespace_paths": list(map(str, paths))}
+            continue
+        if prefix == "PySide6" and str(module.__file__).startswith("shibokensupport/"):
+            result[name] = _qt_embedded_origin(
+                name, module, loaded, package_root, inventory
+            )
             continue
         path = Path(module.__file__).resolve(strict=True)
         digest = checksum(path)
