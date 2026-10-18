@@ -4,7 +4,7 @@
 
 参考本地OpenLESS提交`63be178b43e3e8084d09ff082a42dbdcbaf74d2b`的供应商目录和协议行为，其根许可证为AGPL-3.0；InkEcho为MIT。本任务不复制、翻译移植Rust实现，不链接其库；Python实现以各供应商官方协议为依据。目录不是云端可用性证明。首期不增加本地模型、OAuth账户接管、剪贴板或IME。
 
-以下18项覆盖参考项目的完整云ASR范围，润色覆盖四种显式线协议；各批已完成下面列出的源码与本地合成协议验证。目录、mock服务与单元测试不等于真实账户、模型权限或云服务可用性。既有Qwen及整句收尾路径保留，最终提交完整回归、新包内协议与双Ubuntu实际包验收另记。
+以下18项覆盖参考项目的完整云ASR范围，润色覆盖四种显式线协议；各批已完成下面列出的源码与本地合成协议验证。目录、mock服务与单元测试不等于真实账户、模型权限或云服务可用性。既有Qwen及整句收尾路径保留；精确源码全检和同SHA双Ubuntu新包内协议/桌面证据见[实际包验收](provider-dual-ubuntu-validation.md)，本地协议通过仍不等于云认证。
 
 ## ASR矩阵
 
@@ -13,8 +13,8 @@
 | 火山/volcengine | gzip/二进制序列WebSocket，大模型ASR | API key或app/access/resource组合 | 批4本地WSS/二进制界限通过，云认证未验 |
 | ElevenLabs | multipart speech-to-text，xi-api-key/model_id | API key | 批1本地TLS通过，云认证未验 |
 | 百炼/bailian | run-task/binary PCM/finish-task WS | API key | 批3独立任务WS本地通过，云认证未验 |
-| 百炼Qwen realtime | session/append/commit/finished WS | API key | 已有实现，分批本地回归通过；最终HEAD全检另记 |
-| 百炼fun-asr-flash | multimodal-generation HTTP JSON | API key | 已有实现，分批本地回归通过；最终HEAD全检另记 |
+| 百炼Qwen realtime | session/append/commit/finished WS | API key | 源码回归及两OS实际包local-wss/Qwen Session终态通过；真实云认证未验 |
+| 百炼fun-asr-flash | multimodal-generation HTTP JSON | API key | 源码回归及两OS实际包local-wss的HTTP wire通过（固定fixture模型）；真实型号权限/云认证未验 |
 | SiliconFlow | audio/transcriptions multipart | API key | 批1本地TLS通过，云认证未验 |
 | StepFun | ASR专用realtime WS；HTTP按官方能力另列 | API key | 批2专用ASR WS/HTTP本地通过，云认证未验 |
 | Zhipu | audio/transcriptions HTTP | API key | 批2本地TLS/30秒限制通过，云认证未验 |
@@ -165,3 +165,8 @@ signed本地WSS夹具现在经共享streaming_config/create_streaming_session实
 实际包Host R3已通过隔离收集（226 IDs、0call测试）及随后独立226协议测试：226 passed/0 skipped/0 failed，20.61s，原两owner均wait0；30 before/after origins、55产品源、286实际加载依赖（含精确嵌入来源）、57保全及413冻源一致。原始材料位于`build/provider-acceptance-preparation/protocol-host-r3-{collection,tests}`，helper来源a6f34da，产品仍de504c6/0.2.10/18b6ad26，不把后继诊断版本称产品版本。
 
 桌面Host R1首UI门原wait1并停整批，其余24项未执行；旧诊断要求不兼容模型仍在列表并有tooltip，实际新需求已将其过滤，因而两个旧tooltip检查为false，私有保存/重载检查为true、stderr空。保留results-r1原始失败，不归为产品模型过滤失败。更新诊断检查实际HTTP/实时协议切换无需重新发现就重过滤，固定发现同时加入纯文本与TTS负例；仍仅一次发现、不写真实凭据、手填实时模型后正确协议保存/重载。新增真实ProviderPage私有ConfigStore回归，关联新诊断测试与UI为72 passed/6.15s；产品、旧冻源与AppImage不改。
+
+
+## 同包双系统最终交付
+
+实际0.2.10包固定来源de504c6、SHA-256 `18b6ad26a39032d930a2f319cd497641639910f69cb3402da8ac75ee7d2a63bd`，在Ubuntu26.04.1/GNOME50.1 Wayland+XWayland及Ubuntu24.04.5/GNOME46实际KVM Xorg分别完成实际包隔离收集、相同226项本地协议测试和25/9桌面门。两系统九页由主Agent逐页视觉审阅通过，协议/guard/取消/映射恢复及原owner终态均核验。随后版本化候选实际FUSE启动核3970files/1048links/55源码/9页/原wait0通过，主Agent审定后只更新稳定AppImage及sidecar；其他57路径与用户配置/集成均保留。完整复现材料、诊断来源与失败历史、产品0.2.10和后继报告版本区分、未测云账户等限制见[实际包验收](provider-dual-ubuntu-validation.md)。最终源码推送和主分支合并由主Agent在精确最终HEAD完整检查后执行，不为外部终态再制造报告提交。
