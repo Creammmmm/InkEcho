@@ -19,8 +19,8 @@ TTS、图像、embedding及协议不匹配模型；仍可手填未知模型，�
 跟随新光标。主动取消、过期或被替代后停止未发送文字，已发按键不可撤回或自动重放。
 
 供应商/协议范围、官方依据与本地测试见[适配记录](docs/provider-adaptation-validation.md)。
-本版独立构建0.4.0 AppImage，须完成同一SHA的双系统凭据、界面及输入验收后发布；
-验证方法见[凭据交付记录](docs/plaintext-credentials-package-validation.md)，该历史包不代替本版验收。
+本版0.4.0 AppImage的实际SHA、双系统凭据/界面/输入及候选FUSE结果见
+[本版验收报告](docs/v0.4.0-dual-ubuntu-validation.md)。发布状态以GitHub为准。
 本地TLS/WSS/SSE及合成音频测试不代表真实云账户、模型权限或语音准确率认证。
 
 ## 下载与运行
