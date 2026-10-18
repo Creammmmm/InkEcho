@@ -16,6 +16,7 @@ from PySide6.QtWidgets import (
 )
 
 from inkecho.config import ConfigError, Provider
+from inkecho.provider_catalog import PRESETS, asr_capability
 from inkecho.providers import ProviderError, validate_provider_protocol
 from inkecho.realtime import PROTOCOL, RealtimeConfig
 from inkecho.ui.widgets import Page, actions, button, card, label
@@ -30,11 +31,17 @@ class ProviderPage(Page):
         )
         self.session, self.role = session, role
         self.revision = 0
+        self.available_models = ()
         self.selector = QComboBox()
         self.selector.currentIndexChanged.connect(lambda: self.safe(self.load))
         self.body.addWidget(actions(self.selector, button("新建供应商", self.new)))
         panel, body = card()
         form = QFormLayout()
+        self.preset = QComboBox()
+        for item in PRESETS:
+            if item.role == role:
+                self.preset.addItem(item.label, item.id)
+        self.adapter = "openai" if polishing else "qwen"
         self.name, self.url = QLineEdit(), QLineEdit()
         self.model = QComboBox()
         self.model.setEditable(True)
@@ -60,7 +67,11 @@ class ProviderPage(Page):
         self.timeout.setValue(
             getattr(session.store.load_settings(), role + "_timeout_seconds")
         )
-        rows = [("显示名称", self.name), ("Base URL", self.url)]
+        rows = [
+            ("供应商预设 · 仅修改草稿", self.preset),
+            ("显示名称", self.name),
+            ("Base URL", self.url),
+        ]
         if not polishing:
             rows.extend(
                 [
@@ -127,6 +138,7 @@ class ProviderPage(Page):
         )
         self.refresh()
         self.finish()
+        self.preset.activated.connect(self.apply_preset)
         self.model.currentTextChanged.connect(self.model_changed)
         self.url.textChanged.connect(self.model_changed)
         self.parameters.textChanged.connect(self.parameters_changed)
@@ -137,6 +149,50 @@ class ProviderPage(Page):
             self.realtime_url.textChanged.connect(self.protocol_changed)
             self.parameters_changed()
         self.update_model_hint()
+
+    def apply_preset(self, index):
+        preset = next(
+            item for item in PRESETS if item.id == self.preset.itemData(index)
+        )
+        self.identifier = "provider-" + uuid.uuid4().hex
+        self.reference = f"provider/{self.identifier}"
+        self.adapter = preset.adapter
+        if self.role == "transcription":
+            with QSignalBlocker(self.protocol), QSignalBlocker(self.realtime_url):
+                self.protocol.setCurrentIndex(self.protocol.findData("http"))
+                self.realtime_url.clear()
+                self.realtime_url.setEnabled(False)
+                self.protocol.setEnabled(self.adapter == "qwen")
+        self.name.setText(preset.label)
+        self.url.setText(preset.base_url)
+        self.parameters.setPlainText("{}")
+        self.key.clear()
+        with QSignalBlocker(self.model):
+            self.model.clear()
+            self.model.addItems(preset.models)
+        self.available_models = preset.models
+        self.filter_models()
+        self.model_changed()
+        self.message.setText("预设已填入草稿；尚未保存或联网验证，现有密钥未更改。")
+
+    def filter_models(self):
+        if self.role != "transcription":
+            return
+        try:
+            values = self.parameter_values()
+        except ConfigError:
+            return
+        selected = self.model.currentText()
+        with QSignalBlocker(self.model):
+            self.model.clear()
+            self.model.addItems(
+                [
+                    m
+                    for m in self.available_models
+                    if asr_capability(m, self.adapter, values) == "supported"
+                ]
+            )
+            self.model.setCurrentText(selected)
 
     def model_changed(self):
         self.revision += 1
@@ -155,6 +211,7 @@ class ProviderPage(Page):
 
     def parameters_changed(self):
         self.revision += 1
+        self.filter_models()
         if self.role == "transcription":
             try:
                 values = self.parameter_values()
@@ -236,6 +293,16 @@ class ProviderPage(Page):
                     "录音结束后通过 HTTP 上传；实时模型请切换转写方式。"
                     "模型列表不等于能力验证。"
                 )
+            if (
+                self.role == "transcription"
+                and asr_capability(
+                    provider.model, provider.adapter, provider.parameters
+                )
+                == "unknown"
+            ):
+                hint = (
+                    "此自定义模型的转写能力未知；请显式测试，模型名称不代表验证通过。"
+                )
             self.model_hint.setText(hint)
         self.update_model_annotations(provider)
 
@@ -290,6 +357,21 @@ class ProviderPage(Page):
         provider = self.session.store.load_provider(identifier)
         self.identifier = provider.id
         self.reference = provider.key_ref or f"provider/{provider.id}"
+        self.available_models = ()
+        self.adapter = provider.adapter
+        if self.role == "transcription":
+            self.protocol.setEnabled(self.adapter == "qwen")
+        preset = next(
+            (
+                p
+                for p in PRESETS
+                if p.role == self.role
+                and p.adapter == provider.adapter
+                and p.base_url == provider.base_url
+            ),
+            None,
+        )
+        self.preset.setCurrentIndex(self.preset.findData(preset.id) if preset else -1)
         self.name.setText(provider.name)
         self.url.setText(provider.base_url)
         self.model.setCurrentText(provider.model)
@@ -312,6 +394,13 @@ class ProviderPage(Page):
         self.revision += 1
         self.identifier = "provider-" + uuid.uuid4().hex
         self.reference = f"provider/{self.identifier}"
+        self.available_models = ()
+        self.adapter = "openai" if self.role == "polishing" else "qwen"
+        if self.role == "transcription":
+            self.protocol.setEnabled(True)
+        self.preset.setCurrentIndex(
+            self.preset.findData("custom-chat" if self.role == "polishing" else "qwen")
+        )
         self.name.setText(
             "自定义润色服务" if self.role == "polishing" else "自定义转写服务"
         )
@@ -331,7 +420,7 @@ class ProviderPage(Page):
             self.identifier,
             self.name.text().strip(),
             self.role,
-            "openai" if self.role == "polishing" else "qwen",
+            self.adapter,
             self.url.text().strip(),
             self.model.currentText().strip(),
             self.reference,
@@ -398,6 +487,21 @@ class ProviderPage(Page):
     async def discover(self):
         provider = self.provider()
         revision = self.revision
+        if provider.adapter in {"elevenlabs", "mimo-asr"}:
+            models = next(
+                (p.models for p in PRESETS if p.adapter == provider.adapter), ()
+            )
+            self.available_models = models
+            selected = self.model.currentText()
+            with QSignalBlocker(self.model):
+                self.model.clear()
+                self.model.addItems(models)
+                self.model.setCurrentText(selected)
+            self.update_model_hint()
+            self.message.setText(
+                "该服务无通用模型发现接口；显示内置可选模型，尚未联网验证。"
+            )
+            return
         self.message.setText("正在连接服务并获取模型列表……")
         key = await self.session.key(provider.key_ref)
         if revision != self.revision:
@@ -405,6 +509,14 @@ class ProviderPage(Page):
         models = await self.session.provider_client(self.role).models(provider, key)
         if revision != self.revision:
             return
+        self.available_models = tuple(models)
+        if self.role == "transcription":
+            models = [
+                m
+                for m in models
+                if asr_capability(m, provider.adapter, provider.parameters)
+                == "supported"
+            ]
         selected = self.model.currentText()
         with QSignalBlocker(self.model):
             self.model.clear()
@@ -414,7 +526,7 @@ class ProviderPage(Page):
         self.message.setText(
             f"连接成功，发现 {len(models)} 个模型；尚未验证模型能力。"
             + (
-                "红色项仅表示与当前转写方式不匹配，请查看模型提示。"
+                "已按转写能力和协议过滤；可手动填写未知模型，但未验证其能力。"
                 if self.role == "transcription"
                 else ""
             )

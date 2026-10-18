@@ -41,6 +41,14 @@ class ProviderError(RuntimeError):
 
 def validate_provider_protocol(provider: Provider) -> None:
     """Validate an explicitly selected protocol, without inferring a gateway."""
+    if provider.role == "transcription":
+        from inkecho.provider_catalog import asr_capability
+
+        if (
+            asr_capability(provider.model, provider.adapter, provider.parameters)
+            == "unsupported"
+        ):
+            raise ProviderError("protocol")
     if provider.role != "transcription" or provider.adapter != "qwen":
         return
     if "asr_protocol" not in provider.parameters:
@@ -297,7 +305,14 @@ class ProviderClient:
             raise ProviderError("credentials")
         if not provider.base_url or (model and not provider.model.strip()):
             raise ProviderError("configuration")
-        if provider.adapter not in {"qwen", "openai"}:
+        if provider.adapter not in {
+            "qwen",
+            "openai",
+            "multipart",
+            "elevenlabs",
+            "mimo-asr",
+            "openrouter-asr",
+        }:
             raise ProviderError("configuration")
 
     @staticmethod
@@ -411,6 +426,8 @@ class ProviderClient:
 
     async def models(self, provider: Provider, key: str) -> list[str]:
         self._validate(provider, key, model=False)
+        if provider.adapter in {"elevenlabs", "mimo-asr"}:
+            raise ProviderError("configuration")
         result = await self._request(provider, key, "models")
         models = result.get("data")
         if not isinstance(models, list):
@@ -429,8 +446,18 @@ class ProviderClient:
         return Connection(tuple(await self.models(provider, key)))
 
     async def transcribe(self, provider: Provider, key: str, audio: bytes) -> Result:
+        validate_provider_protocol(provider)
         _validate_http_provider_protocol(provider)
         self._validate(provider, key)
+        if provider.role == "transcription" and provider.adapter in {
+            "multipart",
+            "elevenlabs",
+            "mimo-asr",
+            "openrouter-asr",
+        }:
+            from inkecho.http_asr import transcribe
+
+            return await transcribe(self, provider, key, audio)
         if provider.role != "transcription" or provider.adapter != "qwen":
             raise ProviderError("configuration")
         # 10 MB encoded service limit: reject before making a larger base64 copy.

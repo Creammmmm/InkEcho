@@ -402,11 +402,11 @@ def test_discovery_marks_incompatible_protocols_without_switching_model(window):
         window.session.provider_client = lambda role: Client()
         await page.discover()
         assert page.provider().model == "qwen3-asr-flash-realtime"
-        assert page.model.itemData(1, Qt.ItemDataRole.ToolTipRole)
-        assert page.model.itemData(2, Qt.ItemDataRole.ToolTipRole)
-        assert page.model.itemData(0, Qt.ItemDataRole.ToolTipRole) is None
-        assert "3 个模型" in page.message.text()
-        assert "当前转写方式不匹配" in page.message.text()
+        assert [page.model.itemText(i) for i in range(page.model.count())] == [
+            "qwen3-asr-flash"
+        ]
+        assert "1 个模型" in page.message.text()
+        assert "已按转写能力和协议过滤" in page.message.text()
         assert "协议尚不支持" not in page.message.text()
 
     asyncio.run(scenario())
@@ -442,29 +442,21 @@ def test_protocol_switch_relabels_existing_models_without_network_or_config_save
     window, discovered_protocol_models
 ):
     page, requests, before = discovered_protocol_models
-    tooltip, foreground = Qt.ItemDataRole.ToolTipRole, Qt.ItemDataRole.ForegroundRole
     page.key.setText("unsaved-fixture-key")
     model = page.model.currentText()
     rate = window.session.store.load_settings().sample_rate
-    assert page.model.itemData(0, foreground) is None
-    assert "Qwen 实时 WebSocket" in page.model.itemData(1, tooltip)
-    assert "文件转写任务协议尚未实现" in page.model.itemData(2, tooltip)
-
+    assert [page.model.itemText(i) for i in range(page.model.count())] == [
+        "qwen3-asr-flash"
+    ]
     page.protocol.setCurrentIndex(page.protocol.findData(PROTOCOL))
-    assert "HTTP 录音转写" in page.model.itemData(0, tooltip)
-    assert page.model.itemData(0, foreground) is not None
-    assert page.model.itemData(1, tooltip) is None
-    assert page.model.itemData(1, foreground) is None
-    assert "文件转写任务协议尚未实现" in page.model.itemData(2, tooltip)
+    assert [page.model.itemText(i) for i in range(page.model.count())] == [
+        "qwen3-asr-flash-realtime"
+    ]
     assert "已选择边录边识别" in page.model_hint.text()
-    assert "协议尚不支持" not in page.message.text()
-
     page.protocol.setCurrentIndex(page.protocol.findData("http"))
-    assert page.model.itemData(0, tooltip) is None
-    assert page.model.itemData(0, foreground) is None
-    assert page.model.itemData(1, foreground) is not None
-    assert "Qwen 实时 WebSocket" in page.model.itemData(1, tooltip)
-    assert page.model.itemData(2, foreground) is not None
+    assert [page.model.itemText(i) for i in range(page.model.count())] == [
+        "qwen3-asr-flash"
+    ]
     assert page.model.currentText() == model
     assert page.key.text() == "unsaved-fixture-key"
     assert window.session.store.load_settings().sample_rate == rate
@@ -505,9 +497,10 @@ def test_invalid_configuration_clears_old_model_marks_and_repair_refreshes(
     else:
         page.parameters.setPlainText(json.dumps({"asr_protocol": PROTOCOL}))
     assert "已选择边录边识别" in page.model_hint.text()
-    assert page.model.itemData(0, Qt.ItemDataRole.ForegroundRole) is not None
-    assert page.model.itemData(1, Qt.ItemDataRole.ForegroundRole) is None
-    assert "文件转写" in page.model.itemData(2, Qt.ItemDataRole.ToolTipRole)
+    assert [page.model.itemText(i) for i in range(page.model.count())] == [
+        "qwen3-asr-flash-realtime"
+    ]
+    assert page.model.itemData(0, Qt.ItemDataRole.ForegroundRole) is None
     assert requests == ["models"]
     assert before == {
         p: p.read_bytes() for p in window.session.store.root.rglob("*.json")
@@ -533,7 +526,9 @@ def test_protocol_json_relabels_models_but_bad_json_remains_untouched(
     assert "JSON" in page.model_hint.text()
     page.parameters.setPlainText("{}")
     assert page.protocol.currentData() == "http"
-    assert page.model.itemData(1, Qt.ItemDataRole.ForegroundRole) is not None
+    assert [page.model.itemText(i) for i in range(page.model.count())] == [
+        "qwen3-asr-flash"
+    ]
     assert page.model.currentText() == "qwen3-asr-flash-realtime"
     assert requests == ["models"]
     assert before == {
@@ -563,15 +558,15 @@ def test_discovery_with_missing_custom_wss_does_not_mark_all_models_unsupported(
         window.session.provider_client = lambda _role: Client()
         await page.discover()
         assert "服务配置或请求参数不正确" in page.model_hint.text()
-        assert "2 个模型" in page.message.text()
+        assert "1 个模型" in page.message.text()
         assert "协议尚不支持" not in page.message.text()
         for index in range(page.model.count()):
             assert page.model.itemData(index, Qt.ItemDataRole.ToolTipRole) is None
             assert page.model.itemData(index, Qt.ItemDataRole.ForegroundRole) is None
         page.realtime_url.setText("wss://proxy.example.invalid/realtime")
         assert "已选择边录边识别" in page.model_hint.text()
-        assert page.model.itemData(0, Qt.ItemDataRole.ForegroundRole) is not None
-        assert page.model.itemData(1, Qt.ItemDataRole.ForegroundRole) is None
+        assert page.model.count() == 1
+        assert page.model.itemData(0, Qt.ItemDataRole.ForegroundRole) is None
         assert requests == ["models"]
 
     asyncio.run(scenario())
@@ -608,7 +603,7 @@ def test_pending_discovery_cannot_mark_or_replace_models_after_protocol_edit(
         release.set()
         await pending
         assert page.message.text() == "edited form"
-        assert page.model.findText("existing-model") >= 0
+        assert page.model.findText("existing-model") == -1
         assert page.model.findText("late-model") == -1
         assert page.model.findText("qwen3-asr-flash-filetrans") == -1
         assert page.model.currentText() == "qwen3-asr-flash-realtime"
@@ -914,3 +909,64 @@ def test_http_draft_without_model_remains_saveable(window):
         assert stored.model == "" and stored.parameters == {}
 
     asyncio.run(scenario())
+
+
+def test_preset_uses_new_credential_reference_and_never_overwrites_old_provider(window):
+    page = window.pages[2]
+    old = page.provider()
+    before = {p: p.read_bytes() for p in window.session.store.root.rglob("*.json")}
+    page.key.setText("unsaved-synthetic")
+    page.apply_preset(page.preset.findData("groq"))
+    item = page.provider()
+    assert item.id != old.id and item.key_ref != old.key_ref
+    assert (
+        item.adapter == "multipart"
+        and item.base_url == "https://api.groq.com/openai/v1"
+    )
+    assert page.key.text() == ""
+    assert before == {
+        p: p.read_bytes() for p in window.session.store.root.rglob("*.json")
+    }
+    page.new()
+    assert page.preset.currentData() == "qwen" and page.provider().adapter == "qwen"
+
+
+def test_static_model_catalog_never_reads_secrets_or_claims_connection(window):
+    page = window.pages[2]
+    page.apply_preset(page.preset.findData("elevenlabs"))
+
+    async def key(_):
+        pytest.fail("built-in list must not read credentials or contact network")
+
+    window.session.key = key
+    asyncio.run(page.discover())
+    assert (
+        "尚未联网验证" in page.message.text() and "连接成功" not in page.message.text()
+    )
+    assert page.model.count() == 2
+
+
+def test_unknown_manual_id_is_preserved_but_known_text_capability_is_blocked(window):
+    page = window.pages[2]
+    page.apply_preset(page.preset.findData("custom-asr"))
+    page.url.setText("https://example.invalid/v1")
+    page.model.setCurrentText("private-future-speech-v7")
+    assert "能力未知" in page.model_hint.text()
+    page.model.setCurrentText("deepseek-chat")
+    with pytest.raises(ProviderError) as caught:
+        page.validate_protocol(page.provider())
+    assert caught.value.code == "protocol"
+
+
+def test_realtime_preset_switch_resets_protocol_and_endpoint_draft(window):
+    page = window.pages[2]
+    page.protocol.setCurrentIndex(page.protocol.findData(PROTOCOL))
+    page.realtime_url.setText("wss://fixture.invalid/realtime")
+    page.apply_preset(page.preset.findData("groq"))
+    assert page.protocol.currentData() == "http" and not page.protocol.isEnabled()
+    assert page.realtime_url.text() == "" and page.provider().parameters == {}
+    page.validate_protocol(page.provider())
+    page.apply_preset(page.preset.findData("qwen"))
+    assert page.protocol.currentData() == "http" and page.protocol.isEnabled()
+    assert page.provider().parameters == {}
+    page.validate_protocol(page.provider())

@@ -13,6 +13,11 @@ SCHEMA_VERSION = 1
 IDENTIFIER = re.compile(r"[a-z][a-z0-9_-]{0,63}")
 SECRET_FIELDS = {
     "apikey",
+    "apisecret",
+    "secretkey",
+    "secretid",
+    "accesskey",
+    "appkey",
     "xapikey",
     "apitoken",
     "accesstoken",
