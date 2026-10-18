@@ -460,7 +460,8 @@ def test_known_incompatible_protocol_is_rejected_before_permission_key_and_audio
         assert session.controller.task is None
         assert diagnostics == ["protocol"]
         assert len(problems) == 1
-        assert "连接方式与模型协议不匹配" in problems[0]
+        assert "当前连接方式与模型能力或协议不匹配" in problems[0]
+        assert "所选供应商支持的语音识别模型与对应转写方式" in problems[0]
         await session.close()
 
     asyncio.run(scenario())

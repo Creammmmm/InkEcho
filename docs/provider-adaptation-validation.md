@@ -141,3 +141,5 @@ UI预设每次分配新provider/ref，原配置与凭据不覆盖；润色提示
 
 
 批5最终审查补：Responses跨output_item同样在回调前要求前项done，实际TLS交错第二项不发出；未注册item、错item/part gap实际TLS均0callback。Messages has_more=true但last_id缺失/空/非str明确失败，不把截断模型列表报成功。最终同关联命令376 passed/19.79s；根独立此前368 passed/19.29s，最新三族/Chat156 passed/8.30s，diff检查通过。预设、协议顺序、异常类型及模型发现为源码本地证据，最终当前提交全检/实际新包和同SHA双系统尚待后续门。
+
+最终集成首轮完整检查精确b35937a：Ruff/format318通过，pytest为1896 passed/1 failed/3 skipped，63.34s。唯一失败是tests/test_application.py仍断言旧“连接方式与模型协议不匹配”文案；实际新提示明确模型能力/协议及所选供应商转写方式，diagnostics=[protocol]、禁止权限/key/audio前置门均通过。仅更新该提示断言并补具体供应商/模型/转写方式提示检查，未改产品或安全门。关联`tests/test_application.py tests/test_provider_capability.py`为73 passed/0.54s；当前提交完整检查结果后续另记，不将首轮失败抹为通过。
