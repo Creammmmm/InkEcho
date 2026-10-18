@@ -77,3 +77,52 @@ def test_actual_factory_import_and_construct_without_desktop_io():
     assert isinstance(instance, HybridKeyboardInput)
     assert instance.native._process is None
     assert instance.x11._driver is None
+
+
+@pytest.mark.parametrize(
+    "change",
+    [
+        None,
+        "missing_provider",
+        "extra_origin",
+        "missing_source_binding",
+        "wrong_source_count",
+    ],
+)
+def test_current_package_scope_requires_exact_provider_set_and_frozen_binding(
+    monkeypatch, change
+):
+    origins = {name: {} for name in PROBE.MODULES}
+    origins["inkecho.platform.hybrid_keyboard"] = {}
+    sources = {
+        "inkecho/" + name + ".py": "synthetic"
+        for name in ("app", "provider_catalog", "polish_protocols")
+    }
+    audit = {
+        "origins": origins,
+        "application_source_files": sources,
+        "inventory": {"application_files_match_source": len(sources)},
+    }
+    if change == "missing_provider":
+        del origins["inkecho.polish_protocols"]
+        origins["unknown.replacement"] = {}
+    elif change == "extra_origin":
+        origins["unknown.extra"] = {}
+    elif change == "missing_source_binding":
+        audit.pop("application_source_files")
+    elif change == "wrong_source_count":
+        audit["inventory"]["application_files_match_source"] += 1
+    monkeypatch.setattr(PROBE, "selected_artifact", lambda *args: {"sha256": "fixed"})
+    monkeypatch.setattr(PROBE, "audit_package", lambda *args: audit)
+    args = SimpleNamespace(
+        artifact="candidate",
+        expected_sha="fixed",
+        package_root="package",
+        frozen_source_root="frozen",
+        expected_version="candidate",
+    )
+    if change:
+        with pytest.raises(ValueError, match="final_hybrid_package_scope_required"):
+            PROBE.audit_selected_package(args)
+    else:
+        assert PROBE.audit_selected_package(args)[1] == audit

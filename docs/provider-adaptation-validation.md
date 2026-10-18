@@ -143,3 +143,13 @@ UI预设每次分配新provider/ref，原配置与凭据不覆盖；润色提示
 批5最终审查补：Responses跨output_item同样在回调前要求前项done，实际TLS交错第二项不发出；未注册item、错item/part gap实际TLS均0callback。Messages has_more=true但last_id缺失/空/非str明确失败，不把截断模型列表报成功。最终同关联命令376 passed/19.79s；根独立此前368 passed/19.29s，最新三族/Chat156 passed/8.30s，diff检查通过。预设、协议顺序、异常类型及模型发现为源码本地证据，最终当前提交全检/实际新包和同SHA双系统尚待后续门。
 
 最终集成首轮完整检查精确b35937a：Ruff/format318通过，pytest为1896 passed/1 failed/3 skipped，63.34s。唯一失败是tests/test_application.py仍断言旧“连接方式与模型协议不匹配”文案；实际新提示明确模型能力/协议及所选供应商转写方式，diagnostics=[protocol]、禁止权限/key/audio前置门均通过。仅更新该提示断言并补具体供应商/模型/转写方式提示检查，未改产品或安全门。关联`tests/test_application.py tests/test_provider_capability.py`为73 passed/0.54s；当前提交完整检查结果后续另记，不将首轮失败抹为通过。
+
+## 最终源码与包诊断准备
+
+根对修正后的clean `2e5f1d8910e10b17ed91566b42b9ab0c2109fafb`完成正式完整检查：Ruff/format318通过，1897 passed/3 skipped，63.26s，receipt evidence SHA-256为`8fa90643ba27a68511c67fdc089c6bb4380d5118257b3fc87dcbefad8b07d93d`。前述b359首轮文案断言失败仍保留。本轮后续诊断/规范提交各自改变HEAD，最后仍须精确最终HEAD的新完整收据。
+
+新产品树55文件（旧44+本轮11）与新协议来源审计须全部进入实际包门。`artifact_scope`显式加入十一模块，连Hybrid为30项；每个origin要求在实际包内并匹配inventory。另比较实际`packages/inkecho`与冻源完整文件集合及逐字节hash，拒缺失、额外源、单边冻源修改、包与inventory一并改写但不符冻结来源的情况，排除__pycache__且拒source symlink。mixed验收要求完整模块集合和冻源绑定，旧19/44不能直接通过；不以放宽计数冒充新模块已验。
+
+薄`provider_package_probe.py`只用于后续实际包：真实AppDir Python `-I`、独立pytest配置、不加src overlay、固定五个协议测试模块及精确node IDs；框架pytest/pluggy/iniconfig/packaging/pygments按distribution文件清单另行冻结，仅为诊断例外，不进入AppImage。禁自动插件并清用户pytest环境；前后audit+所有实际加载inkecho.*与runtime dependencies的origin/inventory必须包内，框架与namespace路径也核独立hash/目录。任何失败停、不自动重跑，当前尚未运行新包，不将此工具的纯测试称作AppImage结果。
+
+signed本地WSS夹具现在经共享streaming_config/create_streaming_session实际工厂选路，独立服务端断言不变；根复测45 passed/4.90s。诊断最终关联命令`.venv/bin/pytest -q tests/test_provider_package_probe.py tests/test_artifact_acceptance_controls.py tests/test_package_factory_mixed.py tests/test_signed_asr.py`为115 passed/5.02s，包括完整源set/hash、缺新module同计数替换、未知extra origin、源码预加载来源、框架overlay/namespace与清单篡改拒绝。无新build、GUI、stable变更或推送；下一步固定同包双Ubuntu实际验证，旧冻结工具不改写。

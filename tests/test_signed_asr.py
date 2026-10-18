@@ -14,10 +14,12 @@ from test_realtime import certificate as shared_certificate
 from websockets.asyncio.server import serve
 from websockets.exceptions import ConnectionClosed
 
+from inkecho.asr_streaming import create_streaming_session, streaming_config
+from inkecho.config import Provider
 from inkecho.provider_credentials import encode_credentials
 from inkecho.providers import ProviderError
-from inkecho.tencent_realtime import TencentConfig, TencentSession
-from inkecho.volc_realtime import VolcConfig, VolcSession, decode_frame, encode_frame
+from inkecho.tencent_realtime import TencentConfig
+from inkecho.volc_realtime import VolcConfig, decode_frame, encode_frame
 from inkecho.xfyun_realtime import XfyunConfig, XfyunSession
 
 
@@ -125,6 +127,29 @@ certificate = shared_certificate
 
 async def wire_exercise(ca, family, mode="normal", operation=None):
     frames, stamps, messages, requests = [], [], [], []
+
+    def make_session(config, key, **policy):
+        adapter, protocol = {
+            "xfyun": ("xfyun", "xfyun_iat"),
+            "tencent": ("tencent-asr", "tencent_asr"),
+        }.get(family, ("volcengine", "volc_binary"))
+        parameters = {"asr_protocol": protocol, "realtime_url": config.endpoint}
+        if family.startswith("volc"):
+            parameters.update(
+                resource_id=config.resource_id, credential_mode=config.credential_mode
+            )
+        provider = Provider(
+            "local",
+            "Synthetic",
+            "transcription",
+            adapter,
+            "https://synthetic.invalid",
+            config.model,
+            parameters=parameters,
+        )
+        selected = streaming_config(provider)
+        assert selected == config
+        return create_streaming_session(provider, selected, key, **policy)
 
     async def handler(ws):
         requests.append(ws.request)
@@ -303,7 +328,7 @@ async def wire_exercise(ca, family, mode="normal", operation=None):
         port = server.sockets[0].getsockname()[1]
         endpoint = f"wss://127.0.0.1:{port}"
         if family == "xfyun":
-            session = XfyunSession(
+            session = make_session(
                 XfyunConfig(endpoint + "/v2/iat", "iat"),
                 encode_credentials(
                     {
@@ -317,7 +342,7 @@ async def wire_exercise(ca, family, mode="normal", operation=None):
                 tls_context=ca[1],
             )
         elif family == "tencent":
-            session = TencentSession(
+            session = make_session(
                 TencentConfig(endpoint + "/asr/v2", "16k_zh"),
                 encode_credentials(
                     {
@@ -331,7 +356,7 @@ async def wire_exercise(ca, family, mode="normal", operation=None):
                 tls_context=ca[1],
             )
         else:
-            session = VolcSession(
+            session = make_session(
                 VolcConfig(
                     endpoint + "/bigmodel_async",
                     "bigmodel",

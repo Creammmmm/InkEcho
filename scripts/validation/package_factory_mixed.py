@@ -11,7 +11,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "scripts/validation"))
-from artifact_scope import audit_package, selected_artifact  # noqa: E402
+from artifact_scope import MODULES, audit_package, selected_artifact  # noqa: E402
 from host_mixed_wayland_probe import x11_evidence  # noqa: E402
 from native_acceptance import keymap_metadata, until  # noqa: E402
 from native_guard import save, worker  # noqa: E402
@@ -48,9 +48,10 @@ def audit_selected_package(args):
         args.package_root, args.frozen_source_root, args.expected_version
     )
     if (
-        "inkecho.platform.hybrid_keyboard" not in audit["origins"]
-        or len(audit["origins"]) != 19
-        or audit["inventory"]["application_files_match_source"] != 44
+        set(audit["origins"]) != set(MODULES) | {"inkecho.platform.hybrid_keyboard"}
+        or not audit.get("application_source_files")
+        or audit["inventory"]["application_files_match_source"]
+        != len(audit["application_source_files"])
     ):
         raise ValueError("final_hybrid_package_scope_required")
     return artifact, audit

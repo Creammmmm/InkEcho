@@ -47,6 +47,10 @@ def fake_package(tmp_path, monkeypatch):
         path.write_text("# synthetic module for control test\n")
         modules[name] = SimpleNamespace(__file__=str(path), __version__="0.1.0a14")
         files[str(path.relative_to(root))] = artifact.checksum(path)
+        if name.startswith("inkecho"):
+            frozen = sources / relative
+            frozen.parent.mkdir(parents=True, exist_ok=True)
+            frozen.write_bytes(path.read_bytes())
     doc = root / "usr/share/doc/inkecho"
     doc.mkdir(parents=True)
     (doc / "inventory.json").write_text(
@@ -55,7 +59,15 @@ def fake_package(tmp_path, monkeypatch):
     calls = []
     probe = SimpleNamespace(
         ROOT=sources.parent,
-        audit_appdir=lambda path: calls.append(path) or {"verified": True},
+        audit_appdir=lambda path: (
+            calls.append(path)
+            or {
+                "verified": True,
+                "application_files_match_source": len(
+                    list((sources / "inkecho").rglob("*.py"))
+                ),
+            }
+        ),
     )
     monkeypatch.setitem(sys.modules, "performance_package_probe", probe)
     monkeypatch.setattr(artifact.sys, "executable", str(executable))
@@ -438,6 +450,8 @@ def add_hybrid_to_package(fake_package):
     path = packages / "inkecho/platform/hybrid_keyboard.py"
     path.write_text("# synthetic current package hybrid module\n")
     modules["inkecho.platform.hybrid_keyboard"] = SimpleNamespace(__file__=str(path))
+    frozen = fake_package[2] / "inkecho/platform/hybrid_keyboard.py"
+    frozen.write_bytes(path.read_bytes())
     inventory = root / "usr/share/doc/inkecho/inventory.json"
     value = json.loads(inventory.read_text())
     value["files"][str(path.relative_to(root))] = artifact.checksum(path)
@@ -553,3 +567,37 @@ def test_guard_does_not_suppress_release_after_attempted_remote_failure(
         assert counts["release_success"] == 1
 
     asyncio.run(scenario())
+
+
+@pytest.mark.parametrize(
+    "change", ["missing", "extra", "frozen", "package_and_inventory"]
+)
+def test_complete_application_source_set_and_bytes_are_bound(fake_package, change):
+    root, packages, source, modules, _calls = fake_package
+    name = "inkecho.provider_catalog"
+    path = Path(modules[name].__file__)
+    if change == "missing":
+        path.unlink()
+    elif change == "extra":
+        (packages / "inkecho/extra.py").write_text("# unexpected\n")
+    elif change == "frozen":
+        (source / "inkecho/provider_catalog.py").write_text(
+            "# one-sided frozen change\n"
+        )
+    else:
+        path.write_text("# changed package and its self inventory\n")
+        inventory = root / "usr/share/doc/inkecho/inventory.json"
+        value = json.loads(inventory.read_text())
+        value["files"][str(path.relative_to(root))] = artifact.checksum(path)
+        inventory.write_text(json.dumps(value))
+    with pytest.raises(ValueError, match="application_source_(set|hash)_mismatch"):
+        artifact.audit_package(packages, source, "0.1.0a14")
+
+
+def test_new_provider_module_origin_cannot_be_preloaded_from_source(fake_package):
+    _root, packages, source, modules, _calls = fake_package
+    modules["inkecho.polish_protocols"].__file__ = str(
+        source / "inkecho/polish_protocols.py"
+    )
+    with pytest.raises(ValueError, match="module_origin_outside_package"):
+        artifact.audit_package(packages, source, "0.1.0a14")
