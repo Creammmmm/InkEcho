@@ -208,3 +208,23 @@ microphone/physical shortcut/cloud checks remain untested; no new GitHub release
 was created. The final documentation commit still requires its own full checks.
 The [a14 report](a14-dual-ubuntu-validation.md) remains the first historical
 same-artifact dual-Ubuntu acceptance; its results are not reused for a15.
+
+## Formal v0.2.0 release identity
+
+The formal release is prepared as application version `0.2.0` in all three
+metadata files and built at that exact commit. It must pass the existing same-SHA
+Ubuntu 24.04 Xorg and Ubuntu 26.04 native Wayland/XWayland package gates before
+publishing. GNOME 46 native Wayland remains unsupported. Reuse the verified a18
+readiness and local pipeline checks; a renamed a18 image is not a 0.2.0 build.
+
+Every subsequent commit, including the package-report commit, increments only
+the patch version under the [development version policy](DEVELOPMENT.md#per-commit-application-versions).
+Thus a 0.2.1 report successor may document the frozen 0.2.0 release artifact;
+the release tag still targets its exact 0.2.0 product commit. Do not rebuild
+0.2.1 merely to make the development HEAD equal the released version.
+
+Publish only the validated versioned AppImage and its matching SHA-256 sidecar.
+Prepare release notes in a file, then use an explicit exact commit target for
+`v0.2.0`; the formal release is not a prerelease and is marked latest. Existing
+pre-push tag restrictions remain. Publication requires an independently reviewed
+artifact/commit binding and both actual OS results, not just a source receipt.

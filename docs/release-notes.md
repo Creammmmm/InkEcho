@@ -1,4 +1,33 @@
-# InkEcho 0.1.0a8 — remove the retired focus-tracking adapter
+# InkEcho v0.2.0 — current-cursor Linux voice input
+
+This formal release contains the verified four-slot native Wayland keyboard
+output, a 10 ms per-character release wait, and whole-utterance final-ASR /
+protocol-closure overlap with the existing streaming polishing/output pipeline.
+Each key still has its own acknowledgement; prepared hints never emit text.
+Explicit cancellation, expiry and replacement stop unsent output without replay.
+Recording does not capture a target; output follows the current cursor.
+No clipboard or system input method is used.
+
+The preceding a18 package measured one native 100-character sample at about
+3.31 seconds; its source 30/20/10 ms comparison and local TLS pipeline proof are
+recorded in [a18 acceptance](a18-dual-ubuntu-validation.md). Those are historical
+a18 measurements, not a substitute for the new 0.2.0 artifact's same-SHA dual-OS
+acceptance. The 0.2.0 package report must record its own version, SHA and results
+before publication.
+
+Release scope is Linux x86_64: Ubuntu 24.04 Xorg and Ubuntu 26.04 GNOME native
+Wayland/XWayland as actually validated. GNOME 46 native Wayland remains
+unsupported. No Windows/macOS, arbitrary application, physical shortcut,
+real microphone or authenticated cloud-recognition claim is added by local
+synthetic-audio/TLS tests. Credentials remain in Secret Service; audio and
+transcript history are not retained by default.
+
+The release-source version is 0.2.0. Later report/development commits use
+0.2.1 and subsequent patch versions under the per-commit version policy; they
+are not additional release assets unless independently built and published.
+
+## Historical 0.1.0a8 — remove the retired focus-tracking adapter
+
 
 This cleanup removes the unused captured-target AT-SPI adapter from production
 source and packaging. Historical probes/tests keep that algorithm under test-only

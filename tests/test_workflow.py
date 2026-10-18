@@ -22,6 +22,16 @@ def git(repo: Path, *args: str, check: bool = True) -> subprocess.CompletedProce
     )
 
 
+def write_versions(repository, value):
+    (repository / "src/inkecho").mkdir(parents=True, exist_ok=True)
+    (repository / "pyproject.toml").write_text(f'[project]\nversion = "{value}"\n')
+    (repository / "src/inkecho/__init__.py").write_text(f'__version__ = "{value}"\n')
+    (repository / "uv.lock").write_text(
+        f'[[package]]\nname = "inkecho"\nversion = "{value}"\n'
+    )
+    git(repository, "add", "pyproject.toml", "src/inkecho/__init__.py", "uv.lock")
+
+
 @pytest.fixture
 def repo(tmp_path, monkeypatch):
     repository = tmp_path / "repository"
@@ -33,6 +43,8 @@ def repo(tmp_path, monkeypatch):
     target = repository / "scripts/validation"
     target.mkdir(parents=True)
     shutil.copy(ROOT / "scripts/validation/workflow.py", target)
+    shutil.copy(ROOT / "scripts/validation/versioning.py", target)
+    write_versions(repository, "1.0.0")
     (repository / "evidence.md").write_text("Verified hook behavior locally.\n")
     git(repository, "add", ".")
     git(repository, "commit", "-m", "chore(workflow): initialize test repository")
@@ -75,6 +87,7 @@ def test_invalid_commit_message(tmp_path, message):
 
 
 def test_git_invokes_commit_hook(repo):
+    write_versions(repo, "1.0.1")
     result = git(repo, "commit", "--allow-empty", "-m", "bad message", check=False)
     assert result.returncode != 0
     assert "type(scope)" in result.stderr
@@ -110,6 +123,7 @@ def test_git_push_requires_exact_validated_head(repo, tmp_path):
     assert "exact commit" in result.stderr
     write_receipt(repo)
     git(repo, "push", "origin", "main")
+    write_versions(repo, "1.0.1")
     git(repo, "commit", "--allow-empty", "-m", "test(workflow): change commit")
     result = git(repo, "push", "origin", "main", check=False)
     assert result.returncode != 0

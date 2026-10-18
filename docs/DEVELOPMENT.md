@@ -124,6 +124,43 @@ Push the current branch explicitly, for example `git push origin main`. The hook
 blocks tags, branch deletion and pushing another commit because those actions cannot be
 covered by the current HEAD receipt. Avoid bulk pushes with unrelated refs.
 
+## Per-commit application versions
+
+The release-preparation commit moves the exact reviewed parent
+`76d8d5591017820caafed55e3741ab998fc44de7` from `0.1.0a18` to `0.2.0` once.
+Afterward every new commit, including documentation and empty commits, must keep
+X.Y and increment Z by exactly one. No skipped patch, prerelease or general
+major/minor exception is accepted. Future policy changes require explicit review.
+
+Before staging a commit, run:
+
+```sh
+python3 scripts/validation/versioning.py bump
+```
+
+This explicit helper modifies only the working copies of `pyproject.toml`,
+`src/inkecho/__init__.py` and the local `inkecho` package entry in `uv.lock`.
+It neither stages files nor creates a commit. Review and stage all three version
+changes with the focused feature or documentation. The executable pre-commit
+hook checks those three **index blobs**, not unstaged working files; omissions,
+unsynchronized versions and a nonconsecutive patch reject the commit. Hooks never
+silently edit files. Do not use `--no-verify`.
+
+There is no special amend detection or exemption. A bare `git commit --amend`
+that retains the current version fails the same next-patch check. Do not amend
+published history; use the next explicit commit/version. The gate is a local
+workflow guard, not protection against deliberately replacing hooks.
+
+A release tag binds the exact validated release-source commit, not a later
+report-only development successor. For v0.2.0, build and validate the 0.2.0
+commit on both Ubuntu systems, then record the results in the next 0.2.1 commit.
+The latter also synchronizes all three version fields but does not require
+rebuilding or pretending its source is the released 0.2.0 artifact. Final source
+checks run on that exact clean successor HEAD. Preserve the frozen 0.2.0 source,
+its earlier receipt, actual artifact SHA and dual-OS evidence. The authorized
+GitHub Release API targets the exact 0.2.0 commit; ordinary branch pushes retain
+the existing pre-push hook, which still rejects tag pushes.
+
 ## Real-world acceptance gates
 
 - Phase 0 must have reproducible Chinese/Unicode injection evidence before full
