@@ -76,6 +76,18 @@ related tests and documentation. Do not mix unrelated modules, formatting sweeps
 and behavior changes. Split dependencies into reviewable commits. Never rewrite
 already pushed history merely to rename commits.
 
+## Feature branches and release ancestry
+
+Prefer an independent branch for each feature. After acceptance, merge completed
+work back into the repository's default main branch (currently `main`). Before
+any release, its source commit must already be merged into and reachable from
+that main branch. Verify the current remote state before merging or publishing.
+
+A fast-forward merge is sufficient; do not require an extra `--no-ff` merge
+commit. If a merge does create a new commit, it still follows the version
+increment, validation and Git hook rules. Branches do not bypass the complete
+checks required before pushing or the same-artifact dual-Ubuntu release gate.
+
 ## Local verification before every push
 
 Install the development dependencies documented in the project, then enable the
