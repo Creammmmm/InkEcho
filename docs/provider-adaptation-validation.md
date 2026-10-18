@@ -4,7 +4,7 @@
 
 参考本地OpenLESS提交`63be178b43e3e8084d09ff082a42dbdcbaf74d2b`的供应商目录和协议行为，其根许可证为AGPL-3.0；InkEcho为MIT。本任务不复制、翻译移植Rust实现，不链接其库；Python实现以各供应商官方协议为依据。目录不是云端可用性证明。首期不增加本地模型、OAuth账户接管、剪贴板或IME。
 
-以下18项覆盖参考项目的完整云ASR范围；分批仅用于审查，不缩小目标。所有新族在本页记录验证前均为pending，不宣称已支持真实账户、模型权限或云服务。既有Qwen实时和整句收尾重叠必须回归。
+以下18项覆盖参考项目的完整云ASR范围，润色覆盖四种显式线协议；各批已完成下面列出的源码与本地合成协议验证。目录、mock服务与单元测试不等于真实账户、模型权限或云服务可用性。既有Qwen及整句收尾路径保留，最终提交完整回归、新包内协议与双Ubuntu实际包验收另记。
 
 ## ASR矩阵
 
@@ -13,8 +13,8 @@
 | 火山/volcengine | gzip/二进制序列WebSocket，大模型ASR | API key或app/access/resource组合 | 批4本地WSS/二进制界限通过，云认证未验 |
 | ElevenLabs | multipart speech-to-text，xi-api-key/model_id | API key | 批1本地TLS通过，云认证未验 |
 | 百炼/bailian | run-task/binary PCM/finish-task WS | API key | 批3独立任务WS本地通过，云认证未验 |
-| 百炼Qwen realtime | session/append/commit/finished WS | API key | 已有实现，待本轮回归 |
-| 百炼fun-asr-flash | multimodal-generation HTTP JSON | API key | 已有实现，待本轮回归 |
+| 百炼Qwen realtime | session/append/commit/finished WS | API key | 已有实现，分批本地回归通过；最终HEAD全检另记 |
+| 百炼fun-asr-flash | multimodal-generation HTTP JSON | API key | 已有实现，分批本地回归通过；最终HEAD全检另记 |
 | SiliconFlow | audio/transcriptions multipart | API key | 批1本地TLS通过，云认证未验 |
 | StepFun | ASR专用realtime WS；HTTP按官方能力另列 | API key | 批2专用ASR WS/HTTP本地通过，云认证未验 |
 | Zhipu | audio/transcriptions HTTP | API key | 批2本地TLS/30秒限制通过，云认证未验 |
@@ -33,10 +33,10 @@
 
 | 族 | 参考供应商范围 | 状态 |
 | --- | --- | --- |
-| Chat Completions | OpenAI/DeepSeek/Ark/SiliconFlow/AtlasCloud/MiMo/CometAPI/OpenRouter/Requesty/API Route/Orca/AlibabaCoding/CodingPlanX/MiniMax/StepFun/OpenCode/TencentTokenHub/custom | 既有基础，后续preset/字段白名单与SSE验证pending |
-| Responses | 支持该协议的显式自定义服务 | pending，独立事件解析/终态，不能按厂商名假定 |
-| Messages | 支持Anthropic Messages的显式服务 | pending，专属headers/system/SSE/stop理由 |
-| Gemini | 官方generateContent/streamGenerateContent | pending，专属模型发现/内容与终态 |
+| Chat Completions | OpenAI/DeepSeek/Ark/SiliconFlow/AtlasCloud/MiMo/CometAPI/OpenRouter/Requesty/API Route/Orca/AlibabaCoding/CodingPlanX/MiniMax/StepFun/OpenCode/TencentTokenHub/custom | 批5显式供应商预设/旧Chat SSE本地通过，云认证未验 |
+| Responses | 支持该协议的显式自定义服务 | 批5原生请求/状态绑定/终态本地TLS通过，云认证未验 |
+| Messages | 支持Anthropic Messages的显式服务 | 批5专属headers/system/块顺序/SSE终态本地TLS通过，云认证未验 |
+| Gemini | 官方generateContent/streamGenerateContent | 批5原生模型发现/思考过滤/STOP终态本地TLS通过，云认证未验 |
 
 OAuth与本地LMStudio不在本轮云API-key适配范围，不读取Codex凭据。跨族不自动重发POST或将部分结果整段重放。
 
@@ -117,3 +117,27 @@ StepFun以[当前ASR专属WS](https://platform.stepfun.com/docs/zh/api-reference
 本批真实本机WSS由测试服务器独立解析原始header/PCM及重算HMAC，另固定date/nonce/path排序和篡改向量，覆盖两种火山鉴权、错identity/remote error/close、取消/active失效/deadline、gzip炸弹/截断/尾随、sn修订及60秒门。`QT_QPA_PLATFORM=offscreen .venv/bin/pytest -q tests/test_signed_asr.py tests/test_ui.py tests/test_provider_catalog.py tests/test_application_realtime.py`，136 passed/10.33s。历史WIP：三正常用例最初仅因测试错误要求_socket=None而失败，改为验证已await关闭的close_code；未改成熟Qwen。app/access测试首次夹具仍选API模式导致1失败，修夹具选择后39 passed/4.88s；60秒测试首次无eventloop调用生命周期导致135 passed/1 failed，改async测试后136通过。尚无云账户、麦克风、桌面输出或新包验证；Responses/Messages/Gemini等润色族仍继续实现。
 
 根对同组合独立复测136 passed/10.28s。最后补充畸形JSON类型门（Tencent模型与Volc凭据模式）及静态发现汇总：同role/adapter/protocol聚合兼容内置模型，Paraformer不再误显示仅Fun列表，仍不读密钥、不声称连接成功。最后UI/catalog 86 passed/5.62s，纯边界选定16 passed/0.11s；这些补充与完整组合分列，不累加作独立样本。
+
+
+## 批5：四种润色线协议及供应商目录
+
+Chat Completions继续复用既有有界SSE和Session producer/consumer，不重造识别/输出流水线。新增`polish_protocols.py`独立实现Responses、Messages、Gemini的原生请求/完整响应/SSE状态；ProviderClient只按显式adapter分派。所有POST单次、不重定向、不因网络或部分输出自动重试。回调仍await背压，已发前缀不可撤回；截断、错误、提前EOF不变成正常成功、不整段fallback重放。
+
+Responses请求`instructions`与整句input，`store=false`。依据[官方流事件](https://developers.openai.com/api/reference/resources/responses/streaming-events)，输出前必须登记assistant message与output_text part，核item_id/output_index/content_index、连续分片及前片闭合；reasoning/tool/refusal伪装delta不能先发再靠终态拒绝。output_text.done不是任务完成，只有response.completed/status=completed、登记输出项/分片闭合且完整文本一致才成功；incomplete/failed/error拒绝。sequence_number严格前进。
+
+Messages请求专属system/messages/max_tokens，官方用x-api-key及anthropic-version。依据[流式事件](https://platform.claude.com/docs/en/build-with-claude/streaming)与[停止理由](https://platform.claude.com/docs/en/build-with-claude/handling-stop-reasons)：先message_start，块index连续且前块闭合；只text_delta可输出，thinking/signature不输出，tool/refusal拒绝。message_delta可多次且usage累计覆盖、不相加，进入尾段后拒新正文；end_turn后message_stop且所有块闭合才成功。max_tokens/context_window_exceeded/tool_use/pause/refusal都不是正常润色完成。
+
+Gemini依据[generateContent原生API](https://ai.google.dev/api/generate-content)和[header鉴权](https://ai.google.dev/gemini-api/docs/api-key)：systemInstruction/contents/generationConfig，x-goog-api-key不放URL；单次移除models/前缀后严格限制模型path字符，拒双路径、../?/#。模型发现只列supportedGenerationMethods包含generateContent的项，header鉴权分页最多10页且响应有界。仅text且thought非true可输出；STOP才完成，MAX_TOKENS/SAFETY/CONTINUATION等失败，不发送function/binary内容。
+
+请求参数仅允许各协议明确数值控制，有限值与类型前置门（bool不当数字、JSON层也拒NaN/Infinity）；stream单事件/累计字节/累计文字沿用既有限额，非流式也限制200000字符。模型发现与调用使用该协议headers，无秘密query，无新增tools/OAuth/本地模型能力。
+
+Chat目录覆盖OpenAI、DeepSeek、Ark、SiliconFlow、AtlasCloud、MiMo、CometAPI、OpenRouter、Requesty、API Route、Orca、百炼通用API、CodingPlanX、MiniMax、StepFun、OpenCode Zen、Tencent TokenHub及自定义；模型ID保留手填/显式发现，不把预设或静态型号称认证可用。参考AlibabaCoding在[当前官方FAQ](https://help.aliyun.com/en/model-studio/coding-plan-faq)限定交互AI编程；应用润色默认提供百炼通用API，保留该参考差异，不读key前缀或封锁用户显式自定义URL。OpenCode[官方协议表](https://docs.opencode.ai/docs/zen/)按模型分Chat/Responses，提供两个显式预设。
+
+目录官方出处补充：[AtlasCloud](https://www.atlascloud.ai/docs/llm-protocols)、[Requesty](https://docs.requesty.ai/)、[API Route](https://www.api-route.com/)、[CometAPI](https://www.cometapi.com/quickstart/)、[CodingPlanX](https://codingplanx.ai/docs/dify)、[TokenHub](https://cloud.tencent.com/document/product/1823/130079)、[Ark](https://docs.volcengine.com/docs/ark/chat-api?lang=en)。MiniMax以[当前OpenAI兼容文档](https://platform.minimax.io/docs/api-reference/text-openai-api)的api.minimax.io为默认（不擅自重写旧用户域名）；官方主机+精确M2/M3型号默认reasoning_split=true并拒false，避免其content包含思考，不给未知gateway/未来型号猜参数，不全局剥除用户正文里的think标签。另[官方Messages](https://platform.minimax.io/docs/api-reference/text-anthropic-api)提供独立preset，按其/anthropic/v1与Bearer示例窄处理，原生Anthropic仍x-api-key。
+
+UI预设每次分配新provider/ref，原配置与凭据不覆盖；润色提示明确所选线协议。语音协议combo按adapter禁用不兼容选项（Qwen只有HTTP/Qwen实时）；旧未知/非法JSON保留并明确报错，不默默迁移。无联网目录不声称连接成功。
+
+验证：`QT_QPA_PLATFORM=offscreen .venv/bin/pytest -q tests/test_polish_protocols.py tests/test_polish_stream.py tests/test_runtime_streaming.py tests/test_application_streaming.py tests/test_providers.py tests/test_ui.py tests/test_provider_catalog.py`，368 passed/19.53s，允许本机TLS的运行环境；包含三族实际TLS非流式/完整SSE/headers/body、错终态/HTTP200 error/EOF/部分取消/首字早于final及timeout不重发、分页/模型路径/数值限额、Chat各预设同族wire、现有Session partial-no-replay回归。此前核心350 passed/18.34s、旧Chat+三族130 passed/6.74s分别为逐步证据，不加作独立可靠性统计。首次扩TLS夹具在requests记录新增headers破坏一旧exact断言，改独立headers记录后68通过；数值坏例NaN/Infinity最初6项被更早ConfigError阻断，测试按实际层次断言，无放宽产品。根早期独立组合96 passed/4.71s。尚未认证云账户、实用模型权限、麦克风/桌面输出或新AppImage，不继承v0.2.0包证据。
+
+
+批5最终审查补：Responses跨output_item同样在回调前要求前项done，实际TLS交错第二项不发出；未注册item、错item/part gap实际TLS均0callback。Messages has_more=true但last_id缺失/空/非str明确失败，不把截断模型列表报成功。最终同关联命令376 passed/19.79s；根独立此前368 passed/19.29s，最新三族/Chat156 passed/8.30s，diff检查通过。预设、协议顺序、异常类型及模型发现为源码本地证据，最终当前提交全检/实际新包和同SHA双系统尚待后续门。

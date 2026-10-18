@@ -1118,3 +1118,36 @@ def test_dashscope_static_discovery_includes_paraformer_without_secret_access(wi
         assert "连接成功" not in page.message.text()
 
     asyncio.run(scenario())
+
+
+@pytest.mark.parametrize(
+    "preset,adapter",
+    [
+        ("openai-responses", "responses"),
+        ("anthropic-messages", "messages"),
+        ("gemini-native", "gemini"),
+        ("opencode-responses", "responses"),
+        ("minimax-chat", "openai"),
+    ],
+)
+def test_polishing_native_presets_select_protocol_without_reusing_credentials(
+    window, preset, adapter
+):
+    page = window.pages[3]
+    old_ref = page.reference
+    page.key.setText("unsaved-old-key")
+    page.apply_preset(page.preset.findData(preset))
+    assert page.provider().adapter == adapter
+    assert page.reference != old_ref and not page.key.text()
+    assert "当前协议" in page.model_hint.text()
+
+
+def test_qwen_protocol_picker_disables_other_vendor_protocols(window):
+    page = window.pages[2]
+    page.apply_preset(page.preset.findData("qwen"))
+    for index in range(page.protocol.count()):
+        allowed = page.protocol.itemData(index) in {"http", PROTOCOL}
+        assert page.protocol.model().item(index).isEnabled() == allowed
+    page.parameters.setPlainText(json.dumps({"asr_protocol": "unsupported-mode"}))
+    assert page.protocol.currentIndex() == -1
+    assert page.parameter_values()["asr_protocol"] == "unsupported-mode"

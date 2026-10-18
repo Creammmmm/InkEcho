@@ -65,7 +65,12 @@ def certificate(tmp_path_factory):
 @pytest.fixture
 def server(certificate):
     state = SimpleNamespace(
-        requests=[], replies=deque(), accepted=0, completed=False, server_errors=[]
+        requests=[],
+        replies=deque(),
+        accepted=0,
+        completed=False,
+        server_errors=[],
+        headers=[],
     )
 
     class Server(ThreadingHTTPServer):
@@ -93,12 +98,19 @@ def server(certificate):
             except (BrokenPipeError, ConnectionResetError, ssl.SSLError):
                 pass
 
+        def do_GET(self):
+            self.respond(False)
+
         def do_POST(self):
+            self.respond(True)
+
+        def respond(self, post):
             body = self.rfile.read(int(self.headers.get("Content-Length", 0)))
+            state.headers.append(dict(self.headers))
             state.requests.append(
                 {
                     "path": self.path,
-                    "body": json.loads(body),
+                    "body": json.loads(body) if post else None,
                     "authorization": self.headers.get("Authorization"),
                     "accept": self.headers.get("Accept"),
                 }

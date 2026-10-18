@@ -254,6 +254,28 @@ class ProviderPage(Page):
             raise ConfigError("请求参数必须是 JSON 对象；原内容已保留。")
         return values
 
+    def configure_protocol_options(self):
+        if self.role != "transcription":
+            return
+        allowed = (
+            {"http", PROTOCOL}
+            if self.adapter == "qwen"
+            else {
+                next(
+                    (
+                        preset.protocol
+                        for preset in PRESETS
+                        if preset.adapter == self.adapter
+                    ),
+                    "http",
+                )
+            }
+        )
+        for index in range(self.protocol.count()):
+            self.protocol.model().item(index).setEnabled(
+                self.protocol.itemData(index) in allowed
+            )
+
     def parameters_changed(self):
         self.revision += 1
         self.filter_models()
@@ -264,6 +286,7 @@ class ProviderPage(Page):
                 self.update_model_hint()
                 return
             self.configure_credentials()
+            self.configure_protocol_options()
             mode = values.get("asr_protocol", "http")
             endpoint = values.get("realtime_url", "")
             with QSignalBlocker(self.protocol), QSignalBlocker(self.realtime_url):
@@ -358,10 +381,23 @@ class ProviderPage(Page):
             provider = None
         else:
             if self.role == "polishing":
-                hint = "模型列表不等于能力验证；请测试当前模型能否完成润色。"
+                family = {
+                    "openai": "Chat Completions",
+                    "responses": "Responses",
+                    "messages": "Messages",
+                    "gemini": "Gemini 原生",
+                }.get(provider.adapter, "未知")
+                hint = (
+                    f"当前协议：{family}。模型列表不等于能力验证；"
+                    "请测试当前模型能否完成润色。"
+                )
             elif provider.parameters.get("asr_protocol") in {
                 PROTOCOL,
                 "stepfun_realtime",
+                "dashscope_task",
+                "xfyun_iat",
+                "tencent_asr",
+                "volc_binary",
             }:
                 hint = (
                     "已选择边录边识别；需 16 kHz 录音。请测试所选服务和模型的实时能力。"

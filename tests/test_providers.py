@@ -862,3 +862,21 @@ def test_qwen_thinking_control_requires_json_boolean(value):
     )
     with pytest.raises(ProviderError):
         polishing_request_body(provider, "draft", "prompt")
+
+
+@pytest.mark.parametrize(
+    "model", ["MiniMax-M2.5", "MiniMax-M3", "MiniMax-M3.1-Flash-Preview"]
+)
+def test_verified_minimax_separates_thinking_from_polish_content(model):
+    provider = Provider(
+        "mm", "MiniMax", "polishing", "openai", "https://api.minimax.io/v1", model
+    )
+    assert (
+        polishing_request_body(provider, "draft", "prompt")["reasoning_split"] is True
+    )
+    with pytest.raises(ProviderError):
+        polishing_request_body(
+            replace(provider, parameters={"reasoning_split": False}), "draft", "prompt"
+        )
+    unknown = replace(provider, base_url="https://gateway.example/v1")
+    assert "reasoning_split" not in polishing_request_body(unknown, "draft", "prompt")

@@ -192,6 +192,24 @@ def polishing_request_body(
         and provider.model in qwen_models
     ):
         control = "enable_thinking"
+    if (
+        url.hostname in {"api.minimax.io", "api.minimax.cn", "api.minimaxi.com"}
+        and url.port in {None, 443}
+        and url.path.rstrip("/") == "/v1"
+        and provider.model
+        in {
+            "MiniMax-M3.1-Flash-Preview",
+            "MiniMax-M3",
+            "MiniMax-M2.7",
+            "MiniMax-M2.7-highspeed",
+            "MiniMax-M2.5",
+            "MiniMax-M2.5-highspeed",
+            "MiniMax-M2.1",
+            "MiniMax-M2.1-highspeed",
+            "MiniMax-M2",
+        }
+    ):
+        control = "reasoning_split"
     allowed = {
         "temperature",
         "top_p",
@@ -213,6 +231,10 @@ def polishing_request_body(
         ):
             raise ProviderError("configuration")
         controls[control] = dict(value)
+    elif control == "reasoning_split":
+        if provider.parameters.get(control, True) is not True:
+            raise ProviderError("configuration")
+        controls[control] = True
     elif control == "enable_thinking":
         value = provider.parameters.get(control, False)
         if type(value) is not bool:
@@ -318,6 +340,9 @@ class ProviderClient:
         if provider.adapter not in {
             "qwen",
             "openai",
+            "responses",
+            "messages",
+            "gemini",
             *HTTP_ASR_ADAPTERS,
             *WS_ASR_ADAPTERS,
         }:
@@ -436,6 +461,10 @@ class ProviderClient:
         self._validate(provider, key, model=False)
         if provider.adapter in STATIC_MODEL_ADAPTERS:
             raise ProviderError("configuration")
+        if provider.adapter in {"responses", "messages", "gemini"}:
+            from inkecho.polish_protocols import models
+
+            return await models(self, provider, key)
         result = await self._request(provider, key, "models")
         models = result.get("data")
         if not isinstance(models, list):
@@ -547,6 +576,10 @@ class ProviderClient:
         self, provider: Provider, key: str, text: str, prompt: str
     ) -> Result:
         self._validate(provider, key)
+        if provider.adapter in {"responses", "messages", "gemini"}:
+            from inkecho.polish_protocols import polish
+
+            return await polish(self, provider, key, text, prompt)
         body = polishing_request_body(provider, text, prompt)
         started = time.monotonic()
         return self._result(
@@ -566,6 +599,11 @@ class ProviderClient:
         The callback supplies backpressure and must enforce task authorization
         before delivery. The returned full text is for accounting, not replay.
         """
+        if provider.adapter in {"responses", "messages", "gemini"}:
+            self._validate(provider, key)
+            from inkecho.polish_protocols import polish
+
+            return await polish(self, provider, key, text, prompt, on_delta)
         from inkecho.polish_stream import polish_stream
 
         return await polish_stream(self, provider, key, text, prompt, on_delta)

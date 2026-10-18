@@ -204,6 +204,44 @@ PRESETS = (
         "custom-asr", "自定义 · multipart 录音转写", "transcription", "multipart", ""
     ),
     Preset(
+        "openai-responses",
+        "OpenAI · Responses 润色",
+        "polishing",
+        "responses",
+        "https://api.openai.com/v1",
+    ),
+    Preset(
+        "anthropic-messages",
+        "Anthropic · Messages 润色",
+        "polishing",
+        "messages",
+        "https://api.anthropic.com/v1",
+    ),
+    Preset(
+        "gemini-native",
+        "Google · Gemini 原生润色",
+        "polishing",
+        "gemini",
+        "https://generativelanguage.googleapis.com/v1beta",
+    ),
+    Preset(
+        "minimax-messages",
+        "MiniMax · Messages 润色",
+        "polishing",
+        "messages",
+        "https://api.minimax.io/anthropic/v1",
+    ),
+    Preset("custom-responses", "自定义 · Responses 润色", "polishing", "responses", ""),
+    Preset("custom-messages", "自定义 · Messages 润色", "polishing", "messages", ""),
+    Preset("custom-gemini", "自定义 · Gemini 原生润色", "polishing", "gemini", ""),
+    Preset(
+        "opencode-responses",
+        "OpenCode Zen · Responses 润色",
+        "polishing",
+        "responses",
+        "https://opencode.ai/zen/v1",
+    ),
+    Preset(
         "custom-chat",
         "自定义 · Chat Completions 润色",
         "polishing",
@@ -211,6 +249,34 @@ PRESETS = (
         "https://api.deepseek.com",
         (),
     ),
+)
+
+# Endpoint catalogs select a wire format, never establish account/model access.
+PRESETS += tuple(
+    Preset(identifier, title + " · Chat 润色", "polishing", "openai", endpoint)
+    for identifier, title, endpoint in (
+        ("openai-chat", "OpenAI", "https://api.openai.com/v1"),
+        ("deepseek-chat", "DeepSeek", "https://api.deepseek.com/v1"),
+        ("ark-chat", "火山方舟", "https://ark.cn-beijing.volces.com/api/v3"),
+        ("siliconflow-chat", "硅基流动", "https://api.siliconflow.cn/v1"),
+        ("atlascloud-chat", "AtlasCloud", "https://api.atlascloud.ai/v1"),
+        ("mimo-chat", "小米 MiMo", "https://api.xiaomimimo.com/v1"),
+        ("cometapi-chat", "CometAPI", "https://api.cometapi.com/v1"),
+        ("openrouter-chat", "OpenRouter", "https://openrouter.ai/api/v1"),
+        ("requesty-chat", "Requesty", "https://router.requesty.ai/v1"),
+        ("api-route-chat", "API Route", "https://global.api-route.com/v1"),
+        ("orca-chat", "OrcaRouter", "https://api.orcarouter.ai/v1"),
+        (
+            "bailian-chat",
+            "百炼通用 API",
+            "https://dashscope.aliyuncs.com/compatible-mode/v1",
+        ),
+        ("codingplanx-chat", "CodingPlanX", "https://api.codingplanx.ai/v1"),
+        ("minimax-chat", "MiniMax 通用 API", "https://api.minimax.io/v1"),
+        ("stepfun-chat", "阶跃星辰", "https://api.stepfun.com/v1"),
+        ("opencode-chat", "OpenCode Zen", "https://opencode.ai/zen/v1"),
+        ("tencent-tokenhub", "腾讯 TokenHub", "https://tokenhub.tencentmaas.com/v1"),
+    )
 )
 
 
