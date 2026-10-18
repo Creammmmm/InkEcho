@@ -2,6 +2,8 @@
 
 2026-10-19 用户明确要求不再使用系统密钥环，改为在配置中直接保存明文认证字段。本页记录源码修订及本机项目依赖清理；旧发布包不因源码修改而变化，新候选包的双系统验收与稳定入口更新须另行记录。
 
+本页的源码阶段状态保留为当时记录。后续同 SHA 双系统、候选 FUSE 和本机稳定入口实际交付见 [0.3.2 包验收](plaintext-credentials-package-validation.md)。
+
 ## 存储与升级行为
 
 `FileCredentialStore(config_root)` 只使用调用方明确指定配置目录的 `credentials.json`。文件结构为 `schema_version: 1` 和 `credentials` 引用到字符串的映射。普通 API Key 保持原字符串，多字段 App ID/API Secret/Secret ID/Access Key 等保持现有 bundle 字符串格式；全部为明文，不是加密存储。普通供应商 JSON 仍只保存引用，参数中的秘密字段仍被拒绝，切换供应商预设不复用旧引用。
