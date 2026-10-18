@@ -31,7 +31,7 @@ INTERFACE = SERVICE + ".Session"
 # compositor and application. Keep each map stable before and after its key.
 INITIAL_MAP_SETTLE_SECONDS = 0.05
 MAP_SETTLE_SECONDS = 0.03
-RELEASE_SETTLE_SECONDS = 0.03
+RELEASE_SETTLE_SECONDS = 0.01
 
 
 class MutterSession:

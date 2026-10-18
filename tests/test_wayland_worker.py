@@ -1004,7 +1004,7 @@ def test_stop_during_settle_never_acknowledges_or_sends_a_tail(
         assert remote.data == b"original\0"
         assert guardian.map is None
         assert remote.events == expected_events
-        assert sleeps == ([0.05] if boundary == "map" else [0.05, 0.03])
+        assert sleeps == ([0.05] if boundary == "map" else [0.05, 0.01])
 
     run(scenario())
 
@@ -1033,7 +1033,7 @@ def test_failed_release_settles_before_cleanup_retry_or_restore(remote, monkeypa
             await original_set(data, group)
 
         async def settle(duration):
-            sequence.append("settle")
+            sequence.append(("settle", duration))
 
         monkeypatch.setattr(wayland_worker.asyncio, "sleep", settle)
         remote.key, remote.set_map = key, set_map
@@ -1043,12 +1043,12 @@ def test_failed_release_settles_before_cleanup_retry_or_restore(remote, monkeypa
         await guardian.finish()
         assert sequence == [
             "map",
-            "settle",
+            ("settle", 0.05),
             "press",
             "release",
-            "settle",
+            ("settle", 0.01),
             "release",
-            "settle",
+            ("settle", 0.01),
             "restore",
         ]
         assert guardian.pressed is None
@@ -1110,7 +1110,7 @@ def test_successful_press_time_precedes_release_and_retains_pacing(remote):
         assert await guardian.key("中") == 1
         done = time.monotonic()
         assert began <= guardian.last_sent_at <= release_at <= done
-        assert done - release_at >= 0.025
+        assert done - release_at >= 0.009
         await guardian.finish()
 
     run(scenario())
@@ -1259,7 +1259,7 @@ def test_first_mapping_grace_ignores_newlines_and_cache_and_resets_per_begin(
         await guardian.begin()
         for char in "\nAA\nAB":
             await guardian.key(char)
-        assert sleeps == [0.03, 0.05, 0.03, 0.03, 0.03, 0.03, 0.03, 0.03]
+        assert sleeps == [0.01, 0.05, 0.01, 0.01, 0.01, 0.01, 0.03, 0.01]
         assert remote.writes == [(b"A\0", 1), (b"B\0", 1)]
         assert len(remote.events) == 12
         await guardian.finish()
@@ -1267,7 +1267,7 @@ def test_first_mapping_grace_ignores_newlines_and_cache_and_resets_per_begin(
         sleeps.clear()
         await guardian.begin()
         await guardian.key("A")
-        assert sleeps == [0.05, 0.03]
+        assert sleeps == [0.05, 0.01]
         await guardian.finish()
         assert remote.data == b"original\0" and guardian.map is None
 
