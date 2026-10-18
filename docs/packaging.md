@@ -231,3 +231,30 @@ Prepare release notes in a file, then use an explicit exact commit target for
 `v0.2.0`; the formal release is not a prerelease and is marked latest. Existing
 pre-push tag restrictions remain. Publication requires an independently reviewed
 artifact/commit binding and both actual OS results, not just a source receipt.
+
+
+## Formal v0.3.0 provider release
+
+The release-preparation branch starts at accepted main `c6c0b119e5c06ad13a8134052086e067256eba0a`.
+An explicit `versioning.py bump --release` synchronizes the three fields from
+0.2.14 to 0.3.0; the release adds no new protocol behavior beyond the accepted
+provider implementation. Keep all v0.2.0 and 0.2.10 artifacts and evidence.
+
+Build a fresh versioned 0.3.0 AppImage from its exact clean preparation commit,
+freeze all 55 product files and the complete tracked validation snapshot, and
+bind its own inventory and SHA-256. Reuse the reviewed isolated package protocol
+runner (226 selected local TLS/WSS/SSE tests) on both OSes, host 25 desktop gates,
+and guest extraction plus collection/tests and nine Xorg desktop gates. The
+same-SHA candidate must also pass the private-profile real FUSE observation.
+Old package results are reference methods, not acceptance of this new artifact.
+Do not update the stable entry before both actual OS results and candidate FUSE
+are reviewed; only the two stable artifact/sidecar files may then change.
+
+A focused report successor uses 0.3.1 without rebuilding the frozen 0.3.0 package.
+Before publication, merge the validated source into main and verify that the
+exact 0.3.0 tag target is reachable from it. Create a draft release with only the
+versioned AppImage and matching SHA-256 sidecar, verify remote assets against
+local hashes, then publish as formal/latest after review. Preserve old releases;
+unknown publication results require a read-only state check, not blind retries.
+The official-account and GNOME46 native-Wayland limitations in the release notes
+remain explicit.

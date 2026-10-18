@@ -1,3 +1,44 @@
+# InkEcho v0.3.0 — 云供应商与协议适配
+
+本次版本整合18项云ASR供应商/参考入口与四种润色线协议，并改进语音模型选择。
+供应商目录、协议实现和实际账户权限分开：本地TLS/WSS/SSE验证不代表真实云账户认证。
+协议依据和独立实现边界见[适配记录](provider-adaptation-validation.md)。
+
+- 语音：保留百炼Qwen HTTP/实时能力，新增显式multipart、音频JSON/chat及
+  StepFun专属ASR、百炼Fun-ASR/Paraformer任务式实时、火山、讯飞和腾讯WebSocket适配。
+  包含ElevenLabs、SiliconFlow、Groq、OpenAI、OpenRouter、ZenMux、MiMo、Orca、
+  Zhipu、MiniMax等预设；未知自定义模型保留手填，但不声称已验证。
+- 润色：Chat Completions、Responses、Anthropic Messages、Gemini原生协议，
+  独立处理请求、流事件、终态与思考/工具内容，不将截断或部分输出重放为成功。
+- 模型列表按当前供应商和转写协议过滤ASR候选，排除纯文本、TTS、图像和embedding；
+  切换协议即时重过滤。无发现接口的内置列表不会伪称连接测试成功。
+- 密钥存入系统密钥环，普通配置仅保存引用；多字段凭据有专用输入，不写普通配置或日志。
+  切换供应商不会把旧密钥复用到新端点。
+- 保留四槽原生输出、10ms逐字释放等待、整句ASR最终结果与协议收尾重叠，
+  以及已有流式润色/输出。输出跟随当前光标；取消、过期或被替代后停止未发送文字。
+  不使用剪贴板或系统输入法。
+
+发布范围为Linux x86_64。每个新AppImage必须以同一SHA-256在Ubuntu24.04 Xorg和
+Ubuntu26.04 GNOME原生Wayland/XWayland分别完成实际包验收，才可发布。
+GNOME46原生Wayland仍不支持。本地合成音频测试不证明真实麦克风、物理快捷键、
+任意应用或真实云模型权限；不增加Windows/macOS或本地模型支持。
+本版验收另行绑定0.3.0真实产物，不能使用旧0.2.10包或其结果代替。
+
+下载发布附件AppImage及同名.sha256后，可校验并启动：
+
+```sh
+sha256sum -c InkEcho-0.3.0-x86_64.AppImage.sha256
+chmod +x InkEcho-0.3.0-x86_64.AppImage
+./InkEcho-0.3.0-x86_64.AppImage
+```
+
+正式tag对应精确0.3.0发布源码；后续验收报告提交依规则递增为0.3.1，
+不改变已冻结0.3.0产物身份。发布前须确认该源码已合入主分支。
+
+以下历史记录保留原文。
+
+---
+
 # InkEcho v0.2.0 — current-cursor Linux voice input
 
 This formal release contains the verified four-slot native Wayland keyboard
