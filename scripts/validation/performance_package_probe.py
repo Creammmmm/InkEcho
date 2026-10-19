@@ -503,9 +503,15 @@ async def probe(args):
                 ws_port = ws_server.sockets[0].getsockname()[1]
                 store = ConfigStore(folder / "config")
                 store.initialize()
+                from inkecho.config import DEFAULT_PROVIDERS
+
+                for synthetic_provider in DEFAULT_PROVIDERS:
+                    store.save_provider(synthetic_provider)
                 store.save_settings(
                     replace(
                         store.load_settings(),
+                        transcription_provider="qwen",
+                        polishing_provider="deepseek",
                         polishing_enabled=True,
                         polishing_streaming=True,
                     )

@@ -46,8 +46,11 @@ GNOME快捷键需要用户主动启用，其他桌面可自行绑定应用的`--
 三项使用统计、七日图、模型选择与显式计费刷新；模型页合并语音和润色；设置集中超时、
 录音、快捷键与Siri灵感悬浮预览；帮助可手动检查正式版。新配置目录不预建默认平台，
 需自行命名、填写并保存；已有配置保留。窗口关闭到托盘，无托盘时保留最小化恢复入口。
-这些源码改动尚不能代表已发布的0.4.0下载包；新包仍须同SHA双Ubuntu实际验收。
-详见[使用指南](docs/user-guide.md)和[界面验证记录](docs/ui-redesign-validation.md)。
+本地0.4.4包现已完成同SHA双Ubuntu实际验收并更新本机稳定入口；Siri悬浮在Wayland仅用独立
+XWayland显示宿主，主设置保持原生，不抢测试目标焦点。GitHub现有0.4.0下载包仍是历史
+发布版，本次没有新建release。默认通过快捷键开始录音，概览不再显示开始录音卡片。
+详见[本地工作台包验收](docs/ui-redesign-package-validation.md)、
+[使用指南](docs/user-guide.md)和[界面验证记录](docs/ui-redesign-validation.md)。
 
 实际验证范围为Ubuntu24.04.5/GNOME46 Xorg，以及Ubuntu26.04.1/GNOME50.1原生Wayland
 和XWayland的限定自有测试目标。GNOME46原生Wayland仍不支持；不保证任意应用或

@@ -139,7 +139,7 @@ Root 独立受限 sandbox 批次未完整通过：确认自有测试 PID37897 �
 
 协议使用递增 revision 与完整快照：音量 / partial 更新每40ms合并为一个待发送快照，取消 / idle 的状态边界拒绝旧 ACK，宿主拒绝旧 revision，终态丢弃草稿。代理的可见性只由实际宿主 ACK 更新，支持同一状态下较旧音量 revision 的 ACK，避免持续更新时永远等不到最新 ACK。首 ACK 最长等待3秒；启动失败 / 意外退出显示安全状态，不自动重启、重放或回退抢焦的 native 窗口。正常关闭以 EOF 清空并退出；仅异常卡死的自有显示宿主，在3秒后清理并再次有界等待，不涉及输入 worker。
 
-实际生产 `create_overlay` 源码代理验证在 `build/v0.4.3-ui-acceptance/results-proxy-focus-r1/proxy.json`：原生主进程54680，XCB宿主54914；一秒后真实 ACK visible / exposed=true、style=siri、text_length=35；取消处理后ACK长度0，隐藏后visible / exposed=false。20个 document / field 样本全部true、年龄16–30ms；外层诊断与自有浏览器自然wait0，cleanup为空。宿主 finished 信号触发诊断 Qt 循环退出；该源探针没有单独保存宿主退出码，后续新包门需记录。旧0.4.3包在此仅提供依赖运行时，不作为0.4.4新包验收。
+实际生产 `create_overlay` 源码代理验证在 `build/v0.4.3-ui-acceptance/results-proxy-focus-r1/proxy.json`：外层诊断进程54680、原生Qt代理54900，XCB宿主54914；一秒后真实 ACK visible / exposed=true、style=siri、text_length=35；取消处理后ACK长度0，隐藏后visible / exposed=false。20个 document / field 样本全部true、年龄16–30ms；外层诊断与自有浏览器自然wait0，cleanup为空。宿主 finished 信号触发诊断 Qt 循环退出；该源探针没有单独保存宿主退出码，后续新包门需记录。旧0.4.3包在此仅提供依赖运行时，不作为0.4.4新包验收。
 
 该次固定 helper SHA-256 `2d29e6cbda94fb255293243550f977e90cd06f4da028aebb60042cf5b405cbbc`，plan `54f792f9b151ca346f06c7b37ea6f2ab83cba89f6ad5d2bbfd57e59d5f47d24f`，owner `d640136d862ff1e7110d9dfb8eb1beac721a353bd8d71f993a8c7898ad5fc5ca`，runner `311bca1868a9ac50fe3afece4e049b182a8f889f3e57effe64382d5f98336388`。实际用户配置只作 hash-only before / after 观测，不解析或还原；候选包、旧包、稳定入口、图标与冻结源码仍严格保护。
 
@@ -148,3 +148,6 @@ Root 独立受限 sandbox 批次未完整通过：确认自有测试 PID37897 �
 配置外部变化单列：早期 focus R1 / R2 的 preflight 看到用户正在编辑的真实配置与旧保护快照不一致，子诊断尚未启动；这两次不算焦点复测，不将变化归因于探针。未解析配置正文、未恢复旧文件。改用同一次 owner 的只读 hash 观测后，实际 tooltip 两项与生产代理源诊断的 before / after 均无差异；这只描述各自观察窗口，不承诺用户配置永远不变。其余不可变保护仍全部通过。
 
 最终本次源码 Ruff 检查、格式检查（338 files）及 diff 空白检查通过。版本三处同步为0.4.4；等待干净提交的完整本地检查与新候选双系统验收。
+
+
+最终0.4.4同SHA双Ubuntu实际包验收、FUSE与本地稳定入口交付见[工作台包验证](ui-redesign-package-validation.md)。0.4.5仅为随后报告 / 合成验证fixture提交的版本计数，不改写包内0.4.4或其产品提交绑定。
