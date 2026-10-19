@@ -11,7 +11,6 @@ from PySide6.QtWidgets import (
     QComboBox,
     QFormLayout,
     QHBoxLayout,
-    QProgressBar,
     QWidget,
 )
 
@@ -73,29 +72,11 @@ class WeekChart(QWidget):
 
 
 class HomePage(Page):
-    def __init__(self, session, stats, start, cancel):
+    def __init__(self, session, stats):
         super().__init__("概览", "把声音变成文字，让表达自然发生。")
         self.session, self.stats = session, stats
         self.revision = 0
         self.balance_signature = None
-        panel, body = card()
-        self.state = label("准备就绪")
-        self.state.setStyleSheet("font-size:24px; font-weight:600; color:#173e78")
-        self.description = label(
-            "首次使用请在模型配置中保存语音模型与凭据。", muted=True
-        )
-        body.addWidget(self.description)
-        self.level = QProgressBar()
-        self.level.setRange(0, 100)
-        self.level.setTextVisible(False)
-        body.addWidget(self.level)
-        self.duration = label("录音时长 00:00", muted=True)
-        body.addWidget(self.duration)
-        self.record = button("开始录音", start, primary=True)
-        body.insertWidget(
-            0, actions(self.state, self.record, button("取消任务", cancel))
-        )
-        self.body.addWidget(panel)
         metrics, layout = card()
         self.summary = label("")
         self.summary.hide()
@@ -145,7 +126,7 @@ class HomePage(Page):
         self.console = label("")
         self.console.setOpenExternalLinks(True)
         layout.addWidget(self.console)
-        self.body.insertWidget(3, models)
+        self.body.insertWidget(2, models)
         self.body.addWidget(
             label(
                 "字符按 Unicode 码点计数。统计仅保留数字，不保存录音或识别正文。"

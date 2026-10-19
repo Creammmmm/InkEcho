@@ -184,7 +184,7 @@ def test_keyboard_failure_notifies_specific_reason_and_records_safe_code(window)
     window.session._state(State.IDLE)
     assert len(notices) == 1
     assert "键盘输入连接已断开" in notices[0]
-    assert "重新启用" in window.home.description.text()
+    assert "重新启用" in window.statusBar().currentMessage()
     assert "ERROR error session_closed" in window.log.recent()
     assert not window.problem_notice.isVisible()
     assert not window.controls.isVisible()
@@ -201,7 +201,7 @@ def test_notification_actions_cannot_control_a_different_task(window):
     assert actions == ["cancel"]
 
 
-def test_notification_service_failure_keeps_original_error_in_overview(window):
+def test_notification_service_failure_keeps_original_error_in_status_bar(window):
     async def scenario():
         async def unavailable(*args, **kwargs):
             return False
@@ -212,8 +212,8 @@ def test_notification_service_failure_keeps_original_error_in_overview(window):
         message = "当前文本控件不支持安全输入。"
         window.show_problem(message)
         await asyncio.gather(*window.session.ui_tasks)
-        assert message in window.home.description.text()
-        assert "系统通知不可用" in window.home.description.text()
+        assert message in window.statusBar().currentMessage()
+        assert "系统通知不可用" in window.statusBar().currentMessage()
         assert not window.isVisible()
         assert not window.problem_notice.isVisible()
 
@@ -284,26 +284,18 @@ def test_no_tray_processing_retains_cancel_entry(window):
     assert window.controls.isVisible()
     assert not window.controls.stop.isEnabled()
     click(window.controls, "取消")
-    assert "已取消" in window.home.description.text()
+    assert "已取消" in window.statusBar().currentMessage()
 
 
-def test_preparation_cancel_restores_window(window):
-    async def scenario():
-        waiting = asyncio.Event()
-
-        async def slow(**_kwargs):
-            waiting.set()
-            await asyncio.Event().wait()
-
-        window.session.toggle = slow
-        window.start_from_window()
-        await waiting.wait()
-        assert not window.isVisible()
-        window.session.cancel()
-        await asyncio.gather(*window.session.pending, return_exceptions=True)
-        assert window.isVisible()
-
-    asyncio.run(scenario())
+def test_status_bar_retains_cancel_for_wayland_without_tray(window):
+    window.wayland = True
+    window.notify = lambda *_args, **_kwargs: None
+    window.update_state("transcribing")
+    assert not window.cancel_action.isHidden()
+    click(window.statusBar(), "取消当前任务")
+    assert "已取消" in window.statusBar().currentMessage()
+    window.update_state("idle")
+    assert window.cancel_action.isHidden()
 
 
 def test_model_discovery_does_not_overwrite_another_form(window):

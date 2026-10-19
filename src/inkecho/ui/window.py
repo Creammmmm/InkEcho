@@ -131,7 +131,7 @@ class MainWindow(QMainWindow):
         navigation.addWidget(label("LINUX · 首期预览\n不使用剪贴板", muted=True))
         layout.addWidget(sidebar)
         self.stack = QStackedWidget()
-        self.home = HomePage(session, stats, self.start_from_window, session.cancel)
+        self.home = HomePage(session, stats)
         self.models_page = ModelsPage(session)
         self.settings_page = SettingsPage(
             session, stats, log, integration, command, self.overlay.preview
@@ -153,6 +153,9 @@ class MainWindow(QMainWindow):
             self.stack.addWidget(scroll)
         layout.addWidget(self.stack, 1)
         self.setCentralWidget(root)
+        self.cancel_action = button("取消当前任务", session.cancel)
+        self.cancel_action.hide()
+        self.statusBar().addPermanentWidget(self.cancel_action)
         self.navigation.currentRowChanged.connect(self.select_page)
         self.navigation.setCurrentRow(0)
         self.tray = QSystemTrayIcon(self.icon, self)
@@ -183,9 +186,6 @@ class MainWindow(QMainWindow):
         if hasattr(session, "preview"):
             session.preview.connect(self.overlay.set_text)
         session.level.connect(self.overlay.set_level)
-        session.level.connect(
-            lambda value: self.home.level.setValue(round(value * 100))
-        )
         session.finished.connect(self.record_statistics)
         session.performance.connect(self.record_performance)
         session.diagnostic.connect(self.record_diagnostic)
@@ -193,13 +193,22 @@ class MainWindow(QMainWindow):
         self.duration_timer = QTimer(self)
         self.duration_timer.setInterval(200)
         self.duration_timer.timeout.connect(self.update_duration)
+        session.timer.timeout.connect(self.refresh_cancel_action)
+
+    def refresh_cancel_action(self):
+        active = self.session.preparing or self.session.controller.state in {
+            State.RECORDING,
+            State.TRANSCRIBING,
+            State.POLISHING,
+            State.INJECTING,
+        }
+        self.cancel_action.setVisible(active)
 
     def update_duration(self):
         if self.recording_started is None:
             return
         seconds = int(time.monotonic() - self.recording_started)
         duration = f"{seconds // 60:02}:{seconds % 60:02}"
-        self.home.duration.setText("录音时长  " + duration)
         self.controls.duration.setText(duration)
 
     def record_diagnostic(self, code):
@@ -227,7 +236,6 @@ class MainWindow(QMainWindow):
             page.safe(page.refresh)
 
     def show_status(self, message):
-        self.home.description.setText(message)
         self.statusBar().showMessage(message)
         self.tray.setToolTip("InkEcho · " + message[:70])
 
@@ -264,7 +272,8 @@ class MainWindow(QMainWindow):
             )
             if not available:
                 self.show_status(
-                    message + "\n系统通知不可用；使用快捷键结束或打开设置取消。"
+                    message + "\n系统通知不可用；使用托盘菜单，"
+                    "或打开设置后在窗口底部取消当前任务。"
                 )
 
         self.session.spawn_ui(display())
@@ -272,7 +281,11 @@ class MainWindow(QMainWindow):
     def update_state(self, state):
         from inkecho.app import STATE_LABELS
 
-        self.home.state.setText(STATE_LABELS[State(state)])
+        if state != "idle":
+            self.statusBar().showMessage(STATE_LABELS[State(state)])
+        self.cancel_action.setVisible(
+            state in {"recording", "transcribing", "polishing", "injecting"}
+        )
         if state in {"idle", "recording", "failed", "cancelled", "succeeded"}:
             self.overlay.set_text("")
         if state == "recording":
@@ -281,8 +294,6 @@ class MainWindow(QMainWindow):
             self.duration_timer.start()
         else:
             self.duration_timer.stop()
-        self.home.record.setText("结束录音" if state == "recording" else "开始录音")
-        self.home.record.setEnabled(state in {"idle", "recording"})
         try:
             if self.wayland:
                 if self.session.store.load_settings().overlay_style == "siri":
@@ -325,21 +336,6 @@ class MainWindow(QMainWindow):
         except (ValueError, OSError):
             self.show_status("使用统计保存失败；录音与正文未保存。")
 
-    def start_from_window(self):
-        if self.session.controller.state == State.RECORDING:
-            self.session.stop_recording()
-            return
-
-        async def start():
-            self.hide()
-            try:
-                await self.session.toggle()
-            finally:
-                if not self.session.controller.task:
-                    self.show_window()
-
-        self.session.spawn(start())
-
     def handle_command(self, command: str):
         if command == "show":
             self.show_window()
@@ -378,6 +374,7 @@ class MainWindow(QMainWindow):
     def dispose(self):
         self.exiting = True
         self.duration_timer.stop()
+        self.session.timer.timeout.disconnect(self.refresh_cancel_action)
         self.tray.hide()
         self.overlay.close()
         self.problem_notice.close()

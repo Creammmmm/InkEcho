@@ -238,3 +238,77 @@ def test_reopening_refreshes_statistics_without_replacing_model_draft(workspace)
     workspace.show_window()
     assert workspace.home.metrics["recordings"].text() == "1 次"
     assert workspace.models_page.transcription.name.text() == "Unsaved draft"
+
+
+def test_overview_has_no_recording_card_or_recording_widgets(workspace):
+    from PySide6.QtWidgets import QLabel, QProgressBar
+
+    home = workspace.home
+    texts = [item.text() for item in home.findChildren(QLabel)]
+    buttons = [item.text() for item in home.findChildren(QPushButton)]
+    assert "准备就绪" not in texts
+    assert "开始录音" not in buttons
+    assert "取消任务" not in buttons
+    assert not home.findChildren(QProgressBar)
+    for name in ("record", "state", "description", "level", "duration"):
+        assert not hasattr(home, name)
+    assert home.body.itemAt(2).widget().findChildren(type(home.transcription))
+
+
+def test_shortcut_command_and_recording_duration_remain_available(workspace):
+    async def scenario():
+        calls = []
+
+        async def toggle():
+            calls.append("toggle")
+
+        workspace.session.toggle = toggle
+        workspace.handle_command("toggle")
+        await asyncio.gather(*workspace.session.pending)
+        assert calls == ["toggle"]
+
+    asyncio.run(scenario())
+    workspace.wayland = False
+    workspace.update_state("recording")
+    assert workspace.recording_started is not None
+    assert workspace.duration_timer.isActive()
+    workspace.update_duration()
+    assert workspace.controls.duration.text() == "00:00"
+    workspace.update_state("idle")
+    assert not workspace.duration_timer.isActive()
+
+
+def test_preparing_shortcut_keeps_status_cancel_until_pending_cleanup(workspace):
+    from PySide6.QtCore import Qt
+    from PySide6.QtTest import QTest
+
+    seed_models(workspace)
+    store = workspace.session.store
+    store.save_provider(replace(store.load_provider("qwen"), model="qwen3-asr-flash"))
+    store.save_settings(replace(store.load_settings(), polishing_enabled=False))
+
+    async def scenario():
+        entered = asyncio.Event()
+
+        async def blocked_authorization():
+            entered.set()
+            await asyncio.Event().wait()
+
+        workspace.session.authorize_input = blocked_authorization
+        workspace.show()
+        workspace.handle_command("toggle")
+        await asyncio.wait_for(entered.wait(), 1)
+        assert workspace.session.preparing
+        assert workspace.session.controller.task is None
+        QTest.qWait(150)
+        assert workspace.cancel_action.isVisible()
+        QTest.mouseClick(workspace.cancel_action, Qt.MouseButton.LeftButton)
+        await asyncio.gather(*workspace.session.pending, return_exceptions=True)
+        await asyncio.sleep(0)
+        QTest.qWait(150)
+        assert not workspace.session.preparing
+        assert not workspace.session.pending
+        assert workspace.cancel_action.isHidden()
+        assert "已取消" in workspace.statusBar().currentMessage()
+
+    asyncio.run(scenario())

@@ -112,3 +112,17 @@ QT_QPA_PLATFORM=offscreen .venv/bin/pytest \
 审查补验：缺凭据路径使用实际 `security.CredentialError` 类型（继承 RuntimeError），界面逐配置与外围明确捕获并显示安全错误，不让「正在刷新」残留；取消仍单独传播。修复后 `tests/test_workspace.py` **10 passed，1.07s**，两文件 Ruff 通过。原先 fake ValueError 用例已替换，避免掩盖异常类型边界。
 
 最终余额状态补验：官方 `is_available` True / False 分别显示「账户可用」/「账户当前不可用」，不推断欠费原因；参数化界面用例覆盖两态及币种 / 金额。`tests/test_workspace.py` **11 passed，1.15s**；Ruff 全仓检查与格式检查（335 files）再次通过。三个元数据字段已显式同步准备 0.4.2，源码截图仍保留拍摄当时 0.4.1，不改写图片中的历史版本。
+
+## 后续修订：移除概览录音卡片（0.4.3 源码）
+
+按用户新增要求，概览已整块删除「准备就绪 / 开始录音」卡片，包含状态描述、音量条、录音时长、开始和取消按钮；未保留隐藏录音控件。页面顺序为模型选择 / 计费、三项指标 / 七日图、隐私说明。默认用既有快捷键启动 / 停止录音，`handle_command("toggle")` 路径不变。
+
+仅卡片专属回调与连接删除；悬浮、托盘和共享 RecordingControls 的时长更新保留。详细错误 / 取消原因转到既有状态栏，idle 不覆盖末次详情。窗口底部仅准备中或任务进行中显示「取消当前任务」，沿用 Session.cancel；借用现有 100ms Session.timer 更新，不增加第二套状态机。无系统通知时，提示用户使用托盘菜单或打开设置后在窗口底部取消。
+
+源码私有离屏截图 `build/ui-card-removal-source-r1/overview.png` 实际显示无录音卡片的新概览；不据此声称新包已部署。定向原批次 UI + 工作台 **85 passed，8.84s**，随后增加真实准备中取消回归，`tests/test_workspace.py` **14 passed，1.72s**：实际 toggle 到阻塞的模拟授权，处理 Qt timer 后按钮可见，点击后 pending 清理且按钮隐藏；全程无输入授权 / 录音 / 云请求。全仓 Ruff / 格式检查335files、diff空白检查通过。
+
+旧 0.4.2 AppImage `243aaedc4bc51aa12766638daa0c37e441e305f9ef0497099ec3a4bdc38695b7` 保留为候选，未更新稳定入口。其 workspace R1 即刻断言和 R2 3秒等待均因原生 Wayland Qt minimized 标志不成立而失败并原样保留，后续不重写为通过。
+
+独立最小关闭诊断 `build/v0.4.2-ui-acceptance/results-close-r1/diagnostic.json` 原进程36173正常wait0，保护路径不变。仅自有 WAYLAND_DEBUG 证实 `xdg_toplevel#41.set_minimized` 已发送；Qt close返回时曾为minimized随后清除，显式hide后show_window恢复visible/exposed。Qt6.12官方[requestWindowStates源码](https://raw.githubusercontent.com/qt/qtbase/v6.12.0/src/plugins/platforms/wayland/plugins/shellintegration/xdg-shell/qwaylandxdgshell.cpp)明确在请求后移除WindowMinimized；[xdg-shell协议源](https://raw.githubusercontent.com/wayland-mirror/wayland-protocols/main/stable/xdg-shell/xdg-shell.xml)不提供当前最小化查询。该结果证明请求与恢复路径，**没有观察 compositor 最小化外观**；Xorg仍需用其实际状态验收。后续0.4.3新包必须重新完成同SHA双系统实际验收，不借用此0.4.2候选结果。
+
+Root 独立受限 sandbox 批次未完整通过：确认自有测试 PID37897 后发 SIGINT，原进程返回 exit2，已经完成 **84 passed，94.37s**，最后本地事件循环仍在等待；该批记为中断，不当作全通过。允许本地 socket 环境的85项与新增14项记录如上保留；最终干净提交的完整 workflow 另行执行。
