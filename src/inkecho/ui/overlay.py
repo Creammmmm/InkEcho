@@ -1,4 +1,4 @@
-"""Text-free status waveform, with no focus or mouse input requested."""
+"""Status waveform and RAM preview; X11 uses a nonactivating tooltip."""
 
 import math
 
@@ -12,7 +12,8 @@ class Overlay(QWidget):
         super().__init__()
         self.store = store
         self.setWindowFlags(
-            Qt.WindowType.Tool
+            Qt.WindowType.ToolTip
+            | Qt.WindowType.BypassWindowManagerHint
             | Qt.WindowType.FramelessWindowHint
             | Qt.WindowType.WindowStaysOnTopHint
             | Qt.WindowType.WindowTransparentForInput

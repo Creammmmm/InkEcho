@@ -174,6 +174,8 @@ async def run(app, store, instance, args):
         await session.close()
         if window is not None:
             await window.notifications.shutdown()
+            if hasattr(window.overlay, "shutdown"):
+                await window.overlay.shutdown()
             window.dispose()
         try:
             log.record("shutdown")

@@ -22,7 +22,7 @@ from PySide6.QtWidgets import (
 from inkecho.core import State
 from inkecho.ui.dashboard import HomePage
 from inkecho.ui.notifications import DesktopNotifications
-from inkecho.ui.overlay import Overlay
+from inkecho.ui.overlay_proxy import OverlayProxy, create_overlay
 from inkecho.ui.prompts import PromptsPage
 from inkecho.ui.providers import ProviderPage
 from inkecho.ui.widgets import STYLE, actions, button, label
@@ -104,7 +104,9 @@ class MainWindow(QMainWindow):
         self.icon = QIcon(str(icon_path))
         self.setWindowIcon(self.icon)
         QApplication.setWindowIcon(self.icon)
-        self.overlay = Overlay(session.store)
+        self.overlay = create_overlay(session.store, self)
+        if isinstance(self.overlay, OverlayProxy):
+            self.overlay.failed.connect(self.show_status)
         self.problem_notice = ProblemNotice()
         self.wayland = os.environ.get(
             "XDG_SESSION_TYPE"
