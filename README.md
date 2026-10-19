@@ -3,7 +3,17 @@
 InkEcho 是 Linux 桌面语音输入应用：录音后调用云端转写，可选按 Prompt 润色，
 再把文字输入到输出当时的光标位置。不使用剪贴板或系统输入法。
 
-## v0.4.0
+## v0.5.0
+
+统一五页工作台，并修复原生Wayland语音悬浮预览抢走输入焦点的问题：主设置保持原生，
+仅悬浮通过独立XWayland显示宿主运行。概览已移除「准备就绪 / 开始录音」整块，
+默认通过快捷键开始 / 停止，准备中和任务中仍可取消。
+
+新0.5.0 AppImage已以同一SHA完成Ubuntu24.04 Xorg、Ubuntu26.04原生Wayland / XWayland
+实际包与本机私有FUSE验收；本机稳定入口已更新。下载附件及发布状态以GitHub为准，
+精确产品提交、SHA和限制见[0.5.0验收报告](docs/v0.5.0-dual-ubuntu-validation.md)。
+
+## v0.4.0（历史说明）
 
 本版将全部供应商凭据明文保存到当前配置目录的 `credentials.json`，不再依赖系统
 密钥环。目录0700、文件0600；旧密钥环不读取或迁移，升级后需重新填写。
@@ -26,13 +36,13 @@ TTS、图像、embedding及协议不匹配模型；仍可手填未知模型，�
 ## 下载与运行
 
 发布包为Linux x86_64。从[正式版本列表](https://github.com/Creammmmm/InkEcho/releases)或
-[v0.4.0发布页](https://github.com/Creammmmm/InkEcho/releases/tag/v0.4.0)
+[v0.5.0发布页](https://github.com/Creammmmm/InkEcho/releases/tag/v0.5.0)
 下载AppImage和同名`.sha256`文件；实际发布状态及最新版以GitHub为准。
 
 ```sh
-sha256sum -c InkEcho-0.4.0-x86_64.AppImage.sha256
-chmod +x InkEcho-0.4.0-x86_64.AppImage
-./InkEcho-0.4.0-x86_64.AppImage
+sha256sum -c InkEcho-0.5.0-x86_64.AppImage.sha256
+chmod +x InkEcho-0.5.0-x86_64.AppImage
+./InkEcho-0.5.0-x86_64.AppImage
 ```
 
 若旧实例仍运行，请通过其托盘或界面正常退出再启动新版；单实例通信可能只唤起旧实例。
@@ -46,10 +56,10 @@ GNOME快捷键需要用户主动启用，其他桌面可自行绑定应用的`--
 三项使用统计、七日图、模型选择与显式计费刷新；模型页合并语音和润色；设置集中超时、
 录音、快捷键与Siri灵感悬浮预览；帮助可手动检查正式版。新配置目录不预建默认平台，
 需自行命名、填写并保存；已有配置保留。窗口关闭到托盘，无托盘时保留最小化恢复入口。
-本地0.4.4包现已完成同SHA双Ubuntu实际验收并更新本机稳定入口；Siri悬浮在Wayland仅用独立
-XWayland显示宿主，主设置保持原生，不抢测试目标焦点。GitHub现有0.4.0下载包仍是历史
-发布版，本次没有新建release。默认通过快捷键开始录音，概览不再显示开始录音卡片。
-详见[本地工作台包验收](docs/ui-redesign-package-validation.md)、
+0.4.4本地工作台完成交付后，0.5.0已独立重新构建并通过同SHA双Ubuntu实际验收；
+Siri悬浮在Wayland仅用独立XWayland显示宿主，主设置保持原生，不抢测试目标焦点。
+默认通过快捷键开始录音，概览不再显示开始录音卡片。
+详见[0.5.0包验收](docs/v0.5.0-dual-ubuntu-validation.md)、
 [使用指南](docs/user-guide.md)和[界面验证记录](docs/ui-redesign-validation.md)。
 
 实际验证范围为Ubuntu24.04.5/GNOME46 Xorg，以及Ubuntu26.04.1/GNOME50.1原生Wayland
