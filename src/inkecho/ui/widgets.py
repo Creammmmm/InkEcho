@@ -14,6 +14,9 @@ from PySide6.QtWidgets import (
 STYLE = """
 QWidget { font-family: 'Noto Sans CJK SC', 'Noto Sans', sans-serif; font-size: 14px;
  color: #183153; background: #f4f7fc; }
+QWidget:disabled { color: #8793a6; }
+QComboBox:disabled, QSpinBox:disabled, QDoubleSpinBox:disabled {
+ background: #edf1f7; color: #8793a6; border-color: #dce2ec; }
 QMainWindow { background: #f4f7fc; }
 QLabel#heading { font-size: 28px; font-weight: 700; }
 QLabel#muted { color: #526782; }
@@ -27,6 +30,8 @@ QPushButton:focus { border: 2px solid #356ed0; }
 QPushButton:disabled { color: #748398; background: #edf1f7; }
 QPushButton#primary { background: #245ab1; color: white; border-color: #245ab1; }
 QPushButton#primary:hover { background: #194587; }
+QPushButton#primary:disabled { color: #8793a6; background: #edf1f7;
+ border-color: #dce2ec; }
 QLineEdit, QComboBox, QSpinBox, QDoubleSpinBox, QPlainTextEdit { background: white;
  border: 1px solid #c8d7eb; border-radius: 7px; padding: 7px;
  selection-background-color: #245ab1; selection-color: white; }
@@ -36,6 +41,10 @@ QListWidget { background: #eaf0fa; border: none; outline: none; padding: 8px; }
 QListWidget::item { padding: 12px 14px; margin: 3px 0; border-radius: 8px; }
 QListWidget::item:selected { background: #d4e3fb; color: #173e78; font-weight: 600; }
 QCheckBox { spacing: 8px; }
+QCheckBox:disabled, QLabel:disabled { color: #8793a6; }
+QTabWidget::pane { border: none; }
+QTabBar::tab { background: #eaf0fa; padding: 9px 15px; border: none; }
+QTabBar::tab:selected { background: #d4e3fb; color: #173e78; }
 QProgressBar { border: 0; background: #dce7f8; border-radius: 5px; min-height: 10px; }
 QProgressBar::chunk { background: #3971ca; border-radius: 5px; }
 QScrollArea { border: none; }

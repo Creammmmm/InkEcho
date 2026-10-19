@@ -306,6 +306,8 @@ async def run_arm(streaming, scenario, directory, *, desktop=None):
 
         def load_settings(self):
             return Settings(
+                transcription_provider="qwen",
+                polishing_provider="deepseek",
                 polishing_enabled=True,
                 polishing_fallback=False,
                 polishing_streaming=streaming,

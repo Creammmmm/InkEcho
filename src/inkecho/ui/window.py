@@ -12,7 +12,6 @@ from PySide6.QtWidgets import (
     QListWidget,
     QMainWindow,
     QMenu,
-    QProgressBar,
     QScrollArea,
     QStackedWidget,
     QSystemTrayIcon,
@@ -21,72 +20,13 @@ from PySide6.QtWidgets import (
 )
 
 from inkecho.core import State
-from inkecho.ui.information import AboutPage, CompatibilityPage, StatisticsPage
+from inkecho.ui.dashboard import HomePage
 from inkecho.ui.notifications import DesktopNotifications
 from inkecho.ui.overlay import Overlay
 from inkecho.ui.prompts import PromptsPage
 from inkecho.ui.providers import ProviderPage
-from inkecho.ui.settings import AppearancePage, RecordingPage
-from inkecho.ui.widgets import STYLE, Page, actions, button, card, label
-
-
-class HomePage(Page):
-    def __init__(self, session, start, cancel):
-        super().__init__(
-            "让表达自然发生",
-            "按下快捷键，说出想法。识别完成后，文字输入到当时的光标位置。",
-        )
-        self.session = session
-        panel, body = card()
-        self.state = label("准备就绪")
-        self.state.setStyleSheet("font-size: 24px; font-weight: 600; color: #173e78;")
-        body.addWidget(self.state)
-        self.description = label("先配置转写模型与密钥，再启用快捷键。", muted=True)
-        body.addWidget(self.description)
-        self.level = QProgressBar()
-        self.level.setRange(0, 100)
-        self.level.setTextVisible(False)
-        body.addWidget(self.level)
-        self.duration = label("录音时长  00:00", muted=True)
-        body.addWidget(self.duration)
-        self.record = button("开始录音", start, primary=True)
-        body.addWidget(actions(self.record, button("取消任务", cancel)))
-        self.body.addWidget(panel)
-        summary, content = card()
-        content.addWidget(label("你的输入工作台"))
-        self.summary = label("")
-        content.addWidget(self.summary)
-        content.addWidget(
-            label(
-                "音频只在内存中短暂存在。云端处理会上传录音或文本；"
-                "本地默认不保存录音、转写正文或润色正文。",
-                muted=True,
-            )
-        )
-        self.body.addWidget(summary)
-        self.body.addWidget(
-            label(
-                "开始录音不需要先选文本框，录音和识别期间可以切换窗口。"
-                "文字输出时请将光标放在希望接收的位置。",
-                muted=True,
-            )
-        )
-        self.refresh()
-        self.finish()
-
-    def refresh(self):
-        settings = self.session.store.load_settings()
-        transcript = self.session.store.load_provider(settings.transcription_provider)
-        polish = self.session.store.load_provider(settings.polishing_provider)
-        polish_name = polish.name if settings.polishing_enabled else "已关闭"
-        polish_model = (
-            polish.model if settings.polishing_enabled else "保留原始识别结果"
-        )
-        self.summary.setText(
-            f"快捷键  {settings.shortcut}\n\n转写  {transcript.name} · "
-            f"{transcript.model or '尚未选择模型'}\n\n"
-            f"润色  {polish_name} · {polish_model}"
-        )
+from inkecho.ui.widgets import STYLE, actions, button, label
+from inkecho.ui.workspace import HelpPage, ModelsPage, SettingsPage
 
 
 class RecordingControls(QWidget):
@@ -189,32 +129,22 @@ class MainWindow(QMainWindow):
         self.navigation = QListWidget()
         navigation.addWidget(self.navigation, 1)
         navigation.addWidget(label("LINUX · 首期预览\n不使用剪贴板", muted=True))
-        navigation.addWidget(button("退出 InkEcho", self.quit_requested.emit))
         layout.addWidget(sidebar)
         self.stack = QStackedWidget()
-        self.home = HomePage(session, self.start_from_window, session.cancel)
+        self.home = HomePage(session, stats, self.start_from_window, session.cancel)
+        self.models_page = ModelsPage(session)
+        self.settings_page = SettingsPage(
+            session, stats, log, integration, command, self.overlay.preview
+        )
+        self.help_page = HelpPage(session)
         self.pages = [
             self.home,
-            RecordingPage(session, command),
-            ProviderPage(session, "transcription"),
-            ProviderPage(session, "polishing"),
+            self.models_page,
             PromptsPage(session),
-            CompatibilityPage(session),
-            AppearancePage(session, self.overlay.preview),
-            StatisticsPage(session, stats, log),
-            AboutPage(session, integration),
+            self.settings_page,
+            self.help_page,
         ]
-        names = [
-            "概览",
-            "录音与快捷键",
-            "语音转写",
-            "文字润色",
-            "Prompt 模板",
-            "输入与兼容性",
-            "外观与悬浮提示",
-            "统计与日志",
-            "关于与桌面集成",
-        ]
+        names = ["概览", "模型配置", "风格", "设置", "帮助"]
         for name, page in zip(names, self.pages, strict=True):
             self.navigation.addItem(name)
             scroll = QScrollArea()
@@ -250,6 +180,8 @@ class MainWindow(QMainWindow):
         session.status.connect(self.show_status)
         session.problem.connect(self.show_problem)
         session.state_changed.connect(self.update_state)
+        if hasattr(session, "preview"):
+            session.preview.connect(self.overlay.set_text)
         session.level.connect(self.overlay.set_level)
         session.level.connect(
             lambda value: self.home.level.setValue(round(value * 100))
@@ -287,6 +219,8 @@ class MainWindow(QMainWindow):
         scroll = self.stack.widget(index)
         QTimer.singleShot(0, lambda: scroll.verticalScrollBar().setValue(0))
         page = self.pages[index]
+        if isinstance(page, PromptsPage):
+            page.refresh_availability()
         if hasattr(page, "refresh") and not isinstance(
             page, (ProviderPage, PromptsPage)
         ):
@@ -339,6 +273,8 @@ class MainWindow(QMainWindow):
         from inkecho.app import STATE_LABELS
 
         self.home.state.setText(STATE_LABELS[State(state)])
+        if state in {"idle", "recording", "failed", "cancelled", "succeeded"}:
+            self.overlay.set_text("")
         if state == "recording":
             self.recording_started = time.monotonic()
             self.update_duration()
@@ -349,7 +285,10 @@ class MainWindow(QMainWindow):
         self.home.record.setEnabled(state in {"idle", "recording"})
         try:
             if self.wayland:
-                self.overlay.hide()
+                if self.session.store.load_settings().overlay_style == "siri":
+                    self.overlay.show_state(state)
+                else:
+                    self.overlay.hide()
                 self.controls.hide()
                 detailed_failure = state == "failed"
                 if state != "idle" and not detailed_failure:
@@ -382,6 +321,7 @@ class MainWindow(QMainWindow):
     def record_statistics(self, metrics):
         try:
             self.stats.record(**metrics)
+            self.home.refresh()
         except (ValueError, OSError):
             self.show_status("使用统计保存失败；录音与正文未保存。")
 
@@ -416,6 +356,8 @@ class MainWindow(QMainWindow):
             self.session.spawn(self.session.toggle())
 
     def show_window(self):
+        self.home.safe(self.home.refresh)
+        self.models_page.refresh()
         self.showNormal()
         self.raise_()
         self.activateWindow()
@@ -424,19 +366,14 @@ class MainWindow(QMainWindow):
         if self.exiting:
             event.accept()
             return
-        try:
-            keep = self.session.store.load_settings().close_to_tray
-        except (ValueError, OSError):
-            keep = False
         event.ignore()
-        if keep and self.tray.isVisible():
+        if self.tray.isVisible():
             self.hide()
-        elif keep:
-            self.show_status(
-                "当前桌面没有系统托盘。窗口保留；可使用左侧「退出 InkEcho」。"
-            )
         else:
-            self.quit_requested.emit()
+            self.showMinimized()
+            self.show_status(
+                "当前桌面没有系统托盘，窗口已最小化；可从任务栏或启动器恢复。"
+            )
 
     def dispose(self):
         self.exiting = True

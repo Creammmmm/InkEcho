@@ -9,7 +9,7 @@ import sys
 from pathlib import Path
 
 from PySide6.QtCore import QLockFile, QObject, QStandardPaths, Signal
-from PySide6.QtGui import QFontDatabase
+from PySide6.QtGui import QFontDatabase, QIcon
 from PySide6.QtNetwork import QLocalServer, QLocalSocket
 from PySide6.QtWidgets import QApplication, QMessageBox
 
@@ -144,7 +144,9 @@ async def run(app, store, instance, args):
         if stopped.is_set():
             return
         commands.complete()
-        window.pages[1].run(window.pages[1].check_shortcut())
+        window.settings_page.recording.run(
+            window.settings_page.recording.check_shortcut()
+        )
         if args.screenshot_dir:
             output = Path(args.screenshot_dir)
             output.mkdir(parents=True, exist_ok=True)
@@ -190,9 +192,11 @@ def main():
     parser.add_argument("--screenshot-dir", type=Path)
     parser.add_argument("--quit-after", type=float)
     args = parser.parse_args()
-    app = QApplication(sys.argv[:1])
+    app = QApplication(["InkEcho"])
     app.setApplicationName("InkEcho")
     app.setOrganizationName("InkEcho")
+    app.setDesktopFileName("io.github.Creammmmm.InkEcho")
+    app.setWindowIcon(QIcon(str(Path(__file__).parent / "assets/inkecho.png")))
     app.setQuitOnLastWindowClosed(False)
     bundled_font = (
         Path(os.environ.get("APPDIR", "/nonexistent"))

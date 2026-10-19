@@ -12,7 +12,7 @@ from PySide6.QtTest import QTest
 from PySide6.QtWidgets import QPushButton
 
 from inkecho.app import AudioError, Session
-from inkecho.config import BUILTIN_PROMPT, ConfigError, ConfigStore
+from inkecho.config import BUILTIN_PROMPT, DEFAULT_PROVIDERS, ConfigError, ConfigStore
 from inkecho.core import Failure, State
 from inkecho.integration import DesktopIntegration
 from inkecho.logging import DiagnosticLog
@@ -30,6 +30,24 @@ def window(tmp_path, qt_app, monkeypatch):
     monkeypatch.setattr("inkecho.audio.Recorder.devices", lambda: [])
     store = ConfigStore(tmp_path / "config")
     store.initialize()
+    for provider in DEFAULT_PROVIDERS:
+        store.save_provider(
+            replace(
+                provider,
+                model=(
+                    "qwen3-asr-flash"
+                    if provider.role == "transcription"
+                    else "deepseek-chat"
+                ),
+            )
+        )
+    store.save_settings(
+        replace(
+            store.load_settings(),
+            transcription_provider="qwen",
+            polishing_provider="deepseek",
+        )
+    )
     session = Session(store)
     log = DiagnosticLog(tmp_path / "data")
     integration = DesktopIntegration(
@@ -55,6 +73,11 @@ def window(tmp_path, qt_app, monkeypatch):
     qt_app.processEvents()
 
 
+def select_platform(page, preset):
+    page.apply_preset(page.preset.findData(preset))
+    page.name.setText("Synthetic model configuration")
+
+
 def click(widget, text):
     matches = [item for item in widget.findChildren(QPushButton) if item.text() == text]
     assert len(matches) == 1
@@ -62,8 +85,8 @@ def click(widget, text):
 
 
 def test_appearance_save_reload_and_builtin_prompt_copy(window, qt_app):
-    page = window.pages[6]
-    window.navigation.setCurrentRow(6)
+    page = window.settings_page.appearance
+    window.navigation.setCurrentRow(3)
     page.style.setCurrentIndex(page.style.findData("pulse"))
     page.position.setCurrentIndex(page.position.findData("top-center"))
     click(page, "保存外观")
@@ -71,8 +94,8 @@ def test_appearance_save_reload_and_builtin_prompt_copy(window, qt_app):
     assert reloaded.style.currentData() == "pulse"
     assert reloaded.position.currentData() == "top-center"
     reloaded.close()
-    prompts = window.pages[4]
-    window.navigation.setCurrentRow(4)
+    prompts = window.pages[2]
+    window.navigation.setCurrentRow(2)
     prompts.text.setPlainText("保留用户措辞，只修改标点。")
     click(prompts, "保存模板")
     assert prompts.identifier != BUILTIN_PROMPT.id
@@ -202,7 +225,7 @@ def test_stale_shortcut_health_cannot_replace_enable_result(
     window, monkeypatch, failed
 ):
     async def scenario():
-        page = window.pages[1]
+        page = window.settings_page.recording
         waiting, release = asyncio.Event(), asyncio.Event()
 
         async def operation(function, *args):
@@ -231,7 +254,7 @@ def test_stale_shortcut_health_cannot_replace_enable_result(
 
 def test_shortcut_mutations_are_serialized_in_user_action_order(window, monkeypatch):
     async def scenario():
-        page = window.pages[1]
+        page = window.settings_page.recording
         entered, release = asyncio.Event(), asyncio.Event()
         calls = []
 
@@ -285,7 +308,7 @@ def test_preparation_cancel_restores_window(window):
 
 def test_model_discovery_does_not_overwrite_another_form(window):
     async def scenario():
-        page = window.pages[2]
+        page = window.models_page.transcription
         waiting, release = asyncio.Event(), asyncio.Event()
 
         async def key(_reference):
@@ -313,7 +336,7 @@ def test_model_discovery_does_not_overwrite_another_form(window):
 
 def test_realtime_capability_rejected_before_key_recording_or_network(window):
     async def scenario():
-        page = window.pages[2]
+        page = window.models_page.transcription
         page.model.setCurrentText("qwen3-asr-flash-realtime")
 
         async def forbidden(*args, **kwargs):
@@ -332,7 +355,7 @@ def test_realtime_capability_rejected_before_key_recording_or_network(window):
 
 def test_provider_failure_is_actionable_chinese(window):
     async def scenario():
-        page = window.pages[2]
+        page = window.models_page.transcription
 
         async def failed():
             raise ProviderError("unavailable")
@@ -347,7 +370,7 @@ def test_provider_failure_is_actionable_chinese(window):
 
 def test_microphone_test_page_keeps_specific_failure(window):
     async def scenario():
-        page = window.pages[1]
+        page = window.settings_page.recording
 
         async def failed():
             raise AudioError("audio_format_unsupported")
@@ -363,7 +386,7 @@ def test_microphone_test_page_keeps_specific_failure(window):
 
 def test_late_provider_failure_does_not_overwrite_new_form(window):
     async def scenario():
-        page = window.pages[2]
+        page = window.models_page.transcription
         entered, release = asyncio.Event(), asyncio.Event()
 
         async def failed():
@@ -384,7 +407,7 @@ def test_late_provider_failure_does_not_overwrite_new_form(window):
 
 def test_discovery_marks_incompatible_protocols_without_switching_model(window):
     async def scenario():
-        page = window.pages[2]
+        page = window.models_page.transcription
         page.model.setCurrentText("qwen3-asr-flash-realtime")
 
         async def key(*args):
@@ -414,7 +437,7 @@ def test_discovery_marks_incompatible_protocols_without_switching_model(window):
 
 @pytest.fixture
 def discovered_protocol_models(window):
-    page = window.pages[2]
+    page = window.models_page.transcription
     store = window.session.store
     before = {p: p.read_bytes() for p in store.root.rglob("*.json")}
     requests = []
@@ -540,7 +563,7 @@ def test_discovery_with_missing_custom_wss_does_not_mark_all_models_unsupported(
     window,
 ):
     async def scenario():
-        page = window.pages[2]
+        page = window.models_page.transcription
         page.model.setCurrentText("qwen3-asr-flash-realtime")
         page.protocol.setCurrentIndex(page.protocol.findData(PROTOCOL))
         page.url.setText("https://proxy.example.invalid/v1")
@@ -577,7 +600,7 @@ def test_pending_discovery_cannot_mark_or_replace_models_after_protocol_edit(
     window, control
 ):
     async def scenario():
-        page = window.pages[2]
+        page = window.models_page.transcription
         page.model.addItem("existing-model")
         page.model.setCurrentText("qwen3-asr-flash-realtime")
         entered, release = asyncio.Event(), asyncio.Event()
@@ -613,9 +636,9 @@ def test_pending_discovery_cannot_mark_or_replace_models_after_protocol_edit(
     asyncio.run(scenario())
 
 
-def test_provider_save_snapshots_preferences_before_keyring_wait(window):
+def test_provider_save_does_not_overwrite_settings_during_credential_wait(window):
     async def scenario():
-        page = window.pages[3]
+        page = window.models_page.polishing
         waiting, release = asyncio.Event(), asyncio.Event()
         written = []
 
@@ -641,9 +664,9 @@ def test_provider_save_snapshots_preferences_before_keyring_wait(window):
         await request
         settings = window.session.store.load_settings()
         assert settings.polishing_provider == original
-        assert settings.polishing_enabled
-        assert not settings.polishing_fallback
-        assert not settings.polishing_streaming
+        assert not settings.polishing_enabled
+        assert settings.polishing_fallback
+        assert settings.polishing_streaming
         assert page.identifier != original
         assert written[0][1] == "temporary-test-secret"
         assert (
@@ -655,7 +678,7 @@ def test_provider_save_snapshots_preferences_before_keyring_wait(window):
 
 
 def test_protocol_controls_preserve_json_model_rate_and_saved_configuration(window):
-    page = window.pages[2]
+    page = window.models_page.transcription
     store = window.session.store
     before = {p: p.read_bytes() for p in store.root.rglob("*.json")}
     original_model = page.model.currentText()
@@ -678,7 +701,7 @@ def test_protocol_controls_preserve_json_model_rate_and_saved_configuration(wind
 
 def test_invalid_json_is_never_replaced_by_protocol_controls_or_save(window):
     async def scenario():
-        page = window.pages[2]
+        page = window.models_page.transcription
         stored = window.session.store.load_provider(page.identifier)
         original = '{"unfinished":'
         page.parameters.setPlainText(original)
@@ -696,7 +719,7 @@ def test_invalid_json_is_never_replaced_by_protocol_controls_or_save(window):
 def test_advanced_protocol_json_updates_controls_without_discarding_unknown_data(
     window,
 ):
-    page = window.pages[2]
+    page = window.models_page.transcription
     values = {"asr_protocol": PROTOCOL, "realtime_url": "wss://example.invalid/r"}
     page.parameters.setPlainText(json.dumps(values))
     assert page.protocol.currentData() == PROTOCOL
@@ -709,7 +732,7 @@ def test_advanced_protocol_json_updates_controls_without_discarding_unknown_data
 
 
 def test_explicit_official_realtime_controls_validate_without_changing_model(window):
-    page = window.pages[2]
+    page = window.models_page.transcription
     page.model.setCurrentText("qwen3-asr-flash-realtime")
     page.protocol.setCurrentIndex(page.protocol.findData(PROTOCOL))
     config = RealtimeConfig.from_provider(page.provider())
@@ -720,7 +743,7 @@ def test_explicit_official_realtime_controls_validate_without_changing_model(win
 
 def test_custom_realtime_requires_wss_before_credentials_or_microphone(window):
     async def scenario():
-        page = window.pages[2]
+        page = window.models_page.transcription
         page.model.setCurrentText("qwen3-asr-flash-realtime")
         page.url.setText("https://proxy.example.invalid/v1")
         page.protocol.setCurrentIndex(page.protocol.findData(PROTOCOL))
@@ -741,7 +764,7 @@ def test_custom_realtime_requires_wss_before_credentials_or_microphone(window):
 
 def test_realtime_sample_rate_preflight_does_not_change_settings_or_record(window):
     async def scenario():
-        page = window.pages[2]
+        page = window.models_page.transcription
         store = window.session.store
         store.save_settings(replace(store.load_settings(), sample_rate=48000))
         page.model.setCurrentText("qwen3-asr-flash-realtime")
@@ -761,7 +784,7 @@ def test_realtime_sample_rate_preflight_does_not_change_settings_or_record(windo
 
 def test_realtime_capability_page_passes_explicit_protocol_without_injection(window):
     async def scenario():
-        page = window.pages[2]
+        page = window.models_page.transcription
         page.model.setCurrentText("qwen3-asr-flash-realtime")
         page.protocol.setCurrentIndex(page.protocol.findData(PROTOCOL))
         calls = []
@@ -792,7 +815,7 @@ def test_realtime_capability_page_passes_explicit_protocol_without_injection(win
 @pytest.mark.parametrize("streaming", [False, True])
 def test_polish_capability_uses_saved_streaming_setting(window, streaming):
     async def scenario():
-        page = window.pages[3]
+        page = window.models_page.polishing
         store = window.session.store
         store.save_settings(
             replace(store.load_settings(), polishing_streaming=streaming)
@@ -815,14 +838,15 @@ def test_polish_capability_uses_saved_streaming_setting(window, streaming):
     asyncio.run(scenario())
 
 
-def test_streaming_checkbox_roundtrips_and_warns_about_partial_output(window):
+def test_hidden_legacy_streaming_control_cannot_overwrite_settings(window):
     async def scenario():
-        page = window.pages[3]
+        page = window.models_page.polishing
         assert page.streaming.isChecked()
         page.streaming.setChecked(False)
         await page.save()
-        assert not window.session.store.load_settings().polishing_streaming
-        assert not page.streaming.isChecked()
+        assert window.session.store.load_settings().polishing_streaming
+        assert page.streaming.isChecked()
+        assert page.streaming.isHidden()
 
     asyncio.run(scenario())
 
@@ -830,7 +854,11 @@ def test_streaming_checkbox_roundtrips_and_warns_about_partial_output(window):
 @pytest.mark.parametrize("control", ["protocol", "endpoint", "json", "streaming"])
 def test_new_provider_controls_invalidate_late_status(window, control):
     async def scenario():
-        page = window.pages[3 if control == "streaming" else 2]
+        page = (
+            window.models_page.polishing
+            if control == "streaming"
+            else window.models_page.transcription
+        )
         if control == "endpoint":
             page.protocol.setCurrentIndex(page.protocol.findData(PROTOCOL))
         entered, release = asyncio.Event(), asyncio.Event()
@@ -872,7 +900,7 @@ def test_secret_bearing_realtime_url_is_rejected_before_any_save(
     window, selected, endpoint
 ):
     async def scenario():
-        page = window.pages[2]
+        page = window.models_page.transcription
         store = window.session.store
         before = {p: p.read_bytes() for p in store.root.rglob("*.json")}
         page.model.setCurrentText("qwen3-asr-flash-realtime")
@@ -899,24 +927,24 @@ def test_secret_bearing_realtime_url_is_rejected_before_any_save(
     asyncio.run(scenario())
 
 
-def test_http_draft_without_model_remains_saveable(window):
+def test_http_draft_requires_explicit_model_before_save(window):
     async def scenario():
-        page = window.pages[2]
+        page = window.models_page.transcription
         page.new()
         assert page.model.currentText() == ""
-        await page.save()
-        stored = window.session.store.load_provider(page.identifier)
-        assert stored.model == "" and stored.parameters == {}
+        with pytest.raises(ConfigError):
+            await page.save()
+        assert page.selector.findData(page.identifier) == -1
 
     asyncio.run(scenario())
 
 
 def test_preset_uses_new_credential_reference_and_never_overwrites_old_provider(window):
-    page = window.pages[2]
+    page = window.models_page.transcription
     old = page.provider()
     before = {p: p.read_bytes() for p in window.session.store.root.rglob("*.json")}
     page.key.setText("unsaved-synthetic")
-    page.apply_preset(page.preset.findData("groq"))
+    select_platform(page, "groq")
     item = page.provider()
     assert item.id != old.id and item.key_ref != old.key_ref
     assert (
@@ -928,12 +956,12 @@ def test_preset_uses_new_credential_reference_and_never_overwrites_old_provider(
         p: p.read_bytes() for p in window.session.store.root.rglob("*.json")
     }
     page.new()
-    assert page.preset.currentData() == "qwen" and page.provider().adapter == "qwen"
+    assert page.preset.currentIndex() == -1 and page.name.text() == ""
 
 
 def test_static_model_catalog_never_reads_secrets_or_claims_connection(window):
-    page = window.pages[2]
-    page.apply_preset(page.preset.findData("elevenlabs"))
+    page = window.models_page.transcription
+    select_platform(page, "elevenlabs")
 
     async def key(_):
         pytest.fail("built-in list must not read credentials or contact network")
@@ -947,8 +975,8 @@ def test_static_model_catalog_never_reads_secrets_or_claims_connection(window):
 
 
 def test_unknown_manual_id_is_preserved_but_known_text_capability_is_blocked(window):
-    page = window.pages[2]
-    page.apply_preset(page.preset.findData("custom-asr"))
+    page = window.models_page.transcription
+    select_platform(page, "custom-asr")
     page.url.setText("https://example.invalid/v1")
     page.model.setCurrentText("private-future-speech-v7")
     assert "能力未知" in page.model_hint.text()
@@ -959,35 +987,35 @@ def test_unknown_manual_id_is_preserved_but_known_text_capability_is_blocked(win
 
 
 def test_realtime_preset_switch_resets_protocol_and_endpoint_draft(window):
-    page = window.pages[2]
+    page = window.models_page.transcription
     page.protocol.setCurrentIndex(page.protocol.findData(PROTOCOL))
     page.realtime_url.setText("wss://fixture.invalid/realtime")
-    page.apply_preset(page.preset.findData("groq"))
+    select_platform(page, "groq")
     assert page.protocol.currentData() == "http" and not page.protocol.isEnabled()
     assert page.realtime_url.text() == "" and page.provider().parameters == {}
     page.validate_protocol(page.provider())
-    page.apply_preset(page.preset.findData("qwen"))
+    select_platform(page, "qwen")
     assert page.protocol.currentData() == "http" and page.protocol.isEnabled()
     assert page.provider().parameters == {}
     page.validate_protocol(page.provider())
 
 
 def test_step_realtime_preset_has_own_protocol_and_16khz_validation(window):
-    page = window.pages[2]
-    page.apply_preset(page.preset.findData("stepfun-realtime"))
+    page = window.models_page.transcription
+    select_platform(page, "stepfun-realtime")
     assert page.protocol.currentData() == "stepfun_realtime"
     assert page.provider().adapter == "stepfun-realtime"
     assert page.provider().model == "stepaudio-2.5-asr-stream"
     assert page.provider().parameters == {"asr_protocol": "stepfun_realtime"}
     page.validate_protocol(page.provider())
-    page.apply_preset(page.preset.findData("groq"))
+    select_platform(page, "groq")
     assert page.protocol.currentData() == "http" and page.provider().parameters == {}
 
 
 @pytest.mark.parametrize("preset", ["dashscope-fun", "stepfun-realtime"])
 def test_unselected_ws_url_secret_is_rejected_before_credential_save(window, preset):
-    page = window.pages[2]
-    page.apply_preset(page.preset.findData(preset))
+    page = window.models_page.transcription
+    select_platform(page, preset)
     page.parameters.setPlainText(
         json.dumps({"realtime_url": "wss://user:secret@fixture.invalid/asr"})
     )
@@ -1022,8 +1050,8 @@ def test_multi_credentials_save_one_secret_bundle_and_blank_preserves(
     window, preset, fields
 ):
     async def scenario():
-        page = window.pages[2]
-        page.apply_preset(page.preset.findData(preset))
+        page = window.models_page.transcription
+        select_platform(page, preset)
         if preset.startswith("volcengine"):
             page.resource_id.setText("synthetic-resource")
         saved = []
@@ -1052,8 +1080,8 @@ def test_multi_credentials_save_one_secret_bundle_and_blank_preserves(
 
 def test_partial_credential_bundle_does_not_write_anything(window):
     async def scenario():
-        page = window.pages[2]
-        page.apply_preset(page.preset.findData("xfyun"))
+        page = window.models_page.transcription
+        select_platform(page, "xfyun")
         page.credential_inputs["app_id"].setText("123")
 
         async def forbidden(*args):
@@ -1072,8 +1100,8 @@ def test_partial_credential_bundle_does_not_write_anything(window):
 
 def test_volc_credential_mode_requires_new_ref_and_complete_bundle(window):
     async def scenario():
-        page = window.pages[2]
-        page.apply_preset(page.preset.findData("volcengine-key"))
+        page = window.models_page.transcription
+        select_platform(page, "volcengine-key")
         page.resource_id.setText("synthetic-resource")
         page.key.setText("old-synthetic")
         saved = []
@@ -1107,8 +1135,8 @@ def test_volc_credential_mode_requires_new_ref_and_complete_bundle(window):
 
 def test_dashscope_static_discovery_includes_paraformer_without_secret_access(window):
     async def scenario():
-        page = window.pages[2]
-        page.apply_preset(page.preset.findData("dashscope-paraformer"))
+        page = window.models_page.transcription
+        select_platform(page, "dashscope-paraformer")
 
         async def forbidden(*args):
             pytest.fail("static discovery must not read credentials")
@@ -1135,18 +1163,18 @@ def test_dashscope_static_discovery_includes_paraformer_without_secret_access(wi
 def test_polishing_native_presets_select_protocol_without_reusing_credentials(
     window, preset, adapter
 ):
-    page = window.pages[3]
+    page = window.models_page.polishing
     old_ref = page.reference
     page.key.setText("unsaved-old-key")
-    page.apply_preset(page.preset.findData(preset))
+    select_platform(page, preset)
     assert page.provider().adapter == adapter
     assert page.reference != old_ref and not page.key.text()
     assert "当前协议" in page.model_hint.text()
 
 
 def test_qwen_protocol_picker_disables_other_vendor_protocols(window):
-    page = window.pages[2]
-    page.apply_preset(page.preset.findData("qwen"))
+    page = window.models_page.transcription
+    select_platform(page, "qwen")
     for index in range(page.protocol.count()):
         allowed = page.protocol.itemData(index) in {"http", PROTOCOL}
         assert page.protocol.model().item(index).isEnabled() == allowed
@@ -1160,8 +1188,8 @@ def test_provider_page_persists_bundle_in_own_config_file(window):
     from inkecho.security import FileCredentialStore
 
     async def scenario():
-        page = window.pages[2]
-        page.apply_preset(page.preset.findData("volcengine-app"))
+        page = window.models_page.transcription
+        select_platform(page, "volcengine-app")
         page.model.setCurrentText("bigmodel")
         page.resource_id.setText("synthetic-resource")
         page.credential_inputs["app_key"].setText("synthetic-app")
@@ -1180,12 +1208,16 @@ def test_provider_page_persists_bundle_in_own_config_file(window):
         assert "synthetic-access" not in ordinary and "synthetic-app" not in ordinary
         page.load()
         assert not any(widget.text() for widget in page.credential_inputs.values())
-        page.apply_preset(page.preset.findData("groq"))
+        select_platform(page, "groq")
         assert page.reference != reference
-        await page.save()
+        with pytest.raises(ConfigError, match="完整凭据"):
+            await page.save()
         assert (
             FileCredentialStore(window.session.store.root).get(page.reference) is None
         )
         assert FileCredentialStore(window.session.store.root).get(reference) == saved
 
-    asyncio.run(scenario())
+    async def bounded():
+        await asyncio.wait_for(scenario(), timeout=8)
+
+    asyncio.run(bounded())

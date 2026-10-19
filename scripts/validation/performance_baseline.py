@@ -93,6 +93,17 @@ async def baseline(args, *, streaming=False):
     with tempfile.TemporaryDirectory(prefix="inkecho-synthetic-timing-") as root:
         store = ConfigStore(Path(root))
         store.initialize()
+        from inkecho.config import DEFAULT_PROVIDERS
+
+        for provider in DEFAULT_PROVIDERS:
+            store.save_provider(provider)
+        store.save_settings(
+            replace(
+                store.load_settings(),
+                transcription_provider="qwen",
+                polishing_provider="deepseek",
+            )
+        )
         store.save_settings(
             replace(
                 store.load_settings(),

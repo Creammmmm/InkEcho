@@ -483,6 +483,8 @@ def runtime_store(arm):
     class Store:
         def load_settings(self):
             return Settings(
+                transcription_provider="qwen",
+                polishing_provider="deepseek",
                 polishing_enabled=True,
                 polishing_fallback=False,
                 polishing_streaming=arm == "B",

@@ -104,6 +104,18 @@ class Connection:
 def sessions(tmp_path):
     store = ConfigStore(tmp_path)
     store.initialize()
+    # Legacy configured-user fixture; first-run now intentionally stays empty.
+    from inkecho.config import DEFAULT_PROVIDERS
+
+    for provider in DEFAULT_PROVIDERS:
+        store.save_provider(provider)
+    store.save_settings(
+        replace(
+            store.load_settings(),
+            transcription_provider="qwen",
+            polishing_provider="deepseek",
+        )
+    )
     provider = store.load_provider("qwen")
     store.save_provider(
         replace(

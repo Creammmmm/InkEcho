@@ -30,7 +30,9 @@ def test_without_live_flag_no_config_credentials_or_network(monkeypatch, capsys)
 
 def test_fake_live_path_only_fixed_public_text_metadata(tmp_path, monkeypatch):
     store = ConfigStore(tmp_path)
-    store.save_settings(Settings())
+    store.save_settings(
+        Settings(transcription_provider="qwen", polishing_provider="deepseek")
+    )
     store.save_provider(
         Provider(
             "deepseek",

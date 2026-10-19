@@ -43,7 +43,9 @@ def current_provider(
 
 def config_files(root, provider=None):
     store = ConfigStore(root)
-    store.save_settings(Settings())
+    store.save_settings(
+        Settings(transcription_provider="qwen", polishing_provider="deepseek")
+    )
     store.save_provider(provider or current_provider())
     return store, {p: p.read_bytes() for p in root.rglob("*.json")}
 

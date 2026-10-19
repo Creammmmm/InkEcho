@@ -19,7 +19,6 @@ from inkecho.config import ConfigError, Provider
 from inkecho.provider_catalog import (
     PRESETS,
     STATIC_MODEL_ADAPTERS,
-    WS_ASR_ADAPTERS,
     asr_capability,
 )
 from inkecho.provider_credentials import encode_credentials
@@ -42,7 +41,7 @@ class ProviderPage(Page):
         self.available_models = ()
         self.selector = QComboBox()
         self.selector.currentIndexChanged.connect(lambda: self.safe(self.load))
-        self.body.addWidget(actions(self.selector, button("新建供应商", self.new)))
+        self.body.addWidget(actions(self.selector, button("新建模型配置", self.new)))
         panel, body = card()
         form = QFormLayout()
         self.preset = QComboBox()
@@ -97,7 +96,7 @@ class ProviderPage(Page):
             getattr(session.store.load_settings(), role + "_timeout_seconds")
         )
         rows = [
-            ("供应商预设 · 仅修改草稿", self.preset),
+            ("服务平台", self.preset),
             ("显示名称", self.name),
             ("Base URL", self.url),
         ]
@@ -125,10 +124,16 @@ class ProviderPage(Page):
                 self.credential_labels[field] = form.labelForField(widget)
         form.addRow("资源 ID · 火山授权资源", self.resource_id)
         self.resource_label = form.labelForField(self.resource_id)
+        for widget in (self.parameters, self.timeout):
+            widget.hide()
+            form.labelForField(widget).hide()
+        if not polishing:
+            self.realtime_url.hide()
+            form.labelForField(self.realtime_url).hide()
         body.addLayout(form)
         self.model_hint = label("", muted=True)
         body.addWidget(self.model_hint)
-        self.current = QCheckBox("设为当前服务")
+        self.current = QCheckBox("使用此配置")
         self.current.setChecked(True)
         body.addWidget(self.current)
         if polishing:
@@ -139,22 +144,14 @@ class ProviderPage(Page):
             self.fallback.setChecked(settings.polishing_fallback)
             self.streaming = QCheckBox("边润色边输入")
             self.streaming.setChecked(settings.polishing_streaming)
-            body.addWidget(self.enabled)
-            body.addWidget(self.streaming)
-            body.addWidget(self.fallback)
-            body.addWidget(
-                label(
-                    "边润色边输入可提前开始输出；已经开始输入后若失败，"
-                    "将停止剩余文字，不会整段回退原文或重复输入。",
-                    muted=True,
-                )
-            )
+            for control in (self.enabled, self.streaming, self.fallback):
+                control.hide()
         self.body.addWidget(panel)
         self.body.addWidget(
             actions(
                 button("保存配置与密钥", lambda: self.run(self.save()), primary=True),
                 button("删除密钥", lambda: self.run(self.delete_key())),
-                button("删除供应商", lambda: self.safe(self.delete)),
+                button("删除模型配置", lambda: self.safe(self.delete)),
             )
         )
         self.body.addWidget(
@@ -177,6 +174,7 @@ class ProviderPage(Page):
         self.preset.activated.connect(self.apply_preset)
         self.model.currentTextChanged.connect(self.model_changed)
         self.url.textChanged.connect(self.model_changed)
+        self.name.textChanged.connect(self.model_changed)
         self.parameters.textChanged.connect(self.parameters_changed)
         self.resource_id.textChanged.connect(self.model_changed)
         if polishing:
@@ -201,7 +199,7 @@ class ProviderPage(Page):
                 self.realtime_url.clear()
                 self.realtime_url.setEnabled(preset.protocol != "http")
                 self.protocol.setEnabled(self.adapter == "qwen")
-        self.name.setText(preset.label)
+        self.name.clear()
         self.url.setText(preset.base_url)
         values = {} if preset.protocol == "http" else {"asr_protocol": preset.protocol}
         if self.adapter == "volcengine":
@@ -258,24 +256,30 @@ class ProviderPage(Page):
     def configure_protocol_options(self):
         if self.role != "transcription":
             return
-        allowed = (
-            {"http", PROTOCOL}
-            if self.adapter == "qwen"
-            else {
-                next(
-                    (
-                        preset.protocol
-                        for preset in PRESETS
-                        if preset.adapter == self.adapter
-                    ),
-                    "http",
-                )
-            }
-        )
-        for index in range(self.protocol.count()):
-            self.protocol.model().item(index).setEnabled(
-                self.protocol.itemData(index) in allowed
-            )
+        allowed = {
+            preset.protocol
+            for preset in PRESETS
+            if preset.role == "transcription" and preset.adapter == self.adapter
+        }
+        if self.adapter == "qwen":
+            allowed.add(PROTOCOL)
+        mode = self.parameter_values().get("asr_protocol", "http")
+        labels = {
+            "http": "录音结束后上传 · HTTP",
+            PROTOCOL: "边录边识别 · Qwen 实时 WebSocket",
+            "stepfun_realtime": "边录边识别 · 阶跃 ASR WebSocket",
+            "dashscope_task": "边录边识别 · 百炼任务 WebSocket",
+            "xfyun_iat": "边录边识别 · 讯飞听写",
+            "tencent_asr": "边录边识别 · 腾讯云识别",
+            "volc_binary": "边录边识别 · 火山识别",
+        }
+        with QSignalBlocker(self.protocol):
+            self.protocol.clear()
+            for protocol, title in labels.items():
+                if protocol in allowed:
+                    self.protocol.addItem(title, protocol)
+            self.protocol.setCurrentIndex(self.protocol.findData(mode))
+            self.protocol.setEnabled(len(allowed) > 1)
 
     def parameters_changed(self):
         self.revision += 1
@@ -306,6 +310,11 @@ class ProviderPage(Page):
                         "volc_binary",
                     }
                 )
+        if self.preset.currentIndex() < 0 and not self.url.text().strip():
+            with QSignalBlocker(self.protocol):
+                self.protocol.setCurrentIndex(-1)
+                self.protocol.setEnabled(False)
+                self.protocol.setPlaceholderText("请先选择服务平台")
         self.update_model_hint()
 
     def protocol_changed(self):
@@ -366,6 +375,12 @@ class ProviderPage(Page):
     def update_model_hint(self):
         from inkecho.app import PROVIDER_LABELS
 
+        if not self.name.text().strip():
+            self.model_hint.setText(
+                "请选择服务平台，为模型配置命名，再填写模型和凭据并保存。"
+            )
+            self.update_model_annotations(None)
+            return
         provider = None
         try:
             provider = self.provider()
@@ -445,11 +460,11 @@ class ProviderPage(Page):
                     "stepfun_realtime",
                 }:
                     hint = (
-                        "此模型与当前转写协议不匹配，请选择对应语音模型或供应商预设。"
+                        "此模型与当前转写协议不匹配，请选择对应语音模型或服务平台预设。"
                     )
                 else:
                     hint = (
-                        "此模型与当前转写协议不匹配，请选择对应语音模型或供应商预设。"
+                        "此模型与当前转写协议不匹配，请选择对应语音模型或服务平台预设。"
                         "模型列表不等于能力验证。"
                     )
                 self.model.setItemData(index, hint, Qt.ItemDataRole.ToolTipRole)
@@ -458,6 +473,10 @@ class ProviderPage(Page):
                 )
 
     def refresh(self, identifier=None):
+        if identifier is None:
+            identifier = getattr(
+                self.session.store.load_settings(), self.role + "_provider"
+            )
         self.selector.blockSignals(True)
         self.selector.clear()
         for provider in self.session.store.providers():
@@ -530,23 +549,22 @@ class ProviderPage(Page):
         self.adapter = "openai" if self.role == "polishing" else "qwen"
         if self.role == "transcription":
             self.protocol.setEnabled(True)
-        self.preset.setCurrentIndex(
-            self.preset.findData("custom-chat" if self.role == "polishing" else "qwen")
-        )
-        self.name.setText(
-            "自定义润色服务" if self.role == "polishing" else "自定义转写服务"
-        )
-        self.url.setText(
-            "https://api.deepseek.com"
-            if self.role == "polishing"
-            else "https://dashscope.aliyuncs.com/compatible-mode/v1"
-        )
+        self.preset.setCurrentIndex(-1)
+        self.preset.setPlaceholderText("请选择服务平台")
+        self.name.clear()
+        self.name.setPlaceholderText("请为此模型配置命名")
+        self.url.clear()
         self.model.setCurrentText("")
         self.parameters.setPlainText("{}")
         self.clear_credentials()
         self.resource_id.clear()
         self.configure_credentials()
         self.current.setChecked(True)
+        if self.role == "transcription":
+            with QSignalBlocker(self.protocol):
+                self.protocol.setCurrentIndex(-1)
+                self.protocol.setEnabled(False)
+                self.protocol.setPlaceholderText("请先选择服务平台")
         self.update_model_hint()
 
     def credential_fields(self):
@@ -605,7 +623,11 @@ class ProviderPage(Page):
         )
 
     async def save(self):
+        if self.preset.currentIndex() < 0 and not self.url.text().strip():
+            raise ConfigError("请先选择服务平台，并填写名称、模型与凭据后保存。")
         provider = self.provider()
+        if not provider.base_url or not provider.model:
+            raise ConfigError("请填写服务地址与模型 ID 后保存配置。")
         # Reject secret-bearing/invalid endpoints before touching credentials or
         # persisting any parameter string, including an unselected URL draft.
         if "realtime_url" in provider.parameters:
@@ -615,10 +637,13 @@ class ProviderPage(Page):
                 from inkecho.asr_wire import validate_endpoint
 
                 validate_endpoint(provider.parameters["realtime_url"])
-        if "asr_protocol" in provider.parameters or provider.adapter in WS_ASR_ADAPTERS:
-            self.validate_protocol(provider)
+        self.validate_protocol(provider)
         revision = self.revision
         value = self.credential_value()
+        if not value and not any(
+            item.id == provider.id for item in self.session.store.providers()
+        ):
+            raise ConfigError("首次保存模型配置时，请填写完整凭据。")
         if provider.adapter == "volcengine":
             previous = next(
                 (
@@ -638,15 +663,9 @@ class ProviderPage(Page):
                     provider, id=identifier, key_ref=f"provider/{identifier}"
                 )
         self.clear_credentials()
-        updates = {self.role + "_timeout_seconds": self.timeout.value()}
+        updates = {}
         if self.current.isChecked():
             updates[self.role + "_provider"] = provider.id
-        if self.role == "polishing":
-            updates.update(
-                polishing_enabled=self.enabled.isChecked(),
-                polishing_fallback=self.fallback.isChecked(),
-                polishing_streaming=self.streaming.isChecked(),
-            )
         if value:
             await self.session.save_key(provider.key_ref, value)
         self.session.store.save_provider(provider)
@@ -663,7 +682,7 @@ class ProviderPage(Page):
         if revision != self.revision:
             return
         self.clear_credentials()
-        self.message.setText("此供应商的凭据已从本地 credentials.json 删除。")
+        self.message.setText("此服务平台的凭据已从本地 credentials.json 删除。")
 
     def delete(self):
         providers = [
@@ -682,7 +701,7 @@ class ProviderPage(Page):
             )
         self.session.store.delete_provider(self.identifier)
         self.refresh()
-        self.message.setText("供应商配置已删除。密钥可在删除前单独移除。")
+        self.message.setText("服务平台配置已删除。密钥可在删除前单独移除。")
 
     async def discover(self):
         provider = self.provider()

@@ -110,6 +110,7 @@ def current_task():
 class Session(QObject):
     status = Signal(str)
     state_changed = Signal(str)
+    preview = Signal(str)
     level = Signal(float)
     finished = Signal(dict)
     performance = Signal(dict)
@@ -316,6 +317,14 @@ class Session(QObject):
         self.spawn(deliver())
 
     def _state(self, state: State) -> None:
+        if state in {
+            State.IDLE,
+            State.RECORDING,
+            State.SUCCEEDED,
+            State.FAILED,
+            State.CANCELLED,
+        }:
+            self.preview.emit("")
         self.state_changed.emit(state.value)
         if state == State.IDLE:
             return
@@ -358,6 +367,7 @@ class Session(QObject):
             self.metrics = {}
 
     def cancel(self):
+        self.preview.emit("")
         self.epoch += 1
         self.preparing = False
         self.recorder.cancel()
@@ -396,6 +406,8 @@ class Session(QObject):
         epoch = self.epoch
         try:
             self.settings = self.store.load_settings()
+            if not self.settings.transcription_provider:
+                raise CredentialError("请先在模型配置中保存语音模型。")
             transcription = self.store.load_provider(
                 self.settings.transcription_provider
             )
@@ -481,6 +493,27 @@ class Session(QObject):
                         deadline=task.deadline,
                         active=lambda: self.active(task_id),
                     )
+                    preview = getattr(context["realtime"], "set_preview_callback", None)
+                    if transcription.adapter == "qwen" and callable(preview):
+
+                        def on_preview(text):
+                            self.controller.tick()
+                            if (
+                                epoch == self.epoch
+                                and self.active(task_id)
+                                and self.controller.task is task
+                                and self.task_context is context
+                                and self.controller.state
+                                in {
+                                    State.RECORDING,
+                                    State.TRANSCRIBING,
+                                }
+                                and isinstance(text, str)
+                                and len(text) <= 100000
+                            ):
+                                self.preview.emit(text)
+
+                        preview(on_preview)
                     observe = getattr(
                         context["realtime"], "set_completed_callback", None
                     )

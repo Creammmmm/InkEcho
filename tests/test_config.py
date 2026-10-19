@@ -6,6 +6,7 @@ import pytest
 
 from inkecho.config import (
     BUILTIN_PROMPT,
+    BUILTIN_PROMPTS,
     DEFAULT_PROVIDERS,
     ConfigError,
     ConfigStore,
@@ -19,11 +20,8 @@ def test_first_run_defaults_are_separate_and_private(tmp_path):
     store = ConfigStore(tmp_path / "inkecho")
     store.initialize()
     assert store.load_settings() == Settings()
-    assert {provider.role for provider in store.providers()} == {
-        "transcription",
-        "polishing",
-    }
-    assert store.prompts() == [BUILTIN_PROMPT]
+    assert store.providers() == []
+    assert store.prompts() == list(BUILTIN_PROMPTS)
     for path in store.root.rglob("*.json"):
         assert json.loads(path.read_text())["schema_version"] == 1
         assert stat.S_IMODE(path.stat().st_mode) == 0o600
@@ -85,7 +83,7 @@ def test_builtin_prompt_edits_become_user_copies(tmp_path):
     assert copy.id != edited.id
     assert copy.body == edited.body
     store.delete_prompt(edited.id)
-    assert store.prompts() == [BUILTIN_PROMPT, copy]
+    assert store.prompts() == list(BUILTIN_PROMPTS) + [copy]
     with pytest.raises(ConfigError, match="cannot be deleted"):
         store.delete_prompt(BUILTIN_PROMPT.id)
 

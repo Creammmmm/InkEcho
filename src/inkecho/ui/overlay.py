@@ -3,7 +3,7 @@
 import math
 
 from PySide6.QtCore import Qt, QTimer
-from PySide6.QtGui import QColor, QPainter, QPen
+from PySide6.QtGui import QColor, QLinearGradient, QPainter, QPen
 from PySide6.QtWidgets import QApplication, QWidget
 
 
@@ -23,6 +23,7 @@ class Overlay(QWidget):
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         self.setWindowTitle("InkEcho 状态提示")
         self.resize(176, 58)
+        self.text = ""
         self.state, self.level, self.phase = "idle", 0.0, 0.0
         self.animation = QTimer(self)
         self.animation.setInterval(40)
@@ -38,12 +39,20 @@ class Overlay(QWidget):
     def set_level(self, value):
         self.level = value
 
+    def set_text(self, text):
+        # Preview stays in RAM, never enters statistics, logs or keyboard delivery.
+        self.text = text[-240:] if isinstance(text, str) else ""
+        self.update()
+
     def show_state(self, state):
         if state == "idle":
+            self.set_text("")
+            self.hide()
             return
         self.state = state
         settings = self.store.load_settings()
         self.style = settings.overlay_style
+        self.resize(440, 112) if self.style == "siri" else self.resize(176, 58)
         self.setWindowOpacity(settings.overlay_opacity)
         screen = QApplication.primaryScreen().availableGeometry()
         x = screen.x() + (screen.width() - self.width()) // 2
@@ -65,9 +74,13 @@ class Overlay(QWidget):
 
     def hideEvent(self, event):
         self.animation.stop()
+        self.set_text("")
         super().hideEvent(event)
 
     def paintEvent(self, _event):
+        if getattr(self, "style", "waveform") == "siri":
+            self.paint_siri()
+            return
         colors = {
             "failed": "#fca5a5",
             "cancelled": "#b9c5d9",
@@ -114,3 +127,46 @@ class Overlay(QWidget):
             )
             x = 34 + index * 18
             painter.drawLine(x, 29 - height // 2, x, 29 + height // 2)
+
+    def paint_siri(self):
+        painter = QPainter(self)
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+        painter.setPen(Qt.PenStyle.NoPen)
+        painter.setBrush(QColor(16, 30, 56, 235))
+        painter.drawRoundedRect(self.rect(), 24, 24)
+        gradient = QLinearGradient(24, 0, self.width() - 24, 0)
+        for position, color in (
+            (0, "#65dafa"),
+            (0.35, "#717dff"),
+            (0.65, "#d394fa"),
+            (1, "#70e6d0"),
+        ):
+            gradient.setColorAt(position, QColor(color))
+        painter.setPen(
+            QPen(gradient, 4, Qt.PenStyle.SolidLine, Qt.PenCapStyle.RoundCap)
+        )
+        for index in range(48):
+            x = 28 + index * 8
+            height = 3 + (7 + self.level * 13) * abs(
+                math.sin(self.phase + index * 0.27)
+            )
+            painter.drawLine(int(x), int(29 - height / 2), int(x), int(29 + height / 2))
+        painter.setPen(QColor("#e7eefb"))
+        captions = {
+            "recording": "正在聆听 · 支持实时预览的模型会显示文字",
+            "transcribing": "正在识别",
+            "polishing": "正在润色",
+            "injecting": "正在输入",
+            "succeeded": "已完成",
+            "cancelled": "已取消",
+            "failed": "未完成，请查看概览",
+        }
+        text = self.text or captions.get(self.state, "准备就绪")
+        painter.drawText(
+            22,
+            52,
+            self.width() - 44,
+            48,
+            Qt.TextFlag.TextWordWrap | Qt.AlignmentFlag.AlignCenter,
+            text,
+        )

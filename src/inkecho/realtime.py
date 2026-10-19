@@ -161,6 +161,7 @@ class QwenRealtimeSession:
         self._item_id: str | None = None
         self._transcript: str | None = None
         self._on_completed: Callable[[Result], None] | None = None
+        self._on_preview: Callable[[str], None] | None = None
         self._event_ids: set[str] = set()
         self._started = False
         self._finishing = False
@@ -178,6 +179,12 @@ class QwenRealtimeSession:
         if self._started or self._closed or not callable(callback):
             raise ProviderError("configuration")
         self._on_completed = callback
+
+    def set_preview_callback(self, callback: Callable[[str], None]) -> None:
+        """Observe RAM-only drafts; never contributes to completed/final results."""
+        if self._started or self._closed or not callable(callback):
+            raise ProviderError("configuration")
+        self._on_preview = callback
 
     def _check(self) -> None:
         if self._closed or not self.active():
@@ -479,6 +486,27 @@ class QwenRealtimeSession:
             # The service can announce a placeholder before manual commit.
             # Its contents and identity are not authoritative recognition data.
         elif kind == "conversation.item.input_audio_transcription.text":
+            # Optional previews are replaceable snapshots, not committed content.
+            # Malformed drafts are ignored without weakening final validation.
+            text, stash = event.get("text", ""), event.get("stash", "")
+            if (
+                isinstance(text, str)
+                and isinstance(stash, str)
+                and len(text) + len(stash) <= 100000
+                and (
+                    "content_index" not in event
+                    or (
+                        type(event["content_index"]) is int
+                        and event["content_index"] == 0
+                    )
+                )
+                and not self._closed
+                and self._failure_code is None
+                and self._transcript is None
+                and self.active()
+                and self._on_preview is not None
+            ):
+                self._on_preview(text + stash)
             return  # Previews never contribute to the final result.
         elif kind in {
             "conversation.item.input_audio_transcription.completed",
@@ -546,4 +574,5 @@ class QwenRealtimeSession:
                 await self._socket.close()
         self._transcript = None
         self._on_completed = None
+        self._on_preview = None
         self._event_ids.clear()

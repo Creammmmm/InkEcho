@@ -168,6 +168,7 @@ class AppearancePage(Page):
         panel, body = card()
         form = QFormLayout()
         self.style = QComboBox()
+        self.style.addItem("Siri 灵感光谱 · 实时文字", "siri")
         self.style.addItem("简约波形", "waveform")
         self.style.addItem("呼吸圆点", "pulse")
         self.style.setCurrentIndex(max(0, self.style.findData(settings.overlay_style)))
@@ -196,7 +197,7 @@ class AppearancePage(Page):
         form.addRow("不透明度", self.opacity)
         form.addRow("结果显示时间", self.duration)
         body.addLayout(form)
-        body.addWidget(self.tray)
+        self.tray.hide()
         self.body.addWidget(panel)
         self.body.addWidget(
             actions(
@@ -222,7 +223,7 @@ class AppearancePage(Page):
                     overlay_style=self.style.currentData(),
                     overlay_opacity=self.opacity.value(),
                     overlay_seconds=self.duration.value(),
-                    close_to_tray=self.tray.isChecked(),
+                    close_to_tray=True,
                 )
             )
             self.message.setText("外观设置已保存。")

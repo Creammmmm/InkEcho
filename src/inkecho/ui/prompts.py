@@ -4,13 +4,13 @@ from dataclasses import replace
 
 from PySide6.QtWidgets import QComboBox, QFormLayout, QLineEdit, QPlainTextEdit
 
-from inkecho.config import BUILTIN_PROMPT, Prompt
+from inkecho.config import BUILTIN_PROMPT, BUILTIN_PROMPTS, Prompt
 from inkecho.ui.widgets import Page, actions, button, card, label
 
 
 class PromptsPage(Page):
     def __init__(self, session):
-        super().__init__("Prompt 模板", "保留你的表达方式，让润色遵循明确的规则。")
+        super().__init__("风格", "保留你的表达方式，让润色遵循明确的规则。")
         self.session = session
         self.revision = 0
         self.selector = QComboBox()
@@ -49,9 +49,11 @@ class PromptsPage(Page):
         self.preview.setMaximumHeight(90)
         self.preview.setPlaceholderText("测试结果仅在本页显示，不持久保存")
         self.body.addWidget(self.sample)
-        self.body.addWidget(
-            actions(button("云端测试润色 · 可能计费", lambda: self.run(self.test())))
+        self.test_button = button(
+            "云端测试润色 · 可能计费", lambda: self.run(self.test())
         )
+        self.body.addWidget(actions(self.test_button))
+        self.refresh_availability()
         self.body.addWidget(self.preview)
         self.refresh(session.store.load_settings().prompt)
         self.finish()
@@ -61,7 +63,12 @@ class PromptsPage(Page):
         self.selector.clear()
         for prompt in self.session.store.prompts():
             self.selector.addItem(
-                prompt.name + (" · 内置" if prompt.id == BUILTIN_PROMPT.id else ""),
+                prompt.name
+                + (
+                    " · 内置"
+                    if prompt.id in {item.id for item in BUILTIN_PROMPTS}
+                    else ""
+                ),
                 prompt.id,
             )
         if identifier:
@@ -105,7 +112,7 @@ class PromptsPage(Page):
         self.refresh(prompt.id)
 
     def delete(self):
-        if self.identifier == BUILTIN_PROMPT.id:
+        if self.identifier in {item.id for item in BUILTIN_PROMPTS}:
             self.message.setText("内置模板不能删除，可复制后编辑。")
             return
         settings = self.session.store.load_settings()
@@ -116,7 +123,15 @@ class PromptsPage(Page):
         self.session.store.delete_prompt(self.identifier)
         self.refresh()
 
+    def refresh_availability(self):
+        self.test_button.setEnabled(
+            self.session.store.load_settings().polishing_enabled
+        )
+
     async def test(self):
+        if not self.session.store.load_settings().polishing_enabled:
+            self.message.setText("云端润色已关闭，请先在设置或概览中启用。")
+            return
         revision = self.revision
         text, prompt = self.sample.text().strip(), self.text.toPlainText()
         if not text:

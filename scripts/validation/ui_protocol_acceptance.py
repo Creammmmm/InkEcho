@@ -11,8 +11,12 @@ from native_guard import save
 
 
 async def exercise(page, store):
+    from inkecho.config import DEFAULT_PROVIDERS
     from inkecho.realtime import PROTOCOL
 
+    # Explicit synthetic legacy seed: a new install intentionally has no platform.
+    store.save_provider(DEFAULT_PROVIDERS[0])
+    page.refresh("qwen")
     await page.discover()
 
     def choices():

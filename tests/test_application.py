@@ -72,6 +72,18 @@ def factory(tmp_path, monkeypatch):
     monkeypatch.setenv("XDG_SESSION_TYPE", "x11")
     store = ConfigStore(tmp_path)
     store.initialize()
+    # Legacy configured-user fixture; first-run now intentionally stays empty.
+    from inkecho.config import DEFAULT_PROVIDERS
+
+    for provider in DEFAULT_PROVIDERS:
+        store.save_provider(provider)
+    store.save_settings(
+        replace(
+            store.load_settings(),
+            transcription_provider="qwen",
+            polishing_provider="deepseek",
+        )
+    )
     store.save_provider(replace(store.load_provider("qwen"), model="test-asr"))
     store.save_provider(replace(store.load_provider("deepseek"), model="test-polish"))
 

@@ -3,7 +3,7 @@
 import json
 import math
 import os
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 
 from inkecho.config import atomic_write
@@ -71,6 +71,19 @@ class Statistics:
             raise StatisticsError(
                 "Usage data is invalid; clear statistics to reset it."
             ) from None
+
+    def recent(self, days: int = 7) -> list[tuple[str, dict]]:
+        """Return zero-filled daily aggregates, oldest first, in local time."""
+        if type(days) is not int or not 1 <= days <= 366:
+            raise ValueError("Invalid statistics period.")
+        values = self._load()["days"]
+        today = date.today()
+        return [
+            (day.isoformat(), values.get(day.isoformat(), empty_day()).copy())
+            for day in (
+                today - timedelta(days=offset) for offset in reversed(range(days))
+            )
+        ]
 
     def today(self) -> dict:
         return self._load()["days"].get(date.today().isoformat(), empty_day()).copy()
