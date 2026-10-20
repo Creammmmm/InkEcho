@@ -3,13 +3,14 @@
 InkEcho 是 Linux 桌面语音输入应用：录音后调用云端转写，可选按 Prompt 润色，
 再把文字输入到输出当时的光标位置。不使用剪贴板或系统输入法。
 
-## 本地 0.5.8 修复验证
+## 本地 0.5.12 布局与配置引导
 
-本机稳定入口已更新至 0.5.8：修复录音启动等待、Qwen 实时预览、旧波形样式在
-Wayland 下不显示，以及完全退出后快捷键重新启动的问题。同一 AppImage 已完成
-Ubuntu 24.04 Xorg 与 Ubuntu 26.04 Wayland / XWayland 实际包验收；范围与限制见
-[0.5.8 修复验收](docs/v0.5.8-repair-validation.md)。本次没有创建新的 GitHub Release，
-下方正式版下载仍为 v0.5.0。已运行的旧实例需从托盘完全退出后重新启动。
+本机稳定入口已更新至 0.5.12，新版已正常打开，可直接实际验证。
+本次包含概览双列布局、自动保存设置、润色风格卡片，以及模型配置中的平台链接与
+中文 API 配置引导。同一 AppImage 已完成 Ubuntu 24.04 Xorg、Ubuntu 26.04
+原生 Wayland / XWayland 和私有 FUSE 实际包验收；原配置保持，旧 0.5.8 包已备份。
+完整范围及限制见 [0.5.12 包验收](docs/v0.5.12-guidance-package-validation.md)。
+本次没有创建新的 GitHub Release，下方正式版下载仍为 v0.5.0。
 
 ## v0.5.0
 
