@@ -171,3 +171,80 @@ def test_real_application_quit_then_toggle_does_not_revive(tmp_path):
         if owner.poll() is None:
             owner.terminate()
             owner.communicate(timeout=15)
+
+
+def test_control_processes_do_not_load_gui_audio_or_providers(tmp_path):
+    import json
+    import os
+    import subprocess
+    import sys
+
+    heavy = [
+        "PySide6.QtGui",
+        "PySide6.QtWidgets",
+        "PySide6.QtMultimedia",
+        "inkecho.app",
+        "inkecho.audio",
+        "inkecho.ui.window",
+        "inkecho.providers",
+        "httpx",
+        "qasync",
+    ]
+    code = """
+import json, sys
+from inkecho import __main__ as entry
+entry.main()
+print(json.dumps(sorted(sys.modules)))
+"""
+    runtime = tmp_path / "runtime"
+    runtime.mkdir(mode=0o700)
+    env = {
+        **os.environ,
+        # A control command must not even attempt to load a GUI platform plugin.
+        "QT_QPA_PLATFORM": "invalid-control-test-plugin",
+        "XDG_RUNTIME_DIR": str(runtime),
+    }
+    for action in ("toggle", "cancel", "quit"):
+        result = subprocess.run(
+            [sys.executable, "-c", code, f"--{action}", "--config-dir", str(tmp_path)],
+            env=env,
+            capture_output=True,
+            text=True,
+            timeout=15,
+        )
+        assert result.returncode == 0, result.stderr
+        loaded = json.loads(result.stdout)
+        assert all(name not in loaded for name in heavy)
+        assert "PySide6.QtCore" in loaded
+        assert "PySide6.QtNetwork" in loaded
+
+
+def test_control_error_is_sanitized_without_loading_gui(tmp_path):
+    import os
+    import subprocess
+    import sys
+
+    code = """
+from inkecho import __main__ as entry
+def fail(*args, **kwargs):
+    raise RuntimeError('private-test-error-detail')
+entry.Instance.acquire = fail
+entry.main()
+"""
+    runtime = tmp_path / "runtime"
+    runtime.mkdir(mode=0o700)
+    result = subprocess.run(
+        [sys.executable, "-c", code, "--toggle", "--config-dir", str(tmp_path)],
+        env={
+            **os.environ,
+            "QT_QPA_PLATFORM": "invalid-control-test-plugin",
+            "XDG_RUNTIME_DIR": str(runtime),
+        },
+        capture_output=True,
+        text=True,
+        timeout=15,
+    )
+    assert result.returncode == 1
+    assert result.stderr.strip() == "InkEcho 控制命令未送达，请稍后重试。"
+    assert "private-test-error-detail" not in result.stderr
+    assert str(tmp_path) not in result.stderr

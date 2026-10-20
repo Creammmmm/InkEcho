@@ -1,25 +1,15 @@
 """Desktop entry point and same-user single-instance commands."""
 
 import argparse
-import asyncio
 import hashlib
-import json
 import os
 import sys
 from pathlib import Path
 
-from PySide6.QtCore import QLockFile, QObject, QStandardPaths, Signal
-from PySide6.QtGui import QFontDatabase, QIcon
+from PySide6.QtCore import QCoreApplication, QLockFile, QObject, QStandardPaths, Signal
 from PySide6.QtNetwork import QLocalServer, QLocalSocket
-from PySide6.QtWidgets import QApplication, QMessageBox
 
-from inkecho.app import Session
 from inkecho.config import ConfigError, ConfigStore
-from inkecho.integration import DesktopIntegration
-from inkecho.logging import DiagnosticLog
-from inkecho.runtime import ManagedQtEventLoop
-from inkecho.statistics import Statistics
-from inkecho.ui.window import MainWindow
 
 
 class Instance(QObject):
@@ -122,6 +112,15 @@ class StartupCommands:
 
 
 async def run(app, store, instance, args):
+    import asyncio
+    import json
+
+    from inkecho.app import Session
+    from inkecho.integration import DesktopIntegration
+    from inkecho.logging import DiagnosticLog
+    from inkecho.statistics import Statistics
+    from inkecho.ui.window import MainWindow
+
     session = Session(store)
     data_root = Path(args.data_dir) if args.data_dir else None
     stats = Statistics(data_root / "statistics.json" if data_root else None)
@@ -197,38 +196,54 @@ def main():
     parser.add_argument("--screenshot-dir", type=Path)
     parser.add_argument("--quit-after", type=float)
     args = parser.parse_args()
-    app = QApplication(["InkEcho"])
-    app.setApplicationName("InkEcho")
-    app.setOrganizationName("InkEcho")
-    app.setDesktopFileName("io.github.Creammmmm.InkEcho")
-    app.setWindowIcon(QIcon(str(Path(__file__).parent / "assets/inkecho.png")))
-    app.setQuitOnLastWindowClosed(False)
-    bundled_font = (
-        Path(os.environ.get("APPDIR", "/nonexistent"))
-        / "usr/share/fonts/NotoSansCJK-Regular.ttc"
-    )
-    if bundled_font.is_file():
-        QFontDatabase.addApplicationFont(str(bundled_font))
-    store = ConfigStore(args.config_dir)
-    instance = Instance(store.root)
     command = next(
         (name for name in ("toggle", "cancel", "quit") if getattr(args, name)), "show"
     )
+    control = command in {"toggle", "cancel", "quit"}
+    if control:
+        app = QCoreApplication(["InkEcho"])
+    else:
+        from PySide6.QtGui import QFontDatabase, QIcon
+        from PySide6.QtWidgets import QApplication
+
+        app = QApplication(["InkEcho"])
+        app.setDesktopFileName("io.github.Creammmmm.InkEcho")
+        app.setWindowIcon(QIcon(str(Path(__file__).parent / "assets/inkecho.png")))
+        app.setQuitOnLastWindowClosed(False)
+        bundled_font = (
+            Path(os.environ.get("APPDIR", "/nonexistent"))
+            / "usr/share/fonts/NotoSansCJK-Regular.ttc"
+        )
+        if bundled_font.is_file():
+            QFontDatabase.addApplicationFont(str(bundled_font))
+    app.setApplicationName("InkEcho")
+    app.setOrganizationName("InkEcho")
+    store = ConfigStore(args.config_dir)
+    instance = None
     try:
-        if not instance.acquire(
-            command, allow_start=command not in {"toggle", "cancel", "quit"}
-        ):
+        instance = Instance(store.root)
+        if not instance.acquire(command, allow_start=not control):
             return
+        import asyncio
+
+        from inkecho.runtime import ManagedQtEventLoop
+
         store.initialize()
         with ManagedQtEventLoop(app) as loop:
             asyncio.set_event_loop(loop)
             loop.run_until_complete(run(app, store, instance, args))
     except (ConfigError, OSError, RuntimeError) as error:
-        instance.close()
+        if instance is not None:
+            instance.close()
+        if control:
+            print("InkEcho 控制命令未送达，请稍后重试。", file=sys.stderr)
+            raise SystemExit(1) from None
         message = f"启动未完成，原始配置保留。\n配置目录：{store.root}\n\n{error}"
         if args.quit_after is not None or args.screenshot_dir:
             print(message, file=sys.stderr)
         else:
+            from PySide6.QtWidgets import QMessageBox
+
             QMessageBox.critical(None, "InkEcho 无法启动", message)
         raise SystemExit(1) from None
 
