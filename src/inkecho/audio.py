@@ -87,8 +87,8 @@ class Recorder(QObject):
         self.pcm.clear()
         self.source = QAudioSource(device, audio_format, self)
         source = self.source
-        # Request a short buffer; the audio backend may choose a larger size.
-        self.source.setBufferSize(sample_rate * 2 // 50)
+        # Keep the backend buffer: short fixed buffers can lose onset samples
+        # while the desktop event loop is briefly occupied.
         self.stream = self.source.start()
         if self.stream is None or self.source.error() != QtAudio.Error.NoError:
             self._fail("microphone_start_failed")

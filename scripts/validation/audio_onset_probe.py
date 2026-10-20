@@ -106,7 +106,10 @@ def run():
                     stderr=subprocess.DEVNULL,
                 )
                 # 100 ms marker at the very beginning, then 300 ms silence.
-                pcm = struct.pack("<1600h", *([8000, -8000] * 800)) + b"\0" * 9600
+                pcm = (
+                    struct.pack("<1600h", *(([8000] * 8 + [-8000] * 8) * 100))
+                    + b"\0" * 9600
+                )
                 player.stdin.write(pcm)
                 player.stdin.close()
 

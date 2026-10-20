@@ -289,7 +289,7 @@ def test_start_drains_first_buffer_without_waiting_for_next_notification(
     recorder.pcm_ready.connect(chunks.append)
     recorder.capturing.connect(lambda: started.append(True))
     assert recorder.start(streaming=streaming)
-    assert state.buffer == 640  # Request 20 ms at 16 kHz, not a latency guarantee.
+    assert state.buffer is None  # The device backend owns buffer sizing.
     assert started == [True]
     assert (chunks if streaming else [bytes(recorder.pcm)]) == [b"\x01\x00"]
     pieces.append(b"\x02\x00")
