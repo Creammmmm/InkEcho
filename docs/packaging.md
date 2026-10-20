@@ -291,3 +291,33 @@ package. Before GitHub publication the exact release commit must be reachable
 from main. Draft only the versioned AppImage and SHA-256 sidecar, verify remote
 download hashes, then publish formal/latest after review, preserving v0.3.0.
 No real keyring, cloud account, microphone or user-window control is involved.
+
+
+## Formal v0.6.0 guided configuration release
+
+Prepare on `codex/release-0.6.0` from accepted main
+`1c982b0dd471a03cf9f01f9ebbbc4742ed1bcca5`. The explicit release helper moves
+0.5.13 to 0.6.0 in all three metadata fields. This preparation changes only
+version metadata and release documentation; do not alter product behavior or
+rename the already accepted 0.5.12 artifact.
+
+Build a new versioned 0.6.0 AppImage from the exact clean release-source commit.
+Freeze the tracked source and validation materials, bind the inventory and SHA,
+and rerun the reviewed 0.5.12 actual-package gates on that same artifact in both
+Ubuntu systems: 26.04 native Wayland and XWayland, and 24.04 GNOME 46 Xorg.
+Include the actual AppRun startup path, five pages/new layout/API guidance,
+private configuration and desktop integration, local manual/VAD protocol cases,
+current-cursor mixed Unicode normal/cancel paths, overlay focus and cleanup,
+control lifecycle and virtual onset checks. Then independently verify private
+real FUSE startup. Preserve real configuration/credentials by hash observation
+only. Old acceptance is a method reference, not acceptance of the new hash.
+
+Do not update stable entries or publish before both actual OS results and FUSE
+are independently reviewed. Preserve existing versioned artifacts and releases.
+The report successor increments to 0.6.1 without rebuilding the 0.6.0 package.
+Before publication, merge the exact release source into main and verify ancestry;
+create a draft with only the versioned AppImage and matching SHA sidecar, verify
+both remote asset hashes, then publish formal/latest after review. Bind the tag
+to the exact 0.6.0 source commit, not the report successor. Keep GNOME 46 native
+Wayland, real cloud/physical microphone/physical shortcut and Unicode limitations
+explicit in the final notes. No candidate-only pass or old hash may be substituted.
