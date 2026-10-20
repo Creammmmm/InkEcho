@@ -18,6 +18,7 @@ class OverlayProxy(QObject):
         super().__init__(parent)
         self.store = store
         self.state, self.text, self.level = "idle", "", 0.0
+        self.capture_ready = False
         self.revision = 0
         self.state_revision = 0
         self.last_ack_revision = -1
@@ -67,6 +68,7 @@ class OverlayProxy(QObject):
                     "state": self.state,
                     "text": self.text,
                     "level": self.level,
+                    "capture_ready": self.capture_ready,
                     "settings": {
                         name: getattr(settings, name) for name in DISPLAY_FIELDS
                     },
@@ -102,6 +104,8 @@ class OverlayProxy(QObject):
         self.settings = self.store.load_settings()
         self.preview_token += 1
         self.state = state
+        if state != "recording":
+            self.capture_ready = False
         if state in {"idle", "recording", "succeeded", "failed", "cancelled"}:
             self.text = ""
         self.snapshot()
@@ -122,6 +126,12 @@ class OverlayProxy(QObject):
         ):
             return
         self.text = text[-240:] if isinstance(text, str) else ""
+        self.snapshot()
+
+    def set_capture_ready(self, ready):
+        if self.closed or self.broken:
+            return
+        self.capture_ready = bool(ready) and self.state == "recording"
         self.snapshot()
 
     def set_level(self, value):

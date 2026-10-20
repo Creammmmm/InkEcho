@@ -18,6 +18,7 @@ def frame(revision=1, state="recording", text="Synthetic preview"):
         "state": state,
         "text": text,
         "level": 0.5,
+        "capture_ready": False,
         "settings": {
             "overlay_style": "siri",
             "overlay_opacity": 0.8,
@@ -43,6 +44,7 @@ def test_decode_display_snapshot():
         ("level", float("nan")),
         ("level", True),
         ("level", 1.1),
+        ("capture_ready", 1),
     ],
 )
 def test_decode_rejects_invalid_fields(field, value):
@@ -85,6 +87,9 @@ class FakeOverlay:
 
     def set_text(self, text):
         self.text = text
+
+    def set_capture_ready(self, ready):
+        self.capture_ready = ready
 
     def set_level(self, level):
         self.level = level
@@ -409,3 +414,13 @@ def test_shutdown_stuck_owned_host_has_bounded_kill_cleanup(proxy, monkeypatch):
     assert proxy.pending is None and proxy.text == ""
     assert len(errors) == 1
     assert not proxy.timer.isActive()
+
+
+def test_capture_ready_is_display_only_and_clears_at_terminal(proxy):
+    proxy.show_state("recording")
+    proxy.set_capture_ready(True)
+    assert decode_frame(proxy.pending)["capture_ready"] is True
+    proxy.show_state("cancelled")
+    assert decode_frame(proxy.pending)["capture_ready"] is False
+    proxy.set_capture_ready(True)
+    assert decode_frame(proxy.pending)["capture_ready"] is False

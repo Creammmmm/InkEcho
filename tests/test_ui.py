@@ -1213,3 +1213,25 @@ def test_provider_page_persists_bundle_in_own_config_file(window):
         await asyncio.wait_for(scenario(), timeout=8)
 
     asyncio.run(bounded())
+
+
+@pytest.mark.parametrize("style", ["siri", "waveform", "pulse"])
+def test_wayland_displays_every_configured_overlay_style(window, qt_app, style):
+    window.wayland = True
+    window.notify = lambda *args, **kwargs: None
+    window.session.store.save_settings(
+        replace(window.session.store.load_settings(), overlay_style=style)
+    )
+    window.update_state("recording")
+    qt_app.processEvents()
+    assert window.overlay.isVisible()
+    assert window.overlay.style == style
+    assert "启动" in window.overlay.caption()
+    window.overlay.set_capture_ready(True)
+    assert window.overlay.caption() == "正在聆听"
+    window.session.preview.emit("Synthetic preview")
+    assert window.overlay.text == "Synthetic preview"
+    window.update_state("cancelled")
+    assert not window.overlay.capture_ready
+    assert not window.overlay.text
+    window.update_state("idle")

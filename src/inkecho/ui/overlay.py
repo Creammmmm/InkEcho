@@ -25,6 +25,7 @@ class Overlay(QWidget):
         self.setWindowTitle("InkEcho 状态提示")
         self.resize(176, 58)
         self.text = ""
+        self.capture_ready = False
         self.state, self.level, self.phase = "idle", 0.0, 0.0
         self.animation = QTimer(self)
         self.animation.setInterval(40)
@@ -40,20 +41,40 @@ class Overlay(QWidget):
     def set_level(self, value):
         self.level = value
 
+    def set_capture_ready(self, ready):
+        self.capture_ready = bool(ready) and self.state == "recording"
+        self.update()
+
+    def caption(self):
+        if self.state == "recording" and not self.capture_ready:
+            return "麦克风正在启动，请稍候"
+        return {
+            "recording": "正在聆听",
+            "transcribing": "正在识别",
+            "polishing": "正在润色",
+            "injecting": "正在输入",
+            "succeeded": "已完成",
+            "cancelled": "已取消",
+            "failed": "未完成，请查看概览",
+        }.get(self.state, "准备就绪")
+
     def set_text(self, text):
         # Preview stays in RAM, never enters statistics, logs or keyboard delivery.
         self.text = text[-240:] if isinstance(text, str) else ""
         self.update()
 
     def show_state(self, state):
+        self.state = state
+        if state != "recording":
+            self.capture_ready = False
         if state == "idle":
             self.set_text("")
             self.hide()
             return
-        self.state = state
         settings = self.store.load_settings()
         self.style = settings.overlay_style
-        self.resize(440, 112) if self.style == "siri" else self.resize(176, 58)
+        # Every style keeps space for readiness and live transcript previews.
+        self.resize(440, 112)
         self.setWindowOpacity(settings.overlay_opacity)
         screen = QApplication.primaryScreen().availableGeometry()
         x = screen.x() + (screen.width() - self.width()) // 2
@@ -71,6 +92,7 @@ class Overlay(QWidget):
 
     def preview(self):
         self.show_state("recording")
+        self.set_capture_ready(True)
         self.dismiss.start(2200)
 
     def hideEvent(self, event):
@@ -93,6 +115,15 @@ class Overlay(QWidget):
         painter.setPen(Qt.PenStyle.NoPen)
         painter.setBrush(QColor("#102a56"))
         painter.drawRoundedRect(self.rect(), 18, 18)
+        painter.setPen(QColor("#e7eefb"))
+        painter.drawText(
+            190,
+            10,
+            228,
+            92,
+            Qt.TextFlag.TextWordWrap | Qt.AlignmentFlag.AlignCenter,
+            self.text or self.caption(),
+        )
         painter.setPen(
             QPen(
                 QColor(colors.get(self.state, "#9fc0ff")),
@@ -153,16 +184,7 @@ class Overlay(QWidget):
             )
             painter.drawLine(int(x), int(29 - height / 2), int(x), int(29 + height / 2))
         painter.setPen(QColor("#e7eefb"))
-        captions = {
-            "recording": "正在聆听 · 支持实时预览的模型会显示文字",
-            "transcribing": "正在识别",
-            "polishing": "正在润色",
-            "injecting": "正在输入",
-            "succeeded": "已完成",
-            "cancelled": "已取消",
-            "failed": "未完成，请查看概览",
-        }
-        text = self.text or captions.get(self.state, "准备就绪")
+        text = self.text or self.caption()
         painter.drawText(
             22,
             52,

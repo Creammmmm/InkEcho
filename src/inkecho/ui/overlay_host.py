@@ -43,6 +43,7 @@ def decode_frame(line):
         "state",
         "text",
         "level",
+        "capture_ready",
         "settings",
     }:
         raise ValueError("invalid_display_frame")
@@ -52,6 +53,8 @@ def decode_frame(line):
         raise ValueError("invalid_display_state")
     if not isinstance(frame["text"], str) or len(frame["text"]) > 240:
         raise ValueError("invalid_display_text")
+    if type(frame["capture_ready"]) is not bool:
+        raise ValueError("invalid_capture_readiness")
     level = frame["level"]
     if (
         type(level) not in (int, float)
@@ -100,6 +103,7 @@ class DisplayChannel:
             self.overlay.set_text(frame["text"])
         else:
             self.overlay.set_text("")
+        self.overlay.set_capture_ready(frame["capture_ready"])
         self.overlay.set_level(frame["level"])
 
 

@@ -187,6 +187,8 @@ class MainWindow(QMainWindow):
         session.state_changed.connect(self.update_state)
         if hasattr(session, "preview"):
             session.preview.connect(self.overlay.set_text)
+        if hasattr(session, "capture_ready"):
+            session.capture_ready.connect(self.overlay.set_capture_ready)
         session.level.connect(self.overlay.set_level)
         session.finished.connect(self.record_statistics)
         session.performance.connect(self.record_performance)
@@ -298,10 +300,7 @@ class MainWindow(QMainWindow):
             self.duration_timer.stop()
         try:
             if self.wayland:
-                if self.session.store.load_settings().overlay_style == "siri":
-                    self.overlay.show_state(state)
-                else:
-                    self.overlay.hide()
+                self.overlay.show_state(state)
                 self.controls.hide()
                 detailed_failure = state == "failed"
                 if state != "idle" and not detailed_failure:
