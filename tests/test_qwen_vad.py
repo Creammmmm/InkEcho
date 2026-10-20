@@ -486,3 +486,43 @@ def test_production_session_selects_vad_and_gates_final_on_finish_and_consent(
             await session.close()
 
     asyncio.run(scenario())
+
+
+@pytest.mark.parametrize(
+    "endpoint",
+    [
+        "wss://dashscope.aliyuncs.com/api-ws/v1/realtime",
+        "wss://dashscope-intl.aliyuncs.com:443/api-ws/v1/realtime",
+        "wss://workspace.cn-beijing.maas.aliyuncs.com/api-ws/v1/realtime",
+        "wss://workspace.ap-southeast-1.maas.aliyuncs.com/api-ws/v1/realtime?model="
+        + MODEL,
+    ],
+)
+def test_saved_explicit_official_url_uses_vad_unless_manual_is_requested(endpoint):
+    configured = replace(
+        provider(),
+        parameters={"asr_protocol": "qwen_realtime", "realtime_url": endpoint},
+    )
+    assert RealtimeConfig.from_provider(configured).server_vad
+    manual = replace(
+        configured, parameters={**configured.parameters, "turn_detection": "manual"}
+    )
+    assert not RealtimeConfig.from_provider(manual).server_vad
+
+
+@pytest.mark.parametrize(
+    "endpoint",
+    [
+        "wss://fixture.invalid/api-ws/v1/realtime",
+        "wss://dashscope.aliyuncs.com/custom/realtime",
+        "wss://dashscope.aliyuncs.com:8443/api-ws/v1/realtime",
+        "wss://dashscope.aliyuncs.com.example.com/api-ws/v1/realtime",
+        "wss://127.0.0.1/api-ws/v1/realtime",
+    ],
+)
+def test_custom_or_nonstandard_endpoint_keeps_manual_compatibility(endpoint):
+    configured = replace(
+        provider(),
+        parameters={"asr_protocol": "qwen_realtime", "realtime_url": endpoint},
+    )
+    assert not RealtimeConfig.from_provider(configured).server_vad

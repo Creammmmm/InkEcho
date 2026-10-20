@@ -54,6 +54,33 @@ def _socket_url(endpoint: str, model: str) -> str:
         raise ProviderError("configuration") from None
 
 
+def _official_endpoint(endpoint: str) -> bool:
+    """Recognize standard Qwen realtime URLs, including saved explicit URLs."""
+    try:
+        url = urlsplit(endpoint)
+        host = url.hostname or ""
+        official = host in {
+            "dashscope.aliyuncs.com",
+            "dashscope-intl.aliyuncs.com",
+        } or bool(
+            re.fullmatch(
+                r"[A-Za-z0-9-]+\.(cn-beijing|ap-southeast-1)\.maas\.aliyuncs\.com",
+                host,
+            )
+        )
+        return bool(
+            official
+            and url.scheme == "wss"
+            and url.path == "/api-ws/v1/realtime"
+            and url.port in (None, 443)
+            and not url.username
+            and not url.password
+            and not url.fragment
+        )
+    except (ValueError, TypeError):
+        return False
+
+
 @dataclass(frozen=True)
 class RealtimeConfig:
     endpoint: str
@@ -90,7 +117,6 @@ class RealtimeConfig:
         if mode not in (None, "manual", "server_vad"):
             raise ProviderError("configuration")
         endpoint = provider.parameters.get("realtime_url")
-        derived = endpoint is None
         if endpoint is None:
             url = urlsplit(provider.base_url)
             host = url.hostname or ""
@@ -118,7 +144,8 @@ class RealtimeConfig:
             endpoint,
             provider.model.strip(),
             sample_rate,
-            server_vad=mode == "server_vad" or (mode is None and derived),
+            server_vad=mode == "server_vad"
+            or (mode is None and _official_endpoint(endpoint)),
         )
 
 

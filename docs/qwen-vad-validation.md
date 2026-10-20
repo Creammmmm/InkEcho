@@ -12,13 +12,19 @@ stopped. Alibaba's documented manual interaction sends transcription events afte
 the client's commit. Therefore a local test server that emits an early draft did
 not prove that the real manual-mode service would preview during recording.
 
-Official Qwen realtime endpoints derived from the platform configuration now use
+Official Qwen realtime endpoints, whether derived from platform configuration
+or explicitly saved in older configurations, now use
 server VAD with threshold 0.0 and 400 ms silence. This applies to existing normal
 Qwen configurations without entering credentials again. Speech turns can produce
 replaceable preview text and confirmed segment snapshots while recording.
 A 400 ms silence boundary is not a promise of per-character instantaneous output.
 
 Explicit custom `realtime_url` configurations retain manual mode for compatibility.
+The automatic VAD classification requires an allowlisted official hostname, WSS,
+standard `/api-ws/v1/realtime` path and port 443 (or omitted). Nonstandard paths
+or ports retain manual compatibility. An explicit manual-mode selection is never
+overridden. This prevents older explicit official URLs on another machine from
+silently using a different recognition path.
 The finite configuration field `turn_detection` accepts only `manual` or
 `server_vad`; it is not arbitrary request JSON. Standalone `RealtimeConfig(...)`
 continues to default to manual for existing explicit callers and fixtures.
@@ -147,3 +153,9 @@ updated to block credential loading, which genuinely belongs to preparation.
 All original preparation/cancel assertions remain unchanged; authorization-time
 recording and cancellation have their own tests. Historical frozen package
 evidence was not edited.
+
+A compatibility follow-up adds nine endpoint-selection regressions: explicit
+standard Beijing/international/workspace URLs use VAD, while an explicit manual
+selection, custom gateways, nonstandard ports/paths and lookalike hostnames keep
+manual mode. A metadata-only check of this machine confirmed that its current
+Qwen selection has no explicit realtime URL; no saved configuration was changed.
