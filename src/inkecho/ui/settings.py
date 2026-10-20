@@ -112,6 +112,7 @@ class RecordingPage(Page):
         self.limit.setSuffix(" 秒")
         self.limit.setValue(settings.recording_limit_seconds)
         self.shortcut = ShortcutCapture(settings.shortcut)
+        self.shortcut.clicked.connect(self.invalidate_shortcut_check)
         self.shortcut.captured.connect(lambda value: self.run(self.enable(value)))
         for title, widget in (
             ("输入设备", self.microphone),
@@ -163,11 +164,35 @@ class RecordingPage(Page):
             self.message.setText("无法保存，请检查配置文件或字段。")
             return False
 
+    def invalidate_shortcut_check(self):
+        self.shortcut_revision += 1
+
+    async def check_shortcut(self):
+        """Report startup health without registering or changing a shortcut."""
+        revision = self.shortcut_revision
+        async with self.shortcut_lock:
+            if revision != self.shortcut_revision:
+                return
+            shortcut = self.session.store.load_settings().shortcut
+            try:
+                message = await asyncio.to_thread(
+                    GnomeShortcuts().status, shortcut, self.command
+                )
+            except (ShortcutError, ValueError, OSError):
+                message = (
+                    "无法检查系统快捷键，请检查 GNOME 键盘设置权限；"
+                    "点击「全局快捷键」可重新按键录入。"
+                )
+        if revision == self.shortcut_revision and not self.shortcut.listening:
+            self.message.setText(message)
+
     async def enable(self, shortcut=None):
+        self.invalidate_shortcut_check()
         shortcut = shortcut or self.shortcut.text()
         old_shortcut = self.session.store.load_settings().shortcut
         try:
             async with self.shortcut_lock:
+                old_shortcut = self.session.store.load_settings().shortcut
                 await asyncio.to_thread(GnomeShortcuts().enable, shortcut, self.command)
                 try:
                     self.session.store.save_settings(

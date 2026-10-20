@@ -113,7 +113,7 @@ class GSettings:
 class GnomeShortcuts:
     """Constructing this adapter never changes desktop settings.
 
-    Call enable only after the user's explicit Save/Enable action. The application
+    Call enable only after the user's explicit shortcut capture action. The application
     must debounce its --toggle IPC command; GNOME owns global key recognition.
     """
 
@@ -126,11 +126,11 @@ class GnomeShortcuts:
         paths = self.settings.get(MEDIA, "custom-keybindings")
         binding = self.settings.get(self.schema, "binding")
         if OWN_PATH not in paths or not binding:
-            return "未启用：设置中填写快捷键不会自动注册，请点击「保存并启用快捷键」。"
+            return "未启用：请点击「全局快捷键」并按下组合键，录入后自动保存并启用。"
         if self.settings.get(self.schema, "name") != OWN_NAME:
             return "快捷键入口被其他绑定占用，请检查 GNOME 键盘设置。"
         if canonical(binding) != accelerator(shortcut):
-            return "系统快捷键与当前设置不同，请点击「保存并启用快捷键」同步。"
+            return "系统快捷键与当前设置不同，请点击「全局快捷键」重新按键录入。"
         try:
             registered = shlex.split(self.settings.get(self.schema, "command"))
         except ValueError:
@@ -140,7 +140,9 @@ class GnomeShortcuts:
             or not registered
             or not os.access(registered[0], os.X_OK)
         ):
-            return "快捷键启动路径已失效或指向其他版本，请重新保存并启用快捷键。"
+            return (
+                "快捷键启动路径已失效或指向其他版本，请点击「全局快捷键」重新按键录入。"
+            )
         return f"GNOME 已注册 {shortcut}。按下快捷键开始或结束录音。"
 
     def conflicts(self, binding: str) -> bool:
