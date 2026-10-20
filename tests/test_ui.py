@@ -10,9 +10,10 @@ import pytest
 from PySide6.QtCore import Qt
 from PySide6.QtTest import QTest
 from PySide6.QtWidgets import QPushButton
+from synthetic_providers import SYNTHETIC_PROVIDERS
 
 from inkecho.app import Session
-from inkecho.config import BUILTIN_PROMPT, DEFAULT_PROVIDERS, ConfigError, ConfigStore
+from inkecho.config import BUILTIN_PROMPT, ConfigError, ConfigStore
 from inkecho.core import Failure, State
 from inkecho.integration import DesktopIntegration
 from inkecho.logging import DiagnosticLog
@@ -30,7 +31,7 @@ def window(tmp_path, qt_app, monkeypatch):
     monkeypatch.setattr("inkecho.audio.Recorder.devices", lambda: [])
     store = ConfigStore(tmp_path / "config")
     store.initialize()
-    for provider in DEFAULT_PROVIDERS:
+    for provider in SYNTHETIC_PROVIDERS:
         store.save_provider(
             replace(
                 provider,

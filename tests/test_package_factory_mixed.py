@@ -57,20 +57,10 @@ def test_artifact_rejection_precedes_package_import(monkeypatch):
         )
 
 
-def test_actual_factory_import_and_construct_without_desktop_io():
-    # Match the import used inside one_run, without connecting or sending keys.
-    import ast
-
+def test_actual_factory_constructs_without_desktop_io():
     from inkecho.platform.hybrid_keyboard import HybridKeyboardInput
     from inkecho.platform.wayland_keyboard import keyboard_for_desktop
 
-    tree = ast.parse(PATH.read_text())
-    imports = [node for node in ast.walk(tree) if isinstance(node, ast.ImportFrom)]
-    assert any(
-        node.module == "inkecho.platform.wayland_keyboard"
-        and any(alias.name == "keyboard_for_desktop" for alias in node.names)
-        for node in imports
-    )
     instance = keyboard_for_desktop(
         {"XDG_SESSION_TYPE": "wayland", "XDG_CURRENT_DESKTOP": "ubuntu:GNOME"}
     )

@@ -1,6 +1,6 @@
 [project]
 name = "inkecho"
-version = "0.6.2"
+version = "0.6.3"
 description = "A privacy-conscious Linux voice input application"
 requires-python = ">=3.12"
 dependencies = [
@@ -27,4 +27,4 @@ select = ["E", "F", "I", "UP", "B"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-pythonpath = ["src", "scripts/feasibility"]
+pythonpath = ["src", "scripts/validation"]

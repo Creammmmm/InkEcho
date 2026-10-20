@@ -4,14 +4,9 @@ from dataclasses import replace
 from types import SimpleNamespace
 
 from PySide6.QtWidgets import QComboBox, QPushButton
+from synthetic_providers import SYNTHETIC_PROVIDERS
 
-from inkecho.config import (
-    BUILTIN_PROMPT,
-    BUILTIN_PROMPTS,
-    DEFAULT_PROVIDERS,
-    ConfigStore,
-    Prompt,
-)
+from inkecho.config import BUILTIN_PROMPT, BUILTIN_PROMPTS, ConfigStore, Prompt
 from inkecho.ui.prompts import PromptsPage
 from inkecho.ui.providers import ProviderPage
 
@@ -37,7 +32,7 @@ def test_model_actions_and_keyless_local_catalog(tmp_path, qt_app):
 
 def test_last_provider_can_be_deleted_without_deleting_credentials(tmp_path, qt_app):
     owner = session(tmp_path)
-    provider = replace(DEFAULT_PROVIDERS[0], model="qwen3-asr-flash")
+    provider = replace(SYNTHETIC_PROVIDERS[0], model="qwen3-asr-flash")
     owner.store.save_provider(provider)
     owner.store.save_settings(
         replace(owner.store.load_settings(), transcription_provider=provider.id)
@@ -80,7 +75,7 @@ def test_builtin_templates_explicitly_refuse_answering_transcript_requests():
 
 def test_saved_catalog_stays_with_service_and_filters_transcription(tmp_path, qt_app):
     owner = session(tmp_path)
-    provider = replace(DEFAULT_PROVIDERS[0], model="qwen3-asr-flash")
+    provider = replace(SYNTHETIC_PROVIDERS[0], model="qwen3-asr-flash")
     owner.store.save_provider(provider)
     owner.store.save_settings(
         replace(owner.store.load_settings(), transcription_provider=provider.id)

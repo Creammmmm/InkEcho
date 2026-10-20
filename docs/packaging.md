@@ -82,10 +82,12 @@ artifact=/absolute/path/to/InkEcho-VERSION-x86_64.AppImage
 
 Use a fresh temporary directory and an actual test display. Clear `PYTHONPATH`,
 `PYTHONHOME` and `LD_LIBRARY_PATH` inherited from development before launching.
-Inspect all nine screenshots for Chinese glyphs, clipping and page content.
+Inspect all five screenshots for Chinese glyphs, clipping and page content.
 Without FUSE, the runtime's native extract-and-run option works. The automated
 [desktop acceptance driver](../scripts/validation/desktop_app_probe.py) also
-checks single-instance show/cancel/quit commands against the actual artifact.
+checks single-instance show/quit commands, then verifies that cold toggle/cancel/quit
+commands do not restart the application. It preserves its disposable profile and
+original process exit evidence, including damaged-configuration checks.
 These startup checks do not prove voice transcription or target delivery.
 
 For an offline Ubuntu 24.04 userspace check with an existing Docker daemon:

@@ -73,9 +73,9 @@ def factory(tmp_path, monkeypatch):
     store = ConfigStore(tmp_path)
     store.initialize()
     # Legacy configured-user fixture; first-run now intentionally stays empty.
-    from inkecho.config import DEFAULT_PROVIDERS
+    from synthetic_providers import SYNTHETIC_PROVIDERS
 
-    for provider in DEFAULT_PROVIDERS:
+    for provider in SYNTHETIC_PROVIDERS:
         store.save_provider(provider)
     store.save_settings(
         replace(

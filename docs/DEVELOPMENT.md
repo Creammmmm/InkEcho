@@ -97,15 +97,17 @@ tracked hooks once in each checkout:
 git config core.hooksPath .githooks
 ```
 
-For each module change:
+For each module change (see the
+[current acceptance checklist](acceptance-checklist.md)):
 
-1. Implement the focused behavior and relevant tests. Run its tests while working.
+1. Implement the focused behavior and relevant tests. Run focused tests while working;
+   do not repeatedly run the complete suite for unchanged modules.
 2. Exercise the actual behavior locally. For desktop, audio, network and packaging
    work, record environment, commands or actions, observed results and limitations
    in a tracked Markdown report. Synthetic, mocked and headless checks must be
    labelled as such. Do not describe them as real microphone or desktop tests.
 3. Review the diff, including safety boundaries, and make a focused English commit.
-4. With a clean working tree, validate that exact commit:
+4. With a clean working tree, validate the final reviewed commit once:
 
    ```sh
    python scripts/validation/workflow.py run \
@@ -120,7 +122,9 @@ For each module change:
    pre-push hook requires a clean tree, the exact current HEAD, and its successful
    receipt with matching evidence. A new commit requires new validation.
 
-A final complete-suite run may cover several independently reviewed commits in
+Do not repeat a successful complete run without changed source, evidence or an
+unresolved failure. A final complete-suite run may cover several independently
+reviewed commits in
 one push only when every module has already passed its own local behavior checks
 and the referenced evidence report records each module's results. Generic pytest
 success alone does not satisfy the per-module functional gate.
@@ -193,6 +197,12 @@ GitHub Release API targets the exact 0.2.0 commit; ordinary branch pushes retain
 the existing pre-push hook, which still rejects tag pushes.
 
 ## Real-world acceptance gates
+
+Use the [current checklist](acceptance-checklist.md) to choose the required checks.
+One isolated run may cover several requirements; historical probes are not a
+standing execution list. Source-only changes do not automatically require a new
+package. Apply additional UI sizes/styles, physical devices and performance
+matrices when the changed behavior or a support claim requires them.
 
 - Phase 0 must have reproducible Chinese/Unicode injection evidence before full
   application development proceeds. Record unsupported sessions honestly.

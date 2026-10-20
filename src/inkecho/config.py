@@ -257,27 +257,6 @@ BUILTIN_PROMPTS = (
     ),
 )
 
-DEFAULT_PROVIDERS = (
-    Provider(
-        "qwen",
-        "Alibaba Qwen",
-        "transcription",
-        "qwen",
-        "https://dashscope.aliyuncs.com/compatible-mode/v1",
-        "",
-        "provider/qwen",
-    ),
-    Provider(
-        "deepseek",
-        "DeepSeek",
-        "polishing",
-        "openai",
-        "https://api.deepseek.com",
-        "",
-        "provider/deepseek",
-    ),
-)
-
 
 def atomic_write(path: Path, data: bytes) -> None:
     path.parent.mkdir(parents=True, exist_ok=True, mode=0o700)

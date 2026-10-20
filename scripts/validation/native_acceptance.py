@@ -66,7 +66,7 @@ def common_argv(args):
 
 
 async def run(args, report):
-    from performance_host_a13 import preflight
+    from desktop_preflight import preflight
 
     from inkecho.platform.keyboard import KeyboardError
     from inkecho.platform.wayland_keyboard import WaylandKeyboardInput

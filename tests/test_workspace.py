@@ -8,10 +8,11 @@ from pathlib import Path
 
 import pytest
 from PySide6.QtWidgets import QPushButton
+from synthetic_providers import SYNTHETIC_PROVIDERS
 
 from inkecho.app import Session
 from inkecho.billing import BalanceAmount, BalanceResult
-from inkecho.config import DEFAULT_PROVIDERS, ConfigStore
+from inkecho.config import ConfigStore
 from inkecho.integration import DesktopIntegration
 from inkecho.logging import DiagnosticLog
 from inkecho.security import CredentialError
@@ -112,7 +113,7 @@ def test_close_without_tray_keeps_recoverable_window(workspace, qt_app):
 
 
 def seed_models(workspace):
-    for provider in DEFAULT_PROVIDERS:
+    for provider in SYNTHETIC_PROVIDERS:
         workspace.session.store.save_provider(provider)
     workspace.session.store.save_settings(
         replace(

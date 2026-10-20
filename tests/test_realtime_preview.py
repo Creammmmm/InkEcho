@@ -4,9 +4,10 @@ import asyncio
 from dataclasses import replace
 
 import test_application_realtime as fixtures
+from synthetic_providers import SYNTHETIC_PROVIDERS
 from test_realtime import certificate  # noqa: F401
 
-from inkecho.config import DEFAULT_PROVIDERS, ConfigStore
+from inkecho.config import ConfigStore
 from inkecho.core import State
 from inkecho.realtime import QwenRealtimeSession, RealtimeConfig
 
@@ -63,7 +64,7 @@ def test_session_preview_cancellation_and_replaced_task(tmp_path):
     async def scenario():
         store = ConfigStore(tmp_path)
         store.initialize()
-        for provider in DEFAULT_PROVIDERS:
+        for provider in SYNTHETIC_PROVIDERS:
             store.save_provider(provider)
         create = fixtures.sessions.__wrapped__(tmp_path)
         session, connections = create(factory=PreviewConnection)
@@ -105,7 +106,7 @@ def test_unconfigured_recording_requests_saved_voice_model(tmp_path):
     async def scenario():
         store = ConfigStore(tmp_path)
         store.initialize()
-        for provider in DEFAULT_PROVIDERS:
+        for provider in SYNTHETIC_PROVIDERS:
             store.save_provider(provider)
         create = fixtures.sessions.__wrapped__(tmp_path)
         session, _ = create()
@@ -202,7 +203,7 @@ def test_http_recording_emits_no_synthetic_live_text(tmp_path):
     async def scenario():
         store = ConfigStore(tmp_path)
         store.initialize()
-        provider = next(item for item in DEFAULT_PROVIDERS if item.id == "qwen")
+        provider = next(item for item in SYNTHETIC_PROVIDERS if item.id == "qwen")
         store.save_provider(replace(provider, model="qwen3-asr-flash", parameters={}))
         store.save_settings(
             replace(

@@ -84,7 +84,7 @@ async def until(predicate, seconds=10):
 
 
 def desktop(scope):
-    from performance_host_a13 import preflight
+    from desktop_preflight import preflight
 
     if scope == "ubuntu24-xorg":
         import subprocess

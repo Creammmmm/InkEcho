@@ -5,10 +5,11 @@ from dataclasses import replace
 
 import pytest
 from PySide6.QtWidgets import QPushButton
+from synthetic_providers import SYNTHETIC_PROVIDERS
 
 from inkecho.app import Session
 from inkecho.billing import BalanceResult
-from inkecho.config import DEFAULT_PROVIDERS, ConfigStore
+from inkecho.config import ConfigStore
 from inkecho.statistics import Statistics
 from inkecho.ui.dashboard import HomePage
 
@@ -17,7 +18,7 @@ from inkecho.ui.dashboard import HomePage
 def home(tmp_path, qt_app):
     store = ConfigStore(tmp_path / "config")
     store.initialize()
-    for provider in DEFAULT_PROVIDERS:
+    for provider in SYNTHETIC_PROVIDERS:
         store.save_provider(provider)
     store.save_settings(
         replace(

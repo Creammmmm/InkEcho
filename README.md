@@ -108,6 +108,7 @@ uv run pytest -q
 
 - [用户指南](docs/user-guide.md) · [故障排查](docs/troubleshooting.md)
 - [兼容性矩阵](docs/compatibility-matrix.md) · [实际验收清单](docs/acceptance-checklist.md)
+- [检查项审计](docs/check-audit.md) · [维护清理验证](docs/maintenance-cleanup-validation.md) · [退役工具索引](docs/retired-validation-tools.md)
 - [架构](docs/architecture.md) · [供应商](docs/providers.md) · [配置与凭据](docs/configuration.md)
 - [项目规范](docs/PROJECT_SPEC.md) · [Agent入口](AGENTS.md)
 

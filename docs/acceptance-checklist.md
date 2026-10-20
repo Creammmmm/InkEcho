@@ -1,132 +1,76 @@
-# Acceptance checklist
+# Current acceptance checklist
 
-Reviewed against all sections of [PROJECT_SPEC](PROJECT_SPEC.md), 2026-10-12.
-This is a development preview, not a claim that the complete desktop compatibility
-matrix or the universal voice-input product has passed acceptance.
+当前验收只执行与交付有关的必要检查；同一份结果可以覆盖多个要求。
+每次打包仍须由同一 SHA 的包在 Ubuntu 24.04 和 26.04 分别完成实际验收。
 
-## Implemented and locally tested
+Use [PROJECT_SPEC](PROJECT_SPEC.md), [DEVELOPMENT](DEVELOPMENT.md) and
+[packaging](packaging.md) for binding requirements. The
+[2026-10-12 checklist](acceptance-checklist-2026-10-12.md) preserves historical
+results, including superseded target capture, AT-SPI and keyring behavior; it is
+not a current execution plan.
 
-| Requirement | Evidence and scope |
+## Source changes
+
+During development run focused tests and the local behavior checks relevant to
+the change. Before pushing, run the complete clean-HEAD workflow once for the
+reviewed final source, with evidence for each changed module. Do not repeat the
+full suite after an unchanged successful run. New commits require new receipts.
+Source changes alone do not require building an AppImage.
+
+Keep regressions for explicit cancellation, stale/replaced tasks and late replies;
+current-cursor delivery; cleanup of held keys and mappings; bounded protocol
+handling; credential isolation and atomic owner-only files; and actual startup/IPC.
+Neither focus changes nor an uneditable initial location cancel recording.
+Never substitute clipboard or system input methods, replay uncertain input, or
+hide failing tests with selection/skip changes.
+
+## Every package or release: four required categories
+
+Record **the same version and SHA-256 AppImage** on actual Ubuntu 24.04 and 26.04.
+Until both systems pass and the root agent reviews the evidence, it remains a
+candidate: no stable replacement or publication. One run may satisfy several
+requirements; do not restart probes solely to populate separate report sections.
+
+| Category | Required evidence for each artifact |
 |---|---|
-| Single active task, unique IDs, cancellation and stale reply rejection (§21) | `test_core.py`, `test_application.py`, `test_desktop_acceptance.py`; real local-service voice probe below |
-| Capture target before slow credential lookup (§12,21) | Focus change during pending key lookup cannot retarget; qasync + real credential worker dispatch tested with disposable injected backend |
-| No clipboard and Unicode input (§12) | Actual focused GTK AT-SPI insertion, mixed Chinese/Latin/Greek/emoji/newline, cancellation and away-back focus test; X11 restricted controls only |
-| Microphone selection, RAM audio, limits and cleanup (§5) | Actual host microphone repeated capture, cancellation/restart/timeout; real workflow sends valid mono 16 kHz WAV to localhost only |
-| Qwen transcription and separate polishing adapter (§6–8) | Actual TLS-verified localhost HTTP protocol tests, response/error/timeout/empty/cancel cases; real vendor recognition remains pending |
-| Optional polishing and fallback (§7) | Successful pipeline plus enabled/disabled failure fallback regressions; usage fields preserved or marked unknown |
-| Independent providers, models and capability tests (§8) | Separate records and role-specific UI; model discovery distinct from test request; manual model IDs accepted |
-| Versioned atomic configuration and migration (§9,20) | Defaults, separate JSON, v0 backups, corrupted/future files preserved, path validation, owner-only permissions tested |
-| Credentials (§10) | Explicit Secret Service backend, no plaintext fallback; actual disposable item create/read/update/delete tested; no user secrets accessed |
-| Prompt CRUD and built-in protection (§11) | Selection, create/copy/edit/delete and built-in copy behavior; UI preview/test request controls |
-| Main window and settings (§14) | Nine real pages rendered in isolated X11 at 1120×850; Chinese text visually reviewed; UI interaction regressions recorded separately |
-| Status overlay (§13) | Production overlay keeps GTK target focused during actual recording/ASR/polishing/injection flow; waveform/pulse, position, opacity and duration configuration |
-| Statistics and diagnostics (§15,17) | Numeric daily aggregates, Unicode codepoint count, explicit unknown tokens, corrupted data preservation, explicit clear and bounded diagnostic logs |
-| Lifecycle and IPC (§16) | Separate processes route show/toggle/cancel/quit to one instance; primary exits 0; no-tray settings and stop/cancel alternative implemented |
-| Shortcut settings (§4) | GNOME GSettings temporary F13/F14/ordinary-combo registration/readback/restore; conflict and quoting tests; activation caveat below |
-| Desktop integration (§19) | Explicit install/repair/remove, path-change detection, icons and opt-in autostart; ownership checks preserve unrelated files/config/credentials |
-| Cross-platform boundaries (§3,23) | Pure task controller/config/provider logic separated from Linux accessibility/hotkey/integration adapters; no Windows/macOS support claim |
+| 1. Identity and integrity | Frozen product commit/version, artifact SHA-256, packaged inventory and application source/origin binding. Preserve existing stable files and user configuration. |
+| 2. Packaged entry and UI | Actual bundled entry with a private profile: show, normal quit and owned-process exit; after exit, cold toggle/cancel/quit must not revive it. Never toggle the live default instance to test lifecycle; recording belongs only to a local fixture that explicitly requires it. Open the five current pages (overview, model configuration, polishing styles, settings, help), confirm version and readable navigation. Exercise changed UI behavior. |
+| 3. Audio and provider pipeline | Isolated configuration and disposable credentials; representative complete local HTTP/WebSocket/SSE pipelines, including Qwen realtime manual/VAD where claimed; streaming/final-success ordering, failure/cancel/stale handling and resource cleanup. Expand the protocol matrix for new or changed adapters; do not repeat every vendor adapter on each package. Keep parameter-safety coverage in the full unit suite. Local fixtures establish protocol behavior, not real vendor accuracy or account access. |
+| 4. Desktop delivery and cleanup | Actual declared session/backend, mixed Unicode at the output-time cursor, focus switching and partial cancellation; exact owned-target results, balanced held-key release, restored mapping and cleanup, overlay/control focus behavior. Record native Wayland, XWayland and Xorg separately. |
 
-## Actual integrated voice workflow
+For a formal AppImage, verify at least one actual FUSE mount and bind its runtime
+identity to the same inventory. A guest using extraction must state that path and
+its FUSE limitation; multiple mount rounds on every system are not required.
+A changed image invalidates previous artifact-hash acceptances on both systems.
+Container/headless/source runs do not replace actual package/session acceptance.
+GNOME 46 Xorg evidence does not establish native Wayland support.
 
-`scripts/validation/voice_workflow_probe.py` runs the production `Session`, real Qt
-`Recorder`, real `ProviderClient`, real `AccessibilityInput` and production `Overlay`
-on a private Xvfb display. A separate GTK process is the target; a temporary trusted
-HTTPS server returns a fixed Unicode phrase. Credentials are a disposable injected
-fixture, not a real provider account. TLS verification is enabled.
+## Extend only for a changed feature or a support claim
 
-Source run on Ubuntu 26.04.1, Xvfb `:91`, Qt 6.12.0 passed:
+- UI layout/style changes: inspect relevant dimensions, long content, expanded
+  details and affected overlay styles. Metadata-only packages still open all five
+  pages but need not repeat every UI interaction or size/style combination.
+- Audio/hotkey/integration changes: test the affected physical microphone,
+  activation, permissions, desktop entry or autostart behavior in the relevant
+  environment. Synthetic tone and injected adapters must be labelled accordingly.
+- Provider changes or real-service claims: distinguish local protocol fixtures
+  from explicitly authorized live authentication/model/recognition checks. Never
+  read real credentials merely to complete a checklist.
+- Input/transport/performance changes: exercise the affected backends and
+  cancellation boundaries; measure the relevant latency with a defined sample
+  and report limitations. Old comparative experiments are not standing gates.
 
-- Exact `你好 InkEcho，世界！ café Ω 😀\n第二行。` delivered to the target.
-- Three real microphone payloads: 19786, 19786 and 19104 WAV bytes; no audio files.
-- One successful transcription-plus-polishing task; two cancelled tasks.
-- A delayed reply after cancellation and a delayed reply after focus-away-and-back
-  both left the target unchanged. The overlay preserved target focus.
-- Statistics: 3 recordings, 1 success, 2 cancellations, 28 delivered codepoints,
-  3 transcription calls, 1 polishing call, reported tokens 5/7/12.
-- Recorder resources and PCM buffers released after each operation.
+List untested physical devices, real cloud requests and session scopes explicitly;
+do not turn missing evidence into a compatibility claim. Reuse one isolated run
+when it covers the needed contracts; do not duplicate all historical probes.
 
-Evidence: `build/voice-source-acceptance.json` (generated locally, not a release
-artifact). This proves an integrated microphone/network/desktop path with a fixed
-local reply; it does **not** measure real cloud recognition or polishing quality.
+## Evidence and review
 
-```sh
-dbus-run-session -- env DISPLAY=:91 QT_QPA_PLATFORM=xcb \
-  XDG_SESSION_TYPE=x11 PYTHONPATH=src \
-  .venv/bin/python scripts/validation/voice_workflow_probe.py \
-  --output build/voice-source-acceptance.json
-```
-
-Use an already-running private Xvfb display, never a user desktop. The machine run
-used extracted xdotool via `--xdotool /tmp/inkecho-x11/usr/bin/xdotool` and its library
-directory in `LD_LIBRARY_PATH`. System Python needs GTK 3 introspection; openssl is
-used only to generate the disposable local TLS certificate. The test reads the
-actual default microphone for three short recordings; audio stays in RAM and is
-sent only to the temporary localhost server.
-
-## Desktop launch and process acceptance
-
-`scripts/validation/desktop_app_probe.py --output NEW_DIRECTORY` starts the app with
-private temporary config/data/cache/runtime directories, renders all nine pages,
-uses secondary processes for `--show`, `--toggle`, `--cancel`, `--quit`, and confirms
-clean primary shutdown. It then deliberately damages its own disposable config and
-checks exit 1 with the exact bytes preserved. It never edits user configuration.
-Source run passed; evidence is `build/ui-acceptance-source-final/result.json`.
-The final AppImage also passed the same complete driver on Xvfb `:91`: all nine
-pages rendered at 1120×850, secondary commands succeeded, primary exit was 0,
-and damaged configuration was preserved with exit 1. All nine screenshots were
-visually inspected for legible Chinese, navigation and form layout; long pages
-have scrollbars. Evidence: `build/ui-acceptance-appimage-final/result.json`.
-
-Tested artifact: `dist/InkEcho-0.1.0-alpha-x86_64.AppImage`, 107547128 bytes, SHA-256
-`cb35d203024538a4ee3d55c6ccb8619059ce9f4bfda387fd1b92e2291eec11a4`.
-The README screenshot is an unmodified copy of its actual home page.
-
-The independent root review repeated final AppImage lifecycle checks with
-`PYTHONPATH`, `PYTHONHOME` and `LD_LIBRARY_PATH` cleared; all passed
-(`build/ui-root-final-appimage/result.json`). It then extracted that exact image,
-verified all 31 application source files byte-for-byte against the checkout and
-all 3883 inventory regular-file hashes, and ran the voice workflow using the
-**bundled Python and packages** on private Xvfb `:92`. Only xdotool's own helper
-library was supplied externally; application libraries came from the bundle.
-
-Final bundled-runtime voice result (`build/voice-root-final-appimage.json`): exact
-28-codepoint Unicode delivery, overlay focus preserved, cancelled and focus-away-
-and-back late replies unchanged, 3 tasks / 1 success / 2 cancellations, reported
-tokens 5/7/12, real microphone WAV payloads 17738 / 18422 / 18422 bytes, no audio
-files or clipboard access. This closes packaged pipeline acceptance for the tested
-fixture scope. Ubuntu 24.04 nonroot/read-only/network-disabled userspace startup
-also passed with all nine pages; real desktop compatibility remains pending.
-
-Add `--appimage /absolute/path/to/InkEcho.AppImage` to validate the packaged entry
-point and capture its SHA-256. The report must refer to that tested artifact, not
-an earlier build. Generated screenshots need human visual review; PNG dimensions
-alone do not establish correct rendering.
-
-```sh
-.venv/bin/pytest -q tests/test_desktop_acceptance.py
-```
-
-Five regression cases pass, including the actual qasync event loop and threaded
-credential lookup with a disposable backend. Run thread/socket integration tests
-in a normal authorized local environment: the development sandbox rejects asyncio
-self-pipe sends with `EPERM`, which can prevent worker completion wakeups. No
-application workaround disables security controls for this test restriction.
-
-## Pending or deliberately unavailable
-
-| Requirement | Remaining acceptance work |
-|---|---|
-| Native Wayland input (§12,24) | Disabled in the application; safe focused browser/terminal delivery not demonstrated. Native editor transport alone is insufficient |
-| Arbitrary X11 targets (§12) | Only compatible editable AT-SPI controls; Chrome/VTE tested versions lack the required interface. Diagnostic XTest success is not a safe application backend |
-| Real Ubuntu 24.04 and 26.04 desktop matrix (§24) | Xvfb is not a full X11 desktop. Ubuntu 24.04 container loading is not a Wayland/X11 desktop test |
-| Native global key activation and physical F13/F14 (§4) | Portal binding timed out; GSettings readback succeeded but the native session later locked. No unlock or consent bypass; physical activation remains unverified |
-| Native overlay stacking/transparency/click-through (§13) | Xvfb focus checks pass; compositor behavior and full native Wayland behavior remain unverified |
-| Real vendor account requests (§6–8,28) | No user API credentials used; actual Qwen/DeepSeek authentication, model availability, recognition accuracy and account quotas not accepted by local fixtures |
-| Clean desktop deployment (§18,27) | Final packaged UI/IPC, bundled-runtime voice and Ubuntu 24.04 userspace startup passed. Additional clean real desktops must still verify host audio, accessibility and desktop services |
-| Cross-platform support (§2,23) | Windows/macOS adapters are future work |
-
-The native desktop was locked during later tests. Tests did not unlock it, alter
-permission stores, inject into user documents, read the clipboard, or treat a
-missing native test as a pass. See [feasibility](feasibility-report.md),
-[compatibility matrix](compatibility-matrix.md), [packaging](packaging.md), and
-[application validation](application-validation.md) for detailed evidence.
+Each report records source/artifact identity, OS and desktop/session/backend,
+commands or actions, isolated fixtures, original process completion status,
+observed results and unresolved limitations. Screenshots require visual review;
+file counts or dimensions alone are insufficient. Keep generated raw evidence in
+its reported location and summarize the actual scope in tracked documentation.
+Never log credentials, recorded audio, transcript contents from real users or
+account balances. Review the evidence, then run the existing full clean-HEAD
+workflow for the final source/report commit; keep hooks unchanged.

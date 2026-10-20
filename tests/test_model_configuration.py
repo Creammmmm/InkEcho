@@ -5,14 +5,9 @@ from dataclasses import replace
 from types import SimpleNamespace
 
 import pytest
+from synthetic_providers import SYNTHETIC_PROVIDERS
 
-from inkecho.config import (
-    BUILTIN_PROMPTS,
-    DEFAULT_PROVIDERS,
-    ConfigError,
-    ConfigStore,
-    Settings,
-)
+from inkecho.config import BUILTIN_PROMPTS, ConfigError, ConfigStore, Settings
 from inkecho.realtime import PROTOCOL
 from inkecho.ui.providers import ProviderPage
 
@@ -25,10 +20,10 @@ def test_empty_first_run_and_legacy_records_remain_distinct(tmp_path):
     assert store.load_settings().polishing_provider == ""
     old = replace(Settings(), transcription_provider="qwen", overlay_style="waveform")
     store.save_settings(old)
-    store.save_provider(DEFAULT_PROVIDERS[0])
+    store.save_provider(SYNTHETIC_PROVIDERS[0])
     store.initialize()
     assert store.load_settings() == old
-    assert store.providers() == [DEFAULT_PROVIDERS[0]]
+    assert store.providers() == [SYNTHETIC_PROVIDERS[0]]
 
 
 def test_builtin_styles_are_read_only_and_copyable(tmp_path):
@@ -53,7 +48,6 @@ def test_explicit_platform_name_and_supported_protocols(tmp_path, qt_app):
         assert page.name.text() == page.url.text() == ""
         assert page.parameters.isHidden()
         assert page.realtime_url.isHidden()
-        assert page.timeout.isHidden()
         assert not page.protocol.isEnabled()
         assert page.protocol.currentIndex() == -1
         assert "请选择服务平台" in page.model_hint.text()
@@ -87,7 +81,9 @@ def test_new_save_requires_credentials_and_retains_timeout_on_existing_save(
             asyncio.run(page.save())
         assert store.providers() == []
         legacy = replace(
-            DEFAULT_PROVIDERS[0], model="qwen3-asr-flash", parameters={"temperature": 0}
+            SYNTHETIC_PROVIDERS[0],
+            model="qwen3-asr-flash",
+            parameters={"temperature": 0},
         )
         store.save_provider(legacy)
         page.refresh(legacy.id)

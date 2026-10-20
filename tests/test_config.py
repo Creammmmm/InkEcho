@@ -3,11 +3,11 @@ import stat
 from dataclasses import asdict, replace
 
 import pytest
+from synthetic_providers import SYNTHETIC_PROVIDERS
 
 from inkecho.config import (
     BUILTIN_PROMPT,
     BUILTIN_PROMPTS,
-    DEFAULT_PROVIDERS,
     ConfigError,
     ConfigStore,
     Prompt,
@@ -64,7 +64,7 @@ def test_streaming_setting_requires_boolean(value):
 def test_provider_roundtrip_and_delete(tmp_path):
     store = ConfigStore(tmp_path)
     provider = replace(
-        DEFAULT_PROVIDERS[0], model="user-selected", parameters={"temperature": 0}
+        SYNTHETIC_PROVIDERS[0], model="user-selected", parameters={"temperature": 0}
     )
     store.save_provider(provider)
     assert store.load_provider(provider.id) == provider
@@ -128,7 +128,7 @@ def test_invalid_migrated_provider_id_does_not_change_original(tmp_path):
     directory = tmp_path / "providers"
     directory.mkdir()
     path = directory / "wrong.json"
-    original = json.dumps(asdict(DEFAULT_PROVIDERS[0])).encode()
+    original = json.dumps(asdict(SYNTHETIC_PROVIDERS[0])).encode()
     path.write_bytes(original)
     with pytest.raises(ConfigError, match="filename"):
         ConfigStore(tmp_path).load_provider("wrong")
@@ -169,11 +169,11 @@ def test_atomic_replace_failure_leaves_original(tmp_path, monkeypatch):
 )
 def test_provider_rejects_plain_credentials_and_invalid_json(parameters):
     with pytest.raises(ConfigError):
-        replace(DEFAULT_PROVIDERS[0], parameters=parameters)
+        replace(SYNTHETIC_PROVIDERS[0], parameters=parameters)
 
 
 def test_mutated_provider_parameters_are_revalidated(tmp_path):
-    provider = replace(DEFAULT_PROVIDERS[0], parameters={})
+    provider = replace(SYNTHETIC_PROVIDERS[0], parameters={})
     provider.parameters["api_key"] = "test-only-secret"
     with pytest.raises(ConfigError):
         ConfigStore(tmp_path).save_provider(provider)
@@ -196,7 +196,7 @@ def test_mutated_provider_parameters_are_revalidated(tmp_path):
 )
 def test_provider_rejects_unsafe_base_urls(url):
     with pytest.raises(ConfigError):
-        replace(DEFAULT_PROVIDERS[0], base_url=url)
+        replace(SYNTHETIC_PROVIDERS[0], base_url=url)
 
 
 @pytest.mark.parametrize(
@@ -209,7 +209,7 @@ def test_provider_rejects_unsafe_base_urls(url):
 )
 def test_loopback_services_also_require_https(url):
     with pytest.raises(ConfigError):
-        replace(DEFAULT_PROVIDERS[0], base_url=url)
+        replace(SYNTHETIC_PROVIDERS[0], base_url=url)
 
 
 @pytest.mark.parametrize("rate", [8000, 22050, 44100, True])
