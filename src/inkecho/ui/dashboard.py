@@ -1,53 +1,52 @@
-"""Numeric-only overview with explicit model selection and balance refresh."""
+"""Daily usage and selected models with bounded automatic account balances."""
 
 import asyncio
+import time
 from dataclasses import replace
 from html import escape
 
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QTimer
 from PySide6.QtGui import QColor, QPainter
-from PySide6.QtWidgets import (
-    QCheckBox,
-    QComboBox,
-    QFormLayout,
-    QHBoxLayout,
-    QWidget,
-)
+from PySide6.QtWidgets import QCheckBox, QComboBox, QHBoxLayout, QSizePolicy, QWidget
 
-from inkecho.billing import BalanceResult, console_for_provider
+from inkecho.billing import BalanceResult, balance_platform, console_for_provider
 from inkecho.security import CredentialError
-from inkecho.ui.widgets import Page, actions, button, card, label
+from inkecho.ui.widgets import Page, card, label
 
 
 class WeekChart(QWidget):
     def __init__(self):
         super().__init__()
         self.days = []
-        self.setMinimumHeight(140)
-        self.setAccessibleName("最近七天每日录音次数")
+        self.setMinimumSize(240, 230)
+        self.setAccessibleName("最近七天每日发送字符")
 
     def set_days(self, days):
         self.days = days
         self.setToolTip(
-            "\n".join(f"{day}：{values['recordings']} 次" for day, values in days)
+            "\n".join(f"{day}：{values['characters']:,} 字符" for day, values in days)
         )
         self.update()
 
     def paintEvent(self, event):
         painter = QPainter(self)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
-        maximum = max([values["recordings"] for _, values in self.days] + [1])
+        maximum = max([values["characters"] for _, values in self.days] + [1])
         width = self.width() / 7
+        tick_font = painter.font()
+        tick_font.setPixelSize(12)
+        painter.setFont(tick_font)
         for index, (day, values) in enumerate(self.days):
-            count = values["recordings"]
+            count = values["characters"]
             x = int(index * width)
-            height = int((self.height() - 58) * count / maximum)
+            height = int((self.height() - 62) * count / maximum)
+            bar_width = max(8, int(width * 0.48))
             painter.setPen(Qt.PenStyle.NoPen)
             painter.setBrush(QColor("#3971ca" if count else "#e5ecf8"))
             painter.drawRoundedRect(
-                x + 18,
+                x + int((width - bar_width) / 2),
                 self.height() - 30 - max(height, 3),
-                int(width - 36),
+                bar_width,
                 max(height, 3),
                 5,
                 5,
@@ -59,7 +58,7 @@ class WeekChart(QWidget):
                 int(width),
                 24,
                 Qt.AlignmentFlag.AlignCenter,
-                day[5:],
+                day[8:] + "日",
             )
             painter.drawText(
                 x,
@@ -67,84 +66,161 @@ class WeekChart(QWidget):
                 int(width),
                 24,
                 Qt.AlignmentFlag.AlignCenter,
-                str(count),
+                painter.fontMetrics().elidedText(
+                    str(count), Qt.TextElideMode.ElideRight, int(width) - 4
+                ),
             )
 
 
 class HomePage(Page):
+    BALANCE_CACHE_SECONDS = 300
+
     def __init__(self, session, stats):
         super().__init__("概览", "把声音变成文字，让表达自然发生。")
         self.session, self.stats = session, stats
         self.revision = 0
         self.balance_signature = None
-        metrics, layout = card()
-        self.summary = label("")
-        self.summary.hide()
-        layout.addWidget(self.summary)
+        self.balance_updated = None
+        self.balance_task = None
+        self.active = False
+        self.balance_timer = QTimer(self)
+        self.balance_timer.setInterval(self.BALANCE_CACHE_SECONDS * 1000)
+        self.balance_timer.timeout.connect(self.schedule_balance)
+        self.balance_schedule = QTimer(self)
+        self.balance_schedule.setSingleShot(True)
+        self.balance_schedule.timeout.connect(self.start_balance)
         metrics_row = QHBoxLayout()
+        metrics_row.setSpacing(16)
         self.metrics = {}
         for key, caption in (
-            ("characters", "今日已发送字符"),
+            ("characters", "今日发送字符"),
             ("audio_seconds", "今日录音时长"),
             ("recordings", "今日使用次数"),
         ):
-            tile, tile_body = card()
-            tile_body.setContentsMargins(14, 10, 14, 10)
+            tile, body = card()
             value = label("0")
-            value.setStyleSheet("font-size:25px; font-weight:600; color:#245ab1")
-            tile_body.addWidget(value)
-            tile_body.addWidget(label(caption, muted=True))
+            value.setStyleSheet("font-size:28px; font-weight:600; color:#245ab1")
+            body.addWidget(label(caption, muted=True))
+            body.addWidget(value)
             self.metrics[key] = value
-            metrics_row.addWidget(tile)
-        layout.addLayout(metrics_row)
-        self.outcomes = label("", muted=True)
-        layout.addWidget(self.outcomes)
-        layout.addWidget(label("最近七天 · 每日录音次数", muted=True))
+            metrics_row.addWidget(tile, 1)
+        self.body.addLayout(metrics_row)
+        columns = QHBoxLayout()
+        columns.setSpacing(16)
+        chart_card, chart_body = card()
+        chart_body.addWidget(label("最近七天 · 每日字符"))
         self.chart = WeekChart()
-        layout.addWidget(self.chart)
-        self.body.addWidget(metrics)
-        models, layout = card()
-        form = QFormLayout()
+        chart_body.addWidget(self.chart, 1)
+        self.outcomes = label("", muted=True)
+        chart_body.addWidget(self.outcomes)
+        columns.addWidget(chart_card, 1)
+        models, model_body = card()
+        model_body.addWidget(label("当前模型"))
         self.transcription = QComboBox()
         self.polishing = QComboBox()
         self.enabled = QCheckBox("使用云端润色")
-        form.addRow("语音模型配置", self.transcription)
-        form.addRow(self.enabled)
-        form.addRow("润色模型配置", self.polishing)
-        layout.addLayout(form)
+        self.balance_labels = {}
+        self.console_labels = {}
+        for role, title, selector in (
+            ("transcription", "语音模型", self.transcription),
+            ("polishing", "润色模型", self.polishing),
+        ):
+            if role == "polishing":
+                model_body.addWidget(self.enabled)
+            heading = QHBoxLayout()
+            heading.addWidget(label(title))
+            status = label("余额未知", muted=True)
+            status.setMinimumWidth(0)
+            status.setSizePolicy(
+                QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Preferred
+            )
+            status.setTextFormat(Qt.TextFormat.PlainText)
+            status.setAlignment(
+                Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter
+            )
+            heading.addWidget(status, 1)
+            model_body.addLayout(heading)
+            selector.setMinimumWidth(0)
+            selector.setSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Fixed)
+            selector.setSizeAdjustPolicy(
+                QComboBox.SizeAdjustPolicy.AdjustToMinimumContentsLengthWithIcon
+            )
+            model_body.addWidget(selector)
+            console = label("", muted=True)
+            console.setMinimumWidth(0)
+            console.setSizePolicy(
+                QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Preferred
+            )
+            console.setOpenExternalLinks(True)
+            model_body.addWidget(console)
+            self.balance_labels[role] = status
+            self.console_labels[role] = console
+        model_body.addStretch()
+        columns.addWidget(models, 1)
+        self.body.addLayout(columns)
         self.transcription.currentIndexChanged.connect(self.selection_changed)
         self.polishing.currentIndexChanged.connect(self.selection_changed)
         self.enabled.toggled.connect(self.selection_changed)
-        self.balance = label("余额未知 · 点击刷新查询支持的平台", muted=True)
-        self.balance.setTextFormat(Qt.TextFormat.PlainText)
-        layout.addWidget(self.balance)
-        layout.addWidget(
-            actions(
-                button("刷新 API 计费状态", lambda: self.run(self.refresh_balance()))
-            )
-        )
-        self.console = label("")
-        self.console.setOpenExternalLinks(True)
-        layout.addWidget(self.console)
-        self.body.insertWidget(2, models)
-        self.body.addWidget(
-            label(
-                "字符按 Unicode 码点计数。统计仅保留数字，不保存录音或识别正文。"
-                "云端处理会上传录音或文本。",
-                muted=True,
-            )
-        )
         self.refresh()
         self.finish()
+
+    def showEvent(self, event):
+        super().showEvent(event)
+        self.set_active(True)
+
+    def hideEvent(self, event):
+        self.set_active(False)
+        super().hideEvent(event)
+
+    def set_active(self, active):
+        """Only the visible overview owns automatic read-only requests."""
+        self.active = active
+        if active:
+            self.balance_timer.start()
+            self.schedule_balance()
+        else:
+            self.balance_timer.stop()
+            self.balance_schedule.stop()
+            self.cancel_balance()
+
+    def cancel_balance(self):
+        self.revision += 1
+        if self.balance_task is not None and not self.balance_task.done():
+            self.balance_task.cancel()
+        self.balance_task = None
+
+    def schedule_balance(self):
+        if self.active:
+            self.balance_schedule.start(0)
+
+    def start_balance(self):
+        if not self.active:
+            return
+        # Qt can also display this page in a synchronous diagnostic/test process.
+        try:
+            asyncio.get_running_loop()
+        except RuntimeError:
+            return
+        if self.balance_task is not None and not self.balance_task.done():
+            return
+        if (
+            self.balance_updated is not None
+            and time.monotonic() - self.balance_updated < self.BALANCE_CACHE_SECONDS
+            and self.balance_signature == self.configuration_signature()
+        ):
+            return
+        self.balance_task = self.run(self.refresh_balance())
 
     def refresh(self):
         settings = self.session.store.load_settings()
         signature = self.configuration_signature()
         if signature != self.balance_signature:
-            self.revision += 1
+            self.cancel_balance()
             self.balance_signature = signature
-            self.balance.setText("当前模型的余额未知 · 点击刷新查询")
-            self.console.clear()
+            self.balance_updated = None
+            for role in self.balance_labels:
+                self.balance_labels[role].setText("余额未知")
+                self.console_labels[role].clear()
         for selector, kind, selected in (
             (self.transcription, "transcription", settings.transcription_provider),
             (self.polishing, "polishing", settings.polishing_provider),
@@ -153,42 +229,34 @@ class HomePage(Page):
             selector.clear()
             selector.addItem("请先保存模型配置", "")
             for provider in self.session.store.providers():
-                if provider.role != kind:
-                    continue
-                selector.addItem(
-                    f"{provider.name} · {provider.model or '未选模型'}", provider.id
-                )
+                if provider.role == kind:
+                    selector.addItem(
+                        f"{provider.name} · {provider.model or '未选模型'}", provider.id
+                    )
             selector.setCurrentIndex(max(0, selector.findData(selected)))
+            selector.setToolTip(selector.currentText())
             selector.blockSignals(False)
         self.enabled.blockSignals(True)
         self.enabled.setChecked(settings.polishing_enabled)
         self.enabled.blockSignals(False)
         self.polishing.setEnabled(settings.polishing_enabled)
+        self.balance_labels["polishing"].setEnabled(settings.polishing_enabled)
+        self.console_labels["polishing"].setEnabled(settings.polishing_enabled)
+        if not settings.polishing_enabled:
+            self.balance_labels["polishing"].setText("未启用")
         day = self.stats.today()
-        tokens = day["total_tokens"]
-        token_text = str(tokens) if tokens is not None else "未知（平台未提供完整用量）"
-        self.summary.setText(
-            f"今日已发送 {day['characters']:,} 字符    ·    "
-            f"录音 {day['audio_seconds'] / 60:.1f} 分钟    ·    "
-            f"使用 {day['recordings']} 次\n"
-            f"成功 {day['succeeded']}    失败 {day['failed']}    "
-            f"取消 {day['cancelled']}\n"
-            f"润色 Token：{token_text}"
-        )
         self.metrics["characters"].setText(f"{day['characters']:,}")
         self.metrics["audio_seconds"].setText(f"{day['audio_seconds'] / 60:.1f} 分钟")
         self.metrics["recordings"].setText(f"{day['recordings']} 次")
         self.outcomes.setText(
-            f"成功 {day['succeeded']} · 失败 {day['failed']} · 取消 {day['cancelled']}"
-            f"  |  润色 Token：{token_text}"
+            f"今日成功 {day['succeeded']} · 失败 {day['failed']} · "
+            f"取消 {day['cancelled']}"
         )
         self.chart.set_days(self.stats.recent())
+        self.schedule_balance()
 
     def selection_changed(self):
-        self.revision += 1
-        self.polishing.setEnabled(self.enabled.isChecked())
-        self.balance.setText("当前模型的余额未知 · 点击刷新查询")
-        self.console.clear()
+        self.cancel_balance()
         self.safe(
             lambda: self.session.store.save_settings(
                 replace(
@@ -199,6 +267,7 @@ class HomePage(Page):
                 )
             )
         )
+        self.refresh()
 
     def configuration_signature(self):
         settings = self.session.store.load_settings()
@@ -215,85 +284,70 @@ class HomePage(Page):
             credential_revision = (info.st_mtime_ns, info.st_size)
         except FileNotFoundError:
             credential_revision = None
-        return (settings.polishing_enabled, providers, credential_revision)
+        return settings.polishing_enabled, providers, credential_revision
 
     async def refresh_balance(self):
-        expected = self.revision + 1
-        try:
-            await self._refresh_balance()
-        except asyncio.CancelledError:
-            if self.revision == expected:
-                self.balance.setText("余额查询已取消，点击刷新重试。")
-            raise
-        except (CredentialError, ValueError, OSError):
-            if self.revision == expected:
-                self.balance.setText("配置暂不可读取，请检查配置后重新刷新。")
-
-    async def _refresh_balance(self):
         from inkecho.billing import fetch_balance
 
         self.revision += 1
         revision = self.revision
         signature = self.configuration_signature()
-        self.balance.setText("正在刷新当前模型计费状态……")
-        results = []
-        ids = [self.transcription.currentData()]
-        if self.enabled.isChecked():
-            ids.append(self.polishing.currentData())
-        for identifier in dict.fromkeys(ids):
+        settings = self.session.store.load_settings()
+        selected = {"transcription": settings.transcription_provider}
+        if settings.polishing_enabled:
+            selected["polishing"] = settings.polishing_provider
+        results = {}
+        for role, identifier in selected.items():
             if not identifier:
+                self.balance_labels[role].setText("未选择配置")
                 continue
             provider = self.session.store.load_provider(identifier)
-            # Only an explicit click reads credentials; unsupported platforms need none.
-            platform = ""
-            platform = (
-                "deepseek"
-                if provider.adapter == "openai"
-                and provider.base_url.rstrip("/")
-                in {"https://api.deepseek.com", "https://api.deepseek.com/v1"}
-                else platform
-            )
+            self.balance_labels[role].setText("余额查询中…")
+            platform = balance_platform(provider)
             try:
-                key = (
-                    await self.session.key(provider.key_ref)
-                    if platform == "deepseek"
-                    else ""
-                )
-                result = await fetch_balance(platform, key)
-            except (CredentialError, ValueError, OSError):
+                # Includes credential loading: a stuck key source cannot hang the page.
+                async with asyncio.timeout(12):
+                    key = await self.session.key(provider.key_ref) if platform else ""
+                    if (
+                        revision != self.revision
+                        or signature != self.configuration_signature()
+                    ):
+                        return
+                    result = await fetch_balance(platform, key)
+            except asyncio.CancelledError:
+                if revision == self.revision:
+                    self.balance_labels[role].setText("余额未知")
+                raise
+            except (CredentialError, ValueError, OSError, TimeoutError):
                 result = BalanceResult(
-                    "error", "无法读取当前配置凭据，请重新保存后刷新。"
+                    "error", "无法读取当前配置凭据或余额，请检查配置。"
                 )
-            results.append(
-                (
-                    provider.name,
-                    replace(result, console_url=console_for_provider(provider)),
-                )
+            if revision != self.revision or signature != self.configuration_signature():
+                return
+            results[role] = (
+                provider.name,
+                replace(result, console_url=console_for_provider(provider)),
             )
         if revision != self.revision or signature != self.configuration_signature():
             return
-        self.balance.setText(
-            "\n".join(
-                f"{name}：{result.message}"
-                + (
-                    " · 账户可用"
-                    if result.is_available is True
-                    else " · 账户当前不可用"
-                    if result.is_available is False
-                    else ""
-                )
-                + "".join(
-                    f"  {amount.currency} 余额 {amount.total}"
-                    for amount in result.balances
-                )
-                for name, result in results
+        for role, (name, result) in results.items():
+            amounts = " · ".join(
+                f"{amount.currency} 余额 {amount.total}" for amount in result.balances
             )
-            or "请先保存模型配置。"
-        )
-        self.console.setText(
-            "  ".join(
-                f'<a href="{result.console_url}">{escape(name)} 控制台</a>'
-                for name, result in results
+            caption = amounts or (
+                "余额未知" if result.status == "unsupported" else result.message
+            )
+            if result.is_available is False:
+                caption += " · 账户当前不可用"
+            elif result.is_available is True:
+                caption += " · 账户可用"
+            self.balance_labels[role].setText(caption)
+            self.balance_labels[role].setToolTip(result.message)
+            self.console_labels[role].setText(
+                f'<a href="{escape(result.console_url, quote=True)}">'
+                f"{escape(name)} 控制台</a>"
                 if result.console_url
+                else "无可用的余额接口或官方控制台入口"
             )
-        )
+        self.balance_signature = signature
+        self.balance_updated = time.monotonic()

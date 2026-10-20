@@ -3,19 +3,94 @@
 import asyncio
 from dataclasses import replace
 
+from PySide6.QtCore import Qt, Signal
+from PySide6.QtGui import QKeySequence
 from PySide6.QtWidgets import (
     QCheckBox,
     QComboBox,
     QDoubleSpinBox,
     QFormLayout,
-    QLineEdit,
     QProgressBar,
+    QPushButton,
     QSpinBox,
 )
 
 from inkecho.audio import Recorder
 from inkecho.platform.hotkeys import GnomeShortcuts, ShortcutError
-from inkecho.ui.widgets import Page, actions, button, card, label
+from inkecho.ui.widgets import Page, actions, button, card
+
+
+class ShortcutCapture(QPushButton):
+    """Capture a physical combination without accepting text or IME input."""
+
+    captured = Signal(str)
+
+    def __init__(self, shortcut):
+        super().__init__(shortcut)
+        self.previous = shortcut
+        self.listening = False
+        self.pending = None
+        self.clicked.connect(self.begin)
+
+    def begin(self):
+        self.listening = True
+        self.pending = None
+        self.setText("请按下快捷键 · Esc 取消")
+        self.setFocus()
+
+    def keyPressEvent(self, event):
+        if not self.listening:
+            return super().keyPressEvent(event)
+        event.accept()
+        if event.isAutoRepeat():
+            return
+        key = event.key()
+        if key == Qt.Key.Key_Escape:
+            self.cancel_capture()
+            return
+        if key in (
+            Qt.Key.Key_Control,
+            Qt.Key.Key_Shift,
+            Qt.Key.Key_Alt,
+            Qt.Key.Key_Meta,
+            Qt.Key.Key_AltGr,
+        ):
+            return
+        value = QKeySequence(event.keyCombination()).toString(
+            QKeySequence.SequenceFormat.PortableText
+        )
+        from inkecho.platform.hotkeys import accelerator
+
+        try:
+            accelerator(value)
+        except ShortcutError:
+            self.pending = None
+            self.setText("请选择字母、数字、空格或功能键组合")
+            return
+        self.pending = value
+        self.setText(value)
+
+    def keyReleaseEvent(self, event):
+        if self.listening:
+            event.accept()
+            if self.pending and not event.isAutoRepeat():
+                value = self.pending
+                self.listening = False
+                self.pending = None
+                self.setEnabled(False)
+                self.captured.emit(value)
+            return
+        super().keyReleaseEvent(event)
+
+    def cancel_capture(self):
+        self.listening = False
+        self.pending = None
+        self.setText(self.previous)
+
+    def focusOutEvent(self, event):
+        if self.listening:
+            self.cancel_capture()
+        super().focusOutEvent(event)
 
 
 class RecordingPage(Page):
@@ -36,8 +111,8 @@ class RecordingPage(Page):
         self.limit.setRange(1, 300)
         self.limit.setSuffix(" 秒")
         self.limit.setValue(settings.recording_limit_seconds)
-        self.shortcut = QLineEdit(settings.shortcut)
-        self.shortcut.setPlaceholderText("F13 / F14 / Ctrl+Alt+K")
+        self.shortcut = ShortcutCapture(settings.shortcut)
+        self.shortcut.captured.connect(lambda value: self.run(self.enable(value)))
         for title, widget in (
             ("输入设备", self.microphone),
             ("采样率", self.rate),
@@ -51,38 +126,17 @@ class RecordingPage(Page):
         self.level.setTextVisible(False)
         session.level.connect(lambda value: self.level.setValue(round(value * 100)))
         body.addWidget(self.level)
-        body.addWidget(
-            actions(
-                button("刷新设备", self.refresh_devices),
-                button("测试麦克风 · 3 秒", lambda: self.run(self.test_audio())),
-            )
-        )
-        body.addWidget(
-            label("麦克风测试只在内存采集，不上传、不保存音频。", muted=True)
-        )
+        body.addWidget(actions(button("刷新设备", self.refresh_devices)))
         self.body.addWidget(panel)
-        self.body.addWidget(
-            actions(
-                button(
-                    "保存并启用快捷键", lambda: self.run(self.enable()), primary=True
-                ),
-                button("仅保存录音设置", self.save),
-                button("检查快捷键", lambda: self.run(self.check_shortcut())),
-                button("停用快捷键", lambda: self.run(self.disable())),
-            )
-        )
-        self.body.addWidget(
-            label(
-                "快捷键由 GNOME 管理。启用会检查冲突；不会覆盖其他应用的绑定。"
-                "当前原生会话的实际按键触发仍需验证。",
-                muted=True,
-            )
-        )
         self.refresh_devices()
+        self.microphone.currentIndexChanged.connect(self.save)
+        self.rate.currentIndexChanged.connect(self.save)
+        self.limit.valueChanged.connect(self.save)
         self.finish()
 
     def refresh_devices(self):
         selected = self.session.store.load_settings().microphone
+        self.microphone.blockSignals(True)
         self.microphone.clear()
         self.microphone.addItem("系统默认麦克风", "")
         for identifier, name in Recorder.devices():
@@ -92,6 +146,7 @@ class RecordingPage(Page):
             self.microphone.addItem("已保存的设备当前不可用", selected)
             index = self.microphone.count() - 1
         self.microphone.setCurrentIndex(index)
+        self.microphone.blockSignals(False)
 
     def save(self):
         try:
@@ -100,64 +155,37 @@ class RecordingPage(Page):
                 microphone=self.microphone.currentData(),
                 sample_rate=self.rate.currentData(),
                 recording_limit_seconds=self.limit.value(),
-                shortcut=self.shortcut.text().strip(),
             )
             self.session.store.save_settings(settings)
-            self.shortcut_revision += 1
-            self.message.setText(
-                "录音设置已保存。更改快捷键后，请点击「保存并启用快捷键」注册到系统。"
-            )
+            self.message.setText("录音设置已自动保存。")
             return True
         except (ValueError, OSError):
             self.message.setText("无法保存，请检查配置文件或字段。")
             return False
 
-    async def test_audio(self):
-        if not self.save():
-            return
-        self.message.setText("请说话，正在采集 3 秒麦克风音频……")
-        audio = await self.session.sample_audio()
-        self.message.setText(
-            f"麦克风测试完成，收到 {len(audio):,} 字节 WAV 数据；未上传。"
-        )
-
-    async def enable(self):
-        if not self.save():
-            return
-        revision = self.shortcut_revision
-        shortcut = self.shortcut.text()
+    async def enable(self, shortcut=None):
+        shortcut = shortcut or self.shortcut.text()
+        old_shortcut = self.session.store.load_settings().shortcut
         try:
             async with self.shortcut_lock:
                 await asyncio.to_thread(GnomeShortcuts().enable, shortcut, self.command)
-        except ShortcutError as error:
-            if revision == self.shortcut_revision:
-                self.message.setText(f"快捷键未启用：{error}")
-            return
-        if revision == self.shortcut_revision:
-            self.message.setText(
-                "GNOME 快捷键已配置。请在任意应用中实测开始和结束录音。"
-            )
-
-    async def disable(self):
-        self.shortcut_revision += 1
-        revision = self.shortcut_revision
-        async with self.shortcut_lock:
-            await asyncio.to_thread(GnomeShortcuts().disable)
-        if revision == self.shortcut_revision:
-            self.message.setText("InkEcho 快捷键已停用。")
-
-    async def check_shortcut(self):
-        self.shortcut_revision += 1
-        revision, shortcut = self.shortcut_revision, self.shortcut.text()
-        try:
-            async with self.shortcut_lock:
-                message = await asyncio.to_thread(
-                    GnomeShortcuts().status, shortcut, self.command
-                )
-        except ShortcutError:
-            message = "无法读取 GNOME 快捷键状态，请检查系统服务。"
-        if revision == self.shortcut_revision and shortcut == self.shortcut.text():
-            self.message.setText(message)
+                try:
+                    self.session.store.save_settings(
+                        replace(self.session.store.load_settings(), shortcut=shortcut)
+                    )
+                except (ValueError, OSError):
+                    await asyncio.to_thread(
+                        GnomeShortcuts().enable, old_shortcut, self.command
+                    )
+                    raise
+            self.shortcut.previous = shortcut
+            self.shortcut.setText(shortcut)
+            self.message.setText("快捷键已保存并启用。")
+        except (ShortcutError, ValueError, OSError):
+            self.shortcut.setText(old_shortcut)
+            self.message.setText("快捷键未更改，请检查组合键冲突或系统设置权限。")
+        finally:
+            self.shortcut.setEnabled(True)
 
 
 class AppearancePage(Page):
@@ -199,19 +227,10 @@ class AppearancePage(Page):
         body.addLayout(form)
         self.tray.hide()
         self.body.addWidget(panel)
-        self.body.addWidget(
-            actions(
-                button("保存外观", self.save, primary=True),
-                button("预览波形", lambda: preview()),
-            )
-        )
-        self.body.addWidget(
-            label(
-                "悬浮窗使用不接收焦点与鼠标穿透标志。"
-                "已验证隔离 X11 环境不抢焦点，原生 Wayland 尚未验收。",
-                muted=True,
-            )
-        )
+        self.style.currentIndexChanged.connect(self.save)
+        self.position.currentIndexChanged.connect(self.save)
+        self.opacity.valueChanged.connect(self.save)
+        self.duration.valueChanged.connect(self.save)
         self.finish()
 
     def save(self):

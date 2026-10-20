@@ -5,7 +5,12 @@ from dataclasses import replace
 from PySide6.QtWidgets import QCheckBox, QFormLayout, QSpinBox, QTabWidget
 
 from inkecho import __version__
-from inkecho.ui.information import AboutPage, CompatibilityPage, StatisticsPage
+from inkecho.ui.information import (
+    AboutPage,
+    CompatibilityPage,
+    LogsPage,
+    StatisticsPage,
+)
 from inkecho.ui.providers import ProviderPage
 from inkecho.ui.settings import AppearancePage, RecordingPage
 from inkecho.ui.widgets import Page, actions, button, card, label
@@ -46,9 +51,19 @@ class SettingsPage(Page):
     def __init__(self, session, stats, log, integration, command, preview):
         super().__init__("设置", "录音、快捷键、外观与输入兼容性集中管理。")
         self.session = session
+        self.tabs = QTabWidget()
+        self.requests = Page("识别与润色", "选择处理方式与请求等待时间。")
         panel, body = card()
-        form = QFormLayout()
         settings = session.store.load_settings()
+        self.polishing_enabled = QCheckBox("使用云端润色")
+        self.polishing_enabled.setChecked(settings.polishing_enabled)
+        self.streaming = QCheckBox("边润色边输入")
+        self.streaming.setChecked(settings.polishing_streaming)
+        self.fallback = QCheckBox("润色失败时使用原始识别文本")
+        self.fallback.setChecked(settings.polishing_fallback)
+        for widget in (self.polishing_enabled, self.streaming, self.fallback):
+            body.addWidget(widget)
+        form = QFormLayout()
         self.transcription_timeout = QSpinBox()
         self.polishing_timeout = QSpinBox()
         for widget, value in (
@@ -58,35 +73,29 @@ class SettingsPage(Page):
             widget.setRange(5, 120)
             widget.setSuffix(" 秒")
             widget.setValue(value)
+            widget.valueChanged.connect(lambda: self.safe(self.save))
         form.addRow("转写请求超时", self.transcription_timeout)
         form.addRow("润色请求超时", self.polishing_timeout)
-        self.polishing_enabled = QCheckBox("使用云端润色")
-        self.polishing_enabled.setChecked(settings.polishing_enabled)
-        self.polishing_enabled.toggled.connect(self.toggle_polishing)
-        form.addRow(self.polishing_enabled)
-        self.streaming = QCheckBox("边润色边输入")
-        self.streaming.setChecked(settings.polishing_streaming)
-        self.fallback = QCheckBox("润色失败时使用原始识别文本")
-        self.fallback.setChecked(settings.polishing_fallback)
-        form.addRow(self.streaming)
-        form.addRow(self.fallback)
         body.addLayout(form)
-        body.addWidget(
-            button("保存请求设置", lambda: self.safe(self.save), primary=True)
-        )
-        self.body.addWidget(panel)
-        self.tabs = QTabWidget()
+        self.requests.body.addWidget(panel)
+        self.requests.finish()
+        self.polishing_enabled.toggled.connect(self.toggle_polishing)
+        self.streaming.toggled.connect(lambda: self.safe(self.save))
+        self.fallback.toggled.connect(lambda: self.safe(self.save))
         self.recording = RecordingPage(session, command)
         self.appearance = AppearancePage(session, preview)
         self.compatibility = CompatibilityPage(session)
         self.statistics = StatisticsPage(session, stats, log)
+        self.logs = LogsPage(session, log)
         self.integration = AboutPage(session, integration)
         for name, page in (
+            ("识别与润色", self.requests),
             ("录音与快捷键", self.recording),
-            ("显示与悬浮提示", self.appearance),
+            ("悬浮提示", self.appearance),
             ("输入兼容性", self.compatibility),
-            ("数据与日志", self.statistics),
-            ("启动与桌面", self.integration),
+            ("数据", self.statistics),
+            ("日志", self.logs),
+            ("桌面集成", self.integration),
         ):
             self.tabs.addTab(embed_editor(page), name)
         self.body.addWidget(self.tabs)
@@ -97,11 +106,7 @@ class SettingsPage(Page):
         self.polishing_timeout.setEnabled(enabled)
         self.streaming.setEnabled(enabled)
         self.fallback.setEnabled(enabled)
-        self.safe(
-            lambda: self.session.store.save_settings(
-                replace(self.session.store.load_settings(), polishing_enabled=enabled)
-            )
-        )
+        self.safe(self.save)
 
     def save(self):
         self.session.store.save_settings(
@@ -115,7 +120,7 @@ class SettingsPage(Page):
                 polishing_fallback=self.fallback.isChecked(),
             )
         )
-        self.message.setText("请求设置已保存。")
+        self.requests.message.setText("已自动保存。")
 
     def refresh(self):
         settings = self.session.store.load_settings()
@@ -133,44 +138,29 @@ class HelpPage(Page):
         self.session = session
         panel, body = card()
         body.addWidget(label(f"InkEcho {__version__}"))
+        from inkecho.platform.capabilities import detect_desktop
+
+        environment = detect_desktop()
+        session_name = {"wayland": "Wayland", "x11": "X11"}.get(
+            environment.session, "会话未知"
+        )
+        desktop = environment.desktop.replace(":", " · ")
         body.addWidget(
-            label("Linux 开源语音输入 · 不使用剪贴板或系统输入法", muted=True)
+            label(
+                f"{environment.distribution} · {desktop} · {session_name}", muted=True
+            )
         )
-        self.update_status = label(
-            "仅在点击后连接 GitHub 检查正式版，不自动下载或安装。", muted=True
-        )
-        body.addWidget(self.update_status)
+        self.update_status = label("", muted=True)
         self.update_button = button(
             "检查更新", lambda: self.run(self.check_update()), primary=True
         )
-        body.addWidget(actions(self.update_button))
         self.release = label(
             '<a href="https://github.com/Creammmmm/InkEcho/releases">查看发布与下载</a>'
         )
         self.release.setOpenExternalLinks(True)
-        body.addWidget(self.release)
+        body.addWidget(actions(self.update_button, self.release))
+        body.addWidget(self.update_status)
         self.body.addWidget(panel)
-        self.body.addWidget(
-            label(
-                "使用方法：先在模型配置中保存语音模型和认证信息，在设置中启用快捷键与键盘输入。按快捷键录音，再按一次结束。输出时把光标放在希望接收文字的位置。"
-            )
-        )
-        self.body.addWidget(
-            label(
-                "关闭窗口会隐藏到托盘；桌面不支持托盘时保留最小化入口。"
-                "可通过应用启动器再次打开。退出可使用托盘菜单或命令行 --quit。",
-                muted=True,
-            )
-        )
-        self.body.addWidget(
-            label(
-                "API 凭据以明文保存在配置目录 credentials.json，目录0700、文件0600。"
-                "不保存录音或识别正文。Ubuntu 24.04 GNOME 46 "
-                "原生 Wayland 键盘输入不支持；"
-                "实际支持范围请参阅项目兼容性文档。",
-                muted=True,
-            )
-        )
         self.finish()
 
     async def check_update(self):

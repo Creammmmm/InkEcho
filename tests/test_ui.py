@@ -11,7 +11,7 @@ from PySide6.QtCore import Qt
 from PySide6.QtTest import QTest
 from PySide6.QtWidgets import QPushButton
 
-from inkecho.app import AudioError, Session
+from inkecho.app import Session
 from inkecho.config import BUILTIN_PROMPT, DEFAULT_PROVIDERS, ConfigError, ConfigStore
 from inkecho.core import Failure, State
 from inkecho.integration import DesktopIntegration
@@ -89,13 +89,13 @@ def test_appearance_save_reload_and_builtin_prompt_copy(window, qt_app):
     window.navigation.setCurrentRow(3)
     page.style.setCurrentIndex(page.style.findData("pulse"))
     page.position.setCurrentIndex(page.position.findData("top-center"))
-    click(page, "保存外观")
     reloaded = AppearancePage(window.session, lambda: None)
     assert reloaded.style.currentData() == "pulse"
     assert reloaded.position.currentData() == "top-center"
     reloaded.close()
     prompts = window.pages[2]
     window.navigation.setCurrentRow(2)
+    prompts.open_template(BUILTIN_PROMPT.id)
     prompts.text.setPlainText("保留用户措辞，只修改标点。")
     click(prompts, "保存模板")
     assert prompts.identifier != BUILTIN_PROMPT.id
@@ -221,33 +221,25 @@ def test_notification_service_failure_keeps_original_error_in_status_bar(window)
 
 
 @pytest.mark.parametrize("failed", [False, True])
-def test_stale_shortcut_health_cannot_replace_enable_result(
-    window, monkeypatch, failed
-):
+def test_shortcut_saves_only_after_registration(window, monkeypatch, failed):
     async def scenario():
         page = window.settings_page.recording
-        waiting, release = asyncio.Event(), asyncio.Event()
+        old = window.session.store.load_settings().shortcut
+        calls = []
 
         async def operation(function, *args):
-            if function.__name__ == "status":
-                waiting.set()
-                await release.wait()
-                return "stale disabled result"
-            assert function.__name__ == "enable"
+            assert window.session.store.load_settings().shortcut == old
+            calls.append(args)
             if failed:
                 raise ShortcutError("conflict")
 
         monkeypatch.setattr("inkecho.ui.settings.asyncio.to_thread", operation)
-        pending = asyncio.create_task(page.check_shortcut())
-        await waiting.wait()
-        enable = asyncio.create_task(page.enable())
-        await asyncio.sleep(0)
-        release.set()
-        await pending
-        await enable
-        result = page.message.text()
-        assert ("未启用" if failed else "已配置") in result
-        assert page.message.text() == result
+        await page.enable("Ctrl+F8")
+        assert calls[0][0] == "Ctrl+F8"
+        expected = old if failed else "Ctrl+F8"
+        assert window.session.store.load_settings().shortcut == expected
+        assert page.shortcut.text() == expected
+        assert page.shortcut.isEnabled()
 
     asyncio.run(scenario())
 
@@ -259,23 +251,72 @@ def test_shortcut_mutations_are_serialized_in_user_action_order(window, monkeypa
         calls = []
 
         async def operation(function, *args):
-            calls.append(function.__name__)
-            if function.__name__ == "enable":
+            calls.append(args[0])
+            if args[0] == "Ctrl+F8":
                 entered.set()
                 await release.wait()
 
         monkeypatch.setattr("inkecho.ui.settings.asyncio.to_thread", operation)
-        enable = asyncio.create_task(page.enable())
+        first = asyncio.create_task(page.enable("Ctrl+F8"))
         await entered.wait()
-        disable = asyncio.create_task(page.disable())
+        second = asyncio.create_task(page.enable("Ctrl+F9"))
         await asyncio.sleep(0)
-        assert calls == ["enable"]
+        assert calls == ["Ctrl+F8"]
         release.set()
-        await asyncio.gather(enable, disable)
-        assert calls == ["enable", "disable"]
-        assert "已停用" in page.message.text()
+        await asyncio.gather(first, second)
+        assert calls == ["Ctrl+F8", "Ctrl+F9"]
+        assert window.session.store.load_settings().shortcut == "Ctrl+F9"
 
     asyncio.run(scenario())
+
+
+def test_physical_shortcut_capture_requires_complete_key_and_escape_cancels(qt_app):
+    from inkecho.ui.settings import ShortcutCapture
+
+    capture = ShortcutCapture("Ctrl+F4")
+    capture.show()
+    captured = []
+    capture.captured.connect(captured.append)
+    capture.begin()
+    QTest.keyPress(capture, Qt.Key.Key_Control)
+    QTest.keyRelease(capture, Qt.Key.Key_Control)
+    assert captured == []
+    QTest.keyClick(capture, Qt.Key.Key_Escape)
+    assert capture.text() == "Ctrl+F4"
+    capture.begin()
+    QTest.keyPress(capture, Qt.Key.Key_F8, Qt.KeyboardModifier.ControlModifier)
+    assert captured == []
+    QTest.keyRelease(capture, Qt.Key.Key_F8, Qt.KeyboardModifier.ControlModifier)
+    assert captured == ["Ctrl+F8"]
+    capture.close()
+
+
+def test_settings_autosave_and_separate_data_logs(window):
+    page = window.settings_page
+    assert [page.tabs.tabText(i) for i in range(page.tabs.count())] == [
+        "识别与润色",
+        "录音与快捷键",
+        "悬浮提示",
+        "输入兼容性",
+        "数据",
+        "日志",
+        "桌面集成",
+    ]
+    page.streaming.setChecked(not page.streaming.isChecked())
+    page.transcription_timeout.setValue(61)
+    page.recording.limit.setValue(123)
+    settings = window.session.store.load_settings()
+    assert settings.polishing_streaming == page.streaming.isChecked()
+    assert settings.transcription_timeout_seconds == 61
+    assert settings.recording_limit_seconds == 123
+    assert not hasattr(page.statistics, "logs")
+    assert page.logs.logs.isReadOnly()
+    assert not any(
+        "保存" in item.text()
+        or "测试麦克风" in item.text()
+        or "预览波形" in item.text()
+        for item in page.recording.findChildren(QPushButton)
+    )
 
 
 def test_no_tray_processing_retains_cancel_entry(window):
@@ -360,20 +401,16 @@ def test_provider_failure_is_actionable_chinese(window):
     asyncio.run(scenario())
 
 
-def test_microphone_test_page_keeps_specific_failure(window):
-    async def scenario():
-        page = window.settings_page.recording
-
-        async def failed():
-            raise AudioError("audio_format_unsupported")
-
-        window.session.sample_audio = failed
-        await page.run(page.test_audio())
-        assert "麦克风不支持当前采样率" in page.message.text()
-        assert "录音设置中调整" in page.message.text()
-        assert "操作未完成" not in page.message.text()
-
-    asyncio.run(scenario())
+def test_microphone_refresh_keeps_unavailable_saved_device(window):
+    page = window.settings_page.recording
+    store = window.session.store
+    store.save_settings(replace(store.load_settings(), microphone="aabb"))
+    page.refresh_devices()
+    assert page.microphone.currentData() == "aabb"
+    assert store.load_settings().microphone == "aabb"
+    assert not any(
+        "测试麦克风" in item.text() for item in page.findChildren(QPushButton)
+    )
 
 
 def test_late_provider_failure_does_not_overwrite_new_form(window):
@@ -467,7 +504,7 @@ def test_protocol_switch_relabels_existing_models_without_network_or_config_save
     assert [page.model.itemText(i) for i in range(page.model.count())] == [
         "qwen3-asr-flash-realtime"
     ]
-    assert "已选择边录边识别" in page.model_hint.text()
+    assert "边录边识别" in page.model_hint.text()
     page.protocol.setCurrentIndex(page.protocol.findData("http"))
     assert [page.model.itemText(i) for i in range(page.model.count())] == [
         "qwen3-asr-flash"
@@ -511,7 +548,7 @@ def test_invalid_configuration_clears_old_model_marks_and_repair_refreshes(
         page.model.setCurrentText("qwen3-asr-flash-realtime")
     else:
         page.parameters.setPlainText(json.dumps({"asr_protocol": PROTOCOL}))
-    assert "已选择边录边识别" in page.model_hint.text()
+    assert "边录边识别" in page.model_hint.text()
     assert [page.model.itemText(i) for i in range(page.model.count())] == [
         "qwen3-asr-flash-realtime"
     ]
@@ -579,7 +616,7 @@ def test_discovery_with_missing_custom_wss_does_not_mark_all_models_unsupported(
             assert page.model.itemData(index, Qt.ItemDataRole.ToolTipRole) is None
             assert page.model.itemData(index, Qt.ItemDataRole.ForegroundRole) is None
         page.realtime_url.setText("wss://proxy.example.invalid/realtime")
-        assert "已选择边录边识别" in page.model_hint.text()
+        assert "边录边识别" in page.model_hint.text()
         assert page.model.count() == 1
         assert page.model.itemData(0, Qt.ItemDataRole.ForegroundRole) is None
         assert requests == ["models"]
@@ -623,7 +660,7 @@ def test_pending_discovery_cannot_mark_or_replace_models_after_protocol_edit(
         assert page.model.findText("qwen3-asr-flash-filetrans") == -1
         assert page.model.currentText() == "qwen3-asr-flash-realtime"
         assert page.protocol.currentData() == PROTOCOL
-        assert "已选择边录边识别" in page.model_hint.text()
+        assert "边录边识别" in page.model_hint.text()
 
     asyncio.run(scenario())
 
@@ -730,7 +767,7 @@ def test_explicit_official_realtime_controls_validate_without_changing_model(win
     config = RealtimeConfig.from_provider(page.provider())
     assert config.url.startswith("wss://dashscope.aliyuncs.com/api-ws/v1/realtime?")
     assert page.realtime_url.text() == ""
-    assert "已选择边录边识别" in page.model_hint.text()
+    assert "边录边识别" in page.model_hint.text()
 
 
 def test_custom_realtime_requires_wss_before_credentials_or_microphone(window):
@@ -1235,3 +1272,36 @@ def test_wayland_displays_every_configured_overlay_style(window, qt_app, style):
     assert not window.overlay.capture_ready
     assert not window.overlay.text
     window.update_state("idle")
+
+
+def test_shortcut_config_failure_restores_previous_registration(window, monkeypatch):
+    async def scenario():
+        page = window.settings_page.recording
+        store = window.session.store
+        previous = store.load_settings().shortcut
+        registered = []
+
+        async def operation(function, shortcut, command):
+            registered.append(shortcut)
+
+        def fail(_settings):
+            raise OSError("isolated synthetic save failure")
+
+        monkeypatch.setattr("inkecho.ui.settings.asyncio.to_thread", operation)
+        monkeypatch.setattr(store, "save_settings", fail)
+        await page.enable("Ctrl+F8")
+        assert registered == ["Ctrl+F8", previous]
+        assert store.load_settings().shortcut == previous
+        assert page.shortcut.text() == previous
+
+    asyncio.run(scenario())
+
+
+def test_help_release_link_shares_update_row_and_shows_actual_environment(window):
+    from PySide6.QtWidgets import QLabel
+
+    page = window.help_page
+    assert page.update_button.parentWidget() == page.release.parentWidget()
+    labels = [item.text() for item in page.findChildren(QLabel)]
+    assert any("X11" in text for text in labels)
+    assert not any("不使用剪贴板" in text for text in labels)

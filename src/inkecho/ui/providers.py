@@ -10,9 +10,12 @@ from PySide6.QtWidgets import (
     QCheckBox,
     QComboBox,
     QFormLayout,
+    QHBoxLayout,
     QLineEdit,
     QPlainTextEdit,
+    QSizePolicy,
     QSpinBox,
+    QWidget,
 )
 
 from inkecho.config import ConfigError, Provider
@@ -33,15 +36,32 @@ class ProviderPage(Page):
         polishing = role == "polishing"
         super().__init__(
             "文字润色" if polishing else "语音转写",
-            "服务配置独立保存；凭据以明文保存到当前配置目录的 credentials.json。"
-            "旧版凭据需重新填写。",
+            "管理服务地址、模型与访问凭据。",
         )
         self.session, self.role = session, role
         self.revision = 0
         self.available_models = ()
         self.selector = QComboBox()
         self.selector.currentIndexChanged.connect(lambda: self.safe(self.load))
-        self.body.addWidget(actions(self.selector, button("新建模型配置", self.new)))
+        self.selector.setSizePolicy(
+            QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed
+        )
+        self.selector.setMinimumContentsLength(28)
+        self.selector.setSizeAdjustPolicy(
+            QComboBox.SizeAdjustPolicy.AdjustToMinimumContentsLengthWithIcon
+        )
+        selector_row = QWidget()
+        selector_layout = QHBoxLayout(selector_row)
+        selector_layout.setContentsMargins(0, 0, 0, 0)
+        selector_layout.addWidget(self.selector, 1)
+        selector_layout.addWidget(button("新建模型配置", self.new))
+        self.body.addWidget(selector_row)
+        self.body.addWidget(
+            actions(
+                button("保存配置", lambda: self.run(self.save()), primary=True),
+                button("删除配置", lambda: self.safe(self.delete)),
+            )
+        )
         panel, body = card()
         form = QFormLayout()
         self.preset = QComboBox()
@@ -52,7 +72,7 @@ class ProviderPage(Page):
         self.name, self.url = QLineEdit(), QLineEdit()
         self.model = QComboBox()
         self.model.setEditable(True)
-        self.model.setPlaceholderText("输入模型 ID，或尝试发现模型")
+        self.model.setPlaceholderText("选择内置模型，或输入模型 ID")
         self.key = QLineEdit()
         self.key.setEchoMode(QLineEdit.EchoMode.Password)
         self.key.setPlaceholderText("留空保留现有密钥；不会显示已保存密钥")
@@ -149,24 +169,7 @@ class ProviderPage(Page):
         self.body.addWidget(panel)
         self.body.addWidget(
             actions(
-                button("保存配置与密钥", lambda: self.run(self.save()), primary=True),
-                button("删除密钥", lambda: self.run(self.delete_key())),
-                button("删除模型配置", lambda: self.safe(self.delete)),
-            )
-        )
-        self.body.addWidget(
-            actions(
-                button("发现模型 / 测试连接", lambda: self.run(self.discover())),
-                button(
-                    "测试模型能力 · 会调用云端", lambda: self.run(self.capability())
-                ),
-            )
-        )
-        self.body.addWidget(
-            label(
-                "云端处理会上传录音或转写文字。模型列表可用不代表模型支持所需能力；"
-                "能力测试可能产生费用。请先保存配置与密钥。",
-                muted=True,
+                button("测试连接", lambda: self.run(self.discover())),
             )
         )
         self.refresh()
@@ -403,10 +406,7 @@ class ProviderPage(Page):
                     "messages": "Messages",
                     "gemini": "Gemini 原生",
                 }.get(provider.adapter, "未知")
-                hint = (
-                    f"当前协议：{family}。模型列表不等于能力验证；"
-                    "请测试当前模型能否完成润色。"
-                )
+                hint = f"当前协议：{family}。"
             elif provider.parameters.get("asr_protocol") in {
                 PROTOCOL,
                 "stepfun_realtime",
@@ -415,9 +415,7 @@ class ProviderPage(Page):
                 "tencent_asr",
                 "volc_binary",
             }:
-                hint = (
-                    "已选择边录边识别；需 16 kHz 录音。请测试所选服务和模型的实时能力。"
-                )
+                hint = "边录边识别 · 16 kHz 录音。"
             else:
                 hint = (
                     "录音结束后通过 HTTP 上传；实时模型请切换转写方式。"
@@ -507,7 +505,13 @@ class ProviderPage(Page):
                 if p.role == self.role
                 and p.adapter == provider.adapter
                 and p.base_url == provider.base_url
-                and p.protocol == provider.parameters.get("asr_protocol", "http")
+                and (
+                    p.protocol == provider.parameters.get("asr_protocol", "http")
+                    or (
+                        p.adapter == "qwen"
+                        and provider.parameters.get("asr_protocol") == PROTOCOL
+                    )
+                )
                 and (not p.models or provider.model in p.models)
                 and (
                     provider.adapter != "volcengine"
@@ -520,9 +524,18 @@ class ProviderPage(Page):
             ),
             None,
         )
+        self.available_models = tuple(
+            model
+            for model in (preset.models if preset else ())
+            if self.role != "transcription"
+            or asr_capability(model, provider.adapter, provider.parameters)
+            == "supported"
+        )
         self.preset.setCurrentIndex(self.preset.findData(preset.id) if preset else -1)
         self.name.setText(provider.name)
         self.url.setText(provider.base_url)
+        self.model.clear()
+        self.model.addItems(self.available_models)
         self.model.setCurrentText(provider.model)
         self.parameters.setPlainText(
             json.dumps(provider.parameters, ensure_ascii=False, indent=2)
@@ -554,6 +567,7 @@ class ProviderPage(Page):
         self.name.clear()
         self.name.setPlaceholderText("请为此模型配置命名")
         self.url.clear()
+        self.model.clear()
         self.model.setCurrentText("")
         self.parameters.setPlainText("{}")
         self.clear_credentials()
@@ -690,18 +704,15 @@ class ProviderPage(Page):
             for p in self.session.store.providers()
             if p.role == self.role and p.id != self.identifier
         ]
-        if not providers:
-            self.message.setText("请至少保留一个服务配置。")
-            return
         settings = self.session.store.load_settings()
         field = self.role + "_provider"
         if getattr(settings, field) == self.identifier:
             self.session.store.save_settings(
-                replace(settings, **{field: providers[0].id})
+                replace(settings, **{field: providers[0].id if providers else ""})
             )
         self.session.store.delete_provider(self.identifier)
         self.refresh()
-        self.message.setText("服务平台配置已删除。密钥可在删除前单独移除。")
+        self.message.setText("模型配置已删除。")
 
     async def discover(self):
         provider = self.provider()

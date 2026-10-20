@@ -48,7 +48,7 @@ def test_blank_five_page_workspace_preserves_empty_configuration(workspace):
     assert [workspace.navigation.item(i).text() for i in range(5)] == [
         "概览",
         "模型配置",
-        "风格",
+        "润色风格",
         "设置",
         "帮助",
     ]
@@ -96,8 +96,8 @@ def test_weekly_statistics_zero_fill_and_chart(workspace):
     days[-1][1]["characters"] = 900
     assert workspace.stats.today()["characters"] == 12
     workspace.home.refresh()
-    assert "12 字符" in workspace.home.summary.text()
-    assert "1.5 分钟" in workspace.home.summary.text()
+    assert workspace.home.metrics["characters"].text() == "12"
+    assert workspace.home.metrics["audio_seconds"].text() == "1.5 分钟"
     assert len(workspace.home.chart.days) == 7
 
 
@@ -152,8 +152,12 @@ def test_balance_only_reads_official_platform_and_shows_amount(
     asyncio.run(workspace.home.refresh_balance())
     assert len(keys) == 1
     assert requests == [("", ""), ("deepseek", "synthetic")]
-    assert "CNY 余额 12.50" in workspace.home.balance.text()
-    assert caption in workspace.home.balance.text()
+    assert "CNY 余额 12.50" in "\n".join(
+        item.text() for item in workspace.home.balance_labels.values()
+    )
+    assert caption in "\n".join(
+        item.text() for item in workspace.home.balance_labels.values()
+    )
 
 
 def test_late_balance_does_not_leak_into_changed_configuration(workspace, monkeypatch):
@@ -176,7 +180,9 @@ def test_late_balance_does_not_leak_into_changed_configuration(workspace, monkey
         workspace.home.enabled.setChecked(False)
         finish.set()
         await task
-        assert "OLD BALANCE" not in workspace.home.balance.text()
+        assert "OLD BALANCE" not in "\n".join(
+            item.text() for item in workspace.home.balance_labels.values()
+        )
 
     monkeypatch.setattr(workspace.session, "key", key)
     asyncio.run(scenario())
@@ -199,10 +205,18 @@ def test_missing_balance_key_does_not_leave_loading_or_stop_other_platform(
     monkeypatch.setattr("inkecho.billing.fetch_balance", balance)
     asyncio.run(workspace.home.refresh_balance())
     assert calls == [""]
-    assert "正在刷新" not in workspace.home.balance.text()
-    assert "无法读取当前配置凭据" in workspace.home.balance.text()
-    assert "synthetic secret" not in workspace.home.balance.text()
-    assert "DeepSeek 控制台" in workspace.home.console.text()
+    assert "正在刷新" not in "\n".join(
+        item.text() for item in workspace.home.balance_labels.values()
+    )
+    assert "无法读取当前配置凭据" in "\n".join(
+        item.text() for item in workspace.home.balance_labels.values()
+    )
+    assert "synthetic secret" not in "\n".join(
+        item.text() for item in workspace.home.balance_labels.values()
+    )
+    assert "DeepSeek 控制台" in "\n".join(
+        item.text() for item in workspace.home.console_labels.values()
+    )
 
 
 def test_custom_gateway_never_sends_key_to_official_balance_endpoint(
@@ -219,8 +233,12 @@ def test_custom_gateway_never_sends_key_to_official_balance_endpoint(
 
     monkeypatch.setattr(workspace.session, "key", forbidden)
     asyncio.run(workspace.home.refresh_balance())
-    assert "余额未知" in workspace.home.balance.text()
-    assert "deepseek.com" not in workspace.home.console.text()
+    assert "余额未知" in "\n".join(
+        item.text() for item in workspace.home.balance_labels.values()
+    )
+    assert "deepseek.com" not in "\n".join(
+        item.text() for item in workspace.home.console_labels.values()
+    )
 
 
 def test_completed_statistics_refresh_without_navigation(workspace):
@@ -252,7 +270,9 @@ def test_overview_has_no_recording_card_or_recording_widgets(workspace):
     assert not home.findChildren(QProgressBar)
     for name in ("record", "state", "description", "level", "duration"):
         assert not hasattr(home, name)
-    assert home.body.itemAt(2).widget().findChildren(type(home.transcription))
+    assert home.body.itemAt(2).layout().count() == 3
+    assert home.body.itemAt(3).layout().count() == 2
+    assert home.transcription in home.findChildren(type(home.transcription))
 
 
 def test_shortcut_command_and_recording_duration_remain_available(workspace):

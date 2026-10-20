@@ -130,7 +130,6 @@ class MainWindow(QMainWindow):
         navigation.addWidget(label("把声音，变成文字。", muted=True))
         self.navigation = QListWidget()
         navigation.addWidget(self.navigation, 1)
-        navigation.addWidget(label("LINUX · 首期预览\n不使用剪贴板", muted=True))
         layout.addWidget(sidebar)
         self.stack = QStackedWidget()
         self.home = HomePage(session, stats)
@@ -146,7 +145,7 @@ class MainWindow(QMainWindow):
             self.settings_page,
             self.help_page,
         ]
-        names = ["概览", "模型配置", "风格", "设置", "帮助"]
+        names = ["概览", "模型配置", "润色风格", "设置", "帮助"]
         for name, page in zip(names, self.pages, strict=True):
             self.navigation.addItem(name)
             scroll = QScrollArea()

@@ -99,9 +99,7 @@ class CompatibilityPage(Page):
 
 class StatisticsPage(Page):
     def __init__(self, session, stats, log):
-        super().__init__(
-            "统计与日志", "仅保存汇总数字和固定诊断代码，不保存音频与转写正文。"
-        )
+        super().__init__("使用数据", "每日汇总与模型用量。")
         self.session, self.stats, self.log = session, stats, log
         frame, layout = card()
         self.summary = label("")
@@ -128,16 +126,10 @@ class StatisticsPage(Page):
             form.addRow(title, self.values[key])
         layout.addLayout(form)
         self.body.addWidget(frame)
-        self.logs = QPlainTextEdit()
-        self.logs.setReadOnly(True)
-        self.logs.setMaximumHeight(160)
-        self.logs.setPlaceholderText("暂无诊断记录")
-        self.body.addWidget(self.logs)
         self.body.addWidget(
             actions(
                 button("刷新", self.refresh),
                 button("清除统计", lambda: self.run(self.clear_statistics())),
-                button("清除日志", lambda: self.run(self.clear_logs())),
             )
         )
         self.finish()
@@ -158,15 +150,38 @@ class StatisticsPage(Page):
             self.message.setText(str(error))
             for widget in self.values.values():
                 widget.setText("—")
-        try:
-            self.logs.setPlainText(self.log.recent())
-        except OSError:
-            self.logs.setPlainText("日志暂不可读取。")
 
     async def clear_statistics(self):
         await asyncio.to_thread(self.stats.clear)
         self.refresh()
         self.message.setText("统计已清除；配置、凭据和日志保持不变。")
+
+
+class LogsPage(Page):
+    def __init__(self, session, log):
+        super().__init__("诊断日志", "查看本地诊断记录。")
+        self.session, self.log = session, log
+        panel, body = card()
+        self.logs = QPlainTextEdit()
+        self.logs.setReadOnly(True)
+        self.logs.setMinimumHeight(240)
+        self.logs.setPlaceholderText("暂无诊断记录")
+        body.addWidget(self.logs)
+        body.addWidget(
+            actions(
+                button("刷新", self.refresh),
+                button("清除日志", lambda: self.run(self.clear_logs())),
+            )
+        )
+        self.body.addWidget(panel)
+        self.finish()
+        self.refresh()
+
+    def refresh(self):
+        try:
+            self.logs.setPlainText(self.log.recent())
+        except OSError:
+            self.logs.setPlainText("日志暂不可读取。")
 
     async def clear_logs(self):
         await asyncio.to_thread(self.log.clear)
@@ -180,6 +195,8 @@ class AboutPage(Page):
             "关于与桌面集成", "为当前安装位置创建启动器；开机自启动由你决定。"
         )
         self.session, self.integration = session, integration
+        self.autostart_lock = asyncio.Lock()
+        self.autostart_revision = 0
         frame, layout = card()
         layout.addWidget(label(f"InkEcho {__version__} · Linux 首期开发版"))
         self.location = label("")
@@ -211,11 +228,9 @@ class AboutPage(Page):
                 ),
             )
         )
-        self.body.addWidget(
-            button("保存自启动设置", lambda: self.run(self.save_autostart()))
-        )
         self.finish()
         self.refresh()
+        self.autostart.toggled.connect(self.queue_autostart)
 
     def refresh(self):
         status = self.integration.status()
@@ -227,7 +242,9 @@ class AboutPage(Page):
         else:
             text = "尚未安装桌面启动器。"
         self.integration_status.setText(text)
+        self.autostart.blockSignals(True)
         self.autostart.setChecked(status["autostart"])
+        self.autostart.blockSignals(False)
 
     async def apply(self, operation):
         try:
@@ -238,6 +255,26 @@ class AboutPage(Page):
             self.message.setText(str(error))
             self.session.diagnostic.emit("integration_failed")
 
-    async def save_autostart(self):
-        enabled = self.autostart.isChecked()
-        await self.apply(lambda: self.integration.set_autostart(enabled))
+    def queue_autostart(self, enabled):
+        self.autostart_revision += 1
+        revision = self.autostart_revision
+        self.run(self.save_autostart(enabled, revision))
+
+    async def save_autostart(self, enabled=None, revision=None):
+        if enabled is None:
+            enabled = self.autostart.isChecked()
+        if revision is None:
+            self.autostart_revision += 1
+            revision = self.autostart_revision
+        async with self.autostart_lock:
+            try:
+                await asyncio.to_thread(self.integration.set_autostart, enabled)
+            except IntegrationError:
+                if revision == self.autostart_revision:
+                    self.refresh()
+                    self.message.setText("自启动设置未保存，已恢复实际状态。")
+                self.session.diagnostic.emit("integration_failed")
+                return
+            if revision == self.autostart_revision:
+                self.refresh()
+                self.message.setText("自启动设置已自动保存。")

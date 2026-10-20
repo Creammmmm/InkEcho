@@ -1,4 +1,4 @@
-"""Explicit, read-only account balance queries; never persist credentials."""
+"""Bounded, read-only account balance queries; never persist credentials."""
 
 from dataclasses import dataclass
 from decimal import Decimal, InvalidOperation
@@ -69,6 +69,16 @@ def console_for_provider(provider: Provider) -> str:
         return ""
 
 
+def balance_platform(provider: Provider) -> str:
+    """Recognize only the adapter and exact endpoint whose balance API we support."""
+    if provider.adapter == "openai" and provider.base_url.rstrip("/") in {
+        "https://api.deepseek.com",
+        "https://api.deepseek.com/v1",
+    }:
+        return "deepseek"
+    return ""
+
+
 def _amount(value: object) -> str:
     if not isinstance(value, str) or len(value) > 40:
         raise ValueError
@@ -85,7 +95,7 @@ async def fetch_balance(
     client: httpx.AsyncClient | None = None,
     timeout: float = 10,
 ) -> BalanceResult:
-    """Query only the official DeepSeek endpoint on an explicit user action.
+    """Query only the official DeepSeek endpoint for the selected configuration.
 
     Unknown platforms are not queried. Caller owns cancellation and supplied clients.
     Server error bodies and exception strings are never returned to the UI.

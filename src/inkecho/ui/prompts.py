@@ -1,8 +1,16 @@
-"""Prompt editing and explicit cloud preview without persistence of results."""
+"""Card-based polishing templates with an explicit detailed editor."""
 
 from dataclasses import replace
 
-from PySide6.QtWidgets import QComboBox, QFormLayout, QLineEdit, QPlainTextEdit
+from PySide6.QtCore import QPoint, QTimer
+from PySide6.QtWidgets import (
+    QFormLayout,
+    QGridLayout,
+    QLineEdit,
+    QPlainTextEdit,
+    QScrollArea,
+    QWidget,
+)
 
 from inkecho.config import BUILTIN_PROMPT, BUILTIN_PROMPTS, Prompt
 from inkecho.ui.widgets import Page, actions, button, card, label
@@ -10,80 +18,90 @@ from inkecho.ui.widgets import Page, actions, button, card, label
 
 class PromptsPage(Page):
     def __init__(self, session):
-        super().__init__("风格", "保留你的表达方式，让润色遵循明确的规则。")
+        super().__init__("润色风格", "选择适合场景的模板，查看并编辑完整的润色规则。")
         self.session = session
         self.revision = 0
-        self.selector = QComboBox()
-        self.selector.currentIndexChanged.connect(lambda: self.safe(self.load))
-        self.body.addWidget(
-            actions(
-                self.selector,
-                button("新建", lambda: self.safe(self.new)),
-                button("复制", lambda: self.safe(self.copy)),
-            )
-        )
-        panel, body = card()
+        self.body.addWidget(actions(button("新建模板", lambda: self.safe(self.new))))
+        self.cards = QWidget()
+        self.cards_layout = QGridLayout(self.cards)
+        self.cards_layout.setContentsMargins(0, 0, 0, 0)
+        self.cards_layout.setSpacing(14)
+        self.body.addWidget(self.cards)
+        self.editor, body = card()
         form = QFormLayout()
         self.name, self.description = QLineEdit(), QLineEdit()
         form.addRow("名称", self.name)
-        form.addRow("说明", self.description)
+        form.addRow("简述", self.description)
         body.addLayout(form)
         self.text = QPlainTextEdit()
-        self.text.setMinimumHeight(140)
+        self.text.setMinimumHeight(260)
         body.addWidget(self.text)
+        body.addWidget(label("编辑内置模板会保存为个人副本。", muted=True))
         body.addWidget(
-            label("编辑内置模板时会自动保存为用户副本，原始模板保持不变。", muted=True)
-        )
-        self.body.addWidget(panel)
-        self.body.addWidget(
             actions(
                 button("保存模板", lambda: self.safe(self.save), primary=True),
                 button("设为当前模板", lambda: self.safe(self.select)),
-                button("删除", lambda: self.safe(self.delete)),
+                button("复制模板", lambda: self.safe(self.copy)),
+                button("删除模板", lambda: self.safe(self.delete)),
+                button("收起详情", self.editor.hide),
             )
         )
-        self.sample = QLineEdit()
-        self.sample.setPlaceholderText("输入一小段示例文字进行预览（只在点击后上传）")
-        self.preview = QPlainTextEdit()
-        self.preview.setReadOnly(True)
-        self.preview.setMaximumHeight(90)
-        self.preview.setPlaceholderText("测试结果仅在本页显示，不持久保存")
-        self.body.addWidget(self.sample)
-        self.test_button = button(
-            "云端测试润色 · 可能计费", lambda: self.run(self.test())
-        )
-        self.body.addWidget(actions(self.test_button))
-        self.refresh_availability()
-        self.body.addWidget(self.preview)
+        self.body.addWidget(self.editor)
         self.refresh(session.store.load_settings().prompt)
+        self.editor.hide()
         self.finish()
 
     def refresh(self, identifier=None):
-        self.selector.blockSignals(True)
-        self.selector.clear()
-        for prompt in self.session.store.prompts():
-            self.selector.addItem(
-                prompt.name
-                + (
-                    " · 内置"
-                    if prompt.id in {item.id for item in BUILTIN_PROMPTS}
-                    else ""
-                ),
-                prompt.id,
+        while self.cards_layout.count():
+            item = self.cards_layout.takeAt(0)
+            if item.widget():
+                item.widget().deleteLater()
+        selected = self.session.store.load_settings().prompt
+        for index, prompt in enumerate(self.session.store.prompts()):
+            panel, body = card()
+            title = prompt.name + (" · 当前使用" if prompt.id == selected else "")
+            body.addWidget(label(title))
+            body.addWidget(label(prompt.description, muted=True))
+            body.addWidget(
+                button(
+                    "查看与编辑",
+                    lambda _checked=False, key=prompt.id: self.safe(
+                        lambda: self.open_template(key)
+                    ),
+                )
             )
-        if identifier:
-            self.selector.setCurrentIndex(max(0, self.selector.findData(identifier)))
-        self.selector.blockSignals(False)
-        self.load()
+            self.cards_layout.addWidget(panel, index // 2, index % 2)
+        self.cards_layout.setColumnStretch(0, 1)
+        self.cards_layout.setColumnStretch(1, 1)
+        self.load(identifier or selected)
 
-    def load(self):
+    def open_template(self, identifier):
+        self.load(identifier)
+        self.show_editor()
+
+    def show_editor(self):
+        self.editor.show()
+        QTimer.singleShot(0, self.scroll_to_editor)
+
+    def scroll_to_editor(self):
+        parent = self.parentWidget()
+        while parent is not None:
+            if isinstance(parent, QScrollArea):
+                if parent.widget().layout():
+                    parent.widget().layout().activate()
+                self.layout().activate()
+                top = self.editor.mapTo(parent.widget(), QPoint(0, 0)).y()
+                parent.verticalScrollBar().setValue(max(0, top - 18))
+                break
+            parent = parent.parentWidget()
+
+    def load(self, identifier=None):
         self.revision += 1
-        prompt = self.session.store.load_prompt(self.selector.currentData())
+        prompt = self.session.store.load_prompt(identifier or self.identifier)
         self.identifier = prompt.id
         self.name.setText(prompt.name)
         self.description.setText(prompt.description)
         self.text.setPlainText(prompt.body)
-        self.preview.clear()
 
     def save(self):
         prompt = self.session.store.save_prompt(
@@ -101,15 +119,18 @@ class PromptsPage(Page):
         self.session.store.save_settings(
             replace(self.session.store.load_settings(), prompt=self.identifier)
         )
+        self.refresh(self.identifier)
         self.message.setText("已设为当前润色模板。")
 
     def new(self):
         prompt = self.session.store.copy_prompt(BUILTIN_PROMPT.id, "新模板")
         self.refresh(prompt.id)
+        self.show_editor()
 
     def copy(self):
         prompt = self.session.store.copy_prompt(self.identifier)
         self.refresh(prompt.id)
+        self.show_editor()
 
     def delete(self):
         if self.identifier in {item.id for item in BUILTIN_PROMPTS}:
@@ -122,26 +143,7 @@ class PromptsPage(Page):
             )
         self.session.store.delete_prompt(self.identifier)
         self.refresh()
+        self.editor.hide()
 
     def refresh_availability(self):
-        self.test_button.setEnabled(
-            self.session.store.load_settings().polishing_enabled
-        )
-
-    async def test(self):
-        if not self.session.store.load_settings().polishing_enabled:
-            self.message.setText("云端润色已关闭，请先在设置或概览中启用。")
-            return
-        revision = self.revision
-        text, prompt = self.sample.text().strip(), self.text.toPlainText()
-        if not text:
-            self.message.setText("请先输入示例文字。")
-            return
-        settings = self.session.store.load_settings()
-        provider = self.session.store.load_provider(settings.polishing_provider)
-        result = await self.session.provider_client("polishing").polish(
-            provider, await self.session.key(provider.key_ref), text, prompt
-        )
-        if revision == self.revision:
-            self.preview.setPlainText(result.text)
-            self.message.setText("测试完成。结果未保存、未向其他窗口输入。")
+        """Templates remain editable while cloud polishing is disabled."""
