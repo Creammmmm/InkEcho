@@ -281,10 +281,8 @@ def test_missing_usage_is_not_fabricated(server):
 
 def test_model_discovery_is_not_capability_validation(server):
     server.responses.append({"body": {"data": [{"id": "a"}, {"id": "b"}, {"id": "a"}]}})
-    connection = run(
-        server, lambda client: client.check_connection(server.provider, "test-key")
-    )
-    assert connection.models == ("a", "b") and not connection.capability_verified
+    models = run(server, lambda client: client.models(server.provider, "test-key"))
+    assert models == ["a", "b"]
     assert server.requests[0]["method"] == "GET"
     assert server.requests[0]["path"] == "/v1/models"
     result = run(
@@ -446,11 +444,8 @@ def test_protocol_guard_keeps_http_model_ids_editable(server, model):
 def test_discovery_still_lists_incompatible_protocol_models(server):
     provider = replace(server.provider, model="qwen3-asr-flash-realtime")
     server.responses.append({"body": {"data": [{"id": "qwen3-asr-flash-realtime"}]}})
-    connection = run(
-        server, lambda client: client.check_connection(provider, "test-key")
-    )
-    assert connection.models == ("qwen3-asr-flash-realtime",)
-    assert not connection.capability_verified
+    models = run(server, lambda client: client.models(provider, "test-key"))
+    assert models == ["qwen3-asr-flash-realtime"]
 
 
 @pytest.mark.parametrize(

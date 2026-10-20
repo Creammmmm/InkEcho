@@ -15,7 +15,6 @@ from PySide6.QtWidgets import (
     QPlainTextEdit,
     QPushButton,
     QSizePolicy,
-    QSpinBox,
     QWidget,
 )
 
@@ -111,12 +110,6 @@ class ProviderPage(Page):
                 "官方服务可留空；自定义服务请填写 wss:// 地址"
             )
             self.realtime_url.setEnabled(False)
-        self.timeout = QSpinBox()
-        self.timeout.setRange(5, 120)
-        self.timeout.setSuffix(" 秒")
-        self.timeout.setValue(
-            getattr(session.store.load_settings(), role + "_timeout_seconds")
-        )
         rows = [
             ("服务平台", self.preset),
             ("显示名称", self.name),
@@ -134,7 +127,6 @@ class ProviderPage(Page):
                 ("模型 ID", self.model),
                 ("API 密钥", self.key),
                 ("请求参数 · JSON", self.parameters),
-                ("请求超时", self.timeout),
             ]
         )
         for title, widget in rows:
@@ -146,9 +138,8 @@ class ProviderPage(Page):
                 self.credential_labels[field] = form.labelForField(widget)
         form.addRow("资源 ID · 火山授权资源", self.resource_id)
         self.resource_label = form.labelForField(self.resource_id)
-        for widget in (self.parameters, self.timeout):
-            widget.hide()
-            form.labelForField(widget).hide()
+        self.parameters.hide()
+        form.labelForField(self.parameters).hide()
         if not polishing:
             self.realtime_url.hide()
             form.labelForField(self.realtime_url).hide()
@@ -158,16 +149,6 @@ class ProviderPage(Page):
         self.current = QCheckBox("使用此配置")
         self.current.setChecked(True)
         body.addWidget(self.current)
-        if polishing:
-            settings = session.store.load_settings()
-            self.enabled = QCheckBox("识别后使用云端润色")
-            self.enabled.setChecked(settings.polishing_enabled)
-            self.fallback = QCheckBox("润色失败时使用原始识别文本")
-            self.fallback.setChecked(settings.polishing_fallback)
-            self.streaming = QCheckBox("边润色边输入")
-            self.streaming.setChecked(settings.polishing_streaming)
-            for control in (self.enabled, self.streaming, self.fallback):
-                control.hide()
         self.body.addWidget(panel)
         guide_panel, guide_body = card()
         self.guide_summary = label("", muted=True)
@@ -207,9 +188,7 @@ class ProviderPage(Page):
         self.name.textChanged.connect(self.model_changed)
         self.parameters.textChanged.connect(self.parameters_changed)
         self.resource_id.textChanged.connect(self.model_changed)
-        if polishing:
-            self.streaming.toggled.connect(self.model_changed)
-        else:
+        if not polishing:
             self.protocol.currentIndexChanged.connect(self.protocol_changed)
             self.realtime_url.textChanged.connect(self.protocol_changed)
             self.parameters_changed()
@@ -607,8 +586,6 @@ class ProviderPage(Page):
         self.resource_id.setText(provider.parameters.get("resource_id", ""))
         self.configure_credentials()
         settings = self.session.store.load_settings()
-        if self.role == "polishing":
-            self.streaming.setChecked(settings.polishing_streaming)
         selected = (
             settings.polishing_provider
             if self.role == "polishing"
@@ -753,14 +730,6 @@ class ProviderPage(Page):
         self.refresh(provider.id)
         self.message.setText("服务配置已保存；凭据明文保存在 credentials.json。")
 
-    async def delete_key(self):
-        revision = self.revision
-        await self.session.save_key(self.reference, None)
-        if revision != self.revision:
-            return
-        self.clear_credentials()
-        self.message.setText("此服务平台的凭据已从本地 credentials.json 删除。")
-
     def delete(self):
         providers = [
             p
@@ -834,34 +803,4 @@ class ProviderPage(Page):
                 if self.role == "transcription"
                 else ""
             )
-        )
-
-    async def capability(self):
-        provider = self.provider()
-        revision = self.revision
-        self.validate_protocol(provider)
-        settings = self.session.store.load_settings()
-        streaming = self.role == "polishing" and settings.polishing_streaming
-        key = await self.session.key(provider.key_ref)
-        if revision != self.revision:
-            return
-        audio = None
-        if self.role == "transcription":
-            self.message.setText("请说一句话：录制 3 秒后上传进行能力测试……")
-            audio = await self.session.sample_audio()
-            if revision != self.revision:
-                return
-        else:
-            self.message.setText(
-                "正在发送一次简短流式润色测试……"
-                if streaming
-                else "正在发送一次简短润色测试……"
-            )
-        result = await self.session.provider_client(self.role).test_capability(
-            provider, key, audio=audio, streaming=streaming
-        )
-        if revision != self.revision:
-            return
-        self.message.setText(
-            f"模型能力测试成功，收到 {len(result.text)} 个字符；未向其他窗口输入。"
         )

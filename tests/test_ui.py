@@ -17,7 +17,7 @@ from inkecho.core import Failure, State
 from inkecho.integration import DesktopIntegration
 from inkecho.logging import DiagnosticLog
 from inkecho.platform.hotkeys import ShortcutError
-from inkecho.providers import ProviderError, Result, Usage
+from inkecho.providers import ProviderError
 from inkecho.realtime import PROTOCOL, RealtimeConfig
 from inkecho.statistics import Statistics
 from inkecho.ui.settings import AppearancePage
@@ -89,7 +89,7 @@ def test_appearance_save_reload_and_builtin_prompt_copy(window, qt_app):
     window.navigation.setCurrentRow(3)
     page.style.setCurrentIndex(page.style.findData("pulse"))
     page.position.setCurrentIndex(page.position.findData("top-center"))
-    reloaded = AppearancePage(window.session, lambda: None)
+    reloaded = AppearancePage(window.session)
     assert reloaded.style.currentData() == "pulse"
     assert reloaded.position.currentData() == "top-center"
     reloaded.close()
@@ -367,7 +367,7 @@ def test_model_discovery_does_not_overwrite_another_form(window):
     asyncio.run(scenario())
 
 
-def test_realtime_capability_rejected_before_key_recording_or_network(window):
+def test_invalid_realtime_save_rejected_before_external_access(window):
     async def scenario():
         page = window.models_page.transcription
         page.model.setCurrentText("qwen3-asr-flash-realtime")
@@ -378,7 +378,7 @@ def test_realtime_capability_rejected_before_key_recording_or_network(window):
         window.session.key = forbidden
         window.session.sample_audio = forbidden
         window.session.provider_client = forbidden
-        await page.run(page.capability())
+        await page.run(page.save())
         assert "当前连接方式与模型能力或协议不匹配" in page.message.text()
         assert "语音识别模型与对应转写方式" in page.message.text()
         assert "当前连接方式与模型能力或协议不匹配" in page.model_hint.text()
@@ -678,17 +678,18 @@ def test_provider_save_does_not_overwrite_settings_during_credential_wait(window
 
         window.session.save_key = save_key
         page.key.setText("temporary-test-secret")
-        page.enabled.setChecked(True)
-        page.streaming.setChecked(False)
-        page.fallback.setChecked(False)
+        preferences = window.settings_page
+        preferences.polishing_enabled.setChecked(True)
+        preferences.streaming.setChecked(False)
+        preferences.fallback.setChecked(False)
         original = page.identifier
         request = asyncio.create_task(page.save())
         await waiting.wait()
         assert page.key.text() == ""
         page.new()
-        page.enabled.setChecked(False)
-        page.streaming.setChecked(True)
-        page.fallback.setChecked(True)
+        preferences.polishing_enabled.setChecked(False)
+        preferences.streaming.setChecked(True)
+        preferences.fallback.setChecked(True)
         release.set()
         await request
         settings = window.session.store.load_settings()
@@ -782,7 +783,7 @@ def test_custom_realtime_requires_wss_before_credentials_or_microphone(window):
 
         window.session.key = forbidden
         window.session.sample_audio = forbidden
-        await page.run(page.capability())
+        await page.run(page.save())
         assert "服务配置或请求参数不正确" in page.message.text()
         page.realtime_url.setText("wss://proxy.example.invalid/realtime")
         page.validate_protocol(page.provider())
@@ -804,90 +805,17 @@ def test_realtime_sample_rate_preflight_does_not_change_settings_or_record(windo
 
         window.session.key = forbidden
         window.session.sample_audio = forbidden
-        await page.run(page.capability())
+        await page.run(page.save())
         assert "16 kHz" in page.message.text()
         assert store.load_settings().sample_rate == 48000
 
     asyncio.run(scenario())
 
 
-def test_realtime_capability_page_passes_explicit_protocol_without_injection(window):
-    async def scenario():
-        page = window.models_page.transcription
-        page.model.setCurrentText("qwen3-asr-flash-realtime")
-        page.protocol.setCurrentIndex(page.protocol.findData(PROTOCOL))
-        calls = []
-
-        async def key(_reference):
-            return "fixture-key"
-
-        async def sample():
-            return b"fixture-audio"
-
-        class Client:
-            async def test_capability(self, provider, value, *, audio, streaming):
-                calls.append((provider.parameters, value, audio, streaming))
-                return Result("fixture result", Usage(), 0.01)
-
-        window.session.key = key
-        window.session.sample_audio = sample
-        window.session.provider_client = lambda _role: Client()
-        await page.capability()
-        assert calls == [
-            ({"asr_protocol": PROTOCOL}, "fixture-key", b"fixture-audio", False)
-        ]
-        assert "未向其他窗口输入" in page.message.text()
-
-    asyncio.run(scenario())
-
-
-@pytest.mark.parametrize("streaming", [False, True])
-def test_polish_capability_uses_saved_streaming_setting(window, streaming):
-    async def scenario():
-        page = window.models_page.polishing
-        store = window.session.store
-        store.save_settings(
-            replace(store.load_settings(), polishing_streaming=streaming)
-        )
-        calls = []
-
-        async def key(_reference):
-            return "fixture-key"
-
-        class Client:
-            async def test_capability(self, _provider, _key, **options):
-                calls.append(options)
-                return Result("fixture", Usage(), 0)
-
-        window.session.key = key
-        window.session.provider_client = lambda _role: Client()
-        await page.capability()
-        assert calls == [{"audio": None, "streaming": streaming}]
-
-    asyncio.run(scenario())
-
-
-def test_hidden_legacy_streaming_control_cannot_overwrite_settings(window):
-    async def scenario():
-        page = window.models_page.polishing
-        assert page.streaming.isChecked()
-        page.streaming.setChecked(False)
-        await page.save()
-        assert window.session.store.load_settings().polishing_streaming
-        assert page.streaming.isChecked()
-        assert page.streaming.isHidden()
-
-    asyncio.run(scenario())
-
-
-@pytest.mark.parametrize("control", ["protocol", "endpoint", "json", "streaming"])
+@pytest.mark.parametrize("control", ["protocol", "endpoint", "json"])
 def test_new_provider_controls_invalidate_late_status(window, control):
     async def scenario():
-        page = (
-            window.models_page.polishing
-            if control == "streaming"
-            else window.models_page.transcription
-        )
+        page = window.models_page.transcription
         if control == "endpoint":
             page.protocol.setCurrentIndex(page.protocol.findData(PROTOCOL))
         entered, release = asyncio.Event(), asyncio.Event()
@@ -903,10 +831,8 @@ def test_new_provider_controls_invalidate_late_status(window, control):
             page.protocol.setCurrentIndex(page.protocol.findData(PROTOCOL))
         elif control == "endpoint":
             page.realtime_url.setText("wss://example.invalid/realtime")
-        elif control == "json":
-            page.parameters.setPlainText('{"asr_options":{}}')
         else:
-            page.streaming.setChecked(not page.streaming.isChecked())
+            page.parameters.setPlainText('{"asr_options":{}}')
         page.message.setText("changed form")
         release.set()
         await task

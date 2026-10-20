@@ -48,7 +48,7 @@ class ModelsPage(Page):
 
 
 class SettingsPage(Page):
-    def __init__(self, session, stats, log, integration, command, preview):
+    def __init__(self, session, stats, log, integration, command):
         super().__init__("设置", "录音、快捷键、外观与输入兼容性集中管理。")
         self.session = session
         self.tabs = QTabWidget()
@@ -83,9 +83,9 @@ class SettingsPage(Page):
         self.streaming.toggled.connect(lambda: self.safe(self.save))
         self.fallback.toggled.connect(lambda: self.safe(self.save))
         self.recording = RecordingPage(session, command)
-        self.appearance = AppearancePage(session, preview)
+        self.appearance = AppearancePage(session)
         self.compatibility = CompatibilityPage(session)
-        self.statistics = StatisticsPage(session, stats, log)
+        self.statistics = StatisticsPage(session, stats)
         self.logs = LogsPage(session, log)
         self.integration = AboutPage(session, integration)
         for name, page in (

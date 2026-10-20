@@ -134,9 +134,7 @@ class MainWindow(QMainWindow):
         self.stack = QStackedWidget()
         self.home = HomePage(session, stats)
         self.models_page = ModelsPage(session)
-        self.settings_page = SettingsPage(
-            session, stats, log, integration, command, self.overlay.preview
-        )
+        self.settings_page = SettingsPage(session, stats, log, integration, command)
         self.help_page = HelpPage(session)
         self.pages = [
             self.home,

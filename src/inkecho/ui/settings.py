@@ -6,7 +6,6 @@ from dataclasses import replace
 from PySide6.QtCore import Qt, Signal
 from PySide6.QtGui import QKeySequence
 from PySide6.QtWidgets import (
-    QCheckBox,
     QComboBox,
     QDoubleSpinBox,
     QFormLayout,
@@ -214,7 +213,7 @@ class RecordingPage(Page):
 
 
 class AppearancePage(Page):
-    def __init__(self, session, preview):
+    def __init__(self, session):
         super().__init__("外观与悬浮提示", "以轻量波形显示进度，避免打断输入。")
         self.session = session
         settings = session.store.load_settings()
@@ -243,14 +242,11 @@ class AppearancePage(Page):
         self.duration.setRange(0.1, 30)
         self.duration.setSuffix(" 秒")
         self.duration.setValue(settings.overlay_seconds)
-        self.tray = QCheckBox("关闭窗口时保留托盘入口（托盘不可用时保持窗口可见）")
-        self.tray.setChecked(settings.close_to_tray)
         form.addRow("动画样式", self.style)
         form.addRow("位置", self.position)
         form.addRow("不透明度", self.opacity)
         form.addRow("结果显示时间", self.duration)
         body.addLayout(form)
-        self.tray.hide()
         self.body.addWidget(panel)
         self.style.currentIndexChanged.connect(self.save)
         self.position.currentIndexChanged.connect(self.save)

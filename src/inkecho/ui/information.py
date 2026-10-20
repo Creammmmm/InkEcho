@@ -98,9 +98,9 @@ class CompatibilityPage(Page):
 
 
 class StatisticsPage(Page):
-    def __init__(self, session, stats, log):
+    def __init__(self, session, stats):
         super().__init__("使用数据", "每日汇总与模型用量。")
-        self.session, self.stats, self.log = session, stats, log
+        self.session, self.stats = session, stats
         frame, layout = card()
         self.summary = label("")
         layout.addWidget(self.summary)

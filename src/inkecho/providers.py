@@ -138,12 +138,6 @@ class Result:
     seconds: float
 
 
-@dataclass(frozen=True)
-class Connection:
-    models: tuple[str, ...]
-    capability_verified: bool = False
-
-
 def polishing_request_body(
     provider: Provider, text: str, prompt: str, *, stream: bool = False
 ) -> dict:
@@ -478,9 +472,6 @@ class ProviderClient:
                 and model["id"].strip()
             }
         )
-
-    async def check_connection(self, provider: Provider, key: str) -> Connection:
-        return Connection(tuple(await self.models(provider, key)))
 
     async def transcribe(self, provider: Provider, key: str, audio: bytes) -> Result:
         validate_provider_protocol(provider)
