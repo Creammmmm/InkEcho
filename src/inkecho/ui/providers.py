@@ -13,6 +13,7 @@ from PySide6.QtWidgets import (
     QHBoxLayout,
     QLineEdit,
     QPlainTextEdit,
+    QPushButton,
     QSizePolicy,
     QSpinBox,
     QWidget,
@@ -25,6 +26,7 @@ from inkecho.provider_catalog import (
     asr_capability,
 )
 from inkecho.provider_credentials import encode_credentials
+from inkecho.provider_guidance import setup_guidance
 from inkecho.providers import ProviderError, validate_provider_protocol
 from inkecho.realtime import PROTOCOL, RealtimeConfig
 from inkecho.security import CredentialError
@@ -167,6 +169,31 @@ class ProviderPage(Page):
             for control in (self.enabled, self.streaming, self.fallback):
                 control.hide()
         self.body.addWidget(panel)
+        guide_panel, guide_body = card()
+        self.guide_summary = label("", muted=True)
+        self.guide_toggle = QPushButton("查看 API 配置步骤")
+        self.guide_toggle.setCheckable(True)
+        guide_header = QHBoxLayout()
+        guide_header.addWidget(self.guide_summary, 1)
+        guide_header.addWidget(self.guide_toggle)
+        guide_body.addLayout(guide_header)
+        self.guide_links = label("")
+        self.guide_links.setTextFormat(Qt.TextFormat.RichText)
+        self.guide_links.setTextInteractionFlags(
+            Qt.TextInteractionFlag.TextBrowserInteraction
+        )
+        self.guide_links.setOpenExternalLinks(True)
+        guide_body.addWidget(self.guide_links)
+        self.guide_details = label("")
+        self.guide_details.setTextFormat(Qt.TextFormat.RichText)
+        self.guide_details.setTextInteractionFlags(
+            Qt.TextInteractionFlag.TextBrowserInteraction
+        )
+        self.guide_details.setOpenExternalLinks(True)
+        self.guide_details.hide()
+        self.guide_toggle.toggled.connect(self.toggle_guidance)
+        guide_body.addWidget(self.guide_details)
+        self.body.insertWidget(self.body.indexOf(panel), guide_panel)
         self.body.addWidget(
             actions(
                 button("测试连接", lambda: self.run(self.discover())),
@@ -375,7 +402,43 @@ class ProviderPage(Page):
                 )
             streaming_config(provider, sample_rate=sample_rate)
 
+    def toggle_guidance(self, expanded):
+        self.guide_details.setVisible(expanded)
+        self.guide_toggle.setText(
+            "收起 API 配置步骤" if expanded else "查看 API 配置步骤"
+        )
+
+    def update_guidance(self):
+        if not hasattr(self, "guide_details"):
+            return
+        try:
+            fields = self.credential_fields()
+        except ConfigError:
+            fields = ("api_key",)
+        protocol = (
+            self.protocol.currentData() if self.role == "transcription" else "http"
+        )
+        summary, details = setup_guidance(
+            self.preset.currentData(),
+            self.url.text().strip(),
+            fields,
+            role=self.role,
+            protocol=protocol,
+            adapter=self.adapter,
+        )
+        self.guide_summary.setText(summary)
+        if details.startswith("<p>"):
+            links, _, steps = details.partition("</p>")
+            self.guide_links.setText(links + "</p>")
+            self.guide_links.show()
+            self.guide_details.setText(steps)
+        else:
+            self.guide_links.clear()
+            self.guide_links.hide()
+            self.guide_details.setText(details)
+
     def update_model_hint(self):
+        self.update_guidance()
         from inkecho.app import PROVIDER_LABELS
 
         if not self.name.text().strip():
