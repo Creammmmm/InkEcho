@@ -10,7 +10,15 @@ InkEcho 是 Linux 桌面语音输入应用：录音后调用云端转写，可�
 中文 API 配置引导。同一 AppImage 已完成 Ubuntu 24.04 Xorg、Ubuntu 26.04
 原生 Wayland / XWayland 和私有 FUSE 实际包验收；原配置保持，旧 0.5.8 包已备份。
 完整范围及限制见 [0.5.12 包验收](docs/v0.5.12-guidance-package-validation.md)。
-本次没有创建新的 GitHub Release，下方正式版下载仍为 v0.5.0。
+本机安装版本与下方正式发布目标分开；本轮不额外替换或重启此实例。
+
+## v0.6.0
+
+本版提供更清晰的工作台布局、平台 API 配置引导、润色风格卡片与自动保存设置，
+并包含录音首段、Qwen 实时预览、悬浮样式及完全退出后快捷键行为修复。
+新 0.6.0 同一 AppImage 已完成 Ubuntu 24.04 Xorg 与 Ubuntu 26.04 原生 Wayland /
+XWayland 实际包验收。范围见 [0.6.0 验收报告](docs/v0.6.0-release-validation.md)，
+变化见 [发布说明](docs/v0.6.0-release-notes.md)；正式发布与附件状态以 GitHub 为准。
 
 ## v0.5.0
 
@@ -45,13 +53,13 @@ TTS、图像、embedding及协议不匹配模型；仍可手填未知模型，�
 ## 下载与运行
 
 发布包为Linux x86_64。从[正式版本列表](https://github.com/Creammmmm/InkEcho/releases)或
-[v0.5.0发布页](https://github.com/Creammmmm/InkEcho/releases/tag/v0.5.0)
+[v0.6.0发布页](https://github.com/Creammmmm/InkEcho/releases/tag/v0.6.0)
 下载AppImage和同名`.sha256`文件；实际发布状态及最新版以GitHub为准。
 
 ```sh
-sha256sum -c InkEcho-0.5.0-x86_64.AppImage.sha256
-chmod +x InkEcho-0.5.0-x86_64.AppImage
-./InkEcho-0.5.0-x86_64.AppImage
+sha256sum -c InkEcho-0.6.0-x86_64.AppImage.sha256
+chmod +x InkEcho-0.6.0-x86_64.AppImage
+./InkEcho-0.6.0-x86_64.AppImage
 ```
 
 若旧实例仍运行，请通过其托盘或界面正常退出再启动新版；单实例通信可能只唤起旧实例。
