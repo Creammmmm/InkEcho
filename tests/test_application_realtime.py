@@ -358,3 +358,70 @@ def test_step_protocol_uses_its_factory_without_changing_qwen_injection_contract
         await session.close()
 
     asyncio.run(scenario())
+
+
+def test_delayed_input_consent_preserves_beginning_and_gates_delivery(sessions):
+    async def scenario():
+        session, connections = sessions()
+        session.inputs.authorized = False
+        entered, release = asyncio.Event(), asyncio.Event()
+
+        async def authorize():
+            entered.set()
+            await release.wait()
+            session.inputs.authorized = True
+
+        session.inputs.authorize = authorize
+        pending = asyncio.create_task(session.toggle())
+        await entered.wait()
+        connection = connections[0]
+        assert session.recorder.recording
+        first_pcm = b"\x01\x00" * 160
+        session.recorder.pcm_ready.emit(first_pcm)
+        assert connection.pcm == [first_pcm]
+        session.stop_recording()
+        for _ in range(20):
+            await asyncio.sleep(0)
+        assert not session.inputs.inserted
+        release.set()
+        await pending
+        await settle(session)
+        assert session.inputs.inserted == ["实时识别。"]
+        assert connection.closed
+        await session.close()
+
+    asyncio.run(scenario())
+
+
+@pytest.mark.parametrize("cancel", [False, True])
+def test_denied_or_cancelled_input_consent_stops_audio_without_delivery(
+    sessions, cancel
+):
+    from inkecho.platform.keyboard import KeyboardError
+
+    async def scenario():
+        session, connections = sessions()
+        session.inputs.authorized = False
+        entered, release = asyncio.Event(), asyncio.Event()
+
+        async def authorize():
+            entered.set()
+            await release.wait()
+            raise KeyboardError("permission_denied")
+
+        session.inputs.authorize = authorize
+        pending = asyncio.create_task(session.toggle())
+        await entered.wait()
+        assert session.recorder.recording
+        session.recorder.pcm_ready.emit(b"\x01\x00" * 160)
+        if cancel:
+            session.cancel()
+        release.set()
+        await pending
+        await settle(session)
+        assert not session.recorder.recording
+        assert not session.controller.task and not session.inputs.inserted
+        assert connections[0].closed
+        await session.close()
+
+    asyncio.run(scenario())

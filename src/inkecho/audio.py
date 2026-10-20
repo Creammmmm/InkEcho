@@ -23,6 +23,7 @@ def wav_bytes(pcm: bytes, sample_rate: int) -> bytes:
 
 class Recorder(QObject):
     level = Signal(float)
+    capturing = Signal()
     pcm_ready = Signal(bytes)
     finished = Signal(bytes, float)
     failed = Signal(str)
@@ -37,6 +38,7 @@ class Recorder(QObject):
         self.streaming = False
         self._stream_tail = b""
         self._captured_bytes = 0
+        self._capture_ready = False
         self.timer = QTimer(self)
         self.timer.setSingleShot(True)
         self.timer.timeout.connect(lambda: self._fail("recording_timed_out"))
@@ -78,16 +80,25 @@ class Recorder(QObject):
             return False
         self.sample_rate = sample_rate
         self.streaming = streaming
+        self._capture_ready = False
         self._stream_tail = b""
         self._captured_bytes = 0
         self.max_bytes = int(sample_rate * 2 * max_seconds)
         self.pcm.clear()
         self.source = QAudioSource(device, audio_format, self)
+        source = self.source
+        # Request a short buffer; the audio backend may choose a larger size.
+        self.source.setBufferSize(sample_rate * 2 // 50)
         self.stream = self.source.start()
         if self.stream is None or self.source.error() != QtAudio.Error.NoError:
             self._fail("microphone_start_failed")
             return False
         self.stream.readyRead.connect(self._read)
+        # start() may already have buffered the first frame before readyRead
+        # was connected. Drain it now instead of waiting for another edge.
+        self._read()
+        if self.source is not source:
+            return False
         self.monitor.start()
         self.timer.start(round(max_seconds * 1000))
         return True
@@ -95,6 +106,7 @@ class Recorder(QObject):
     def _read(self) -> None:
         if self.stream is None:
             return
+        source = self.source
         data = bytes(self.stream.readAll())
         captured = self._captured_bytes if self.streaming else len(self.pcm)
         if captured + len(data) > self.max_bytes:
@@ -103,11 +115,18 @@ class Recorder(QObject):
         self._captured_bytes += len(data)
         if not self.streaming:
             self.pcm.extend(data)
+        if self._captured_bytes >= 2 and not self._capture_ready:
+            self._capture_ready = True
+            self.capturing.emit()
+            if self.source is not source:
+                return
         samples = len(data) // 2
         if samples:
             values = struct.unpack(f"<{samples}h", data[: samples * 2])
             rms = math.sqrt(sum(value * value for value in values) / samples) / 32768
             self.level.emit(min(rms, 1.0))
+        if self.source is not source:
+            return
         if self.streaming and self.source is not None:
             complete = self._stream_tail + data
             boundary = len(complete) - len(complete) % 2
@@ -128,6 +147,7 @@ class Recorder(QObject):
         self.monitor.stop()
         source, self.source = self.source, None
         self.stream = None
+        self._capture_ready = False
         if source:
             source.stop()
             source.deleteLater()

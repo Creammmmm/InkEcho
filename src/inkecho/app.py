@@ -112,6 +112,7 @@ class Session(QObject):
     state_changed = Signal(str)
     preview = Signal(str)
     level = Signal(float)
+    capture_ready = Signal(bool)
     finished = Signal(dict)
     performance = Signal(dict)
     diagnostic = Signal(str)
@@ -157,6 +158,8 @@ class Session(QObject):
         self.input_failure = None
         self.settings = self.store.load_settings()
         self.recorder.level.connect(self.level)
+        if hasattr(self.recorder, "capturing"):
+            self.recorder.capturing.connect(self._capture_ready)
         self.recorder.finished.connect(self._recorded)
         self.recorder.failed.connect(self._audio_failed)
         if hasattr(self.recorder, "pcm_ready"):
@@ -260,7 +263,11 @@ class Session(QObject):
                 if not self.connected or epoch != self.epoch:
                     return False
                 if not self.inputs.authorized:
-                    self.status.emit("正在启用键盘输入；如出现系统授权提示，请允许。")
+                    self.status.emit(
+                        "录音已开始，正在启用键盘输入；请允许系统授权提示。"
+                        if self.controller.state == State.RECORDING
+                        else "正在启用键盘输入；如出现系统授权提示，请允许。"
+                    )
                     await self.inputs.authorize()
                 return self.inputs.authorized and epoch == self.epoch
             except asyncio.CancelledError:
@@ -329,6 +336,8 @@ class Session(QObject):
         if state == State.IDLE:
             return
         message = ERROR_LABELS.get(self.controller.failure, STATE_LABELS[state])
+        if state == State.RECORDING and hasattr(self.recorder, "capturing"):
+            message = "麦克风正在启动，请稍候。"
         if state == State.FAILED:
             code = self.controller.failure.value
             if self.controller.failure == Failure.AUDIO and self.audio_failure:
@@ -341,6 +350,7 @@ class Session(QObject):
         else:
             self.status.emit(message)
         if state in {State.SUCCEEDED, State.FAILED, State.CANCELLED}:
+            self.capture_ready.emit(False)
             if self.task_context and "asr_started" in self.task_context:
                 self.metrics.setdefault(
                     "transcription_seconds",
@@ -367,6 +377,7 @@ class Session(QObject):
             self.metrics = {}
 
     def cancel(self):
+        self.capture_ready.emit(False)
         self.preview.emit("")
         self.epoch += 1
         self.preparing = False
@@ -402,6 +413,8 @@ class Session(QObject):
             self.status.emit("当前任务正在处理，请等待或取消。")
             return
         self.preparing = True
+        self.capture_ready.emit(False)
+        self.status.emit("正在准备录音，请稍候。")
         self.epoch += 1
         epoch = self.epoch
         try:
@@ -445,8 +458,6 @@ class Session(QObject):
                 )
                 await asyncio.sleep(delay)
             if epoch != self.epoch:
-                return
-            if not await self.authorize_input() or epoch != self.epoch:
                 return
             key = await self.key(transcription.key_ref)
             if epoch != self.epoch:
@@ -548,8 +559,18 @@ class Session(QObject):
                 }
                 if realtime_config is not None:
                     options["streaming"] = True
+                # Input consent must not delay capturing the beginning of speech.
+                # The same owned task is a hard gate before any text delivery.
+                context["input_authorization"] = self.spawn(self.authorize_input())
                 if not self.recorder.start(device, **options):
                     self.controller.fail(task_id, Failure.AUDIO)
+                    return
+                if not await context["input_authorization"]:
+                    if epoch == self.epoch and self.active(task_id):
+                        self.cancel()
+                    return
+                if epoch != self.epoch or not self.active(task_id):
+                    return
         except asyncio.CancelledError:
             raise
         except KeyboardError as error:
@@ -580,6 +601,11 @@ class Session(QObject):
                 self.preparing = False
                 if not self.controller.task:
                     self.keys.clear()
+
+    def _capture_ready(self) -> None:
+        if self.controller.task and self.controller.state == State.RECORDING:
+            self.capture_ready.emit(True)
+            self.status.emit("正在聆听，可以开始说话。")
 
     def _audio_failed(self, reason):
         if self.controller.task:
@@ -687,6 +713,9 @@ class Session(QObject):
                 return
             self.metrics["transcription_seconds"] = time.monotonic() - started
             self.mark_timing(task_id, "asr_completed")
+            authorized = await context["input_authorization"]
+            if not authorized or not self.active(task_id):
+                return
             self.controller.transcribed(task_id, result.text)
             if self.controller.task is None or self.controller.task.id != task_id:
                 return

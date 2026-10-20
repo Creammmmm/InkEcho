@@ -121,6 +121,7 @@ def test_synchronous_start_failure_is_reported_once(recorder, monkeypatch):
     )
     state = SimpleNamespace(stopped=False)
     source = SimpleNamespace(
+        setBufferSize=lambda _: None,
         start=lambda: None,
         error=lambda: QtAudio.Error.OpenError,
         stop=lambda: setattr(state, "stopped", True),
@@ -247,3 +248,117 @@ def test_live_repeated_same_process_capture(recorder):
             "timeout_restart": True,
         }
     )
+
+
+def startup_source(monkeypatch, *, first=b"\x01\x00"):
+    """Model PCM ready during start(), before a consumer can connect readyRead."""
+
+    class Ready:
+        callback = None
+
+        def connect(self, callback):
+            self.callback = callback
+
+    pieces = [first]
+    ready = Ready()
+    stream = SimpleNamespace(
+        readyRead=ready, readAll=lambda: pieces.pop(0) if pieces else b""
+    )
+    state = SimpleNamespace(buffer=None, stopped=False)
+    source = SimpleNamespace(
+        setBufferSize=lambda size: setattr(state, "buffer", size),
+        start=lambda: stream,
+        error=lambda: QtAudio.Error.NoError,
+        stop=lambda: setattr(state, "stopped", True),
+        deleteLater=lambda: None,
+    )
+    device = SimpleNamespace(isNull=lambda: False, isFormatSupported=lambda _: True)
+    monkeypatch.setattr(
+        audio, "QMediaDevices", SimpleNamespace(defaultAudioInput=lambda: device)
+    )
+    monkeypatch.setattr(audio, "QAudioSource", lambda *_: source)
+    return state, pieces, ready
+
+
+@pytest.mark.parametrize("streaming", [False, True])
+def test_start_drains_first_buffer_without_waiting_for_next_notification(
+    recorder, monkeypatch, streaming
+):
+    state, pieces, ready = startup_source(monkeypatch)
+    chunks, started = [], []
+    recorder.pcm_ready.connect(chunks.append)
+    recorder.capturing.connect(lambda: started.append(True))
+    assert recorder.start(streaming=streaming)
+    assert state.buffer == 640  # Request 20 ms at 16 kHz, not a latency guarantee.
+    assert started == [True]
+    assert (chunks if streaming else [bytes(recorder.pcm)]) == [b"\x01\x00"]
+    pieces.append(b"\x02\x00")
+    ready.callback()
+    assert started == [True]
+    recorder.cancel()
+    assert not recorder._capture_ready and state.stopped
+
+
+def test_capture_ready_waits_for_complete_sample_and_resets_after_cancel(
+    recorder, monkeypatch
+):
+    _, pieces, ready = startup_source(monkeypatch, first=b"\x01")
+    started = []
+    recorder.capturing.connect(lambda: started.append(True))
+    assert recorder.start(streaming=True)
+    assert not started
+    pieces.append(b"\x00")
+    ready.callback()
+    assert started == [True]
+    recorder.cancel()
+    startup_source(monkeypatch, first=b"")
+    assert recorder.start(streaming=True)
+    assert started == [True] and not recorder._capture_ready
+
+
+def test_cancel_from_first_frame_does_not_emit_pcm_or_restart_timers(
+    recorder, monkeypatch
+):
+    state, _, _ = startup_source(monkeypatch)
+    levels, chunks = [], []
+    recorder.level.connect(levels.append)
+    recorder.pcm_ready.connect(chunks.append)
+    recorder.capturing.connect(recorder.cancel)
+    assert not recorder.start(streaming=True)
+    assert state.stopped and recorder.source is None
+    assert not levels and not chunks
+    assert not recorder.monitor.isActive() and not recorder.timer.isActive()
+
+
+def test_replaced_source_from_first_frame_never_receives_old_pcm(recorder, monkeypatch):
+    state, _, _ = startup_source(monkeypatch)
+    chunks, replacements = [], []
+    recorder.pcm_ready.connect(chunks.append)
+
+    def replace():
+        recorder.cancel()
+        startup_source(monkeypatch, first=b"")
+        assert recorder.start(streaming=True)
+        replacements.append(recorder.source)
+
+    recorder.capturing.connect(replace)
+    assert not recorder.start(streaming=True)
+    assert state.stopped and recorder.source is replacements[0]
+    assert not chunks and recorder._captured_bytes == 0
+    assert recorder.monitor.isActive() and recorder.timer.isActive()
+
+
+def test_level_callback_cannot_feed_old_pcm_to_replaced_source(recorder, monkeypatch):
+    state, _, _ = startup_source(monkeypatch)
+    chunks = []
+    recorder.pcm_ready.connect(chunks.append)
+
+    def replace(_level):
+        recorder.cancel()
+        startup_source(monkeypatch, first=b"")
+        assert recorder.start(streaming=True)
+
+    recorder.level.connect(replace)
+    assert not recorder.start(streaming=True)
+    assert state.stopped and recorder.source is not None
+    assert not chunks and recorder._captured_bytes == 0

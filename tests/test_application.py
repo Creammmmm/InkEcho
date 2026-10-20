@@ -375,7 +375,7 @@ def test_disabled_polishing_does_not_load_unused_provider_or_prompt(factory):
     asyncio.run(scenario())
 
 
-def test_first_toggle_waits_for_input_connection(factory):
+def test_first_toggle_connects_input_while_recording(factory):
     async def scenario():
         session = factory()
         await session.toggle()
@@ -401,7 +401,7 @@ def test_wayland_recording_has_no_target_requirement(factory, monkeypatch):
     asyncio.run(scenario())
 
 
-def test_denied_keyboard_permission_is_visible_before_key_or_audio(factory):
+def test_denied_keyboard_permission_stops_recording_without_output(factory):
     from inkecho.platform.keyboard import KeyboardError
 
     async def scenario():
@@ -413,21 +413,18 @@ def test_denied_keyboard_permission_is_visible_before_key_or_audio(factory):
         async def denied():
             raise KeyboardError("permission_denied")
 
-        async def unexpected_key(_reference):
-            raise AssertionError("Denied permission must not read credentials")
-
         session.inputs.authorize = denied
-        session.key = unexpected_key
         await session.toggle()
         assert not session.recorder.recording
         assert len(problems) == 1 and "系统未允许键盘输入" in problems[0]
         assert diagnostics == ["permission_denied"]
+        assert session.inputs.inserted == [] and session.controller.task is None
         await session.close()
 
     asyncio.run(scenario())
 
 
-def test_cancel_during_input_connection_does_not_start_recording(factory):
+def test_cancel_during_input_connection_stops_existing_recording(factory):
     async def scenario():
         session = factory()
         entered = asyncio.Event()
@@ -767,7 +764,7 @@ def test_session_connection_reflects_backend_disconnect(factory):
     asyncio.run(scenario())
 
 
-def test_display_failure_is_visible_before_credentials_or_recording(factory):
+def test_display_failure_stops_recording_and_prevents_output(factory):
     from inkecho.platform.keyboard import KeyboardError, KeyboardInput
 
     async def scenario():
@@ -779,11 +776,7 @@ def test_display_failure_is_visible_before_credentials_or_recording(factory):
         def unavailable():
             raise KeyboardError("display_unavailable")
 
-        async def forbidden_key(_reference):
-            pytest.fail("Display failure must not request credentials")
-
         session.inputs = KeyboardInput(driver_factory=unavailable)
-        session.key = forbidden_key
         await session.toggle()
         assert not session.recorder.recording and not session.controller.task
         assert diagnostics == ["display_unavailable"]
