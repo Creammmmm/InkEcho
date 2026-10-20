@@ -12,6 +12,7 @@ PROVIDER_MODULES = (
     "inkecho.provider_credentials",
     "inkecho.http_asr",
     "inkecho.asr_streaming",
+    "inkecho.qwen_vad",
     "inkecho.asr_wire",
     "inkecho.step_realtime",
     "inkecho.dashscope_realtime",

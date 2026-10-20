@@ -45,4 +45,10 @@ def create_streaming_session(
         raise ProviderError("configuration")
     if provider.adapter == "qwen" and qwen_factory is not None:
         factory = qwen_factory
+    if provider.adapter == "qwen" and config.server_vad:
+        from inkecho.qwen_vad import QwenVadSession
+        from inkecho.realtime import QwenRealtimeSession
+
+        if factory is QwenRealtimeSession:
+            factory = QwenVadSession
     return factory(config, key, **policy)

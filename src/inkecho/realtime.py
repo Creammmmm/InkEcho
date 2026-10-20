@@ -59,10 +59,12 @@ class RealtimeConfig:
     endpoint: str
     model: str
     sample_rate: int = 16000
+    server_vad: bool = False
 
     def __post_init__(self):
         if (
-            type(self.sample_rate) is not int
+            type(self.server_vad) is not bool
+            or type(self.sample_rate) is not int
             or self.sample_rate != 16000
             or not isinstance(self.model, str)
             or not re.fullmatch(r"[A-Za-z0-9_.:-]{1,200}", self.model)
@@ -80,10 +82,15 @@ class RealtimeConfig:
         if (
             provider.role != "transcription"
             or provider.parameters.get("asr_protocol") != PROTOCOL
-            or set(provider.parameters) - {"asr_protocol", "realtime_url"}
+            or set(provider.parameters)
+            - {"asr_protocol", "realtime_url", "turn_detection"}
         ):
             raise ProviderError("configuration")
+        mode = provider.parameters.get("turn_detection")
+        if mode not in (None, "manual", "server_vad"):
+            raise ProviderError("configuration")
         endpoint = provider.parameters.get("realtime_url")
+        derived = endpoint is None
         if endpoint is None:
             url = urlsplit(provider.base_url)
             host = url.hostname or ""
@@ -107,7 +114,12 @@ class RealtimeConfig:
             endpoint = f"wss://{host}/api-ws/v1/realtime"
         if not isinstance(endpoint, str):
             raise ProviderError("configuration")
-        return cls(endpoint, provider.model.strip(), sample_rate)
+        return cls(
+            endpoint,
+            provider.model.strip(),
+            sample_rate,
+            server_vad=mode == "server_vad" or (mode is None and derived),
+        )
 
 
 class _DirectConnect(connect):

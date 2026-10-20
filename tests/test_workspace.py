@@ -290,11 +290,11 @@ def test_preparing_shortcut_keeps_status_cancel_until_pending_cleanup(workspace)
     async def scenario():
         entered = asyncio.Event()
 
-        async def blocked_authorization():
+        async def blocked_key(_reference):
             entered.set()
             await asyncio.Event().wait()
 
-        workspace.session.authorize_input = blocked_authorization
+        workspace.session.key = blocked_key
         workspace.show()
         workspace.handle_command("toggle")
         await asyncio.wait_for(entered.wait(), 1)
