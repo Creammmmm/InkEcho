@@ -49,8 +49,11 @@ class Instance(QObject):
             self.command.emit(command)
         self.pending_commands.clear()
 
-    def acquire(self, command: str) -> bool:
+    def acquire(self, command: str, *, allow_start: bool = True) -> bool:
         if self.lock.tryLock(0):
+            if not allow_start:
+                self.lock.unlock()
+                return False
             QLocalServer.removeServer(self.name)
             if not self.server.listen(self.name):
                 self.lock.unlock()
@@ -95,12 +98,12 @@ class Instance(QObject):
 
 
 class StartupCommands:
-    """Keep cold-start toggles until input initialization has finished."""
+    """Queue commands to an already starting instance until services are ready."""
 
-    def __init__(self, dispatch, *, toggle=False):
+    def __init__(self, dispatch):
         self.dispatch = dispatch
         self.ready = False
-        self.pending_toggle = toggle
+        self.pending_toggle = False
 
     def receive(self, command):
         if not self.ready:
@@ -133,12 +136,12 @@ async def run(app, store, instance, args):
         window = MainWindow(session, stats, log, integration, command)
         stopped = asyncio.Event()
         window.quit_requested.connect(stopped.set)
-        commands = StartupCommands(window.handle_command, toggle=args.toggle)
+        commands = StartupCommands(window.handle_command)
         instance.attach(commands.receive)
         log.record("startup")
         if stopped.is_set():
             return
-        if not args.toggle and (not args.background or not window.tray.isVisible()):
+        if not args.background or not window.tray.isVisible():
             window.show()
         await session.initialize()
         if stopped.is_set():
@@ -212,10 +215,9 @@ def main():
         (name for name in ("toggle", "cancel", "quit") if getattr(args, name)), "show"
     )
     try:
-        if not instance.acquire(command):
-            return
-        if args.cancel or args.quit:
-            instance.close()
+        if not instance.acquire(
+            command, allow_start=command not in {"toggle", "cancel", "quit"}
+        ):
             return
         store.initialize()
         with ManagedQtEventLoop(app) as loop:
