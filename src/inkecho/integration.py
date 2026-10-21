@@ -84,6 +84,13 @@ def desktop_argument(value: str) -> str:
     return f'"{value}"'
 
 
+def desktop_string(value: str) -> str:
+    """Encode a desktop-entry string, independently of Exec argument quoting."""
+    if any(ord(char) < 32 or ord(char) == 127 for char in value):
+        raise IntegrationError("Desktop values cannot contain control characters.")
+    return value.replace("\\", "\\\\")
+
+
 class DesktopIntegration:
     def __init__(
         self,
@@ -115,6 +122,10 @@ class DesktopIntegration:
     def _entry(self, *, autostart: bool = False) -> str:
         if not self.executable.is_file() or not os.access(self.executable, os.X_OK):
             raise IntegrationError("Select an existing executable application path.")
+        # A persistent file bypasses theme-name lookup in a running Shell.
+        # Never reference the AppImage's temporary mounted asset directory.
+        icon = self.data_home / "icons/hicolor/256x256/apps" / f"{APP_ID}.png"
+        icon_value = desktop_string(str(icon.absolute()))
         command = " ".join(
             desktop_argument(str(value)) for value in (self.executable, *self.args)
         )
@@ -123,7 +134,7 @@ class DesktopIntegration:
             "Comment=Private desktop voice input\n"
             # GIO checks the executable before expanding %% in its filename.
             f"Exec=/usr/bin/env -- {command}{' --background' if autostart else ''}\n"
-            f"Icon={APP_ID}\nTerminal=false\nCategories=AudioVideo;Audio;\n"
+            f"Icon={icon_value}\nTerminal=false\nCategories=AudioVideo;Audio;\n"
             f"StartupWMClass=InkEcho\n{MARKER}\n"
         )
 

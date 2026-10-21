@@ -193,7 +193,10 @@ def test_direct_appimage_identity_registers_matching_icons_without_autostart(
     entry = integration.launcher.read_text()
     assert integration.launcher.name == "io.github.Creammmmm.InkEcho.desktop"
     assert "StartupWMClass=InkEcho\n" in entry
-    assert "Icon=io.github.Creammmmm.InkEcho\n" in entry
+    assert (
+        f"Icon={integration.data_home}/icons/hicolor/256x256/apps/io.github.Creammmmm.InkEcho.png\n"
+        in entry
+    )
     assert not integration.autostart.exists()
     before = integration.launcher.stat().st_mtime_ns
     integration.ensure_running_identity()
@@ -243,3 +246,73 @@ def test_running_identity_publishes_desktop_after_atomic_icons(
         *(destination for _, destination in integration._icons()),
         integration.launcher,
     ]
+
+
+def test_old_managed_theme_entry_migrates_once(integration, monkeypatch):
+    integration.install(refresh=False)
+    entry = integration.launcher.read_text()
+    old = "\n".join(
+        "Icon=io.github.Creammmmm.InkEcho" if line.startswith("Icon=") else line
+        for line in entry.split("\n")
+    )
+    integration.launcher.write_text(old)
+    monkeypatch.setattr(integration, "_refresh", lambda: pytest.fail("no cache wait"))
+    assert not integration.status()["current"]
+    integration.ensure_running_identity()
+    assert integration.launcher.read_text() == entry
+    before = integration.launcher.stat().st_mtime_ns
+    integration.ensure_running_identity()
+    assert integration.launcher.stat().st_mtime_ns == before
+
+
+@pytest.mark.parametrize("character", ["\n", "\r", "\t", "\0", "\x1f", "\x7f"])
+def test_icon_path_control_characters_rejected_before_writes(
+    integration, tmp_path, character
+):
+    app = DesktopIntegration(
+        integration.executable, data_home=tmp_path / ("bad" + character + "path")
+    )
+    with pytest.raises(IntegrationError):
+        app.ensure_running_identity()
+    assert not app.data_home.exists()
+
+
+def test_relative_icon_data_home_becomes_absolute(integration, monkeypatch, tmp_path):
+    monkeypatch.chdir(tmp_path)
+    app = DesktopIntegration(integration.executable, data_home=Path("relative data"))
+    app.ensure_running_identity()
+    assert f"Icon={tmp_path}/relative data/icons/" in app.launcher.read_text()
+
+
+def test_gio_parses_persistent_icon_with_special_path(integration, tmp_path):
+    probe = subprocess.run(
+        ["/usr/bin/python3", "-I", "-c", "from gi.repository import Gio"],
+        capture_output=True,
+    )
+    if probe.returncode:
+        pytest.skip("system Python GIO is unavailable")
+    data_home = tmp_path / 'persistent space back\\slash $ 100% "quoted"'
+    app = DesktopIntegration(integration.executable, data_home=data_home)
+    app.ensure_running_identity()
+    result = subprocess.run(
+        [
+            "/usr/bin/python3",
+            "-I",
+            "-c",
+            "import json,sys; from gi.repository import Gio; "
+            "app=Gio.DesktopAppInfo.new_from_filename(sys.argv[1]); "
+            "print(json.dumps(app.get_icon().get_file().get_path()))",
+            str(app.launcher),
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    expected = data_home / "icons/hicolor/256x256/apps/io.github.Creammmmm.InkEcho.png"
+    assert json.loads(result.stdout) == str(expected)
+    assert (
+        expected.read_bytes()
+        == dict((destination, source) for source, destination in app._icons())[
+            expected
+        ].read_bytes()
+    )
