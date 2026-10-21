@@ -323,3 +323,42 @@ both remote asset hashes, then publish formal/latest after review. Bind the tag
 to the exact 0.6.0 source commit, not the report successor. Keep GNOME 46 native
 Wayland, real cloud/physical microphone/physical shortcut and Unicode limitations
 explicit in the final notes. No candidate-only pass or old hash may be substituted.
+
+
+## Formal v0.7.0 Ubuntu input repair release
+
+Prepare on `codex/release-0.7.0` from clean accepted main
+`0dd7a3b` (development version 0.6.9). Use
+`python3 scripts/validation/versioning.py bump --release` to synchronize
+`pyproject.toml`, `src/inkecho/__init__.py` and `uv.lock` to 0.7.0. This preparation
+changes only metadata and release documentation; do not relabel 0.6.8 or reuse
+its acceptance as proof of the new artifact.
+
+Commit the reviewed preparation, build from that exact clean source, and freeze
+one manifest binding its source commit, AppImage SHA-256, full package inventory
+and validation helpers. Rebind all 0.6.8 fixture paths, version and hash assertions
+to 0.7.0; a stale assertion must fail before input, not be disabled. Run that same
+new SHA on Ubuntu 24.04.5 / GNOME 46 Xorg and Ubuntu 26.04.1 / GNOME 50 native
+Wayland plus XWayland. Required gates cover actual AppRun/configuration pages,
+local manual/realtime/VAD protocols, real Recorder onset and overlay timing,
+actual Dock identity, real Files and Text Editor progressive Unicode input,
+and actual Codex/Claude private offline TUI checks specifically on 24.04 Xorg.
+Distinguish progressive complete output from strict one-character render frames.
+On 26.04 require controlled native/XWayland normal/cancel/current-cursor targets,
+UI/protocol/audio gates and one private actual FUSE startup; do not claim fresh
+Files, CLI or Dock application certification there. On 24.04 verify extraction
+and actual package execution without claiming guest FUSE mounting. Both systems
+require complete mapping/key cleanup. Physical microphone/cloud accuracy remain
+unverified unless separately measured; do not copy personal credentials.
+
+Keep the 26.04 intermittent field-blur failures and subsequent controls visible.
+Do not add focus forcing or loosen guards to produce a pass. Record original
+process exits, raw result versus tool-result files and all residual limitations
+in `docs/release-0.7.0-validation.md`. Pending or failed gates are not approval.
+The publication target is GitHub only; keep this machine's existing stable
+entry unchanged. Require the same-artifact dual-system and host FUSE review
+before publication. Preserve previous releases and artifacts. Merge the exact
+release-source commit into main before tagging. Draft only the versioned
+AppImage and matching checksum sidecar, verify remote downloads against local
+hashes, then publish formal/latest. The report successor uses 0.7.1 without
+rebuilding the validated 0.7.0 artifact; the tag stays on the exact release source.
