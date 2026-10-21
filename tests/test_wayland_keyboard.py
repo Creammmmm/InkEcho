@@ -87,6 +87,19 @@ def test_other_desktops_keep_x11_adapter(environ):
     assert type(keyboard_for_desktop(environ)) is KeyboardInput
 
 
+def test_only_explicit_xorg_uses_global_xtest():
+    from inkecho.platform.keyboard import _XDriver, _XTestDriver
+
+    assert keyboard_for_desktop({"XDG_SESSION_TYPE": "x11"})._factory is _XTestDriver
+    assert keyboard_for_desktop({})._factory is _XDriver
+    assert (
+        keyboard_for_desktop(
+            {"XDG_SESSION_TYPE": "wayland", "XDG_CURRENT_DESKTOP": "KDE"}
+        )._factory
+        is _XDriver
+    )
+
+
 def test_connect_is_non_authorizing_and_output_is_sequential_normalized():
     async def run():
         inputs, process = await connected()

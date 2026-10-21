@@ -57,6 +57,10 @@ PROVIDER_LABELS = {
     "audio": "录音格式或大小不符合服务要求。",
 }
 KEYBOARD_LABELS = {
+    "unsupported_compositor": (
+        "当前 GNOME Wayland 缺少 Unicode 键盘映射接口。Ubuntu 24.04 / GNOME 46 "
+        "请在登录界面选择「Ubuntu on Xorg」；程序不会自动更改系统会话。"
+    ),
     "display_unavailable": "无法连接桌面的键盘输入服务。请检查桌面会话。",
     "unsupported_target": (
         "当前窗口暂不支持此键盘输入方式。请使用兼容的 X11 / XWayland 应用；"

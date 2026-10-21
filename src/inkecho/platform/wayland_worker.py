@@ -174,6 +174,33 @@ class MutterSession:
             raise KeyboardError("display_unavailable")
         await self._call(self.path, INTERFACE, "Start")
         check()
+        xml = (
+            await self._call(
+                self.path, "org.freedesktop.DBus.Introspectable", "Introspect"
+            )
+        ).body[0]
+        check()
+        try:
+            interface = next(
+                item
+                for item in ET.fromstring(xml).findall("interface")
+                if item.get("name") == INTERFACE
+            )
+            methods = {item.get("name") for item in interface.findall("method")}
+            properties = {item.get("name") for item in interface.findall("property")}
+        except (ET.ParseError, StopIteration):
+            raise KeyboardError("display_unavailable") from None
+        if (
+            not {
+                "SetKeymap",
+                "ConnectToEIS",
+                "NotifyKeyboardKeycode",
+                "NotifyKeyboardKeysym",
+            }
+            <= methods
+            or "KeymapCapabilities" not in properties
+        ):
+            raise KeyboardError("unsupported_compositor")
         capabilities = (
             (
                 await self._call(
@@ -200,31 +227,6 @@ class MutterSession:
                 or 1 not in formats.value
             ):
                 raise KeyboardError("display_unavailable")
-        xml = (
-            await self._call(
-                self.path, "org.freedesktop.DBus.Introspectable", "Introspect"
-            )
-        ).body[0]
-        check()
-        try:
-            interface = next(
-                item
-                for item in ET.fromstring(xml).findall("interface")
-                if item.get("name") == INTERFACE
-            )
-            methods = {item.get("name") for item in interface.findall("method")}
-        except (ET.ParseError, StopIteration):
-            raise KeyboardError("display_unavailable") from None
-        if (
-            not {
-                "SetKeymap",
-                "ConnectToEIS",
-                "NotifyKeyboardKeycode",
-                "NotifyKeyboardKeysym",
-            }
-            <= methods
-        ):
-            raise KeyboardError("display_unavailable")
         await self._open_observer()
         check()
         await self.snapshot()

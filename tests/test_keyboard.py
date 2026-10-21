@@ -5,7 +5,13 @@ from types import SimpleNamespace
 
 import pytest
 
-from inkecho.platform.keyboard import KeyboardError, KeyboardInput, _Event, _XDriver
+from inkecho.platform.keyboard import (
+    KeyboardError,
+    KeyboardInput,
+    _Event,
+    _XDriver,
+    _XTestDriver,
+)
 
 
 class Driver:
@@ -463,6 +469,53 @@ def test_send_uses_owner_mask_zero_modifiers_and_exact_release_window():
 def test_unknown_errors_never_expose_details():
     error = KeyboardError("private server detail")
     assert str(error) == error.code == "injection_failed"
+
+
+def test_xorg_xtest_events_follow_global_focus_and_release_without_modifier_guard():
+    calls = []
+    driver = _XTestDriver.__new__(_XTestDriver)
+    driver.display = 100
+    driver._checked = nullcontext
+    driver.xtst = SimpleNamespace(
+        XTestFakeKeyEvent=lambda *args: calls.append(args) or 1
+    )
+    driver.send(22, 248, True)
+    driver.send(99, 248, False)
+    assert calls == [(100, 248, 1, 0), (100, 248, 0, 0)]
+
+
+@pytest.mark.parametrize("held,mask", [(True, 0), (False, 1), (False, 2), (False, 8)])
+def test_xorg_refuses_physical_keys_or_modifiers_without_mutating_them(held, mask):
+    driver = _XTestDriver.__new__(_XTestDriver)
+    driver.display, driver.root = 100, 1
+    driver._checked = nullcontext
+
+    def query_keys(display, keys):
+        if held:
+            keys[3] = b"\x01"
+        return 1
+
+    def query_pointer(*args):
+        ctypes.cast(args[-1], ctypes.POINTER(ctypes.c_uint))[0] = mask
+        return 1
+
+    driver.x11 = SimpleNamespace(XQueryKeymap=query_keys, XQueryPointer=query_pointer)
+    with pytest.raises(KeyboardError, match="keys_held"):
+        driver.focus()
+
+
+def test_xorg_preserves_numlock_for_identical_level_unicode_row(monkeypatch):
+    driver = _XTestDriver.__new__(_XTestDriver)
+    driver.display, driver.root = 100, 1
+    driver._checked = nullcontext
+
+    def query_pointer(*args):
+        ctypes.cast(args[-1], ctypes.POINTER(ctypes.c_uint))[0] = 16
+        return 1
+
+    driver.x11 = SimpleNamespace(XQueryKeymap=lambda *_: 1, XQueryPointer=query_pointer)
+    monkeypatch.setattr(_XDriver, "focus", lambda self: 22)
+    assert driver.focus() == 22
 
 
 def test_successful_map_write_followed_by_read_failure_still_restores_owned_slot():

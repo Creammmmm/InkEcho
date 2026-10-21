@@ -958,6 +958,94 @@ def test_authorization_subscription_timeout_is_sanitized_and_reclaims_session():
     run(scenario())
 
 
+@pytest.mark.parametrize("supported", [False, True])
+def test_capability_preflight_closes_unsupported_session_before_property_read(
+    supported,
+):
+    from inkecho.platform.wayland_worker import INTERFACE, MutterSession
+
+    async def scenario():
+        remote = MutterSession()
+        calls = []
+
+        class Bus:
+            def add_message_handler(self, _callback):
+                pass
+
+            async def call(self, _message):
+                return SimpleNamespace(message_type=MessageType.METHOD_RETURN)
+
+            def disconnect(self):
+                calls.append("disconnect")
+
+        remote.bus, remote.owner = Bus(), ":1.owned"
+
+        async def connect():
+            pass
+
+        async def call(_path, _interface, member, *_args):
+            calls.append(member)
+            if member == "CreateSession":
+                return SimpleNamespace(body=["/owned/provisional"])
+            if member == "Introspect":
+                methods = [
+                    "ConnectToEIS",
+                    "NotifyKeyboardKeycode",
+                    "NotifyKeyboardKeysym",
+                ]
+                if supported:
+                    methods.append("SetKeymap")
+                xml = '<node><interface name="' + INTERFACE + '">'
+                xml += "".join('<method name="' + name + '"/>' for name in methods)
+                if supported:
+                    xml += (
+                        '<property name="KeymapCapabilities" '
+                        'type="a{sv}" access="read"/>'
+                    )
+                return SimpleNamespace(body=[xml + "</interface></node>"])
+            if member == "Get":
+                assert supported
+                return SimpleNamespace(body=[SimpleNamespace(value={})])
+            assert member in {"Start", "Stop"}
+            return SimpleNamespace(body=[])
+
+        async def observer():
+            calls.append("observer")
+
+        async def snapshot():
+            calls.append("snapshot")
+
+        remote.connect, remote._call = connect, call
+        remote._open_observer, remote.snapshot = observer, snapshot
+        if supported:
+            await remote.authorize()
+            assert calls == [
+                "CreateSession",
+                "Start",
+                "Introspect",
+                "Get",
+                "observer",
+                "snapshot",
+            ]
+            await remote.close()
+        else:
+            with pytest.raises(KeyboardError, match="unsupported_compositor"):
+                await remote.authorize()
+            assert calls == [
+                "CreateSession",
+                "Start",
+                "Introspect",
+                "Stop",
+                "disconnect",
+            ]
+            assert remote.path is None and remote.bus is None
+            guardian = Guardian(remote)
+            await guardian.finish()
+            assert guardian.map is None
+
+    run(scenario())
+
+
 @pytest.mark.parametrize("boundary", ["map", "release"])
 @pytest.mark.parametrize("stop_kind", ["cancel", "deadline"])
 def test_stop_during_settle_never_acknowledges_or_sends_a_tail(

@@ -9,7 +9,7 @@ import time
 from collections.abc import AsyncIterator, Callable, Mapping
 from contextlib import asynccontextmanager
 
-from inkecho.platform.keyboard import KeyboardError, KeyboardInput
+from inkecho.platform.keyboard import KeyboardError, KeyboardInput, _XTestDriver
 
 
 def keyboard_for_desktop(environ: Mapping[str, str] | None = None):
@@ -20,6 +20,8 @@ def keyboard_for_desktop(environ: Mapping[str, str] | None = None):
         from inkecho.platform.hybrid_keyboard import HybridKeyboardInput
 
         return HybridKeyboardInput()
+    if env.get("XDG_SESSION_TYPE", "").lower() == "x11":
+        return KeyboardInput(driver_factory=_XTestDriver)
     return KeyboardInput()
 
 

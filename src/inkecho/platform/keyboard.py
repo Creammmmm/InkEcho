@@ -29,6 +29,7 @@ class KeyboardError(RuntimeError):
             "unsupported_text",
             "busy",
             "unsupported_target",
+            "unsupported_compositor",
             "mapping_changed",
             "display_unavailable",
             "keys_held",
@@ -353,6 +354,74 @@ def _text(text):
     ):
         raise KeyboardError("unsupported_text")
     return normalized
+
+
+class _XTestDriver(_XDriver):
+    """Server-wide Xorg events, including terminals which reject XSendEvent.
+
+    Never use this driver on XWayland: its client-local mapping is not the
+    compositor's physical keyboard map. Only the explicit Xorg factory selects
+    this driver. The empty-row loan and ownership-checked restoration are shared.
+    """
+
+    def __init__(self):
+        super().__init__()
+        try:
+            self.xtst = ctypes.CDLL("libXtst.so.6")
+            p, i, u, word = (
+                ctypes.c_void_p,
+                ctypes.c_int,
+                ctypes.c_uint,
+                ctypes.c_ulong,
+            )
+            self.xtst.XTestFakeKeyEvent.argtypes = [p, u, i, word]
+            self.xtst.XTestFakeKeyEvent.restype = i
+            self.x11.XQueryKeymap.argtypes = [p, ctypes.POINTER(ctypes.c_char)]
+            self.x11.XQueryKeymap.restype = i
+            self.x11.XQueryPointer.argtypes = [
+                p,
+                word,
+                ctypes.POINTER(word),
+                ctypes.POINTER(word),
+                *([ctypes.POINTER(i)] * 4),
+                ctypes.POINTER(u),
+            ]
+            self.x11.XQueryPointer.restype = i
+        except BaseException:
+            self.close()
+            raise
+
+    def focus(self):
+        # Global events inherit physical modifiers. Refuse held keys and lock
+        # modifiers rather than releasing or rewriting the user's physical state.
+        keys = (ctypes.c_char * 32)()
+        root, child = ctypes.c_ulong(), ctypes.c_ulong()
+        coordinates = [ctypes.c_int() for _ in range(4)]
+        mask = ctypes.c_uint()
+        with self._checked():
+            self.x11.XQueryKeymap(self.display, keys)
+            result = self.x11.XQueryPointer(
+                self.display,
+                self.root,
+                ctypes.byref(root),
+                ctypes.byref(child),
+                *(ctypes.byref(value) for value in coordinates),
+                ctypes.byref(mask),
+            )
+        # Mod2 is the usual Num Lock and has no effect on our non-keypad,
+        # identical-level Unicode rows. Preserve it (as the native backend does).
+        if any(bytes(keys)) or mask.value & 0xEF:
+            raise KeyboardError("keys_held")
+        if not result:
+            raise KeyboardError("unsupported_target")
+        return super().focus()
+
+    def send(self, window, code, pressed):
+        # window is deliberately unused: delivery follows the current cursor.
+        # Releases must remain possible even if a physical modifier was pressed.
+        with self._checked():
+            if not self.xtst.XTestFakeKeyEvent(self.display, code, int(pressed), 0):
+                raise KeyboardError("injection_failed")
 
 
 class KeyboardInput:
