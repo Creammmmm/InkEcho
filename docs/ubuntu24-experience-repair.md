@@ -69,7 +69,7 @@ GNOME 46 的实际接口已有 `ConnectToEIS` 和键码 / keysym 通知，却没
 
 每项接收内容均逐码点精确，取消后额外观察 700 ms 无尾部；所有原始执行自然退出，未强制终止。原始逐字时间戳与内容位于 `build/ubuntu24-perf-vm/output/ubuntu24-experience-source-r1/{old-vte-r1,source-gtk-r1,source-vte-r1,source-vte-cancel8-r1}/result.json`，同目录保留接收记录、执行终态、桌面身份和依赖审计。
 
-这些结果**确切排除了上述场景在输入阶段末尾一次性收到全部文字**。同时原 v0.6.0 的自有 VTE 也通过，故不能将「终端拒绝 XSendEvent」写成已复现的用户故障根因；35 字首末跨度也未显示明显提速。新 XTest 路径是兼容性改进，不能据此承诺所有应用或所有负载都逐字呈现。本轮四项沿用历史桌面助手的 simple IM 上下文，不能代替系统默认输入上下文中的实际应用验收。后续完整链路恢复当前 GNOME 环境中的实际 `QT_IM_MODULE` / `GTK_IM_MODULE` / `XMODIFIERS`，不通过修改目标输入上下文获得通过结果，也不调用系统输入法作为输出路径。
+这些结果**确切排除了上述场景在输入阶段末尾一次性收到全部文字**。同时原 v0.6.0 的自有 VTE 也通过，故不能将「终端拒绝 XSendEvent」写成已复现的用户故障根因；35 字首末跨度也未显示明显提速。新 XTest 路径是兼容性改进，不能据此承诺所有应用或所有负载都逐字呈现。本轮四项沿用历史桌面助手的 simple IM 上下文，不能代替系统默认输入上下文中的实际应用验收。随后源码 Session 链路仅恢复了 GNOME 进程中的 `QT_IM_MODULE` / `GTK_IM_MODULE` / `XMODIFIERS`，没有完整合并用户服务 activation 环境，不能称为完整恢复默认桌面输入上下文；再后面的真实编辑器与 CLI 另行合并 GNOME 进程及 activation 环境。正文均不调用系统输入法作为输出路径。
 
 Xorg 新路径需要系统 `libXtst.so.6`；实际 Ubuntu 24.04 验证机只读查询确认安装 `libxtst6:amd64 2:1.2.3-1.1build1`。未将开发主机 Ubuntu 26 的系统库复制进包。缺库时连接失败且不会开始映射或按键发送。
 
@@ -79,13 +79,13 @@ Xorg 新路径需要系统 `libXtst.so.6`；实际 Ubuntu 24.04 验证机只读�
 
 原执行 `85657` 自然退出 0。录音停止请求至首个发送字符 `215.297 ms`；任务开始至首字 `226.746 ms`，早于润色结束的 `2537.980 ms`。目标实际收到 35 字、34 个中间前缀，每次最多增加一字符，首末接收跨度 `2263.954 ms`；映射恢复、接收进程自然退出 0，诊断为空，WSS 收到预期 6400 字节且仅完成一次，ASR 最终内容核对正确。产品模块来源与依赖清单均验证通过。原始证据位于 `build/ubuntu24-perf-vm/output/ubuntu24-experience-source-r2/source-session-gtk-r1/result.json`，同级保存桌面身份、依赖审计和原始执行终态。
 
-这证明该生产 Session / 本地协议 / 默认桌面上下文 / GTK 组合在润色仍进行时已逐字符输出，并非全部完成后批显。70 ms 供给决定了本轮大部分输出跨度；此结果不是实际云端转写耗时或用户物理麦克风识别率，也不能外推其他目标与负载。
+这证明该生产 Session / 本地协议 / GNOME 进程来源的输入上下文 / GTK 组合在润色仍进行时已逐字符输出，并非全部完成后批显。此轮没有完整恢复 activation 环境，默认桌面输入环境的实际应用证据须看后续独立记录。70 ms 供给决定了本轮大部分输出跨度；此结果不是实际云端转写耗时或用户物理麦克风识别率，也不能外推其他目标与负载。
 
 ### 前段等待与未验范围
 
 源码审查未发现 `XGrabServer`。普通输入循环每字符都有异步等待；统计 `finished` 与性能结果在输入完成后才发出，不在每个字符上同步写统计。流式润色在首段到达后启动输出消费者，最终结果仅核对后缀；HTTP 转写和非流式润色仍须先等待最终结果。故须将「结束录音到首字」和「首字到末字」分别测量，当前直接工厂验证只覆盖后者，尚不足以解释用户等待发生在哪一段。
 
-前表只覆盖生产键盘工厂到真实 GTK / VTE；随后完整 Session 场景补足了一个本地协议链路，但两者均不是新 AppImage 验收。实际 GNOME Text Editor、Files 可编辑框、Claude Code、codex-cli 与 GNOME 46 原生 Wayland 任意中文尚不能由此宣布通过。物理键、真实供应商负载、其他工具包与应用绘制合并行为均需独立证据。
+前表只覆盖生产键盘工厂到真实 GTK / VTE；随后完整 Session 场景补足了一个本地协议链路，但两者均不是新 AppImage 验收。该表本身不覆盖实际 GNOME Text Editor、Files 可编辑框、Claude Code、codex-cli 与 GNOME 46 原生 Wayland 任意中文；后续实际编辑器与新包证据见下文，不由这张源码表代替。物理键、真实供应商负载、其他工具包与应用绘制合并行为均需独立证据。
 
 ### 实际 GNOME Text Editor 与默认桌面输入环境
 
@@ -100,14 +100,92 @@ Xorg 新路径需要系统 `libXtst.so.6`；实际 Ubuntu 24.04 验证机只读�
 
 工具失败也保留：r1 因 GI 多接口同名方法解析错误，读回工具失败，不能判定产品；r2 修复接口后最终 21 字精确、持续出现前缀 2 至 21，但观测器在首次 AT-SPI 初始化完成前过早发布就绪，未观察首字，严格验收失败。r3 在发布就绪前完整初始化并缓存实际空白、已聚焦可编辑控件，记录基线及准备时间后才允许发送；没有修改产品等待时间，也没有放宽逐字链标准。r1/r2 目录完整保留，不作为通过结果。
 
-Files 搜索栏、取消第八字以及新 AppImage 的相同真实应用验收待补；Claude Code / codex-cli / Node 在专用 VM 中未安装，未联网安装，仍明确未验。
+源码阶段的上述记录不覆盖 Files、新包与真实 CLI。最初专用 VM 库存盘点时 Claude Code / codex-cli / Node 未安装；后续固定离线 CLI 工具及新包验证在下文单独记录，不能把这一时点的库存状态当作最终验收结论。
 
 ## AppImage 直接运行图标
 
-源码已统一 AppImage 根目录 desktop 文件、图标资源与 Qt 桌面 ID：`io.github.Creammmmm.InkEcho`，X11 的 `StartupWMClass=InkEcho` 保持与现有窗口一致。直接运行正常 AppImage 主进程时，在用户数据目录安全注册受管理入口及图标，无须先点安装集成；冷控制命令不会注册、不启用自启动、不覆盖无主管理或符号链接入口。图标原子写入完成后才发布 desktop，已一致时不重复重写，移动 AppImage 后仅更新自有入口路径。
+源码已统一 AppImage 根目录 desktop 文件、图标资源与 Qt 桌面 ID：`io.github.Creammmmm.InkEcho`，X11 声明沿用 `StartupWMClass=InkEcho`，实际匹配仍以侧栏观测为准。直接运行正常 AppImage 主进程时，在用户数据目录安全注册受管理入口及图标，无须先点安装集成；冷控制命令不会注册、不启用自启动、不覆盖无主管理或符号链接入口。图标原子写入完成后才发布 desktop，已一致时不重复重写，移动 AppImage 后仅更新自有入口路径。
 
-针对性验证 `tests/test_integration.py tests/test_startup.py tests/test_packaging.py` 为 `29 passed in 1.57s`，涵盖正常主进程注册、冷控制边界、自启动缺省、非自有/符号链接保护及原子写顺序。真实 GNOME Shell 侧栏观察仍待新包；仅有包内图片或 Gio 可解析资源不等于侧栏已经匹配。
+针对性验证 `tests/test_integration.py tests/test_startup.py tests/test_packaging.py` 为 `29 passed in 1.57s`，涵盖正常主进程注册、冷控制边界、自启动缺省、非自有/符号链接保护及原子写顺序。随后在实际 Ubuntu 24.04 / GNOME 46 Xorg，直接运行同一候选 AppImage runtime（guest 使用 extract-and-run，非 FUSE 声明），配置和日志私有，但 desktop / 图标注册到实际 Shell 可见的用户数据目录。根 Agent 审查 `build/ubuntu24-perf-vm/output/ubuntu24-experience-dock-r4/dock.png`：左侧 Dock 为单一 InkEcho 蓝色品牌图标并带运行点，托盘也使用同一图标，图标反馈项实际通过。
 
-## 实际包与双系统边界
+真实自有窗口 PID 8741 的 `WM_CLASS="InkEcho", "InkEcho"`、`_GTK_APPLICATION_ID` 与 `_KDE_NET_WM_DESKTOP_FILE` 均为预期 InkEcho 身份，实际 desktop 的 `StartupWMClass=InkEcho` 和 Icon 与之匹配。Gio 找到真实用户 desktop，GTK 解析出对应 256px 图标；Shell 只读 Introspect 被正常权限限制，未启用 unsafe Eval，以实际截图验证侧栏。原运行自然退出 0，无信号；`terminal.json` 记录 1 个 desktop 与 8 个图标路径全部精确恢复，无未恢复路径。QMP 原始截图成功后，由系统 Python 离线转换已存在的 PPM；首次转换环境缺 PIL 的工具退出不属于产品问题，没有重新截图覆盖原帧。
 
-当前尚未在本报告记录新包双系统验收；源码级测试和复用旧包依赖运行冻结修复源码，不构成新 AppImage 通过。物理麦克风和真实云端识别率也不由生成音频外推。
+## 候选 0.6.7 的同包双系统验收记录（交付门未完成）
+
+产品提交 `4121ce4bac59a0ae59cd0ff83d8ab8d9597f0ce7`，AppImage `InkEcho-0.6.7-x86_64.AppImage`，SHA-256 `1dd85e0551850bb4a766639dd8111407b9e5f5c29a812eb93c1915b3acf18f28`。候选冻结清单 SHA-256 `b264c7aa519bf2cc8f5f5aaadbb0e258c591367dd6c42f10be94b7d3b442ceff`，包库存 SHA-256 `6bbb1172072b66b553bf5308d0d674e3c738b9b933f12cfe18e043b69093ca06`。以下包验证使用该同一镜像及包内产品代码，不把此前源码叠加结果当作包结果。
+
+| 实际系统与会话 | 已完成的必要包检查 | 范围 |
+|---|---|---|
+| Ubuntu 24.04，实际 GNOME 46 / Xorg 专用 KVM | 实际入口与五页 / IPC 退出边界；本地协议链路；Qwen 服务端 VAD 最终结果屏障；实际音频服务首采样动画门；实际 GNOME Text Editor 正常及取消第八字 | 入口经 AppImage runtime extract-and-run；与 host 正式 FUSE 挂载分开记录。真实 GTK / VTE 源码验证不替代此列包验证。 |
+| Ubuntu 26.04，实际 GNOME / Wayland host | 正式 FUSE 挂载入口与五页；同包本地协议；服务端 VAD；首采样动画；原生 / XWayland 切换正常与中途取消 | 所有原执行自然返回 0；不包含真实云端语音准确率与物理麦克风标记实验。 |
+
+24 包原始门证据位于 `build/ubuntu24-perf-vm/output/inkecho-candidate-0.6.7-r1`，其中首次 protocol 使用过时的 UI 隐藏字段检查而失败，该结果保留；修订后的真实包链路通过证据为 `build/ubuntu24-perf-vm/output/inkecho-candidate-0.6.7-r2/gates/protocol/{result.json,tool-result.json,terminal.json,origins.json}`（原执行 11470 自然 0）。仅替换过时 UI 字段观察为真实 Session.settings 与 ConfigStore 状态核对，SSE 时序、取消、实际协议链路未删减；26 包原始证据位于 `build/ubuntu24-experience/host-package-r1/{fuse-entry,protocol,vad,audio,mixed-normal,mixed-cancel}`。根 Agent 在最终接受前检查原始 JSON、进程自然退出与关键截图，不只依据工具总结。
+
+### 新包在真实 GNOME Text Editor 中逐字接收
+
+本轮启动真实 `gnome-text-editor --new-window` 打开专用空文档，先确认独占应用 PID、激活窗口与实际空白可编辑焦点，再从新包调用生产键盘工厂；产品模块来源硬限定新包 `packages`。AT-SPI 仅只读观察，不用于写入。目标保留真实 GNOME 输入环境，不通过禁用目标已有输入法插件制造兼容性。没有向云端提交固定测试文字，也未读取真实密钥。
+
+| 真实应用场景 | 最终文字与实际前缀 | 首字至末字 | 相邻字符中位 / 最大 |
+|---|---|---:|---:|
+| GNOME Text Editor 正常输出 | 21 字精确，1 至 21 每个前缀均读回 | 952.560 ms | 48.194 / 54.978 ms |
+| GNOME Text Editor 第八字取消 | 8 字精确，1 至 8 每个前缀均读回，后续观察无尾部 | 324.325 ms | 47.454 / 52.510 ms |
+
+两项最大前缀增长均为一字符，无非预期正文；按下 / 释放平衡、映射恢复、应用自然退出 0、无强杀。观测器先完整初始化并读取空白聚焦基线后才发布就绪。原始证据：`build/ubuntu24-perf-vm/output/ubuntu24-experience-package-apps-r1/{package-editor-normal-r1,package-editor-cancel8-r1}` 的 `observation.json`、`dispatch.json`、`terminal.json` 与同级身份 / 库存审计。这确切排除了上述实际场景末尾一次性输入全部文字，不代表所有应用的绘制节奏一致，也没有据此宣称每秒字符数明显提高。
+
+### 真实 CLI 的显示节奏须与发送区分
+
+后续采用独立固定 CLI 二进制、私有配置与本地禁联网模型入口，在根 Agent 确认真实输入编辑状态后输入固定公开样本，不按 Enter 提交、不调用云端推理、不读取用户 CLI 配置或凭据。最初库存盘点中的「CLI 未安装」只描述当时状态；后续专用测试二进制验证应以此段实际记录为准。
+
+Codex CLI v0.160.0 的真实 TUI 完整显示过 21 字样本，记录到前缀长度 `1, 2, 4, 6, 8, 10, 11, 13, 16, 18, 20, 21`，首末可见跨度约 1060.537 ms。UI 约 100 ms 合并绘制，因而未通过「可见前缀必须每次只增加一字符」的严格门；这既不是末尾一次性输入，也不能写成每字均独立绘制通过。生产发送保持逐键，21 次按下 / 21 次释放，按键间隔中位 48.408 ms / 最大 52.032 ms；TUI 渲染间隔中位约 100.751 ms。按下 / 释放与映射清理通过；接收编辑内容已完整出现，但最终关闭过程会清空编辑区，不能只用关闭后的最终屏幕文本判断之前没有输入。原始 `state.json` 保存 `sample_complete_ever=true` 与逐段快照，`rendered.json` 是后续关闭状态，两者时间语义不同。
+
+分析 JSON 为 `build/ubuntu24-experience/codex-tui-r5-analysis.json`；即刻抓取的 `prefix-21.png` 仍是旧帧，不能当作全文出现证据，应读带时间的实际屏幕文本快照。Codex 原始证据：`build/ubuntu24-perf-vm/output/cli-tui-r5/codex-package-r5`。CLI 子进程 exit 0，GTK / VTE owner 自然退出 0（同级 `codex-package-r5-owner-terminal.json`）；外层严格前缀控制器原执行 `40124` 返回 1，因为不是 1 至 21 的完整逐字渲染链。必须分别记录产品接收、子进程退出与严格验收失败，不能把它们合写为整项自然 0 通过。没有强杀。
+
+Claude Code 2.1.258 也在完成正常首次引导后的真实离线对话编辑状态收到完整 21 字，前缀长度 `1, 3, 5, 7, 9, 12, 14, 16, 18, 20, 21`，可见首字至完整显示 1008.946 ms。生产 21 次按下 / 21 次释放，间隔中位 47.844 ms / 最大 52.350 ms；CLI 渲染中位 100.783 ms，同样合并约两至三字，严格每帧一字未通过，但已明确渐进显示且完整接收。未按 Enter 发送正文，无云请求；来源见 `build/ubuntu24-experience/claude-tui-r5-analysis.json`。
+
+Claude 原包装控制器 `36619` 达到 180 秒期限后返回 1，记录 `still_running=true`，没有强杀；后续仍在同一自有会话继续正常引导 / 编辑。捕获控制文件非原子改写又使观察定时器遇到瞬时空 JSON，抛出 `JSONDecodeError` 后定时器停止，故自动最终截图 / 退出监控不可靠；这是夹具问题，原失败记录保留。修正私有控制文件后，根 Agent 以身份核验的正常 Ctrl+C 关闭该实例（关闭助手 `9382` 自然 0）。之后独立 pidfd 观察器原执行 `8130` 自然 0，确认 CLI exit 0 与 GTK owner 结束；这不是原父控制器完成了 wait。`build/ubuntu24-perf-vm/output/cli-tui-r5/claude-package-r5/later-natural-exit-observation.json` 记录两进程退出、无强制信号，并逐字节核对原包装器超时终态未变。最终截图在退出时才补抓，不作为 21 字全文截图；完整输入的证据为此前带时间的实际 TUI 文本前缀，不能用早于全文渲染的即时 `prefix-21.png` 或只看分析总结代替。
+
+### 同包 Xorg 输出中切换光标与取消
+
+同一候选包在两个独占 GTK 接收窗口间完成受控焦点切换。正常场景在 A 收到前 8 字后切至 B，A 精确 8 字、B 精确 27 字；取消场景同样先向 A 输出 8 字，再切 B，累计第 14 字取消，B 精确 6 字，之后无剩余正文。两窗口每次接收均只增加一字符，正常按下 / 释放为 35 / 35，取消为 14 / 14；临时映射恢复，两个接收进程均自然退出 0，无强制信号。
+
+原始证据为 `build/ubuntu24-perf-vm/output/ubuntu24-package-xorg-switch-r2/{normal-r2,cancel14-r2}/result.json`，同级 `normal-r2-terminal.json`、`cancel14-r2-terminal.json` 记录原 owner wait 完成且返回 0；包内模块来源及同 SHA 均在结果中固定。这是受控 GTK 接收器的当前光标语义与取消证明，不能代替 Files 的真实控件绘制结果。
+
+### 旧候选 Files 延迟与后续修复；Dock 已通过
+
+Files 搜索 / 重命名旧夹具 r3/r4/r5 没有证明目标编辑焦点，未发送识别正文，不当作产品失败或通过。r5 当时未先验证异步选择，原因只能保留为假说；r6 明确验证文件已选择后，F2 仍未出现重命名框，所以不能将「未等选择」定为已定位原因。只读 Gio 查询表明该文件 `can-rename/can-write/can-delete=TRUE`、uid 1000、挂载可写，不能归因文件权限。
+
+r7 在 guest 本地专用目录通过正常上下文菜单进入真实重命名框，核实自有窗口、可编辑焦点后由候选包发送固定 21 字。独立 QMP 连续画面显示首字之后停顿，再出现全文；因此**候选 0.6.7 没有通过 Files 渐进呈现要求**，不能凭发送器计数或最终全文判为成功。AT-SPI 的该 Entry 文本接口始终报告 0，故不能伪造其逐字文本事件；应看 `build/ubuntu24-perf-vm/output/files-f2-diagnostic-r7/candidate-input-r1` 中的帧图、`dispatch.json` 与 `terminal.json`。退出时 Esc 取消重命名，自有文件未改；发送助手 0，应用进程消失，但该轮正常退出辅助命令返回 255、原包装器超时仍保留，不能把所有控制器状态合成一次完整 0 通过。
+
+r8 的同一实际控件对照中，普通 ASCII 持续呈现；候选包混合中文样本首次与再次发送均表现为首字后全文。独立 Pillow 画面与 QMP 结果一致，排除了只因 QMP 抓帧或单次中文暖场造成的解释。证据为 `build/ubuntu24-perf-vm/output/files-ascii-warm-r8/{result.json,contact-sheet.png}` 及两份中文 `dispatch.json`。这一对照尚不足以断言 GTK 或 IBus 内部根因。
+
+r9 进一步固定为相同的「中」重复 21 次及原按键节拍：每字重写同一键码映射的对照有 22 次映射写入（含恢复），仍首字后全文；仅首次映射、后续复用同一键码的实验只有 2 次写入（含恢复），帧图持续出现约 7 / 14 / 19 / 21 字。两轮发送耗时分别 1099.636 / 1037.900 ms，按下 / 释放平衡、映射恢复、应用退出 0、自有文件未改。原始证据为 `build/ubuntu24-perf-vm/output/files-repeat-r9/{repeat-rewrite-dispatch.json,repeat-once-dispatch.json,result.json,contact-sheet.png}`。这支持**频繁映射更新与该 Files 控件延后绘制相关**，并不证明 GTK / IBus 内部具体机制；仅映射一次也只适用于相同字符，不是任意混合 Unicode 的产品修复。该轮对照本身没有形成已验产品修复，不能返写候选 0.6.7 已通过；后续正式源码方案及其实际验证见下节。
+
+### 后续正式源码修复：Xorg 相邻双行合并更新
+
+针对上述尚未通过的 Files 场景，生产 `_XTestDriver` 增加可选的批次准备：只借用原本为空、未列入修饰键表的相邻两条键码行，每批最多容纳两个不同字符，通过一次 `XChangeKeyboardMapping(..., count=2)` 同时更新。没有合法相邻空行时明确拒绝，不回退到仍会批显的单行方案。已有符号在当前批次或后续流片段中直接复用；换行仍使用真实 Return，不为换行或空闲输出会话改表。新批次最后只用一行时，另一行保留本次已拥有的值。原 100 ms 首次映射等待及后续逐键等待均未增加。
+
+实现只扩展 Xorg 的 `_XTestDriver` 和现有逐字循环中的可选准备调用，纯 `XSendEvent` / XWayland 路径不变。写入前登记两行 pending 意图，读回后保存实际规范化快照；取消、过期或部分写入 / 读回失败仍逐行清理所有明确属于本任务的行。外部替换行不覆盖，且仍尝试恢复另一条自有行。焦点在每字发送时重新读取；已尝试按下的键仍在 `finally` 中释放，不重放不确定输入。
+
+源码文件 `src/inkecho/platform/keyboard.py` 的本轮冻结 SHA-256 为 `8c81ec8ba2e6519016c94ae687ca48647fc2d89417cea89ad8a554c513b47690`。定向回归 `tests/test_keyboard.py tests/test_xorg_pair.py` 为 `74 passed in 0.11s`；混合路由、Wayland、worker 与 streaming 相关四组为 `202 passed in 4.98s`，合计 276 项通过，Ruff 检查和格式检查通过。新增覆盖单次 count=2 请求、符号复用、无合法 pair、modifier 排除、规范化读回、第二行读回失败、外部冲突、跨片段 / Return、首等待取消、按下后取消、deadline 及资源恢复。
+
+随后在实际 Ubuntu 24.04.5 / GNOME 46 / Xorg 的真实 Files 重命名框中，直接运行该正式源码的生产工厂，未再替换 `map` / `prepare`；冻结清单 SHA-256 为 `b08d7bc51640207c1512c3534a7fb39f9f1fa593c7d81f869225317e7d1464d6`，源码 keyboard SHA 与上文一致，仅运行依赖复用原候选 0.6.7 包。根 Agent 审阅实际帧图并核对以下结果：
+
+| 正式源码实际场景 | 正文与接收画面 | 发送耗时 | 清理与退出 |
+|---|---|---:|---|
+| r20，mixed 21 字；原执行 74498 | 帧图连续增长；文件名逐码点精确并恢复 | 1067.199 ms | 按下 / 释放平衡，完整映射恢复，应用自然 0 |
+| r21，long 36 字；原执行 19447 | 跨越多批仍连续增长；文件名逐码点精确并恢复 | 1755.305 ms | 按下 / 释放平衡，完整映射恢复，应用自然 0 |
+| r22，累计第 8 字取消；原执行 84090 | 仅「中文输入验证 c」8 字，额外观察 700 ms 无尾部 | 462.843 ms | 按下 / 释放平衡，完整映射恢复，应用自然 0 |
+
+三项原执行均自然返回 0，未强制终止；原始帧图、发送事件、文件名精确读回及恢复证据在 `build/ubuntu24-perf-vm/output/{files-production-r20,files-production-r21,files-production-r22}` 的 `result.json`、对应 `production-*-dispatch.json` 与帧图中。Files 的 AT-SPI Entry 文本接口仍返回 0，故只把实际帧图作为渐进呈现证据，不伪造完整逐字 AT-SPI 事件链。
+
+同一正式源码另在真实 GNOME Text Editor 回归，原执行 `99567` 自然 0：21 字精确、1 至 21 完整前缀、最大增长 1 字，无额外正文；首字至末字 932.495 ms，字符间隔中位 47.330 ms / 最大 49.264 ms，映射恢复、按键平衡、应用自然 0。原始证据为 `build/ubuntu24-perf-vm/output/editor-production-r23/case/{terminal.json,observation.json,dispatch.json}`。
+
+上述已验证**正式源码修复**，但**不是原候选 0.6.7 已包含此修复**，也不构成新 AppImage 验收。三处开发元数据准备递增至 0.6.8；此前 r7 至 r16 的失败与实验对照不覆盖、不删除。新包仍须以新版本与新 SHA 完成双系统实际验收。
+
+Dock r1/r3 的工具未给 X11 只读搜索传入真实图形环境，继承 SSH 无 DISPLAY，所以没有找到窗口；不是产品无窗口或 WM_CLASS 不匹配证据。r4 修正后已有真实侧栏截图及同一自有窗口的实际身份匹配通过，见上节。候选不修改用户 host 的 Dock 设置、不重启 Shell、不启用 unsafe Eval；guest 仅暂时使用 Shell 实际可见的数据目录，正常退出后精确恢复自己管理的 9 个文件。
+
+### 仍需明确的边界
+
+Ubuntu 24.04 / GNOME 46 原生 Wayland 缺少本实现所需的任意 Unicode 键盘映射接口；此轮没有将其冒充已支持。已验证的 24 输入会话为 Xorg，产品对缺失接口提供明确切换提示，不静默回退剪贴板或系统输入法。Ubuntu 26.04 原生 Wayland 与 XWayland 保留其各自同包验证范围。
+
+物理麦克风开头与真实供应商识别准确率未用生成音频替代宣称；已有生成标记实验证明实际 Recorder 开头标记完整、动画在首次采样后才启动。网络 / 云端转写 / 非流式润色仍可能占据结束录音至首字的等待，不能把输入阶段逐字证明写成消除了整条云端延迟。Dock r4 已实际通过，Files 的正式源码修复也已在上述目标场景验证，但包含该修复的新包仍待验；CLI 不能承诺每字单独一帧绘制。候选 0.6.7 的 SHA 不变，不能把后续源码结果写成旧候选已全部修复；新包及其他未验会话须独立记录，所有剩余必要项通过前不更新稳定入口、不发布新 release。

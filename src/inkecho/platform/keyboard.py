@@ -68,6 +68,13 @@ class _Event(ctypes.Union):
     _fields_ = [("key", _KeyEvent), ("pad", ctypes.c_long * 24)]
 
 
+class _ModifierMap(ctypes.Structure):
+    _fields_ = [
+        ("max_keypermod", ctypes.c_int),
+        ("modifiermap", ctypes.POINTER(ctypes.c_ubyte)),
+    ]
+
+
 def _row_identity(row):
     end = len(row)
     while end and row[end - 1] == 0:
@@ -366,6 +373,9 @@ class _XTestDriver(_XDriver):
 
     def __init__(self):
         super().__init__()
+        self._pair_applied = {}
+        self._pair_pending = {}
+        self._batch = {}
         try:
             self.xtst = ctypes.CDLL("libXtst.so.6")
             p, i, u, word = (
@@ -387,9 +397,144 @@ class _XTestDriver(_XDriver):
                 ctypes.POINTER(u),
             ]
             self.x11.XQueryPointer.restype = i
+            self.x11.XGetModifierMapping.argtypes = [p]
+            self.x11.XGetModifierMapping.restype = ctypes.POINTER(_ModifierMap)
+            self.x11.XFreeModifiermap.argtypes = [ctypes.POINTER(_ModifierMap)]
+            self.x11.XFreeModifiermap.restype = i
         except BaseException:
             self.close()
             raise
+
+    def _reserve_pair(self):
+        self.width, values = self._mapping()
+        with self._checked():
+            modifiers = self.x11.XGetModifierMapping(self.display)
+            if not modifiers:
+                raise KeyboardError("mapping_changed")
+            try:
+                excluded = set(
+                    modifiers.contents.modifiermap[
+                        : 8 * modifiers.contents.max_keypermod
+                    ]
+                )
+            finally:
+                self.x11.XFreeModifiermap(modifiers)
+        empty = {
+            self.first + index
+            for index in range(self.count)
+            if self.first + index not in excluded
+            and not any(values[index * self.width : (index + 1) * self.width])
+        }
+        start = next((code for code in sorted(empty) if code + 1 in empty), None)
+        if start is None:
+            raise KeyboardError("mapping_changed")
+        self._pair_applied = {code: () for code in (start, start + 1)}
+
+    def _pair_row(self, code):
+        self.slot = code
+        return self._row()
+
+    def _owns_pair_row(self, code, actual):
+        if _row_identity(actual) == _row_identity(self._pair_applied[code]):
+            return True
+        pending = self._pair_pending.get(code)
+        if pending is None:
+            return False
+        if _row_identity(actual) == _row_identity(pending):
+            return True
+        symbols = set(pending) - {0}
+        return (
+            len(symbols) == 1
+            and bool(symbols & set(actual))
+            and set(actual) <= symbols | {0}
+        )
+
+    def prepare(self, text, index):
+        """Two Unicode rows per request; repeated/current symbols reuse the map.
+
+        Frequent global mapping notifications can defer GTK Entry drawing. Keep
+        the existing key pacing, but update both adjacent borrowed rows together.
+        No mapping is prepared for Return or while an output session is idle.
+        """
+        if text[index] == "\n" or text[index] in self._batch:
+            return
+        if not self._pair_applied:
+            self._reserve_pair()
+        self.verify()
+        characters = []
+        for offset in range(index, len(text)):
+            character = text[offset]
+            if character == "\n":
+                break
+            if character not in characters:
+                if len(characters) == 2:
+                    break
+                characters.append(character)
+        codes = tuple(self._pair_applied)
+        desired = {}
+        for code in codes:
+            actual = _row_identity(self._pair_row(code))
+            if len(actual) > self.width:
+                raise KeyboardError("mapping_changed")
+            desired[code] = actual + (0,) * (self.width - len(actual))
+        self._batch = dict(zip(characters, codes, strict=False))
+        for character, code in self._batch.items():
+            desired[code] = (0x01000000 | ord(character),) * self.width
+        # Register both intents before any write/readback can fail. A final
+        # one-symbol batch retains the unused row's existing owned values.
+        self._pair_pending = desired
+        array = (ctypes.c_ulong * (self.width * 2))(
+            *(desired[codes[0]] + desired[codes[1]])
+        )
+        with self._checked():
+            self.x11.XChangeKeyboardMapping(
+                self.display, codes[0], self.width, array, 2
+            )
+        for code in codes:
+            actual = self._pair_row(code)
+            pending = self._pair_pending[code]
+            symbols = set(pending) - {0}
+            if (symbols and not symbols <= set(actual)) or not self._owns_pair_row(
+                code, actual
+            ):
+                raise KeyboardError("mapping_changed")
+            self._pair_applied[code] = actual
+            del self._pair_pending[code]
+
+    def map(self, character):
+        if character == "\n":
+            return super().map(character)
+        self.slot = self._batch[character]
+        self.applied = self._pair_applied[self.slot]
+        return self.slot
+
+    def verify(self):
+        selected = self.slot
+        try:
+            for code in self._pair_applied:
+                if not self._owns_pair_row(code, self._pair_row(code)):
+                    raise KeyboardError("mapping_changed")
+        finally:
+            self.slot = selected
+
+    def restore(self):
+        failed = False
+        for code in tuple(self._pair_applied):
+            try:
+                actual = self._pair_row(code)
+                if any(actual):
+                    if not self._owns_pair_row(code, actual):
+                        raise KeyboardError("mapping_changed")
+                    self.applied, self.pending_symbol = actual, None
+                    super().restore()
+                del self._pair_applied[code]
+                self._pair_pending.pop(code, None)
+            except Exception:
+                failed = True  # Still release every other row that is ours.
+        self.applied = self.pending_symbol = None
+        self._batch.clear()
+        if failed:
+            raise KeyboardError("mapping_changed")
 
     def focus(self):
         # Global events inherit physical modifiers. Refuse held keys and lock
@@ -549,6 +694,9 @@ class KeyboardInput:
                         break
                     raise
                 first_mapping = character != "\n" and driver.applied is None
+                prepare = getattr(driver, "prepare", None)
+                if prepare is not None:
+                    prepare(text, index)
                 code = driver.map(character)
                 await asyncio.sleep(
                     INITIAL_MAP_SETTLE_SECONDS if first_mapping else MAP_SETTLE_SECONDS

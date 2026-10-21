@@ -577,13 +577,16 @@ async def probe(args):
                         await owned.open()
                     await session.initialize()
                     transcription = ProviderPage(session, "transcription")
-                    polishing = ProviderPage(session, "polishing")
                     report["ui_protocol_and_stream_loaded"] = (
                         transcription.protocol.currentData() == "qwen_realtime"
-                        and polishing.streaming.isChecked()
+                        and session.settings.polishing_streaming
+                        and store.load_settings().polishing_streaming
+                    )
+                    report["streaming_setting_observation"] = (
+                        "Session.settings and ConfigStore; "
+                        "visible settings checkbox not exercised"
                     )
                     transcription.deleteLater()
-                    polishing.deleteLater()
                     for cancelled in (False, True):
                         if owned:
                             owned.intervals.clear()
