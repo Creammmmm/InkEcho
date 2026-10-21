@@ -1191,14 +1191,20 @@ def test_wayland_displays_every_configured_overlay_style(window, qt_app, style):
     assert window.overlay.isVisible()
     assert window.overlay.style == style
     assert "启动" in window.overlay.caption()
+    assert not window.overlay.animation.isActive()
+    phase = window.overlay.phase
+    window.overlay.animate()  # A previously queued timer tick cannot animate readiness.
+    assert window.overlay.phase == phase
     window.overlay.set_capture_ready(True)
     assert window.overlay.caption() == "正在聆听"
+    assert window.overlay.animation.isActive()
     window.session.preview.emit("Synthetic preview")
     assert window.overlay.text == "Synthetic preview"
     window.update_state("cancelled")
     assert not window.overlay.capture_ready
     assert not window.overlay.text
     window.update_state("idle")
+    assert not window.overlay.animation.isActive()
 
 
 def test_shortcut_config_failure_restores_previous_registration(window, monkeypatch):

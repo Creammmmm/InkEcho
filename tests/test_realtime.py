@@ -5,6 +5,7 @@ import base64
 import json
 import ssl
 import subprocess
+import threading
 import time
 from dataclasses import replace
 from types import SimpleNamespace
@@ -722,6 +723,88 @@ def test_tls_verification_cannot_be_disabled():
         QwenRealtimeSession(
             RealtimeConfig("wss://test.invalid/ws", MODEL), "k", tls_context=context
         )
+
+
+@pytest.mark.parametrize("cancel", [False, True])
+def test_cold_tls_preparation_keeps_onset_and_cannot_open_after_cancel(
+    monkeypatch, cancel
+):
+    """A blocked trust-store load must leave the event loop and capture usable."""
+    from inkecho import realtime
+
+    entered, release, completed = (
+        threading.Event(),
+        threading.Event(),
+        threading.Event(),
+    )
+    original = ssl.create_default_context
+    calls, opened = [], []
+
+    def trust():
+        calls.append(threading.get_ident())
+        entered.set()
+        assert release.wait(3)
+        try:
+            return original()
+        finally:
+            completed.set()
+
+    monkeypatch.setattr(realtime.ssl, "create_default_context", trust)
+
+    async def scenario():
+        owner = threading.get_ident()
+        session = QwenRealtimeSession(
+            RealtimeConfig("wss://test.invalid/ws", MODEL), "synthetic-key"
+        )
+        assert not calls  # Construction no longer loads the trust store.
+        onset = b"\x11\x00" * (CHUNK_BYTES // 2)
+        session.feed_nowait(onset)
+
+        async def open_without_network():
+            opened.append(True)
+            assert session._tls_context.check_hostname
+            assert session._tls_context.verify_mode == ssl.CERT_REQUIRED
+            assert session._queue.get_nowait() == onset
+            session._ready.set_result(None)
+
+        async def no_audio_sender():
+            pass
+
+        async def no_receiver():
+            pass
+
+        monkeypatch.setattr(session, "_open", open_without_network)
+        monkeypatch.setattr(session, "_send_audio", no_audio_sender)
+        monkeypatch.setattr(session, "_receive", no_receiver)
+        task = asyncio.create_task(session.start())
+        try:
+            async with asyncio.timeout(2):
+                while not entered.is_set():
+                    await asyncio.sleep(0)
+            assert len(calls) == 1 and calls[0] != owner
+            assert not opened
+            assert session._queue.qsize() == 1
+            if cancel:
+                task.cancel()
+                with pytest.raises(asyncio.CancelledError):
+                    await task
+                assert session._closed
+                assert session._queue.empty() and not session._tail
+            release.set()
+            if not cancel:
+                await task
+                assert opened == [True]
+            else:
+                async with asyncio.timeout(2):
+                    while not completed.is_set():
+                        await asyncio.sleep(0)
+                await asyncio.sleep(0)
+                assert not opened
+        finally:
+            release.set()
+            await session.aclose()
+
+    asyncio.run(scenario())
 
 
 def test_real_wss_redirect_never_forwards_credentials(certificate):

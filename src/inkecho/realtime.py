@@ -187,7 +187,10 @@ class QwenRealtimeSession:
         self.timeout_seconds = timeout_seconds
         self.deadline = deadline
         self.active = active
-        self._tls_context = tls_context or ssl.create_default_context()
+        # Loading system trust roots can block on a cold desktop. Construct the
+        # connection and its bounded onset queue immediately; prepare trust in
+        # start() without delaying microphone capture on the GUI thread.
+        self._tls_context = tls_context
         self._queue: asyncio.Queue[bytes | None] = asyncio.Queue(QUEUE_CHUNKS)
         self._tail = bytearray()
         self._socket = None
@@ -285,6 +288,11 @@ class QwenRealtimeSession:
         self._done = loop.create_future()
         self._tasks.append(asyncio.create_task(self._watch()))
         try:
+            if self._tls_context is None:
+                self._tls_context = await self._wait(
+                    asyncio.to_thread(ssl.create_default_context),
+                    timeout=self.timeout_seconds,
+                )
             await self._wait(self._open(), timeout=self.timeout_seconds)
             self._key = ""
             self._tasks.append(asyncio.create_task(self._receive()))

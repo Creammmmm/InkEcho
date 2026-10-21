@@ -35,6 +35,8 @@ class Overlay(QWidget):
         self.dismiss.timeout.connect(self.hide)
 
     def animate(self):
+        if self.state == "recording" and not self.capture_ready:
+            return
         self.phase += 0.2
         self.update()
 
@@ -43,7 +45,14 @@ class Overlay(QWidget):
 
     def set_capture_ready(self, ready):
         self.capture_ready = bool(ready) and self.state == "recording"
+        self._sync_animation()
         self.update()
+
+    def _sync_animation(self):
+        if self.isVisible() and (self.state != "recording" or self.capture_ready):
+            self.animation.start()
+        else:
+            self.animation.stop()
 
     def caption(self):
         if self.state == "recording" and not self.capture_ready:
@@ -64,9 +73,13 @@ class Overlay(QWidget):
         self.update()
 
     def show_state(self, state):
+        previous = self.state
         self.state = state
-        if state != "recording":
+        if state != "recording" or previous != "recording":
             self.capture_ready = False
+        if state == "recording" and not self.capture_ready:
+            self.phase = 0.0
+            self.level = 0.0
         if state == "idle":
             self.set_text("")
             self.hide()
@@ -86,7 +99,7 @@ class Overlay(QWidget):
         self.move(x, y)
         self.dismiss.stop()
         self.show()
-        self.animation.start()
+        self._sync_animation()
         if state in {"succeeded", "failed", "cancelled"}:
             self.dismiss.start(round(settings.overlay_seconds * 1000))
 

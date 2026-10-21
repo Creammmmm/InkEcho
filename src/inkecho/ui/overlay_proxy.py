@@ -155,6 +155,7 @@ class OverlayProxy(QObject):
 
     def preview(self):
         self.show_state("recording")
+        self.set_capture_ready(True)
         token = self.preview_token
         QTimer.singleShot(
             2200, lambda: self.hide() if self.preview_token == token else None
