@@ -1,6 +1,6 @@
 # InkEcho 0.8.0 发布验证记录
 
-状态：同一 SHA 的双系统实际包验收已完成，等待发布前源码 / 证据审阅与 GitHub 资产流程；尚未发布。0.7.0 图标失败候选保留且未发布。
+状态：同一 SHA 的双系统实际包验收完成，已正式发布为 GitHub 最新稳定版 [v0.8.0](https://github.com/Creammmmm/InkEcho/releases/tag/v0.8.0)。0.7.0 图标失败候选保留且未发布。
 
 ## 精确来源与产物
 
@@ -30,9 +30,9 @@
 
 24输入范围为Xorg；GNOME46原生Wayland未支持。26原生Wayland既有BMP范围，非BMP明确拒绝。26既有偶发field blur尚无根因定位，新门通过也不等于风险已修。真实物理麦克风开头 / 供应商准确率 / 录音→云ASR→目标应用端到端未验；本地协议和合成标记不替代。CLI可能合帧，不承诺每帧单字。
 
-## 发布（待执行）
+## 正式发布实态
 
-同SHA双系统、host FUSE与实际图标QA已通过；尚待最终源码检查、main祖先关系确认、精确tag、GitHub草稿资产上传及远端下载校验，当前未发布。本机旧稳定入口保持不变，不额外替换。本次QA报告为0.8.1；实际远端发布终态将另以0.8.2报告记录，均不重建已验0.8.0包。
+同SHA双系统、host FUSE与实际图标QA已通过。QA报告提交 `34bc654f587abf2c5f7fb9b1660ad3665f51be5c` / 0.8.1 已在main与origin/main，完整workflow原48700自然0：1865 passed / 2 skipped，49.92s。发布源码3bf0c67已是main祖先，远端tag `v0.8.0` 精确指向该发布源码，未指向报告提交。本机旧稳定入口保持不变；本次发布终态报告普通递增为0.8.2，不重建或改标已验0.8.0包。
 
 ## 26.04 同包六门独立审查
 
@@ -76,4 +76,17 @@ Codex前缀 `1,2,3,4,5,6,8,9,10,11,13,15,16,17,18,19,20,21`，首末呈现906.31
 
 ### 结束与版本边界
 
-全部验收后正常 `systemctl poweroff`，SSH0、VM容器Exited0、非OOM、无强杀，结束时刻 `2026-10-21T17:53:59.938303467Z`。本机旧稳定入口未替换；发布仅GitHub。该QA报告提交按普通规则将三处开发元数据递增至0.8.1，**不重建 / 不改标上述已验0.8.0包**，tag应绑定精确3bf0c67发布源码。GitHub发布地址、远端资产hash及正式终态待实际操作后补，不提前写已发布。
+全部验收后正常 `systemctl poweroff`，SSH0、VM容器Exited0、非OOM、无强杀，结束时刻 `2026-10-21T17:53:59.938303467Z`。本机旧稳定入口未替换；发布仅GitHub。该QA报告提交按普通规则将三处开发元数据递增至0.8.1，**不重建 / 不改标上述已验0.8.0包**，tag应绑定精确3bf0c67发布源码。正式远端终态见下节。
+
+## GitHub 资产与独立下载校验
+
+正式地址：[v0.8.0](https://github.com/Creammmmm/InkEcho/releases/tag/v0.8.0)。Release ID `419879356`，`draft=false`、`prerelease=false`，发布时间 `2026-10-21T17:59:31Z`；独立 latest GET 返回相同ID。远端tag对象type=commit、SHA=`3bf0c67c2c5e47ee94166cf44ea5e855c3b2e521`。
+
+| 唯一两个发布资产 | GitHub asset ID | 字节 | 下载 SHA-256 |
+|---|---:|---:|---|
+| InkEcho-0.8.0-x86_64.AppImage | 663344344 | 104282616 | `0adb112bd5e955935a3dbc844f44a8165b5ea10bca0f4535b030acc9cd8be74b` |
+| InkEcho-0.8.0-x86_64.AppImage.sha256 | 663344343 | 96 | `2854f200c3f8b2f3421a845f2d68f3356cf8851cce3155dc2ac324eea8f027fa` |
+
+草稿上传原35333、独立下载原12548均自然0；下载的两个文件hash分别与本地产物完全一致，下载目录内 `sha256sum -c` 为OK，GitHub资产digest也一致。原始记录在 `build/release-0.8.0/publication/{remote-release-list-r1,remote-formal-r1,remote-latest-r1,remote-tag-r1}.json`；下载件在同目录 `downloaded-draft-r1`。草稿期间按tag直接GET返回404的 `remote-draft-r1.json` 也保留，随后按列表定位同一草稿ID，未因404重建重复release。
+
+既有正式版v0.2.0至v0.6.0，以及v0.1预发布均保留；主Agent比较 `remote-release-list-final-r1.json` 与初始列表，六个既有release的tag、draft、prerelease、body与assets完全相同，未删除或改写其资产，0.7.0没有release。本次仅GitHub发布，本机旧稳定入口保持原值。所有平台与物理麦克风 / 云准确率 / 26偶发失焦限制仍有效，正式发布不扩展已验范围。
