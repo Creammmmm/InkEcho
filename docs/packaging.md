@@ -362,3 +362,39 @@ release-source commit into main before tagging. Draft only the versioned
 AppImage and matching checksum sidecar, verify remote downloads against local
 hashes, then publish formal/latest. The report successor uses 0.7.1 without
 rebuilding the validated 0.7.0 artifact; the tag stays on the exact release source.
+
+
+## Formal v0.8.0 persistent-icon release
+
+Prepare `codex/release-0.8.0` from accepted icon-fix commit `63cb0cd` / 0.7.1,
+using the explicit release bump to synchronize all three metadata files to 0.8.0.
+0.7.0 failed the actual Ubuntu24 Dock image gate and was not published; keep its
+artifact and failure/absolute-Icon experiment intact. Do not relabel it.
+
+Build from the exact clean reviewed 0.8.0 source commit, freeze one inventory and
+manifest, and test the same AppImage SHA on both actual Ubuntu systems. On
+Ubuntu24.04.5 GNOME46 Xorg, test Dock as this Shell's first InkEcho window before
+entry/protocol/audio/private same-APP_ID windows, without preinstalling the new
+desktop entry or refreshing caches. After entry/protocol/audio gates, repeat the
+actual Dock screenshot in the previous failing order. Both must visibly show
+InkEcho and restore managed resources. GIO/WM_CLASS or natural exit0 alone is
+not a Dock image pass. Also run local realtime/manual/VAD, actual Recorder onset
+and animation, real Files mixed/long/cancel and Editor strict prefixes, current
+cursor normal/cancel, and real Codex/Claude offline private TUI checks; preserve
+strict per-frame versus progressive-full distinctions.
+
+On Ubuntu26.04.1 GNOME50 require actual private FUSE startup/UI, local protocols,
+VAD/audio and controlled native/XWayland normal/cancel/current-cursor output with
+balanced keys and restored maps. Do not expand this into new Files/CLI/Dock
+certification there. Ubuntu24 uses extraction and actual execution, not an
+unverified guest FUSE claim. Keep GNOME46 native-Wayland, BMP, intermittent26
+field-blur and physical-mic/real-cloud limitations explicit. No forced refocus,
+production pacing change or relaxed safety guard to make a gate pass.
+
+Record original waits, screenshots, package origins, raw tool/result distinctions
+and all failures in `docs/release-0.8.0-validation.md`. Only publish to GitHub after
+same-SHA dual-system review; preserve this machine's old stable entry. Merge the
+exact release source into main before tagging it. Upload a draft with only the
+versioned AppImage and checksum sidecar, verify remote download hashes, then
+publish formal/latest. A later 0.8.1 report commit never rebuilds or relabels the
+validated 0.8.0 package. No old artifact or acceptance substitutes for new tests.
