@@ -181,3 +181,65 @@ def test_real_launcher_preserves_quoted_arguments(integration, tmp_path):
             break
         time.sleep(0.01)
     assert json.loads(output.read_text()) == list(arguments)
+
+
+def test_direct_appimage_identity_registers_matching_icons_without_autostart(
+    integration, monkeypatch
+):
+    monkeypatch.setattr(
+        integration, "_refresh", lambda: pytest.fail("startup must not wait for caches")
+    )
+    integration.ensure_running_identity()
+    entry = integration.launcher.read_text()
+    assert integration.launcher.name == "io.github.Creammmmm.InkEcho.desktop"
+    assert "StartupWMClass=InkEcho\n" in entry
+    assert "Icon=io.github.Creammmmm.InkEcho\n" in entry
+    assert not integration.autostart.exists()
+    before = integration.launcher.stat().st_mtime_ns
+    integration.ensure_running_identity()
+    assert integration.launcher.stat().st_mtime_ns == before
+    moved = integration.executable.with_name("new image.AppImage")
+    integration.executable.rename(moved)
+    integration.executable = moved
+    integration.ensure_running_identity()
+    assert str(moved) in integration.launcher.read_text()
+    assert not integration.autostart.exists()
+
+
+def test_direct_appimage_identity_preserves_unrelated_launcher(integration):
+    integration.launcher.parent.mkdir(parents=True)
+    integration.launcher.write_text("[Desktop Entry]\nName=User override\n")
+    with pytest.raises(IntegrationError):
+        integration.ensure_running_identity()
+    assert integration.launcher.read_text() == "[Desktop Entry]\nName=User override\n"
+    assert not integration.autostart.exists()
+
+
+def test_direct_appimage_identity_preserves_symlink_launcher(integration, tmp_path):
+    target = tmp_path / "user.desktop"
+    target.write_text("user launcher")
+    integration.launcher.parent.mkdir(parents=True)
+    integration.launcher.symlink_to(target)
+    with pytest.raises(IntegrationError):
+        integration.ensure_running_identity()
+    assert target.read_text() == "user launcher"
+    assert integration.launcher.is_symlink()
+
+
+def test_running_identity_publishes_desktop_after_atomic_icons(
+    integration, monkeypatch
+):
+    from inkecho.config import atomic_write
+
+    written = []
+
+    def record(path, content):
+        atomic_write(path, content)
+        written.append(path)
+
+    monkeypatch.setattr("inkecho.integration.atomic_write", record)
+    integration.ensure_running_identity()
+    assert written == [
+        *(destination for _, destination in integration._icons()),
+        integration.launcher,
+    ]

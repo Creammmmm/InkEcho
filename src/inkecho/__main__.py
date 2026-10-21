@@ -116,7 +116,7 @@ async def run(app, store, instance, args):
     import json
 
     from inkecho.app import Session
-    from inkecho.integration import DesktopIntegration
+    from inkecho.integration import DesktopIntegration, IntegrationError
     from inkecho.logging import DiagnosticLog
     from inkecho.statistics import Statistics
     from inkecho.ui.window import MainWindow
@@ -132,6 +132,11 @@ async def run(app, store, instance, args):
     command = [str(executable), *arguments, "--toggle"]
     window = None
     try:
+        if appimage:
+            try:
+                integration.ensure_running_identity()
+            except (IntegrationError, OSError):
+                log.record("integration", "integration_failed")
         window = MainWindow(session, stats, log, integration, command)
         stopped = asyncio.Event()
         window.quit_requested.connect(stopped.set)

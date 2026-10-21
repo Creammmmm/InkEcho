@@ -1,4 +1,4 @@
-"""Explicit user desktop integration; never remove configuration or credentials."""
+"""Managed desktop identity and explicit integration; preserve user-owned files."""
 
 import hashlib
 import os
@@ -165,7 +165,22 @@ class DesktopIntegration:
             in (LEGACY_ICON_SHA256.get(name), PREVIOUS_BLUE_ICON_SHA256.get(name))
         )
 
-    def install(self) -> None:
+    def ensure_running_identity(self) -> None:
+        """Register a directly opened AppImage for GNOME's app-ID icon lookup.
+
+        No autostart is enabled, and unrelated launchers/artwork are preserved.
+        Keep the entry after exit so its launcher remains valid.
+        """
+        if self.status()["current"] and all(
+            destination.is_file()
+            and not destination.is_symlink()
+            and destination.read_bytes() == source.read_bytes()
+            for source, destination in self._icons()
+        ):
+            return
+        self.install(refresh=False)
+
+    def install(self, *, refresh: bool = True) -> None:
         entry = self._entry()
         managed = self._owned(self.launcher)
         for source, destination in self._icons():
@@ -185,13 +200,20 @@ class DesktopIntegration:
             raise IntegrationError(
                 "An unrelated scalable icon occupies this path; preserve it."
             )
-        self._write(self.launcher, entry)
+        # Publish the desktop entry only after its icon is resolvable.
+        # Validate launcher ownership before modifying any managed assets.
+        if self.launcher.is_symlink() or (self.launcher.exists() and not managed):
+            raise IntegrationError(
+                "An unrelated launcher occupies this path; preserve it."
+            )
         for source, destination in self._icons():
             destination.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copyfile(source, destination)
+            atomic_write(destination, source.read_bytes())
         if old_svg.exists():
             old_svg.unlink()
-        self._refresh()
+        self._write(self.launcher, entry)
+        if refresh:
+            self._refresh()
 
     def _refresh(self) -> None:
         for program, arguments in (

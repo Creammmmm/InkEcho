@@ -88,11 +88,15 @@ def test_control_commands_after_exit_leave_config_uninitialized(tmp_path):
     import subprocess
     import sys
 
+    image = tmp_path / "InkEcho.AppImage"
+    image.write_text("#!/bin/sh\nexit 0\n")
+    image.chmod(0o755)
     config = tmp_path / "config"
     runtime = tmp_path / "runtime"
     runtime.mkdir(mode=0o700)
     env = {
         **os.environ,
+        "APPIMAGE": str(image),
         "QT_QPA_PLATFORM": "offscreen",
         "XDG_RUNTIME_DIR": str(runtime),
         "XDG_CONFIG_HOME": str(tmp_path / "xdg-config"),
@@ -116,6 +120,7 @@ def test_control_commands_after_exit_leave_config_uninitialized(tmp_path):
         )
         assert result.returncode == 0, result.stderr.decode()
         assert not config.exists()
+        assert not (tmp_path / "xdg-data/applications").exists()
         assert list(runtime.iterdir()) == []
 
 
@@ -125,11 +130,15 @@ def test_real_application_quit_then_toggle_does_not_revive(tmp_path):
     import sys
     import time
 
+    image = tmp_path / "InkEcho.AppImage"
+    image.write_text("#!/bin/sh\nexit 0\n")
+    image.chmod(0o755)
     config = tmp_path / "config"
     runtime = tmp_path / "runtime"
     runtime.mkdir(mode=0o700)
     env = {
         **os.environ,
+        "APPIMAGE": str(image),
         "QT_QPA_PLATFORM": "offscreen",
         "XDG_RUNTIME_DIR": str(runtime),
         "XDG_CONFIG_HOME": str(tmp_path / "xdg-config"),
@@ -156,6 +165,12 @@ def test_real_application_quit_then_toggle_does_not_revive(tmp_path):
         assert quit_result.returncode == 0, quit_result.stderr.decode()
         _, stderr = owner.communicate(timeout=15)
         assert owner.returncode == 0, stderr.decode()
+        launcher = (
+            tmp_path / "xdg-data/applications/io.github.Creammmmm.InkEcho.desktop"
+        )
+        assert launcher.is_file()
+        assert str(image) in launcher.read_text()
+        assert not (tmp_path / "xdg-config/autostart").exists()
         before = {path.name: path.stat().st_mtime_ns for path in config.iterdir()}
         runtime_before = set(runtime.iterdir())
         assert not list(runtime.glob("inkecho-*.lock"))

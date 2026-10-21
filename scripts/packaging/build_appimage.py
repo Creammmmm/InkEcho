@@ -148,12 +148,16 @@ def main() -> None:
         'exec "$APPDIR/usr/bin/python3" -m inkecho "$@"\n'
     )
     launcher.chmod(0o755)
-    (APPDIR / "inkecho.desktop").write_text(
+    (APPDIR / "io.github.Creammmmm.InkEcho.desktop").write_text(
         "[Desktop Entry]\nType=Application\nName=InkEcho\n"
-        "Exec=AppRun\nIcon=inkecho\nCategories=AudioVideo;Audio;\nTerminal=false\n"
+        "Exec=AppRun\nIcon=io.github.Creammmmm.InkEcho\n"
+        "StartupWMClass=InkEcho\nCategories=AudioVideo;Audio;\nTerminal=false\n"
     )
-    shutil.copy2(ROOT / "src/inkecho/assets/inkecho-256.png", APPDIR / "inkecho.png")
-    (APPDIR / ".DirIcon").symlink_to("inkecho.png")
+    shutil.copy2(
+        ROOT / "src/inkecho/assets/inkecho-256.png",
+        APPDIR / "io.github.Creammmmm.InkEcho.png",
+    )
+    (APPDIR / ".DirIcon").symlink_to("io.github.Creammmmm.InkEcho.png")
     write_inventory(
         APPDIR,
         {
