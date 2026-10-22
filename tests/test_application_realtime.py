@@ -425,3 +425,184 @@ def test_denied_or_cancelled_input_consent_stops_audio_without_delivery(
         await session.close()
 
     asyncio.run(scenario())
+
+
+def test_capture_preserves_onset_while_credentials_are_loading(sessions):
+    """Synthetic credential delay must not discard speech before key retrieval."""
+
+    async def scenario():
+        session, connections = sessions()
+        entered, release = asyncio.Event(), asyncio.Event()
+
+        async def delayed_key(_reference):
+            entered.set()
+            await release.wait()
+            return "synthetic-not-a-key"
+
+        session.key = delayed_key
+        toggle = asyncio.create_task(session.toggle())
+        try:
+            await entered.wait()
+            assert session.recorder.recording
+            onset = b"\x12\x34" * 1600
+            session.recorder.pcm_ready.emit(onset)
+            # A short recording can end before credentials finish loading.
+            session.stop_recording()
+            release.set()
+            await toggle
+            await settle(session)
+            assert b"".join(connections[0].pcm) == onset
+            assert connections[0].finished == 1
+            assert session.inputs.inserted == ["实时识别。"]
+        finally:
+            release.set()
+            toggle.cancel()
+            await asyncio.gather(toggle, return_exceptions=True)
+            await session.close()
+
+    asyncio.run(scenario())
+
+
+def test_cancel_during_credential_startup_discards_buffer_and_late_results(sessions):
+    async def scenario():
+        session, connections = sessions()
+        entered, release = asyncio.Event(), asyncio.Event()
+
+        async def delayed_key(_reference):
+            entered.set()
+            try:
+                await release.wait()
+            except asyncio.CancelledError:
+                await release.wait()
+            return "synthetic-not-a-key"
+
+        session.key = delayed_key
+        toggle = session.spawn(session.toggle())
+        await entered.wait()
+        session.recorder.pcm_ready.emit(b"\x12\x34" * 100)
+        context = session.task_context
+        session.cancel()
+        release.set()
+        await toggle
+        assert not session.recorder.recording
+        assert not context["onset_pcm"]
+        assert not context["startup_ready"].result()
+        assert not connections and not session.inputs.inserted
+        await session.close()
+
+    asyncio.run(scenario())
+
+
+def test_startup_audio_overflow_fails_without_silently_dropping_onset(sessions):
+    async def scenario():
+        session, connections = sessions()
+        entered, release = asyncio.Event(), asyncio.Event()
+
+        async def delayed_key(_reference):
+            entered.set()
+            await release.wait()
+            return "synthetic-not-a-key"
+
+        session.key = delayed_key
+        toggle = session.spawn(session.toggle())
+        await entered.wait()
+        context = session.task_context
+        session.recorder.pcm_ready.emit(b"\0\0" * 32001)
+        await asyncio.gather(toggle, return_exceptions=True)
+        assert session.controller.outcome == State.FAILED
+        assert not session.recorder.recording
+        assert not context["onset_pcm"]
+        assert not connections and not session.inputs.inserted
+        await session.close()
+
+    asyncio.run(scenario())
+
+
+def test_missing_credential_stops_capture_started_before_lookup(sessions):
+    from inkecho.security import CredentialError
+
+    async def scenario():
+        session, connections = sessions()
+
+        async def missing_key(_reference):
+            assert session.recorder.recording
+            raise CredentialError("Synthetic missing key")
+
+        session.key = missing_key
+        problems, diagnostics = [], []
+        session.problem.connect(problems.append)
+        session.diagnostic.connect(diagnostics.append)
+        await session.toggle()
+        assert problems == ["Synthetic missing key"]
+        assert diagnostics == ["credentials_unavailable"]
+        assert session.controller.outcome == State.FAILED
+        assert not session.recorder.recording
+        assert not connections and not session.inputs.inserted
+        await session.close()
+
+    asyncio.run(scenario())
+
+
+def test_cancelled_processing_cannot_cancel_shared_startup_future(sessions):
+    async def scenario():
+        session, connections = sessions()
+        entered, release = asyncio.Event(), asyncio.Event()
+
+        async def delayed_key(_reference):
+            entered.set()
+            await release.wait()
+            return "synthetic-not-a-key"
+
+        session.key = delayed_key
+        toggle = asyncio.create_task(session.toggle())
+        await entered.wait()
+        context = session.task_context
+        session.recorder.pcm_ready.emit(b"\0\0" * 100)
+        session.stop_recording()
+        await asyncio.sleep(0)
+        processing = next(
+            task for task in session.pending if task.get_coro().__name__ == "_process"
+        )
+        processing.cancel()
+        await asyncio.gather(processing, return_exceptions=True)
+        assert not context["startup_ready"].done()
+        release.set()
+        await toggle
+        assert context["startup_ready"].result() is True
+        assert len(connections) == 1
+        assert not session.inputs.inserted
+        session.cancel()
+        await session.close()
+
+    asyncio.run(scenario())
+
+
+def test_cancel_after_short_stop_during_key_wait_never_sets_late_ready(sessions):
+    async def scenario():
+        session, connections = sessions()
+        entered, release = asyncio.Event(), asyncio.Event()
+
+        async def delayed_key(_reference):
+            entered.set()
+            try:
+                await release.wait()
+            except asyncio.CancelledError:
+                await release.wait()
+            return "synthetic-not-a-key"
+
+        session.key = delayed_key
+        toggle = session.spawn(session.toggle())
+        await entered.wait()
+        context = session.task_context
+        session.recorder.pcm_ready.emit(b"\0\0" * 100)
+        session.stop_recording()
+        await asyncio.sleep(0)
+        session.cancel()
+        release.set()
+        await toggle
+        assert context["startup_ready"].result() is False
+        assert not context["onset_pcm"]
+        assert not connections and not session.inputs.inserted
+        await session.close()
+
+    asyncio.run(scenario())

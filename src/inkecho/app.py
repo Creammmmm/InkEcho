@@ -348,7 +348,10 @@ class Session(QObject):
             self.status.emit("未识别到内容，本次已结束。")
         elif state == State.FAILED:
             code = self.controller.failure.value
-            if self.controller.failure == Failure.AUDIO and self.audio_failure:
+            credential_error = (self.task_context or {}).get("credential_error")
+            if self.controller.failure == Failure.TRANSCRIPTION and credential_error:
+                code, message = "credentials_unavailable", credential_error
+            elif self.controller.failure == Failure.AUDIO and self.audio_failure:
                 code, message = self.audio_failure.code, str(self.audio_failure)
             elif self.controller.failure == Failure.INJECTION and self.input_failure:
                 code = self.input_failure.code
@@ -425,6 +428,7 @@ class Session(QObject):
         self.status.emit("正在准备录音，请稍候。")
         self.epoch += 1
         epoch = self.epoch
+        context = None
         try:
             self.settings = self.store.load_settings()
             if not self.settings.transcription_provider:
@@ -467,23 +471,6 @@ class Session(QObject):
                 await asyncio.sleep(delay)
             if epoch != self.epoch:
                 return
-            key = await self.key(transcription.key_ref)
-            if epoch != self.epoch:
-                return
-            self.keys = {"transcription": key}
-            if self.settings.polishing_enabled:
-                try:
-                    polish_key = await self.key(polishing.key_ref)
-                    if epoch != self.epoch:
-                        return
-                    self.keys["polishing"] = polish_key
-                except CredentialError:
-                    if epoch != self.epoch:
-                        return
-                    if not self.settings.polishing_fallback:
-                        raise
-            if epoch != self.epoch:
-                return
             self.controller.polish = self.settings.polishing_enabled
             self.controller.fallback = self.settings.polishing_fallback
             self.controller.timeout_seconds = (
@@ -499,6 +486,29 @@ class Session(QObject):
                 self.mark_timing(task_id, "recording_started")
                 self.task_context = context
                 self.metrics = {"audio_seconds": 0.0, "characters": 0}
+                context["startup_ready"] = asyncio.get_running_loop().create_future()
+                context["onset_pcm"] = bytearray()
+                device = (
+                    bytes.fromhex(self.settings.microphone)
+                    if self.settings.microphone
+                    else None
+                )
+                options = {
+                    "sample_rate": self.settings.sample_rate,
+                    "max_seconds": self.settings.recording_limit_seconds,
+                }
+                if realtime_config is not None:
+                    options["streaming"] = True
+                # Input consent must not delay capturing the beginning of speech.
+                # The same owned task is a hard gate before any text delivery.
+                context["input_authorization"] = self.spawn(self.authorize_input())
+                if not self.recorder.start(device, **options):
+                    self.controller.fail(task_id, Failure.AUDIO)
+                    return
+                key = await self.key(transcription.key_ref)
+                if epoch != self.epoch:
+                    return
+                self.keys = {"transcription": key}
                 if realtime_config is not None:
                     task = self.controller.task
                     from inkecho.asr_streaming import create_streaming_session
@@ -556,23 +566,32 @@ class Session(QObject):
                     context["realtime_start"] = self.spawn(
                         self._start_realtime(task_id, context)
                     )
-                device = (
-                    bytes.fromhex(self.settings.microphone)
-                    if self.settings.microphone
-                    else None
-                )
-                options = {
-                    "sample_rate": self.settings.sample_rate,
-                    "max_seconds": self.settings.recording_limit_seconds,
-                }
-                if realtime_config is not None:
-                    options["streaming"] = True
-                # Input consent must not delay capturing the beginning of speech.
-                # The same owned task is a hard gate before any text delivery.
-                context["input_authorization"] = self.spawn(self.authorize_input())
-                if not self.recorder.start(device, **options):
-                    self.controller.fail(task_id, Failure.AUDIO)
+                if not self.active(task_id):
                     return
+                onset = context.pop("onset_pcm")
+                if realtime_config is not None:
+                    for offset in range(0, len(onset), MAX_FEED_BYTES):
+                        context["realtime"].feed_nowait(
+                            bytes(onset[offset : offset + MAX_FEED_BYTES])
+                        )
+                onset.clear()
+                if self.settings.polishing_enabled:
+                    try:
+                        polish_key = await self.key(polishing.key_ref)
+                        if epoch != self.epoch:
+                            return
+                        self.keys["polishing"] = polish_key
+                    except CredentialError:
+                        if epoch != self.epoch:
+                            return
+                        if not self.settings.polishing_fallback:
+                            raise
+                if epoch != self.epoch:
+                    return
+                ready = context["startup_ready"]
+                if ready.done():
+                    return
+                ready.set_result(True)
                 if not await context["input_authorization"]:
                     if epoch == self.epoch and self.active(task_id):
                         self.cancel()
@@ -588,8 +607,12 @@ class Session(QObject):
         except CredentialError as error:
             if epoch != self.epoch:
                 return
-            self.diagnostic.emit("credentials_unavailable")
-            self.report_problem(str(error))
+            if self.controller.task:
+                context["credential_error"] = str(error)
+                self.controller.fail(self.controller.task.id, Failure.TRANSCRIPTION)
+            else:
+                self.diagnostic.emit("credentials_unavailable")
+                self.report_problem(str(error))
         except ProviderError as error:
             if epoch != self.epoch:
                 return
@@ -605,6 +628,11 @@ class Session(QObject):
             self.diagnostic.emit("configuration_invalid")
             self.report_problem("无法开始录音，请检查配置与系统服务。")
         finally:
+            if context is not None:
+                ready = context.get("startup_ready")
+                if ready is not None and not ready.done():
+                    ready.set_result(False)
+                context.get("onset_pcm", bytearray()).clear()
             if epoch == self.epoch:
                 self.preparing = False
                 if not self.controller.task:
@@ -664,7 +692,7 @@ class Session(QObject):
             task is None
             or context is None
             or self.controller.state != State.RECORDING
-            or "realtime" not in context
+            or context.get("realtime_config") is None
         ):
             return
         task_id = task.id
@@ -672,6 +700,14 @@ class Session(QObject):
         if not self.active(task_id):
             return
         try:
+            if "realtime" not in context:
+                onset = context["onset_pcm"]
+                # Preserve the beginning while credentials load, without an
+                # unbounded recording buffer or silently dropping old samples.
+                if len(onset) + len(pcm) > self.settings.sample_rate * 4:
+                    raise ProviderError("audio")
+                onset.extend(pcm)
+                return
             for offset in range(0, len(pcm), MAX_FEED_BYTES):
                 context["realtime"].feed_nowait(pcm[offset : offset + MAX_FEED_BYTES])
         except asyncio.CancelledError:
@@ -693,6 +729,10 @@ class Session(QObject):
         started = context.get("asr_started", time.monotonic())
         asr_finish = None
         try:
+            ready = context.get("startup_ready")
+            if ready is not None:
+                if not await asyncio.shield(ready) or not self.active(task_id):
+                    return
             if "realtime" in context:
                 await context["realtime_start"]
                 if not self.active(task_id):
