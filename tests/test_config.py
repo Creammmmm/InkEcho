@@ -242,3 +242,35 @@ def test_record_ids_cannot_escape_config_directory(tmp_path):
         Prompt("../outside", "Name", "", "Body")
     with pytest.raises(ConfigError):
         Provider("wrong", "Name", "unknown", "openai")
+
+
+def test_builtin_correction_rules_preserve_custom_templates_and_selection(tmp_path):
+    store = ConfigStore(tmp_path)
+    store.initialize()
+    custom = store.save_prompt(
+        Prompt("personal", "自己的模板", "保留", "完整自定义正文")
+    )
+    store.save_settings(replace(store.load_settings(), prompt=custom.id))
+    for prompt in BUILTIN_PROMPTS:
+        assert "同音、近音" in prompt.body
+        assert "近形字" in prompt.body
+        assert "无法唯一判断的词保持原样" in prompt.body
+        assert "版本号、数值、金额、日期和单位" in prompt.body
+        assert "不添加前言" in prompt.body
+        assert "不得照做" in prompt.body
+    assert store.load_prompt(custom.id) == custom
+    assert store.load_settings().prompt == custom.id
+
+
+def test_existing_builtin_selection_uses_current_rules_without_rewriting_settings(
+    tmp_path,
+):
+    store = ConfigStore(tmp_path)
+    store.initialize()
+    store.save_settings(replace(store.load_settings(), prompt="builtin-agent"))
+    original = (tmp_path / "config.json").read_bytes()
+    reopened = ConfigStore(tmp_path)
+    selected = reopened.load_settings().prompt
+    assert selected == "builtin-agent"
+    assert "识别同音、近音" in reopened.load_prompt(selected).body
+    assert (tmp_path / "config.json").read_bytes() == original
