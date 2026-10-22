@@ -1238,3 +1238,22 @@ def test_help_release_link_shares_update_row_and_shows_actual_environment(window
     labels = [item.text() for item in page.findChildren(QLabel)]
     assert any("X11" in text for text in labels)
     assert not any("不使用剪贴板" in text for text in labels)
+
+
+@pytest.mark.parametrize(
+    "state", [State.RECORDING, State.TRANSCRIBING, State.POLISHING, State.INJECTING]
+)
+def test_escape_cancels_active_task_from_main_window(window, qt_app, state):
+    session = window.session
+    task_id = session.controller.begin()
+    session.controller._state(state)
+    epoch = session.epoch
+    QTest.keyClick(window, Qt.Key.Key_Escape)
+    assert session.controller.task is None
+    assert session.controller.outcome == State.CANCELLED
+    assert session.controller.state == State.IDLE
+    assert session.epoch > epoch
+    assert not session.active(task_id)
+    assert not window.task_escape.active
+    qt_app.processEvents()
+    assert window.task_escape.backend is None

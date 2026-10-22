@@ -20,6 +20,7 @@ from PySide6.QtWidgets import (
 )
 
 from inkecho.core import State
+from inkecho.platform.escape import TaskEscape
 from inkecho.ui.dashboard import HomePage
 from inkecho.ui.notifications import DesktopNotifications
 from inkecho.ui.overlay_proxy import OverlayProxy, create_overlay
@@ -181,6 +182,7 @@ class MainWindow(QMainWindow):
             self.tray.show()
         session.status.connect(self.show_status)
         session.problem.connect(self.show_problem)
+        self.task_escape = TaskEscape(session.cancel, self)
         session.state_changed.connect(self.update_state)
         if hasattr(session, "preview"):
             session.preview.connect(self.overlay.set_text)
@@ -282,6 +284,9 @@ class MainWindow(QMainWindow):
     def update_state(self, state):
         from inkecho.app import STATE_LABELS
 
+        self.task_escape.set_active(
+            state in {"recording", "transcribing", "polishing", "injecting"}
+        )
         if state != "idle":
             self.statusBar().showMessage(STATE_LABELS[State(state)])
         self.cancel_action.setVisible(
@@ -371,6 +376,7 @@ class MainWindow(QMainWindow):
 
     def dispose(self):
         self.exiting = True
+        self.task_escape.close()
         self.duration_timer.stop()
         self.session.timer.timeout.disconnect(self.refresh_cancel_action)
         self.tray.hide()
