@@ -336,13 +336,17 @@ class Session(QObject):
             State.CANCELLED,
         }:
             self.preview.emit("")
-        self.state_changed.emit(state.value)
+        empty = state == State.FAILED and self.controller.failure == Failure.EMPTY
+        # No speech is a quiet completion, not a desktop error notification.
+        self.state_changed.emit(State.IDLE.value if empty else state.value)
         if state == State.IDLE:
             return
         message = ERROR_LABELS.get(self.controller.failure, STATE_LABELS[state])
         if state == State.RECORDING and hasattr(self.recorder, "capturing"):
             message = "麦克风正在启动，请稍候。"
-        if state == State.FAILED:
+        if empty:
+            self.status.emit("未识别到内容，本次已结束。")
+        elif state == State.FAILED:
             code = self.controller.failure.value
             if self.controller.failure == Failure.AUDIO and self.audio_failure:
                 code, message = self.audio_failure.code, str(self.audio_failure)
@@ -613,6 +617,9 @@ class Session(QObject):
 
     def _audio_failed(self, reason):
         if self.controller.task:
+            if reason == "empty_recording":
+                self.controller.fail(self.controller.task.id, Failure.EMPTY)
+                return
             self.audio_failure = AudioError(reason)
             self.controller.fail(self.controller.task.id, Failure.AUDIO)
 
@@ -624,6 +631,9 @@ class Session(QObject):
             self.metrics["transcription_seconds"] = (
                 time.monotonic() - context["asr_started"]
             )
+        if isinstance(error, ProviderError) and error.code == "empty":
+            self.controller.fail(task_id, Failure.EMPTY)
+            return
         self.controller.fail(task_id, Failure.TRANSCRIPTION)
         if isinstance(error, ProviderError):
             self.diagnostic.emit(error.code)
@@ -717,6 +727,9 @@ class Session(QObject):
                 return
             self.metrics["transcription_seconds"] = time.monotonic() - started
             self.mark_timing(task_id, "asr_completed")
+            if not result.text.strip():
+                self.controller.transcribed(task_id, result.text)
+                return
             authorized = await context["input_authorization"]
             if not authorized or not self.active(task_id):
                 return
@@ -783,13 +796,9 @@ class Session(QObject):
         except asyncio.CancelledError:
             raise
         except Exception as error:
-            if not self.active(task_id):
-                return
-            self.metrics["transcription_seconds"] = time.monotonic() - started
-            self.controller.fail(task_id, Failure.TRANSCRIPTION)
-            if isinstance(error, ProviderError):
-                self.diagnostic.emit(error.code)
-                self.report_problem(PROVIDER_LABELS[error.code])
+            if self.active(task_id):
+                self.metrics["transcription_seconds"] = time.monotonic() - started
+            self._transcription_failed(task_id, error)
 
         finally:
             if asr_finish is not None:

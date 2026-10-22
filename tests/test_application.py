@@ -481,7 +481,6 @@ def test_known_incompatible_protocol_is_rejected_before_permission_key_and_audio
     [
         ("recording_timed_out", "recording_timed_out", "最长时限"),
         ("microphone_interrupted", "microphone_interrupted", "设备连接"),
-        ("empty_recording", "empty_recording", "未收到有效录音数据"),
         ("untrusted-private-detail", "audio_failed", "录音失败"),
     ],
 )
@@ -1024,5 +1023,90 @@ def test_session_credentials_use_only_explicit_config_root(tmp_path, monkeypatch
         finally:
             for session in sessions:
                 await session.close()
+
+    asyncio.run(scenario())
+
+
+@pytest.mark.parametrize("empty", ["", " \n\t", ProviderError("empty")])
+def test_no_speech_is_quiet_and_does_not_polish_or_emit_text(factory, empty):
+    class NoSpeech(Client):
+        async def transcribe(self, *_args):
+            if isinstance(empty, Exception):
+                raise empty
+            return Result(empty, Usage(), 0.1)
+
+        async def polish(self, *_args):
+            raise AssertionError("No speech must not enter polishing")
+
+    async def scenario():
+        session = factory(client=NoSpeech())
+        session.store.save_settings(replace(session.settings, polishing_enabled=True))
+        problems, diagnostics, states, statuses = [], [], [], []
+        session.problem.connect(problems.append)
+        session.diagnostic.connect(diagnostics.append)
+        session.state_changed.connect(states.append)
+        session.status.connect(statuses.append)
+        await session.initialize()
+        await session.toggle()
+        session.recorder.stop()
+        await complete(session)
+        assert not problems
+        assert not diagnostics
+        assert "failed" not in states
+        assert session.controller.failure == Failure.EMPTY
+        assert session.controller.state == State.IDLE
+        assert "未识别到内容，本次已结束。" in statuses
+        assert not session.inputs.inserted
+        assert session.task_context is None
+        assert not session.keys
+        await session.close()
+
+    asyncio.run(scenario())
+
+
+@pytest.mark.parametrize("code", ["authentication", "network", "response", "timeout"])
+def test_real_transcription_errors_are_not_silenced_as_no_speech(factory, code):
+    class Broken(Client):
+        async def transcribe(self, *_args):
+            raise ProviderError(code)
+
+    async def scenario():
+        session = factory(client=Broken())
+        problems, diagnostics = [], []
+        session.problem.connect(problems.append)
+        session.diagnostic.connect(diagnostics.append)
+        await session.initialize()
+        await session.toggle()
+        session.recorder.stop()
+        await complete(session)
+        assert problems
+        assert code in diagnostics
+        assert session.controller.failure == Failure.TRANSCRIPTION
+        assert not session.inputs.inserted
+        await session.close()
+
+    asyncio.run(scenario())
+
+
+def test_no_pcm_recording_ends_quietly_and_releases_task(factory):
+    async def scenario():
+        session = factory()
+        problems, diagnostics, states = [], [], []
+        session.problem.connect(problems.append)
+        session.diagnostic.connect(diagnostics.append)
+        session.state_changed.connect(states.append)
+        await session.toggle()
+        session.recorder.failed.emit("empty_recording")
+        assert session.controller.failure == Failure.EMPTY
+        assert session.controller.task is None
+        assert session.controller.state == State.IDLE
+        assert not session.recorder.recording
+        assert not session.task_context
+        assert not session.keys
+        assert not problems
+        assert not diagnostics
+        assert "failed" not in states
+        assert not session.inputs.inserted
+        await session.close()
 
     asyncio.run(scenario())
