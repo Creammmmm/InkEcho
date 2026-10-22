@@ -2,6 +2,7 @@
 
 import hashlib
 import os
+import re
 import shutil
 import subprocess
 from importlib.resources import files
@@ -182,14 +183,42 @@ class DesktopIntegration:
         No autostart is enabled, and unrelated launchers/artwork are preserved.
         Keep the entry after exit so its launcher remains valid.
         """
-        if self.status()["current"] and all(
+        current = self.status()["current"] and all(
             destination.is_file()
             and not destination.is_symlink()
             and destination.read_bytes() == source.read_bytes()
             for source, destination in self._icons()
-        ):
+        )
+        if not current:
+            self.install(refresh=False)
+        self._sync_enabled_autostart()
+
+    def _sync_enabled_autostart(self) -> None:
+        """Update only the executable in an already managed startup command.
+
+        Keep profile arguments and all other desktop fields byte-for-byte. An
+        unfamiliar command layout belongs to its existing owner, not this repair.
+        """
+        if not self._owned(self.autostart):
             return
-        self.install(refresh=False)
+        content = self.autostart.read_text()
+        pattern = (
+            r'(?m)^(Exec=/usr/bin/env -- )"(?:\\.|[^"\\])*"'
+            r"(?= .* --background$| --background$)"
+        )
+        matches = list(re.finditer(pattern, content))
+        if len(matches) != 1 or len(re.findall(r"(?m)^Exec=", content)) != 1:
+            return
+        self._entry()  # Validate the current executable before changing a file.
+        match = matches[0]
+        updated = (
+            content[: match.start()]
+            + match.group(1)
+            + desktop_argument(str(self.executable))
+            + content[match.end() :]
+        )
+        if updated != content:
+            self._write(self.autostart, updated)
 
     def install(self, *, refresh: bool = True) -> None:
         entry = self._entry()

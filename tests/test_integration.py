@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from inkecho.integration import DesktopIntegration, IntegrationError
+from inkecho.integration import DesktopIntegration, IntegrationError, desktop_argument
 
 
 @pytest.fixture
@@ -316,3 +316,56 @@ def test_gio_parses_persistent_icon_with_special_path(integration, tmp_path):
             expected
         ].read_bytes()
     )
+
+
+def test_running_image_updates_enabled_autostart_preserving_profile_args(integration):
+    integration.args = (
+        "--config-dir",
+        "/private/profile space",
+        "--data-dir",
+        "/private/data",
+    )
+    integration.install(refresh=False)
+    integration.set_autostart(True)
+    before = integration.autostart.read_text()
+    moved = integration.executable.with_name('new "image.AppImage')
+    integration.executable.rename(moved)
+    current = DesktopIntegration(
+        moved, data_home=integration.data_home, config_home=integration.config_home
+    )
+    current.ensure_running_identity()
+    expected = before.replace(
+        desktop_argument(str(integration.executable)), desktop_argument(str(moved)), 1
+    )
+    assert current.autostart.read_text() == expected
+    assert "--config-dir" in expected and "/private/profile space" in expected
+    before_mtime = current.autostart.stat().st_mtime_ns
+    current.ensure_running_identity()
+    assert current.autostart.stat().st_mtime_ns == before_mtime
+
+
+def test_running_identity_preserves_unrelated_autostart(integration):
+    integration.autostart.parent.mkdir(parents=True)
+    original = "[Desktop Entry]\nExec=/custom/start --background\n"
+    integration.autostart.write_text(original)
+    integration.ensure_running_identity()
+    assert integration.autostart.read_text() == original
+
+
+@pytest.mark.parametrize(
+    "command",
+    [
+        "Exec=/custom/managed --background\n",
+        'Exec=/usr/bin/env -- "/old.AppImage" --background\nExec=/custom/other\n',
+        (
+            'Exec=/usr/bin/env -- "/old.AppImage" --background\n'
+            'Exec=/usr/bin/env -- "/second.AppImage" --background\n'
+        ),
+    ],
+)
+def test_running_identity_preserves_unfamiliar_managed_autostart(integration, command):
+    integration.autostart.parent.mkdir(parents=True)
+    original = "[Desktop Entry]\nX-InkEcho-Managed=true\n" + command
+    integration.autostart.write_text(original)
+    integration.ensure_running_identity()
+    assert integration.autostart.read_text() == original
