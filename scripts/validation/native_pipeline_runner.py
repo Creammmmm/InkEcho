@@ -47,6 +47,9 @@ def parse():
     parser.add_argument("--artifact-sha256")
     parser.add_argument("--inventory-sha256")
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument(
+        "--case", choices=("normal", "cancel-after-first"), default="normal"
+    )
     parser.add_argument("--run-reviewed", action="store_true")
     parser.add_argument("--audit-only", action="store_true", help=argparse.SUPPRESS)
     return parser.parse_args()
@@ -191,6 +194,8 @@ class PageReader:
 
 def main():
     args = parse()
+    cancelling = args.case == "cancel-after-first"
+    expected = SAMPLE[:1] if cancelling else SAMPLE
     stage, source, manifest = stage_check(args)
     helpers = stage / "frozen/scripts/validation"
     if args.audit_only:
@@ -230,6 +235,7 @@ def main():
         "stage_provenance": manifest.get("provenance"),
         "source_or_package": "package" if args.package_root else "source",
         "expected_version": args.expected_version,
+        "case": args.case,
         "sender_started": False,
         "forced_signals": [],
         "cleanup_errors": [],
@@ -376,6 +382,8 @@ def main():
             str(helpers),
             "--native-work-root",
             str(args.output / "native-worker"),
+            "--case",
+            args.case,
             "--output",
             str(args.output / "delivery.json"),
         ]
@@ -408,19 +416,59 @@ def main():
                 time.sleep(0.01)
             report["sender_exit_code"] = sender.wait()
             report["sender_original_wait_completed"] = True
+        if cancelling:
+            delivery = json.loads((args.output / "delivery.json").read_text())
+            assert delivery["case"] == args.case and delivery["cancel"]["task_inactive"]
+            assert (
+                delivery["cancel"]["epoch_after"] > delivery["cancel"]["epoch_before"]
+            )
+            # Begin this separate receiver window only AFTER the actual Session
+            # cancellation has completed, and its first character was received.
+            baseline = reader.state()
+            assert baseline["text"] == expected
+            started = time.monotonic()
+            assert started >= delivery["timeline_monotonic"]["cancel_requested"]
+            samples = []
+            while True:
+                state = reader.state()
+                sampled = time.monotonic()
+                samples.append({"at_monotonic": sampled, "state": state})
+                assert state["text"] == expected
+                assert [row["text"] for row in state["history"]] == [expected]
+                assert all(row["trusted"] for row in state["history"])
+                if sampled - started >= 1.2:
+                    break
+                time.sleep(0.01)
+            save(
+                args.output / "cancel-receiver-observation.json",
+                {
+                    "scope": "actual owned receiver after confirmed Session.cancel",
+                    "started_monotonic": started,
+                    "finished_monotonic": sampled,
+                    "stable_seconds": sampled - started,
+                    "baseline": baseline,
+                    "samples": samples,
+                    "no_tail": True,
+                },
+            )
+            report["cancel_receiver_no_tail_seconds"] = sampled - started
         final = reader.state()
         reader.screenshot(args.output / "final.png")
         save(args.output / "receiver-final.json", final)
         lengths = [len(row["text"]) for row in final["history"]]
         report["visible_prefix_lengths"] = lengths
         report["exact_all_prefixes"] = [row["text"] for row in final["history"]] == [
-            SAMPLE[:i] for i in range(1, len(SAMPLE) + 1)
+            expected[:i] for i in range(1, len(expected) + 1)
         ]
         report["success"] = bool(
             report["sender_exit_code"] == 0
-            and final["text"] == SAMPLE
+            and final["text"] == expected
             and report["exact_all_prefixes"]
             and partial
+            and (
+                not cancelling
+                or report.get("cancel_receiver_no_tail_seconds", 0) >= 1.2
+            )
             and all(row["trusted"] for row in final["history"])
         )
         assert report["success"], "native_full_pipeline_acceptance_failed"

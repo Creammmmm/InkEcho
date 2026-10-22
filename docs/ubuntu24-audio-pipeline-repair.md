@@ -368,3 +368,125 @@ screenshots, balanced actual keys, restored mappings/default devices and origina
 natural child waits. Compare the artifact SHA-256 across the two result sets
 before declaring this package gate complete. This virtual-audio/local-service
 gate still does not claim physical-microphone or real-cloud accuracy testing.
+
+## Ubuntu 24 actual Code/Codex full chain and Session cancellation
+
+On Ubuntu 24.04.5/KVM, GNOME 46 Xorg, the generic sender carried actual Recorder
+PCM through Session, local TLS Qwen-compatible ASR, real HTTPS/SSE polishing and
+production KeyboardInput into a private normally sandboxed Code 1.140.0 /
+Chromium 150 / Electron 43.7.3 terminal. Its genuine offline Codex used the normal
+alternate screen and Kitty protocol flags 7. No DOM text assignment, clipboard,
+input method transport or real credentials were used. The virtual source and
+fixed local ASR/SSE responses do not establish physical-mic/cloud accuracy.
+
+The r2 product source was frozen before its keyboard commit, with source
+manifest `92e88de01d36fdea98756dd3442edc38641ad27de17782f84eb1b44704e8e7e4`
+and keyboard SHA-256
+`386d8349da0269766e3c1a9fa3c5deededce72f8b8909e040602b398a9c788dc`.
+The later keyboard commit is `619bf8e`; these results are bound to the frozen
+files, not relabelled as an entire clean-commit or new-AppImage result. The old
+0.8.0 extracted Python supplied dependencies only; every loaded application
+module resolved to the selected r2 source and had its hash recorded.
+
+A first attempt failed reading the default audio sink: the copied host Pulse17
+pactl lacked `libpulsecommon-17.0.so` on Noble. It naturally exited 1 before any
+module, recording or key dispatch; independently observed DOM keys remained
+empty. This failed directory was preserved. After review, a separate result
+used VM-native Pulse16.1 tools with explicit hashes: pactl
+`f80e4a11c6a13c927810a1b695490f689f25f7afb8881475099b45ca26f5fbbd`,
+pacat/paplay `925943b3e978dfbda45d1d716aae7dc9491dcbcce290a69ddda9c163f3ca860b`.
+The owner/identity/focus and still-empty target were rechecked before this
+confirmed-unsent retry; no uncertain input was replayed.
+
+Normal chain result: first captured PCM at 7.113 ms, onset marker 1600 samples,
+final ASR at 1412.634 ms, first dispatch at 1636.711 ms, and full polished SSE text
+at 1934.433 ms. Actual input began 297.722 ms before the full polished response.
+All nine trusted DOM keydowns, all nine UTF-8 PTY characters and all nine Kitty
+release codepoints exactly matched `本地完整链路测试。`, with zero NUL bytes.
+Guest-local screenshot receipts measured actual before/after key counts 2/2,
+5/5 and 8/8; the independent pixels show partial text, then the accurate final
+nine-character Codex prompt. Sparse screenshots do not imply every individual
+character had a separately verified paint. Actual production presses/releases
+were balanced and mappings/default audio devices restored, with no cleanup
+errors. Sender PID8931 naturally exited 0; normal Code close and original owner
+wait (session90887) both completed with exit 0.
+
+A separate fresh empty Code target then ran `--case cancel-after-first`.
+The real production first-sent callback synchronously called Session.cancel;
+epoch changed 1 to 3 and the task immediately became inactive. The sender kept
+its original tasks and release/mapping cleanup, and emitted exactly one press
+and release. Sender PID9594 naturally exited 0. After confirmed Session
+cancellation, independent Code observations sampled the actual trusted key
+history 60 times across 1.206536 seconds, always only `本`; actual PTY bytes and
+the final Codex screenshot also contained only `本`, with no NUL or later tail.
+The observation was not simulated with can_continue alone. Map/default-device
+restoration and balanced keys passed; Code and original owner wait
+(session20488) completed normally with exit 0.
+
+In both cases, the genuine Codex CLI's separate relay recorded `cli_exit=-1`
+when its terminal was closed with Code (PTY hangup); do not claim the CLI itself
+exited 0. No direct termination signals were sent by these validation runners.
+The Code and original controller natural-exit receipts remain distinct from
+that child terminal outcome.
+
+Evidence roots are `build/ubuntu24-input-pipeline/raw/pipeline-normal-r1/` and
+`pipeline-cancel-r1/`; each has an evidence-summary.json with full original file
+SHA-256 values, screenshots, DOM history, raw PTY bytes, source/tool proofs and
+original wait receipts. The first dependency failure remains in the normal
+archive beside the successful separate r2 output.
+
+| Pin | SHA-256 |
+| --- | --- |
+| Code receiver stage manifest | `eeec10ad5cc3f579205bb22f17b2fe6978eb26aecbe709174b973e9b93d4fa52` |
+| Generic sender stage manifest | `edcb1897c65673a3882eb10df334d64e2297a4d2019bac62e27f16e2fd7fbbcc` |
+| Generic sender including optional cancel | `77f719520b764f67542c78bddf2996f15faadbb0a4a5b76f7b14570ea41fcb01` |
+| Guest-local 2/5/8 screenshot observer | `8873a9929a034fff1a18c6fed3becca67963bff5685f2edd07dc8517a6e9aef5` |
+| Normal delivery.json | `fbbf78bf436e3b79cebad600624d341937af94dae588e2a91ce45613c87cb1ae` |
+| Cancel delivery.json | `9998c097c32b82be1432d929413949147efeecc24d032151e0596d8b34613327` |
+
+These source normal/cancel results do not replace final 0.9.0 same-SHA package
+normal/cancel acceptance on both actual Ubuntu systems.
+
+## Ubuntu 26 native source Session cancellation
+
+A separate fresh native Wayland Chrome target ran `cancel-after-first` from the
+0.8.11 source freeze, after the reviewer inspected its empty focused textarea.
+The real production first-sent callback caused synchronous Session.cancel,
+epoch 1→3 and immediate task invalidation. The complete Recorder/local-ASR/SSE
+pipeline sent one actual native press/release and received one ACK, with zero
+guard rejections. The independent actual receiver retained exactly the single
+trusted prefix `本` over 107 observations spanning 1.208353 seconds after the
+confirmed cancellation; partial and final screenshots both show that single
+character. It did not receive the second character or later SSE tail.
+
+The qasync sender-side nominal sleep(1.2) woke after 1.140958 seconds; this is
+recorded honestly and is **not** the 1200 ms acceptance evidence. The independent
+system-Python receiver measured its own monotonic ≥1200 ms observation window,
+which is the no-tail gate. No application timer or pacing code was altered.
+
+Mutter keymap SHA, group and modifier state matched before/after; X11 driver
+mapping and default audio devices were also restored. Sender PID61166, guardian
+PID61186, owned browser PID58894 and original runner wait session88375 all
+completed naturally with exit 0, no forced signals or cleanup errors. Product
+module and guardian origins/hashes bind to the frozen source. This source test
+still uses virtual audio and local services and is not a new AppImage result.
+
+Evidence root: `build/ubuntu24-pipeline-repair/host26-native-cancel-r1/`.
+Its evidence-summary.json contains all raw SHA-256 values. Principal pins:
+
+| Item | SHA-256 |
+| --- | --- |
+| 0.8.11 source/helper stage manifest | `e23ddc39170f59d83f6950155d0068aeca395eaa080b1feee94b8c5b49eeeecc` |
+| Generic sender | `77f719520b764f67542c78bddf2996f15faadbb0a4a5b76f7b14570ea41fcb01` |
+| Native runner including optional cancel case | `193efb09bfef69837e161af4a5be5862620e46ac0a02602dfe4f1c33fc86cdce` |
+| terminal.json | `2e80568f5cf1de7bd44688a46b74ccdbd5c6332cdfac0bbc33b0691ad448b213` |
+| delivery.json | `cca76e529bf77439ade253514b02bce187c428df584c4411cfb23ac362fb9365` |
+| Actual receiver ≥1200 ms observation | `a3d3cea45e116a8c57ee02044e965974e7368054de4e437903a3945994b3506e` |
+| Actual single-character final pixels | `9e4ca80e2acb6e2ab70804021c4e0e511a74f9ffdfb2ff89e1569456e3f6fe15` |
+
+The unique sender keeps `normal` as the default and adds explicit
+`cancel-after-first`; the native runner forwards that case and independently
+verifies actual receiver history for ≥1200 ms. Every scenario requires a fresh
+empty owned target and result directory. Source normal and real Session cancel
+now have actual evidence on 24 Xorg and 26 native; final 0.9.0 package runs must
+repeat both scenarios on each OS bound to the identical AppImage SHA-256.

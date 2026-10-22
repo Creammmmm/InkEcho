@@ -37,6 +37,9 @@ parser.add_argument("--native-owner", type=int)
 parser.add_argument("--native-helper-root", type=Path)
 parser.add_argument("--native-work-root", type=Path)
 parser.add_argument("--output", type=Path, required=True)
+parser.add_argument(
+    "--case", choices=("normal", "cancel-after-first"), default="normal"
+)
 args = parser.parse_args()
 IMPORT_ROOT = (args.package_root or args.source_root).resolve(strict=True)
 assert (IMPORT_ROOT / "inkecho/app.py").is_file()
@@ -98,6 +101,9 @@ async def run():
     }
     inputs, driver, before = None, None, None
     native_monitor = None
+    cancelling = args.case == "cancel-after-first"
+    expected_presses = 1 if cancelling else len("本地完整链路测试。")
+    report["case"] = args.case
     try:
         modules.append(
             pulse(
@@ -249,7 +255,12 @@ async def run():
                     errors.append(type(error).__name__)
                 finally:
                     writer.close()
-                    await writer.wait_closed()
+                    try:
+                        await writer.wait_closed()
+                    except (ConnectionResetError, BrokenPipeError) as error:
+                        if not cancelling:
+                            raise
+                        errors.append(type(error).__name__)
 
             https = await asyncio.start_server(polish, "127.0.0.1", 0, ssl=tls)
             async with https, serve(protocol, "127.0.0.1", 0, ssl=tls) as server:
@@ -384,6 +395,31 @@ async def run():
                 session.finished.connect(
                     lambda result: done.set_result(result) if not done.done() else None
                 )
+                if cancelling:
+                    assert getattr(inputs, "supports_first_sent_callback", False)
+                    original_mark = session.mark_timing
+
+                    def observe_first(task_id, event, *, at=None):
+                        original_mark(task_id, event, at=at)
+                        if (
+                            event != "first_character_sent"
+                            or "cancel_requested" in times
+                        ):
+                            return
+                        times["first_sent_confirmed"] = at or time.monotonic()
+                        epoch = session.epoch
+                        times["cancel_requested"] = time.monotonic()
+                        session.cancel()
+                        report["cancel"] = {
+                            "trigger": "real production first_sent callback",
+                            "epoch_before": epoch,
+                            "epoch_after": session.epoch,
+                            "task_inactive": not session.active(task_id),
+                            "receiver_observation_required": True,
+                        }
+                        assert session.epoch > epoch and not session.active(task_id)
+
+                    session.mark_timing = observe_first
                 session.capture_ready.connect(
                     lambda ready: (
                         times.setdefault("first_capture", time.monotonic())
@@ -428,24 +464,51 @@ async def run():
                 async with asyncio.timeout(5):
                     result = await done
                 await playback
+                if cancelling:
+                    assert result["outcome"] == "cancelled" and report.get("cancel")
+                    # Keep the original transport/Session tasks alive to release
+                    # held keys and restore mappings. Do not replace can_continue.
+                    times["cancel_observation_started"] = time.monotonic()
+                    await asyncio.sleep(1.2)
+                    times["cancel_observation_finished"] = time.monotonic()
+                    async with asyncio.timeout(3):
+                        await asyncio.gather(
+                            *list(session.pending), return_exceptions=True
+                        )
+                    assert (
+                        session.controller.task is None and session.task_context is None
+                    )
+                    assert not session.keys
+                    report["cancel"]["sender_observation_seconds"] = (
+                        times["cancel_observation_finished"]
+                        - times["cancel_observation_started"]
+                    )
+                    # A receiver must separately prove its actual first prefix
+                    # remains unchanged for 1200 ms; these are sender observations.
                 samples = struct.unpack(f"<{len(wire) // 2}h", wire)
                 marker_count = sum(abs(value) >= 2000 for value in samples)
-                assert result["outcome"] == "succeeded"
+                if not cancelling:
+                    assert result["outcome"] == "succeeded"
                 if native_monitor is not None:
-                    assert native_monitor.ack_count == len("本地完整链路测试。")
+                    assert native_monitor.ack_count == expected_presses
                     times["first_dispatch"] = native_monitor.first_sent_at
                 else:
-                    assert sum(e["pressed"] for e in report["events"]) == len(
-                        "本地完整链路测试。"
+                    assert (
+                        sum(e["pressed"] for e in report["events"]) == expected_presses
                     )
                 assert (
                     times["final_asr"]
                     < times["polishing_first_delta"]
                     <= times["first_dispatch"]
-                    < times["polishing_full_text"]
                 )
-                # The server may observe client abort after valid session finish.
-                assert set(errors) <= {"ConnectionClosedError"}
+                if not cancelling:
+                    assert times["first_dispatch"] < times["polishing_full_text"]
+                # Cancellation may close the local TLS peer before its tail.
+                allowed_errors = {"ConnectionClosedError"}
+                if cancelling:
+                    allowed_errors |= {"ConnectionResetError", "BrokenPipeError"}
+                report["local_server_errors"] = errors.copy()
+                assert set(errors) <= allowed_errors
                 zero = times["toggle_requested"]
                 report["clock_origin_monotonic"] = zero
                 report["timeline_monotonic"] = times.copy()
@@ -500,7 +563,7 @@ async def run():
                 assert (
                     native_counts["press_success"]
                     == native_counts["release_success"]
-                    == len("本地完整链路测试。")
+                    == expected_presses
                     and native_counts["guard_rejections"] == 0
                     and report["native"].get("native_mapping_restored") is True
                     and all(
