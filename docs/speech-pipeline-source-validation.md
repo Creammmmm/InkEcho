@@ -64,3 +64,25 @@ Ubuntu26普通9字完整链路另绑定0.8.7冻结源，记录全部可信1–9�
 Pulse工具是外部验收依赖，不改变AppImage。经审的prepare将分别冻结Ubuntu24 native16.1和Ubuntu26 native17.0 payload及固定SHA；相同regular launchers根据实际OS选择并清除仅external Pulse进程的AppImage库/Python环境。独立两实际OS的 `--version` 与只读默认sink查询已验证；没有加载虚拟模块、开启物理麦克风或改系统库。它只证明fixture工具可运行，不证明0.9应用音频链路。原sandbox socket拒绝及补充的正常权限只读结果均保留。
 
 实际包验、物理麦克风自然语音识别、真实云供应商准确率/网络时延是不同验证层次。本次源码fixture使用假密钥、本地协议服务及已知文本，不能推导后两项通过。
+
+## 完整源码检查中的工作区测试假设修正
+
+首次完整检查结果为 **1917 passed、2 skipped、1 failed**。唯一失败是
+`test_preparing_shortcut_keeps_status_cancel_until_pending_cleanup` 仍假设等待密钥时
+不存在任务；这与已实测的「先开始收音，再异步读取密钥」行为矛盾。原工作区 fixture
+还创建真实 Recorder、键盘输入和全局 Escape，模拟设备列表只屏蔽了页面枚举，不能
+隔离真正的录音启动或 X11 快捷键后端。
+
+本次只修复测试：向工作区注入模拟录音器、已授权模拟输入与不接触桌面的 Escape
+对象，保留真实按钮的取消连接和 active 状态。断言加强为等待密钥时录音已启动一次、
+任务有效且处于 RECORDING、取消按钮可用；点击后必须清空待处理工作、录音、任务、
+密钥与上下文，启动 Future 结束为 False，并保留「已取消」状态。fixture 以完整
+Session.close 收尾。产品代码没有改变，也没有删除或跳过该回归。
+
+应用修正后的 `tests/test_workspace.py` 初次定向运行 **14 passed、1 warning**；
+取消测试的 Qt 等待期间，无关概览余额 timer 创建的协程在执行前取消，产生未 await
+警告。该原始结果保留，不能据此宣称余额产品行为已修复。随后该取消回归在 show 前
+通过真实导航选择模型配置页，隔离不属于本测试的概览后台 timer；余额功能仍由本文件
+已有独立测试覆盖。相同文件再次运行 **14 passed、无 warning**，Ruff、格式及差异
+检查通过，没有修改产品。最终 release 准备和打包前仍须重新完成完整源码检查；此次
+定向结果不能替代该门，更不能算实际新包验收。

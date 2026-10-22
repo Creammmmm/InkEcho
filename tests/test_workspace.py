@@ -7,12 +7,14 @@ from datetime import date, timedelta
 from pathlib import Path
 
 import pytest
+from PySide6.QtCore import QObject, Signal
 from PySide6.QtWidgets import QPushButton
 from synthetic_providers import SYNTHETIC_PROVIDERS
 
 from inkecho.app import Session
 from inkecho.billing import BalanceAmount, BalanceResult
 from inkecho.config import ConfigStore
+from inkecho.core import State
 from inkecho.integration import DesktopIntegration
 from inkecho.logging import DiagnosticLog
 from inkecho.security import CredentialError
@@ -20,13 +22,67 @@ from inkecho.statistics import Statistics
 from inkecho.ui.window import MainWindow
 
 
+class WorkspaceRecorder(QObject):
+    level = Signal(float)
+    finished = Signal(bytes, float)
+    failed = Signal(str)
+
+    def __init__(self):
+        super().__init__()
+        self.recording = False
+        self.starts = 0
+
+    def start(self, *_args, **_kwargs):
+        self.recording = True
+        self.starts += 1
+        return True
+
+    def stop(self):
+        self.recording = False
+
+    def cancel(self):
+        self.recording = False
+
+
+class WorkspaceInputs:
+    authorized = True
+
+    async def connect(self):
+        pass
+
+    async def authorize(self):
+        raise AssertionError("Workspace inputs are already authorized")
+
+    async def insert(self, *_args, **_kwargs):
+        raise AssertionError("Workspace UI tests must not send keyboard input")
+
+    async def aclose(self):
+        pass
+
+
+class WorkspaceEscape(QObject):
+    unavailable = Signal(str)
+
+    def __init__(self, cancel, parent=None):
+        super().__init__(parent)
+        self.cancel = cancel
+        self.active = False
+
+    def set_active(self, active):
+        self.active = active
+
+    def close(self):
+        self.active = False
+
+
 @pytest.fixture
 def workspace(tmp_path, qt_app, monkeypatch):
     monkeypatch.setenv("XDG_SESSION_TYPE", "x11")
     monkeypatch.setattr("inkecho.audio.Recorder.devices", lambda: [])
+    monkeypatch.setattr("inkecho.ui.window.TaskEscape", WorkspaceEscape)
     store = ConfigStore(tmp_path / "config")
     store.initialize()
-    session = Session(store)
+    session = Session(store, recorder=WorkspaceRecorder(), inputs=WorkspaceInputs())
     stats = Statistics(tmp_path / "statistics.json")
     log = DiagnosticLog(tmp_path / "data")
     integration = DesktopIntegration(
@@ -40,8 +96,7 @@ def workspace(tmp_path, qt_app, monkeypatch):
     window.tray.hide()
     yield window
     window.dispose()
-    session.timer.stop()
-    asyncio.run(session.inputs.aclose())
+    asyncio.run(session.close())
     log.close()
 
 
@@ -309,26 +364,47 @@ def test_preparing_shortcut_keeps_status_cancel_until_pending_cleanup(workspace)
     store.save_settings(replace(store.load_settings(), polishing_enabled=False))
 
     async def scenario():
-        entered = asyncio.Event()
+        entered, key_cleaned = asyncio.Event(), asyncio.Event()
 
         async def blocked_key(_reference):
             entered.set()
-            await asyncio.Event().wait()
+            try:
+                await asyncio.Event().wait()
+            finally:
+                key_cleaned.set()
 
         workspace.session.key = blocked_key
+        workspace.navigation.setCurrentRow(1)
         workspace.show()
         workspace.handle_command("toggle")
         await asyncio.wait_for(entered.wait(), 1)
-        assert workspace.session.preparing
-        assert workspace.session.controller.task is None
+        session = workspace.session
+        assert session.preparing
+        task = session.controller.task
+        context = session.task_context
+        assert task is not None and session.active(task.id)
+        assert session.controller.state == State.RECORDING
+        assert session.recorder.recording and session.recorder.starts == 1
+        assert context is not None and not context["startup_ready"].done()
+        assert workspace.task_escape.active
         QTest.qWait(150)
         assert workspace.cancel_action.isVisible()
         QTest.mouseClick(workspace.cancel_action, Qt.MouseButton.LeftButton)
         await asyncio.gather(*workspace.session.pending, return_exceptions=True)
         await asyncio.sleep(0)
         QTest.qWait(150)
-        assert not workspace.session.preparing
-        assert not workspace.session.pending
+        assert key_cleaned.is_set()
+        assert not session.preparing and not session.pending
+        assert (
+            session.controller.task is None and session.controller.state == State.IDLE
+        )
+        assert not session.recorder.recording
+        assert session.task_context is None and not session.keys
+        assert (
+            context["startup_ready"].done()
+            and context["startup_ready"].result() is False
+        )
+        assert not workspace.task_escape.active
         assert workspace.cancel_action.isHidden()
         assert "已取消" in workspace.statusBar().currentMessage()
 
