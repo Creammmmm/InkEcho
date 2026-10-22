@@ -64,8 +64,25 @@ class _KeyEvent(ctypes.Structure):
     ]
 
 
+class _MappingEvent(ctypes.Structure):
+    _fields_ = [
+        ("type", ctypes.c_int),
+        ("serial", ctypes.c_ulong),
+        ("send_event", ctypes.c_int),
+        ("display", ctypes.c_void_p),
+        ("window", ctypes.c_ulong),
+        ("request", ctypes.c_int),
+        ("first_keycode", ctypes.c_int),
+        ("count", ctypes.c_int),
+    ]
+
+
 class _Event(ctypes.Union):
-    _fields_ = [("key", _KeyEvent), ("pad", ctypes.c_long * 24)]
+    _fields_ = [
+        ("key", _KeyEvent),
+        ("mapping", _MappingEvent),
+        ("pad", ctypes.c_long * 24),
+    ]
 
 
 class _ModifierMap(ctypes.Structure):
@@ -376,6 +393,8 @@ class _XTestDriver(_XDriver):
         self._pair_applied = {}
         self._pair_pending = {}
         self._batch = {}
+        self._map_revision = 0
+        self._notified = None
         try:
             self.xtst = ctypes.CDLL("libXtst.so.6")
             p, i, u, word = (
@@ -500,6 +519,7 @@ class _XTestDriver(_XDriver):
                 raise KeyboardError("mapping_changed")
             self._pair_applied[code] = actual
             del self._pair_pending[code]
+        self._map_revision += 1
 
     def map(self, character):
         if character == "\n":
@@ -519,6 +539,7 @@ class _XTestDriver(_XDriver):
 
     def restore(self):
         failed = False
+        borrowed = tuple(self._pair_applied)
         for code in tuple(self._pair_applied):
             try:
                 actual = self._pair_row(code)
@@ -533,6 +554,12 @@ class _XTestDriver(_XDriver):
                 failed = True  # Still release every other row that is ours.
         self.applied = self.pending_symbol = None
         self._batch.clear()
+        self._notified = None
+        if borrowed:
+            try:
+                self._notify_mapping(min(borrowed), max(borrowed) - min(borrowed) + 1)
+            except KeyboardError:
+                pass  # Cache hints must never prevent returning borrowed rows.
         if failed:
             raise KeyboardError("mapping_changed")
 
@@ -561,9 +588,30 @@ class _XTestDriver(_XDriver):
             raise KeyboardError("unsupported_target")
         return super().focus()
 
+    def _notify_mapping(self, first, count):
+        # XKB-aware Chromium clients can retain an old map despite server-side
+        # MapNotify. Invalidate the current client's cache before its next key.
+        # InputFocus (1) follows the cursor; no recording target is retained.
+        event = _Event()
+        event.mapping.type = 34  # MappingNotify
+        event.mapping.display = self.display
+        event.mapping.window = 1
+        event.mapping.request = 1  # MappingKeyboard
+        event.mapping.first_keycode = first
+        event.mapping.count = count
+        with self._checked():
+            if not self.x11.XSendEvent(self.display, 1, 0, 0, ctypes.byref(event)):
+                raise KeyboardError("injection_failed")
+
     def send(self, window, code, pressed):
-        # window is deliberately unused: delivery follows the current cursor.
+        # window only deduplicates cache hints; XTest follows the current cursor.
         # Releases must remain possible even if a physical modifier was pressed.
+        if pressed and code in getattr(self, "_pair_applied", {}):
+            key = (self._map_revision, window)
+            if key != self._notified:
+                rows = tuple(self._pair_applied)
+                self._notify_mapping(min(rows), max(rows) - min(rows) + 1)
+                self._notified = key
         with self._checked():
             if not self.xtst.XTestFakeKeyEvent(self.display, code, int(pressed), 0):
                 raise KeyboardError("injection_failed")

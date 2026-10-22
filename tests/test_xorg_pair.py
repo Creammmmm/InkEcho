@@ -24,6 +24,7 @@ def hardware(monkeypatch, *, modifiers=(181, 182), blocked=False):
     driver.width = None
     driver.slot = driver.applied = driver.pending_symbol = None
     driver._pair_applied, driver._pair_pending, driver._batch = {}, {}, {}
+    driver._map_revision, driver._notified = 0, None
     driver.display, driver.root = 100, 1
     driver._checked = nullcontext
     driver._mapping = lambda: (2, tuple(value for row in rows for value in row))
@@ -44,6 +45,7 @@ def hardware(monkeypatch, *, modifiers=(181, 182), blocked=False):
         XGetModifierMapping=lambda *_: ctypes.pointer(modifier_map),
         XFreeModifiermap=lambda *_: 0,
         XKeysymToKeycode=lambda *_: 36,
+        XSendEvent=lambda *_: 1,
     )
     driver.focus = lambda: focus[0]
     driver.send = lambda window, code, pressed: events.append((window, code, pressed))
