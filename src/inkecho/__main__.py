@@ -180,6 +180,7 @@ async def run(app, store, instance, args):
     finally:
         await session.close()
         if window is not None:
+            await window.task_escape.shutdown()
             await window.notifications.shutdown()
             if hasattr(window.overlay, "shutdown"):
                 await window.overlay.shutdown()

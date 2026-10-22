@@ -183,6 +183,7 @@ class MainWindow(QMainWindow):
         session.status.connect(self.show_status)
         session.problem.connect(self.show_problem)
         self.task_escape = TaskEscape(session.cancel, self)
+        self.task_escape.unavailable.connect(self.show_status)
         session.state_changed.connect(self.update_state)
         if hasattr(session, "preview"):
             session.preview.connect(self.overlay.set_text)

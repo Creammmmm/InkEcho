@@ -1,9 +1,10 @@
 """Task-scoped Escape cancellation without recording ordinary keyboard input."""
 
+import asyncio
 import ctypes as c
 import os
 
-from PySide6.QtCore import QEvent, QObject, QSocketNotifier, Qt, QTimer
+from PySide6.QtCore import QEvent, QObject, QSocketNotifier, Qt, QTimer, Signal
 from PySide6.QtWidgets import QApplication
 
 
@@ -135,11 +136,13 @@ class _XEscape:
 class TaskEscape(QObject):
     """Arm only during a task; no persistent desktop settings or key logger.
 
-    Local Qt Escape works on all sessions. Global Escape currently requires
-    Xorg. Wayland needs an authorized compositor shortcut API, not an X11 grab.
+    Xorg grabs and authorized Wayland portal sessions are released at task end.
+    Local Qt Escape remains available when the desktop denies a global binding.
     """
 
-    def __init__(self, cancel, parent=None, *, factory=_XEscape):
+    unavailable = Signal(str)
+
+    def __init__(self, cancel, parent=None, *, factory=_XEscape, portal_factory=None):
         super().__init__(parent)
         self.cancel = cancel
         self.factory = factory
@@ -147,10 +150,15 @@ class TaskEscape(QObject):
         self.backend = None
         self.notifier = None
         self.revision = 0
+        self.portal_factory = portal_factory
+        self.portal = None
+        self.portal_task = None
+        self.pending = set()
+        self.closed = False
         QApplication.instance().installEventFilter(self)
 
     def set_active(self, active):
-        if active == self.active:
+        if self.closed or active == self.active:
             return
         self.active = active
         self.revision += 1
@@ -162,11 +170,19 @@ class TaskEscape(QObject):
         QTimer.singleShot(0, lambda: self._arm(revision))
 
     def _arm(self, revision):
-        if (
-            not self.active
-            or revision != self.revision
-            or os.environ.get("XDG_SESSION_TYPE") != "x11"
-        ):
+        if not self.active or revision != self.revision or self.closed:
+            return
+        session = os.environ.get("XDG_SESSION_TYPE")
+        if session == "wayland":
+            try:
+                loop = asyncio.get_running_loop()
+            except RuntimeError:
+                return
+            self.portal_task = loop.create_task(self._arm_portal(revision))
+            self.pending.add(self.portal_task)
+            self.portal_task.add_done_callback(self.pending.discard)
+            return
+        if session != "x11":
             return
         try:
             self.backend = self.factory()
@@ -178,6 +194,31 @@ class TaskEscape(QObject):
             # Do not replace a conflicting desktop binding. Local Qt Escape and
             # the existing explicit cancel controls remain available.
             self._release()
+
+    async def _arm_portal(self, revision):
+        from inkecho.platform.portal_escape import PortalTaskEscape
+
+        backend = (self.portal_factory or PortalTaskEscape)()
+        self.portal = backend
+        try:
+            await backend.arm(lambda: self._portal_cancel(revision))
+            if self.closed or not self.active or revision != self.revision:
+                backend.abort()
+        except asyncio.CancelledError:
+            backend.abort()
+        except Exception:
+            backend.abort()
+            if self.active and revision == self.revision and not self.closed:
+                self.unavailable.emit(
+                    "未启用全局 Escape；可使用托盘或窗口中的取消入口。"
+                )
+        finally:
+            if backend.closed and self.portal is backend:
+                self.portal = None
+
+    def _portal_cancel(self, revision):
+        if not self.closed and self.active and revision == self.revision:
+            self._cancel()
 
     def _read(self, *_args):
         if self.backend and self.backend.pressed() and self.active:
@@ -199,6 +240,13 @@ class TaskEscape(QObject):
         return False
 
     def _release(self):
+        if self.portal is not None:
+            self.portal.abort()
+            self.portal = None
+        if self.portal_task is not None:
+            if not self.portal_task.done():
+                self.portal_task.cancel()
+            self.portal_task = None
         if self.notifier is not None:
             self.notifier.setEnabled(False)
             self.notifier.deleteLater()
@@ -207,7 +255,14 @@ class TaskEscape(QObject):
             self.backend.close()
             self.backend = None
 
+    async def shutdown(self):
+        self.close()
+        if self.pending:
+            await asyncio.gather(*tuple(self.pending), return_exceptions=True)
+
     def close(self):
         self.set_active(False)
+        self.closed = True
+        self.revision += 1
         self._release()
         QApplication.instance().removeEventFilter(self)

@@ -138,3 +138,80 @@ def test_lock_masks_follow_remapped_numlock_and_preserve_real_modifiers():
 
 def test_lock_masks_do_not_grab_unassigned_modifier_combinations():
     assert _lock_combinations([()] * 8, {66, 77}) == (0,)
+
+
+class PortalBackend:
+    def __init__(self):
+        import asyncio
+
+        self.started = asyncio.Event()
+        self.ready = asyncio.Event()
+        self.closed = False
+        self.callback = None
+
+    async def arm(self, callback):
+        self.callback = callback
+        self.started.set()
+        await self.ready.wait()
+
+    def abort(self):
+        self.closed = True
+
+
+def test_wayland_arm_is_async_and_terminal_releases_pending_grant(qt_app, monkeypatch):
+    import asyncio
+
+    async def scenario():
+        monkeypatch.setenv("XDG_SESSION_TYPE", "wayland")
+        backend = PortalBackend()
+        cancelled = []
+        guard = TaskEscape(
+            lambda: cancelled.append(True), portal_factory=lambda: backend
+        )
+        guard.set_active(True)
+        qt_app.processEvents()
+        # Starting the task returns without waiting for portal authorization.
+        assert guard.active and not backend.started.is_set()
+        await backend.started.wait()
+        guard.set_active(False)
+        assert backend.closed
+        backend.callback()  # A stale permission/signal cannot cancel another task.
+        assert not cancelled
+        await guard.shutdown()
+        assert not guard.pending
+
+    asyncio.run(scenario())
+
+
+def test_wayland_same_turn_cancel_and_rapid_rearm_ignore_old_signal(
+    qt_app, monkeypatch
+):
+    import asyncio
+
+    async def scenario():
+        monkeypatch.setenv("XDG_SESSION_TYPE", "wayland")
+        backends, cancelled = [], []
+
+        def create():
+            backend = PortalBackend()
+            backends.append(backend)
+            return backend
+
+        guard = TaskEscape(lambda: cancelled.append(True), portal_factory=create)
+        guard.set_active(True)
+        qt_app.processEvents()
+        await asyncio.sleep(0)
+        first = backends[0]
+        guard.set_active(False)
+        guard.set_active(True)
+        qt_app.processEvents()
+        await asyncio.sleep(0)
+        second = backends[1]
+        first.callback()
+        assert guard.active and not cancelled
+        second.callback()
+        # No await: revision/task cancellation and peer disposal already happened.
+        assert not guard.active and cancelled == [True] and second.closed
+        await guard.shutdown()
+
+    asyncio.run(scenario())
