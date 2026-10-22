@@ -223,3 +223,148 @@ initial audio marker and therefore correctly exited 1. The startup repair
 addresses the capture gap; it does not mislabel already working SSE streaming as
 a new fix. The protocol still returns immediately on a valid DONE event rather
 than waiting for HTTP EOF, and final ASR confirmation remains intact.
+
+
+## Actual native Wayland full-chain source verification (Ubuntu 26.04)
+
+The root reviewer inspected the empty, focused owned target before authorizing
+this run. On Ubuntu 26.04/GNOME Wayland, frozen source `dc3ac5a2bacd126e6924ea6331e5e1a10aa1916f`
+(version 0.8.7) ran the real Recorder, Session, local TLS Qwen-compatible ASR,
+real HTTPS/SSE ProviderClient, production keyboard factory and native guardian.
+The audio source was a unique virtual device and credentials were fake. The
+receiver was a private owned native Chrome window, with DISPLAY unset and
+observed Wayland surface and xdg_toplevel. This does not validate a physical
+microphone, actual cloud recognition accuracy, Ubuntu 24, or an AppImage.
+
+Actual trusted insertText events produced all prefixes of `本地完整链路测试。`,
+lengths 1 through 9, in order. The intermediate screenshot shows `本地`;
+receiver state before and after taking that screenshot remained `本地`.
+The final screenshot and receiver history contain the exact nine characters.
+The first two receiver events were 2.1 ms apart; the deliberate SSE fixture
+pause separated the second and third events by 366.4 ms. The remaining text
+continued character by character rather than being assigned as a DOM value.
+
+| Measured interval | Actual result |
+| --- | ---: |
+| Toggle to first captured PCM | 11.795 ms |
+| Final ASR to first keyboard dispatch | 213.118 ms |
+| First polished SSE delta to first dispatch | 101.460 ms |
+| First dispatch before complete polished text | 318.556 ms |
+
+Nine actual native presses, nine releases and nine acknowledgements were
+observed, with zero guard rejections. Mutter's keymap SHA-256, group and all
+modifier states matched before/after; default audio devices were unchanged.
+The sender PID 39138, guardian PID 39158 and owned browser PID 37454 each
+completed their original Popen wait naturally with exit 0. No forced signals or
+cleanup errors occurred. The outer runner also exited 0. Source and worker
+module origins and SHA-256 values were recorded and bound to the frozen source.
+
+Raw evidence is in `build/ubuntu24-pipeline-repair/host26-native-source-r1/`.
+`evidence-summary.json` records the full original file digests. Important pins:
+
+| Item | SHA-256 |
+| --- | --- |
+| Frozen stage manifest | `e81ceba75bd3b6ed16f643e3cc383ab52a864bbf9f1097111ee3d56701a0d155` |
+| Native sender | `8fc96d96bcc3ea8593b747fad5db2f42484d62f45083c9036be0fe7770eb5f95` |
+| Native adapter | `2ee89c294742d1acf96942537d6d0e5088d481d44a863637a8aac2d8474bd195` |
+| Native runner | `aad1d67fef246e15ce9fd8a6e80cc4f063e86d0e108f0529d016c694552c64fb` |
+| terminal.json | `bb7de75886cf378faac41639ead7c1920dbc4fbd8101f50bded84dec78e2bac5` |
+| delivery.json | `8edf8ff9689a555dfd3b501e0cea747303a8805fa56393a5c29c6d78839db809` |
+| receiver-final.json | `77a6abbae292f25b57a2d2adaff4dde6397053eaa37167d236af5003e2c14274` |
+| partial.json | `b118ab18207db0a075f32b9427d1154084adf10a6864dc2e98071594d8373235` |
+| partial.png | `d3e8f35c1205d2f8881c8d80007cf30d9fc38d04a2ba2aaa5d0e8a9d30bd1ce8` |
+| final.png | `16b8f5ce7cc52ffc773bfb00d84642492d7bc4ded5c12dc164a931c7854ddf5d` |
+
+## Reproducible generic full-chain tools
+
+The repository now contains one generic sender,
+`scripts/validation/audio_pipeline_keyboard.py`, with Xorg PID/XID guards or a
+native guard selected explicitly. `audio_pipeline_native_guard.py` adds only
+owned-target guard/observation seams to the real guardian; it does not replace
+mapping, pacing or ASR final confirmation. `native_pipeline_runner.py` prepares
+a private native target, waits for reviewer release, records real prefixes and
+screenshots, and performs normal owned-process cleanup. Package mode retains
+selected-artifact, inventory, interpreter and module-origin checks.
+
+Freeze a fresh source/helper stage without opening any desktop target:
+
+```sh
+.venv/bin/python scripts/validation/stage_audio_pipeline.py \
+  --stage build/audio-pipeline-review \
+  --pulse-bin /absolute/path/to/reviewed/pulse-tools
+```
+
+Review the printed manifest digest and tool code before launching the runner.
+Use the frozen runner with `--stage`, `--manifest-sha256`, `--source-root
+STAGE/frozen/src`, `--python`, `--expected-version`, a fresh `--output`, and
+`--run-reviewed`. It publishes ready.png/json and waits. It never creates
+send-request itself: after reviewing the empty owned target, the reviewer may
+write literal `send` to OUTPUT/send-request; OUTPUT/close-request closes without
+sending. The Xorg sender additionally requires the separately reviewed owned
+receiver PID/XID and independent receiver observation.
+
+The tracked-tool migration was checked with Ruff, AST/CLI parsing and a fresh
+178-file stage plus stage_check, without opening another desktop target. The
+stage manifest was `f07f6993d917844aaa12bad04828183892c783128b691567e99cdbe4328cfe5f`.
+These migration checks are not another desktop acceptance run. Ubuntu 24
+full-chain verification was still pending at preparation time. A release 0.9.0
+candidate must separately bind the same AppImage SHA-256 on both systems and
+rerun the actual package path; the source evidence above cannot satisfy that gate.
+
+## Pending 0.9.0 package gate: explicit argument binding
+
+No 0.9.0 artifact or package result is asserted here. First freeze the final
+release source and these helpers, then build one candidate AppImage. Record its
+absolute path, SHA-256 and bytes before copying that exact file to each system.
+Extract each verified copy into a fresh private directory using that AppImage's
+own extraction mode; retain the extraction command and original exit status.
+Pin the extracted `usr/share/doc/inkecho/inventory.json` SHA-256 on both systems.
+Use that AppDir's `usr/bin/python3`, never the development virtual environment
+or the old 0.8.0 dependency runtime. Bind all paths to that extraction.
+
+For native Ubuntu 26.04 the reviewed runner's package arguments are:
+
+```sh
+/absolute/path/to/development/python STAGE/native_pipeline_runner.py \
+  --stage STAGE --manifest-sha256 REVIEWED_STAGE_SHA256 \
+  --package-root APPDIR/packages --frozen-source-root STAGE/frozen/src \
+  --python APPDIR/usr/bin/python3 --expected-version 0.9.0 \
+  --artifact SAME_CANDIDATE.AppImage --artifact-sha256 SAME_ARTIFACT_SHA256 \
+  --inventory-sha256 EXTRACTED_INVENTORY_SHA256 \
+  --output FRESH_NATIVE_RESULT --run-reviewed
+```
+
+Every placeholder must be replaced with a concrete absolute path or full digest
+and reviewed before execution. The parent interpreter runs only the owned
+browser controller. The runner starts package audit and sender subprocesses with
+the selected packaged interpreter, APPDIR/PYTHONHOME/library paths, private HOME
+and selected package PYTHONPATH. The audit checks artifact bytes, inventory,
+exact application source file set, every source file's bytes and runtime module
+origins. Native worker origins must resolve to that same package root. Source
+mode and package mode remain explicitly distinct in the final report. Inspect
+ready.png/json before authorizing the fixed nine-character send request.
+
+For Ubuntu 24.04, the independent owned Xorg receiver wrapper must first run
+`artifact_scope.selected_artifact` and `audit_package` with the same artifact,
+version, frozen source and package interpreter. Only after that check may it
+invoke the generic sender:
+
+```sh
+APPDIR/usr/bin/python3 STAGE/audio_pipeline_keyboard.py \
+  --package-root APPDIR/packages \
+  --owned-pid REVIEWED_TARGET_PID --owned-window REVIEWED_TARGET_XID \
+  --output FRESH_DELIVERY_JSON
+```
+
+This invocation requires the wrapper's private package environment, explicit
+PID/start-time/window ownership guard and independent actual receiver prefix
+history/screenshots; the sender command alone is not a package acceptance gate.
+Await the Code/xterm dynamic-mapping repair before running this path. Preserve
+old failures instead of reusing their output directories or replaying text.
+
+Both systems must retain the selected artifact/inventory/stage digests, complete
+module-origin receipts, actual 1–9 trusted receiver prefixes plus partial/final
+screenshots, balanced actual keys, restored mappings/default devices and original
+natural child waits. Compare the artifact SHA-256 across the two result sets
+before declaring this package gate complete. This virtual-audio/local-service
+gate still does not claim physical-microphone or real-cloud accuracy testing.
