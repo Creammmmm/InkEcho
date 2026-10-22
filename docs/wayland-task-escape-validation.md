@@ -106,3 +106,57 @@ Official APIs:
 [host Registry](https://flatpak.github.io/xdg-desktop-portal/docs/doc-org.freedesktop.host.portal.Registry.html),
 [GlobalShortcuts](https://flatpak.github.io/xdg-desktop-portal/docs/doc-org.freedesktop.portal.GlobalShortcuts.html),
 [shortcut identifiers](https://specifications.freedesktop.org/shortcuts/latest/).
+
+## Self-contained reproducible runner migration
+
+`scripts/validation/native_escape_probe.py` contains the owned target and process
+identity helper; it has no dependency on ignored `build/` files. It accepts either
+`--source-root /absolute/repository/src` or `--package-root /absolute/AppDir/packages`.
+Package mode requires that selected AppDir's actual interpreter, bootstraps its
+packages before importing PySide/InkEcho, passes the same selected root to its
+isolated child and audits all loaded InkEcho module origins plus selected GUI /
+D-Bus dependency origins. It records version, interpreter, desktop entry hash and
+source-module hashes. Own desktop identity is read/validated, never forged.
+
+This migration received CLI help, AST parsing, Ruff lint and formatting checks.
+A static negative case using a synthetic package directory and the wrong host
+interpreter was rejected before **any** PySide6, dbus_next or InkEcho import;
+no GUI or D-Bus call occurred. Raw static result:
+`build/ubuntu24-input-pipeline/escape-portal/native-probe-static-negative.json`.
+These static checks are not another desktop or package acceptance run. The actual
+r5 desktop result above came from the reviewed predecessor tool.
+
+For each reviewed run, first create a unique private parent directory. Supply new
+`--output`, `--progress`, `--owned-root` and `--emit-file` paths below that parent.
+Example source invocation (requires a real unlocked native Wayland desktop and
+an existing legitimate own application desktop entry):
+
+```sh
+.venv/bin/python -I -B scripts/validation/native_escape_probe.py \
+  --source-root /absolute/InkEcho/src \
+  --output /private/new-run/result.json \
+  --progress /private/new-run/progress.json \
+  --owned-root /private/new-run/target \
+  --emit-file /private/new-run/emit
+```
+
+For package mode use `/absolute/AppDir/usr/bin/python3 -I -B` with that AppDir's
+`PYTHONHOME=/absolute/AppDir/usr` and
+`LD_LIBRARY_PATH=/absolute/AppDir/usr/lib/inkecho`, replacing `--source-root` with
+`--package-root /absolute/AppDir/packages`. If needed, `--desktop-entry` explicitly
+selects the already existing own `io.github.Creammmmm.InkEcho.desktop` entry.
+
+Before any package run, the external coordinator must still run the complete
+`artifact_scope` binding audit and retain artifact SHA256, extracted inventory,
+expected source SHA and tool SHA. Internal origin checks are **not** a substitute
+for that artifact binding. Use the same accepted package SHA on both systems.
+
+The progress file identifies the exact owned PID/start and a prepared hidden
+control preview; it is explicitly not yet visible. Review that process and image,
+then authorize exactly `PID:start` in the new emit file. The fixture first shows
+that owned target once, requires250ms stable actual native focus and fresh
+process/focus checks before both Escape presses, then closes naturally. Write the
+emit file and wait for the original runner to finish within one controlled tool
+operation, to avoid test-tool display updates disturbing the owned focus. Never
+remove the guard, loop activation attempts, or treat this fixture sequence as
+product focus management. Preserve all original failed results and exits.
