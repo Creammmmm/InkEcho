@@ -6,6 +6,7 @@ from contextlib import nullcontext
 from types import SimpleNamespace
 
 import pytest
+from test_keyboard import ImmediatePacer
 
 from inkecho.platform.keyboard import (
     KeyboardError,
@@ -64,7 +65,7 @@ def test_pair_request_excludes_modifiers_and_batches_new_symbols(monkeypatch):
     before = rows.copy()
 
     async def run():
-        inputs = KeyboardInput(driver_factory=lambda: driver)
+        inputs = KeyboardInput(driver_factory=lambda: driver, pacer=ImmediatePacer())
         await inputs.connect()
         assert await inputs.insert("中文Ωé字", lambda: True) == 5
         assert [write[3] for write in writes] == [2, 2, 2, 1, 1]
@@ -84,7 +85,7 @@ def test_no_legal_adjacent_pair_refuses_without_any_write_or_press(monkeypatch):
     before = rows.copy()
 
     async def run():
-        inputs = KeyboardInput(driver_factory=lambda: driver)
+        inputs = KeyboardInput(driver_factory=lambda: driver, pacer=ImmediatePacer())
         await inputs.connect()
         with pytest.raises(KeyboardError, match="mapping_changed"):
             await inputs.insert("中文", lambda: True)
@@ -109,7 +110,7 @@ def test_return_and_stream_fragments_reuse_existing_pair_without_idle_mapping(
     monkeypatch.setattr(asyncio, "sleep", sleep)
 
     async def run():
-        inputs = KeyboardInput(driver_factory=lambda: driver)
+        inputs = KeyboardInput(driver_factory=lambda: driver, pacer=ImmediatePacer())
         await inputs.connect()
         async with inputs.output_session():
             assert not writes
@@ -156,7 +157,7 @@ def test_cancel_and_deadline_release_keys_and_both_rows(monkeypatch, phase):
     monkeypatch.setattr(asyncio, "sleep", sleep)
 
     async def run():
-        inputs = KeyboardInput(driver_factory=lambda: driver)
+        inputs = KeyboardInput(driver_factory=lambda: driver, pacer=ImmediatePacer())
         await inputs.connect()
         expected = asyncio.CancelledError if phase == "pressed" else KeyboardError
         with pytest.raises(expected):
@@ -209,7 +210,7 @@ def test_pair_transaction_failure_restores_every_owned_row(monkeypatch, failure)
     driver._row = readback
 
     async def run():
-        inputs = KeyboardInput(driver_factory=lambda: driver)
+        inputs = KeyboardInput(driver_factory=lambda: driver, pacer=ImmediatePacer())
         await inputs.connect()
         with pytest.raises(KeyboardError, match="injection_failed"):
             await inputs.insert("中文", lambda: True)
@@ -231,7 +232,7 @@ def test_foreign_change_preserved_but_other_owned_row_still_restored(monkeypatch
     monkeypatch.setattr(asyncio, "sleep", sleep)
 
     async def run():
-        inputs = KeyboardInput(driver_factory=lambda: driver)
+        inputs = KeyboardInput(driver_factory=lambda: driver, pacer=ImmediatePacer())
         await inputs.connect()
         with pytest.raises(KeyboardError, match="mapping_changed"):
             await inputs.insert("中文", lambda: True)
@@ -250,19 +251,18 @@ def test_focus_changes_and_normalized_readback_do_not_retarget_old_window(monkey
     original_row = driver._row
     driver._row = lambda: (*original_row(), 0, 0)
     original_sleep = asyncio.sleep
-    calls = 0
 
     async def sleep(_delay):
-        nonlocal calls
-        calls += 1
-        if calls == 4:
+        # Switch after the first physical release, not after an obsolete fourth
+        # sleep: cached pair symbols no longer pay a fictitious MAP settle.
+        if len(events) == 2:
             focus[0] = 22
         await original_sleep(0)
 
     monkeypatch.setattr(asyncio, "sleep", sleep)
 
     async def run():
-        inputs = KeyboardInput(driver_factory=lambda: driver)
+        inputs = KeyboardInput(driver_factory=lambda: driver, pacer=ImmediatePacer())
         await inputs.connect()
         assert await inputs.insert("中文", lambda: True) == 2
         assert events == [

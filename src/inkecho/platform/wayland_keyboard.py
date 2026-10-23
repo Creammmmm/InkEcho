@@ -10,6 +10,34 @@ from collections.abc import AsyncIterator, Callable, Mapping
 from contextlib import asynccontextmanager
 
 from inkecho.platform.keyboard import KeyboardError, KeyboardInput, _XTestDriver
+from inkecho.platform.output_pacing import FeedbackLevel, OutputPacer
+
+
+def _input_feedback(value):
+    """Validate optional input diagnostics without changing delivery semantics."""
+    if not isinstance(value, dict) or set(value) != {
+        "map_changed",
+        "cache_hit",
+        "map_set_seconds",
+        "map_confirm_seconds",
+    }:
+        return None
+    if any(type(value[key]) is not bool for key in ("map_changed", "cache_hit")):
+        return None
+    if value["map_changed"] and value["cache_hit"]:
+        return None
+    for key in ("map_set_seconds", "map_confirm_seconds"):
+        number = value[key]
+        if type(number) not in (float, int) or number < 0:
+            return None
+        try:
+            if not math.isfinite(number):
+                return None
+        except OverflowError:
+            # JSON integers can exceed float range while remaining within the
+            # reply size limit. Advisory parsing must not fail an accepted key.
+            return None
+    return dict(value)
 
 
 def keyboard_for_desktop(environ: Mapping[str, str] | None = None):
@@ -31,7 +59,9 @@ class WaylandKeyboardInput:
     backend = "gnome-wayland"
     supports_first_sent_callback = True
 
-    def __init__(self, *, spawn=None, timeout=5, cleanup_timeout=5):
+    def __init__(self, *, spawn=None, timeout=5, cleanup_timeout=5, pacer=None):
+        self._pacer = pacer if pacer is not None else OutputPacer()
+        self._pacing_token = None
         self._spawn = spawn or asyncio.create_subprocess_exec
         self.timeout = timeout
         self.cleanup_timeout = cleanup_timeout
@@ -301,6 +331,8 @@ class WaylandKeyboardInput:
         self._output_deadline = None
         self._output_failed = False
         self._begun = False
+        token = self._pacer.bind(FeedbackLevel.INPUT)
+        self._pacing_token = token
         try:
             yield
             if self._closing or self._output_failed:
@@ -318,6 +350,8 @@ class WaylandKeyboardInput:
                 await self._cancel_and_clean(self._output_process)
             raise
         finally:
+            self._pacer.invalidate(token)
+            self._pacing_token = None
             self._output_owner = self._output_process = self._output_deadline = None
             self._output_failed = False
             self._output_check = None
@@ -358,6 +392,7 @@ class WaylandKeyboardInput:
                     selected=selected,
                 )
         process = self._output_process
+        token = self._pacing_token
         try:
             normalized = text.replace("\r\n", "\n").replace("\r", "\n")
             if any(
@@ -413,6 +448,17 @@ class WaylandKeyboardInput:
                     check()
                     if selected is not None and not selected():
                         break
+
+                def active():
+                    check()
+                    return True
+
+                await self._pacer.before_send(
+                    token, mapping_changed=False, active=active, deadline=deadline
+                )
+                check()
+                if selected is not None and not selected():
+                    break
                 request_start = time.monotonic()
                 hint = normalized[index + 1 : index + 4].split("\n", 1)[0]
                 fields = {"value": character}
@@ -430,6 +476,21 @@ class WaylandKeyboardInput:
                     or not math.isfinite(sent_at)
                 ):
                     raise KeyboardError("injection_failed")
+                # Optional telemetry cannot turn an already successful press into
+                # failure. Old workers without it still provide an INPUT RTT.
+                feedback = _input_feedback(result.get("input_feedback"))
+                self._pacer.sent(
+                    token, mapping_changed=bool(feedback and feedback["map_changed"])
+                )
+                if "input_feedback" in result and feedback is None:
+                    self._pacer.reset_input(token)
+                else:
+                    self._pacer.ack(
+                        token,
+                        started=request_start,
+                        completed=acknowledged,
+                        mapping_changed=(feedback["map_changed"] if feedback else None),
+                    )
                 if count == 0 and on_first_sent is not None:
                     on_first_sent(sent_at)
                 count += 1
@@ -445,6 +506,8 @@ class WaylandKeyboardInput:
             self._busy = False
 
     async def aclose(self) -> None:
+        if self._pacing_token is not None:
+            self._pacer.invalidate(self._pacing_token)
         self._closing = True
         self._authorized = self._connected = False
         owner = self._output_owner

@@ -48,13 +48,15 @@ class Process:
         return self.returncode
 
 
-async def connected(handler=None):
+async def connected(handler=None, *, pacer=None):
     process = Process(handler)
 
     async def spawn(*_args, **_kwargs):
         return process
 
-    inputs = WaylandKeyboardInput(spawn=spawn, timeout=0.1, cleanup_timeout=0.1)
+    inputs = WaylandKeyboardInput(
+        spawn=spawn, timeout=0.1, cleanup_timeout=0.1, pacer=pacer
+    )
     await inputs.connect()
     return inputs, process
 
@@ -1006,6 +1008,337 @@ def test_parent_lookahead_is_at_most_three_and_stops_at_newline():
             ("g", "hi"),
             ("h", "i"),
             ("i", None),
+        ]
+        await inputs.aclose()
+
+    asyncio.run(run())
+
+
+@pytest.mark.parametrize(
+    "feedback",
+    [
+        None,
+        {},
+        {"map_changed": 1},
+        {
+            "map_changed": True,
+            "cache_hit": False,
+            "map_set_seconds": 10**1000,
+            "map_confirm_seconds": 0,
+        },
+        {
+            "map_changed": True,
+            "cache_hit": False,
+            "map_set_seconds": 0,
+            "map_confirm_seconds": 10**1000,
+        },
+        {
+            "map_changed": True,
+            "cache_hit": False,
+            "map_set_seconds": -1,
+            "map_confirm_seconds": 0,
+        },
+        {
+            "map_changed": False,
+            "cache_hit": True,
+            "map_set_seconds": float("nan"),
+            "map_confirm_seconds": 0,
+        },
+        {
+            "map_changed": False,
+            "cache_hit": True,
+            "map_set_seconds": 0,
+            "map_confirm_seconds": float("inf"),
+        },
+        {
+            "map_changed": True,
+            "cache_hit": True,
+            "map_set_seconds": 0,
+            "map_confirm_seconds": 0,
+        },
+    ],
+)
+def test_invalid_advisory_feedback_drops_sample_but_never_replays_success(feedback):
+    from inkecho.platform.output_pacing import OutputPacer
+
+    class Pacer(OutputPacer):
+        def __init__(self):
+            super().__init__()
+            self.samples = self.resets = 0
+
+        def ack(self, *args, **kwargs):
+            self.samples += 1
+            return super().ack(*args, **kwargs)
+
+        def reset_input(self, token):
+            self.resets += 1
+            return super().reset_input(token)
+
+    async def run():
+        def handle(process, request):
+            if request["op"] == "key":
+                process.reply(request, count=1, input_feedback=feedback)
+                return True
+            return False
+
+        pacer = Pacer()
+        inputs, process = await connected(handle, pacer=pacer)
+        await inputs.authorize()
+        calls = []
+        assert (
+            await inputs.insert("中文", lambda: True, on_first_sent=calls.append) == 2
+        )
+        assert pacer.samples == 0 and pacer.resets == 2
+        assert len(calls) == 1
+        assert [r["value"] for r in process.requests if r["op"] == "key"] == [
+            "中",
+            "文",
+        ]
+        assert process.requests[-1]["op"] == "finish"
+        assert inputs._pacing_token is None
+        await inputs.aclose()
+
+    asyncio.run(run())
+
+
+def test_valid_input_feedback_and_legacy_ack_both_use_input_rtt_only():
+    from inkecho.platform.output_pacing import FeedbackLevel, OutputPacer
+
+    class Pacer(OutputPacer):
+        def __init__(self):
+            super().__init__()
+            self.samples = []
+
+        def ack(self, token, **kwargs):
+            accepted = super().ack(token, **kwargs)
+            self.samples.append((token, accepted, self.snapshot(token)))
+            return accepted
+
+    async def run():
+        def handle(process, request):
+            if request["op"] == "key" and request["value"] == "中":
+                process.reply(
+                    request,
+                    count=1,
+                    input_feedback={
+                        "map_changed": True,
+                        "cache_hit": False,
+                        "map_set_seconds": 0.001,
+                        "map_confirm_seconds": 0.002,
+                    },
+                )
+                return True
+            return False
+
+        pacer = Pacer()
+        inputs, process = await connected(handle, pacer=pacer)
+        await inputs.authorize()
+        assert await inputs.insert("中文", lambda: True) == 2
+        assert len(pacer.samples) == 2
+        assert pacer.samples[0][0] == pacer.samples[1][0]
+        assert all(
+            accepted and snapshot.level == FeedbackLevel.INPUT and snapshot.pending == 0
+            for _, accepted, snapshot in pacer.samples
+        )
+        old = pacer.samples[-1][0]
+        assert not OutputPacer.ack(pacer, old, started=0, completed=0)
+        assert await inputs.insert("后", lambda: True) == 1
+        assert pacer.samples[-1][0] != old
+        await inputs.aclose()
+
+    asyncio.run(run())
+
+
+def test_cancel_during_input_pacing_wait_never_starts_key_and_cleans_scope():
+    from inkecho.platform.output_pacing import OutputPacer
+
+    class Pacer(OutputPacer):
+        def __init__(self):
+            super().__init__()
+            self.waiting = asyncio.Event()
+            self.token = None
+
+        async def before_send(self, token, **kwargs):
+            self.token = token
+            self.waiting.set()
+            await asyncio.Event().wait()
+
+    async def run():
+        pacer = Pacer()
+        inputs, process = await connected(pacer=pacer)
+        await inputs.authorize()
+        task = asyncio.create_task(inputs.insert("未发送", lambda: True))
+        await asyncio.wait_for(pacer.waiting.wait(), 1)
+        task.cancel()
+        with pytest.raises(asyncio.CancelledError):
+            await task
+        assert not any(r["op"] == "key" for r in process.requests)
+        assert process.requests[-1]["op"] == "cancel"
+        assert inputs._pacing_token is None
+        assert not pacer.invalidate(pacer.token)
+        await inputs.aclose()
+
+    asyncio.run(run())
+
+
+def test_selection_changed_during_pacing_sends_no_old_route_character():
+    from inkecho.platform.output_pacing import OutputPacer
+
+    async def run():
+        selected = True
+
+        class Pacer(OutputPacer):
+            async def before_send(self, token, **kwargs):
+                nonlocal selected
+                await super().before_send(token, **kwargs)
+                selected = False
+
+        inputs, process = await connected(pacer=Pacer())
+        await inputs.authorize()
+        async with inputs.output_session():
+            assert (
+                await inputs._insert_prefix(
+                    "未发送", lambda: True, selected=lambda: selected
+                )
+                == 0
+            )
+        assert not any(r["op"] == "key" for r in process.requests)
+        assert process.requests[-1]["op"] == "finish"
+        await inputs.aclose()
+
+    asyncio.run(run())
+
+
+def test_replaced_worker_ack_never_updates_input_pacer():
+    from inkecho.platform.output_pacing import OutputPacer
+
+    async def run():
+        replacement = Process()
+        inputs = None
+
+        class Pacer(OutputPacer):
+            def ack(self, *args, **kwargs):
+                pytest.fail("old worker ACK must not update a pacing generation")
+
+        def handle(_process, request):
+            if request["op"] == "key":
+                inputs._process = replacement
+            return False
+
+        inputs, original = await connected(handle, pacer=Pacer())
+        await inputs.authorize()
+        with pytest.raises(KeyboardError, match="input_cancelled"):
+            await inputs.insert("中文", lambda: True)
+        assert replacement.requests == []
+        assert inputs._pacing_token is None
+        inputs._process = original
+        await inputs.aclose()
+
+    asyncio.run(run())
+
+
+@pytest.mark.parametrize("field", ["map_set_seconds", "map_confirm_seconds"])
+@pytest.mark.parametrize(
+    "number",
+    [
+        True,
+        False,
+        None,
+        "0.1",
+        [],
+        {},
+        -1,
+        -0.1,
+        float("nan"),
+        float("inf"),
+        -float("inf"),
+        10**1000,
+        -(10**1000),
+    ],
+)
+def test_optional_feedback_numeric_shapes_never_raise(field, number):
+    from inkecho.platform.wayland_keyboard import _input_feedback
+
+    value = {
+        "map_changed": True,
+        "cache_hit": False,
+        "map_set_seconds": 0.001,
+        "map_confirm_seconds": 0.002,
+    }
+    value[field] = number
+    assert _input_feedback(value) is None
+
+
+def test_active_predicate_failure_during_pacing_invalidates_scope_and_cleans():
+    from inkecho.platform.output_pacing import OutputPacer
+
+    async def run():
+        allowed = True
+
+        class Pacer(OutputPacer):
+            async def before_send(self, token, **kwargs):
+                nonlocal allowed
+                allowed = False
+                await super().before_send(token, **kwargs)
+
+        pacer = Pacer()
+        inputs, process = await connected(pacer=pacer)
+        await inputs.authorize()
+        with pytest.raises(KeyboardError, match="input_cancelled"):
+            await inputs.insert("未发送", lambda: allowed)
+        assert not any(r["op"] == "key" for r in process.requests)
+        assert process.requests[-1]["op"] == "cancel"
+        assert inputs._pacing_token is None
+        assert not pacer.invalidate(1)
+        await inputs.aclose()
+
+    asyncio.run(run())
+
+
+def test_fragments_retain_input_baselines_and_fixed_deadline_until_scope_exit():
+    from inkecho.platform.output_pacing import OutputPacer
+
+    class Pacer(OutputPacer):
+        def __init__(self):
+            super().__init__()
+            self.binds = []
+            self.samples = []
+
+        def bind(self, level):
+            token = super().bind(level)
+            self.binds.append(token)
+            return token
+
+        def ack(self, token, **kwargs):
+            accepted = super().ack(token, **kwargs)
+            self.samples.append(
+                (
+                    token,
+                    accepted,
+                    self._scope.deadline,
+                    dict(self._scope.input_baselines),
+                )
+            )
+            return accepted
+
+    async def run():
+        pacer = Pacer()
+        inputs, process = await connected(pacer=pacer)
+        await inputs.authorize()
+        deadline = time.monotonic() + 5
+        async with inputs.output_session():
+            assert await inputs.insert("中", lambda: True, deadline=deadline) == 1
+            first = pacer.samples[-1]
+            assert first[3]
+            assert await inputs.insert("文", lambda: True, deadline=deadline) == 1
+            second = pacer.samples[-1]
+            assert first[0] == second[0]
+            assert first[2] == second[2] == deadline
+            assert first[3].keys() == second[3].keys()
+            assert len(pacer.binds) == 1
+        assert inputs._pacing_token is None
+        assert [r["deadline"] for r in process.requests if r["op"] == "begin"] == [
+            deadline
         ]
         await inputs.aclose()
 

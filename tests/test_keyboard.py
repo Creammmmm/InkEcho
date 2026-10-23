@@ -1,5 +1,6 @@
 import asyncio
 import ctypes
+import time
 from contextlib import nullcontext
 from types import SimpleNamespace
 
@@ -12,6 +13,45 @@ from inkecho.platform.keyboard import (
     _XDriver,
     _XTestDriver,
 )
+from inkecho.platform.output_pacing import FeedbackLevel, OutputPacer
+
+
+class ImmediatePacer(OutputPacer):
+    """Existing mapping tests replace elapsed time, not pacing safety checks."""
+
+    async def _wait(self, token, active, deadline, until):
+        self._check(token, active, deadline)
+
+
+class Feedback:
+    def __init__(self, *, level=FeedbackLevel.NONE, fail_close=False):
+        self.capability = SimpleNamespace(level=level)
+        self.callbacks = []
+        self.bindings = []
+        self.closed = False
+        self.fail_close = fail_close
+        self.polls = 0
+        self.focus_revision = 0
+        self.focus_watches = []
+
+    def bind(self, top):
+        self.bindings.append(top)
+        return self.capability
+
+    def set_callback(self, callback):
+        self.callbacks.append(callback)
+
+    def poll(self):
+        assert not self.closed
+        self.polls += 1
+
+    def watch_focus(self, child):
+        self.focus_watches.append(child)
+
+    def close(self):
+        self.closed = True
+        if self.fail_close:
+            raise RuntimeError("fixed observer cleanup failure")
 
 
 class Driver:
@@ -66,7 +106,7 @@ def test_connect_does_not_require_focus_or_permission_dialog():
     async def run():
         driver = Driver()
         driver.window = None
-        inputs = KeyboardInput(driver_factory=lambda: driver)
+        inputs = KeyboardInput(driver_factory=lambda: driver, pacer=ImmediatePacer())
         await inputs.connect()
         await inputs.authorize()
         assert inputs.authorized and inputs.connected
@@ -83,7 +123,7 @@ def test_connect_does_not_require_focus_or_permission_dialog():
 def test_whole_text_control_preflight_sends_nothing(text):
     async def run():
         driver = Driver()
-        inputs = KeyboardInput(driver_factory=lambda: driver)
+        inputs = KeyboardInput(driver_factory=lambda: driver, pacer=ImmediatePacer())
         await inputs.connect()
         with pytest.raises(KeyboardError, match="unsupported_text"):
             await inputs.insert(text, lambda: True)
@@ -100,7 +140,7 @@ def test_focus_is_refreshed_after_mapping_wait_and_between_characters(monkeypatc
     )
 
     async def run():
-        inputs = KeyboardInput(driver_factory=lambda: driver)
+        inputs = KeyboardInput(driver_factory=lambda: driver, pacer=ImmediatePacer())
         await inputs.connect()
         await inputs.insert("中Ω", lambda: True)
         assert driver.events == [
@@ -125,7 +165,7 @@ def test_cancel_after_mapping_wait_stops_all_presses_and_restores(monkeypatch):
     fast_sleep(monkeypatch, cancel)
 
     async def run():
-        inputs = KeyboardInput(driver_factory=lambda: driver)
+        inputs = KeyboardInput(driver_factory=lambda: driver, pacer=ImmediatePacer())
         await inputs.connect()
         with pytest.raises(KeyboardError, match="input_cancelled"):
             await inputs.insert("中文字", lambda: allowed)
@@ -144,7 +184,7 @@ def test_cancel_after_press_releases_only_and_does_not_replay(monkeypatch):
     fast_sleep(monkeypatch, cancel)
 
     async def run():
-        inputs = KeyboardInput(driver_factory=lambda: driver)
+        inputs = KeyboardInput(driver_factory=lambda: driver, pacer=ImmediatePacer())
         await inputs.connect()
         with pytest.raises(asyncio.CancelledError):
             await inputs.insert("中文字", lambda: True)
@@ -169,7 +209,7 @@ def test_async_focus_or_layout_change_prevents_press(monkeypatch, change, code):
     fast_sleep(monkeypatch, changed)
 
     async def run():
-        inputs = KeyboardInput(driver_factory=lambda: driver)
+        inputs = KeyboardInput(driver_factory=lambda: driver, pacer=ImmediatePacer())
         await inputs.connect()
         with pytest.raises(KeyboardError, match=code):
             await inputs.insert("字", lambda: True)
@@ -188,7 +228,7 @@ def test_busy_and_close_cancel_waiting_delivery(monkeypatch):
             await asyncio.Event().wait()
 
         monkeypatch.setattr(asyncio, "sleep", waiting)
-        inputs = KeyboardInput(driver_factory=lambda: driver)
+        inputs = KeyboardInput(driver_factory=lambda: driver, pacer=ImmediatePacer())
         await inputs.connect()
         task = asyncio.create_task(inputs.insert("字", lambda: True))
         await entered.wait()
@@ -206,7 +246,7 @@ def test_newlines_normalized_use_return_code(monkeypatch):
 
     async def run():
         driver = Driver()
-        inputs = KeyboardInput(driver_factory=lambda: driver)
+        inputs = KeyboardInput(driver_factory=lambda: driver, pacer=ImmediatePacer())
         await inputs.connect()
         assert await inputs.insert("\r\n\r", lambda: True) == 2
         assert driver.events == [(21, 36, True), (21, 36, False)] * 2
@@ -246,7 +286,13 @@ def mapped_keyboard(monkeypatch, action=lambda _count: None):
     driver.send = lambda window, code, pressed: events.append((window, code, pressed))
     driver.close = lambda: None
     fast_sleep(monkeypatch, action)
-    return KeyboardInput(driver_factory=lambda: driver), driver, rows, writes, events
+    return (
+        KeyboardInput(driver_factory=lambda: driver, pacer=ImmediatePacer()),
+        driver,
+        rows,
+        writes,
+        events,
+    )
 
 
 def test_full_unicode_sample_uses_one_final_restore_not_per_character(monkeypatch):
@@ -566,7 +612,7 @@ def test_first_sent_callback_is_once_after_successful_press(monkeypatch):
         import time
 
         driver = Driver()
-        inputs = KeyboardInput(driver_factory=lambda: driver)
+        inputs = KeyboardInput(driver_factory=lambda: driver, pacer=ImmediatePacer())
         await inputs.connect()
         observed = []
         began = time.monotonic()
@@ -589,7 +635,7 @@ def test_first_sent_callback_failure_still_releases_and_stops(monkeypatch):
 
     async def run():
         driver = Driver()
-        inputs = KeyboardInput(driver_factory=lambda: driver)
+        inputs = KeyboardInput(driver_factory=lambda: driver, pacer=ImmediatePacer())
         await inputs.connect()
 
         def failed(_sent_at):
@@ -609,7 +655,7 @@ def test_no_first_sent_callback_when_press_fails(monkeypatch):
 
     async def run():
         driver = Driver()
-        inputs = KeyboardInput(driver_factory=lambda: driver)
+        inputs = KeyboardInput(driver_factory=lambda: driver, pacer=ImmediatePacer())
         await inputs.connect()
         observed = []
         original = driver.send
@@ -971,13 +1017,14 @@ def test_first_real_mapping_grace_survives_newline_and_stream_fragments(monkeypa
 
     async def run():
         driver = Driver()
-        inputs = KeyboardInput(driver_factory=lambda: driver)
+        inputs = KeyboardInput(driver_factory=lambda: driver, pacer=ImmediatePacer())
         await inputs.connect()
         async with inputs.output_session():
             await inputs.insert("\n", lambda: True)
             await inputs.insert("中", lambda: True)
             await inputs.insert("文", lambda: True)
-        assert delays == [0.02, 0.01, 0.01] + [0.1, 0.01, 0.01] + [0.02, 0.01, 0.01]
+        # Return does not change the map; only its press/release floors apply.
+        assert delays == [0.01, 0.01] + [0.1, 0.01, 0.01] + [0.02, 0.01, 0.01]
         assert driver.applied is None
         delays.clear()
         await inputs.insert("a", lambda: True)
@@ -1001,10 +1048,329 @@ def test_cancel_during_initial_mapping_grace_emits_nothing(monkeypatch):
 
     async def run():
         driver = Driver()
-        inputs = KeyboardInput(driver_factory=lambda: driver)
+        inputs = KeyboardInput(driver_factory=lambda: driver, pacer=ImmediatePacer())
         await inputs.connect()
         with pytest.raises(KeyboardError, match="input_cancelled"):
             await inputs.insert("中文", lambda: active)
         assert driver.events == [] and driver.applied is None
+
+    asyncio.run(run())
+
+
+def test_real_pair_mapping_needed_is_read_only_and_tracks_cache_revision():
+    driver = _XTestDriver.__new__(_XTestDriver)
+    driver._batch = {"甲": 183, "乙": 184}
+    driver._map_revision = 7
+    driver._mapping = lambda: pytest.fail("A map-cost query must not read or write X")
+    driver._write = lambda _values: pytest.fail("A map-cost query must not mutate X")
+    assert not driver.mapping_needed("甲", 0)
+    assert not driver.mapping_needed("乙", 0)
+    assert not driver.mapping_needed("\n", 0)
+    assert driver.mapping_needed("丙", 0)
+    assert driver._map_revision == 7 and driver._batch == {"甲": 183, "乙": 184}
+
+
+def test_pacing_precedes_mapping_and_cached_characters_have_no_map_sleep(monkeypatch):
+    original_sleep = asyncio.sleep
+    operations, delays = [], []
+
+    async def sleep(delay):
+        delays.append(delay)
+        await original_sleep(0)
+
+    monkeypatch.setattr(asyncio, "sleep", sleep)
+
+    class Pacer(ImmediatePacer):
+        async def before_send(self, token, **options):
+            operations.append(("before", options["mapping_changed"]))
+            await super().before_send(token, **options)
+
+    class CachedDriver(Driver):
+        def __init__(self):
+            super().__init__()
+            self._map_revision = 0
+            self._batch = {}
+
+        mapping_needed = _XTestDriver.mapping_needed
+
+        def prepare(self, text, index):
+            if self.mapping_needed(text, index):
+                operations.append(("map-write", text[index]))
+                self._batch = dict.fromkeys(text[index : index + 2], 248)
+                self._map_revision += 1
+
+    async def run():
+        driver = CachedDriver()
+        inputs = KeyboardInput(driver_factory=lambda: driver, pacer=Pacer())
+        await inputs.connect()
+        assert await inputs.insert("甲乙甲丙", lambda: True) == 4
+        assert operations == [
+            ("before", True),
+            ("map-write", "甲"),
+            ("before", False),
+            ("before", False),
+            ("before", True),
+            ("map-write", "丙"),
+        ]
+        assert delays == [0.1, 0.01, 0.01] + [0.01, 0.01] * 2 + [0.02, 0.01, 0.01]
+        assert driver._map_revision == 2
+        assert [event[2] for event in driver.events] == [True, False] * 4
+
+    asyncio.run(run())
+
+
+@pytest.mark.parametrize("same_owner", [False, True])
+@pytest.mark.parametrize("fail_close", [False, True])
+def test_observer_stops_before_restore_and_driver_close(
+    monkeypatch, same_owner, fail_close
+):
+    fast_sleep(monkeypatch)
+    feedback = Feedback(fail_close=fail_close)
+    driver = Driver()
+    original_restore = driver.restore
+
+    def restore():
+        assert feedback.closed
+        original_restore()
+
+    def close():
+        assert feedback.closed
+        driver.closed = True
+
+    driver.restore, driver.close = restore, close
+
+    async def run():
+        inputs = KeyboardInput(
+            driver_factory=lambda: driver,
+            pacer=ImmediatePacer(),
+            feedback_factory=lambda _driver: feedback,
+        )
+        await inputs.connect()
+        expected = (
+            pytest.raises(KeyboardError, match="session_closed")
+            if same_owner
+            else nullcontext()
+        )
+        with expected:
+            async with inputs.output_session():
+                assert await inputs.insert("甲", lambda: True) == 1
+                assert not feedback.closed
+                if same_owner:
+                    await inputs.aclose()
+                    assert driver.closed and inputs._feedback_poll is None
+        if not same_owner:
+            await inputs.aclose()
+        assert feedback.closed and inputs._feedback_poll is None and driver.closed
+        assert [event[2] for event in driver.events] == [True, False]
+
+    asyncio.run(run())
+
+
+def test_child_focus_change_rebinds_generation_and_old_hint_cannot_credit_new_target(
+    monkeypatch,
+):
+    fast_sleep(monkeypatch)
+    feedback = Feedback(level=FeedbackLevel.DRAW)
+    driver = Driver()
+    driver.observation_target = lambda _window: 100
+    pacer = ImmediatePacer()
+    stale_results = []
+    original_map = driver.map
+
+    def map_character(character):
+        if character == "乙":
+            stale_results.append(feedback.callbacks[0](0.0))
+            assert pacer.snapshot(inputs._pacing_token).pending == 0
+        return original_map(character)
+
+    driver.map = map_character
+    inputs = KeyboardInput(
+        driver_factory=lambda: driver,
+        pacer=pacer,
+        feedback_factory=lambda _driver: feedback,
+    )
+
+    async def run():
+        await inputs.connect()
+        async with inputs.output_session():
+            await inputs.insert(
+                "甲乙",
+                lambda: True,
+                on_first_sent=lambda _at: setattr(driver, "window", 22),
+            )
+        assert feedback.bindings == [100, 100]
+        assert stale_results == [False]
+        assert driver.events == [
+            (21, 248, True),
+            (21, 248, False),
+            (22, 248, True),
+            (22, 248, False),
+        ]
+        assert feedback.closed and driver.applied is None
+
+    asyncio.run(run())
+
+
+def test_pacing_and_default_absolute_deadline_persist_across_fragments(monkeypatch):
+    fast_sleep(monkeypatch)
+    driver = Driver()
+    pacer = ImmediatePacer()
+    inputs = KeyboardInput(driver_factory=lambda: driver, pacer=pacer)
+
+    async def run():
+        await inputs.connect()
+        async with inputs.output_session():
+            before = time.monotonic()
+            await inputs.insert("甲", lambda: True)
+            token, deadline = inputs._pacing_token, inputs._output_deadline
+            assert before + 59 <= deadline <= before + 61
+            await inputs.insert("乙", lambda: True)
+            assert inputs._pacing_token == token and inputs._output_deadline == deadline
+        assert inputs._output_deadline is None
+        async with inputs.output_session():
+            await inputs.insert("丙", lambda: True)
+            assert inputs._pacing_token != token
+
+    asyncio.run(run())
+
+
+@pytest.mark.parametrize("deadline", [float("nan"), float("inf"), True, 10**1000])
+def test_invalid_deadline_releases_scope_without_any_press(deadline):
+    async def run():
+        driver = Driver()
+        inputs = KeyboardInput(driver_factory=lambda: driver)
+        await inputs.connect()
+        with pytest.raises(KeyboardError, match="input_cancelled"):
+            await inputs.insert("甲", lambda: True, deadline=deadline)
+        assert driver.events == [] and driver.applied is None
+        assert inputs._output_owner is None and inputs._feedback_poll is None
+
+    asyncio.run(run())
+
+
+def test_cancel_during_draw_wait_releases_observer_and_mapping_without_tail():
+    async def run():
+        feedback = Feedback(level=FeedbackLevel.DRAW)
+        driver = Driver()
+        first = asyncio.Event()
+        inputs = KeyboardInput(
+            driver_factory=lambda: driver,
+            feedback_factory=lambda _driver: feedback,
+        )
+        await inputs.connect()
+        owner = asyncio.create_task(
+            inputs.insert("甲乙", lambda: True, on_first_sent=lambda _at: first.set())
+        )
+        await first.wait()
+        await asyncio.sleep(0.025)  # Enter the next character's DRAW wait.
+        owner.cancel()
+        with pytest.raises(asyncio.CancelledError):
+            await owner
+        assert [event[2] for event in driver.events] == [True, False]
+        assert feedback.closed and driver.applied is None
+        assert inputs._feedback_poll is None and inputs._output_owner is None
+
+    asyncio.run(run())
+
+
+def test_focus_round_trip_to_same_child_starts_new_generation_without_replaying(
+    monkeypatch,
+):
+    fast_sleep(monkeypatch)
+    feedback = Feedback(level=FeedbackLevel.DRAW)
+    driver = Driver()
+    pacer = ImmediatePacer()
+    first_token, stale_results = [], []
+    round_trip = False
+    stale_checked = False
+    original_poll = feedback.poll
+    inputs = KeyboardInput(
+        driver_factory=lambda: driver,
+        pacer=pacer,
+        feedback_factory=lambda _driver: feedback,
+    )
+
+    def poll():
+        nonlocal round_trip, stale_checked
+        original_poll()
+        if round_trip:
+            feedback.focus_revision += 2  # A -> B -> A; tuple is still (21, 21).
+            round_trip = False
+        if len(driver.events) >= 3 and not stale_checked:
+            stale_checked = True
+            assert inputs._pacing_token != first_token[0]
+            stale_results.append(feedback.callbacks[0](time.monotonic()))
+            assert pacer.snapshot(inputs._pacing_token).pending == 1
+            assert not pacer._scope.hint
+
+    feedback.poll = poll
+
+    def first(_at):
+        nonlocal round_trip
+        first_token.append(inputs._pacing_token)
+        round_trip = True
+
+    async def run():
+        await inputs.connect()
+        assert await inputs.insert("甲乙", lambda: True, on_first_sent=first) == 2
+        assert feedback.bindings == [21, 21]
+        assert feedback.focus_watches == [21, 21]
+        assert stale_results == [False]
+        assert [event[2] for event in driver.events] == [True, False] * 2
+        assert feedback.closed and driver.applied is None
+
+    asyncio.run(run())
+
+
+@pytest.mark.parametrize(
+    "failure", ["poll", "callback", "backlog", "watch_focus", "watch_degrades"]
+)
+def test_observer_failure_continues_once_with_bounded_none_fallback(
+    monkeypatch, failure
+):
+    fast_sleep(monkeypatch)
+    feedback = Feedback(level=FeedbackLevel.DRAW)
+    driver = Driver()
+
+    def failed():
+        raise RuntimeError("fixed observation failure")
+
+    if failure == "poll":
+        feedback.poll = failed
+    elif failure == "callback":
+        feedback.set_callback = lambda _callback: failed()
+    elif failure == "watch_focus":
+        feedback.watch_focus = lambda _window: failed()
+    elif failure == "watch_degrades":
+
+        def watch_degrades(_window):
+            feedback.close()
+            feedback.capability = SimpleNamespace(
+                level=FeedbackLevel.NONE, reason="focus_unavailable"
+            )
+
+        feedback.watch_focus = watch_degrades
+    else:
+
+        def backlog():
+            feedback.capability = SimpleNamespace(
+                level=FeedbackLevel.NONE, reason="event_backlog"
+            )
+
+        feedback.poll = backlog
+
+    async def run():
+        inputs = KeyboardInput(
+            driver_factory=lambda: driver,
+            pacer=ImmediatePacer(),
+            feedback_factory=lambda _driver: feedback,
+        )
+        await inputs.connect()
+        async with inputs.output_session():
+            assert await inputs.insert("甲乙", lambda: True) == 2
+            assert inputs._pacing_level == FeedbackLevel.NONE
+        assert [event[2] for event in driver.events] == [True, False] * 2
+        assert feedback.closed and driver.applied is None
+        assert inputs._feedback_poll is None
 
     asyncio.run(run())

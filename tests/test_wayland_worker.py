@@ -821,6 +821,7 @@ def test_cancel_invalidates_queued_epoch_but_allows_new_task(remote, queued_oper
                 "ok": True,
                 "count": 1,
                 "sent_at": guardian.last_sent_at,
+                "input_feedback": guardian.last_input_feedback,
             }
             assert isinstance(key_response["sent_at"], float)
             finish_id = request("finish")
@@ -1479,3 +1480,68 @@ def test_four_slot_unused_hints_never_emit_after_stop(remote, cancel_after):
         assert remote.data == b"original\0"
 
     asyncio.run(run())
+
+
+def test_input_feedback_distinguishes_map_cache_and_newline_without_draw_claim(remote):
+    async def scenario():
+        guardian = Guardian(remote)
+        await guardian.begin()
+        assert guardian.last_input_feedback is None
+        await guardian.key("中", "文")
+        mapped = guardian.last_input_feedback
+        assert set(mapped) == {
+            "map_changed",
+            "cache_hit",
+            "map_set_seconds",
+            "map_confirm_seconds",
+        }
+        assert mapped["map_changed"] is True and mapped["cache_hit"] is False
+        assert mapped["map_set_seconds"] >= 0
+        assert mapped["map_confirm_seconds"] >= 0
+        writes = len(remote.writes)
+        await guardian.key("文")
+        assert len(remote.writes) == writes
+        assert guardian.last_input_feedback == {
+            "map_changed": False,
+            "cache_hit": True,
+            "map_set_seconds": 0.0,
+            "map_confirm_seconds": 0.0,
+        }
+        await guardian.key("\n")
+        assert guardian.last_input_feedback == {
+            "map_changed": False,
+            "cache_hit": False,
+            "map_set_seconds": 0.0,
+            "map_confirm_seconds": 0.0,
+        }
+        guardian.stop()
+        with pytest.raises(KeyboardError, match="input_cancelled"):
+            await guardian.key("后")
+        assert guardian.last_input_feedback is None
+        await guardian.finish()
+        assert remote.data == b"original\0"
+        assert len(remote.events) == 6
+
+    run(scenario())
+
+
+def test_failed_map_never_publishes_successful_input_feedback(remote):
+    async def scenario():
+        guardian = Guardian(remote)
+        await guardian.begin()
+        await guardian.key("中")
+        assert guardian.last_input_feedback is not None
+
+        async def fail():
+            remote.on_set = None
+            raise KeyboardError("injection_failed")
+
+        remote.on_set = fail
+        with pytest.raises(KeyboardError, match="injection_failed"):
+            await guardian.key("文")
+        assert guardian.last_input_feedback is None
+        assert len(remote.events) == 2
+        await guardian.finish()
+        assert remote.data == b"original\0"
+
+    run(scenario())

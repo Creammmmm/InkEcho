@@ -8,7 +8,7 @@ import asyncio
 
 import pytest
 from test_application_streaming import Client, sessions, until
-from test_xorg_pair import hardware
+from test_xorg_pair import ImmediatePacer, hardware
 
 from inkecho.core import State
 from inkecho.platform.keyboard import KeyboardInput
@@ -43,7 +43,7 @@ def test_session_streaming_decodes_every_remapped_symbol(
     driver.send = send
 
     async def scenario():
-        inputs = KeyboardInput(driver_factory=lambda: driver)
+        inputs = KeyboardInput(driver_factory=lambda: driver, pacer=ImmediatePacer())
         await inputs.connect()
 
         class StreamClient(Client):
@@ -85,7 +85,7 @@ def test_pair_session_invalidated_between_fragments_never_sends_late_text(
     before = rows.copy()
 
     async def scenario():
-        inputs = KeyboardInput(driver_factory=lambda: driver)
+        inputs = KeyboardInput(driver_factory=lambda: driver, pacer=ImmediatePacer())
         await inputs.connect()
         release = asyncio.Event()
 

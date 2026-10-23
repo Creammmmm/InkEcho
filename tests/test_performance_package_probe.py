@@ -336,9 +336,12 @@ def test_observer_leaves_cancel_release_and_cleanup_to_production(tmp_path):
             await inputs.insert("中文", lambda: allowed, on_first_sent=cancel)
         assert driver.events == [(21, 248, True), (21, 248, False)]
         assert driver.writes == ["中", None] and driver.mapping is None
+        # Failure cleanup restores immediately, then the direct insertion's
+        # output_session performs its idempotent final restore. Only the first
+        # call writes the map; the observer must count both successful calls.
         assert owned.mapping_counts == {
             "mapping_writes": 2,
-            "successful_restore_calls": 1,
+            "successful_restore_calls": 2,
             "completed_insert_calls": 0,
         }
 

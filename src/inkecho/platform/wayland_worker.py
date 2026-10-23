@@ -370,6 +370,7 @@ class Guardian:
         self.last_character = self.last_keycode = None
         self.prepared_codes: dict[str, int] = {}
         self.last_sent_at = None
+        self.last_input_feedback = None
         self.stopped = True
         self.permanent_stop = False
         self.deadline = 0.0
@@ -452,6 +453,13 @@ class Guardian:
 
     async def _key(self, character, hint=None):
         self.last_sent_at = None
+        self.last_input_feedback = None
+        feedback = {
+            "map_changed": False,
+            "cache_hit": False,
+            "map_set_seconds": 0.0,
+            "map_confirm_seconds": 0.0,
+        }
         if not self.map:
             raise KeyboardError("session_closed")
         if normalize_text(character) != character or len(character) != 1:
@@ -498,6 +506,7 @@ class Guardian:
             and data == self.last_confirmed
         )
         if cached:
+            feedback["cache_hit"] = True
             code = self.prepared_codes[character]
             self.last_character, self.last_keycode = character, code
         elif not newline:
@@ -509,14 +518,19 @@ class Guardian:
             first_mapping = not self.modified
             self.pending_map = mapping.data
             self._continue()
+            started = time.monotonic()
             await self.remote.set_map(mapping.data, self.group)
+            feedback["map_set_seconds"] = time.monotonic() - started
+            feedback["map_changed"] = True
             self.modified = True
             self._continue()
             await asyncio.sleep(
                 INITIAL_MAP_SETTLE_SECONDS if first_mapping else MAP_SETTLE_SECONDS
             )
             self._continue()
+            started = time.monotonic()
             state, data = await self.remote.snapshot(refresh=True)
+            feedback["map_confirm_seconds"] = time.monotonic() - started
             if data != mapping.data or state["group"] != self.group:
                 raise KeyboardError("mapping_changed")
             self.last_confirmed, self.pending_map = data, None
@@ -540,6 +554,8 @@ class Guardian:
         finally:
             await self._release_key()
         self._continue()
+        # Input-chain timings only: neither a target draw nor presentation ACK.
+        self.last_input_feedback = feedback
         return 1
 
     async def _release_key(self):
@@ -722,6 +738,7 @@ async def serve(reader, reply, guardian=None):
                         request.get("value"), request.get("hint")
                     )
                     response["sent_at"] = guardian.last_sent_at
+                    response["input_feedback"] = guardian.last_input_feedback
                 else:
                     await guardian.finish()
             except (KeyboardError, ObserverError) as error:

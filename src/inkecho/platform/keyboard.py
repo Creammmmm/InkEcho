@@ -2,9 +2,16 @@
 
 import asyncio
 import ctypes
+import math
 import time
 from collections.abc import AsyncIterator, Callable
 from contextlib import asynccontextmanager, contextmanager
+
+from inkecho.platform.output_pacing import (
+    FeedbackLevel,
+    OutputPacer,
+    PacingScopeChanged,
+)
 
 # Keep the first mapping stable for fresh X clients and retain 20 ms for later
 # map changes. The 10 ms press/release profile has bounded fresh-window evidence
@@ -161,6 +168,9 @@ class _XDriver:
         self.slot = None
         self.applied = None
         self.pending_symbol = None
+        self.feedback_enabled = False
+        self._map_revision = 0
+        self._focused_top = None
         self.width = None
         low, high = i(), i()
         self.x11.XDisplayKeycodes(self.display, ctypes.byref(low), ctypes.byref(high))
@@ -235,6 +245,7 @@ class _XDriver:
             ancestor = window
             for _ in range(32):
                 if ancestor == active:
+                    self._focused_top = active
                     return window
                 root, parent = ctypes.c_ulong(), ctypes.c_ulong()
                 children, count = ctypes.c_void_p(), ctypes.c_uint()
@@ -315,7 +326,14 @@ class _XDriver:
         self.pending_symbol = None
         if symbol not in self.applied:
             raise KeyboardError("mapping_changed")
+        self._map_revision = getattr(self, "_map_revision", 0) + 1
         return self.slot
+
+    def mapping_needed(self, text, index):
+        return text[index] != "\n"
+
+    def observation_target(self, window):
+        return getattr(self, "_focused_top", None) or window
 
     def verify(self):
         if self.applied is not None and _row_identity(self._row()) != _row_identity(
@@ -390,6 +408,7 @@ class _XTestDriver(_XDriver):
 
     def __init__(self):
         super().__init__()
+        self.feedback_enabled = True
         self._pair_applied = {}
         self._pair_pending = {}
         self._batch = {}
@@ -521,6 +540,9 @@ class _XTestDriver(_XDriver):
             del self._pair_pending[code]
         self._map_revision += 1
 
+    def mapping_needed(self, text, index):
+        return text[index] != "\n" and text[index] not in self._batch
+
     def map(self, character):
         if character == "\n":
             return super().map(character)
@@ -622,13 +644,23 @@ class KeyboardInput:
 
     supports_first_sent_callback = True
 
-    def __init__(self, *, driver_factory=_XDriver):
+    def __init__(self, *, driver_factory=_XDriver, pacer=None, feedback_factory=None):
         self._factory = driver_factory
         self._driver = None
         self._task = None
         self._output_owner = None
         self._output_failed = False
         self._closing = False
+        self._pacer = pacer if pacer is not None else OutputPacer()
+        self._feedback_factory = feedback_factory
+        self._feedback = None
+        self._feedback_poll = None
+        self._feedback_disabled = False
+        self._pacing_target = None
+        self._pacing_token = None
+        self._pacing_level = FeedbackLevel.NONE
+        self._focus_revision = None
+        self._output_deadline = None
 
     @property
     def connected(self) -> bool:
@@ -656,6 +688,113 @@ class KeyboardInput:
     def _send(self, window, keycode, pressed):
         self._driver.send(window, keycode, pressed)
 
+    def _bind_pacer(self, level):
+        self._pacing_level = FeedbackLevel(level)
+        self._pacing_token = self._pacer.bind(self._pacing_level)
+        if self._feedback is not None:
+            token = self._pacing_token
+            try:
+                self._feedback.set_callback(
+                    lambda at, token=token: self._pacer.observe(token, at=at)
+                )
+            except Exception:
+                self._disable_feedback()
+                self._pacing_level = FeedbackLevel.NONE
+                self._pacing_token = self._pacer.bind(FeedbackLevel.NONE)
+
+    def _select_feedback(self, window):
+        driver = self._driver
+        top = getattr(driver, "observation_target", lambda value: value)(window)
+        target = (window, top)
+        if target == self._pacing_target:
+            return self._pacing_token
+        self._pacing_target = target
+        level = FeedbackLevel.NONE
+        if not self._feedback_disabled:
+            try:
+                if self._feedback is None:
+                    factory = self._feedback_factory
+                    if factory is None and getattr(driver, "feedback_enabled", False):
+                        from inkecho.platform.x11_feedback import X11Feedback
+
+                        factory = X11Feedback
+                    if factory is not None:
+                        self._feedback = factory(driver)
+                if self._feedback is not None:
+                    level = FeedbackLevel(self._feedback.bind(top).level)
+                    watch_focus = getattr(self._feedback, "watch_focus", None)
+                    if watch_focus is not None:
+                        watch_focus(window)
+                    level = FeedbackLevel(self._feedback.capability.level)
+                    self._focus_revision = getattr(
+                        self._feedback, "focus_revision", None
+                    )
+            except Exception:
+                self._disable_feedback()
+                level = FeedbackLevel.NONE
+        self._bind_pacer(level)
+        if self._feedback is not None and self._feedback_poll is None:
+            self._feedback_poll = asyncio.create_task(self._poll_feedback())
+        return self._pacing_token
+
+    def _disable_feedback(self):
+        feedback, self._feedback = self._feedback, None
+        self._feedback_disabled = True
+        if feedback is not None:
+            try:
+                feedback.close()
+            except Exception:
+                pass  # Optional observation cannot obstruct mapping restoration.
+
+    def _poll_feedback_once(self):
+        if self._feedback is None:
+            return
+        try:
+            self._feedback.poll()
+            capability = self._feedback.capability
+            level = FeedbackLevel(capability.level)
+            revision = getattr(self._feedback, "focus_revision", None)
+            changed = (
+                self._focus_revision is not None and revision != self._focus_revision
+            )
+            self._focus_revision = revision
+            if getattr(capability, "reason", None) == "event_backlog":
+                self._disable_feedback()
+                self._pacing_target = None
+                self._bind_pacer(FeedbackLevel.NONE)
+                return
+            if changed:
+                # Even A -> B -> A is a new observation generation. Events only
+                # reset scheduling; actual delivery still follows current focus.
+                self._pacing_target = None
+                self._bind_pacer(FeedbackLevel.NONE)
+            elif level != self._pacing_level:
+                self._bind_pacer(level)
+        except Exception:
+            self._disable_feedback()
+            self._bind_pacer(FeedbackLevel.NONE)
+
+    async def _poll_feedback(self):
+        while self._feedback is not None:
+            self._poll_feedback_once()
+            await asyncio.sleep(0.008)
+
+    async def _stop_feedback(self):
+        if self._pacing_token is not None:
+            self._pacer.invalidate(self._pacing_token)
+        poller, self._feedback_poll = self._feedback_poll, None
+        try:
+            if poller is not None:
+                poller.cancel()
+                try:
+                    await poller
+                except asyncio.CancelledError:
+                    pass
+        finally:
+            self._disable_feedback()
+            self._pacing_target = self._pacing_token = None
+            self._focus_revision = None
+
     @asynccontextmanager
     async def output_session(self) -> AsyncIterator[None]:
         """Retain our empty-row loan across fragments owned by one consumer task."""
@@ -666,6 +805,8 @@ class KeyboardInput:
             raise KeyboardError("busy")
         driver = self._driver
         self._output_owner, self._output_failed = owner, False
+        self._output_deadline = None
+        self._feedback_disabled = False
         try:
             yield
             if self._closing:
@@ -674,11 +815,15 @@ class KeyboardInput:
                 raise KeyboardError("injection_failed")
         finally:
             try:
-                # Same-owner aclose may already have restored and closed it.
-                if self._driver is driver:
-                    driver.restore()
+                try:
+                    await self._stop_feedback()
+                finally:
+                    # Same-owner aclose may already have restored and closed it.
+                    if self._driver is driver:
+                        driver.restore()
             finally:
                 self._output_owner, self._output_failed = None, False
+                self._output_deadline = None
 
     async def insert(
         self,
@@ -707,7 +852,10 @@ class KeyboardInput:
         except BaseException:
             if self._output_owner is current and self._driver is not None:
                 self._output_failed = True
-                self._driver.restore()
+                try:
+                    await self._stop_feedback()
+                finally:
+                    self._driver.restore()
             raise
         if not self.connected:
             raise KeyboardError("session_closed")
@@ -717,6 +865,34 @@ class KeyboardInput:
             raise KeyboardError("busy")
         if self._output_failed:
             raise KeyboardError("input_cancelled")
+        if self._output_owner is None:
+            async with self.output_session():
+                return await self._insert_prefix(
+                    text,
+                    can_continue,
+                    deadline=deadline,
+                    on_first_sent=on_first_sent,
+                    selected=selected,
+                )
+        if deadline is None:
+            deadline = self._output_deadline
+            if deadline is None:
+                deadline = time.monotonic() + 60
+        try:
+            valid_deadline = type(deadline) in (int, float) and math.isfinite(deadline)
+        except OverflowError:
+            valid_deadline = False
+        if not valid_deadline or (
+            self._output_deadline is not None and deadline != self._output_deadline
+        ):
+            self._output_failed = True
+            try:
+                await self._stop_feedback()
+            finally:
+                self._driver.restore()
+            raise KeyboardError("input_cancelled")
+        if text:
+            self._output_deadline = deadline
         self._task = current
         driver = self._driver
         completed = False
@@ -735,34 +911,103 @@ class KeyboardInput:
                 check()
                 if selected is not None and not selected():
                     break
-                try:
-                    driver.focus()
-                except KeyboardError as error:
-                    if selected is not None and error.code == "unsupported_target":
+                prepared, mapped, ready = False, False, False
+                while True:
+                    check()
+                    if selected is not None and not selected():
                         break
-                    raise
-                first_mapping = character != "\n" and driver.applied is None
-                prepare = getattr(driver, "prepare", None)
-                if prepare is not None:
-                    prepare(text, index)
-                code = driver.map(character)
-                await asyncio.sleep(
-                    INITIAL_MAP_SETTLE_SECONDS if first_mapping else MAP_SETTLE_SECONDS
-                )
-                check()
-                if selected is not None and not selected():
-                    break  # No press has been attempted for this character.
-                try:
-                    window = driver.focus()
-                except KeyboardError as error:
-                    if selected is not None and error.code == "unsupported_target":
+                    try:
+                        window = driver.focus()
+                    except KeyboardError as error:
+                        if selected is not None and error.code == "unsupported_target":
+                            break
+                        raise
+                    token = self._select_feedback(window)
+                    needs_map = not prepared and getattr(
+                        driver,
+                        "mapping_needed",
+                        lambda text, index: text[index] != "\n",
+                    )(text, index)
+
+                    def active():
+                        check()
+                        return True
+
+                    try:
+                        # Pace before changing the global map: changing it first
+                        # can freeze the very frame progress we are waiting for.
+                        await self._pacer.before_send(
+                            token,
+                            mapping_changed=needs_map,
+                            active=active,
+                            deadline=deadline,
+                        )
+                    except PacingScopeChanged:
+                        check()
+                        continue  # No press has been attempted for this character.
+                    check()
+                    if selected is not None and not selected():
                         break
-                    raise
+                    try:
+                        window = driver.focus()
+                    except KeyboardError as error:
+                        if selected is not None and error.code == "unsupported_target":
+                            break
+                        raise
+                    if self._select_feedback(window) != token:
+                        continue
+                    if not prepared:
+                        first_mapping = character != "\n" and driver.applied is None
+                        revision = getattr(driver, "_map_revision", None)
+                        prepare = getattr(driver, "prepare", None)
+                        if prepare is not None:
+                            prepare(text, index)
+                        code = driver.map(character)
+                        mapped = (
+                            getattr(driver, "_map_revision", None) != revision
+                            if revision is not None
+                            else needs_map
+                        )
+                        prepared = True
+                        # Real map changes retain their protocol floor. Cached
+                        # characters no longer pay a fictitious map settle.
+                        if mapped:
+                            await asyncio.sleep(
+                                INITIAL_MAP_SETTLE_SECONDS
+                                if first_mapping
+                                else MAP_SETTLE_SECONDS
+                            )
+                        check()
+                        if selected is not None and not selected():
+                            break
+                        try:
+                            window = driver.focus()
+                        except KeyboardError as error:
+                            if (
+                                selected is not None
+                                and error.code == "unsupported_target"
+                            ):
+                                break
+                            raise
+                        if self._select_feedback(window) != token:
+                            continue  # Keep the prepared map; no key was sent.
+                    # Observe queued focus events before a press, including a
+                    # round trip whose current child/top tuple is unchanged.
+                    self._poll_feedback_once()
+                    if self._pacing_token != token:
+                        continue
+                    ready = True
+                    break
+                if not ready:
+                    break
                 driver.verify()
                 check()
                 try:
                     self._send(window, code, True)
                     sent_at = time.monotonic()
+                    # Outside the pre-press reselection handler: a changed scope
+                    # after delivery must never trigger a replay.
+                    self._pacer.sent(token, mapping_changed=mapped)
                     if index == 0 and on_first_sent is not None:
                         on_first_sent(sent_at)
                     await asyncio.sleep(PRESS_SETTLE_SECONDS)
@@ -777,7 +1022,10 @@ class KeyboardInput:
                 if not completed and self._output_owner is current:
                     self._output_failed = True
                 if not completed or self._output_owner is not current:
-                    driver.restore()
+                    try:
+                        await self._stop_feedback()
+                    finally:
+                        driver.restore()
             finally:
                 self._task = None
         return count
@@ -793,6 +1041,9 @@ class KeyboardInput:
                 except (asyncio.CancelledError, KeyboardError):
                     pass
         finally:
-            if self._driver is not None:
-                driver, self._driver = self._driver, None
-                driver.close()
+            try:
+                await self._stop_feedback()
+            finally:
+                if self._driver is not None:
+                    driver, self._driver = self._driver, None
+                    driver.close()
