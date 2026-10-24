@@ -2,10 +2,11 @@
 
 from dataclasses import replace
 
-from PySide6.QtCore import QPoint, QTimer
+from PySide6.QtCore import QPoint, Qt, QTimer
 from PySide6.QtWidgets import (
     QFormLayout,
     QGridLayout,
+    QHBoxLayout,
     QLineEdit,
     QPlainTextEdit,
     QScrollArea,
@@ -57,10 +58,27 @@ class PromptsPage(Page):
             if item.widget():
                 item.widget().deleteLater()
         selected = self.session.store.load_settings().prompt
+        self.style_cards = {}
         for index, prompt in enumerate(self.session.store.prompts()):
             panel, body = card()
-            title = prompt.name + (" · 当前使用" if prompt.id == selected else "")
-            body.addWidget(label(title))
+            active = prompt.id == selected
+            panel.setProperty("activeStyle", active)
+            panel.setProperty("promptId", prompt.id)
+            panel.setAccessibleName(
+                prompt.name + ("，当前使用" if active else "，非当前风格")
+            )
+            self.style_cards[prompt.id] = panel
+            heading = QHBoxLayout()
+            title = label(prompt.name)
+            title.setMinimumHeight(32)
+            heading.addWidget(title, 1)
+            if active:
+                badge = label("✓ 当前使用")
+                badge.setObjectName("activeStyleBadge")
+                badge.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                badge.setFixedWidth(104)
+                heading.addWidget(badge)
+            body.addLayout(heading)
             body.addWidget(label(prompt.description, muted=True))
             body.addWidget(
                 button(

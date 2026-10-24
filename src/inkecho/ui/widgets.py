@@ -23,6 +23,15 @@ QLabel#muted { color: #526782; }
 QLabel#brand { font-size: 24px; font-weight: 700; color: #173e78; }
 QFrame#card { background: white; border: 1px solid #dbe4f1; border-radius: 14px; }
 QFrame#card QLabel { background: transparent; }
+QFrame#card[activeStyle="true"] {
+ background: #e6efff; border: 2px solid #245ab1; }
+QFrame#card[activeStyle="true"] QLabel#muted { color: #344f75; }
+QFrame#card QLabel#activeStyleBadge {
+ background: #245ab1; color: white; border-radius: 8px;
+ padding: 5px 8px; font-weight: 700; }
+QFrame#card[activeStyle="true"] QPushButton {
+ background: #f8fbff; color: #173e78; border-color: #739bdb; }
+QFrame#card[activeStyle="true"] QPushButton:hover { background: #d4e3fb; }
 QPushButton { background: white; border: 1px solid #c8d7eb; border-radius: 8px;
  padding: 9px 15px; font-weight: 500; }
 QPushButton:hover { background: #e8f0ff; border-color: #739bdb; }

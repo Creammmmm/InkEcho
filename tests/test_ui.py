@@ -1257,3 +1257,55 @@ def test_escape_cancels_active_task_from_main_window(window, qt_app, state):
     assert not window.task_escape.active
     qt_app.processEvents()
     assert window.task_escape.backend is None
+
+
+def test_style_highlight_tracks_applied_template_not_editor(window, qt_app):
+    from inkecho.ui.prompts import PromptsPage
+
+    page = window.pages[2]
+    original = window.session.store.load_settings().prompt
+
+    def active_ids(widget):
+        return {
+            key
+            for key, panel in widget.style_cards.items()
+            if panel.property("activeStyle") is True
+        }
+
+    assert active_ids(page) == {original}
+    page.open_template("builtin-social")
+    assert active_ids(page) == {original}
+    page.text.setPlainText("我的自定义完整模板，不要覆盖。")
+    page.save()
+    custom = page.identifier
+    assert custom != "builtin-social"
+    assert active_ids(page) == {original}
+    page.select()
+    assert active_ids(page) == {custom}
+    assert window.session.store.load_settings().prompt == custom
+    assert "当前使用" in page.style_cards[custom].accessibleName()
+    reopened = PromptsPage(window.session)
+    assert active_ids(reopened) == {custom}
+    assert reopened.text.toPlainText() == "我的自定义完整模板，不要覆盖。"
+    reopened.delete()
+    assert active_ids(reopened) == {BUILTIN_PROMPT.id}
+    assert window.session.store.load_settings().prompt == BUILTIN_PROMPT.id
+    reopened.close()
+
+
+def test_copying_and_deleting_inactive_style_keeps_applied_style(window, qt_app):
+    page = window.pages[2]
+    page.open_template("builtin-agent")
+    page.select()
+    page.copy()
+    copied = page.identifier
+    assert copied != "builtin-agent"
+    assert window.session.store.load_settings().prompt == "builtin-agent"
+    assert page.style_cards["builtin-agent"].property("activeStyle") is True
+    assert page.style_cards[copied].property("activeStyle") is False
+    page.delete()
+    assert window.session.store.load_settings().prompt == "builtin-agent"
+    assert page.style_cards["builtin-agent"].property("activeStyle") is True
+    page.delete()
+    assert window.session.store.load_settings().prompt == "builtin-agent"
+    assert window.session.store.load_prompt("builtin-agent").id == "builtin-agent"

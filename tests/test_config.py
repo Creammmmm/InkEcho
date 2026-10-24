@@ -274,3 +274,23 @@ def test_existing_builtin_selection_uses_current_rules_without_rewriting_setting
     assert selected == "builtin-agent"
     assert "识别同音、近音" in reopened.load_prompt(selected).body
     assert (tmp_path / "config.json").read_bytes() == original
+
+
+def test_builtin_style_contracts_do_not_depend_on_openless_runtime_features():
+    bodies = {prompt.id: prompt.body for prompt in BUILTIN_PROMPTS}
+    assert set(bodies) == {
+        "builtin-faithful",
+        "builtin-social",
+        "builtin-agent",
+        "builtin-mail",
+    }
+    for body in bodies.values():
+        assert "{{HOTWORDS}}" not in body
+        assert "<raw_transcript>" not in body
+        assert "独立回复“嗯嗯”“哦”“好”" in body
+        assert "半句话保持未完成" in body
+        assert "不把商量改成命令" in body
+    assert "内部符号" in bodies["builtin-social"]
+    assert "最后一句默认不加句号" in bodies["builtin-social"]
+    assert "不执行开发" in bodies["builtin-agent"]
+    assert "不把“可能要推迟”改成“需要推迟”" in bodies["builtin-mail"]
