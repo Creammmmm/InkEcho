@@ -80,7 +80,7 @@ def test_cleanup_error_releases_lock_and_redacts_token(
     tmp_path, monkeypatch, operation
 ):
     cap = Capability(tmp_path)
-    lock_fd, directory_fd = cap.lock_fd, cap.fd
+    lock_fd, directory_fd, cap_fd = cap.lock_fd, cap.fd, cap.cap_fd
     original = getattr(os, operation)
 
     def fail(*args, **kwargs):
@@ -91,9 +91,74 @@ def test_cleanup_error_releases_lock_and_redacts_token(
         cap.close()
     monkeypatch.setattr(os, operation, original)
     assert cap.lock_fd is None and cap.fd is None and cap.token == ""
-    for fd in (lock_fd, directory_fd):
+    assert cap.cap_fd is None
+    for fd in (lock_fd, directory_fd, cap_fd):
         with pytest.raises(OSError):
             os.fstat(fd)
     # The old owned file remains until the next owner verifies and replaces it.
     again = Capability(tmp_path)
     again.close()
+
+
+@pytest.mark.parametrize("replacement", ["regular", "symlink"])
+def test_live_unlinked_inode_remains_reserved_and_replacement_survives(
+    tmp_path, replacement
+):
+    cap = Capability(tmp_path)
+    fd = cap.cap_fd
+    path = tmp_path / "inkecho-fcitx-candidate.cap"
+    path.unlink()
+    assert os.fstat(fd).st_nlink == 0
+    if replacement == "regular":
+        path.write_text("foreign")
+    else:
+        path.symlink_to("foreign")
+    info = path.lstat()
+    assert (info.st_dev, info.st_ino) != cap.identity
+    cap.close()
+    assert (
+        path.is_symlink() if replacement == "symlink" else path.read_text() == "foreign"
+    )
+    with pytest.raises(OSError):
+        os.fstat(fd)
+    cap.close()
+
+
+def test_symlink_never_removed_even_if_identity_matches(tmp_path):
+    cap = Capability(tmp_path)
+    path = tmp_path / "inkecho-fcitx-candidate.cap"
+    path.unlink()
+    path.symlink_to("foreign")
+    info = path.lstat()
+    cap.identity = (info.st_dev, info.st_ino)
+    cap.close()
+    assert path.is_symlink()
+
+
+def test_failed_token_write_closes_unnamed_capability_fd(tmp_path, monkeypatch):
+    original_open, original_write = os.open, os.write
+    opened = []
+
+    def track(*args, **kwargs):
+        fd = original_open(*args, **kwargs)
+        opened.append(fd)
+        return fd
+
+    writes = 0
+
+    def fail(fd, data):
+        nonlocal writes
+        writes += 1
+        if writes == 2:
+            raise OSError("synthetic token write failure")
+        return original_write(fd, data)
+
+    monkeypatch.setattr(os, "open", track)
+    monkeypatch.setattr(os, "write", fail)
+    with pytest.raises(OSError, match="synthetic token write failure"):
+        Capability(tmp_path)
+    assert len(opened) == 3
+    for fd in opened:
+        with pytest.raises(OSError):
+            os.fstat(fd)
+    assert not (tmp_path / "inkecho-fcitx-candidate.cap").exists()
