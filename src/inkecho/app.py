@@ -102,6 +102,12 @@ KEYBOARD_LABELS = {
     "ibus_cancelled": "输入已停止，不会继续发送剩余文字。",
     "ibus_unsupported_text": "IBus 实验性输入暂不支持结果中的控制字符。",
     "fcitx_ambiguous_target": "输入法报告了多个焦点，无法确定接收位置；已停止输入。",
+    "fcitx_composition_guard_unavailable": (
+        "当前 Fcitx5 输入桥版本过旧，缺少组词保护；请更新输入桥并重新启动输入法。"
+    ),
+    "fcitx_composition_active": (
+        "输入法仍在组词或处理输入，已停止发送；请先完成当前输入。"
+    ),
     "fcitx_no_target": "当前没有可确定的输入目标，已停止输入，未自动重试。",
     "fcitx_delivery_unknown": "输入结果无法确认，已停止输入，未自动重试。",
     "fcitx_cancelled": "输入已停止，不会继续发送剩余文字。",

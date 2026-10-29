@@ -1,0 +1,118 @@
+"""Actual Fcitx Core/private D-Bus, synthetic contexts; no desktop acceptance."""
+import asyncio,json,os,subprocess,sys,time
+from pathlib import Path
+ROOT=Path('/home/inkecho/fcitx-guard-sdk');sys.path[:0]=[str(ROOT/'src'),str(ROOT/'deps')]
+from dbus_next import Message,MessageType
+from dbus_next.aio import MessageBus
+from inkecho.platform.fcitx5 import Fcitx5Bridge,FcitxOutputError,INTERFACE
+from inkecho.platform.fcitx5_capability import Capability
+work=ROOT/'protocol-r5';work.mkdir(mode=0o700)
+for folder in ['runtime','data/fcitx5/addon','config','home']:(work/folder).mkdir(mode=0o700,parents=True,exist_ok=True)
+for key,value in {'HOME':str(work/'home'),'XDG_CONFIG_HOME':str(work/'config'),'XDG_DATA_HOME':str(work/'data'),'XDG_RUNTIME_DIR':str(work/'runtime')}.items():os.environ[key]=value
+for key in ['DISPLAY','WAYLAND_DISPLAY','WAYLAND_SOCKET']:os.environ.pop(key,None)
+for name,build,library in [('inkecho','product-native-build','libinkecho'),('ownedtest','test-control-build','libownedtest')]:
+ text=(ROOT/build/'inkecho.conf').read_text().replace('Library='+library,'Library='+str(ROOT/build/library));(work/'data/fcitx5/addon'/(name+'.conf')).write_text(text)
+log=(work/'fcitx.log').open('xb');argv=['/usr/bin/fcitx5','-D','--keep','--disable=wayland,xcb,notificationitem,classicui,clipboard'];proc=subprocess.Popen(argv,stdin=subprocess.DEVNULL,stdout=log,stderr=subprocess.STDOUT)
+report={'scope':'actual Fcitx5 Core/SDK addon on isolated Ubuntu24/private bus; synthetic owned contexts/panel states; no engine or desktop composition acceptance','checks':[],'passed':False,'daemon_pid':proc.pid}
+async def main():
+ bus=await MessageBus().connect();owner=None;shutdown=False
+ async def raw(conn,destination,path,interface,member,sig='',body=[]):
+  r=await asyncio.wait_for(conn.call(Message(destination=destination,path=path,interface=interface,member=member,signature=sig,body=body)),2);assert r.message_type==MessageType.METHOD_RETURN,(member,r.error_name);return r.body
+ async def api(member,sig='',body=[],conn=None):return (await raw(conn or bus,owner,'/inkecho',INTERFACE,member,sig,body))[0]
+ async def ctl(member,sig='',body=[]):return (await raw(bus,owner,'/ownedtest','org.fcitx.Fcitx.OwnedTest1',member,sig,body))[0]
+ async def counts():return [await ctl('CountA'),await ctl('CountB')]
+ async def begin(method,cap,conn=None):return await api(method,'s' if method=='Begin' else 'su',[cap.token] if method=='Begin' else [cap.token,2 if method=='Begin2' else 3],conn)
+ def check(name,**values):report['checks'].append({'name':name,**values});(work/'result.json').write_text(json.dumps(report,indent=2)+'\n')
+ try:
+  for _ in range(100):
+   try:owner=(await raw(bus,'org.freedesktop.DBus','/org/freedesktop/DBus','org.freedesktop.DBus','GetNameOwner','s',['org.fcitx.Fcitx5']))[0];break
+   except AssertionError:assert proc.poll() is None;await asyncio.sleep(.05)
+  assert owner
+  xml=(await raw(bus,owner,'/inkecho','org.freedesktop.DBus.Introspectable','Introspect'))[0];assert all('name="'+m+'"' in xml for m in ['Begin','Begin2','Begin3','Commit','Cancel']);report['runtime_version']=await api('RuntimeVersion');report['initial_owner']=owner
+  for method in ['Begin','Begin2','Begin3']:
+   cap=Capability(str(work/'runtime'))
+   try:
+    assert await begin(method,cap) is True;before=await counts()
+    for mode,expected in [(0,3),(2,3 if method=='Begin' else 4)]:
+     assert await ctl('Focus','u',[mode])==mode
+     for _ in range(2):assert await api('Commit','sus',[cap.token,0,'甲'])==expected
+    assert await counts()==before
+    assert await ctl('Focus','u',[1])==1;assert await api('Commit','sus',[cap.token,0,'甲'])==1;assert await api('Commit','sus',[cap.token,0,'甲'])==0
+    assert await ctl('Focus','u',[3])==1;assert await api('Commit','sus',[cap.token,1,'乙'])==1;assert await counts()==[before[0]+1,before[1]+1]
+    assert await api('Cancel','s',[cap.token]) is True;assert await api('Commit','sus',[cap.token,2,'丙'])==0
+    check(method+'_sequence_focus_cancel',duplicate_rejected=True,confirmed_unsent_sequence_preserved=True,cancel_stops_tail=True)
+   finally:cap.close()
+   assert await ctl('Focus','u',[1])==1
+   for mode in [1,2,3,4,5]:
+    bits=await ctl('State','u',[mode]);assert bits== (2 if mode==5 else 1),(mode,bits)
+    before=await counts();cap=Capability(str(work/'runtime'))
+    try:
+     assert await begin(method,cap) is True
+     status=await api('Commit','sus',[cap.token,0,'丙']);assert status==(5 if method=='Begin3' else 2),(method,mode,status)
+     assert await counts()==before and await ctl('StateBits')==bits
+     assert await ctl('State','u',[0])==0
+     assert await api('Commit','sus',[cap.token,0,'丙'])==0
+     assert await api('Cancel','s',[cap.token]) is False
+     check(method+'_composition_mode_'+str(mode),status=status,zero_commits=True,state_preserved=True,task_terminal=True)
+    finally:cap.close()
+  cap=Capability(str(work/'runtime'))
+  try:
+   assert await api('Begin3','su',[cap.token,99]) is False;assert await begin('Begin3',cap) is True
+   assert await api('Commit','sus',[cap.token,0,'甲乙'])==0
+   assert await api('Commit','sus',[cap.token,0,'甲'])==0
+   check('version_and_malformed_scalar',bad_version_did_not_consume=True,bad_scalar_invalidated=True)
+  finally:cap.close()
+  # Actual sender authentication and owner-loss cleanup.
+  own=await MessageBus().connect();cap=Capability(str(work/'runtime'))
+  try:
+   assert await begin('Begin3',cap,own) is True;before=await counts()
+   assert await api('Commit','sus',[cap.token,0,'甲'])==0;assert await api('Cancel','s',[cap.token]) is False
+   old_token=cap.token;own.disconnect();cap.close();await asyncio.sleep(.05)
+   fresh=Capability(str(work/'runtime'))
+   try:
+    assert await begin('Begin3',fresh) is True
+    assert await api('Commit','sus',[old_token,0,'甲'])==0
+    assert await api('Cancel','s',[fresh.token]) is True
+   finally:fresh.close()
+   assert await counts()==before;check('sender_owner_loss',foreign_commit_cancel_rejected=True,owner_loss_released_gate=True,old_token_rejected=True)
+  finally:own.disconnect();cap.close()
+  # Explicit cancel after prefix while panel holds composition.
+  cap=Capability(str(work/'runtime'))
+  try:
+   before=await counts();assert await begin('Begin3',cap) is True;assert await api('Commit','sus',[cap.token,0,'甲'])==1
+   assert await ctl('State','u',[1])==1;assert await api('Cancel','s',[cap.token]) is True;assert await api('Commit','sus',[cap.token,1,'乙'])==0
+   assert await counts()==[before[0]+1,before[1]] and await ctl('StateBits')==1
+   await ctl('State','u',[0]);check('cancel_after_prefix_with_preedit',prefix=1,tail=0,state_preserved=True)
+  finally:cap.close()
+  # New actual Python client does not resume after composition clears.
+  for prefix in [0,1]:
+   client=Fcitx5Bridge();await client.connect(expected_owner=owner);before=await counts()
+   try:
+    if prefix:assert await client.insert('甲',lambda:True)==1
+    assert await ctl('State','u',[2])==1
+    try:await client.insert('乙丙',lambda:True);raise AssertionError('composition not blocked')
+    except FcitxOutputError as e:assert e.code=='composition_active' and e.accepted==prefix
+    assert await counts()==[before[0]+prefix,before[1]] and await ctl('StateBits')==1
+    await ctl('State','u',[0])
+    try:await client.insert('乙',lambda:True);raise AssertionError('failed session resumed')
+    except FcitxOutputError as e:assert e.code=='session_failed'
+    check('actual_python_composition_prefix_'+str(prefix),confirmed_prefix=prefix,tail=0,no_replay=True)
+   finally:await client.aclose()
+  # The service owner really disappears; the already-connected client stops.
+  client=Fcitx5Bridge();await client.connect(expected_owner=owner)
+  assert await ctl('Quit') is True;shutdown=True;assert await asyncio.to_thread(proc.wait,5)==0
+  try:await client.insert('甲',lambda:True);raise AssertionError('lost owner accepted')
+  except FcitxOutputError as e:assert e.code=='owner_changed'
+  finally:await client.aclose()
+  check('actual_service_owner_loss',client_stopped=True);report['checks_passed']=True
+ finally:
+  if owner and not shutdown:
+   try:report['quit_reply']=await ctl('Quit')
+   except Exception as e:report['quit_error_type']=type(e).__name__
+  bus.disconnect()
+  try:report['daemon_wait']=await asyncio.to_thread(proc.wait,5)
+  except subprocess.TimeoutExpired:report['daemon_wait_timeout']=True
+  log.close();report['passed']=report.get('checks_passed',False) and report.get('daemon_wait')==0;(work/'result.json').write_text(json.dumps(report,indent=2)+'\n')
+try:asyncio.run(main())
+except Exception as e:report['error_type']=type(e).__name__;(work/'result.json').write_text(json.dumps(report,indent=2)+'\n');raise
+assert report['passed'];print(json.dumps({'passed':True,'checks':len(report['checks']),'daemon_wait':report['daemon_wait']}))

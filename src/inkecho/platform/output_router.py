@@ -213,6 +213,7 @@ class OutputRouter:
                 allowed = {
                     "unavailable",
                     "authorization_failed",
+                    "composition_guard_unavailable",
                     "permission_denied",
                     "untrusted_owner",
                 }
@@ -442,7 +443,7 @@ class OutputRouter:
             except asyncio.CancelledError:
                 await self._abort_preflight_after_stop(bridge)
                 raise
-            except Exception:
+            except Exception as error:
                 # No Commit has been attempted in preflight. Avoid waiting on
                 # an unresponsive service before the safe keyboard fallback.
                 try:
@@ -450,6 +451,16 @@ class OutputRouter:
                 except Exception:
                     self._report_cleanup_failure()
                     raise OutputRouterError(f"{framework}_cleanup_failed") from None
+                self._check_task(can_continue, deadline)
+                if (
+                    framework == "fcitx"
+                    and isinstance(error, FcitxOutputError)
+                    and error.code
+                    in {"composition_guard_unavailable", "authorization_failed"}
+                ):
+                    # Missing/rejected protection is not permission to bypass
+                    # composition through keyboard or the optional owned bridge.
+                    raise OutputRouterError("fcitx_" + error.code) from None
                 if framework == "ibus" and getattr(
                     self, "_owned_auto_candidate", False
                 ):
@@ -550,7 +561,13 @@ class OutputRouter:
                 error.accepted > 0
                 and not error.uncertain
                 and error.code
-                in {"no_target", "ambiguous_target", "expired", "owner_changed"}
+                in {
+                    "no_target",
+                    "ambiguous_target",
+                    "expired",
+                    "owner_changed",
+                    "composition_active",
+                }
             ):
                 if not can_continue():
                     raise OutputRouterError("input_cancelled") from None

@@ -1,0 +1,106 @@
+[
+  {
+    "case": "staged",
+    "sha": "acd896aae8ab38ecca2685c0dd8639f2910e841176eadccf59ee4943b158c4de",
+    "test_only_override": true,
+    "session": "wayland"
+  },
+  {
+    "case": "ready",
+    "receiver": {
+      "pid": 2905,
+      "active": true,
+      "focus": true,
+      "text": "",
+      "preedit_length": 0,
+      "key_results": [],
+      "module": null
+    }
+  },
+  {
+    "case": "frontend_loaded",
+    "paths": [
+      "/usr/lib/x86_64-linux-gnu/gtk-3.0/3.0.0/immodules/im-fcitx5.so"
+    ]
+  },
+  {
+    "case": "normal",
+    "sent": 2,
+    "route": "fcitx",
+    "receiver": {
+      "pid": 2905,
+      "active": true,
+      "focus": true,
+      "text": "\u7532\u4e59",
+      "preedit_length": 0,
+      "key_results": [],
+      "module": null
+    }
+  },
+  {
+    "case": "active_engine",
+    "engine": "pinyin"
+  },
+  {
+    "case": "first_pinyin_key",
+    "receiver": {
+      "pid": 2905,
+      "active": true,
+      "focus": true,
+      "text": "\u7532\u4e59",
+      "preedit_length": 0,
+      "key_results": [
+        {
+          "keyval": 110,
+          "state": 0,
+          "owned_xid": 10485763,
+          "xtest": true
+        }
+      ],
+      "module": null
+    }
+  },
+  {
+    "case": "real_preedit_before",
+    "receiver": {
+      "pid": 2905,
+      "active": true,
+      "focus": true,
+      "text": "\u7532\u4e59",
+      "preedit_length": 0,
+      "key_results": [
+        {
+          "keyval": 110,
+          "state": 0,
+          "owned_xid": 10485763,
+          "xtest": true
+        },
+        {
+          "keyval": 110,
+          "state": 0,
+          "owned_xid": 10485763,
+          "xtest": true
+        },
+        {
+          "keyval": 105,
+          "state": 0,
+          "owned_xid": 10485763,
+          "xtest": true
+        }
+      ],
+      "module": null
+    }
+  },
+  {
+    "case": "actor_exit",
+    "exit": 0
+  },
+  {
+    "case": "daemon_exit",
+    "exit": 0
+  },
+  {
+    "case": "hints_restored",
+    "value": true
+  }
+]

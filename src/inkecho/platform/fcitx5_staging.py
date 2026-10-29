@@ -98,12 +98,15 @@ def _conf(library_without_suffix: str, core: str):
 
 
 # These are empirical combinations for the pinned candidate, not guarantees
-# inferred from the user-editable manifest. Updated only after two-system tests.
+# inferred from the user-editable manifest. Staging qualification covers the
+# exact ABI pairs below; desktop scope is recorded in
+# docs/fcitx-preedit-guard-validation.md, not inferred for every session/client.
 TESTED_CANDIDATE_SHA256 = (
-    "3a3c80fb464bbfce465b52cb73e998a00705998a768c45400416daf29e89a497"
+    "acd896aae8ab38ecca2685c0dd8639f2910e841176eadccf59ee4943b158c4de"
 )
 # Only for safely removing a description installed by a previous candidate.
 RETIRED_CANDIDATE_SHA256 = (
+    "3a3c80fb464bbfce465b52cb73e998a00705998a768c45400416daf29e89a497",
     "532ef632385bfe9ae3b76312b74874a7cc562c58435bb07f430e704179ebd139",
     "f5c280c980359abfb29d676b5afb65aaae33968a3877a19545661decf2ad6b1d",
 )

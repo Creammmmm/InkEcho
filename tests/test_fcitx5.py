@@ -57,11 +57,12 @@ class FakeBus:
             return reply(
                 [
                     f'<node><interface name="{INTERFACE}">'
-                    '<method name="Begin"/><method name="Commit"/>'
+                    '<method name="Begin"/><method name="Begin3"/>'
+                    '<method name="Commit"/>'
                     '<method name="Cancel"/></interface></node>'
                 ]
             )
-        if message.member in ("Begin", "Cancel"):
+        if message.member in ("Begin3", "Cancel"):
             return reply([True])
         result = self.outcomes.pop(0)
         if isinstance(result, Exception):
@@ -464,7 +465,7 @@ def test_refused_authorization_never_sends_or_falls_back():
         original = bus.call
 
         async def call(message):
-            if message.member == "Begin":
+            if message.member == "Begin3":
                 bus.calls.append(message)
                 return reply([False])
             return await original(message)
@@ -490,7 +491,7 @@ def test_cancelling_authorization_preserves_async_cancellation():
         started = asyncio.Event()
 
         async def call(message):
-            if message.member == "Begin":
+            if message.member == "Begin3":
                 started.set()
                 await asyncio.Event().wait()
             return await original(message)
@@ -1055,7 +1056,7 @@ def test_first_focus_gap_recovers_without_replay_and_cancel_is_prompt():
     asyncio.run(run())
 
 
-@pytest.mark.parametrize("member", ["AddMatch", "GetNameOwner", "Introspect", "Begin"])
+@pytest.mark.parametrize("member", ["AddMatch", "GetNameOwner", "Introspect", "Begin3"])
 def test_untrusted_setup_reply_never_prepares_bridge(member):
     class SpoofBus(FakeBus):
         async def call(self, message):
@@ -1238,7 +1239,7 @@ def test_router_begin_cleanup_failure_disconnects_and_never_sends(mode):
 
         class BeginBus(FakeBus):
             async def call(self, message):
-                if message.member == "Begin":
+                if message.member == "Begin3":
                     self.calls.append(message)
                     started.set()
                     if mode == "service":
@@ -1298,7 +1299,7 @@ def test_explicit_begin_cleanup_failure_reports_and_disconnects(cancel):
 
         class BeginBus(FakeBus):
             async def call(self, message):
-                if message.member == "Begin":
+                if message.member == "Begin3":
                     self.calls.append(message)
                     started.set()
                     if cancel:
@@ -1363,7 +1364,7 @@ def test_auto_router_never_replays_after_service_failure_and_next_task_recovers(
 
             async def call(self, message):
                 response = await super().call(message)
-                if message.member in {"Introspect", "Begin", "Cancel"}:
+                if message.member in {"Introspect", "Begin3", "Cancel"}:
                     response.sender = self.owner
                 return response
 

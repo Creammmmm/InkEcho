@@ -1,7 +1,9 @@
 # Experimental Fcitx5 bridge
 
-This is an isolated, unintegrated backend. It does not enable a system input
-method, install files, restart Fcitx5, or change existing InkEcho settings.
+This is the optional Fcitx5 output bridge. Building or bundling it does not
+install or enable it, restart Fcitx5, or change existing InkEcho settings.
+Installation and enablement require the explicit application controls or staging
+procedure below; the live addon must still pass protocol negotiation.
 
 Build on the target Fcitx5 ABI with CMake, a C++20 compiler, and the Fcitx5
 core, utils, and module development packages:
@@ -50,15 +52,37 @@ interpret LF according to their own behavior: an active shell may execute the
 current command. The raw-byte fixture is not a test with a real shell.
 
 The current source and pinned candidate implement a task capability and
-bus-assigned sender binding, with additive focus-v2 negotiation. An older
-already-running daemon may still expose only Begin; clients negotiate its
-actual interface and must not infer activation from a staged file. The capability file
+bus-assigned sender binding. New clients require `Begin3(token, 3)` from the
+running daemon before creating the capability. Missing protection stops with
+`composition_guard_unavailable`; rejected negotiation stops with
+`authorization_failed`. Neither condition authorizes keyboard or owned-IBus
+fallback. Updating a file does not update a daemon's already-loaded addon.
+
+Before each scalar, the addon rejects a non-empty public input panel or pending
+client events without calling `commitString`, resetting composition or changing
+the engine. A panel includes server/client preedit, candidates and auxiliary UI.
+Guarded status5 terminates the native task; old Begin/Begin2 clients receive
+terminal status2 for the same condition. The Python client does not retry or
+replay a blocked tail, even after composition clears. Private engine/client state
+not exposed by these APIs remains unproven; the guard is not a target receipt.
+No-target and keyboard behavior retain their existing, narrower guarantees.
+
+The pinned native SHA has Ubuntu 24 SDK/Core/private-bus verification and real
+Pinyin composition, normal auto output and partial-cancel checks in Ubuntu 24
+X11/GTK3 and Ubuntu 26 Wayland/XWayland GTK3. Both used the identical native SHA.
+The staging allowlist authorizes only Ubuntu 24.04/Fcitx 5.1.7 and Ubuntu
+26.04/Fcitx 5.1.19 on x86_64. This is bounded addon qualification, not AppImage
+acceptance or a guarantee for every session, engine or application. Exact
+results, retained failures and limits are in
+[the validation record](../../docs/fcitx-preedit-guard-validation.md).
+Clients must not infer activation from a staged file. The capability file
 helps prevent accidental and tokenless calls, but does not protect against
 other processes with the same user identity, which may read or race it.
 A disconnected owner is watched for task cleanup. The client enforces the
 actual task deadline and explicitly cancels when the task ends; the plugin does
 not impose a shorter independent recording limit. A connected but stalled client
 can retain the task until it disconnects or cancels. The plugin never logs
-input text and does not read the clipboard; security, packaging and two-system
-validation require further review before deployment. No compatibility is claimed for untested
+input text and does not read the clipboard. A new AppImage still requires
+same-SHA actual package acceptance on both Ubuntu systems before deployment.
+No compatibility is claimed for untested
 desktop sessions, frontends, input engines or applications.

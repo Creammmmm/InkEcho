@@ -1,0 +1,126 @@
+{
+  "addon_sha256": "acd896aae8ab38ecca2685c0dd8639f2910e841176eadccf59ee4943b158c4de",
+  "qualification": "candidate only; real desktop normal/cancel pass, actual preedit NOT VERIFIED; formal staging allowlist unchanged",
+  "staging_override": "only isolated process TESTED_CANDIDATE_SHA256 variable",
+  "ubuntu24": {
+    "session": "X11",
+    "target": "real GTK3 Entry with im-fcitx5.so",
+    "normal": "\u7532\u4e59",
+    "cancel_after_first": "\u7532\u4e59\u5df1",
+    "no_tail": "\u5e9a",
+    "wait_seconds": 1.2,
+    "preedit_verified": false,
+    "raw_archive_sha256": "e8302e286fbcdc40b3e88d57ff70fd63fd09ab9fbbd46863c6a4c1eeff2cad47"
+  },
+  "ubuntu26": {
+    "session": "Wayland",
+    "target": "real GTK3 Entry explicitly on XWayland with im-fcitx5.so",
+    "normal": "\u7532\u4e59",
+    "cancel_after_first": "\u7532\u4e59\u5df1",
+    "no_tail": "\u5e9a",
+    "wait_seconds": 1.2,
+    "preedit_verified": false,
+    "raw_archive_sha256": "43b8cf96c0d1bf25420a216b41bced76c189ea840093f9b8762b74ac6357000e"
+  },
+  "failures": [
+    "24 unpacked fixture directories775 refused unsafe_directory before daemon/input; corrected only fixture permissions",
+    "24 stale system-session input hints chose old keyboard route and session_closed without text; exact hints then temporarily configured/restored",
+    "24 Gdk software keys did not establish persistent preedit; ordinary e2d then test\u620a appeared, so this is not preedit-guard acceptance or proven product failure",
+    "24 XTest on verified owned XID typed ordinary4e2d, preedit0; harness stopped before test\u6b63\u6587",
+    "26 old historical prior overlay booted with bad EXT4 bitmap/journal and emergency_ro; stage/input not attempted; normally stopped and replaced by fresh child of current original disk",
+    "26 F24 absent from keymap; callback error stopped command watcher; only verified owned actor/daemon TERM used and hints/description restored",
+    "26 mapped private CtrlShiftF8 trial lost owned target activity during hex input, preedit0; no body injection attempted; callback/quit timeout cleanup restored only own resources"
+  ],
+  "limits": [
+    "no actual Fcitx preedit protection acceptance on either OS",
+    "no Chinese/Pinyin engine trial",
+    "no native Wayland GTK target trial",
+    "no real physical Escape; cancellation is callback/task guard",
+    "no no-target/ambiguous fallback desktop sample",
+    "no new AppImage or same-version/same-AppImage-SHA acceptance",
+    "not permission to promote empirical staging SHA"
+  ],
+  "cleanup": {
+    "desktop24": {
+      "source": "/tmp/inkecho-fcitx-preedit-guard-20261030/desktop24/state/guest.qcow2",
+      "inode": 968174,
+      "device": 47,
+      "source_sha256": "5392347c90927aa7bdcf9c5d35fa5474ac347a38ddc36e5839fa1ac0b8df39cc",
+      "archive": "/tmp/inkecho-fcitx-preedit-guard-20261030/desktop24/stopped-child.qcow2.gz",
+      "archive_bytes": 6182262,
+      "archive_sha256": "205dfa00d9be0e3e711f33a72fa7a326e77ea78018525ce6b3f627d2ed90f939",
+      "decompressed_sha256_matches": true,
+      "source_allocated_bytes_released": 49090560,
+      "other_image_references": [],
+      "open_references": [],
+      "final_container": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-29T17:33:58.884383401Z",
+        "FinishedAt": "2026-10-29T17:42:34.647235815Z"
+      },
+      "parents_and_evidence_preserved": true
+    },
+    "desktop26": {
+      "source": "/tmp/inkecho-fcitx-preedit-guard-20261030/desktop26/state/guest.qcow2",
+      "inode": 968817,
+      "device": 47,
+      "source_sha256": "e12572827e61e15cb9f9b7347796ba83309a0de03322eef74e34efc6ce347e4d",
+      "archive": "/tmp/inkecho-fcitx-preedit-guard-20261030/desktop26/stopped-child.qcow2.gz",
+      "archive_bytes": 4022521,
+      "archive_sha256": "8cab4b0b5f5ffc198661c4f3036361b8c6eccd2acf54cd5df28dde278838a468",
+      "decompressed_sha256_matches": true,
+      "source_allocated_bytes_released": 21434368,
+      "other_image_references": [],
+      "open_references": [],
+      "final_container": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-29T17:44:12.179621493Z",
+        "FinishedAt": "2026-10-29T17:45:46.805383805Z"
+      },
+      "parents_and_evidence_preserved": true
+    },
+    "desktop26-clean": {
+      "source": "/tmp/inkecho-fcitx-preedit-guard-20261030/desktop26-clean/state/guest.qcow2",
+      "inode": 968995,
+      "device": 47,
+      "source_sha256": "1639e2f3ac14368f47c89949cf07bbddb8b4b254cb0b29fc62fda24f8fabb480",
+      "archive": "/tmp/inkecho-fcitx-preedit-guard-20261030/desktop26-clean/stopped-child.qcow2.gz",
+      "archive_bytes": 17505735,
+      "archive_sha256": "4948ece172bde5fc5772baab61e3de4e7d9db5b19d392f35e9c1f2c50ee0512f",
+      "decompressed_sha256_matches": true,
+      "source_allocated_bytes_released": 88018944,
+      "other_image_references": [],
+      "open_references": [],
+      "final_container": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-29T17:46:55.2907247Z",
+        "FinishedAt": "2026-10-29T17:50:50.022147536Z"
+      },
+      "parents_and_evidence_preserved": true
+    }
+  }
+}

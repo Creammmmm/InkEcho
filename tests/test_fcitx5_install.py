@@ -106,8 +106,8 @@ def test_disable_preserves_foreign_description_without_fcitx(tmp_path, monkeypat
     assert description.read_text() == "foreign configuration"
 
 
-def test_disable_recognizes_retired_candidate_after_upgrade(tmp_path):
-    old_digest = staging.RETIRED_CANDIDATE_SHA256[0]
+@pytest.mark.parametrize("old_digest", staging.RETIRED_CANDIDATE_SHA256)
+def test_disable_recognizes_retired_candidate_after_upgrade(tmp_path, old_digest):
     addon = tmp_path / "fcitx5" / "addon"
     addon.mkdir(parents=True, mode=0o700)
     addon.parent.chmod(0o700)
@@ -120,8 +120,10 @@ def test_disable_recognizes_retired_candidate_after_upgrade(tmp_path):
     assert not description.exists()
 
 
-def test_disable_preserves_retired_candidate_description_if_modified(tmp_path):
-    old_digest = staging.RETIRED_CANDIDATE_SHA256[0]
+@pytest.mark.parametrize("old_digest", staging.RETIRED_CANDIDATE_SHA256)
+def test_disable_preserves_retired_candidate_description_if_modified(
+    tmp_path, old_digest
+):
     addon = tmp_path / "fcitx5" / "addon"
     addon.mkdir(parents=True, mode=0o700)
     addon.parent.chmod(0o700)

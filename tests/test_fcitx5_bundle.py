@@ -44,7 +44,8 @@ def test_verified_candidate_is_included_in_inventory(bundle, candidate_root, tmp
     assert inventory["files"][key] == bundle.FCITX5_PLUGIN_SHA256
     assert inventory["fcitx5_candidate"]["status"] == "uninstalled-candidate"
     assert inventory["fcitx5_candidate"]["fcitx5_core_version"] == "5.1.7"
-    assert inventory["fcitx5_candidate"]["focus_protocol_version"] == 2
+    assert inventory["fcitx5_candidate"]["focus_protocol_version"] == 3
+    assert inventory["fcitx5_candidate"]["composition_guard_protocol_version"] == 3
     assert inventory["fcitx5_candidate"]["legacy_begin_supported"] is True
 
 
@@ -82,8 +83,11 @@ def test_changed_candidate_after_preflight_is_not_packaged(bundle, tmp_path):
     assert not (tmp_path / "appdir").exists()
 
 
+@pytest.mark.parametrize(
+    ("os_version", "fcitx_version"), [("24.04", "5.1.7"), ("26.04", "5.1.19")]
+)
 def test_squashfs_extracted_candidate_is_safe_to_stage(
-    bundle, candidate_root, tmp_path
+    bundle, candidate_root, tmp_path, os_version, fcitx_version
 ):
     from inkecho.platform.fcitx5_staging import stage
 
@@ -136,9 +140,9 @@ def test_squashfs_extracted_candidate_is_safe_to_stage(
             root,
             data,
             os_id="ubuntu",
-            os_version="26.04",
+            os_version=os_version,
             architecture="x86_64",
-            fcitx_version="5.1.19",
+            fcitx_version=fcitx_version,
         )
         == bundle.FCITX5_PLUGIN_SHA256
     )

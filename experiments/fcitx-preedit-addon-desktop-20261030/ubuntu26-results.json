@@ -1,0 +1,76 @@
+[
+  {
+    "case": "staged",
+    "sha": "acd896aae8ab38ecca2685c0dd8639f2910e841176eadccf59ee4943b158c4de",
+    "test_only_override": true,
+    "session": "wayland"
+  },
+  {
+    "case": "ready",
+    "receiver": {
+      "pid": 3148,
+      "active": true,
+      "focus": true,
+      "text": "",
+      "preedit_length": 0,
+      "key_results": [],
+      "module": null
+    }
+  },
+  {
+    "case": "frontend_loaded",
+    "paths": [
+      "/usr/lib/x86_64-linux-gnu/gtk-3.0/3.0.0/immodules/im-fcitx5.so"
+    ]
+  },
+  {
+    "case": "normal",
+    "sent": 2,
+    "route": "fcitx",
+    "receiver": {
+      "pid": 3148,
+      "active": true,
+      "focus": true,
+      "text": "\u7532\u4e59",
+      "preedit_length": 0,
+      "key_results": [],
+      "module": null
+    }
+  },
+  {
+    "case": "preedit_not_verified",
+    "reason": "no sustained client preedit established; no guard acceptance claimed"
+  },
+  {
+    "case": "cancel_after_prefix",
+    "code": "fcitx_cancelled",
+    "attempts": 1,
+    "route": null,
+    "receiver": {
+      "pid": 3148,
+      "active": true,
+      "focus": true,
+      "text": "\u7532\u4e59\u5df1",
+      "preedit_length": 0,
+      "key_results": [],
+      "module": null
+    }
+  },
+  {
+    "case": "normal_cancel_passed",
+    "value": true,
+    "preedit_verified": false
+  },
+  {
+    "case": "actor_exit",
+    "exit": 0
+  },
+  {
+    "case": "daemon_exit",
+    "exit": 0
+  },
+  {
+    "case": "hints_restored",
+    "value": true
+  }
+]

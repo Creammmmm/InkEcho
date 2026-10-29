@@ -1,0 +1,167 @@
+{
+  "scope": "actual Fcitx5 Core/SDK addon on isolated Ubuntu24/private bus; synthetic owned contexts/panel states; no engine or desktop composition acceptance",
+  "checks": [
+    {
+      "name": "Begin_sequence_focus_cancel",
+      "duplicate_rejected": true,
+      "confirmed_unsent_sequence_preserved": true,
+      "cancel_stops_tail": true
+    },
+    {
+      "name": "Begin_composition_mode_1",
+      "status": 2,
+      "zero_commits": true,
+      "state_preserved": true,
+      "task_terminal": true
+    },
+    {
+      "name": "Begin_composition_mode_2",
+      "status": 2,
+      "zero_commits": true,
+      "state_preserved": true,
+      "task_terminal": true
+    },
+    {
+      "name": "Begin_composition_mode_3",
+      "status": 2,
+      "zero_commits": true,
+      "state_preserved": true,
+      "task_terminal": true
+    },
+    {
+      "name": "Begin_composition_mode_4",
+      "status": 2,
+      "zero_commits": true,
+      "state_preserved": true,
+      "task_terminal": true
+    },
+    {
+      "name": "Begin_composition_mode_5",
+      "status": 2,
+      "zero_commits": true,
+      "state_preserved": true,
+      "task_terminal": true
+    },
+    {
+      "name": "Begin2_sequence_focus_cancel",
+      "duplicate_rejected": true,
+      "confirmed_unsent_sequence_preserved": true,
+      "cancel_stops_tail": true
+    },
+    {
+      "name": "Begin2_composition_mode_1",
+      "status": 2,
+      "zero_commits": true,
+      "state_preserved": true,
+      "task_terminal": true
+    },
+    {
+      "name": "Begin2_composition_mode_2",
+      "status": 2,
+      "zero_commits": true,
+      "state_preserved": true,
+      "task_terminal": true
+    },
+    {
+      "name": "Begin2_composition_mode_3",
+      "status": 2,
+      "zero_commits": true,
+      "state_preserved": true,
+      "task_terminal": true
+    },
+    {
+      "name": "Begin2_composition_mode_4",
+      "status": 2,
+      "zero_commits": true,
+      "state_preserved": true,
+      "task_terminal": true
+    },
+    {
+      "name": "Begin2_composition_mode_5",
+      "status": 2,
+      "zero_commits": true,
+      "state_preserved": true,
+      "task_terminal": true
+    },
+    {
+      "name": "Begin3_sequence_focus_cancel",
+      "duplicate_rejected": true,
+      "confirmed_unsent_sequence_preserved": true,
+      "cancel_stops_tail": true
+    },
+    {
+      "name": "Begin3_composition_mode_1",
+      "status": 5,
+      "zero_commits": true,
+      "state_preserved": true,
+      "task_terminal": true
+    },
+    {
+      "name": "Begin3_composition_mode_2",
+      "status": 5,
+      "zero_commits": true,
+      "state_preserved": true,
+      "task_terminal": true
+    },
+    {
+      "name": "Begin3_composition_mode_3",
+      "status": 5,
+      "zero_commits": true,
+      "state_preserved": true,
+      "task_terminal": true
+    },
+    {
+      "name": "Begin3_composition_mode_4",
+      "status": 5,
+      "zero_commits": true,
+      "state_preserved": true,
+      "task_terminal": true
+    },
+    {
+      "name": "Begin3_composition_mode_5",
+      "status": 5,
+      "zero_commits": true,
+      "state_preserved": true,
+      "task_terminal": true
+    },
+    {
+      "name": "version_and_malformed_scalar",
+      "bad_version_did_not_consume": true,
+      "bad_scalar_invalidated": true
+    },
+    {
+      "name": "sender_owner_loss",
+      "foreign_commit_cancel_rejected": true,
+      "owner_loss_released_gate": true,
+      "old_token_rejected": true
+    },
+    {
+      "name": "cancel_after_prefix_with_preedit",
+      "prefix": 1,
+      "tail": 0,
+      "state_preserved": true
+    },
+    {
+      "name": "actual_python_composition_prefix_0",
+      "confirmed_prefix": 0,
+      "tail": 0,
+      "no_replay": true
+    },
+    {
+      "name": "actual_python_composition_prefix_1",
+      "confirmed_prefix": 1,
+      "tail": 0,
+      "no_replay": true
+    },
+    {
+      "name": "actual_service_owner_loss",
+      "client_stopped": true
+    }
+  ],
+  "passed": true,
+  "daemon_pid": 26079,
+  "runtime_version": "5.1.7",
+  "initial_owner": ":1.1",
+  "checks_passed": true,
+  "daemon_wait": 0
+}

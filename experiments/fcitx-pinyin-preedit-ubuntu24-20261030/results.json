@@ -1,0 +1,222 @@
+[
+  {
+    "case": "staged",
+    "sha": "acd896aae8ab38ecca2685c0dd8639f2910e841176eadccf59ee4943b158c4de",
+    "test_only_override": true,
+    "session": "x11"
+  },
+  {
+    "case": "ready",
+    "receiver": {
+      "pid": 3691,
+      "active": true,
+      "focus": true,
+      "text": "",
+      "preedit_length": 0,
+      "key_results": [],
+      "module": null
+    }
+  },
+  {
+    "case": "frontend_loaded",
+    "paths": [
+      "/usr/lib/x86_64-linux-gnu/gtk-3.0/3.0.0/immodules/im-fcitx5.so"
+    ]
+  },
+  {
+    "case": "normal",
+    "sent": 2,
+    "route": "fcitx",
+    "receiver": {
+      "pid": 3691,
+      "active": true,
+      "focus": true,
+      "text": "\u7532\u4e59",
+      "preedit_length": 0,
+      "key_results": [],
+      "module": null
+    }
+  },
+  {
+    "case": "active_engine",
+    "engine": "pinyin"
+  },
+  {
+    "case": "first_pinyin_key",
+    "receiver": {
+      "pid": 3691,
+      "active": true,
+      "focus": true,
+      "text": "\u7532\u4e59n",
+      "preedit_length": 0,
+      "key_results": [
+        {
+          "keyval": 110,
+          "state": 0,
+          "owned_xid": 39845891,
+          "xtest": true
+        }
+      ],
+      "module": null
+    }
+  },
+  {
+    "case": "real_preedit_before",
+    "receiver": {
+      "pid": 3691,
+      "active": true,
+      "focus": true,
+      "text": "\u7532\u4e59n",
+      "preedit_length": 2,
+      "key_results": [
+        {
+          "keyval": 110,
+          "state": 0,
+          "owned_xid": 39845891,
+          "xtest": true
+        },
+        {
+          "keyval": 110,
+          "state": 0,
+          "owned_xid": 39845891,
+          "xtest": true
+        },
+        {
+          "keyval": 105,
+          "state": 0,
+          "owned_xid": 39845891,
+          "xtest": true
+        }
+      ],
+      "module": null
+    }
+  },
+  {
+    "case": "guarded_during_pinyin",
+    "code": "fcitx_composition_active",
+    "attempts": 0,
+    "route": null,
+    "receiver": {
+      "pid": 3691,
+      "active": true,
+      "focus": true,
+      "text": "\u7532\u4e59n",
+      "preedit_length": 2,
+      "key_results": [
+        {
+          "keyval": 110,
+          "state": 0,
+          "owned_xid": 39845891,
+          "xtest": true
+        },
+        {
+          "keyval": 110,
+          "state": 0,
+          "owned_xid": 39845891,
+          "xtest": true
+        },
+        {
+          "keyval": 105,
+          "state": 0,
+          "owned_xid": 39845891,
+          "xtest": true
+        }
+      ],
+      "module": null
+    }
+  },
+  {
+    "case": "user_finished_composition",
+    "receiver": {
+      "pid": 3691,
+      "active": true,
+      "focus": true,
+      "text": "\u7532\u4e59n\u4f60",
+      "preedit_length": 0,
+      "key_results": [
+        {
+          "keyval": 110,
+          "state": 0,
+          "owned_xid": 39845891,
+          "xtest": true
+        },
+        {
+          "keyval": 110,
+          "state": 0,
+          "owned_xid": 39845891,
+          "xtest": true
+        },
+        {
+          "keyval": 105,
+          "state": 0,
+          "owned_xid": 39845891,
+          "xtest": true
+        },
+        {
+          "keyval": 32,
+          "state": 0,
+          "owned_xid": 39845891,
+          "xtest": true
+        }
+      ],
+      "module": null
+    }
+  },
+  {
+    "case": "cancel_after_prefix",
+    "code": "fcitx_cancelled",
+    "attempts": 1,
+    "route": null,
+    "receiver": {
+      "pid": 3691,
+      "active": true,
+      "focus": true,
+      "text": "\u7532\u4e59n\u4f60\u5df1",
+      "preedit_length": 0,
+      "key_results": [
+        {
+          "keyval": 110,
+          "state": 0,
+          "owned_xid": 39845891,
+          "xtest": true
+        },
+        {
+          "keyval": 110,
+          "state": 0,
+          "owned_xid": 39845891,
+          "xtest": true
+        },
+        {
+          "keyval": 105,
+          "state": 0,
+          "owned_xid": 39845891,
+          "xtest": true
+        },
+        {
+          "keyval": 32,
+          "state": 0,
+          "owned_xid": 39845891,
+          "xtest": true
+        }
+      ],
+      "module": null
+    }
+  },
+  {
+    "case": "normal_cancel_passed",
+    "value": true,
+    "preedit_verified": true
+  },
+  {
+    "case": "actor_exit",
+    "exit": 0
+  },
+  {
+    "case": "daemon_exit",
+    "exit": 0
+  },
+  {
+    "case": "hints_restored",
+    "value": true
+  }
+]

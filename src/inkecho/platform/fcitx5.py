@@ -64,7 +64,6 @@ class Fcitx5Bridge:
         self._bus_factory = bus_factory
         self._capability_factory = capability_factory
         self._capability = None
-        self._detailed_focus = False
         self._sequence = 0
         self._bus = None
         self._owner = None
@@ -176,12 +175,11 @@ class Fcitx5Bridge:
             if bus is not None:
                 bus.disconnect()
             raise FcitxOutputError("unavailable") from None
-        # Begin remains the v1 protocol. Begin2 explicitly negotiates the
-        # additive ambiguity result; old bridges/clients retain results 0..3.
-        detailed_focus = (
-            root.find(f"interface[@name='{INTERFACE}']/method[@name='Begin2']")
-            is not None
-        )
+        # Old running addons must not submit unprotected text or authorize
+        # another output path simply because the new protocol is unavailable.
+        if root.find(f"interface[@name='{INTERFACE}']/method[@name='Begin3']") is None:
+            bus.disconnect()
+            raise FcitxOutputError("composition_guard_unavailable")
         cap = None
         try:
             cap = self._capability_factory(os.environ.get("XDG_RUNTIME_DIR", ""))
@@ -191,9 +189,9 @@ class Fcitx5Bridge:
                         destination=unique,
                         path=PATH,
                         interface=INTERFACE,
-                        member="Begin2" if detailed_focus else "Begin",
-                        signature="su" if detailed_focus else "s",
-                        body=[cap.token, 2] if detailed_focus else [cap.token],
+                        member="Begin3",
+                        signature="su",
+                        body=[cap.token, 3],
                     )
                 ),
                 self._timeout,
@@ -233,7 +231,6 @@ class Fcitx5Bridge:
                 raise FcitxOutputError("cleanup_failed") from None
             raise FcitxOutputError("closed")
         self._bus, self._owner, self._capability = bus, unique, cap
-        self._detailed_focus = detailed_focus
 
     async def insert(
         self,
@@ -353,16 +350,23 @@ class Fcitx5Bridge:
                     if (
                         reply.sender != self._owner
                         or reply.message_type != MessageType.METHOD_RETURN
-                        or reply.body
-                        not in (
-                            ([0], [1], [2], [3], [4])
-                            if self._detailed_focus
-                            else ([0], [1], [2], [3])
-                        )
+                        or reply.body not in ([0], [1], [2], [3], [4], [5])
                         or type(reply.body[0]) is not int
                     ):
                         raise FcitxOutputError(
                             "delivery_unknown", accepted=self._accepted, uncertain=True
+                        )
+                    if reply.body[0] == 5:
+                        if not can_continue():
+                            raise FcitxOutputError("cancelled", accepted=self._accepted)
+                        if time.monotonic() >= deadline:
+                            raise FcitxOutputError("expired", accepted=self._accepted)
+                        # Terminal definitely-unsent scalar, not a focus gap.
+                        # Never retry later or authorize another output backend.
+                        raise FcitxOutputError(
+                            "composition_active",
+                            accepted=self._accepted,
+                            unsent_offset=accepted,
                         )
                     if reply.body[0] == 2:
                         raise FcitxOutputError(

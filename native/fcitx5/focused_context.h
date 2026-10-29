@@ -32,3 +32,10 @@ template <typename Context>
 std::uint32_t inkecho_focus_rejection(const InkEchoFocusSelection<Context> &selection, bool detailed) {
     return detailed && selection.ambiguous ? 4 : 3;
 }
+
+// Do not inspect text, reset composition or flush queued frontend events.
+// A non-empty panel includes client/server preedit, candidates and auxiliary UI.
+template <typename Context>
+bool inkecho_composition_blocked(Context &context) {
+    return !context.inputPanel().empty() || context.hasPendingEvents();
+}

@@ -30,7 +30,7 @@ QT_PLUGINS = {
 # These exact source and binary hashes are bound to the documented standalone
 # plugin experiments, not to AppImage acceptance or a general support claim.
 FCITX5_PLUGIN_SHA256 = (
-    "3a3c80fb464bbfce465b52cb73e998a00705998a768c45400416daf29e89a497"
+    "acd896aae8ab38ecca2685c0dd8639f2910e841176eadccf59ee4943b158c4de"
 )
 FCITX5_CONF_SHA256 = "44a1386046f2b4df4ea9ba73a43d7caf353e1039f7c14a316cc73e4c928bcb57"
 FCITX5_SOURCE_SHA256 = {
@@ -38,12 +38,12 @@ FCITX5_SOURCE_SHA256 = {
         "30cf333e2a67288c76b2d5b9dbf9095c8b68cde61c108653c277d8ef46faa850"
     ),
     "focused_context.h": (
-        "9fbfd4008a8b3f8ec8880b722b9fbe37198877da65c6168c60a7df5070fe0525"
+        "a87ede2283d65c8a3a47ee3f08e7f2a05c6e107c00237e9abcb28068e3fdc8f2"
     ),
     "inkecho.conf.in": (
         "4911bd724fbd1035fb3d24dbe6e872ceb3e20fc38976a1db8af244ca0c689b0e"
     ),
-    "inkecho.cpp": "7963ede79326c0f3ef87ea5daf51a515632214def0dabc8553d6ff2120363934",
+    "inkecho.cpp": "a3bcd375d167a6b63c59136da5a8b9ece27e86691739ecaaed20bbe93b505f1c",
     "task_gate.h": "88f2a9dc762d5d135818531621b85fa1873b132ecb2926a04e68456355df9a80",
     "utf8_scalar.h": "685754ac1701df448902bcc57adee099925b6dc80ecac06cbea7e669c6913da9",
 }
@@ -106,7 +106,8 @@ def install_fcitx5_candidate(appdir, candidate):
         "os_id": "ubuntu",
         "os_version": "24.04",
         "fcitx5_core_version": "5.1.7",
-        "focus_protocol_version": 2,
+        "focus_protocol_version": 3,
+        "composition_guard_protocol_version": 3,
         "legacy_begin_supported": True,
         "files_sha256": {
             "libinkecho.so": FCITX5_PLUGIN_SHA256,

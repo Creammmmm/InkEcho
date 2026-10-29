@@ -11,7 +11,7 @@ from inkecho.platform.fcitx5 import Fcitx5Bridge, FcitxOutputError
 from inkecho.platform.output_router import OutputRouter, OutputRouterError
 
 
-class V2Bus(FakeBus):
+class GuardBus(FakeBus):
     async def call(self, message):
         if message.member == "Begin2":
             self.calls.append(message)
@@ -31,11 +31,11 @@ def bridge(bus):
     return Fcitx5Bridge(bus_factory=lambda: bus, capability_factory=FakeCapability)
 
 
-def test_v2_zero_prefix_ambiguity_is_definitely_unsent(monkeypatch):
+def test_guarded_zero_prefix_ambiguity_is_definitely_unsent(monkeypatch):
     monkeypatch.setattr(fcitx5, "FOCUS_WAIT_SECONDS", 0)
 
     async def run():
-        bus = V2Bus([reply([4])])
+        bus = GuardBus([reply([4])])
         client = bridge(bus)
         await client.connect()
         with pytest.raises(FcitxOutputError) as caught:
@@ -43,30 +43,36 @@ def test_v2_zero_prefix_ambiguity_is_definitely_unsent(monkeypatch):
         assert caught.value.code == "ambiguous_target"
         assert caught.value.accepted == 0 and caught.value.unsent_offset == 0
         assert not caught.value.uncertain
-        assert [x.member for x in bus.calls].count("Begin2") == 1
+        assert [x.member for x in bus.calls].count("Begin3") == 1
         await client.aclose()
 
     asyncio.run(run())
 
 
-def test_v1_unnegotiated_4_remains_uncertain_not_safe_fallback():
+def test_old_addon_without_guard_never_begins_or_sends():
+    class OldBus(FakeBus):
+        async def call(self, message):
+            result = await super().call(message)
+            if message.member == "Introspect":
+                result.body = [result.body[0].replace('<method name="Begin3"/>', "")]
+            return result
+
     async def run():
-        bus = FakeBus([reply([4])])
+        bus = OldBus([reply([4])])
         client = bridge(bus)
-        await client.connect()
-        with pytest.raises(FcitxOutputError) as caught:
-            await client.insert("甲", lambda: True)
-        assert caught.value.code == "delivery_unknown" and caught.value.uncertain
-        assert caught.value.unsent_offset is None
-        assert not any(x.member == "Begin2" for x in bus.calls)
-        await client.aclose()
+        with pytest.raises(FcitxOutputError, match="composition_guard_unavailable"):
+            await client.connect()
+        assert bus.disconnected
+        assert not any(
+            x.member in {"Begin", "Begin2", "Begin3", "Commit"} for x in bus.calls
+        )
 
     asyncio.run(run())
 
 
-def test_v2_mid_prefix_ambiguity_resumes_only_same_unsent_sequence():
+def test_guarded_mid_prefix_ambiguity_resumes_only_same_unsent_sequence():
     async def run():
-        bus = V2Bus([reply([1]), reply([4]), reply([1])])
+        bus = GuardBus([reply([1]), reply([4]), reply([1])])
         client = bridge(bus)
         await client.connect()
         assert await client.insert("甲乙", lambda: True) == 2
@@ -77,10 +83,10 @@ def test_v2_mid_prefix_ambiguity_resumes_only_same_unsent_sequence():
     asyncio.run(run())
 
 
-@pytest.mark.parametrize("body", [[True], ["4"], [5]])
-def test_v2_malformed_replies_never_become_unsent(body):
+@pytest.mark.parametrize("body", [[True], ["4"], [6]])
+def test_guarded_malformed_replies_never_become_unsent(body):
     async def run():
-        bus = V2Bus([reply(body)])
+        bus = GuardBus([reply(body)])
         client = bridge(bus)
         await client.connect()
         with pytest.raises(FcitxOutputError) as caught:
@@ -91,7 +97,7 @@ def test_v2_malformed_replies_never_become_unsent(body):
     asyncio.run(run())
 
 
-def test_auto_v2_ambiguity_fallback_preserves_auto_selection():
+def test_auto_guarded_ambiguity_fallback_preserves_auto_selection():
     async def run():
         keyboard = Keyboard()
 
@@ -111,7 +117,7 @@ def test_auto_v2_ambiguity_fallback_preserves_auto_selection():
     asyncio.run(run())
 
 
-def test_partial_v2_ambiguity_cannot_fallback_or_replay():
+def test_partial_guarded_ambiguity_cannot_fallback_or_replay():
     async def run():
         keyboard = Keyboard()
 
@@ -132,11 +138,11 @@ def test_partial_v2_ambiguity_cannot_fallback_or_replay():
     asyncio.run(run())
 
 
-def test_v2_cancel_during_ambiguous_focus_does_not_retry_tail():
+def test_guarded_cancel_during_ambiguous_focus_does_not_retry_tail():
     async def run():
         active = True
 
-        class CancelBus(V2Bus):
+        class CancelBus(GuardBus):
             async def call(self, message):
                 nonlocal active
                 result = await super().call(message)

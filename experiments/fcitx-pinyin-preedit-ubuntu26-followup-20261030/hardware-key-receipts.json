@@ -1,0 +1,50 @@
+[
+  {
+    "request": {
+      "sequence": 1,
+      "keyval": 97,
+      "owned_pid": 2685,
+      "owned_active": true,
+      "owned_focus": true
+    },
+    "returncode": 0,
+    "stdout": "{\"ok\": true, \"key\": \"97\"}\n",
+    "stderr": ""
+  },
+  {
+    "request": {
+      "sequence": 2,
+      "keyval": 110,
+      "owned_pid": 2685,
+      "owned_active": true,
+      "owned_focus": true
+    },
+    "returncode": 0,
+    "stdout": "{\"ok\": true, \"key\": \"110\"}\n",
+    "stderr": ""
+  },
+  {
+    "request": {
+      "sequence": 3,
+      "keyval": 105,
+      "owned_pid": 2685,
+      "owned_active": true,
+      "owned_focus": true
+    },
+    "returncode": 0,
+    "stdout": "{\"ok\": true, \"key\": \"105\"}\n",
+    "stderr": ""
+  },
+  {
+    "request": {
+      "sequence": 4,
+      "keyval": 32,
+      "owned_pid": 2685,
+      "owned_active": true,
+      "owned_focus": true
+    },
+    "returncode": 0,
+    "stdout": "{\"ok\": true, \"key\": \"32\"}\n",
+    "stderr": ""
+  }
+]
