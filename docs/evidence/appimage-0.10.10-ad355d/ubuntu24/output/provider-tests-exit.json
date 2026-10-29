@@ -1,0 +1,32 @@
+{
+  "returncode": 0,
+  "argv": [
+    "/run/user/1000/inkecho-package-gate-0.10.10/.mount_InkEchbJgGjF/usr/bin/python3",
+    "-I",
+    "/mnt/input/frozen/scripts/validation/provider_package_probe.py",
+    "--artifact",
+    "/mnt/input/InkEcho.AppImage",
+    "--package-root",
+    "/run/user/1000/inkecho-package-gate-0.10.10/.mount_InkEchbJgGjF/packages",
+    "--frozen-source-root",
+    "/mnt/input/frozen/src",
+    "--framework-root",
+    "/mnt/input/framework",
+    "--framework-manifest",
+    "/mnt/input/framework-manifest.json",
+    "--tests-manifest",
+    "/mnt/input/tests-manifest.json",
+    "--work-dir",
+    "/run/user/1000/inkecho-package-gate-0.10.10/provider-tests",
+    "--output",
+    "/mnt/output/provider-tests.json",
+    "--expected-sha",
+    "ad355d622d6888b8092381988327f589f71669791cb32465c0b5e825573bcf23",
+    "--expected-version",
+    "0.10.10",
+    "--framework-sha",
+    "b01175767169904824c36199b10e07b21c4f417ce0ee39783b744be199084792",
+    "--tests-sha",
+    "f7942311852a1c31ea4e92e24d68a976aace8cc9fc17d1af361d5f4261a118ab"
+  ]
+}

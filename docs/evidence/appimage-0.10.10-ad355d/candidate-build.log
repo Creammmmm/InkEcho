@@ -1,0 +1,29 @@
+Parallel mksquashfs: Using 2 processors
+Creating 4.0 filesystem on /run/user/1000/inkecho-candidate-0.10.10-7h_6ed20/source/build/inkecho.squashfs, block size 131072.
+
+Exportable Squashfs 4.0 filesystem, zstd compressed, data block size 131072
+	compressed data, compressed metadata, compressed fragments,
+	no xattrs, compressed ids
+	duplicates are removed
+Filesystem size 101036.34 Kbytes (98.67 Mbytes)
+	36.41% of uncompressed filesystem size (277515.47 Kbytes)
+Inode table size 43651 bytes (42.63 Kbytes)
+	25.82% of uncompressed inode table size (169061 bytes)
+Directory table size 43646 bytes (42.62 Kbytes)
+	46.32% of uncompressed directory table size (94223 bytes)
+Number of duplicate files found 80
+Number of inodes 4985
+Number of files 3707
+Number of fragments 231
+Number of symbolic links 1048
+Number of device nodes 0
+Number of fifo nodes 0
+Number of socket nodes 0
+Number of directories 230
+Number of hard-links 0
+Number of ids (unique uids + gids) 1
+Number of uids 1
+	root (0)
+Number of gids 1
+	root (0)
+Built /run/user/1000/inkecho-candidate-0.10.10-7h_6ed20/source/dist/InkEcho-0.10.10-x86_64.AppImage (99 MiB)

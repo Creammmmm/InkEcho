@@ -1,0 +1,122 @@
+{
+  "artifact": "/home/lth/github/InkEcho/dist/candidates/InkEcho-0.10.10-x86_64-ad355d62.AppImage",
+  "artifact_sha256": "ad355d622d6888b8092381988327f589f71669791cb32465c0b5e825573bcf23",
+  "artifact_bytes": 104409592,
+  "source_commit": "34f8ee9b643f82bb30e44d7eaa5a3e30e9c7050e",
+  "guests": [
+    {
+      "guest": "gap24",
+      "resource_check": {
+        "candidate_processes_after_tests": [],
+        "capabilities_remaining": [],
+        "lock_states": [],
+        "owned_virtual_audio_remaining": [],
+        "fcitx_service_owner": "(false,)",
+        "generated_keys_or_modifiers_held": [],
+        "mount_gone": true,
+        "passed": true
+      },
+      "archive": {
+        "original_bytes": 153288704,
+        "original_sha256": "aa5d900b5193f8b95522e2e7cff48c020cc6c3e5178309a74e19a1669d35435f",
+        "archive_bytes": 48653307,
+        "archive_sha256": "aa2f2e9bb54d612096c4f7530c33a715378c931d0f18e86c29ee8014112b7f90",
+        "full_stream_verified": true,
+        "qemu_exit": 0
+      },
+      "container_state": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-29T19:18:06.489312773Z",
+        "FinishedAt": "2026-10-29T19:25:41.067953052Z"
+      }
+    },
+    {
+      "guest": "gap26",
+      "resource_check": {
+        "candidate_processes_after_tests": [],
+        "capabilities_remaining": [],
+        "lock_states": [
+          {
+            "name": "inkecho-fcitx-candidate.lock",
+            "lock_free": true
+          }
+        ],
+        "owned_virtual_audio_remaining": [],
+        "fcitx_service_owner": "(false,)",
+        "generated_keys_or_modifiers_held": [],
+        "mount_gone": true,
+        "passed": true
+      },
+      "archive": {
+        "original_bytes": 178651136,
+        "original_sha256": "1c14e8465539b3cb2d3e59479b70a2358db3037f73167d8d3a1d40d1d4af9c93",
+        "archive_bytes": 64262661,
+        "archive_sha256": "3d4d5425d8664ff6c68c6a9b98329bffdfd12f9edddd01c6f20040dbfd8b648a",
+        "full_stream_verified": true,
+        "qemu_exit": 0
+      },
+      "container_state": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-29T19:25:49.118059818Z",
+        "FinishedAt": "2026-10-29T19:32:37.7747152Z"
+      }
+    },
+    {
+      "guest": "gap24-zero",
+      "resource_check": {
+        "candidate_processes_after_tests": [],
+        "capabilities_remaining": [],
+        "lock_states": [
+          {
+            "name": "inkecho-fcitx-candidate.lock",
+            "lock_free": true
+          }
+        ],
+        "owned_virtual_audio_remaining": [],
+        "fcitx_service_owner": "(false,)",
+        "generated_keys_or_modifiers_held": [],
+        "mount_gone": true,
+        "passed": true
+      },
+      "archive": {
+        "original_bytes": 173932544,
+        "original_sha256": "b0304fbdb2e5109fd508c6470ec7fdd47db753cec0fe11a5b7fb43f1eec05bae",
+        "archive_bytes": 50045307,
+        "archive_sha256": "15e2154c9e7fd6240aa4c10304ab0f5ab696a3fef0259ad9527eadf664a33cba",
+        "full_stream_verified": true,
+        "qemu_exit": 0
+      },
+      "container_state": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-29T19:33:00.356033113Z",
+        "FinishedAt": "2026-10-29T19:37:12.659306987Z"
+      }
+    }
+  ],
+  "stable_entry_modified": false,
+  "published": false
+}

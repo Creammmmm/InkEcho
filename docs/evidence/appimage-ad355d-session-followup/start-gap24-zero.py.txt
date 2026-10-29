@@ -1,0 +1,11 @@
+from pathlib import Path
+import json,shutil,subprocess
+base=Path('/home/lth/github/InkEcho/dist/acceptance-ad355d62-20261030');old=base/'gap24';new=base/'gap24-zero';new.mkdir(mode=0o700,exist_ok=False);shutil.copytree(base/'gap26/input',new/'input');(new/'output').mkdir(mode=0o700)
+shutil.copyfile(old/'input/qemu.json',new/'input/qemu.json')
+s=(old/'input/wrapper.py').read_text().replace('/snapshot/stopped-child.qcow2.gz','/snapshot/stopped-followup-child.qcow2.gz').replace('af64ba75b695edb5f72b2ffaa42466b5b65eb3dc250b024340d96d6501d89717','aa5d900b5193f8b95522e2e7cff48c020cc6c3e5178309a74e19a1669d35435f');(new/'input/wrapper.py').write_text(s)
+a=json.loads((old/'boot.json').read_text())['argv']
+for i,v in enumerate(a):
+ if v=='inkecho-package-ad355d-gap24-20261030':a[i]='inkecho-package-ad355d-gap24-zero-20261030'
+ elif v.startswith('type=bind,src='+str(old)):a[i]=v.replace(str(old),str(new))
+ elif ',dst=/snapshot,readonly'in v:a[i]=f'type=bind,src={old}/output,dst=/snapshot,readonly'
+r=subprocess.run(a,capture_output=True,text=True);(new/'boot.json').write_text(json.dumps({'argv':a,'returncode':r.returncode,'stdout':r.stdout,'stderr':r.stderr},indent=2));print(r.returncode,r.stdout,r.stderr);r.check_returncode()

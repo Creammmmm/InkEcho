@@ -1,0 +1,23 @@
+from pathlib import Path
+import json,subprocess,os,shutil
+logs=Path(__file__).resolve().parent;run=json.loads((logs/'candidate-build-run.json').read_text());root=Path(run['ram_root']);b=root/'gate26';old=root/'gate24'
+for n in ['input','output']:(b/n).mkdir(parents=True,mode=0o700,exist_ok=True)
+for p in (old/'input').iterdir():
+ if p.name in {'wrapper.py','qemu.json'}:continue
+ q=b/'input'/p.name
+ if p.is_dir():shutil.copytree(p,q,copy_function=os.link)
+ elif p.name=='InkEcho.AppImage':os.link(p,q)
+ else:shutil.copy2(p,q)
+a=json.loads((logs/'pinyin26/boot.json').read_text())['argv'];i=a.index('inkecho-ubuntu24-perf-vm-tools:20261016');pre=a[:i+1];qemu=a[i+1:]
+for j,v in enumerate(pre):
+ if v=='inkecho-fcitx-pinyin26-20261030':pre[j]='inkecho-package-0.10.10-26-20261030'
+ elif v.startswith('type=bind,src=') and '/pinyin26/state,dst=/state'in v:pre[j]=f'type=bind,src={logs}/pinyin26-followup/output,dst=/snapshot,readonly'
+ elif v.startswith('type=bind,src=') and '/pinyin26/input,dst=/input'in v:pre[j]=f'type=bind,src={b}/input,dst=/input,readonly'
+ elif v.startswith('type=bind,src=') and '/pinyin26/output,dst=/output'in v:pre[j]=f'type=bind,src={b}/output,dst=/output'
+pre[-1:-1]=['--tmpfs','/state:rw,nosuid,nodev,size=768m,uid=1000,gid=1000']
+(b/'input/qemu.json').write_text(json.dumps(qemu))
+wrapper=(logs/'pinyin26-followup/input/wrapper.py').read_text().replace('/snapshot/stopped-child.qcow2.gz','/snapshot/stopped-followup-child.qcow2.gz').replace('2a7362638cba33c2bcef787e342ddc7cbc82063758c212a7afc0a7ea858038ab','af9c0e97a32182fb908d598593186f21c9ce889056daa7b4bac261557793be5b');(b/'input/wrapper.py').write_text(wrapper)
+# Clean validation snapshot is supplied inside the existing read-only input share.
+argv=pre+['python3','/input/wrapper.py'];r=subprocess.run(argv,capture_output=True,text=True);(b/'boot.json').write_text(json.dumps({'argv':argv,'returncode':r.returncode,'stdout':r.stdout,'stderr':r.stderr},indent=2));print(r.returncode,r.stdout,r.stderr);r.check_returncode();(logs/'package-gate26-path.json').write_text(json.dumps({'root':str(b),'container':'inkecho-package-0.10.10-26-20261030'},indent=2))
+s=(logs/'package-gate24-host.py').read_text().replace('package-gate24-path.json','package-gate26-path.json');s=s.replace("command='sudo -n mkdir -p /mnt/input /mnt/output /mnt/frozen", "command='sudo -n mkdir -p /mnt/input /mnt/output /mnt/frozen");s=s.replace(" && (mountpoint -q /mnt/frozen || sudo -n mount -t 9p -o trans=virtio,version=9p2000.L,ro inkecho_frozen /mnt/frozen)","");(logs/'package-gate26-host.py').write_text(s)
+s=(logs/'package-gate24-hardware.py').read_text().replace(str(old),str(b)).replace('inkecho-package-0.10.10-24-20261030','inkecho-package-0.10.10-26-20261030');(logs/'package-gate26-hardware.py').write_text(s)

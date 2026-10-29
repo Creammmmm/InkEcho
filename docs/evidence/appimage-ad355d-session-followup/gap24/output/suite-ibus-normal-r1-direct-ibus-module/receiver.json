@@ -1,0 +1,11 @@
+{
+  "pipeline_exit": 1,
+  "expected_backend": "ibus",
+  "session": "wayland",
+  "target_backend": "wayland",
+  "text_exact_or_partial_prefix": false,
+  "no_late_text": true,
+  "old_target_untouched": true,
+  "received_codepoints": [],
+  "passed": false
+}

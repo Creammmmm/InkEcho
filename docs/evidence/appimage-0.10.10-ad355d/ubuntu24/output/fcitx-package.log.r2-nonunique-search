@@ -1,0 +1,21 @@
+{"case": "staged", "sha": "acd896aae8ab38ecca2685c0dd8639f2910e841176eadccf59ee4943b158c4de", "test_only_override": false, "session": "x11"}
+{"case": "actor_exit", "exit": 0}
+{"case": "daemon_exit", "exit": 0}
+{"case": "hints_restored", "value": true}
+Traceback (most recent call last):
+  File "/mnt/input/fcitx-package.py", line 119, in <module>
+    asyncio.run(main())
+    ~~~~~~~~~~~^^^^^^^^
+  File "/run/user/1000/inkecho-package-gate-0.10.10/.mount_InkEchbJgGjF/usr/lib/python3.13/asyncio/runners.py", line 196, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "/run/user/1000/inkecho-package-gate-0.10.10/.mount_InkEchbJgGjF/usr/lib/python3.13/asyncio/runners.py", line 119, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/run/user/1000/inkecho-package-gate-0.10.10/.mount_InkEchbJgGjF/usr/lib/python3.13/asyncio/base_events.py", line 726, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/mnt/input/fcitx-package.py", line 63, in main
+    ids=subprocess.check_output(['xdotool','search','--onlyvisible','--pid',str(actor.pid),'--name','^InkEcho owned Fcitx guard acceptance$'],env=actor_env,text=True).split();assert len(ids)==1,ids
+                                                                                                                                                                                      ^^^^^^^^^^^
+AssertionError: ['6291487', '39845891']

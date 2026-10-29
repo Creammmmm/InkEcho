@@ -1,0 +1,8 @@
+from pathlib import Path
+import subprocess,json,sys
+logs=Path(__file__).resolve().parent;info=json.loads((logs/'package-gate24-path.json').read_text());b=Path(info['root']);prefix=['docker','exec','-i',info['container'],'ssh','-T','-i','/secrets/testkey','-p2222','-o','BatchMode=yes','-o','ConnectTimeout=30','-o','StrictHostKeyChecking=yes','-o','UserKnownHostsFile=/prior/known_hosts','inkecho@127.0.0.1']
+action=sys.argv[1]
+if action=='mount':command='sudo -n mkdir -p /mnt/input /mnt/output /mnt/frozen && (mountpoint -q /mnt/input || sudo -n mount -t 9p -o trans=virtio,version=9p2000.L,ro inkecho_input /mnt/input) && (mountpoint -q /mnt/output || sudo -n mount -t 9p -o trans=virtio,version=9p2000.L inkecho_output /mnt/output) && (mountpoint -q /mnt/frozen || sudo -n mount -t 9p -o trans=virtio,version=9p2000.L,ro inkecho_frozen /mnt/frozen)'
+elif action=='shutdown':command='sudo -n systemctl poweroff'
+else:command='/usr/bin/python3 /mnt/input/guest.py '+action
+r=subprocess.run(prefix+[command],capture_output=True,text=True);(b/(action+'-ssh.json')).write_text(json.dumps({'returncode':r.returncode,'stdout':r.stdout,'stderr':r.stderr},indent=2));print(r.returncode,r.stdout,r.stderr);r.check_returncode()

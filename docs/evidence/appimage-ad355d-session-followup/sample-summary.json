@@ -1,0 +1,601 @@
+[
+  {
+    "guest": "gap24",
+    "sample": "suite-ibus-cancel-after-first",
+    "receiver": {
+      "pipeline_exit": 0,
+      "expected_backend": "ibus",
+      "session": "wayland",
+      "target_backend": "wayland",
+      "text_exact_or_partial_prefix": true,
+      "no_late_text": true,
+      "old_target_untouched": true,
+      "received_codepoints": [
+        20320,
+        22909,
+        32
+      ],
+      "passed": true
+    },
+    "product_result": {
+      "audio_seconds": 1.2995,
+      "characters": 3,
+      "outcome": "cancelled",
+      "polishing_calls": 1,
+      "transcription_calls": 1,
+      "transcription_seconds": 1.037784619999968
+    },
+    "selected_backend": "ibus",
+    "diagnostics": [],
+    "key_event_counts": null
+  },
+  {
+    "guest": "gap24",
+    "sample": "suite-ibus-normal",
+    "receiver": {
+      "pipeline_exit": 0,
+      "expected_backend": "ibus",
+      "session": "wayland",
+      "target_backend": "wayland",
+      "text_exact_or_partial_prefix": true,
+      "no_late_text": true,
+      "old_target_untouched": true,
+      "received_codepoints": [
+        20320,
+        22909,
+        32,
+        73,
+        110,
+        107,
+        69,
+        99,
+        104,
+        111,
+        65292,
+        99,
+        97,
+        102,
+        233,
+        32,
+        937,
+        10,
+        31532,
+        20108,
+        34892,
+        12290
+      ],
+      "passed": true
+    },
+    "product_result": {
+      "audio_seconds": 1.384875,
+      "characters": 22,
+      "outcome": "unconfirmed",
+      "polishing_calls": 1,
+      "polishing_seconds": 0.5961358100000211,
+      "transcription_calls": 1,
+      "transcription_seconds": 1.076276593999978
+    },
+    "selected_backend": "ibus",
+    "diagnostics": [
+      "ibus_delivery_unknown"
+    ],
+    "key_event_counts": null
+  },
+  {
+    "guest": "gap24",
+    "sample": "suite-ibus-normal-r1-direct-ibus-module",
+    "receiver": {
+      "pipeline_exit": 1,
+      "expected_backend": "ibus",
+      "session": "wayland",
+      "target_backend": "wayland",
+      "text_exact_or_partial_prefix": false,
+      "no_late_text": true,
+      "old_target_untouched": true,
+      "received_codepoints": [],
+      "passed": false
+    },
+    "product_result": {
+      "audio_seconds": 1.256875,
+      "characters": 0,
+      "outcome": "failed",
+      "polishing_calls": 1,
+      "polishing_seconds": 0.45143828600001257,
+      "transcription_calls": 1,
+      "transcription_seconds": 0.9888275609999937
+    },
+    "selected_backend": "keyboard",
+    "diagnostics": [
+      "unsupported_compositor"
+    ],
+    "key_event_counts": null
+  },
+  {
+    "guest": "gap24",
+    "sample": "suite-keyboard-cancel-after-first",
+    "receiver": {
+      "pipeline_exit": 0,
+      "expected_backend": "keyboard",
+      "session": "wayland",
+      "target_backend": "x11",
+      "text_exact_or_partial_prefix": true,
+      "no_late_text": true,
+      "old_target_untouched": true,
+      "received_codepoints": [
+        20320
+      ],
+      "passed": true
+    },
+    "product_result": {
+      "audio_seconds": 1.2781875,
+      "characters": 0,
+      "outcome": "cancelled",
+      "polishing_calls": 1,
+      "transcription_calls": 1,
+      "transcription_seconds": 0.9997699570000123
+    },
+    "selected_backend": "keyboard",
+    "diagnostics": [],
+    "key_event_counts": {
+      "presses": 1,
+      "releases": 1,
+      "held": []
+    }
+  },
+  {
+    "guest": "gap24",
+    "sample": "suite-keyboard-normal",
+    "receiver": {
+      "pipeline_exit": 0,
+      "expected_backend": "keyboard",
+      "session": "wayland",
+      "target_backend": "x11",
+      "text_exact_or_partial_prefix": true,
+      "no_late_text": true,
+      "old_target_untouched": true,
+      "received_codepoints": [
+        20320,
+        22909,
+        32,
+        73,
+        110,
+        107,
+        69,
+        99,
+        104,
+        111,
+        65292,
+        99,
+        97,
+        102,
+        233,
+        32,
+        937,
+        10,
+        31532,
+        20108,
+        34892,
+        12290
+      ],
+      "passed": true
+    },
+    "product_result": {
+      "audio_seconds": 1.320875,
+      "characters": 22,
+      "outcome": "succeeded",
+      "polishing_calls": 1,
+      "polishing_seconds": 0.5818997810000042,
+      "transcription_calls": 1,
+      "transcription_seconds": 1.0195935319999876
+    },
+    "selected_backend": "keyboard",
+    "diagnostics": [],
+    "key_event_counts": {
+      "presses": 22,
+      "releases": 22,
+      "held": []
+    }
+  },
+  {
+    "guest": "gap26",
+    "sample": "suite-ibus-cancel-after-first",
+    "receiver": {
+      "pipeline_exit": 0,
+      "expected_backend": "ibus",
+      "session": "wayland",
+      "target_backend": "wayland",
+      "text_exact_or_partial_prefix": true,
+      "no_late_text": true,
+      "old_target_untouched": true,
+      "received_codepoints": [
+        20320,
+        22909,
+        32
+      ],
+      "passed": true
+    },
+    "product_result": {
+      "audio_seconds": 1.363625,
+      "characters": 3,
+      "outcome": "cancelled",
+      "polishing_calls": 1,
+      "transcription_calls": 1,
+      "transcription_seconds": 1.0586346390000045
+    },
+    "selected_backend": "ibus",
+    "diagnostics": [],
+    "key_event_counts": {
+      "presses": 0,
+      "releases": 0,
+      "held": []
+    }
+  },
+  {
+    "guest": "gap26",
+    "sample": "suite-ibus-normal",
+    "receiver": {
+      "pipeline_exit": 0,
+      "expected_backend": "ibus",
+      "session": "wayland",
+      "target_backend": "wayland",
+      "text_exact_or_partial_prefix": true,
+      "no_late_text": true,
+      "old_target_untouched": true,
+      "received_codepoints": [
+        20320,
+        22909,
+        32,
+        73,
+        110,
+        107,
+        69,
+        99,
+        104,
+        111,
+        65292,
+        99,
+        97,
+        102,
+        233,
+        32,
+        937,
+        10,
+        31532,
+        20108,
+        34892,
+        12290
+      ],
+      "passed": true
+    },
+    "product_result": {
+      "audio_seconds": 1.235625,
+      "characters": 22,
+      "outcome": "unconfirmed",
+      "polishing_calls": 1,
+      "polishing_seconds": 0.5873666350000022,
+      "transcription_calls": 1,
+      "transcription_seconds": 0.9923774019999954
+    },
+    "selected_backend": "ibus",
+    "diagnostics": [
+      "ibus_delivery_unknown"
+    ],
+    "key_event_counts": {
+      "presses": 0,
+      "releases": 0,
+      "held": []
+    }
+  },
+  {
+    "guest": "gap26",
+    "sample": "suite-keyboard-cancel-after-first",
+    "receiver": {
+      "pipeline_exit": 0,
+      "expected_backend": "keyboard",
+      "session": "x11",
+      "target_backend": "x11",
+      "text_exact_or_partial_prefix": true,
+      "no_late_text": true,
+      "old_target_untouched": true,
+      "received_codepoints": [
+        20320
+      ],
+      "passed": true
+    },
+    "product_result": {
+      "audio_seconds": 1.299625,
+      "characters": 0,
+      "outcome": "cancelled",
+      "polishing_calls": 1,
+      "transcription_calls": 1,
+      "transcription_seconds": 1.0282121719999964
+    },
+    "selected_backend": "keyboard",
+    "diagnostics": [],
+    "key_event_counts": {
+      "presses": 1,
+      "releases": 1,
+      "held": []
+    }
+  },
+  {
+    "guest": "gap26",
+    "sample": "suite-keyboard-native-cancel-after-first",
+    "receiver": {
+      "pipeline_exit": 0,
+      "expected_backend": "keyboard",
+      "session": "wayland",
+      "target_backend": "wayland",
+      "text_exact_or_partial_prefix": true,
+      "no_late_text": true,
+      "old_target_untouched": true,
+      "received_codepoints": [
+        20320
+      ],
+      "passed": true
+    },
+    "product_result": {
+      "audio_seconds": 1.3423125,
+      "characters": 0,
+      "outcome": "cancelled",
+      "polishing_calls": 1,
+      "transcription_calls": 1,
+      "transcription_seconds": 1.0534850230000075
+    },
+    "selected_backend": "keyboard",
+    "diagnostics": [],
+    "key_event_counts": {
+      "presses": 1,
+      "releases": 1,
+      "held": []
+    }
+  },
+  {
+    "guest": "gap26",
+    "sample": "suite-keyboard-native-normal",
+    "receiver": {
+      "pipeline_exit": 0,
+      "expected_backend": "keyboard",
+      "session": "wayland",
+      "target_backend": "wayland",
+      "text_exact_or_partial_prefix": true,
+      "no_late_text": true,
+      "old_target_untouched": true,
+      "received_codepoints": [
+        20320,
+        22909,
+        32,
+        73,
+        110,
+        107,
+        69,
+        99,
+        104,
+        111,
+        65292,
+        99,
+        97,
+        102,
+        233,
+        32,
+        937,
+        10,
+        31532,
+        20108,
+        34892,
+        12290
+      ],
+      "passed": true
+    },
+    "product_result": {
+      "audio_seconds": 1.3849375,
+      "characters": 22,
+      "outcome": "succeeded",
+      "polishing_calls": 1,
+      "polishing_seconds": 0.5799940199999867,
+      "transcription_calls": 1,
+      "transcription_seconds": 1.0864519389999998
+    },
+    "selected_backend": "keyboard",
+    "diagnostics": [],
+    "key_event_counts": {
+      "presses": 22,
+      "releases": 22,
+      "held": []
+    }
+  },
+  {
+    "guest": "gap26",
+    "sample": "suite-keyboard-normal",
+    "receiver": {
+      "pipeline_exit": 0,
+      "expected_backend": "keyboard",
+      "session": "x11",
+      "target_backend": "x11",
+      "text_exact_or_partial_prefix": true,
+      "no_late_text": true,
+      "old_target_untouched": true,
+      "received_codepoints": [
+        20320,
+        22909,
+        32,
+        73,
+        110,
+        107,
+        69,
+        99,
+        104,
+        111,
+        65292,
+        99,
+        97,
+        102,
+        233,
+        32,
+        937,
+        10,
+        31532,
+        20108,
+        34892,
+        12290
+      ],
+      "passed": true
+    },
+    "product_result": {
+      "audio_seconds": 1.3849375,
+      "characters": 22,
+      "outcome": "succeeded",
+      "polishing_calls": 1,
+      "polishing_seconds": 0.5829733219999866,
+      "transcription_calls": 1,
+      "transcription_seconds": 1.081907061000038
+    },
+    "selected_backend": "keyboard",
+    "diagnostics": [],
+    "key_event_counts": {
+      "presses": 22,
+      "releases": 22,
+      "held": []
+    }
+  },
+  {
+    "guest": "gap26",
+    "sample": "suite-keyboard-normal-r1-audio-startup",
+    "receiver": {
+      "pipeline_exit": 1,
+      "expected_backend": "keyboard",
+      "session": "x11",
+      "target_backend": "x11",
+      "text_exact_or_partial_prefix": true,
+      "no_late_text": true,
+      "old_target_untouched": true,
+      "received_codepoints": [
+        20320,
+        22909,
+        32,
+        73,
+        110,
+        107,
+        69,
+        99,
+        104,
+        111,
+        65292,
+        99,
+        97,
+        102,
+        233,
+        32,
+        937,
+        10,
+        31532,
+        20108,
+        34892,
+        12290
+      ],
+      "passed": false
+    },
+    "product_result": {
+      "audio_seconds": 1.299625,
+      "characters": 22,
+      "outcome": "succeeded",
+      "polishing_calls": 1,
+      "polishing_seconds": 0.555362749999972,
+      "transcription_calls": 1,
+      "transcription_seconds": 1.029639520000046
+    },
+    "selected_backend": "keyboard",
+    "diagnostics": [],
+    "key_event_counts": {
+      "presses": 22,
+      "releases": 22,
+      "held": []
+    }
+  },
+  {
+    "guest": "gap26",
+    "sample": "wayland-suite-keyboard-cancel-after-first",
+    "receiver": {
+      "pipeline_exit": 0,
+      "expected_backend": "keyboard",
+      "session": "wayland",
+      "target_backend": "x11",
+      "text_exact_or_partial_prefix": true,
+      "no_late_text": true,
+      "old_target_untouched": true,
+      "received_codepoints": [
+        20320
+      ],
+      "passed": true
+    },
+    "product_result": {
+      "audio_seconds": 1.235625,
+      "characters": 0,
+      "outcome": "cancelled",
+      "polishing_calls": 1,
+      "transcription_calls": 1,
+      "transcription_seconds": 0.9787255909999999
+    },
+    "selected_backend": "keyboard",
+    "diagnostics": [],
+    "key_event_counts": {
+      "presses": 1,
+      "releases": 1,
+      "held": []
+    }
+  },
+  {
+    "guest": "gap26",
+    "sample": "wayland-suite-keyboard-normal",
+    "receiver": {
+      "pipeline_exit": 0,
+      "expected_backend": "keyboard",
+      "session": "wayland",
+      "target_backend": "x11",
+      "text_exact_or_partial_prefix": true,
+      "no_late_text": true,
+      "old_target_untouched": true,
+      "received_codepoints": [
+        20320,
+        22909,
+        32,
+        73,
+        110,
+        107,
+        69,
+        99,
+        104,
+        111,
+        65292,
+        99,
+        97,
+        102,
+        233,
+        32,
+        937,
+        10,
+        31532,
+        20108,
+        34892,
+        12290
+      ],
+      "passed": true
+    },
+    "product_result": {
+      "audio_seconds": 1.3209375,
+      "characters": 22,
+      "outcome": "succeeded",
+      "polishing_calls": 1,
+      "polishing_seconds": 0.5764791059999936,
+      "transcription_calls": 1,
+      "transcription_seconds": 1.0235743519999971
+    },
+    "selected_backend": "keyboard",
+    "diagnostics": [],
+    "key_event_counts": {
+      "presses": 22,
+      "releases": 22,
+      "held": []
+    }
+  }
+]

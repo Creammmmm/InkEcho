@@ -1,0 +1,50 @@
+[
+  {
+    "case": "staged",
+    "sha": "acd896aae8ab38ecca2685c0dd8639f2910e841176eadccf59ee4943b158c4de",
+    "test_only_override": false,
+    "session": "x11"
+  },
+  {
+    "case": "owned_activation",
+    "pid": 6830,
+    "xid": 23068675,
+    "fixture_only": true
+  },
+  {
+    "case": "ready",
+    "receiver": {
+      "pid": 6830,
+      "active": true,
+      "focus": true,
+      "text": "",
+      "preedit_length": 0,
+      "key_results": [],
+      "module": null,
+      "owned_events": []
+    }
+  },
+  {
+    "case": "fcitx_frontend_absent",
+    "paths": []
+  },
+  {
+    "case": "actual_fcitx_result",
+    "code": "no_target",
+    "accepted": 0,
+    "uncertain": false,
+    "unsent_offset": 0
+  },
+  {
+    "case": "actor_exit",
+    "exit": 0
+  },
+  {
+    "case": "daemon_exit",
+    "exit": 0
+  },
+  {
+    "case": "hints_restored",
+    "value": true
+  }
+]

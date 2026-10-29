@@ -1,0 +1,11 @@
+{
+  "returncode": 0,
+  "argv": [
+    "/run/user/1000/inkecho-package-gate-0.10.10/.mount_InkEchbJgGjF/usr/bin/python3",
+    "/mnt/frozen/scripts/validation/qwen_vad_package_probe.py",
+    "--package-root",
+    "/run/user/1000/inkecho-package-gate-0.10.10/.mount_InkEchbJgGjF/packages",
+    "--output",
+    "/mnt/output/qwen-vad.json"
+  ]
+}

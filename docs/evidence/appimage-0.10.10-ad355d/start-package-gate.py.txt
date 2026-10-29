@@ -1,0 +1,16 @@
+from pathlib import Path
+import json,subprocess,os
+logs=Path(__file__).resolve().parent;run=json.loads((logs/'candidate-build-run.json').read_text());root=Path(run['ram_root']);b=root/'gate24'
+for n in ['input','output']:(b/n).mkdir(parents=True,mode=0o700,exist_ok=True)
+os.link(Path(run['frozen_source'])/'dist/InkEcho-0.10.10-x86_64.AppImage',b/'input/InkEcho.AppImage')
+a=json.loads((logs/'pinyin24/boot-fixed.json').read_text())['argv'];i=a.index('inkecho-ubuntu24-perf-vm-tools:20261016');pre=a[:i+1];qemu=a[i+1:]
+for j,v in enumerate(pre):
+ if v=='inkecho-fcitx-pinyin24-fixed-20261030':pre[j]='inkecho-package-0.10.10-24-20261030'
+ elif v.startswith('type=bind,src=') and '/pinyin24/state,dst=/state' in v:pre[j]=f'type=bind,src={logs}/pinyin24,dst=/snapshot,readonly'
+ elif v.startswith('type=bind,src=') and '/pinyin24/input,dst=/input' in v:pre[j]=f'type=bind,src={b}/input,dst=/input,readonly'
+ elif v.startswith('type=bind,src=') and '/pinyin24/output,dst=/output' in v:pre[j]=f'type=bind,src={b}/output,dst=/output'
+pre[-1:-1]=['--tmpfs','/state:rw,nosuid,nodev,size=768m,uid=1000,gid=1000','--mount',f'type=bind,src={run["frozen_source"]},dst=/frozen,readonly']
+qemu+=['-virtfs','local,path=/frozen,mount_tag=inkecho_frozen,security_model=none,readonly=on,id=frozenshare']
+(b/'input/qemu.json').write_text(json.dumps(qemu))
+wrapper=(logs/'pinyin26-followup/input/wrapper.py').read_text().replace('2a7362638cba33c2bcef787e342ddc7cbc82063758c212a7afc0a7ea858038ab','af64ba75b695edb5f72b2ffaa42466b5b65eb3dc250b024340d96d6501d89717');(b/'input/wrapper.py').write_text(wrapper)
+a=pre+['python3','/input/wrapper.py'];r=subprocess.run(a,capture_output=True,text=True);(b/'boot.json').write_text(json.dumps({'argv':a,'returncode':r.returncode,'stdout':r.stdout,'stderr':r.stderr},indent=2));print(r.returncode,r.stdout,r.stderr);r.check_returncode();(logs/'package-gate24-path.json').write_text(json.dumps({'root':str(b),'container':'inkecho-package-0.10.10-24-20261030'},indent=2))

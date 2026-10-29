@@ -1,0 +1,21 @@
+qt.multimedia.symbolsresolver: Couldn't load va-x11 library
+qt.multimedia.symbolsresolver: Couldn't resolve va-x11 symbols
+qt.multimedia.symbolsresolver: Couldn't load va-drm library
+qt.multimedia.symbolsresolver: Couldn't resolve va-drm symbols
+qt.multimedia.symbolsresolver: Couldn't load va library
+qt.multimedia.symbolsresolver: Couldn't resolve va symbols
+qt.multimedia.symbolsresolver: Couldn't load va(in plugin) library
+qt.multimedia.symbolsresolver: Couldn't resolve va(in plugin) symbols
+qt.multimedia.ffmpeg: Using Qt multimedia with FFmpeg version 9.0.1 LGPL version 2.1 or later
+qt.multimedia.pipewire.devicemonitor: Ignoring dummy output: std::map(std::pair("client.id", "32"), std::pair("factory.id", "18"), std::pair("media.class", "Audio/Sink"), std::pair("node.description", "Dummy Output"), std::pair("node.name", "auto_null"), std::pair("object.serial", "84"))
+Traceback (most recent call last):
+  File "/mnt/input/pipeline_receiver_cancel.py", line 607, in <module>
+    loop.run_until_complete(run())
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "/run/user/1000/inkecho-package-gate-0.10.10/.mount_InkEchonkakd/packages/qasync/__init__.py", line 438, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/mnt/input/pipeline_receiver_cancel.py", line 473, in run
+    assert result["outcome"] == "succeeded"
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

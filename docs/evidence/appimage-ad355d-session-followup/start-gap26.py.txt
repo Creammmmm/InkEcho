@@ -1,0 +1,10 @@
+from pathlib import Path
+import shutil,json,subprocess
+base=Path('/home/lth/github/InkEcho/dist/acceptance-ad355d62-20261030');old=Path('/run/user/1000/inkecho-candidate-0.10.10-7h_6ed20/gate26');new=base/'gap26';new.mkdir(mode=0o700,exist_ok=False)
+shutil.copytree(base/'gap24/input',new/'input');(new/'output').mkdir(mode=0o700)
+for name in ['qemu.json','wrapper.py']:shutil.copyfile(old/'input'/name,new/'input'/name)
+a=json.loads((old/'boot.json').read_text())['argv']
+for i,v in enumerate(a):
+ if v=='inkecho-package-0.10.10-26-20261030':a[i]='inkecho-package-ad355d-gap26-20261030'
+ elif v.startswith('type=bind,src='+str(old)):a[i]=v.replace(str(old),str(new))
+r=subprocess.run(a,capture_output=True,text=True);(new/'boot.json').write_text(json.dumps({'argv':a,'returncode':r.returncode,'stdout':r.stdout,'stderr':r.stderr},indent=2));print(r.returncode,r.stdout,r.stderr);r.check_returncode()

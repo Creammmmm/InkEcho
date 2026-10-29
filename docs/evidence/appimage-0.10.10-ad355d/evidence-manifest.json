@@ -1,0 +1,1002 @@
+[
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/candidate-artifact-verification.json",
+    "bytes": 772,
+    "sha256": "e8d40b400ab9bddbe0fd96ea9bac83fbac3bad21578c1b0b5955dbe6b9450a5b"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/candidate-build-exit.json",
+    "bytes": 21,
+    "sha256": "a02d222e1be4a3d356cac5372aa177b9048c9baaa90b42f86d8cfae4569f1286"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/candidate-build-run.json",
+    "bytes": 478,
+    "sha256": "fc799c529970ba26b2660c082ff665a15f9f5f6683174250b958ca61dfc62fea"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/candidate-build.log",
+    "bytes": 1124,
+    "sha256": "4f8f4837f2974ed1c5a7e16f06c68987e326fb3c1efb2a860904df2ef82d40fd"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/candidate-unsquashfs.json",
+    "bytes": 278,
+    "sha256": "4283e89604972a21e4fc8429ab59953d94302821f78f747b471b2e3313a95ddc"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/package-gate24-hardware.py.txt",
+    "bytes": 1468,
+    "sha256": "720f142ae173ffce739c98966ae531af760a3071af236814df66cf9df61b43d7"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/package-gate24-host.py.txt",
+    "bytes": 1221,
+    "sha256": "b43c743dad8eddc2f7d98375ccd3dcdbb99bceb879e82c1f4d9a84bcb6685198"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/package-gate26-hardware.py.txt",
+    "bytes": 1468,
+    "sha256": "018e5c16cc72d78ee585e94f455ebfe00638973ffad335ab82f709f5ef153bd2"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/package-gate26-host.py.txt",
+    "bytes": 1104,
+    "sha256": "93b62e56210608051414623551061bb03752a7419531bd788b94a4c8249661b5"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/start-package-gate.py.txt",
+    "bytes": 1991,
+    "sha256": "2e153573e2f088f5905b5c1f3662737f6878a271f74dc354003bb4445c835042"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/start-package-gate26.py.txt",
+    "bytes": 2786,
+    "sha256": "f59d502ea483b96e5f7068739058a12e459a03013a131b255e4b792dbaaebfa1"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/boot.json",
+    "bytes": 1845,
+    "sha256": "4bd583343fd557e51fb0329818fdb63a65b050df2ffee460bc4b607703044a5e"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/cleanup-ssh.json",
+    "bytes": 80,
+    "sha256": "e5d323ee79e11b2032e6a29aaa281db11f28704f3fd977ed110022d2b74d70f8"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/container-final-state.json",
+    "bytes": 269,
+    "sha256": "4f9e7fa33455bb3fe59882e028bfecd655a95420414a6aa3e9e6b74e3d9d9431"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/gui-ssh.json",
+    "bytes": 76,
+    "sha256": "e5701b805f0db6efbc3bbedd5af931bc6797d7ee382b99d06a1c172c99382261"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/hardware-exit.json",
+    "bytes": 23,
+    "sha256": "d7a8a1c5a71e5d6da2648038f6f26f28685403e67d3374b3be73f308dceea052"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/hardware-guest.log",
+    "bytes": 24,
+    "sha256": "8ce71e4b8ff102e7a1968b5b9fffc2de8980dedf9638bc61119689b5722d76aa"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/hardware-key-receipts.json",
+    "bytes": 974,
+    "sha256": "94b669886f2be5651819d30d6604d759a75070f6a5f060ba9385b1fa2fa2cc7d"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/input/actor.py.txt",
+    "bytes": 4504,
+    "sha256": "adb1f6a4256c215abe1b32d2e5344d1ad9891093e7f418ebd610b53a84f611bb"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/input/fcitx-package-r1.py.txt",
+    "bytes": 8533,
+    "sha256": "6d166596c56f5913095e1b52f9ccdb50cd4e382dd6441b4a4077933d9896a223"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/input/fcitx-package-r2.py.txt",
+    "bytes": 8936,
+    "sha256": "da01749d1a21affc858f57ce0f30d89bfe3b19ed39b06a6a4438a6359d81f43d"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/input/fcitx-package-r3.py.txt",
+    "bytes": 8944,
+    "sha256": "9e04307c5c763629768b6b3dcd4a315139cec78c4f5330d517d30d46ef215f75"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/input/fcitx-package.py.txt",
+    "bytes": 8944,
+    "sha256": "10695ae8e42b9ebe6701e7cddcf8ccbe9855f6f97e5937967c4c132cfaae7eb6"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/input/guest.py.txt",
+    "bytes": 4923,
+    "sha256": "7c092b36261a8a1a3b0b8a742dbf7d487e8acab170e63fa66ffa4ecaa2eede57"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/input/http_asr.py.txt",
+    "bytes": 2987,
+    "sha256": "2cd394b56c70ab0956bd84f536ec4ab83262807c57db215b94db4da2f54a55a2"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/input/pipeline.py.txt",
+    "bytes": 27559,
+    "sha256": "8126d6d4b7b77b3e44e5f078e69f4c3f01171d6711594fc4aa69c5084e64855b"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/input/pipeline_receiver_cancel.py.txt",
+    "bytes": 27559,
+    "sha256": "8126d6d4b7b77b3e44e5f078e69f4c3f01171d6711594fc4aa69c5084e64855b"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/input/pipeline_suite.py.txt",
+    "bytes": 2369,
+    "sha256": "36cfef868a6773e899fd75044bea629568d0ffbcced1a9d5c4e28d8e938b7cca"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/input/qmp-key.py.txt",
+    "bytes": 687,
+    "sha256": "4e041cde0db4e002497c3d6afdf42a6154588da2c4443775f9741009b411b6a1"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/input/resource-check.py.txt",
+    "bytes": 2172,
+    "sha256": "8b44413069961095ed1cc77f2a2a375ce897207cd0190b8a496ad59f10b03211"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/input/target.py.txt",
+    "bytes": 1143,
+    "sha256": "df86e4d473e5d36eae43ed8bb3ecb0eae06e8f27dd2f0a8aadec407716e654e4"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/input/wrapper.py.txt",
+    "bytes": 1283,
+    "sha256": "e81cbeb656beaf498d1070f048ee44f21a3d68cec797b18b1abde07b6d4f4f66"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/mount-before-ready.json",
+    "bytes": 145,
+    "sha256": "68f0b5b5e9266fd53a9f4542d344737af4f2629714cd930aa69d889095c98914"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/mount-ssh.json",
+    "bytes": 53,
+    "sha256": "53b3790c87ca15dba61fc27495cf997e00b1a5fabc356f5eab167ebf320d4ece"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/desktop-lifecycle-exit.json",
+    "bytes": 211,
+    "sha256": "3dd218d2ef07640e52c44493214f60c2a137315f9de0b4cd1e7744131d9fd9e4"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/desktop-lifecycle.log",
+    "bytes": 815,
+    "sha256": "b3b5bc67318641c2a9103b37c8f23e7410c3c831d8a448ea8f9702f7128f1145"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/fcitx-package-exit.json",
+    "bytes": 159,
+    "sha256": "d4bc8d1480b6bf0371df33224d87ca08caaac7abd797bf3a97b52fbce7a21f70"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/fcitx-package-exit.json.before-overview-escape",
+    "bytes": 159,
+    "sha256": "a85ac795fe640209ffde6a62ba43e3a35c2090e4792e66c3e65f8f9b42d01d1f"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/fcitx-package-exit.json.r1-owned-not-active",
+    "bytes": 159,
+    "sha256": "a85ac795fe640209ffde6a62ba43e3a35c2090e4792e66c3e65f8f9b42d01d1f"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/fcitx-package-exit.json.r2-nonunique-search",
+    "bytes": 159,
+    "sha256": "a85ac795fe640209ffde6a62ba43e3a35c2090e4792e66c3e65f8f9b42d01d1f"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/fcitx-package.log",
+    "bytes": 5082,
+    "sha256": "aa5247fb404892e843d530a7112bcbc390af69c61c1b9b45344c0bffe77d93be"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/fcitx-package.log.before-overview-escape",
+    "bytes": 1481,
+    "sha256": "d5ec9a8b0cdee31b104cebf4dbfc8c3fd87cd5d4e7d1594a88d3369f2ef465ec"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/fcitx-package.log.r1-owned-not-active",
+    "bytes": 1345,
+    "sha256": "bbae10cd62a3296d21ea979a60724dad7b52a906b867c16711245377576351cd"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/fcitx-package.log.r2-nonunique-search",
+    "bytes": 1492,
+    "sha256": "1ae991771fa34be883a8d45f1ffd7e2bc00c34f798ed5398798926f904621b72"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/fcitx-raw/actor.json",
+    "bytes": 133,
+    "sha256": "6e413d9663ced655a6d5de93dc3168ca67e0088df991bcbcfaae77cab884b56b"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/fcitx-raw/actor.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/fcitx-raw/fcitx.log.gz",
+    "bytes": 1247,
+    "sha256": "f79b9445e6b116b2786feb4b7ec5ac5f0998cfb75b2671c0542858dd8f8996ad"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/fcitx-raw/hints-before.json",
+    "bytes": 44,
+    "sha256": "fbfda932806ff04cfbe550cc55e63617075efba1b518de2dea5982b4eb65ad1a"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/fcitx-raw/results.json",
+    "bytes": 322,
+    "sha256": "26a529b9c057ff770340c378b721278c68ef093a03dce5dc4f9c037d7f61f0a1"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/fcitx-raw-r2/actor.json",
+    "bytes": 133,
+    "sha256": "a73caaaf2c385535d1deda10b5424dc5de91cf19b5d72b072ce37c1fe62b2b36"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/fcitx-raw-r2/actor.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/fcitx-raw-r2/fcitx.log.gz",
+    "bytes": 1232,
+    "sha256": "30fc0ce1846563b2812d6345f0c87122cab8ab930d6ea05c4c35e13ed4d2b4e6"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/fcitx-raw-r2/hints-before.json",
+    "bytes": 44,
+    "sha256": "fbfda932806ff04cfbe550cc55e63617075efba1b518de2dea5982b4eb65ad1a"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/fcitx-raw-r2/results.json",
+    "bytes": 322,
+    "sha256": "26a529b9c057ff770340c378b721278c68ef093a03dce5dc4f9c037d7f61f0a1"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/fcitx-raw-r3/actor.json",
+    "bytes": 133,
+    "sha256": "71c8045022de3e07bdd43210687613ae4bd67b8bc9900221fee760745964998a"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/fcitx-raw-r3/actor.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/fcitx-raw-r3/fcitx.log.gz",
+    "bytes": 1237,
+    "sha256": "8c04d3d8b8f802c953b7e89a09583ed85f4fdfa4d2f82f9fc479c46a9aa04317"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/fcitx-raw-r3/hints-before.json",
+    "bytes": 44,
+    "sha256": "fbfda932806ff04cfbe550cc55e63617075efba1b518de2dea5982b4eb65ad1a"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/fcitx-raw-r3/results.json",
+    "bytes": 426,
+    "sha256": "5b71b6bcbf4ca2941af4d5b79ff27061947dd00c896e57e4fa77e68be3d21fa6"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/fcitx-raw-r4/actor.json",
+    "bytes": 635,
+    "sha256": "b382b65ebc07c38e23da916e6a0380a24b494a5893dc236faafd0b64afb1e7b8"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/fcitx-raw-r4/actor.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/fcitx-raw-r4/fcitx.log.gz",
+    "bytes": 1260,
+    "sha256": "89f7ee17e20fd2a285413192c227aec4cccae4b126bc0759dd7ec52fce60d693"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/fcitx-raw-r4/hints-before.json",
+    "bytes": 44,
+    "sha256": "fbfda932806ff04cfbe550cc55e63617075efba1b518de2dea5982b4eb65ad1a"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/fcitx-raw-r4/results.json",
+    "bytes": 7242,
+    "sha256": "a240f8ac5a8c93bbdca876ecb86e688497be9477b4aff3f6e56cebc97edfe259"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/final-resource-check.json",
+    "bytes": 339,
+    "sha256": "7ba2179640406d29404b91d0cf35066390587d402f756496f0eb9c2ab9d10ac2"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/fuse-cleanup.json",
+    "bytes": 62,
+    "sha256": "9fc44dd3cd523e71e0dd95aaf7cb76c57da231d3531a5c7d62a14c3fc1a6b1a8"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/fuse-mount.err",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/fuse-mount.log",
+    "bytes": 64,
+    "sha256": "a1b66510b9e014753f4641ca8ca9259cb0285859ffb27dd374851899665ce00c"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/http-asr-exit.json",
+    "bytes": 187,
+    "sha256": "aa22417d712b26a9c03a531f5217c80dabb9c98622ce348f8dd9640a133df935"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/http-asr.json",
+    "bytes": 524,
+    "sha256": "d7398fce61dac367dbf8cc4cadfde4469c9324b1cbf189f6b13406855a4a42fe"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/http-asr.log",
+    "bytes": 453,
+    "sha256": "ed56f68d0bdbac9ee40540b00ab3b15d8c063396d385fa8d4c2bef041111138c"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/key-ack.json",
+    "bytes": 31,
+    "sha256": "7c8a29fccb39d2945d2e388b6649ae4e7459194be38cd103dce69bc66f33dd90"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/key-request.json",
+    "bytes": 91,
+    "sha256": "fb9ae1c7788e282f262ef05bfb30af5f2555369f3a9dbd9038b7c38edd82a483"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/mount.json",
+    "bytes": 205,
+    "sha256": "10f36b4bf9989c82a8a648855d405640378f9dc1cfbee9be17fbda24309ae042"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/package-audit-exit.json",
+    "bytes": 546,
+    "sha256": "15a4acf17741e472e5753c6da0fb3db03d8b5316f0e17cebcc22f9d4cec3c6c8"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/package-audit.json",
+    "bytes": 18162,
+    "sha256": "613829ba1302967159f49a72ef94ea97d6bb07746a2a88619b2ad2e5bd49371b"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/package-audit.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/pipeline-cancel-after-first/pipeline.log",
+    "bytes": 2655,
+    "sha256": "58d67ebbe3439ceed0132779a3270bdc29440c1f6cb1e39379b3b0eb2cef9fcf"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/pipeline-cancel-after-first/receiver.json",
+    "bytes": 213,
+    "sha256": "2303b5219a2614fe3f802d38f383f1e5a80bdc5f36a930c52102333e744367d5"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/pipeline-cancel-after-first/report.json",
+    "bytes": 15760,
+    "sha256": "aace48d4e6ffaf8da9e211a239a397f4af18cde5f7a04ad96cdbcb38686081d6"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/pipeline-cancel-after-first/target.json",
+    "bytes": 111,
+    "sha256": "8a513a3d49f376e5b504afdeb42dc1b8da470ee6bd7a550d86e75f0174ca6fb3"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/pipeline-cancel-after-first/target.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/pipeline-normal/pipeline.log",
+    "bytes": 2090,
+    "sha256": "3770e6312c5750c099913327a119ec7bf7f22fdbe466c10ff1aabe4aa91a74a7"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/pipeline-normal/receiver.json",
+    "bytes": 375,
+    "sha256": "82629457d21b11a3030ee16006340ab55006e27115260eaaf2745b008ef58f96"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/pipeline-normal/report.json",
+    "bytes": 15341,
+    "sha256": "1ceb7679d65d546b93fb2e4d106e622bc8473c549f9d6ba22e6a67446cecb8c4"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/pipeline-normal/target.json",
+    "bytes": 143,
+    "sha256": "775d1b2078f631f9a57b79388e4110b8b26866b695f369b95b2d089f79c87eef"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/pipeline-normal/target.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/provider-tests-exit.json",
+    "bytes": 1060,
+    "sha256": "10f3f5a492019f5ea5ba6a824e896714d6e4ab3e0557665f9e4dfafd50b62a1d"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/provider-tests-exit.json.before-overview-escape",
+    "bytes": 1038,
+    "sha256": "eca2056436cf5600d1653c63495b0f746b2dfa23e030034751df935f242cbb20"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/provider-tests-exit.json.r2-build-tree-symlinks",
+    "bytes": 1048,
+    "sha256": "5a8c1f7039d64502337bb46465650c8bc3548560855a2b02e6abeab6603a9354"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/provider-tests.json",
+    "bytes": 126650,
+    "sha256": "ef592f0713780abd6e3dfb4b783b57b4aa54979ce1a9216151c97c8b1da0b938"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/provider-tests.log",
+    "bytes": 341,
+    "sha256": "4c002b1de83e42ca7e335c840eb6edaf0e76fd63624aaa653397436fa949c722"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/provider-tests.log.before-overview-escape",
+    "bytes": 475,
+    "sha256": "619eac34e75fd72cfe7dce38a89c025ca8ccef84b3d7a4f4d4f61c7789761794"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/provider-tests.log.r2-build-tree-symlinks",
+    "bytes": 685,
+    "sha256": "d27862739f429b65ba5f3d824fc856d9dca18349840eb4d67bf50cbf4b927abd"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/provider-ui-exit.json",
+    "bytes": 717,
+    "sha256": "61a459c94efbd654937a9280e1e625ca5f3faf9abafe4dbfb0800b3ad4bb6ba9"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/provider-ui.json",
+    "bytes": 18719,
+    "sha256": "59a2fea51186473487b22283386fabf88c125e90e94e23a26fcf466337ea7bc4"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/provider-ui.log",
+    "bytes": 17076,
+    "sha256": "a95cc0dc71bf4acfa7ff7412a03ef3cb2412c2f3618ad2ddfdb9d52ff4bc78ff"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/qemu-exit.json",
+    "bytes": 17,
+    "sha256": "c365161d39236fe0f1d32937fbc549796b8487d8faf65ed3879b96897c78ea5d"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/qwen-vad-exit.json",
+    "bytes": 339,
+    "sha256": "92a3b144b0e12d7260248af5836445316c44488b4ffbf2129cb9a3895d349860"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/qwen-vad.json",
+    "bytes": 1287,
+    "sha256": "31b0cba05786d0f6663f85b3a04b6e180180e178ab34f388214433172572f70b"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/qwen-vad.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/ram-overlay-archive.json",
+    "bytes": 289,
+    "sha256": "b9c731a94bda04da3d530a181144fdb8978a0e65ea86ef6616d9713b2ec662a5"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/resource-check-exit.json",
+    "bytes": 97,
+    "sha256": "bc5248b2e8759ce8dc2aa9cf9353c360520236d7334912436600a437747de01c"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/resource-check.log",
+    "bytes": 296,
+    "sha256": "c27e224a3ca16c2bb221a68661f8cfb7939408d23037cf72ce22734cfdf1b653"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/serial.log.gz",
+    "bytes": 22374,
+    "sha256": "d044ac48d3ef9b4b6984a18df05885dfaf68a34248278ed37f450d2c2e2ef5cb"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/ui/page-01.png",
+    "bytes": 72506,
+    "sha256": "184aaeeef511e8ffc8231c68306539def69da0c7fc7db0c0ab6dbb8d9a8b599f"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/ui/page-02.png",
+    "bytes": 85532,
+    "sha256": "aa02765ad2acd8dfa67fc361b6d09b8d1ff0fb6af45a3fb6b9b1c1a4a4c79659"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/ui/page-03.png",
+    "bytes": 105440,
+    "sha256": "5532448335794758e4f3490351a3f7123874048b2721a96926311d94521ee93c"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/ui/page-04.png",
+    "bytes": 61480,
+    "sha256": "fb96d4d795783732517a9c5101acb9e1c5e84e9e42eda69e7054949570f249c7"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/ui/page-05.png",
+    "bytes": 38525,
+    "sha256": "20ce31d4084282b7eb69d6a2c36c9674234d8766ccff84714f15d91cff12f3d8"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/ui/process.log",
+    "bytes": 1080,
+    "sha256": "44228106b17979f0993ad8f9c2fafa8ce47b3718b8fbad00065d4b32f9142f44"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/ui/result.json",
+    "bytes": 815,
+    "sha256": "b3b5bc67318641c2a9103b37c8f23e7410c3c831d8a448ea8f9702f7128f1145"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/output/ui/terminal.json",
+    "bytes": 59,
+    "sha256": "3d1aaa180d4fce5cb398f9afb39ab7e8c3cbe6f1bf4487d15b7d5bfea06b3557"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/prepare-ssh.json",
+    "bytes": 80,
+    "sha256": "1dd944ea377b5b192403de514f5bde1fc34649d374b36ddb0db3332e163d22c2"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/prepare-without-share-mount.json",
+    "bytes": 147,
+    "sha256": "bc8060ca92e4ab010f22f94a15b92a1a2aa4b87da90c0f29778f477333e61d27"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/protocol-ssh.json",
+    "bytes": 81,
+    "sha256": "53badc7b8ec6853ff71ef823516c839858637f9c5d04b1bd94718c6a7eb63349"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/provider-tests-ssh.json",
+    "bytes": 87,
+    "sha256": "316e7249f3ca25f2cbde428e58081aa5a675f4dc031177ebba4f730e835e2432"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/resource-check-ssh.json",
+    "bytes": 87,
+    "sha256": "f6103a4e3d381796737009b693fdb107e6fa17b61e5684952e2eab8e496670e6"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu24/shutdown-ssh.json",
+    "bytes": 53,
+    "sha256": "53b3790c87ca15dba61fc27495cf997e00b1a5fabc356f5eab167ebf320d4ece"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/boot.json",
+    "bytes": 1782,
+    "sha256": "35a86f8f143e0717e20dddedfdd6f278c6e1c8540b993106ff9acb1bf11140e7"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/cleanup-ssh.json",
+    "bytes": 80,
+    "sha256": "e5d323ee79e11b2032e6a29aaa281db11f28704f3fd977ed110022d2b74d70f8"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/container-final-state.json",
+    "bytes": 269,
+    "sha256": "c651863eaab55cb031ae369a31c98584d01ca85e5b3ba7c0feacc3afcf09ab84"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/gui-ssh.json",
+    "bytes": 76,
+    "sha256": "e5701b805f0db6efbc3bbedd5af931bc6797d7ee382b99d06a1c172c99382261"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/hardware-exit.json",
+    "bytes": 23,
+    "sha256": "d7a8a1c5a71e5d6da2648038f6f26f28685403e67d3374b3be73f308dceea052"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/hardware-guest.log",
+    "bytes": 24,
+    "sha256": "8ce71e4b8ff102e7a1968b5b9fffc2de8980dedf9638bc61119689b5722d76aa"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/hardware-key-receipts.json",
+    "bytes": 974,
+    "sha256": "b1475eb10da219adb92c28e7ac7f99cc905f289373b353c947878e077efb71f7"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/input/actor.py.txt",
+    "bytes": 4504,
+    "sha256": "adb1f6a4256c215abe1b32d2e5344d1ad9891093e7f418ebd610b53a84f611bb"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/input/fcitx-package-r1.py.txt",
+    "bytes": 8533,
+    "sha256": "6d166596c56f5913095e1b52f9ccdb50cd4e382dd6441b4a4077933d9896a223"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/input/fcitx-package-r2.py.txt",
+    "bytes": 8936,
+    "sha256": "da01749d1a21affc858f57ce0f30d89bfe3b19ed39b06a6a4438a6359d81f43d"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/input/fcitx-package-r3.py.txt",
+    "bytes": 8944,
+    "sha256": "9e04307c5c763629768b6b3dcd4a315139cec78c4f5330d517d30d46ef215f75"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/input/fcitx-package.py.txt",
+    "bytes": 8944,
+    "sha256": "10695ae8e42b9ebe6701e7cddcf8ccbe9855f6f97e5937967c4c132cfaae7eb6"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/input/guest.py.txt",
+    "bytes": 4923,
+    "sha256": "7c092b36261a8a1a3b0b8a742dbf7d487e8acab170e63fa66ffa4ecaa2eede57"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/input/http_asr.py.txt",
+    "bytes": 2987,
+    "sha256": "2cd394b56c70ab0956bd84f536ec4ab83262807c57db215b94db4da2f54a55a2"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/input/pipeline.py.txt",
+    "bytes": 27559,
+    "sha256": "8126d6d4b7b77b3e44e5f078e69f4c3f01171d6711594fc4aa69c5084e64855b"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/input/pipeline_receiver_cancel.py.txt",
+    "bytes": 27559,
+    "sha256": "8126d6d4b7b77b3e44e5f078e69f4c3f01171d6711594fc4aa69c5084e64855b"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/input/pipeline_suite.py.txt",
+    "bytes": 2369,
+    "sha256": "36cfef868a6773e899fd75044bea629568d0ffbcced1a9d5c4e28d8e938b7cca"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/input/qmp-key.py.txt",
+    "bytes": 687,
+    "sha256": "4e041cde0db4e002497c3d6afdf42a6154588da2c4443775f9741009b411b6a1"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/input/resource-check.py.txt",
+    "bytes": 2172,
+    "sha256": "8b44413069961095ed1cc77f2a2a375ce897207cd0190b8a496ad59f10b03211"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/input/target.py.txt",
+    "bytes": 1143,
+    "sha256": "df86e4d473e5d36eae43ed8bb3ecb0eae06e8f27dd2f0a8aadec407716e654e4"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/input/wrapper.py.txt",
+    "bytes": 1292,
+    "sha256": "38728fcbdcd6c7ba9a5133e13537773bc5f2d7c584cd8c2a25e67a368de7f4e1"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/mount-ssh.json",
+    "bytes": 53,
+    "sha256": "53b3790c87ca15dba61fc27495cf997e00b1a5fabc356f5eab167ebf320d4ece"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/desktop-lifecycle-exit.json",
+    "bytes": 217,
+    "sha256": "be161df60243d708d2decb7c2d8c1c84a3baa44c1fc36123c697962d65b5d47d"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/desktop-lifecycle.log",
+    "bytes": 819,
+    "sha256": "3a24272b126431bffce7a6889b6be6b5f0f5f3b71d5cb2bb693332d9604cb4ea"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/fcitx-package-exit.json",
+    "bytes": 159,
+    "sha256": "04ac8bb6c170064b9b8563c7d8259c4ee8000c9fbdefeaa86a11043457c2ba2a"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/fcitx-package.log",
+    "bytes": 4109,
+    "sha256": "e72880ee1a6bf760843ad681da092a2154b5c5e6c50f287fd7d3ac5361a138b0"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/fcitx-raw-r4/actor.json",
+    "bytes": 422,
+    "sha256": "e79edf4382ea6a3bfd432571f9b931f5ead494e4b81f27938833f9a37056d1dd"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/fcitx-raw-r4/actor.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/fcitx-raw-r4/fcitx.log.gz",
+    "bytes": 1531,
+    "sha256": "5a899b626572c3549d0019acd491b6564ae4b1a99d66218823be04c74ea2a995"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/fcitx-raw-r4/hints-before.json",
+    "bytes": 44,
+    "sha256": "fbfda932806ff04cfbe550cc55e63617075efba1b518de2dea5982b4eb65ad1a"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/fcitx-raw-r4/results.json",
+    "bytes": 6269,
+    "sha256": "4a7caeb322833272bf418768493f9a016a80c1c4b7f94c18a295d1e145698fbf"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/final-resource-check.json",
+    "bytes": 339,
+    "sha256": "7ba2179640406d29404b91d0cf35066390587d402f756496f0eb9c2ab9d10ac2"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/fuse-cleanup.json",
+    "bytes": 62,
+    "sha256": "5f6d9b7cb791ec86423f1933f9f3e3c5f07f781ac9ac45fc01f1090a179cce61"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/fuse-mount.err",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/fuse-mount.log",
+    "bytes": 64,
+    "sha256": "fc5fc3f3f3ea50d3180a21a1d96b8e3a12fb904d566b761cef6caca349dcc28a"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/http-asr-exit.json",
+    "bytes": 187,
+    "sha256": "48eac88f38f19eaed5dfd6981a2747144cdbdeeef2fbfefbcc83217a49267849"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/http-asr.json",
+    "bytes": 524,
+    "sha256": "8a2e51d633ad47edbfcea7b5f0e6ad65341c8862c69d980cf8c00ec640a60dd6"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/http-asr.log",
+    "bytes": 453,
+    "sha256": "06683d34cb3f8d094873a6993c2ebb67ee2f13f346a339b625b1b7a90bcd47ae"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/key-ack.json",
+    "bytes": 31,
+    "sha256": "7c8a29fccb39d2945d2e388b6649ae4e7459194be38cd103dce69bc66f33dd90"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/key-request.json",
+    "bytes": 91,
+    "sha256": "b5c50d844001e577a7639facdfb57aac7ef8d34ec7dd155194efc84cb7054ccd"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/mount.json",
+    "bytes": 209,
+    "sha256": "2f6eeb293fc493f96124ac995871d8aaf8f3339552e8d83892797fad2673eb82"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/package-audit-exit.json",
+    "bytes": 552,
+    "sha256": "931eccc0c1a85e87e9bbd6d68542ae33466ee5fe411e3c511106d58e3c86d3b5"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/package-audit.json",
+    "bytes": 18168,
+    "sha256": "935f59a4dede909e883f7c7f1882ad335efb49d65aada6671aaae4aeedfb5258"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/package-audit.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/pipeline-cancel-after-first/pipeline.log",
+    "bytes": 2279,
+    "sha256": "8720b556cf084ce1039f5109e09a307c4c9cde76a2dfc86886ab5315f622af0a"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/pipeline-cancel-after-first/receiver.json",
+    "bytes": 213,
+    "sha256": "2303b5219a2614fe3f802d38f383f1e5a80bdc5f36a930c52102333e744367d5"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/pipeline-cancel-after-first/report.json",
+    "bytes": 16337,
+    "sha256": "ae92284b3a4cfb2cc62566b1dae1ad7bd4dcf9910f39c56ccacd2db47d667981"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/pipeline-cancel-after-first/target.json",
+    "bytes": 112,
+    "sha256": "716cd7710747a3fd1179d3e9e9c736bf304f158971acb7a29dacb9b8f75e3e21"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/pipeline-cancel-after-first/target.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/pipeline-normal/pipeline.log",
+    "bytes": 1718,
+    "sha256": "b2125b834655adedb974f00a9d0e1ba925c73123d3bb84c8e81c671a9c9aef58"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/pipeline-normal/receiver.json",
+    "bytes": 375,
+    "sha256": "82629457d21b11a3030ee16006340ab55006e27115260eaaf2745b008ef58f96"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/pipeline-normal/report.json",
+    "bytes": 15859,
+    "sha256": "1f5f5444a27d35f3a402d1fe4a1c6c842af5fe5d69dbae629a1c751df1b9c4a0"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/pipeline-normal/target.json",
+    "bytes": 144,
+    "sha256": "a12843d3a226cae510a4901c8bcc9729eeeab56e9cf31f954fc8ff40e31ac1e2"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/pipeline-normal/target.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/provider-tests-exit.json",
+    "bytes": 1060,
+    "sha256": "e857999d55c7e6c71a9e735d26fe2916cad9b6b985a94fbc4266971abcf11890"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/provider-tests.json",
+    "bytes": 126650,
+    "sha256": "7ca1968fe7e6c6888990e31c7d417456d165d8493e99abfd51f196b33c625a54"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/provider-tests.log",
+    "bytes": 341,
+    "sha256": "c749acb54bf6e35eab23e5bf8483646746188b1e68356190ad9e02f1b2a49279"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/provider-ui-exit.json",
+    "bytes": 733,
+    "sha256": "30ad37fb6a165de77a6f06364842cef38f27751ab0e07e466fbd8a89bcec7d9c"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/provider-ui.json",
+    "bytes": 18729,
+    "sha256": "0cd2904839a0bc9f8eb2375ad27583761bd4ea5eaf7a79812a5da5a7abebef02"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/provider-ui.log",
+    "bytes": 17086,
+    "sha256": "2d0bb3d1cb901f2048da85b10067ec7eef71ac536e5d85027b08b47d4280027f"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/qemu-exit.json",
+    "bytes": 17,
+    "sha256": "c365161d39236fe0f1d32937fbc549796b8487d8faf65ed3879b96897c78ea5d"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/qwen-vad-exit.json",
+    "bytes": 345,
+    "sha256": "2b40ba6b9b5b57397c15d07bbff570a0325d0d1d2e11ca8782e9af5caa38c906"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/qwen-vad.json",
+    "bytes": 1287,
+    "sha256": "8a5d1e49e8978c6e78a8fccd6836da8b6940f868eedb7328020d737e828642f3"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/qwen-vad.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/ram-overlay-archive.json",
+    "bytes": 289,
+    "sha256": "9beee5f0bea625a366836817f7a41a88ba580c17760a7467c115388a2a0a46fb"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/resource-check-exit.json",
+    "bytes": 97,
+    "sha256": "bc5248b2e8759ce8dc2aa9cf9353c360520236d7334912436600a437747de01c"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/resource-check.log",
+    "bytes": 296,
+    "sha256": "c27e224a3ca16c2bb221a68661f8cfb7939408d23037cf72ce22734cfdf1b653"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/serial.log.gz",
+    "bytes": 20090,
+    "sha256": "005ed92ef1af33e69e8dd2d06000ce7a269b704ed304349d849d95cd003d2eb7"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/ui/page-01.png",
+    "bytes": 81848,
+    "sha256": "9e11e037a8937937523a5a64cce77d67eab20952a485897102081f17ab029c0c"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/ui/page-02.png",
+    "bytes": 97211,
+    "sha256": "2a9efe258926d3d2af15f6995c8045c38dace9b4ae2f9f817846172dde6af7a6"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/ui/page-03.png",
+    "bytes": 119468,
+    "sha256": "c6921f1cbb56538c5edf3bc5e479036165b23be0ca81dbbabc9b34ff5999646b"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/ui/page-04.png",
+    "bytes": 69404,
+    "sha256": "509a686e9280519dc4963cb3961c7f1177f53a336416cefdba15fc435ecd3fc0"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/ui/page-05.png",
+    "bytes": 45121,
+    "sha256": "63931c1dbc5bad4ccd7affd0fdec2a1255fc2b115ba062112b53ac4540107260"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/ui/process.log",
+    "bytes": 1199,
+    "sha256": "86160eff54bb8ea5f62f92ff64c3e3b2db7e1c446f66fc42b49dd623217a5488"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/ui/result.json",
+    "bytes": 819,
+    "sha256": "3a24272b126431bffce7a6889b6be6b5f0f5f3b71d5cb2bb693332d9604cb4ea"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/output/ui/terminal.json",
+    "bytes": 59,
+    "sha256": "2e458eb0e4465184754623282bff7dc550d5598221bae0dac11179664cd39268"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/prepare-ssh.json",
+    "bytes": 80,
+    "sha256": "1dd944ea377b5b192403de514f5bde1fc34649d374b36ddb0db3332e163d22c2"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/protocol-ssh.json",
+    "bytes": 81,
+    "sha256": "53badc7b8ec6853ff71ef823516c839858637f9c5d04b1bd94718c6a7eb63349"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/provider-tests-ssh.json",
+    "bytes": 87,
+    "sha256": "316e7249f3ca25f2cbde428e58081aa5a675f4dc031177ebba4f730e835e2432"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/resource-check-ssh.json",
+    "bytes": 87,
+    "sha256": "f6103a4e3d381796737009b693fdb107e6fa17b61e5684952e2eab8e496670e6"
+  },
+  {
+    "path": "docs/evidence/appimage-0.10.10-ad355d/ubuntu26/shutdown-ssh.json",
+    "bytes": 53,
+    "sha256": "53b3790c87ca15dba61fc27495cf997e00b1a5fabc356f5eab167ebf320d4ece"
+  }
+]

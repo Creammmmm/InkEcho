@@ -1,0 +1,11 @@
+{
+  "returncode": 0,
+  "argv": [
+    "/usr/bin/python3",
+    "/mnt/frozen/scripts/validation/desktop_app_probe.py",
+    "--appimage",
+    "/mnt/input/InkEcho.AppImage",
+    "--output",
+    "/mnt/output/ui"
+  ]
+}

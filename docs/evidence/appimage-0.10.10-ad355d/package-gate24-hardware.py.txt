@@ -1,0 +1,20 @@
+from pathlib import Path
+import subprocess,json,time
+b=Path('/run/user/1000/inkecho-candidate-0.10.10-7h_6ed20/gate24');name='inkecho-package-0.10.10-24-20261030'
+ssh=['docker','exec','-i',name,'ssh','-T','-i','/secrets/testkey','-p2222','-o','BatchMode=yes','-o','ConnectTimeout=30','-o','StrictHostKeyChecking=yes','-o','UserKnownHostsFile=/prior/known_hosts','inkecho@127.0.0.1','/usr/bin/python3 /mnt/input/guest.py fcitx']
+for p in [b/'output/key-request.json',b/'output/key-ack.json']:
+ if p.exists():p.unlink()
+rows=[]
+with (b/'hardware-guest.log').open('w')as log:
+ p=subprocess.Popen(ssh,stdout=log,stderr=subprocess.STDOUT);last=0
+ while p.poll()is None:
+  request=b/'output/key-request.json'
+  if request.exists():
+   r=json.loads(request.read_text())
+   if r['sequence']>last:
+    assert r['owned_active']and r['owned_focus']
+    q=subprocess.run(['docker','exec',name,'python3','/input/qmp-key.py',str(r['keyval'])],capture_output=True,text=True)
+    rows.append({'request':r,'returncode':q.returncode,'stdout':q.stdout,'stderr':q.stderr});(b/'hardware-key-receipts.json').write_text(json.dumps(rows,indent=2));a=b/'output/key-ack.tmp';a.write_text(json.dumps({'sequence':r['sequence'],'qmp_ok':q.returncode==0}));a.replace(b/'output/key-ack.json');last=r['sequence']
+  time.sleep(.05)
+ rc=p.wait()
+(b/'hardware-exit.json').write_text(json.dumps({'guest_returncode':rc}));print('guest',rc);print((b/'hardware-guest.log').read_text());raise SystemExit(rc)

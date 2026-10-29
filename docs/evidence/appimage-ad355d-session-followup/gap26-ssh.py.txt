@@ -1,0 +1,5 @@
+import subprocess,json,sys
+from pathlib import Path
+b=Path('/home/lth/github/InkEcho/dist/acceptance-ad355d62-20261030/gap24')
+a=['docker','exec','-i','inkecho-package-ad355d-gap26-20261030','ssh','-T','-i','/secrets/testkey','-p2222','-o','BatchMode=yes','-o','ConnectTimeout=12','-o','StrictHostKeyChecking=yes','-o','UserKnownHostsFile=/prior/known_hosts','inkecho@127.0.0.1',sys.argv[1]]
+r=subprocess.run(a,capture_output=True,text=True);name=sys.argv[2]if len(sys.argv)>2 else'command';(b/(name+'.json')).write_text(json.dumps({'returncode':r.returncode,'stdout':r.stdout,'stderr':r.stderr},indent=2));print(r.returncode,r.stdout,r.stderr);r.check_returncode()

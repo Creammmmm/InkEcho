@@ -1,0 +1,9 @@
+Traceback (most recent call last):
+  File "/mnt/frozen/scripts/validation/provider_package_probe.py", line 370, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "/mnt/frozen/scripts/validation/provider_package_probe.py", line 362, in main
+    result = run(args)
+  File "/mnt/frozen/scripts/validation/provider_package_probe.py", line 217, in run
+    raise ValueError("isolated_package_python_required")
+ValueError: isolated_package_python_required

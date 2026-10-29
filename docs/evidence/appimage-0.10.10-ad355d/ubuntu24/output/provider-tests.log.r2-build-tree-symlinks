@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "/mnt/frozen/scripts/validation/provider_package_probe.py", line 370, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "/mnt/frozen/scripts/validation/provider_package_probe.py", line 362, in main
+    result = run(args)
+  File "/mnt/frozen/scripts/validation/provider_package_probe.py", line 221, in run
+    verify_files(frozen, tests_manifest["files"], exact=False)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/frozen/scripts/validation/provider_package_probe.py", line 55, in verify_files
+    raise ValueError("diagnostic_symlink_forbidden")
+ValueError: diagnostic_symlink_forbidden

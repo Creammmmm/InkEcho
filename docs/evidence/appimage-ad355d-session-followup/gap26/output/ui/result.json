@@ -1,0 +1,40 @@
+{
+  "kind": "appimage",
+  "session": "x11",
+  "qt_platform": "default",
+  "voice_end_to_end": false,
+  "clipboard_accessed": false,
+  "artifact_sha256": "ad355d622d6888b8092381988327f589f71669791cb32465c0b5e825573bcf23",
+  "pages": [
+    {
+      "file": "page-01.png",
+      "width": 1120,
+      "height": 850
+    },
+    {
+      "file": "page-02.png",
+      "width": 1120,
+      "height": 850
+    },
+    {
+      "file": "page-03.png",
+      "width": 1120,
+      "height": 850
+    },
+    {
+      "file": "page-04.png",
+      "width": 1120,
+      "height": 850
+    },
+    {
+      "file": "page-05.png",
+      "width": 1120,
+      "height": 850
+    }
+  ],
+  "primary_exit_code": 0,
+  "ipc_show_quit": true,
+  "cold_controls_exit_0_config_unchanged": true,
+  "damaged_config_exit_1_preserved": true,
+  "passed": true
+}
