@@ -1,0 +1,4408 @@
+{
+  "artifact_sha256": "51d20c74a31beb7f01008378a76876a491fd8a3cdc6b61bda440a79bf11c966f",
+  "appdir": "/run/user/1000/inkecho-package-gate-0.11.0/.mount_InkEchAhpnlP",
+  "test_scope": "full pinned candidate product source overlay on released AppImage runtime; actual Session/default Router/negotiated bridge, no consumer or bridge-class monkeypatch; local synthetic provider only",
+  "browser_profile_new": "/run/user/1000/inkecho-browser-d5hvlje7/chrome-profile",
+  "sandbox_disabled_in_isolated_vm": true,
+  "system": "Ubuntu 24.04.5 LTS",
+  "session": "x11",
+  "desktop": "ubuntu:GNOME",
+  "cases": [
+    {
+      "method": "auto",
+      "case": "leading-lf",
+      "sample": "\n甲",
+      "initial_focus": "a",
+      "session": {
+        "route": null,
+        "outcome": "succeeded",
+        "metrics_characters": null,
+        "reported_characters": 2,
+        "outcomes": [
+          {
+            "characters": 2
+          }
+        ],
+        "deltas": [
+          {
+            "index": 0,
+            "monotonic": 247.81925549
+          },
+          {
+            "index": 1,
+            "monotonic": 247.84523087
+          }
+        ],
+        "dispatches": [
+          {
+            "length": 2,
+            "has_lf": true,
+            "at": 247.875482558,
+            "route_before": "fcitx",
+            "first_sent_at": 247.875966151,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 2
+          }
+        ],
+        "input_failure": null,
+        "error_code": null
+      },
+      "sent": 2,
+      "route": null,
+      "cancel_requested": false,
+      "first_dom": {
+        "a": "\n甲",
+        "b": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "\n甲",
+            "inputType": "insertText",
+            "time": 1046.7000000000116
+          },
+          {
+            "id": "a",
+            "len": 2,
+            "type": "input",
+            "time": 1050.1000000000058
+          },
+          {
+            "id": "a",
+            "len": 2,
+            "type": "input",
+            "time": 1050.3999999999942
+          }
+        ]
+      },
+      "last_dom": {
+        "a": "\n甲",
+        "b": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "\n甲",
+            "inputType": "insertText",
+            "time": 1046.7000000000116
+          },
+          {
+            "id": "a",
+            "len": 2,
+            "type": "input",
+            "time": 1050.1000000000058
+          },
+          {
+            "id": "a",
+            "len": 2,
+            "type": "input",
+            "time": 1050.3999999999942
+          }
+        ]
+      },
+      "no_late": true,
+      "passed": true,
+      "received_lengths": [
+        2,
+        0
+      ]
+    },
+    {
+      "method": "auto",
+      "case": "trailing-lf",
+      "sample": "甲\n",
+      "initial_focus": "a",
+      "session": {
+        "route": null,
+        "outcome": "succeeded",
+        "metrics_characters": null,
+        "reported_characters": 2,
+        "outcomes": [
+          {
+            "characters": 2
+          }
+        ],
+        "deltas": [
+          {
+            "index": 0,
+            "monotonic": 249.774058212
+          },
+          {
+            "index": 1,
+            "monotonic": 249.799457931
+          }
+        ],
+        "dispatches": [
+          {
+            "length": 2,
+            "has_lf": true,
+            "at": 249.824920383,
+            "route_before": "fcitx",
+            "first_sent_at": 249.827024771,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 2
+          }
+        ],
+        "input_failure": null,
+        "error_code": null
+      },
+      "sent": 2,
+      "route": null,
+      "cancel_requested": false,
+      "first_dom": {
+        "a": "甲\n",
+        "b": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "甲\n",
+            "inputType": "insertText",
+            "time": 2997.399999999994
+          },
+          {
+            "id": "a",
+            "len": 2,
+            "type": "input",
+            "time": 2998.5
+          },
+          {
+            "id": "a",
+            "len": 2,
+            "type": "input",
+            "time": 3000.2999999999884
+          }
+        ]
+      },
+      "last_dom": {
+        "a": "甲\n",
+        "b": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "甲\n",
+            "inputType": "insertText",
+            "time": 2997.399999999994
+          },
+          {
+            "id": "a",
+            "len": 2,
+            "type": "input",
+            "time": 2998.5
+          },
+          {
+            "id": "a",
+            "len": 2,
+            "type": "input",
+            "time": 3000.2999999999884
+          }
+        ]
+      },
+      "no_late": true,
+      "passed": true,
+      "received_lengths": [
+        2,
+        0
+      ]
+    },
+    {
+      "method": "auto",
+      "case": "pure-three-tail",
+      "sample": "甲\n\n\n",
+      "initial_focus": "a",
+      "session": {
+        "route": null,
+        "outcome": "succeeded",
+        "metrics_characters": null,
+        "reported_characters": 4,
+        "outcomes": [
+          {
+            "characters": 4
+          }
+        ],
+        "deltas": [
+          {
+            "index": 0,
+            "monotonic": 251.716472978
+          },
+          {
+            "index": 1,
+            "monotonic": 251.742392094
+          },
+          {
+            "index": 2,
+            "monotonic": 251.767536721
+          },
+          {
+            "index": 3,
+            "monotonic": 251.793252015
+          }
+        ],
+        "dispatches": [
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 251.76763361,
+            "route_before": "fcitx",
+            "first_sent_at": 251.768833032,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 1
+          },
+          {
+            "length": 3,
+            "has_lf": true,
+            "at": 251.818951294,
+            "route_before": "fcitx",
+            "first_sent_at": 251.821344863,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 4
+          }
+        ],
+        "input_failure": null,
+        "error_code": null
+      },
+      "sent": 4,
+      "route": null,
+      "cancel_requested": false,
+      "first_dom": {
+        "a": "甲\n\n\n",
+        "b": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "甲",
+            "inputType": "insertText",
+            "time": 4940
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 4940.5
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "\n\n\n",
+            "inputType": "insertText",
+            "time": 4992
+          },
+          {
+            "id": "a",
+            "len": 4,
+            "type": "input",
+            "time": 4994.100000000006
+          },
+          {
+            "id": "a",
+            "len": 4,
+            "type": "input",
+            "time": 4995
+          },
+          {
+            "id": "a",
+            "len": 4,
+            "type": "input",
+            "time": 4995.299999999988
+          }
+        ]
+      },
+      "last_dom": {
+        "a": "甲\n\n\n",
+        "b": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "甲",
+            "inputType": "insertText",
+            "time": 4940
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 4940.5
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "\n\n\n",
+            "inputType": "insertText",
+            "time": 4992
+          },
+          {
+            "id": "a",
+            "len": 4,
+            "type": "input",
+            "time": 4994.100000000006
+          },
+          {
+            "id": "a",
+            "len": 4,
+            "type": "input",
+            "time": 4995
+          },
+          {
+            "id": "a",
+            "len": 4,
+            "type": "input",
+            "time": 4995.299999999988
+          }
+        ]
+      },
+      "no_late": true,
+      "passed": true,
+      "received_lengths": [
+        4,
+        0
+      ]
+    },
+    {
+      "method": "auto",
+      "case": "synchronous",
+      "sample": "甲乙\n\n\n丙\n",
+      "initial_focus": "a",
+      "session": {
+        "route": null,
+        "outcome": "succeeded",
+        "metrics_characters": null,
+        "reported_characters": 7,
+        "outcomes": [
+          {
+            "characters": 7
+          }
+        ],
+        "deltas": [],
+        "dispatches": [
+          {
+            "length": 7,
+            "has_lf": true,
+            "at": 253.712689172,
+            "route_before": "keyboard",
+            "first_sent_at": 253.733907942,
+            "protocol": null,
+            "route_after": null,
+            "backend_type": "NoneType",
+            "native_attempts": null
+          },
+          {
+            "length": 7,
+            "has_lf": true,
+            "at": 253.712704409,
+            "route_before": "keyboard",
+            "first_sent_at": 253.733907942,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 7
+          }
+        ],
+        "input_failure": null,
+        "error_code": null
+      },
+      "sent": 7,
+      "route": null,
+      "cancel_requested": false,
+      "first_dom": {
+        "a": "甲乙\n\n\n丙\n",
+        "b": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "甲",
+            "inputType": "insertText",
+            "time": 6904.600000000006
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 6904.899999999994
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "乙",
+            "inputType": "insertText",
+            "time": 6905.700000000012
+          },
+          {
+            "id": "a",
+            "len": 2,
+            "type": "input",
+            "time": 6905.799999999988
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "\n\n",
+            "inputType": "insertText",
+            "time": 6906.299999999988
+          },
+          {
+            "id": "a",
+            "len": 4,
+            "type": "input",
+            "time": 6906.5
+          },
+          {
+            "id": "a",
+            "len": 4,
+            "type": "input",
+            "time": 6906.5
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "\n丙\n",
+            "inputType": "insertText",
+            "time": 6906.799999999988
+          },
+          {
+            "id": "a",
+            "len": 7,
+            "type": "input",
+            "time": 6907.200000000012
+          },
+          {
+            "id": "a",
+            "len": 7,
+            "type": "input",
+            "time": 6907.299999999988
+          },
+          {
+            "id": "a",
+            "len": 7,
+            "type": "input",
+            "time": 6907.299999999988
+          }
+        ]
+      },
+      "last_dom": {
+        "a": "甲乙\n\n\n丙\n",
+        "b": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "甲",
+            "inputType": "insertText",
+            "time": 6904.600000000006
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 6904.899999999994
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "乙",
+            "inputType": "insertText",
+            "time": 6905.700000000012
+          },
+          {
+            "id": "a",
+            "len": 2,
+            "type": "input",
+            "time": 6905.799999999988
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "\n\n",
+            "inputType": "insertText",
+            "time": 6906.299999999988
+          },
+          {
+            "id": "a",
+            "len": 4,
+            "type": "input",
+            "time": 6906.5
+          },
+          {
+            "id": "a",
+            "len": 4,
+            "type": "input",
+            "time": 6906.5
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "\n丙\n",
+            "inputType": "insertText",
+            "time": 6906.799999999988
+          },
+          {
+            "id": "a",
+            "len": 7,
+            "type": "input",
+            "time": 6907.200000000012
+          },
+          {
+            "id": "a",
+            "len": 7,
+            "type": "input",
+            "time": 6907.299999999988
+          },
+          {
+            "id": "a",
+            "len": 7,
+            "type": "input",
+            "time": 6907.299999999988
+          }
+        ]
+      },
+      "no_late": true,
+      "passed": true,
+      "received_lengths": [
+        7,
+        0
+      ]
+    },
+    {
+      "method": "auto",
+      "case": "original-fallback",
+      "sample": "甲乙\n\n\n丙\n",
+      "initial_focus": "a",
+      "session": {
+        "route": null,
+        "outcome": "succeeded",
+        "metrics_characters": null,
+        "reported_characters": 7,
+        "outcomes": [
+          {
+            "characters": 7
+          }
+        ],
+        "deltas": [],
+        "dispatches": [
+          {
+            "length": 7,
+            "has_lf": true,
+            "at": 255.623036953,
+            "route_before": "keyboard",
+            "first_sent_at": 255.644584513,
+            "protocol": null,
+            "route_after": null,
+            "backend_type": "NoneType",
+            "native_attempts": null
+          },
+          {
+            "length": 7,
+            "has_lf": true,
+            "at": 255.623044107,
+            "route_before": "keyboard",
+            "first_sent_at": 255.644584513,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 7
+          }
+        ],
+        "input_failure": null,
+        "error_code": null
+      },
+      "sent": 7,
+      "route": null,
+      "cancel_requested": false,
+      "first_dom": {
+        "a": "甲乙\n\n\n丙\n",
+        "b": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "甲",
+            "inputType": "insertText",
+            "time": 8815.299999999988
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 8815.600000000006
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "乙",
+            "inputType": "insertText",
+            "time": 8815.799999999988
+          },
+          {
+            "id": "a",
+            "len": 2,
+            "type": "input",
+            "time": 8815.899999999994
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "\n\n",
+            "inputType": "insertText",
+            "time": 8816.299999999988
+          },
+          {
+            "id": "a",
+            "len": 4,
+            "type": "input",
+            "time": 8816.5
+          },
+          {
+            "id": "a",
+            "len": 4,
+            "type": "input",
+            "time": 8816.899999999994
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "\n丙\n",
+            "inputType": "insertText",
+            "time": 8817.200000000012
+          },
+          {
+            "id": "a",
+            "len": 7,
+            "type": "input",
+            "time": 8817.399999999994
+          },
+          {
+            "id": "a",
+            "len": 7,
+            "type": "input",
+            "time": 8817.5
+          },
+          {
+            "id": "a",
+            "len": 7,
+            "type": "input",
+            "time": 8817.700000000012
+          }
+        ]
+      },
+      "last_dom": {
+        "a": "甲乙\n\n\n丙\n",
+        "b": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "甲",
+            "inputType": "insertText",
+            "time": 8815.299999999988
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 8815.600000000006
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "乙",
+            "inputType": "insertText",
+            "time": 8815.799999999988
+          },
+          {
+            "id": "a",
+            "len": 2,
+            "type": "input",
+            "time": 8815.899999999994
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "\n\n",
+            "inputType": "insertText",
+            "time": 8816.299999999988
+          },
+          {
+            "id": "a",
+            "len": 4,
+            "type": "input",
+            "time": 8816.5
+          },
+          {
+            "id": "a",
+            "len": 4,
+            "type": "input",
+            "time": 8816.899999999994
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "\n丙\n",
+            "inputType": "insertText",
+            "time": 8817.200000000012
+          },
+          {
+            "id": "a",
+            "len": 7,
+            "type": "input",
+            "time": 8817.399999999994
+          },
+          {
+            "id": "a",
+            "len": 7,
+            "type": "input",
+            "time": 8817.5
+          },
+          {
+            "id": "a",
+            "len": 7,
+            "type": "input",
+            "time": 8817.700000000012
+          }
+        ]
+      },
+      "no_late": true,
+      "passed": true,
+      "received_lengths": [
+        7,
+        0
+      ]
+    },
+    {
+      "method": "auto",
+      "case": "mixed",
+      "sample": "你好 InkEcho，café Ω\n第二行。",
+      "initial_focus": "a",
+      "session": {
+        "route": null,
+        "outcome": "succeeded",
+        "metrics_characters": null,
+        "reported_characters": 22,
+        "outcomes": [
+          {
+            "characters": 22
+          }
+        ],
+        "deltas": [
+          {
+            "index": 0,
+            "monotonic": 257.537566506
+          },
+          {
+            "index": 1,
+            "monotonic": 257.56311343
+          },
+          {
+            "index": 2,
+            "monotonic": 257.588325062
+          },
+          {
+            "index": 3,
+            "monotonic": 257.614290609
+          },
+          {
+            "index": 4,
+            "monotonic": 257.639545934
+          },
+          {
+            "index": 5,
+            "monotonic": 257.664994411
+          },
+          {
+            "index": 6,
+            "monotonic": 257.690224032
+          },
+          {
+            "index": 7,
+            "monotonic": 257.716284384
+          },
+          {
+            "index": 8,
+            "monotonic": 257.74246596
+          },
+          {
+            "index": 9,
+            "monotonic": 257.768495633
+          },
+          {
+            "index": 10,
+            "monotonic": 257.794204947
+          },
+          {
+            "index": 11,
+            "monotonic": 257.819511457
+          },
+          {
+            "index": 12,
+            "monotonic": 257.84479331
+          },
+          {
+            "index": 13,
+            "monotonic": 257.870393353
+          },
+          {
+            "index": 14,
+            "monotonic": 257.896590393
+          },
+          {
+            "index": 15,
+            "monotonic": 257.922496093
+          },
+          {
+            "index": 16,
+            "monotonic": 257.948409439
+          },
+          {
+            "index": 17,
+            "monotonic": 257.974097157
+          },
+          {
+            "index": 18,
+            "monotonic": 257.999420385
+          },
+          {
+            "index": 19,
+            "monotonic": 258.024632091
+          },
+          {
+            "index": 20,
+            "monotonic": 258.050771291
+          },
+          {
+            "index": 21,
+            "monotonic": 258.076622799
+          }
+        ],
+        "dispatches": [
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 257.57028837,
+            "route_before": "fcitx",
+            "first_sent_at": 257.570678746,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 1
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 257.588345628,
+            "route_before": "fcitx",
+            "first_sent_at": 257.588931463,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 2
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 257.614356174,
+            "route_before": "fcitx",
+            "first_sent_at": 257.61625804,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 3
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 257.639589582,
+            "route_before": "fcitx",
+            "first_sent_at": 257.640813333,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 4
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 257.665031239,
+            "route_before": "fcitx",
+            "first_sent_at": 257.66607739,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 5
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 257.690269422,
+            "route_before": "fcitx",
+            "first_sent_at": 257.691245292,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 6
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 257.716311678,
+            "route_before": "fcitx",
+            "first_sent_at": 257.716982948,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 7
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 257.742557563,
+            "route_before": "fcitx",
+            "first_sent_at": 257.744559553,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 8
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 257.768614834,
+            "route_before": "fcitx",
+            "first_sent_at": 257.770671121,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 9
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 257.794284579,
+            "route_before": "fcitx",
+            "first_sent_at": 257.796244296,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 10
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 257.819578299,
+            "route_before": "fcitx",
+            "first_sent_at": 257.821929961,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 11
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 257.844867186,
+            "route_before": "fcitx",
+            "first_sent_at": 257.846877284,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 12
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 257.870464498,
+            "route_before": "fcitx",
+            "first_sent_at": 257.872423448,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 13
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 257.896700136,
+            "route_before": "fcitx",
+            "first_sent_at": 257.899090703,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 14
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 257.922583167,
+            "route_before": "fcitx",
+            "first_sent_at": 257.924684249,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 15
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 257.948448524,
+            "route_before": "fcitx",
+            "first_sent_at": 257.949384608,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 16
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 257.99951677,
+            "route_before": "fcitx",
+            "first_sent_at": 258.00165299,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 17
+          },
+          {
+            "length": 2,
+            "has_lf": true,
+            "at": 258.024698751,
+            "route_before": "fcitx",
+            "first_sent_at": 258.02690843,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 19
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 258.050847017,
+            "route_before": "fcitx",
+            "first_sent_at": 258.052752924,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 20
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 258.076705389,
+            "route_before": "fcitx",
+            "first_sent_at": 258.079864185,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 21
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 258.102743462,
+            "route_before": "fcitx",
+            "first_sent_at": 258.105190584,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 22
+          }
+        ],
+        "input_failure": null,
+        "error_code": null
+      },
+      "sent": 22,
+      "route": null,
+      "cancel_requested": false,
+      "first_dom": {
+        "a": "你好 InkEcho，café Ω\n第二行。",
+        "b": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "你",
+            "inputType": "insertText",
+            "time": 10741.299999999988
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 10741.799999999988
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "好",
+            "inputType": "insertText",
+            "time": 10759.600000000006
+          },
+          {
+            "id": "a",
+            "len": 2,
+            "type": "input",
+            "time": 10759.899999999994
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": " ",
+            "inputType": "insertText",
+            "time": 10787.200000000012
+          },
+          {
+            "id": "a",
+            "len": 3,
+            "type": "input",
+            "time": 10787.899999999994
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "I",
+            "inputType": "insertText",
+            "time": 10812.5
+          },
+          {
+            "id": "a",
+            "len": 4,
+            "type": "input",
+            "time": 10812.799999999988
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "n",
+            "inputType": "insertText",
+            "time": 10836.799999999988
+          },
+          {
+            "id": "a",
+            "len": 5,
+            "type": "input",
+            "time": 10837.600000000006
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "k",
+            "inputType": "insertText",
+            "time": 10862
+          },
+          {
+            "id": "a",
+            "len": 6,
+            "type": "input",
+            "time": 10862.200000000012
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "E",
+            "inputType": "insertText",
+            "time": 10887.799999999988
+          },
+          {
+            "id": "a",
+            "len": 7,
+            "type": "input",
+            "time": 10888.100000000006
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "c",
+            "inputType": "insertText",
+            "time": 10915.5
+          },
+          {
+            "id": "a",
+            "len": 8,
+            "type": "input",
+            "time": 10916.200000000012
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "h",
+            "inputType": "insertText",
+            "time": 10941.600000000006
+          },
+          {
+            "id": "a",
+            "len": 9,
+            "type": "input",
+            "time": 10942.399999999994
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "o",
+            "inputType": "insertText",
+            "time": 10967.200000000012
+          },
+          {
+            "id": "a",
+            "len": 10,
+            "type": "input",
+            "time": 10968
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "，",
+            "inputType": "insertText",
+            "time": 10992.899999999994
+          },
+          {
+            "id": "a",
+            "len": 11,
+            "type": "input",
+            "time": 10994.299999999988
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "c",
+            "inputType": "insertText",
+            "time": 11017.799999999988
+          },
+          {
+            "id": "a",
+            "len": 12,
+            "type": "input",
+            "time": 11018.600000000006
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "a",
+            "inputType": "insertText",
+            "time": 11043.399999999994
+          },
+          {
+            "id": "a",
+            "len": 13,
+            "type": "input",
+            "time": 11044.100000000006
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "f",
+            "inputType": "insertText",
+            "time": 11069.899999999994
+          },
+          {
+            "id": "a",
+            "len": 14,
+            "type": "input",
+            "time": 11070.700000000012
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "é",
+            "inputType": "insertText",
+            "time": 11095.600000000006
+          },
+          {
+            "id": "a",
+            "len": 15,
+            "type": "input",
+            "time": 11096.299999999988
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": " ",
+            "inputType": "insertText",
+            "time": 11120.100000000006
+          },
+          {
+            "id": "a",
+            "len": 16,
+            "type": "input",
+            "time": 11120.399999999994
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "Ω",
+            "inputType": "insertText",
+            "time": 11172.700000000012
+          },
+          {
+            "id": "a",
+            "len": 17,
+            "type": "input",
+            "time": 11173.700000000012
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "\n第",
+            "inputType": "insertText",
+            "time": 11197.600000000006
+          },
+          {
+            "id": "a",
+            "len": 19,
+            "type": "input",
+            "time": 11201.200000000012
+          },
+          {
+            "id": "a",
+            "len": 19,
+            "type": "input",
+            "time": 11201.899999999994
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "二",
+            "inputType": "insertText",
+            "time": 11223.700000000012
+          },
+          {
+            "id": "a",
+            "len": 20,
+            "type": "input",
+            "time": 11224.399999999994
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "行",
+            "inputType": "insertText",
+            "time": 11250.899999999994
+          },
+          {
+            "id": "a",
+            "len": 21,
+            "type": "input",
+            "time": 11251.899999999994
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "。",
+            "inputType": "insertText",
+            "time": 11275.700000000012
+          },
+          {
+            "id": "a",
+            "len": 22,
+            "type": "input",
+            "time": 11276.299999999988
+          }
+        ]
+      },
+      "last_dom": {
+        "a": "你好 InkEcho，café Ω\n第二行。",
+        "b": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "你",
+            "inputType": "insertText",
+            "time": 10741.299999999988
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 10741.799999999988
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "好",
+            "inputType": "insertText",
+            "time": 10759.600000000006
+          },
+          {
+            "id": "a",
+            "len": 2,
+            "type": "input",
+            "time": 10759.899999999994
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": " ",
+            "inputType": "insertText",
+            "time": 10787.200000000012
+          },
+          {
+            "id": "a",
+            "len": 3,
+            "type": "input",
+            "time": 10787.899999999994
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "I",
+            "inputType": "insertText",
+            "time": 10812.5
+          },
+          {
+            "id": "a",
+            "len": 4,
+            "type": "input",
+            "time": 10812.799999999988
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "n",
+            "inputType": "insertText",
+            "time": 10836.799999999988
+          },
+          {
+            "id": "a",
+            "len": 5,
+            "type": "input",
+            "time": 10837.600000000006
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "k",
+            "inputType": "insertText",
+            "time": 10862
+          },
+          {
+            "id": "a",
+            "len": 6,
+            "type": "input",
+            "time": 10862.200000000012
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "E",
+            "inputType": "insertText",
+            "time": 10887.799999999988
+          },
+          {
+            "id": "a",
+            "len": 7,
+            "type": "input",
+            "time": 10888.100000000006
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "c",
+            "inputType": "insertText",
+            "time": 10915.5
+          },
+          {
+            "id": "a",
+            "len": 8,
+            "type": "input",
+            "time": 10916.200000000012
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "h",
+            "inputType": "insertText",
+            "time": 10941.600000000006
+          },
+          {
+            "id": "a",
+            "len": 9,
+            "type": "input",
+            "time": 10942.399999999994
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "o",
+            "inputType": "insertText",
+            "time": 10967.200000000012
+          },
+          {
+            "id": "a",
+            "len": 10,
+            "type": "input",
+            "time": 10968
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "，",
+            "inputType": "insertText",
+            "time": 10992.899999999994
+          },
+          {
+            "id": "a",
+            "len": 11,
+            "type": "input",
+            "time": 10994.299999999988
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "c",
+            "inputType": "insertText",
+            "time": 11017.799999999988
+          },
+          {
+            "id": "a",
+            "len": 12,
+            "type": "input",
+            "time": 11018.600000000006
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "a",
+            "inputType": "insertText",
+            "time": 11043.399999999994
+          },
+          {
+            "id": "a",
+            "len": 13,
+            "type": "input",
+            "time": 11044.100000000006
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "f",
+            "inputType": "insertText",
+            "time": 11069.899999999994
+          },
+          {
+            "id": "a",
+            "len": 14,
+            "type": "input",
+            "time": 11070.700000000012
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "é",
+            "inputType": "insertText",
+            "time": 11095.600000000006
+          },
+          {
+            "id": "a",
+            "len": 15,
+            "type": "input",
+            "time": 11096.299999999988
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": " ",
+            "inputType": "insertText",
+            "time": 11120.100000000006
+          },
+          {
+            "id": "a",
+            "len": 16,
+            "type": "input",
+            "time": 11120.399999999994
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "Ω",
+            "inputType": "insertText",
+            "time": 11172.700000000012
+          },
+          {
+            "id": "a",
+            "len": 17,
+            "type": "input",
+            "time": 11173.700000000012
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "\n第",
+            "inputType": "insertText",
+            "time": 11197.600000000006
+          },
+          {
+            "id": "a",
+            "len": 19,
+            "type": "input",
+            "time": 11201.200000000012
+          },
+          {
+            "id": "a",
+            "len": 19,
+            "type": "input",
+            "time": 11201.899999999994
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "二",
+            "inputType": "insertText",
+            "time": 11223.700000000012
+          },
+          {
+            "id": "a",
+            "len": 20,
+            "type": "input",
+            "time": 11224.399999999994
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "行",
+            "inputType": "insertText",
+            "time": 11250.899999999994
+          },
+          {
+            "id": "a",
+            "len": 21,
+            "type": "input",
+            "time": 11251.899999999994
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "。",
+            "inputType": "insertText",
+            "time": 11275.700000000012
+          },
+          {
+            "id": "a",
+            "len": 22,
+            "type": "input",
+            "time": 11276.299999999988
+          }
+        ]
+      },
+      "no_late": true,
+      "passed": true,
+      "received_lengths": [
+        22,
+        0
+      ]
+    },
+    {
+      "method": "auto",
+      "case": "cancel",
+      "sample": "你好 InkEcho，café Ω\n第二行。",
+      "initial_focus": "a",
+      "session": {
+        "route": null,
+        "outcome": "cancelled",
+        "metrics_characters": null,
+        "reported_characters": 1,
+        "outcomes": [
+          {
+            "characters": 1
+          }
+        ],
+        "deltas": [
+          {
+            "index": 0,
+            "monotonic": 260.013974543
+          },
+          {
+            "index": 1,
+            "monotonic": 260.039351182
+          }
+        ],
+        "dispatches": [
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 260.039403614,
+            "route_before": "fcitx",
+            "first_sent_at": 260.039814054,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 1
+          }
+        ],
+        "input_failure": null,
+        "error_code": null
+      },
+      "sent": 1,
+      "route": null,
+      "cancel_requested": true,
+      "first_dom": {
+        "a": "你",
+        "b": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "你",
+            "inputType": "insertText",
+            "time": 13210.600000000006
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 13210.899999999994
+          }
+        ]
+      },
+      "last_dom": {
+        "a": "你",
+        "b": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "你",
+            "inputType": "insertText",
+            "time": 13210.600000000006
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 13210.899999999994
+          }
+        ]
+      },
+      "no_late": true,
+      "passed": true,
+      "received_lengths": [
+        1,
+        0
+      ]
+    },
+    {
+      "method": "auto",
+      "case": "pending-cancel",
+      "sample": "甲\n乙",
+      "initial_focus": "a",
+      "session": {
+        "route": null,
+        "outcome": "cancelled",
+        "metrics_characters": null,
+        "reported_characters": 0,
+        "outcomes": [
+          {
+            "characters": 0
+          }
+        ],
+        "deltas": [
+          {
+            "index": 0,
+            "monotonic": 261.928886814
+          },
+          {
+            "index": 1,
+            "monotonic": 261.954814453
+          }
+        ],
+        "dispatches": [],
+        "input_failure": null,
+        "error_code": null
+      },
+      "sent": 0,
+      "route": null,
+      "cancel_requested": true,
+      "first_dom": {
+        "a": "",
+        "b": "",
+        "active": "a",
+        "focus": true,
+        "events": []
+      },
+      "last_dom": {
+        "a": "",
+        "b": "",
+        "active": "a",
+        "focus": true,
+        "events": []
+      },
+      "no_late": true,
+      "passed": true,
+      "received_lengths": [
+        0,
+        0
+      ]
+    },
+    {
+      "method": "auto",
+      "case": "prepare-switch",
+      "sample": "你好 InkEcho，café Ω\n第二行。",
+      "initial_focus": "a",
+      "session": {
+        "route": null,
+        "outcome": "succeeded",
+        "metrics_characters": null,
+        "reported_characters": 22,
+        "outcomes": [
+          {
+            "characters": 22
+          }
+        ],
+        "deltas": [
+          {
+            "index": 0,
+            "monotonic": 263.877468801
+          },
+          {
+            "index": 1,
+            "monotonic": 263.902910545
+          },
+          {
+            "index": 2,
+            "monotonic": 263.928322712
+          },
+          {
+            "index": 3,
+            "monotonic": 263.954260231
+          },
+          {
+            "index": 4,
+            "monotonic": 263.979682564
+          },
+          {
+            "index": 5,
+            "monotonic": 264.005238261
+          },
+          {
+            "index": 6,
+            "monotonic": 264.031324502
+          },
+          {
+            "index": 7,
+            "monotonic": 264.057175502
+          },
+          {
+            "index": 8,
+            "monotonic": 264.082579062
+          },
+          {
+            "index": 9,
+            "monotonic": 264.10868432
+          },
+          {
+            "index": 10,
+            "monotonic": 264.134518775
+          },
+          {
+            "index": 11,
+            "monotonic": 264.160670859
+          },
+          {
+            "index": 12,
+            "monotonic": 264.186762902
+          },
+          {
+            "index": 13,
+            "monotonic": 264.212902054
+          },
+          {
+            "index": 14,
+            "monotonic": 264.238860379
+          },
+          {
+            "index": 15,
+            "monotonic": 264.264990324
+          },
+          {
+            "index": 16,
+            "monotonic": 264.291208932
+          },
+          {
+            "index": 17,
+            "monotonic": 264.316708818
+          },
+          {
+            "index": 18,
+            "monotonic": 264.342519104
+          },
+          {
+            "index": 19,
+            "monotonic": 264.36876323
+          },
+          {
+            "index": 20,
+            "monotonic": 264.394580601
+          },
+          {
+            "index": 21,
+            "monotonic": 264.420439241
+          }
+        ],
+        "dispatches": [
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 263.902952839,
+            "route_before": "fcitx",
+            "first_sent_at": 263.903315679,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 1
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 263.928374618,
+            "route_before": "fcitx",
+            "first_sent_at": 263.929694415,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 2
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 263.954345622,
+            "route_before": "fcitx",
+            "first_sent_at": 263.95695507,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 3
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 263.979774696,
+            "route_before": "fcitx",
+            "first_sent_at": 263.982101722,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 4
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 264.005366113,
+            "route_before": "fcitx",
+            "first_sent_at": 264.008180267,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 5
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 264.031393514,
+            "route_before": "fcitx",
+            "first_sent_at": 264.033552485,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 6
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 264.05726353,
+            "route_before": "fcitx",
+            "first_sent_at": 264.059620885,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 7
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 264.082639764,
+            "route_before": "fcitx",
+            "first_sent_at": 264.085211351,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 8
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 264.108768849,
+            "route_before": "fcitx",
+            "first_sent_at": 264.110835648,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 9
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 264.134602363,
+            "route_before": "fcitx",
+            "first_sent_at": 264.136690934,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 10
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 264.160817566,
+            "route_before": "fcitx",
+            "first_sent_at": 264.162811388,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 11
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 264.186851038,
+            "route_before": "fcitx",
+            "first_sent_at": 264.189259578,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 12
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 264.212987774,
+            "route_before": "fcitx",
+            "first_sent_at": 264.215345304,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 13
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 264.238938984,
+            "route_before": "fcitx",
+            "first_sent_at": 264.243246828,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 14
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 264.265106076,
+            "route_before": "fcitx",
+            "first_sent_at": 264.26778307,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 15
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 264.291346435,
+            "route_before": "fcitx",
+            "first_sent_at": 264.294830588,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 16
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 264.34259986,
+            "route_before": "fcitx",
+            "first_sent_at": 264.344947396,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 17
+          },
+          {
+            "length": 2,
+            "has_lf": true,
+            "at": 264.368859311,
+            "route_before": "fcitx",
+            "first_sent_at": 264.370895283,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 19
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 264.394661175,
+            "route_before": "fcitx",
+            "first_sent_at": 264.396693104,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 20
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 264.420524679,
+            "route_before": "fcitx",
+            "first_sent_at": 264.422575713,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 21
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 264.446379085,
+            "route_before": "fcitx",
+            "first_sent_at": 264.448814207,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 22
+          }
+        ],
+        "input_failure": null,
+        "error_code": null
+      },
+      "sent": 22,
+      "route": null,
+      "cancel_requested": false,
+      "first_dom": {
+        "a": "",
+        "b": "你好 InkEcho，café Ω\n第二行。",
+        "active": "b",
+        "focus": true,
+        "events": [
+          {
+            "id": "b",
+            "type": "focus",
+            "time": 17046.79999999999
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "你",
+            "inputType": "insertText",
+            "time": 17074.099999999977
+          },
+          {
+            "id": "b",
+            "len": 1,
+            "type": "input",
+            "time": 17074.29999999999
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "好",
+            "inputType": "insertText",
+            "time": 17100.5
+          },
+          {
+            "id": "b",
+            "len": 2,
+            "type": "input",
+            "time": 17100.900000000023
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": " ",
+            "inputType": "insertText",
+            "time": 17127.79999999999
+          },
+          {
+            "id": "b",
+            "len": 3,
+            "type": "input",
+            "time": 17128.400000000023
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "I",
+            "inputType": "insertText",
+            "time": 17153
+          },
+          {
+            "id": "b",
+            "len": 4,
+            "type": "input",
+            "time": 17153.79999999999
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "n",
+            "inputType": "insertText",
+            "time": 17179.099999999977
+          },
+          {
+            "id": "b",
+            "len": 5,
+            "type": "input",
+            "time": 17179.79999999999
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "k",
+            "inputType": "insertText",
+            "time": 17204.400000000023
+          },
+          {
+            "id": "b",
+            "len": 6,
+            "type": "input",
+            "time": 17204.900000000023
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "E",
+            "inputType": "insertText",
+            "time": 17230.599999999977
+          },
+          {
+            "id": "b",
+            "len": 7,
+            "type": "input",
+            "time": 17231.400000000023
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "c",
+            "inputType": "insertText",
+            "time": 17256.29999999999
+          },
+          {
+            "id": "b",
+            "len": 8,
+            "type": "input",
+            "time": 17257.099999999977
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "h",
+            "inputType": "insertText",
+            "time": 17281.79999999999
+          },
+          {
+            "id": "b",
+            "len": 9,
+            "type": "input",
+            "time": 17282.400000000023
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "o",
+            "inputType": "insertText",
+            "time": 17308.20000000001
+          },
+          {
+            "id": "b",
+            "len": 10,
+            "type": "input",
+            "time": 17309.29999999999
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "，",
+            "inputType": "insertText",
+            "time": 17334.099999999977
+          },
+          {
+            "id": "b",
+            "len": 11,
+            "type": "input",
+            "time": 17335.099999999977
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "c",
+            "inputType": "insertText",
+            "time": 17360.099999999977
+          },
+          {
+            "id": "b",
+            "len": 12,
+            "type": "input",
+            "time": 17360.900000000023
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "a",
+            "inputType": "insertText",
+            "time": 17386.29999999999
+          },
+          {
+            "id": "b",
+            "len": 13,
+            "type": "input",
+            "time": 17387.099999999977
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "f",
+            "inputType": "insertText",
+            "time": 17414.400000000023
+          },
+          {
+            "id": "b",
+            "len": 14,
+            "type": "input",
+            "time": 17415.099999999977
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "é",
+            "inputType": "insertText",
+            "time": 17438.900000000023
+          },
+          {
+            "id": "b",
+            "len": 15,
+            "type": "input",
+            "time": 17439.599999999977
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": " ",
+            "inputType": "insertText",
+            "time": 17465.5
+          },
+          {
+            "id": "b",
+            "len": 16,
+            "type": "input",
+            "time": 17466.400000000023
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "Ω",
+            "inputType": "insertText",
+            "time": 17515.900000000023
+          },
+          {
+            "id": "b",
+            "len": 17,
+            "type": "input",
+            "time": 17516.599999999977
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "\n第",
+            "inputType": "insertText",
+            "time": 17541.79999999999
+          },
+          {
+            "id": "b",
+            "len": 19,
+            "type": "input",
+            "time": 17543
+          },
+          {
+            "id": "b",
+            "len": 19,
+            "type": "input",
+            "time": 17543.400000000023
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "二",
+            "inputType": "insertText",
+            "time": 17567.79999999999
+          },
+          {
+            "id": "b",
+            "len": 20,
+            "type": "input",
+            "time": 17568.5
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "行",
+            "inputType": "insertText",
+            "time": 17593.599999999977
+          },
+          {
+            "id": "b",
+            "len": 21,
+            "type": "input",
+            "time": 17594.29999999999
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "。",
+            "inputType": "insertText",
+            "time": 17619.599999999977
+          },
+          {
+            "id": "b",
+            "len": 22,
+            "type": "input",
+            "time": 17620.29999999999
+          }
+        ]
+      },
+      "last_dom": {
+        "a": "",
+        "b": "你好 InkEcho，café Ω\n第二行。",
+        "active": "b",
+        "focus": true,
+        "events": [
+          {
+            "id": "b",
+            "type": "focus",
+            "time": 17046.79999999999
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "你",
+            "inputType": "insertText",
+            "time": 17074.099999999977
+          },
+          {
+            "id": "b",
+            "len": 1,
+            "type": "input",
+            "time": 17074.29999999999
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "好",
+            "inputType": "insertText",
+            "time": 17100.5
+          },
+          {
+            "id": "b",
+            "len": 2,
+            "type": "input",
+            "time": 17100.900000000023
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": " ",
+            "inputType": "insertText",
+            "time": 17127.79999999999
+          },
+          {
+            "id": "b",
+            "len": 3,
+            "type": "input",
+            "time": 17128.400000000023
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "I",
+            "inputType": "insertText",
+            "time": 17153
+          },
+          {
+            "id": "b",
+            "len": 4,
+            "type": "input",
+            "time": 17153.79999999999
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "n",
+            "inputType": "insertText",
+            "time": 17179.099999999977
+          },
+          {
+            "id": "b",
+            "len": 5,
+            "type": "input",
+            "time": 17179.79999999999
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "k",
+            "inputType": "insertText",
+            "time": 17204.400000000023
+          },
+          {
+            "id": "b",
+            "len": 6,
+            "type": "input",
+            "time": 17204.900000000023
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "E",
+            "inputType": "insertText",
+            "time": 17230.599999999977
+          },
+          {
+            "id": "b",
+            "len": 7,
+            "type": "input",
+            "time": 17231.400000000023
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "c",
+            "inputType": "insertText",
+            "time": 17256.29999999999
+          },
+          {
+            "id": "b",
+            "len": 8,
+            "type": "input",
+            "time": 17257.099999999977
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "h",
+            "inputType": "insertText",
+            "time": 17281.79999999999
+          },
+          {
+            "id": "b",
+            "len": 9,
+            "type": "input",
+            "time": 17282.400000000023
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "o",
+            "inputType": "insertText",
+            "time": 17308.20000000001
+          },
+          {
+            "id": "b",
+            "len": 10,
+            "type": "input",
+            "time": 17309.29999999999
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "，",
+            "inputType": "insertText",
+            "time": 17334.099999999977
+          },
+          {
+            "id": "b",
+            "len": 11,
+            "type": "input",
+            "time": 17335.099999999977
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "c",
+            "inputType": "insertText",
+            "time": 17360.099999999977
+          },
+          {
+            "id": "b",
+            "len": 12,
+            "type": "input",
+            "time": 17360.900000000023
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "a",
+            "inputType": "insertText",
+            "time": 17386.29999999999
+          },
+          {
+            "id": "b",
+            "len": 13,
+            "type": "input",
+            "time": 17387.099999999977
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "f",
+            "inputType": "insertText",
+            "time": 17414.400000000023
+          },
+          {
+            "id": "b",
+            "len": 14,
+            "type": "input",
+            "time": 17415.099999999977
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "é",
+            "inputType": "insertText",
+            "time": 17438.900000000023
+          },
+          {
+            "id": "b",
+            "len": 15,
+            "type": "input",
+            "time": 17439.599999999977
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": " ",
+            "inputType": "insertText",
+            "time": 17465.5
+          },
+          {
+            "id": "b",
+            "len": 16,
+            "type": "input",
+            "time": 17466.400000000023
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "Ω",
+            "inputType": "insertText",
+            "time": 17515.900000000023
+          },
+          {
+            "id": "b",
+            "len": 17,
+            "type": "input",
+            "time": 17516.599999999977
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "\n第",
+            "inputType": "insertText",
+            "time": 17541.79999999999
+          },
+          {
+            "id": "b",
+            "len": 19,
+            "type": "input",
+            "time": 17543
+          },
+          {
+            "id": "b",
+            "len": 19,
+            "type": "input",
+            "time": 17543.400000000023
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "二",
+            "inputType": "insertText",
+            "time": 17567.79999999999
+          },
+          {
+            "id": "b",
+            "len": 20,
+            "type": "input",
+            "time": 17568.5
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "行",
+            "inputType": "insertText",
+            "time": 17593.599999999977
+          },
+          {
+            "id": "b",
+            "len": 21,
+            "type": "input",
+            "time": 17594.29999999999
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "。",
+            "inputType": "insertText",
+            "time": 17619.599999999977
+          },
+          {
+            "id": "b",
+            "len": 22,
+            "type": "input",
+            "time": 17620.29999999999
+          }
+        ]
+      },
+      "no_late": true,
+      "passed": true,
+      "received_lengths": [
+        0,
+        22
+      ]
+    },
+    {
+      "method": "auto",
+      "case": "switch",
+      "sample": "你好 InkEcho，café Ω\n第二行。",
+      "initial_focus": "a",
+      "session": {
+        "route": null,
+        "outcome": "succeeded",
+        "metrics_characters": null,
+        "reported_characters": 22,
+        "outcomes": [
+          {
+            "characters": 22
+          }
+        ],
+        "deltas": [
+          {
+            "index": 0,
+            "monotonic": 266.348089161
+          },
+          {
+            "index": 1,
+            "monotonic": 266.373933401
+          },
+          {
+            "index": 2,
+            "monotonic": 266.3998949
+          },
+          {
+            "index": 3,
+            "monotonic": 266.425792543
+          },
+          {
+            "index": 4,
+            "monotonic": 266.451554238
+          },
+          {
+            "index": 5,
+            "monotonic": 266.477406879
+          },
+          {
+            "index": 6,
+            "monotonic": 266.503397918
+          },
+          {
+            "index": 7,
+            "monotonic": 266.529238107
+          },
+          {
+            "index": 8,
+            "monotonic": 266.554645767
+          },
+          {
+            "index": 9,
+            "monotonic": 266.580599565
+          },
+          {
+            "index": 10,
+            "monotonic": 266.606784263
+          },
+          {
+            "index": 11,
+            "monotonic": 266.632652485
+          },
+          {
+            "index": 12,
+            "monotonic": 266.658644245
+          },
+          {
+            "index": 13,
+            "monotonic": 266.684750521
+          },
+          {
+            "index": 14,
+            "monotonic": 266.710492309
+          },
+          {
+            "index": 15,
+            "monotonic": 266.736395889
+          },
+          {
+            "index": 16,
+            "monotonic": 266.762304926
+          },
+          {
+            "index": 17,
+            "monotonic": 266.788375746
+          },
+          {
+            "index": 18,
+            "monotonic": 266.814045342
+          },
+          {
+            "index": 19,
+            "monotonic": 266.840046313
+          },
+          {
+            "index": 20,
+            "monotonic": 266.866237965
+          },
+          {
+            "index": 21,
+            "monotonic": 266.892559915
+          }
+        ],
+        "dispatches": [
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 266.373981757,
+            "route_before": "fcitx",
+            "first_sent_at": 266.37454063,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 1
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 266.399920685,
+            "route_before": "fcitx",
+            "first_sent_at": 266.400565683,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 2
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 266.425812779,
+            "route_before": "fcitx",
+            "first_sent_at": 266.426429368,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 3
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 266.451573178,
+            "route_before": "fcitx",
+            "first_sent_at": 266.452163206,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 4
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 266.477444277,
+            "route_before": "fcitx",
+            "first_sent_at": 266.478694468,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 5
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 266.503463844,
+            "route_before": "fcitx",
+            "first_sent_at": 266.505530881,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 6
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 266.529308552,
+            "route_before": "fcitx",
+            "first_sent_at": 266.531639669,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 7
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 266.554731192,
+            "route_before": "fcitx",
+            "first_sent_at": 266.55678809,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 8
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 266.580684533,
+            "route_before": "fcitx",
+            "first_sent_at": 266.582907089,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 9
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 266.606865791,
+            "route_before": "fcitx",
+            "first_sent_at": 266.608866052,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 10
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 266.632754155,
+            "route_before": "fcitx",
+            "first_sent_at": 266.634783781,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 11
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 266.658745057,
+            "route_before": "fcitx",
+            "first_sent_at": 266.661747952,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 12
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 266.684827141,
+            "route_before": "fcitx",
+            "first_sent_at": 266.686747387,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 13
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 266.710574018,
+            "route_before": "fcitx",
+            "first_sent_at": 266.712606992,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 14
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 266.736473566,
+            "route_before": "fcitx",
+            "first_sent_at": 266.738497945,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 15
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 266.762396969,
+            "route_before": "fcitx",
+            "first_sent_at": 266.764583966,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 16
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 266.814128133,
+            "route_before": "fcitx",
+            "first_sent_at": 266.816786663,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 17
+          },
+          {
+            "length": 2,
+            "has_lf": true,
+            "at": 266.840095812,
+            "route_before": "fcitx",
+            "first_sent_at": 266.841130434,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 19
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 266.866307396,
+            "route_before": "fcitx",
+            "first_sent_at": 266.868440268,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 20
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 266.892734455,
+            "route_before": "fcitx",
+            "first_sent_at": 266.896117137,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 21
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 266.918473203,
+            "route_before": "fcitx",
+            "first_sent_at": 266.920969373,
+            "protocol": 4,
+            "route_after": "fcitx",
+            "backend_type": "Fcitx5Bridge",
+            "native_attempts": 22
+          }
+        ],
+        "input_failure": null,
+        "error_code": null
+      },
+      "sent": 22,
+      "route": null,
+      "cancel_requested": false,
+      "first_dom": {
+        "a": "你",
+        "b": "好 InkEcho，café Ω\n第二行。",
+        "active": "b",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "focus",
+            "time": 19267.099999999977
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "你",
+            "inputType": "insertText",
+            "time": 19545.29999999999
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 19545.599999999977
+          },
+          {
+            "id": "b",
+            "type": "focus",
+            "time": 19545.599999999977
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "好",
+            "inputType": "insertText",
+            "time": 19571.29999999999
+          },
+          {
+            "id": "b",
+            "len": 1,
+            "type": "input",
+            "time": 19571.599999999977
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": " ",
+            "inputType": "insertText",
+            "time": 19597.099999999977
+          },
+          {
+            "id": "b",
+            "len": 2,
+            "type": "input",
+            "time": 19597.400000000023
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "I",
+            "inputType": "insertText",
+            "time": 19622.900000000023
+          },
+          {
+            "id": "b",
+            "len": 3,
+            "type": "input",
+            "time": 19623.099999999977
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "n",
+            "inputType": "insertText",
+            "time": 19649.5
+          },
+          {
+            "id": "b",
+            "len": 4,
+            "type": "input",
+            "time": 19650
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "k",
+            "inputType": "insertText",
+            "time": 19676.599999999977
+          },
+          {
+            "id": "b",
+            "len": 5,
+            "type": "input",
+            "time": 19677.099999999977
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "E",
+            "inputType": "insertText",
+            "time": 19702.400000000023
+          },
+          {
+            "id": "b",
+            "len": 6,
+            "type": "input",
+            "time": 19703.099999999977
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "c",
+            "inputType": "insertText",
+            "time": 19727.79999999999
+          },
+          {
+            "id": "b",
+            "len": 7,
+            "type": "input",
+            "time": 19728.400000000023
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "h",
+            "inputType": "insertText",
+            "time": 19753.900000000023
+          },
+          {
+            "id": "b",
+            "len": 8,
+            "type": "input",
+            "time": 19754.400000000023
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "o",
+            "inputType": "insertText",
+            "time": 19779.900000000023
+          },
+          {
+            "id": "b",
+            "len": 9,
+            "type": "input",
+            "time": 19780.5
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "，",
+            "inputType": "insertText",
+            "time": 19805.70000000001
+          },
+          {
+            "id": "b",
+            "len": 10,
+            "type": "input",
+            "time": 19806.400000000023
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "c",
+            "inputType": "insertText",
+            "time": 19832.79999999999
+          },
+          {
+            "id": "b",
+            "len": 11,
+            "type": "input",
+            "time": 19833.400000000023
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "a",
+            "inputType": "insertText",
+            "time": 19857.79999999999
+          },
+          {
+            "id": "b",
+            "len": 12,
+            "type": "input",
+            "time": 19858.400000000023
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "f",
+            "inputType": "insertText",
+            "time": 19883.599999999977
+          },
+          {
+            "id": "b",
+            "len": 13,
+            "type": "input",
+            "time": 19884.29999999999
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "é",
+            "inputType": "insertText",
+            "time": 19909.599999999977
+          },
+          {
+            "id": "b",
+            "len": 14,
+            "type": "input",
+            "time": 19910.29999999999
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": " ",
+            "inputType": "insertText",
+            "time": 19935.79999999999
+          },
+          {
+            "id": "b",
+            "len": 15,
+            "type": "input",
+            "time": 19937
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "Ω",
+            "inputType": "insertText",
+            "time": 19987.400000000023
+          },
+          {
+            "id": "b",
+            "len": 16,
+            "type": "input",
+            "time": 19988.099999999977
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "\n第",
+            "inputType": "insertText",
+            "time": 20011.79999999999
+          },
+          {
+            "id": "b",
+            "len": 18,
+            "type": "input",
+            "time": 20012.79999999999
+          },
+          {
+            "id": "b",
+            "len": 18,
+            "type": "input",
+            "time": 20013.099999999977
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "二",
+            "inputType": "insertText",
+            "time": 20039.400000000023
+          },
+          {
+            "id": "b",
+            "len": 19,
+            "type": "input",
+            "time": 20040.099999999977
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "行",
+            "inputType": "insertText",
+            "time": 20066.400000000023
+          },
+          {
+            "id": "b",
+            "len": 20,
+            "type": "input",
+            "time": 20067.099999999977
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "。",
+            "inputType": "insertText",
+            "time": 20091.599999999977
+          },
+          {
+            "id": "b",
+            "len": 21,
+            "type": "input",
+            "time": 20092.29999999999
+          }
+        ]
+      },
+      "last_dom": {
+        "a": "你",
+        "b": "好 InkEcho，café Ω\n第二行。",
+        "active": "b",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "focus",
+            "time": 19267.099999999977
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "你",
+            "inputType": "insertText",
+            "time": 19545.29999999999
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 19545.599999999977
+          },
+          {
+            "id": "b",
+            "type": "focus",
+            "time": 19545.599999999977
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "好",
+            "inputType": "insertText",
+            "time": 19571.29999999999
+          },
+          {
+            "id": "b",
+            "len": 1,
+            "type": "input",
+            "time": 19571.599999999977
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": " ",
+            "inputType": "insertText",
+            "time": 19597.099999999977
+          },
+          {
+            "id": "b",
+            "len": 2,
+            "type": "input",
+            "time": 19597.400000000023
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "I",
+            "inputType": "insertText",
+            "time": 19622.900000000023
+          },
+          {
+            "id": "b",
+            "len": 3,
+            "type": "input",
+            "time": 19623.099999999977
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "n",
+            "inputType": "insertText",
+            "time": 19649.5
+          },
+          {
+            "id": "b",
+            "len": 4,
+            "type": "input",
+            "time": 19650
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "k",
+            "inputType": "insertText",
+            "time": 19676.599999999977
+          },
+          {
+            "id": "b",
+            "len": 5,
+            "type": "input",
+            "time": 19677.099999999977
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "E",
+            "inputType": "insertText",
+            "time": 19702.400000000023
+          },
+          {
+            "id": "b",
+            "len": 6,
+            "type": "input",
+            "time": 19703.099999999977
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "c",
+            "inputType": "insertText",
+            "time": 19727.79999999999
+          },
+          {
+            "id": "b",
+            "len": 7,
+            "type": "input",
+            "time": 19728.400000000023
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "h",
+            "inputType": "insertText",
+            "time": 19753.900000000023
+          },
+          {
+            "id": "b",
+            "len": 8,
+            "type": "input",
+            "time": 19754.400000000023
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "o",
+            "inputType": "insertText",
+            "time": 19779.900000000023
+          },
+          {
+            "id": "b",
+            "len": 9,
+            "type": "input",
+            "time": 19780.5
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "，",
+            "inputType": "insertText",
+            "time": 19805.70000000001
+          },
+          {
+            "id": "b",
+            "len": 10,
+            "type": "input",
+            "time": 19806.400000000023
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "c",
+            "inputType": "insertText",
+            "time": 19832.79999999999
+          },
+          {
+            "id": "b",
+            "len": 11,
+            "type": "input",
+            "time": 19833.400000000023
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "a",
+            "inputType": "insertText",
+            "time": 19857.79999999999
+          },
+          {
+            "id": "b",
+            "len": 12,
+            "type": "input",
+            "time": 19858.400000000023
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "f",
+            "inputType": "insertText",
+            "time": 19883.599999999977
+          },
+          {
+            "id": "b",
+            "len": 13,
+            "type": "input",
+            "time": 19884.29999999999
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "é",
+            "inputType": "insertText",
+            "time": 19909.599999999977
+          },
+          {
+            "id": "b",
+            "len": 14,
+            "type": "input",
+            "time": 19910.29999999999
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": " ",
+            "inputType": "insertText",
+            "time": 19935.79999999999
+          },
+          {
+            "id": "b",
+            "len": 15,
+            "type": "input",
+            "time": 19937
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "Ω",
+            "inputType": "insertText",
+            "time": 19987.400000000023
+          },
+          {
+            "id": "b",
+            "len": 16,
+            "type": "input",
+            "time": 19988.099999999977
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "\n第",
+            "inputType": "insertText",
+            "time": 20011.79999999999
+          },
+          {
+            "id": "b",
+            "len": 18,
+            "type": "input",
+            "time": 20012.79999999999
+          },
+          {
+            "id": "b",
+            "len": 18,
+            "type": "input",
+            "time": 20013.099999999977
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "二",
+            "inputType": "insertText",
+            "time": 20039.400000000023
+          },
+          {
+            "id": "b",
+            "len": 19,
+            "type": "input",
+            "time": 20040.099999999977
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "行",
+            "inputType": "insertText",
+            "time": 20066.400000000023
+          },
+          {
+            "id": "b",
+            "len": 20,
+            "type": "input",
+            "time": 20067.099999999977
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "。",
+            "inputType": "insertText",
+            "time": 20091.599999999977
+          },
+          {
+            "id": "b",
+            "len": 21,
+            "type": "input",
+            "time": 20092.29999999999
+          }
+        ]
+      },
+      "no_late": true,
+      "passed": true,
+      "received_lengths": [
+        1,
+        21
+      ]
+    },
+    {
+      "method": "auto",
+      "case": "keyboard-first",
+      "sample": "甲乙\n",
+      "initial_focus": "a",
+      "session": {
+        "route": null,
+        "outcome": "succeeded",
+        "metrics_characters": null,
+        "reported_characters": 3,
+        "outcomes": [
+          {
+            "characters": 3
+          }
+        ],
+        "deltas": [
+          {
+            "index": 0,
+            "monotonic": 268.825401634
+          },
+          {
+            "index": 1,
+            "monotonic": 268.850894918
+          },
+          {
+            "index": 2,
+            "monotonic": 268.876866527
+          }
+        ],
+        "dispatches": [
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 268.825455804,
+            "route_before": "keyboard",
+            "first_sent_at": 268.948565634,
+            "protocol": null,
+            "route_after": "keyboard",
+            "backend_type": "KeyboardInput",
+            "native_attempts": null
+          },
+          {
+            "length": 2,
+            "has_lf": true,
+            "at": 268.970428391,
+            "route_before": "keyboard",
+            "first_sent_at": 269.058846206,
+            "protocol": null,
+            "route_after": "keyboard",
+            "backend_type": "KeyboardInput",
+            "native_attempts": null
+          }
+        ],
+        "input_failure": null,
+        "error_code": null
+      },
+      "sent": 3,
+      "route": null,
+      "cancel_requested": false,
+      "first_dom": {
+        "a": "甲乙\n",
+        "b": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "focus",
+            "time": 21742.70000000001
+          },
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "甲",
+            "code": "",
+            "time": 22133
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "甲",
+            "inputType": "insertText",
+            "time": 22133
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 22133.29999999999
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": "甲",
+            "code": "",
+            "time": 22133.5
+          },
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "乙",
+            "code": "",
+            "time": 22230.29999999999
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "乙",
+            "inputType": "insertText",
+            "time": 22230.29999999999
+          },
+          {
+            "id": "a",
+            "len": 2,
+            "type": "input",
+            "time": 22230.5
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": "乙",
+            "code": "",
+            "time": 22241
+          },
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "Enter",
+            "code": "Enter",
+            "time": 22254.400000000023
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": null,
+            "inputType": "insertLineBreak",
+            "time": 22254.400000000023
+          },
+          {
+            "id": "a",
+            "len": 3,
+            "type": "input",
+            "time": 22254.599999999977
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": "Enter",
+            "code": "Enter",
+            "time": 22265.20000000001
+          }
+        ]
+      },
+      "last_dom": {
+        "a": "甲乙\n",
+        "b": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "focus",
+            "time": 21742.70000000001
+          },
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "甲",
+            "code": "",
+            "time": 22133
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "甲",
+            "inputType": "insertText",
+            "time": 22133
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 22133.29999999999
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": "甲",
+            "code": "",
+            "time": 22133.5
+          },
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "乙",
+            "code": "",
+            "time": 22230.29999999999
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "乙",
+            "inputType": "insertText",
+            "time": 22230.29999999999
+          },
+          {
+            "id": "a",
+            "len": 2,
+            "type": "input",
+            "time": 22230.5
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": "乙",
+            "code": "",
+            "time": 22241
+          },
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "Enter",
+            "code": "Enter",
+            "time": 22254.400000000023
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": null,
+            "inputType": "insertLineBreak",
+            "time": 22254.400000000023
+          },
+          {
+            "id": "a",
+            "len": 3,
+            "type": "input",
+            "time": 22254.599999999977
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": "Enter",
+            "code": "Enter",
+            "time": 22265.20000000001
+          }
+        ]
+      },
+      "no_late": true,
+      "passed": true,
+      "received_lengths": [
+        3,
+        0
+      ]
+    }
+  ],
+  "failures": [],
+  "native_candidate_test_only_override": "f67c6b5f2cb7ecd7c915c8062efd3b70284c74b97ced4a597d942c4b39594e44",
+  "browser_full_public_manifest_matches": true,
+  "browser_version": "Google Chrome 154.0.8037.97",
+  "browser_binary_sha256": "6c792041b07547a662e1b17974d1dc34a3db630379b45d9d89ddd7e3e68cc587",
+  "startup_document": "{\"title\":\"InkEcho owned Chrome acceptance\",\"url\":\"file:///run/user/1000/inkecho-browser-d5hvlje7/owned.html\",\"ready\":\"complete\",\"body\":\"InkEcho owned offline input\",\"focus\":true}",
+  "startup_visible_window_ids": "541\n4194311\n4194307\n35651592\n39845891\n35651593\n",
+  "focus_proofs": [
+    {
+      "label": "before-activation",
+      "returncode": 0,
+      "stdout": "{\n  \"owned_xid\": 39845891,\n  \"pid\": 2372,\n  \"pid_start\": \"24648\",\n  \"exe\": \"/opt/inkecho-test-chrome/chrome\",\n  \"profile\": \"/run/user/1000/inkecho-browser-d5hvlje7/chrome-profile\",\n  \"properties\": \"_NET_WM_PID(CARDINAL) = 2372\\nWM_CLASS(STRING) = \\\"google-chrome (/run/user/1000/inkecho-browser-d5hvlje7/chrome-profile)\\\", \\\"Google-chrome\\\"\\n_NET_WM_NAME(UTF8_STRING) = \\\"InkEcho owned Chrome acceptance - Google Chrome\\\"\\n\",\n  \"net_active_window\": 39845891,\n  \"input_focus_chain\": [\n    39845891\n  ],\n  \"active_matches\": true,\n  \"input_focus_owned\": true\n}\n",
+      "stderr": "",
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-d5hvlje7/owned.html",
+        "visible": "visible"
+      },
+      "os": {
+        "owned_xid": 39845891,
+        "pid": 2372,
+        "pid_start": "24648",
+        "exe": "/opt/inkecho-test-chrome/chrome",
+        "profile": "/run/user/1000/inkecho-browser-d5hvlje7/chrome-profile",
+        "properties": "_NET_WM_PID(CARDINAL) = 2372\nWM_CLASS(STRING) = \"google-chrome (/run/user/1000/inkecho-browser-d5hvlje7/chrome-profile)\", \"Google-chrome\"\n_NET_WM_NAME(UTF8_STRING) = \"InkEcho owned Chrome acceptance - Google Chrome\"\n",
+        "net_active_window": 39845891,
+        "input_focus_chain": [
+          39845891
+        ],
+        "active_matches": true,
+        "input_focus_owned": true
+      }
+    },
+    {
+      "label": "after-activation-dom-focus",
+      "returncode": 0,
+      "stdout": "{\n  \"owned_xid\": 39845891,\n  \"pid\": 2372,\n  \"pid_start\": \"24648\",\n  \"exe\": \"/opt/inkecho-test-chrome/chrome\",\n  \"profile\": \"/run/user/1000/inkecho-browser-d5hvlje7/chrome-profile\",\n  \"properties\": \"_NET_WM_PID(CARDINAL) = 2372\\nWM_CLASS(STRING) = \\\"google-chrome (/run/user/1000/inkecho-browser-d5hvlje7/chrome-profile)\\\", \\\"Google-chrome\\\"\\n_NET_WM_NAME(UTF8_STRING) = \\\"InkEcho owned Chrome acceptance - Google Chrome\\\"\\n\",\n  \"net_active_window\": 39845891,\n  \"input_focus_chain\": [\n    39845891\n  ],\n  \"active_matches\": true,\n  \"input_focus_owned\": true\n}\n",
+      "stderr": "",
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-d5hvlje7/owned.html",
+        "visible": "visible"
+      },
+      "os": {
+        "owned_xid": 39845891,
+        "pid": 2372,
+        "pid_start": "24648",
+        "exe": "/opt/inkecho-test-chrome/chrome",
+        "profile": "/run/user/1000/inkecho-browser-d5hvlje7/chrome-profile",
+        "properties": "_NET_WM_PID(CARDINAL) = 2372\nWM_CLASS(STRING) = \"google-chrome (/run/user/1000/inkecho-browser-d5hvlje7/chrome-profile)\", \"Google-chrome\"\n_NET_WM_NAME(UTF8_STRING) = \"InkEcho owned Chrome acceptance - Google Chrome\"\n",
+        "net_active_window": 39845891,
+        "input_focus_chain": [
+          39845891
+        ],
+        "active_matches": true,
+        "input_focus_owned": true
+      }
+    },
+    {
+      "label": "auto-leading-lf-before-prepare",
+      "returncode": 0,
+      "stdout": "{\n  \"owned_xid\": 39845891,\n  \"pid\": 2372,\n  \"pid_start\": \"24648\",\n  \"exe\": \"/opt/inkecho-test-chrome/chrome\",\n  \"profile\": \"/run/user/1000/inkecho-browser-d5hvlje7/chrome-profile\",\n  \"properties\": \"_NET_WM_PID(CARDINAL) = 2372\\nWM_CLASS(STRING) = \\\"google-chrome (/run/user/1000/inkecho-browser-d5hvlje7/chrome-profile)\\\", \\\"Google-chrome\\\"\\n_NET_WM_NAME(UTF8_STRING) = \\\"InkEcho owned Chrome acceptance - Google Chrome\\\"\\n\",\n  \"net_active_window\": 39845891,\n  \"input_focus_chain\": [\n    39845891\n  ],\n  \"active_matches\": true,\n  \"input_focus_owned\": true\n}\n",
+      "stderr": "",
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-d5hvlje7/owned.html",
+        "visible": "visible"
+      },
+      "os": {
+        "owned_xid": 39845891,
+        "pid": 2372,
+        "pid_start": "24648",
+        "exe": "/opt/inkecho-test-chrome/chrome",
+        "profile": "/run/user/1000/inkecho-browser-d5hvlje7/chrome-profile",
+        "properties": "_NET_WM_PID(CARDINAL) = 2372\nWM_CLASS(STRING) = \"google-chrome (/run/user/1000/inkecho-browser-d5hvlje7/chrome-profile)\", \"Google-chrome\"\n_NET_WM_NAME(UTF8_STRING) = \"InkEcho owned Chrome acceptance - Google Chrome\"\n",
+        "net_active_window": 39845891,
+        "input_focus_chain": [
+          39845891
+        ],
+        "active_matches": true,
+        "input_focus_owned": true
+      }
+    },
+    {
+      "label": "auto-trailing-lf-before-prepare",
+      "returncode": 0,
+      "stdout": "{\n  \"owned_xid\": 39845891,\n  \"pid\": 2372,\n  \"pid_start\": \"24648\",\n  \"exe\": \"/opt/inkecho-test-chrome/chrome\",\n  \"profile\": \"/run/user/1000/inkecho-browser-d5hvlje7/chrome-profile\",\n  \"properties\": \"_NET_WM_PID(CARDINAL) = 2372\\nWM_CLASS(STRING) = \\\"google-chrome (/run/user/1000/inkecho-browser-d5hvlje7/chrome-profile)\\\", \\\"Google-chrome\\\"\\n_NET_WM_NAME(UTF8_STRING) = \\\"InkEcho owned Chrome acceptance - Google Chrome\\\"\\n\",\n  \"net_active_window\": 39845891,\n  \"input_focus_chain\": [\n    39845891\n  ],\n  \"active_matches\": true,\n  \"input_focus_owned\": true\n}\n",
+      "stderr": "",
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-d5hvlje7/owned.html",
+        "visible": "visible"
+      },
+      "os": {
+        "owned_xid": 39845891,
+        "pid": 2372,
+        "pid_start": "24648",
+        "exe": "/opt/inkecho-test-chrome/chrome",
+        "profile": "/run/user/1000/inkecho-browser-d5hvlje7/chrome-profile",
+        "properties": "_NET_WM_PID(CARDINAL) = 2372\nWM_CLASS(STRING) = \"google-chrome (/run/user/1000/inkecho-browser-d5hvlje7/chrome-profile)\", \"Google-chrome\"\n_NET_WM_NAME(UTF8_STRING) = \"InkEcho owned Chrome acceptance - Google Chrome\"\n",
+        "net_active_window": 39845891,
+        "input_focus_chain": [
+          39845891
+        ],
+        "active_matches": true,
+        "input_focus_owned": true
+      }
+    },
+    {
+      "label": "auto-pure-three-tail-before-prepare",
+      "returncode": 0,
+      "stdout": "{\n  \"owned_xid\": 39845891,\n  \"pid\": 2372,\n  \"pid_start\": \"24648\",\n  \"exe\": \"/opt/inkecho-test-chrome/chrome\",\n  \"profile\": \"/run/user/1000/inkecho-browser-d5hvlje7/chrome-profile\",\n  \"properties\": \"_NET_WM_PID(CARDINAL) = 2372\\nWM_CLASS(STRING) = \\\"google-chrome (/run/user/1000/inkecho-browser-d5hvlje7/chrome-profile)\\\", \\\"Google-chrome\\\"\\n_NET_WM_NAME(UTF8_STRING) = \\\"InkEcho owned Chrome acceptance - Google Chrome\\\"\\n\",\n  \"net_active_window\": 39845891,\n  \"input_focus_chain\": [\n    39845891\n  ],\n  \"active_matches\": true,\n  \"input_focus_owned\": true\n}\n",
+      "stderr": "",
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-d5hvlje7/owned.html",
+        "visible": "visible"
+      },
+      "os": {
+        "owned_xid": 39845891,
+        "pid": 2372,
+        "pid_start": "24648",
+        "exe": "/opt/inkecho-test-chrome/chrome",
+        "profile": "/run/user/1000/inkecho-browser-d5hvlje7/chrome-profile",
+        "properties": "_NET_WM_PID(CARDINAL) = 2372\nWM_CLASS(STRING) = \"google-chrome (/run/user/1000/inkecho-browser-d5hvlje7/chrome-profile)\", \"Google-chrome\"\n_NET_WM_NAME(UTF8_STRING) = \"InkEcho owned Chrome acceptance - Google Chrome\"\n",
+        "net_active_window": 39845891,
+        "input_focus_chain": [
+          39845891
+        ],
+        "active_matches": true,
+        "input_focus_owned": true
+      }
+    },
+    {
+      "label": "auto-synchronous-before-prepare",
+      "returncode": 0,
+      "stdout": "{\n  \"owned_xid\": 39845891,\n  \"pid\": 2372,\n  \"pid_start\": \"24648\",\n  \"exe\": \"/opt/inkecho-test-chrome/chrome\",\n  \"profile\": \"/run/user/1000/inkecho-browser-d5hvlje7/chrome-profile\",\n  \"properties\": \"_NET_WM_PID(CARDINAL) = 2372\\nWM_CLASS(STRING) = \\\"google-chrome (/run/user/1000/inkecho-browser-d5hvlje7/chrome-profile)\\\", \\\"Google-chrome\\\"\\n_NET_WM_NAME(UTF8_STRING) = \\\"InkEcho owned Chrome acceptance - Google Chrome\\\"\\n\",\n  \"net_active_window\": 39845891,\n  \"input_focus_chain\": [\n    39845891\n  ],\n  \"active_matches\": true,\n  \"input_focus_owned\": true\n}\n",
+      "stderr": "",
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-d5hvlje7/owned.html",
+        "visible": "visible"
+      },
+      "os": {
+        "owned_xid": 39845891,
+        "pid": 2372,
+        "pid_start": "24648",
+        "exe": "/opt/inkecho-test-chrome/chrome",
+        "profile": "/run/user/1000/inkecho-browser-d5hvlje7/chrome-profile",
+        "properties": "_NET_WM_PID(CARDINAL) = 2372\nWM_CLASS(STRING) = \"google-chrome (/run/user/1000/inkecho-browser-d5hvlje7/chrome-profile)\", \"Google-chrome\"\n_NET_WM_NAME(UTF8_STRING) = \"InkEcho owned Chrome acceptance - Google Chrome\"\n",
+        "net_active_window": 39845891,
+        "input_focus_chain": [
+          39845891
+        ],
+        "active_matches": true,
+        "input_focus_owned": true
+      }
+    },
+    {
+      "label": "auto-original-fallback-before-prepare",
+      "returncode": 0,
+      "stdout": "{\n  \"owned_xid\": 39845891,\n  \"pid\": 2372,\n  \"pid_start\": \"24648\",\n  \"exe\": \"/opt/inkecho-test-chrome/chrome\",\n  \"profile\": \"/run/user/1000/inkecho-browser-d5hvlje7/chrome-profile\",\n  \"properties\": \"_NET_WM_PID(CARDINAL) = 2372\\nWM_CLASS(STRING) = \\\"google-chrome (/run/user/1000/inkecho-browser-d5hvlje7/chrome-profile)\\\", \\\"Google-chrome\\\"\\n_NET_WM_NAME(UTF8_STRING) = \\\"InkEcho owned Chrome acceptance - Google Chrome\\\"\\n\",\n  \"net_active_window\": 39845891,\n  \"input_focus_chain\": [\n    39845891\n  ],\n  \"active_matches\": true,\n  \"input_focus_owned\": true\n}\n",
+      "stderr": "",
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-d5hvlje7/owned.html",
+        "visible": "visible"
+      },
+      "os": {
+        "owned_xid": 39845891,
+        "pid": 2372,
+        "pid_start": "24648",
+        "exe": "/opt/inkecho-test-chrome/chrome",
+        "profile": "/run/user/1000/inkecho-browser-d5hvlje7/chrome-profile",
+        "properties": "_NET_WM_PID(CARDINAL) = 2372\nWM_CLASS(STRING) = \"google-chrome (/run/user/1000/inkecho-browser-d5hvlje7/chrome-profile)\", \"Google-chrome\"\n_NET_WM_NAME(UTF8_STRING) = \"InkEcho owned Chrome acceptance - Google Chrome\"\n",
+        "net_active_window": 39845891,
+        "input_focus_chain": [
+          39845891
+        ],
+        "active_matches": true,
+        "input_focus_owned": true
+      }
+    },
+    {
+      "label": "auto-mixed-before-prepare",
+      "returncode": 0,
+      "stdout": "{\n  \"owned_xid\": 39845891,\n  \"pid\": 2372,\n  \"pid_start\": \"24648\",\n  \"exe\": \"/opt/inkecho-test-chrome/chrome\",\n  \"profile\": \"/run/user/1000/inkecho-browser-d5hvlje7/chrome-profile\",\n  \"properties\": \"_NET_WM_PID(CARDINAL) = 2372\\nWM_CLASS(STRING) = \\\"google-chrome (/run/user/1000/inkecho-browser-d5hvlje7/chrome-profile)\\\", \\\"Google-chrome\\\"\\n_NET_WM_NAME(UTF8_STRING) = \\\"InkEcho owned Chrome acceptance - Google Chrome\\\"\\n\",\n  \"net_active_window\": 39845891,\n  \"input_focus_chain\": [\n    39845891\n  ],\n  \"active_matches\": true,\n  \"input_focus_owned\": true\n}\n",
+      "stderr": "",
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-d5hvlje7/owned.html",
+        "visible": "visible"
+      },
+      "os": {
+        "owned_xid": 39845891,
+        "pid": 2372,
+        "pid_start": "24648",
+        "exe": "/opt/inkecho-test-chrome/chrome",
+        "profile": "/run/user/1000/inkecho-browser-d5hvlje7/chrome-profile",
+        "properties": "_NET_WM_PID(CARDINAL) = 2372\nWM_CLASS(STRING) = \"google-chrome (/run/user/1000/inkecho-browser-d5hvlje7/chrome-profile)\", \"Google-chrome\"\n_NET_WM_NAME(UTF8_STRING) = \"InkEcho owned Chrome acceptance - Google Chrome\"\n",
+        "net_active_window": 39845891,
+        "input_focus_chain": [
+          39845891
+        ],
+        "active_matches": true,
+        "input_focus_owned": true
+      }
+    },
+    {
+      "label": "auto-cancel-before-prepare",
+      "returncode": 0,
+      "stdout": "{\n  \"owned_xid\": 39845891,\n  \"pid\": 2372,\n  \"pid_start\": \"24648\",\n  \"exe\": \"/opt/inkecho-test-chrome/chrome\",\n  \"profile\": \"/run/user/1000/inkecho-browser-d5hvlje7/chrome-profile\",\n  \"properties\": \"_NET_WM_PID(CARDINAL) = 2372\\nWM_CLASS(STRING) = \\\"google-chrome (/run/user/1000/inkecho-browser-d5hvlje7/chrome-profile)\\\", \\\"Google-chrome\\\"\\n_NET_WM_NAME(UTF8_STRING) = \\\"InkEcho owned Chrome acceptance - Google Chrome\\\"\\n\",\n  \"net_active_window\": 39845891,\n  \"input_focus_chain\": [\n    39845891\n  ],\n  \"active_matches\": true,\n  \"input_focus_owned\": true\n}\n",
+      "stderr": "",
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-d5hvlje7/owned.html",
+        "visible": "visible"
+      },
+      "os": {
+        "owned_xid": 39845891,
+        "pid": 2372,
+        "pid_start": "24648",
+        "exe": "/opt/inkecho-test-chrome/chrome",
+        "profile": "/run/user/1000/inkecho-browser-d5hvlje7/chrome-profile",
+        "properties": "_NET_WM_PID(CARDINAL) = 2372\nWM_CLASS(STRING) = \"google-chrome (/run/user/1000/inkecho-browser-d5hvlje7/chrome-profile)\", \"Google-chrome\"\n_NET_WM_NAME(UTF8_STRING) = \"InkEcho owned Chrome acceptance - Google Chrome\"\n",
+        "net_active_window": 39845891,
+        "input_focus_chain": [
+          39845891
+        ],
+        "active_matches": true,
+        "input_focus_owned": true
+      }
+    },
+    {
+      "label": "auto-pending-cancel-before-prepare",
+      "returncode": 0,
+      "stdout": "{\n  \"owned_xid\": 39845891,\n  \"pid\": 2372,\n  \"pid_start\": \"24648\",\n  \"exe\": \"/opt/inkecho-test-chrome/chrome\",\n  \"profile\": \"/run/user/1000/inkecho-browser-d5hvlje7/chrome-profile\",\n  \"properties\": \"_NET_WM_PID(CARDINAL) = 2372\\nWM_CLASS(STRING) = \\\"google-chrome (/run/user/1000/inkecho-browser-d5hvlje7/chrome-profile)\\\", \\\"Google-chrome\\\"\\n_NET_WM_NAME(UTF8_STRING) = \\\"InkEcho owned Chrome acceptance - Google Chrome\\\"\\n\",\n  \"net_active_window\": 39845891,\n  \"input_focus_chain\": [\n    39845891\n  ],\n  \"active_matches\": true,\n  \"input_focus_owned\": true\n}\n",
+      "stderr": "",
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-d5hvlje7/owned.html",
+        "visible": "visible"
+      },
+      "os": {
+        "owned_xid": 39845891,
+        "pid": 2372,
+        "pid_start": "24648",
+        "exe": "/opt/inkecho-test-chrome/chrome",
+        "profile": "/run/user/1000/inkecho-browser-d5hvlje7/chrome-profile",
+        "properties": "_NET_WM_PID(CARDINAL) = 2372\nWM_CLASS(STRING) = \"google-chrome (/run/user/1000/inkecho-browser-d5hvlje7/chrome-profile)\", \"Google-chrome\"\n_NET_WM_NAME(UTF8_STRING) = \"InkEcho owned Chrome acceptance - Google Chrome\"\n",
+        "net_active_window": 39845891,
+        "input_focus_chain": [
+          39845891
+        ],
+        "active_matches": true,
+        "input_focus_owned": true
+      }
+    },
+    {
+      "label": "auto-prepare-switch-before-prepare",
+      "returncode": 0,
+      "stdout": "{\n  \"owned_xid\": 39845891,\n  \"pid\": 2372,\n  \"pid_start\": \"24648\",\n  \"exe\": \"/opt/inkecho-test-chrome/chrome\",\n  \"profile\": \"/run/user/1000/inkecho-browser-d5hvlje7/chrome-profile\",\n  \"properties\": \"_NET_WM_PID(CARDINAL) = 2372\\nWM_CLASS(STRING) = \\\"google-chrome (/run/user/1000/inkecho-browser-d5hvlje7/chrome-profile)\\\", \\\"Google-chrome\\\"\\n_NET_WM_NAME(UTF8_STRING) = \\\"InkEcho owned Chrome acceptance - Google Chrome\\\"\\n\",\n  \"net_active_window\": 39845891,\n  \"input_focus_chain\": [\n    39845891\n  ],\n  \"active_matches\": true,\n  \"input_focus_owned\": true\n}\n",
+      "stderr": "",
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-d5hvlje7/owned.html",
+        "visible": "visible"
+      },
+      "os": {
+        "owned_xid": 39845891,
+        "pid": 2372,
+        "pid_start": "24648",
+        "exe": "/opt/inkecho-test-chrome/chrome",
+        "profile": "/run/user/1000/inkecho-browser-d5hvlje7/chrome-profile",
+        "properties": "_NET_WM_PID(CARDINAL) = 2372\nWM_CLASS(STRING) = \"google-chrome (/run/user/1000/inkecho-browser-d5hvlje7/chrome-profile)\", \"Google-chrome\"\n_NET_WM_NAME(UTF8_STRING) = \"InkEcho owned Chrome acceptance - Google Chrome\"\n",
+        "net_active_window": 39845891,
+        "input_focus_chain": [
+          39845891
+        ],
+        "active_matches": true,
+        "input_focus_owned": true
+      }
+    },
+    {
+      "label": "auto-switch-before-prepare",
+      "returncode": 0,
+      "stdout": "{\n  \"owned_xid\": 39845891,\n  \"pid\": 2372,\n  \"pid_start\": \"24648\",\n  \"exe\": \"/opt/inkecho-test-chrome/chrome\",\n  \"profile\": \"/run/user/1000/inkecho-browser-d5hvlje7/chrome-profile\",\n  \"properties\": \"_NET_WM_PID(CARDINAL) = 2372\\nWM_CLASS(STRING) = \\\"google-chrome (/run/user/1000/inkecho-browser-d5hvlje7/chrome-profile)\\\", \\\"Google-chrome\\\"\\n_NET_WM_NAME(UTF8_STRING) = \\\"InkEcho owned Chrome acceptance - Google Chrome\\\"\\n\",\n  \"net_active_window\": 39845891,\n  \"input_focus_chain\": [\n    39845891\n  ],\n  \"active_matches\": true,\n  \"input_focus_owned\": true\n}\n",
+      "stderr": "",
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-d5hvlje7/owned.html",
+        "visible": "visible"
+      },
+      "os": {
+        "owned_xid": 39845891,
+        "pid": 2372,
+        "pid_start": "24648",
+        "exe": "/opt/inkecho-test-chrome/chrome",
+        "profile": "/run/user/1000/inkecho-browser-d5hvlje7/chrome-profile",
+        "properties": "_NET_WM_PID(CARDINAL) = 2372\nWM_CLASS(STRING) = \"google-chrome (/run/user/1000/inkecho-browser-d5hvlje7/chrome-profile)\", \"Google-chrome\"\n_NET_WM_NAME(UTF8_STRING) = \"InkEcho owned Chrome acceptance - Google Chrome\"\n",
+        "net_active_window": 39845891,
+        "input_focus_chain": [
+          39845891
+        ],
+        "active_matches": true,
+        "input_focus_owned": true
+      }
+    },
+    {
+      "label": "auto-keyboard-first-before-prepare",
+      "returncode": 0,
+      "stdout": "{\n  \"owned_xid\": 39845891,\n  \"pid\": 2372,\n  \"pid_start\": \"24648\",\n  \"exe\": \"/opt/inkecho-test-chrome/chrome\",\n  \"profile\": \"/run/user/1000/inkecho-browser-d5hvlje7/chrome-profile\",\n  \"properties\": \"_NET_WM_PID(CARDINAL) = 2372\\nWM_CLASS(STRING) = \\\"google-chrome (/run/user/1000/inkecho-browser-d5hvlje7/chrome-profile)\\\", \\\"Google-chrome\\\"\\n_NET_WM_NAME(UTF8_STRING) = \\\"InkEcho owned Chrome acceptance - Google Chrome\\\"\\n\",\n  \"net_active_window\": 39845891,\n  \"input_focus_chain\": [\n    39845891\n  ],\n  \"active_matches\": true,\n  \"input_focus_owned\": true\n}\n",
+      "stderr": "",
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-d5hvlje7/owned.html",
+        "visible": "visible"
+      },
+      "os": {
+        "owned_xid": 39845891,
+        "pid": 2372,
+        "pid_start": "24648",
+        "exe": "/opt/inkecho-test-chrome/chrome",
+        "profile": "/run/user/1000/inkecho-browser-d5hvlje7/chrome-profile",
+        "properties": "_NET_WM_PID(CARDINAL) = 2372\nWM_CLASS(STRING) = \"google-chrome (/run/user/1000/inkecho-browser-d5hvlje7/chrome-profile)\", \"Google-chrome\"\n_NET_WM_NAME(UTF8_STRING) = \"InkEcho owned Chrome acceptance - Google Chrome\"\n",
+        "net_active_window": 39845891,
+        "input_focus_chain": [
+          39845891
+        ],
+        "active_matches": true,
+        "input_focus_owned": true
+      }
+    }
+  ],
+  "owned_screenshots": [
+    {
+      "label": "before-activation",
+      "returncode": 0,
+      "stderr": ""
+    },
+    {
+      "label": "after-activation",
+      "returncode": 0,
+      "stderr": ""
+    }
+  ],
+  "fixture_initial_activation": {
+    "xid": 39845891,
+    "only_before_cases": true,
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "passed": true,
+  "addon_disabled_before_daemon_stop": true,
+  "browser_exit": 0,
+  "fcitx_exit": 0,
+  "hints_restored": true,
+  "package_module_origins": {
+    "inkecho.platform.fcitx5_staging": "/mnt/input/product-r2/src/inkecho/platform/fcitx5_staging.py",
+    "inkecho.platform.fcitx5_install": "/mnt/input/product-r2/src/inkecho/platform/fcitx5_install.py",
+    "inkecho.platform.framework_detection": "/mnt/input/product-r2/src/inkecho/platform/framework_detection.py",
+    "inkecho.platform.ibus_lifecycle": "/mnt/input/product-r2/src/inkecho/platform/ibus_lifecycle.py",
+    "inkecho.platform.ibus": "/mnt/input/product-r2/src/inkecho/platform/ibus.py",
+    "inkecho.platform.ibus_owned": "/mnt/input/product-r2/src/inkecho/platform/ibus_owned.py",
+    "inkecho.text_units": "/mnt/input/product-r2/src/inkecho/text_units.py",
+    "inkecho.platform.fcitx5_capability": "/mnt/input/product-r2/src/inkecho/platform/fcitx5_capability.py",
+    "inkecho.platform.fcitx5": "/mnt/input/product-r2/src/inkecho/platform/fcitx5.py",
+    "inkecho.platform.output_pacing": "/mnt/input/product-r2/src/inkecho/platform/output_pacing.py",
+    "inkecho.platform.keyboard": "/mnt/input/product-r2/src/inkecho/platform/keyboard.py",
+    "inkecho.text_normalization": "/mnt/input/product-r2/src/inkecho/text_normalization.py",
+    "inkecho.platform.output_router": "/mnt/input/product-r2/src/inkecho/platform/output_router.py",
+    "inkecho.platform.ibus_owned_auto": "/mnt/input/product-r2/src/inkecho/platform/ibus_owned_auto.py",
+    "inkecho.platform.owned_installation": "/mnt/input/product-r2/src/inkecho/platform/owned_installation.py",
+    "inkecho.platform.ibus_owned_default": "/mnt/input/product-r2/src/inkecho/platform/ibus_owned_default.py",
+    "inkecho.platform.wayland_keyboard": "/mnt/input/product-r2/src/inkecho/platform/wayland_keyboard.py",
+    "inkecho.config": "/mnt/input/product-r2/src/inkecho/config.py",
+    "inkecho.provider_catalog": "/mnt/input/product-r2/src/inkecho/provider_catalog.py",
+    "inkecho.providers": "/mnt/input/product-r2/src/inkecho/providers.py",
+    "inkecho.audio": "/mnt/input/product-r2/src/inkecho/audio.py",
+    "inkecho.core": "/mnt/input/product-r2/src/inkecho/core.py",
+    "inkecho.performance": "/mnt/input/product-r2/src/inkecho/performance.py",
+    "inkecho.realtime": "/mnt/input/product-r2/src/inkecho/realtime.py",
+    "inkecho.security": "/mnt/input/product-r2/src/inkecho/security.py",
+    "inkecho.streaming_output": "/mnt/input/product-r2/src/inkecho/streaming_output.py",
+    "inkecho.app": "/mnt/input/product-r2/src/inkecho/app.py",
+    "inkecho.platform.x11_feedback": "/mnt/input/product-r2/src/inkecho/platform/x11_feedback.py"
+  }
+}

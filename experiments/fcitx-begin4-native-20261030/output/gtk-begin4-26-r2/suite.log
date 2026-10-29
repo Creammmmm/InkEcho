@@ -1,0 +1,28 @@
+{"case": "staged", "sha": "f67c6b5f2cb7ecd7c915c8062efd3b70284c74b97ced4a597d942c4b39594e44", "test_only_override": true, "session": "wayland"}
+{"case": "owned_activation", "pid": 3136, "xid": 12582915, "fixture_only": true}
+{"case": "ready", "receiver": {"pid": 3136, "active": true, "focus": true, "text": "", "preedit_length": 0, "key_results": [], "module": null, "owned_events": []}}
+{"case": "frontend_loaded", "paths": ["/usr/lib/x86_64-linux-gnu/gtk-3.0/3.0.0/immodules/im-fcitx5.so"]}
+{"case": "normal", "route": "fcitx", "outcome": "succeeded", "metrics_characters": null, "reported_characters": 2, "outcomes": [{"characters": 2}], "deltas": [{"index": 0, "monotonic": 103.171662558}, {"index": 1, "monotonic": 103.196783295}], "dispatches": [{"length": 1, "has_lf": false, "at": 103.198071947, "route_before": "fcitx", "first_sent_at": 103.198417109, "protocol": 4, "route_after": "fcitx", "backend_type": "Fcitx5Bridge", "native_attempts": 1}, {"length": 1, "has_lf": false, "at": 103.222512187, "route_before": "fcitx", "first_sent_at": 103.223334294, "protocol": 4, "route_after": "fcitx", "backend_type": "Fcitx5Bridge", "native_attempts": 2}], "input_failure": null, "error_code": null, "route_during_dispatch": ["fcitx", "fcitx"], "sent": 2, "code": null, "attempts": 2, "receiver": {"pid": 3136, "active": true, "focus": true, "text": "\u7532\u4e59", "preedit_length": 0, "key_results": [], "module": null, "owned_events": []}}
+{"case": "actor_exit", "exit": 0}
+{"case": "daemon_exit", "exit": 0}
+{"case": "hints_restored", "value": true}
+Traceback (most recent call last):
+  File "/mnt/input/gtk-begin4-26.py", line 129, in <module>
+    asyncio.run(main())
+    ~~~~~~~~~~~^^^^^^^^
+  File "/tmp/.mount_InkEchhdaHNo/usr/lib/python3.13/asyncio/runners.py", line 196, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "/tmp/.mount_InkEchhdaHNo/usr/lib/python3.13/asyncio/runners.py", line 119, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/tmp/.mount_InkEchhdaHNo/usr/lib/python3.13/asyncio/base_events.py", line 726, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/mnt/input/gtk-begin4-26.py", line 86, in main
+    await asyncio.sleep(.5);await key(ord('a'));await asyncio.sleep(1)
+                            ^^^^^^^^^^^^^^^^^^^
+  File "/mnt/input/gtk-begin4-26.py", line 45, in key
+    else:raise RuntimeError('virtual keyboard acknowledgement timeout')
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: virtual keyboard acknowledgement timeout

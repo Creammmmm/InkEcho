@@ -1,0 +1,482 @@
+[
+  {
+    "case": "staged",
+    "sha": "f67c6b5f2cb7ecd7c915c8062efd3b70284c74b97ced4a597d942c4b39594e44",
+    "test_only_override": true,
+    "session": "wayland"
+  },
+  {
+    "case": "owned_activation",
+    "pid": 3368,
+    "xid": 10485763,
+    "fixture_only": true
+  },
+  {
+    "case": "ready",
+    "receiver": {
+      "pid": 3368,
+      "active": true,
+      "focus": true,
+      "text": "",
+      "preedit_length": 0,
+      "key_results": [],
+      "module": null,
+      "owned_events": []
+    }
+  },
+  {
+    "case": "frontend_loaded",
+    "paths": [
+      "/usr/lib/x86_64-linux-gnu/gtk-3.0/3.0.0/immodules/im-fcitx5.so"
+    ]
+  },
+  {
+    "case": "normal",
+    "route": "fcitx",
+    "outcome": "succeeded",
+    "metrics_characters": null,
+    "reported_characters": 2,
+    "outcomes": [
+      {
+        "characters": 2
+      }
+    ],
+    "deltas": [
+      {
+        "index": 0,
+        "monotonic": 137.058267
+      },
+      {
+        "index": 1,
+        "monotonic": 137.083441936
+      }
+    ],
+    "dispatches": [
+      {
+        "length": 1,
+        "has_lf": false,
+        "at": 137.08515531,
+        "route_before": "fcitx",
+        "first_sent_at": 137.08556196,
+        "protocol": 4,
+        "route_after": "fcitx",
+        "backend_type": "Fcitx5Bridge",
+        "native_attempts": 1
+      },
+      {
+        "length": 1,
+        "has_lf": false,
+        "at": 137.1088631,
+        "route_before": "fcitx",
+        "first_sent_at": 137.110249302,
+        "protocol": 4,
+        "route_after": "fcitx",
+        "backend_type": "Fcitx5Bridge",
+        "native_attempts": 2
+      }
+    ],
+    "input_failure": null,
+    "error_code": null,
+    "route_during_dispatch": [
+      "fcitx",
+      "fcitx"
+    ],
+    "sent": 2,
+    "code": null,
+    "attempts": 2,
+    "receiver": {
+      "pid": 3368,
+      "active": true,
+      "focus": true,
+      "text": "\u7532\u4e59",
+      "preedit_length": 0,
+      "key_results": [],
+      "module": null,
+      "owned_events": []
+    }
+  },
+  {
+    "case": "virtual_hardware_control",
+    "receiver": {
+      "pid": 3368,
+      "active": true,
+      "focus": true,
+      "text": "\u7532\u4e59a",
+      "preedit_length": 0,
+      "key_results": [],
+      "module": null,
+      "owned_events": [
+        {
+          "type": "8",
+          "keyval": 97,
+          "hardware_keycode": 38
+        },
+        {
+          "type": "9",
+          "keyval": 97,
+          "hardware_keycode": 38
+        }
+      ]
+    }
+  },
+  {
+    "case": "active_engine",
+    "engine": "pinyin"
+  },
+  {
+    "case": "first_pinyin_key",
+    "receiver": {
+      "pid": 3368,
+      "active": true,
+      "focus": true,
+      "text": "\u7532\u4e59a",
+      "preedit_length": 1,
+      "key_results": [],
+      "module": null,
+      "owned_events": [
+        {
+          "type": "8",
+          "keyval": 97,
+          "hardware_keycode": 38
+        },
+        {
+          "type": "9",
+          "keyval": 97,
+          "hardware_keycode": 38
+        },
+        {
+          "type": "9",
+          "keyval": 110,
+          "hardware_keycode": 57
+        }
+      ]
+    }
+  },
+  {
+    "case": "real_preedit_before",
+    "receiver": {
+      "pid": 3368,
+      "active": true,
+      "focus": true,
+      "text": "\u7532\u4e59a",
+      "preedit_length": 2,
+      "key_results": [],
+      "module": null,
+      "owned_events": [
+        {
+          "type": "8",
+          "keyval": 97,
+          "hardware_keycode": 38
+        },
+        {
+          "type": "9",
+          "keyval": 97,
+          "hardware_keycode": 38
+        },
+        {
+          "type": "9",
+          "keyval": 110,
+          "hardware_keycode": 57
+        },
+        {
+          "type": "9",
+          "keyval": 105,
+          "hardware_keycode": 31
+        }
+      ]
+    }
+  },
+  {
+    "case": "guarded_during_pinyin",
+    "route": "fcitx",
+    "outcome": "failed",
+    "metrics_characters": null,
+    "reported_characters": 0,
+    "outcomes": [
+      {
+        "characters": 0
+      }
+    ],
+    "deltas": [
+      {
+        "index": 0,
+        "monotonic": 142.571145918
+      },
+      {
+        "index": 1,
+        "monotonic": 142.597157714
+      }
+    ],
+    "dispatches": [
+      {
+        "length": 2,
+        "has_lf": true,
+        "at": 142.645463757,
+        "route_before": "fcitx",
+        "error_code": "fcitx_composition_active",
+        "error_type": "OutputRouterError",
+        "protocol": 4,
+        "route_after": "fcitx",
+        "backend_type": "Fcitx5Bridge",
+        "native_attempts": 0
+      }
+    ],
+    "input_failure": "fcitx_composition_active",
+    "error_code": null,
+    "route_during_dispatch": [
+      "fcitx"
+    ],
+    "sent": 0,
+    "code": "fcitx_composition_active",
+    "attempts": 0,
+    "receiver": {
+      "pid": 3368,
+      "active": true,
+      "focus": true,
+      "text": "\u7532\u4e59a",
+      "preedit_length": 2,
+      "key_results": [],
+      "module": null,
+      "owned_events": [
+        {
+          "type": "8",
+          "keyval": 97,
+          "hardware_keycode": 38
+        },
+        {
+          "type": "9",
+          "keyval": 97,
+          "hardware_keycode": 38
+        },
+        {
+          "type": "9",
+          "keyval": 110,
+          "hardware_keycode": 57
+        },
+        {
+          "type": "9",
+          "keyval": 105,
+          "hardware_keycode": 31
+        }
+      ]
+    }
+  },
+  {
+    "case": "user_finished_composition",
+    "receiver": {
+      "pid": 3368,
+      "active": true,
+      "focus": true,
+      "text": "\u7532\u4e59a\u4f60",
+      "preedit_length": 0,
+      "key_results": [],
+      "module": null,
+      "owned_events": [
+        {
+          "type": "8",
+          "keyval": 97,
+          "hardware_keycode": 38
+        },
+        {
+          "type": "9",
+          "keyval": 97,
+          "hardware_keycode": 38
+        },
+        {
+          "type": "9",
+          "keyval": 110,
+          "hardware_keycode": 57
+        },
+        {
+          "type": "9",
+          "keyval": 105,
+          "hardware_keycode": 31
+        },
+        {
+          "type": "9",
+          "keyval": 32,
+          "hardware_keycode": 65
+        }
+      ]
+    }
+  },
+  {
+    "case": "gtk_stream_lf_neighbor",
+    "route": "fcitx",
+    "outcome": "succeeded",
+    "metrics_characters": null,
+    "reported_characters": 2,
+    "outcomes": [
+      {
+        "characters": 2
+      }
+    ],
+    "deltas": [
+      {
+        "index": 0,
+        "monotonic": 144.487066046
+      },
+      {
+        "index": 1,
+        "monotonic": 144.513125234
+      }
+    ],
+    "dispatches": [
+      {
+        "length": 2,
+        "has_lf": true,
+        "at": 144.576038888,
+        "route_before": "fcitx",
+        "first_sent_at": 144.576585661,
+        "protocol": 4,
+        "route_after": "fcitx",
+        "backend_type": "Fcitx5Bridge",
+        "native_attempts": 2
+      }
+    ],
+    "input_failure": null,
+    "error_code": null,
+    "route_during_dispatch": [
+      "fcitx"
+    ],
+    "sent": 2,
+    "code": null,
+    "attempts": 2,
+    "receiver": {
+      "pid": 3368,
+      "active": true,
+      "focus": true,
+      "text": "\u7532\u4e59a\u4f60\n\u5e9a",
+      "preedit_length": 0,
+      "key_results": [],
+      "module": null,
+      "owned_events": [
+        {
+          "type": "8",
+          "keyval": 97,
+          "hardware_keycode": 38
+        },
+        {
+          "type": "9",
+          "keyval": 97,
+          "hardware_keycode": 38
+        },
+        {
+          "type": "9",
+          "keyval": 110,
+          "hardware_keycode": 57
+        },
+        {
+          "type": "9",
+          "keyval": 105,
+          "hardware_keycode": 31
+        },
+        {
+          "type": "9",
+          "keyval": 32,
+          "hardware_keycode": 65
+        }
+      ]
+    }
+  },
+  {
+    "case": "cancel_after_prefix",
+    "route": "fcitx",
+    "outcome": "cancelled",
+    "metrics_characters": null,
+    "reported_characters": 2,
+    "outcomes": [
+      {
+        "characters": 2
+      }
+    ],
+    "deltas": [
+      {
+        "index": 0,
+        "monotonic": 144.986721076
+      },
+      {
+        "index": 1,
+        "monotonic": 145.012240826
+      },
+      {
+        "index": 2,
+        "monotonic": 145.037755325
+      }
+    ],
+    "dispatches": [
+      {
+        "length": 2,
+        "has_lf": true,
+        "at": 145.078341199,
+        "route_before": "fcitx",
+        "first_sent_at": 145.079495076,
+        "protocol": 4,
+        "route_after": "fcitx",
+        "backend_type": "Fcitx5Bridge",
+        "native_attempts": 2
+      }
+    ],
+    "input_failure": null,
+    "error_code": null,
+    "route_during_dispatch": [
+      "fcitx"
+    ],
+    "sent": 2,
+    "code": null,
+    "attempts": 2,
+    "receiver": {
+      "pid": 3368,
+      "active": true,
+      "focus": true,
+      "text": "\u7532\u4e59a\u4f60\n\u5e9a\n\u5e9a",
+      "preedit_length": 0,
+      "key_results": [],
+      "module": null,
+      "owned_events": [
+        {
+          "type": "8",
+          "keyval": 97,
+          "hardware_keycode": 38
+        },
+        {
+          "type": "9",
+          "keyval": 97,
+          "hardware_keycode": 38
+        },
+        {
+          "type": "9",
+          "keyval": 110,
+          "hardware_keycode": 57
+        },
+        {
+          "type": "9",
+          "keyval": 105,
+          "hardware_keycode": 31
+        },
+        {
+          "type": "9",
+          "keyval": 32,
+          "hardware_keycode": 65
+        }
+      ]
+    }
+  },
+  {
+    "case": "normal_cancel_passed",
+    "value": true,
+    "preedit_verified": true
+  },
+  {
+    "case": "actor_exit_before_pipeline",
+    "exit": 0
+  },
+  {
+    "case": "daemon_exit",
+    "exit": 0
+  },
+  {
+    "case": "hints_restored",
+    "value": true
+  }
+]

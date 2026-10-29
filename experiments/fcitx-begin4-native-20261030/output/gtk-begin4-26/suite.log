@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/mnt/input/gtk-begin4-26.py", line 28, in <module>
+    label=os.environ.get('INKECHO_OUTPUT_STAGE','default');work=Path('/run/user/1000/inkecho-package-gate-0.11.0')/('fcitx-'+label);work.mkdir(mode=0o700);state=work/'actor.json';data=work/'data';data.mkdir(mode=0o700);rows=[];daemon=None;actor=None
+                                                                                                                                    ~~~~~~~~~~^^^^^^^^^^^^
+  File "/tmp/.mount_InkEchfEkGOB/usr/lib/python3.13/pathlib/_local.py", line 722, in mkdir
+    os.mkdir(self, mode)
+    ~~~~~~~~^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/run/user/1000/inkecho-package-gate-0.11.0/fcitx-begin4-26'

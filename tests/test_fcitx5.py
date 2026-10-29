@@ -232,39 +232,55 @@ def test_owner_change_during_no_target_reply_disables_keyboard_fallback():
     asyncio.run(run())
 
 
-def test_newline_and_tab_are_sent_as_individual_text_fragments():
+def test_newline_and_tab_keep_exact_text_in_neighbor_batches():
+    from test_neighbor_protocol import Bus
+
     async def run():
-        bus = FakeBus([reply([1])] * 5)
+        bus = Bus()
         client = Fcitx5Bridge(
             bus_factory=lambda: bus, capability_factory=FakeCapability
         )
         await client.connect()
         assert await client.insert("甲\n乙\tZ", lambda: True) == 5
-        sends = [call.body[2] for call in bus.calls if call.member == "Commit"]
-        assert sends == ["甲", "\n", "乙", "\t", "Z"]
+        sends = [call.body[2] for call in bus.calls if call.member == "CommitBatch"]
+        assert sends == ["甲", "\n乙", "\t", "Z"]
+        await client.aclose()
 
     asyncio.run(run())
 
 
-def test_cancel_after_newline_stops_and_prevents_replay():
+def test_cancel_after_newline_batch_stops_and_prevents_replay():
+    from test_neighbor_protocol import Bus
+
     async def run():
-        bus = FakeBus([reply([1]), reply([1])])
+        bus = Bus()
+        active = True
+        original_call = bus.call
+
+        async def call(message):
+            nonlocal active
+            result = await original_call(message)
+            if message.member == "CommitBatch" and "\n" in message.body[2]:
+                active = False
+            return result
+
+        bus.call = call
         client = Fcitx5Bridge(
             bus_factory=lambda: bus, capability_factory=FakeCapability
         )
         await client.connect()
-        checks = iter([True, True, True, True, False])
         with pytest.raises(FcitxOutputError) as caught:
-            await client.insert("甲\n乙\tZ", lambda: next(checks))
+            await client.insert("甲\n乙\tZ", lambda: active)
         assert caught.value.code == "cancelled"
-        assert caught.value.accepted == 2
+        assert caught.value.accepted == 3
         assert not caught.value.safe_to_fallback
-        assert [call.body[2] for call in bus.calls if call.member == "Commit"] == [
+        assert [call.body[2] for call in bus.calls if call.member == "CommitBatch"] == [
             "甲",
-            "\n",
+            "\n乙",
         ]
         with pytest.raises(FcitxOutputError, match="session_failed"):
             await client.insert("乙\tZ", lambda: True)
+        await client.aclose()
 
     asyncio.run(run())
 

@@ -53,6 +53,8 @@ CODES = (
         "fcitx_owner_changed",
         "fcitx_composition_guard_unavailable",
         "fcitx_composition_active",
+        "fcitx_linefeed_protocol_unavailable",
+        "fcitx_unsupported_text",
         "fcitx_no_target",
         "fcitx_ambiguous_target",
         "fcitx_delivery_unknown",

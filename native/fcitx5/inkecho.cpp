@@ -37,11 +37,12 @@ public:
         return message ? message->sender() : "";
     }
 
-    bool beginTask(const std::string &token, bool detailedFocus, bool compositionGuard = false) {
+    bool beginTask(const std::string &token, bool detailedFocus, bool compositionGuard = false, bool batchProtocol = false) {
         const auto owner = sender();
         if (!watcher_ || !gate_.begin(owner, token)) return false;
         detailedFocus_ = detailedFocus;
         compositionGuard_ = compositionGuard;
+        batchProtocol_ = batchProtocol;
         watch_ = watcher_->watchService(owner, [this, token](const std::string &name, const std::string &, const std::string &newOwner) {
             if (newOwner.empty()) gate_.owner_lost(name, token);
         });
@@ -54,6 +55,9 @@ public:
     }
     bool begin3(const std::string &token, std::uint32_t version) {
         return version == 3 && beginTask(token, true, true);
+    }
+    bool begin4(const std::string &token, std::uint32_t version) {
+        return version == 4 && beginTask(token, true, true, true);
     }
     bool cancel(const std::string &token) { return gate_.cancel(sender(), token); }
     std::string runtimeVersion() { return Instance::version(); }
@@ -81,9 +85,36 @@ public:
         return result == 3 ? rejected : result;
     }
 
+    std::uint32_t commitBatch(const std::string &token, std::uint32_t sequence, const std::string &text) {
+        if (!batchProtocol_) return 0;
+        std::uint32_t rejected = 3;
+        const auto result = gate_.commitBatch(sender(), token, sequence, text, [this, &rejected](const std::string &scalar) {
+            const auto selection = inkecho_focus_selection<InputContext>(instance_->inputContextManager());
+            if (!selection.target) {
+                rejected = inkecho_focus_rejection(selection, detailedFocus_);
+                return false;
+            }
+            if (inkecho_composition_blocked(*selection.target)) {
+                // Old clients must see an unsafe terminal result, never no-target.
+                rejected = compositionGuard_ ? 5 : 2;
+                return false;
+            }
+            // This is an attempt, not acknowledgement from the target client.
+            selection.target->commitString(scalar);
+            return true;
+        });
+        if (result == 3 && (rejected == 5 || rejected == 2)) {
+            // No delayed retry of this task when the user's composition changes.
+            gate_.cancel(sender(), token);
+        }
+        return result == 3 ? rejected : result;
+    }
+
     FCITX_OBJECT_VTABLE_METHOD(begin, "Begin", "s", "b");
     FCITX_OBJECT_VTABLE_METHOD(begin2, "Begin2", "su", "b");
     FCITX_OBJECT_VTABLE_METHOD(begin3, "Begin3", "su", "b");
+    FCITX_OBJECT_VTABLE_METHOD(begin4, "Begin4", "su", "b");
+    FCITX_OBJECT_VTABLE_METHOD(commitBatch, "CommitBatch", "sus", "u");
     FCITX_OBJECT_VTABLE_METHOD(cancel, "Cancel", "s", "b");
     FCITX_OBJECT_VTABLE_METHOD(runtimeVersion, "RuntimeVersion", "", "s");
     FCITX_OBJECT_VTABLE_METHOD(commit, "Commit", "sus", "u");
@@ -93,6 +124,7 @@ private:
     inkecho::TaskGate gate_;
     bool detailedFocus_ = false;
     bool compositionGuard_ = false;
+    bool batchProtocol_ = false;
     std::unique_ptr<dbus::ServiceWatcher> watcher_;
     std::unique_ptr<dbus::ServiceWatcherEntry> watch_;
 };

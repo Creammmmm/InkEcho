@@ -1,0 +1,25 @@
+[
+  {
+    "argv": [
+      "cmake",
+      "-S",
+      "/home/inkecho/batch-prototype/native",
+      "-B",
+      "/home/inkecho/batch-prototype/build"
+    ],
+    "returncode": 0,
+    "stdout": "-- The CXX compiler identification is GNU 13.3.0\n-- Detecting CXX compiler ABI info\n-- Detecting CXX compiler ABI info - done\n-- Check for working CXX compiler: /usr/bin/c++ - skipped\n-- Detecting CXX compile features\n-- Detecting CXX compile features - done\n-- Configuring done (0.1s)\n-- Generating done (0.0s)\n-- Build files have been written to: /home/inkecho/batch-prototype/build\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "cmake",
+      "--build",
+      "/home/inkecho/batch-prototype/build",
+      "-j2"
+    ],
+    "returncode": 0,
+    "stdout": "[ 50%] Building CXX object CMakeFiles/inkecho.dir/inkecho.cpp.o\n[100%] Linking CXX shared module libinkecho.so\n[100%] Built target inkecho\n",
+    "stderr": ""
+  }
+]

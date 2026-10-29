@@ -28,3 +28,17 @@ inline bool inkecho_one_scalar(std::string_view text) {
            !(first == 0xf0 && second < 0x90) &&
            !(first == 0xf4 && second >= 0x90);
 }
+
+// Prototype-only: at most eight valid scalars, no new control characters.
+inline bool inkecho_bounded_batch(std::string_view text) {
+    if (text.empty() || text.size() > 32) return false;
+    std::size_t offset = 0, count = 0;
+    while (offset < text.size()) {
+        const auto c = static_cast<unsigned char>(text[offset]);
+        const std::size_t size = c < 0x80 ? 1 : c < 0xe0 ? 2 : c < 0xf0 ? 3 : 4;
+        if (offset + size > text.size() || !inkecho_one_scalar(text.substr(offset, size))) return false;
+        offset += size;
+        if (++count > 8) return false;
+    }
+    return true;
+}

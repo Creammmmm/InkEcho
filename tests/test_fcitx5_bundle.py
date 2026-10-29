@@ -47,6 +47,7 @@ def test_verified_candidate_is_included_in_inventory(bundle, candidate_root, tmp
     assert inventory["fcitx5_candidate"]["focus_protocol_version"] == 3
     assert inventory["fcitx5_candidate"]["composition_guard_protocol_version"] == 3
     assert inventory["fcitx5_candidate"]["legacy_begin_supported"] is True
+    assert inventory["fcitx5_candidate"]["neighbor_batch_protocol_version"] == 4
 
 
 @pytest.mark.parametrize(

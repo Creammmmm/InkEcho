@@ -1,0 +1,22 @@
+Traceback (most recent call last):
+  File "/input/wrapper.py", line 11, in <module>
+    while chunk:=src.read(1024*1024):h.update(chunk);out.write(chunk)
+                                                     ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/gzip.py", line 300, in write
+    return self._buffer.write(data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/gzip.py", line 130, in write
+    return self.gzip_file._write_raw(data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/gzip.py", line 312, in _write_raw
+    self.fileobj.write(self.compress.compress(data))
+OSError: [Errno 122] Disk quota exceeded
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/input/wrapper.py", line 10, in <module>
+    with dst.open('rb') as src,gzip.open(a,'wb',compresslevel=9) as out:
+  File "/usr/lib/python3.12/gzip.py", line 368, in close
+    myfileobj.close()
+OSError: [Errno 122] Disk quota exceeded

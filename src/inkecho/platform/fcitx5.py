@@ -11,6 +11,8 @@ from collections.abc import Callable
 from dbus_next import Message, MessageType
 from dbus_next.aio import MessageBus
 
+from inkecho.text_units import iter_text_units
+
 from .fcitx5_capability import Capability
 
 SERVICE = "org.fcitx.Fcitx5"
@@ -66,6 +68,7 @@ class Fcitx5Bridge:
         self._capability = None
         self._sequence = 0
         self._bus = None
+        self._protocol = 0
         self._owner = None
         self._timeout = timeout
         self._busy = False
@@ -175,9 +178,52 @@ class Fcitx5Bridge:
             if bus is not None:
                 bus.disconnect()
             raise FcitxOutputError("unavailable") from None
-        # Old running addons must not submit unprotected text or authorize
-        # another output path simply because the new protocol is unavailable.
-        if root.find(f"interface[@name='{INTERFACE}']/method[@name='Begin3']") is None:
+        # A partial/malformed new advertisement is not an old healthy bridge.
+        interfaces = root.findall(f"interface[@name='{INTERFACE}']")
+        interface = interfaces[0] if len(interfaces) == 1 else None
+
+        def valid_method(name, inputs, outputs):
+            methods = (
+                interface.findall(f"method[@name='{name}']")
+                if interface is not None
+                else []
+            )
+            if len(methods) != 1:
+                return False
+            arguments = methods[0].findall("arg")
+            return (
+                "".join(
+                    a.get("type", "")
+                    for a in arguments
+                    if a.get("direction", "in") == "in"
+                )
+                == inputs
+                and "".join(
+                    a.get("type", "") for a in arguments if a.get("direction") == "out"
+                )
+                == outputs
+                and all(a.get("direction", "in") in {"in", "out"} for a in arguments)
+            )
+
+        advertised = interface is not None and any(
+            interface.find(f"method[@name='{name}']") is not None
+            for name in ("Begin4", "CommitBatch")
+        )
+        if advertised:
+            if not (
+                valid_method("Begin4", "su", "b")
+                and valid_method("CommitBatch", "sus", "u")
+                and valid_method("Cancel", "s", "b")
+            ):
+                bus.disconnect()
+                raise FcitxOutputError("composition_guard_unavailable")
+            protocol = 4
+        elif (
+            interface is not None
+            and interface.find("method[@name='Begin3']") is not None
+        ):
+            protocol = 3
+        else:
             bus.disconnect()
             raise FcitxOutputError("composition_guard_unavailable")
         cap = None
@@ -189,9 +235,9 @@ class Fcitx5Bridge:
                         destination=unique,
                         path=PATH,
                         interface=INTERFACE,
-                        member="Begin3",
+                        member=f"Begin{protocol}",
                         signature="su",
-                        body=[cap.token, 3],
+                        body=[cap.token, protocol],
                     )
                 ),
                 self._timeout,
@@ -201,6 +247,7 @@ class Fcitx5Bridge:
                 or begin.message_type != MessageType.METHOD_RETURN
                 or begin.body != [True]
                 or type(begin.body[0]) is not bool
+                or (protocol == 4 and getattr(begin, "signature", None) != "b")
             ):
                 raise ValueError("task authorization failed")
             if self._owner_changed:
@@ -230,7 +277,16 @@ class Fcitx5Bridge:
             if self.preflight_cleanup_failed:
                 raise FcitxOutputError("cleanup_failed") from None
             raise FcitxOutputError("closed")
+        self._protocol = protocol
         self._bus, self._owner, self._capability = bus, unique, cap
+
+    @property
+    def supports_neighbor_batch(self):
+        return (
+            self._protocol == 4
+            and self._bus is not None
+            and not (self._closed or self._failed or self._owner_changed)
+        )
 
     async def insert(
         self,
@@ -256,6 +312,15 @@ class Fcitx5Bridge:
         ):
             self._failed = True
             raise FcitxOutputError("unsupported_text", accepted=self._accepted)
+        if self._protocol != 4 and "\n" in text:
+            self._failed = True
+            raise FcitxOutputError(
+                "linefeed_protocol_unavailable", accepted=self._accepted
+            )
+        if self._protocol == 4 and text == "\n":
+            self._failed = True
+            raise FcitxOutputError("unsupported_text", accepted=self._accepted)
+        units = iter_text_units(text) if self._protocol == 4 else text
         if deadline is None:
             deadline = time.monotonic() + 60
         try:
@@ -268,7 +333,7 @@ class Fcitx5Bridge:
         self._busy = True
         accepted = 0
         try:
-            for char in text:
+            for char in units:
                 if self._closed:
                     raise FcitxOutputError("cancelled", accepted=self._accepted)
                 if time.monotonic() >= deadline:
@@ -333,7 +398,9 @@ class Fcitx5Bridge:
                                     destination=self._owner,
                                     path=PATH,
                                     interface=INTERFACE,
-                                    member="Commit",
+                                    member="CommitBatch"
+                                    if self._protocol == 4
+                                    else "Commit",
                                     signature="sus",
                                     body=[self._capability.token, self._sequence, char],
                                 )
@@ -352,6 +419,10 @@ class Fcitx5Bridge:
                         or reply.message_type != MessageType.METHOD_RETURN
                         or reply.body not in ([0], [1], [2], [3], [4], [5])
                         or type(reply.body[0]) is not int
+                        or (
+                            self._protocol == 4
+                            and getattr(reply, "signature", None) != "u"
+                        )
                     ):
                         raise FcitxOutputError(
                             "delivery_unknown", accepted=self._accepted, uncertain=True
@@ -420,9 +491,9 @@ class Fcitx5Bridge:
                         focus_poll_delay * 2, max(FOCUS_POLL_SECONDS, poll_cap)
                     )
                 self._sequence += 1
-                accepted += 1
-                self._accepted += 1
-                if accepted == 1 and on_first_sent is not None:
+                accepted += len(char)
+                self._accepted += len(char)
+                if accepted == len(char) and on_first_sent is not None:
                     try:
                         on_first_sent(time.monotonic())
                     except Exception:

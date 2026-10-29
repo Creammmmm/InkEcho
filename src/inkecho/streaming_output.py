@@ -8,6 +8,7 @@ from dataclasses import dataclass, field
 from inkecho.platform.keyboard import KeyboardError
 from inkecho.providers import ProviderError
 from inkecho.text_normalization import normalize_newlines
+from inkecho.text_units import NeighborPlanner
 
 CHUNK_CHARACTERS = 128
 QUEUE_CHUNKS = 32
@@ -33,8 +34,14 @@ class StreamingOutput:
         self,
         send: Callable[[str], Awaitable[int]],
         active: Callable[[], bool],
+        *,
+        prepare=None,
+        batch_enabled=None,
     ) -> None:
         self._send = send
+        self._prepare = prepare
+        self._batch_enabled = batch_enabled
+        self._planner = None
         self._active = active
         self._queue: deque[TextDelta | None] = deque()
         self._available = asyncio.Event()
@@ -154,24 +161,61 @@ class StreamingOutput:
         await self._put(None)
         self._check()
 
+    async def _emit(self, text):
+        if not text:
+            return
+        self._check()
+        self.attempted = True
+        count = await self._send(text)
+        self._check()
+        if type(count) is not int or count != len(text):
+            raise KeyboardError("injection_failed")
+        self.sent_characters += count
+        self._consumed_characters += count
+
     async def run(self) -> int:
-        while True:
-            self._check()
-            delta = await self._take()
-            self._check()
-            if delta is None:
-                return self.sent_characters
-            if delta.offset != self._consumed_characters:
-                raise ProviderError("response")
-            self.attempted = True
-            count = await self._send(delta.text)
-            self._check()
-            if type(count) is not int or count != len(delta.text):
-                raise KeyboardError("injection_failed")
-            self.sent_characters += count
-            self._consumed_characters += len(delta.text)
+        received = 0
+        prepared = False
+        try:
+            while True:
+                self._check()
+                delta = await self._take()
+                self._check()
+                if delta is None:
+                    if self._planner is not None:
+                        for unit in self._planner.finish():
+                            await self._emit(unit)
+                    return self.sent_characters
+                if delta.offset != received:
+                    raise ProviderError("response")
+                received += len(delta.text)
+                if not prepared:
+                    prepared = True
+                    if self._prepare is not None:
+                        enabled = await self._prepare()
+                        self._check()
+                        if enabled is True:
+                            self._planner = NeighborPlanner()
+                if self._planner is None:
+                    await self._emit(delta.text)
+                    continue
+                for unit in self._planner.feed(delta.text):
+                    await self._emit(unit)
+                # A confirmed-unsent Fcitx route may hand off through existing
+                # guards. Preserve order, flush its held tail once, and restore
+                # ordinary chunk timing on the selected non-Fcitx route.
+                if self._batch_enabled is not None and not self._batch_enabled():
+                    pending = self._planner.pending
+                    self._planner.cancel()
+                    self._planner = None
+                    await self._emit(pending)
+        finally:
+            if self._planner is not None:
+                self._planner.cancel()
 
     def close(self) -> None:
+        if self._planner is not None:
+            self._planner.cancel()
         self._closed = True
         self._text = self._leading = ""
         self._pending_cr = False

@@ -60,6 +60,19 @@ public:
         ++next_;
         return 1;
     }
+    template<typename Deliver>
+    std::uint32_t commitBatch(const std::string &sender, const std::string &token, std::uint32_t sequence,
+                const std::string &scalar, Deliver deliver) {
+        if (!matches(sender, token) || sequence != next_) return 0;
+        if (!inkecho_bounded_batch(scalar)) { clear(); return 0; }
+        bool ok=false;
+        try { ok=deliver(scalar); } catch (...) { clear(); return 2; }
+        // 3 means no commitString call was made and this sequence remains
+        // valid. Protocol errors remain 0; exceptions are ambiguous (2).
+        if (!ok) return 3;
+        ++next_;
+        return 1;
+    }
 private:
     bool matches(const std::string &sender,const std::string &token) const { return active_ && sender == sender_ && token == token_; }
     void clear() { active_=false; sender_.clear(); token_.clear(); }

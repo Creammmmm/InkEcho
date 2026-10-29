@@ -1,0 +1,19 @@
+{
+  "path": "/tmp/inkecho-begin4-qualification26/output/stopped-followup-child.qcow2.gz",
+  "bytes": 26615808,
+  "sha256": "544a6ae00aa6798367570a820ef86e35d8a2700b6c33186acba1ffad6fe4eca3",
+  "reason": "incomplete archive: wrapper gzip write and close failed with EDQUOT; original read-only dist parent preserved; all raw experiment results already exported to mounted output; QEMU exit0 recorded",
+  "container_state": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 1,
+    "Error": "",
+    "StartedAt": "2026-10-29T23:11:34.421555798Z",
+    "FinishedAt": "2026-10-29T23:14:26.860421193Z"
+  }
+}

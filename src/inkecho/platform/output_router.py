@@ -348,6 +348,29 @@ class OutputRouter:
             self._owner = None
             await self.discard_task()
 
+    @property
+    def neighbor_batches_enabled(self):
+        return self._kind == "fcitx" and bool(
+            getattr(self._selected, "supports_neighbor_batch", False)
+        )
+
+    async def prepare_stream(self, can_continue, *, deadline=None):
+        # Called only after the first actual body arrives, inside output_session.
+        # Recording/transcription never inspects or pins a target.
+        if self._owner is not asyncio.current_task() or self._busy:
+            raise OutputRouterError("busy")
+        if self._selected is None or self._failed:
+            raise OutputRouterError("output_not_prepared")
+        self._check_task(can_continue, deadline)
+        self._busy = True
+        try:
+            if self._auto_pending:
+                await self._choose_auto(can_continue, deadline)
+            self._check_task(can_continue, deadline)
+            return self.neighbor_batches_enabled
+        finally:
+            self._busy = False
+
     async def _wait_auto_preflight(
         self, awaitable, can_continue, deadline, *, timeout=None
     ):

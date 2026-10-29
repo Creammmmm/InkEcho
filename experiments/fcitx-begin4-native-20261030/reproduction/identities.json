@@ -1,0 +1,32 @@
+{
+  "source_commit": "40a6cb2702b64e8b8b15accf3636ae95051b22b7",
+  "parent_chain": [
+    {
+      "host_path": "/home/lth/github/InkEcho/dist/candidate-0.11.0-7203ba1-20261030/vm26/output/stopped-followup-child.qcow2.gz",
+      "bytes": 64268324,
+      "sha256": "e6a8ec7ed85c60cee8e83a085ad6053f695ac9443a28c282ae1d7cd3f2807dee",
+      "qcow2_backing_file": "/prior/guest.qcow2",
+      "read_only_mount": true
+    },
+    {
+      "host_path": "/home/lth/github/InkEcho/build/ubuntu26-release-vm/state/guest.qcow2",
+      "bytes": 6258688000,
+      "sha256": "cabd2163c700b5a95f37ff0ab1e01c485579421ca1e597a9c57a326038098595",
+      "qcow2_backing_file": "/base/ubuntu-26.04-server-cloudimg-amd64.img",
+      "read_only_mount": true
+    },
+    {
+      "host_path": "/home/lth/github/InkEcho/build/ubuntu26-release-vm/base/ubuntu-26.04-server-cloudimg-amd64.img",
+      "bytes": 859090944,
+      "sha256": "5645d0318ad21f643ebb1ac4567514620e9893380b07b0201fda163baa5b7eb5",
+      "qcow2_backing_file": null,
+      "read_only_mount": true
+    }
+  ],
+  "archive_raw_sha256": "00b1d59eb3475ece0105bd0cbcc68db100ff72f80f584a7aa39b71ccce6fed64",
+  "candidate_source_manifest_sha256": "c579575e8eee662403818db5395f9a5d2ceab57b002b9135289bff9910fdccfd",
+  "source_reconstruction": "The exact tested source overlay is preserved in input/product-r2/src and individually pinned by this full manifest. It is the R2 product candidate before native staging-pin promotion, not the postqualification staging update. All reproduction inputs are fixture-only. Recreate a private guest from the verified stopped parent, never resume the failed final RAM layer or restart a host service.",
+  "tested_source_overlay_reference": "/home/lth/github/InkEcho/dist/fcitx-return-candidate-20261030/begin4-qualification26/input/product-r2/src",
+  "product_patch_sha256": "9c08b3b03b9362d4a5daa311134e3bb1db0aab62371533b6a2d110c09f326f7f",
+  "final_ram_archive_unavailable": "EDQUOT after QEMU exit0; original raw results exported; do not claim full child archive verification"
+}

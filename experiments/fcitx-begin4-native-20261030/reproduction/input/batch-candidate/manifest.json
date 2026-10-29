@@ -1,0 +1,25 @@
+{
+  "status": "uninstalled-candidate",
+  "architecture": "x86_64",
+  "os_id": "ubuntu",
+  "os_version": "24.04",
+  "fcitx5_core_version": "5.1.7",
+  "focus_protocol_version": 3,
+  "composition_guard_protocol_version": 3,
+  "legacy_begin_supported": true,
+  "files_sha256": {
+    "libinkecho.so": "f67c6b5f2cb7ecd7c915c8062efd3b70284c74b97ced4a597d942c4b39594e44",
+    "inkecho.conf": "44a1386046f2b4df4ea9ba73a43d7caf353e1039f7c14a316cc73e4c928bcb57"
+  },
+  "source_sha256": {
+    "inkecho.cpp": "bea763a76a694503f8e5f605ff7a53be21c9f82c5a4338fff4218ac6714fc783",
+    "utf8_scalar.h": "1b3567c7b7d64696dacbd310b818a23c38ddb2d0f05b295e9c573fd273ac92ac",
+    "inkecho.conf.in": "4911bd724fbd1035fb3d24dbe6e872ceb3e20fc38976a1db8af244ca0c689b0e",
+    "CMakeLists.txt": "30cf333e2a67288c76b2d5b9dbf9095c8b68cde61c108653c277d8ef46faa850",
+    "task_gate.h": "59e2cb07f0d038aad491db45f9f7fa157b21764ae9d1a8a7b67b65addbc8e024",
+    "focused_context.h": "a87ede2283d65c8a3a47ee3f08e7f2a05c6e107c00237e9abcb28068e3fdc8f2",
+    "README.md": "62e511009a0606f0b219558f4dc7372d362a1174406651434eb80775d82eb3cd",
+    "libinkecho.so": "f67c6b5f2cb7ecd7c915c8062efd3b70284c74b97ced4a597d942c4b39594e44"
+  },
+  "verification_scope": "isolated Begin4 CommitBatch feasibility only; not qualified"
+}

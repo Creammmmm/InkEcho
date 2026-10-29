@@ -108,6 +108,11 @@ KEYBOARD_LABELS = {
     "fcitx_composition_active": (
         "输入法仍在组词或处理输入，已停止发送；请先完成当前输入。"
     ),
+    "fcitx_linefeed_protocol_unavailable": (
+        "当前运行的 Fcitx5 输入桥不支持安全换行批次，请启用新版输入桥。"
+        "已停止输入，未自动重试。"
+    ),
+    "fcitx_unsupported_text": "Fcitx5 无法安全提交这段文字，已停止输入，未自动补发。",
     "fcitx_no_target": "当前没有可确定的输入目标，已停止输入，未自动重试。",
     "fcitx_delivery_unknown": "输入结果无法确认，已停止输入，未自动重试。",
     "fcitx_cancelled": "输入已停止，不会继续发送剩余文字。",
@@ -216,6 +221,7 @@ class Session(QObject):
         self.last_toggle = 0.0
         self.metrics = {}
         self.output_metrics_task_id = None
+        self._fallback_reprepare_task_id = None
         self.task_timing = None
         self.timing_task_id = None
         self.last_performance = None
@@ -458,6 +464,15 @@ class Session(QObject):
                 task = self.controller.task
                 if task is None or task.id != task_id:
                     return
+                if self._fallback_reprepare_task_id == task_id:
+                    self._fallback_reprepare_task_id = None
+                    if not can_continue():
+                        raise asyncio.CancelledError
+                    prepare = getattr(self.inputs, "prepare_task", None)
+                    if callable(prepare):
+                        await prepare(self.settings.output_method)
+                    if not can_continue():
+                        raise asyncio.CancelledError
                 options = {"deadline": task.deadline}
                 if getattr(self.inputs, "supports_first_sent_callback", False):
                     options["on_first_sent"] = lambda sent_at=None: self.mark_timing(
@@ -570,6 +585,7 @@ class Session(QObject):
             self.metrics = {}
 
     def cancel(self):
+        self._fallback_reprepare_task_id = None
         self.capture_ready.emit(False)
         self.preview.emit("")
         self.epoch += 1
@@ -1065,7 +1081,24 @@ class Session(QObject):
                 self.metrics["characters"] += count
             return count
 
-        output = StreamingOutput(send, active)
+        prepare_stream = getattr(self.inputs, "prepare_stream", None)
+
+        async def prepare_output():
+            if not active():
+                raise asyncio.CancelledError
+            task = self.controller.task
+            if task is None:
+                raise asyncio.CancelledError
+            return await prepare_stream(active, deadline=task.deadline)
+
+        output = StreamingOutput(
+            send,
+            active,
+            prepare=prepare_output if callable(prepare_stream) else None,
+            batch_enabled=lambda: bool(
+                getattr(self.inputs, "neighbor_batches_enabled", False)
+            ),
+        )
         offset = 0
 
         async def on_delta(text):
@@ -1177,6 +1210,12 @@ class Session(QObject):
             elif output.attempted:
                 self.controller.fail(task_id, Failure.POLISHING)
             else:
+                # This branch is reachable only before any dispatch attempt.
+                # The consumer scope has already discarded its prepared route.
+                # Authorize one task-scoped reprepare for original-text fallback;
+                # partial/uncertain output never receives this permission.
+                if self.controller.fallback:
+                    self._fallback_reprepare_task_id = task_id
                 self.controller.polishing_failed(task_id)
                 if isinstance(error, ProviderError):
                     self.diagnostic.emit(error.code)
