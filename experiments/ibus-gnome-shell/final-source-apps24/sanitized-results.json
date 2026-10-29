@@ -1,0 +1,201 @@
+[
+  {
+    "case": "GTK-fcitx-native",
+    "framework": [
+      "fcitx",
+      ":1.105"
+    ],
+    "owned_probe": null,
+    "count": 4,
+    "selected_during": "fcitx",
+    "handoff_during": false,
+    "fcitx_evidence": [
+      "fcitx",
+      ":1.105"
+    ],
+    "record_source": "rows.json",
+    "receiver_character_count": 4,
+    "actual_display": "GdkWaylandDisplay",
+    "target_window_pid": 3892,
+    "gnome_current_focus": false,
+    "gnome_preedit": false
+  },
+  {
+    "case": "GTK-fcitx-ibus",
+    "framework": [
+      "fcitx",
+      ":1.105"
+    ],
+    "owned_probe": null,
+    "code": "input_capability_unknown",
+    "attempts": 0,
+    "selected_during": null,
+    "handoff_during": false,
+    "fcitx_evidence": [
+      "fcitx",
+      ":1.105"
+    ],
+    "record_source": "rows.json",
+    "receiver_character_count": 0,
+    "actual_display": "GdkWaylandDisplay",
+    "target_window_pid": 3892,
+    "gnome_current_focus": false,
+    "gnome_preedit": false
+  },
+  {
+    "case": "GTK-fcitx-simple",
+    "framework": [
+      "fcitx",
+      ":1.105"
+    ],
+    "owned_probe": null,
+    "code": "input_capability_unknown",
+    "attempts": 0,
+    "selected_during": null,
+    "handoff_during": false,
+    "fcitx_evidence": [
+      "fcitx",
+      ":1.105"
+    ],
+    "record_source": "rows.json",
+    "receiver_character_count": 0,
+    "actual_display": "GdkWaylandDisplay",
+    "target_window_pid": 3892,
+    "gnome_current_focus": false,
+    "gnome_preedit": false
+  },
+  {
+    "case": "GTK-None-native",
+    "framework": [
+      "fcitx",
+      ":1.105"
+    ],
+    "owned_probe": [
+      "ibus",
+      ":1.24"
+    ],
+    "count": 4,
+    "code": "ibus_delivery_unknown",
+    "attempts": 4,
+    "selected_during": "ibus",
+    "handoff_during": true,
+    "fcitx_evidence": [
+      "fcitx",
+      ":1.105"
+    ],
+    "record_source": "rows.json",
+    "receiver_character_count": 4,
+    "actual_display": "GdkWaylandDisplay",
+    "target_window_pid": 4143,
+    "gnome_current_focus": true,
+    "gnome_preedit": false
+  },
+  {
+    "case": "Chrome-wayland",
+    "fixture_error": "RuntimeError",
+    "browser_exit": null,
+    "record_source": "rows.json"
+  },
+  {
+    "case": "Chrome-x11",
+    "fixture_error": "RuntimeError",
+    "browser_exit": null,
+    "record_source": "rows.json"
+  },
+  {
+    "case": "Chrome-wayland",
+    "fixture_error": "RuntimeError",
+    "browser_exit": null,
+    "record_source": "rows-r2.json"
+  },
+  {
+    "case": "Chrome-x11",
+    "fixture_error": "RuntimeError",
+    "browser_exit": null,
+    "record_source": "rows-r2.json"
+  },
+  {
+    "case": "GNOME-Terminal",
+    "framework": [
+      "fcitx",
+      ":1.105"
+    ],
+    "owned_probe": null,
+    "count": 4,
+    "selected_during": "fcitx",
+    "handoff_during": false,
+    "fcitx_evidence": [
+      "fcitx",
+      ":1.105"
+    ],
+    "record_source": "rows-r2.json",
+    "receiver_character_count": 4,
+    "target_window_pid": 6690,
+    "gnome_current_focus": false,
+    "gnome_preedit": false
+  },
+  {
+    "case": "Chrome-wayland",
+    "fixture_error": "RuntimeError",
+    "browser_exit": null,
+    "record_source": "rows-r3.json"
+  },
+  {
+    "case": "Chrome-x11",
+    "fixture_error": "RuntimeError",
+    "browser_exit": null,
+    "record_source": "rows-r3.json"
+  },
+  {
+    "case": "GNOME-TextEditor",
+    "fixture_error": "RuntimeError",
+    "editor_exit": null,
+    "record_source": "rows-editor.json"
+  },
+  {
+    "case": "GNOME-TextEditor",
+    "framework": [
+      "fcitx",
+      ":1.185"
+    ],
+    "owned_probe": null,
+    "code": "input_capability_unknown",
+    "attempts": 0,
+    "selected_during": null,
+    "handoff_during": false,
+    "fcitx_evidence": [
+      "fcitx",
+      ":1.185"
+    ],
+    "record_source": "rows-editor-r2.json",
+    "receiver_field_character_counts": [
+      0
+    ],
+    "target_window_pid": 8204,
+    "gnome_current_focus": false,
+    "gnome_preedit": false
+  },
+  {
+    "case": "GNOME-TextEditor",
+    "framework": [
+      "fcitx",
+      ":1.217"
+    ],
+    "owned_probe": null,
+    "code": "input_capability_unknown",
+    "attempts": 0,
+    "selected_during": null,
+    "handoff_during": false,
+    "fcitx_evidence": [
+      "fcitx",
+      ":1.217"
+    ],
+    "record_source": "rows-editor-r3.json",
+    "receiver_field_character_counts": [
+      0
+    ],
+    "target_window_pid": 8843,
+    "gnome_current_focus": false,
+    "gnome_preedit": false
+  }
+]

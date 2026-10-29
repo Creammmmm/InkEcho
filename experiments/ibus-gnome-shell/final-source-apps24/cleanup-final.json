@@ -1,0 +1,13 @@
+{
+  "enabled-extensions": "@as []",
+  "disabled-extensions": "['inkecho-ibus-candidate@local.invalid', 'inkecho-ibus-focus-probe@local.invalid', 'inkecho-ibus-v2-prototype@local.invalid']",
+  "disable-user-extensions": "false",
+  "idle-delay": "uint32 0",
+  "lock-enabled": "false",
+  "gdm_byte_restored": true,
+  "gtk4_remove_exit": 0,
+  "engine": "xkb:us::eng",
+  "hints_match_before": true,
+  "owned_processes_remaining": [],
+  "settings_match_before": true
+}

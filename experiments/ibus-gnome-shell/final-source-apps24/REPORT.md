@@ -1,0 +1,31 @@
+# Final-source application coverage on isolated Ubuntu24 Wayland
+
+## Identity and reproduction scope
+
+This report tests commit d1f4f73694577984defb23c656a13bc98927f7cd, source version0.10.6. All93 final source files copied to the guest were SHA-256 checked. No new AppImage was built or accepted, and these results do not describe a current packaged artifact or add universal compatibility.
+
+One disposable KVM guest ran Ubuntu24.04.5/GNOME46.0 with actual native Wayland; original backing remained read-only, Docker networknone and QEMU restrict stayed enabled. The final source was loaded through its real DefaultAutoOutputRouter and real system detector/bridge factories. Guest-only session hints were saved, set consistently to Fcitx, then restored. Real system Fcitx5.1.7 kept its normal input frontends including IBus and XIM; only clipboard support was disabled. Genuine IBus1.5.29 remained a separate owner. The tested addon was explicitly installed from the previously pinned runtime; its disk/runtime checks passed. Optional GNOME-owned extension was explicitly installed/enabled, never silently selected without proof.
+
+Reproduction fixtures are preserved privately under the path in evidence-pins.json and /tmp/inkecho-fcitx-owned24/lab/input/final-coverage. Run setup.py only in a fresh isolated copy with the verified machine ID and read-only fixture share, then run.py for GTK variants, run-r2.py for PID-verified browser and raw-PTY terminal fixtures, and editor-r2.py/editor-r3.py for the independently verified empty owned editor. Their original hashes are recorded. Payloads were fixed synthetic fixtures; this patch intentionally records only counts, status, protocol and safe metadata, not input contents. No user recording, transcript, browser profile, cloud key or host input method was accessed.
+
+## Positive results
+
+- Native GTK3 with the Fcitx IM module received all4 fixture characters through Fcitx directly. Its independently reported display was GdkWaylandDisplay.
+- Native GTK3 with no explicit IM module received all4 through actual Fcitx zero-target to GNOME-owned handoff. Product trace explicitly recorded handoff_during=true, selected_during=ibus and authenticated Fcitx evidence. Completion remained ibus_delivery_unknown, correctly distinguishing submission from application acknowledgement.
+- Actual GNOME Terminal3.52.0/VTE received all4 through Fcitx. Its private raw-PTY consumer never executed entered characters, and terminal/daemon exited0.
+
+## Negative and unresolved results
+
+- In the same GTK3 window, explicit IBus and simple controls received0 new characters and stopped with input_capability_unknown. Neither provided a Fcitx target nor a GNOME-owned currentFocus. Their existence must not be treated as proof of an eligible IBus target.
+- Real GNOME Text Editor46.3/GTK4 had an independently verified empty focused editable field and native window but received0. Installing the missing official GTK4 Fcitx frontend did not resolve it. Read-only process maps confirmed the module/library loaded and GTK_IM_MODULE=fcitx. Fcitx DebugInfo then showed4 real dbus contexts for that application in the Wayland group, all focus:0, while GNOME-owned currentFocus remained false. This locates the failure at frontend/focus reporting rather than absent module or absent service; the lower-level cause remains unresolved. The router must not select a nonfocused context by application name. DebugInfo was vetted against the [official5.1.7 implementation](https://github.com/fcitx/fcitx5/blob/5.1.7/src/modules/dbus/dbusmodule.cpp#L593), which returns context/program/frontend/capability/focus metadata without surrounding text.
+- Root-owned Chrome154.0.8037.97 launched with a fresh profile and normal4755 sandbox in both native Wayland and XWayland. Browser PID/window protocol was confirmed, but its local test page never produced a DOM-ready focused textarea. A local preflight GET succeeded; Chrome itself did not request the page, and DevTools showed a pending local page. Software-rendering retry did not resolve the fixture. No browser text was sent. This is an unresolved browser fixture/environment block, not a proven input-backend rejection or a browser pass.
+
+The first focus fixture used a wrong numeric Meta enum assumption; that field is not used as native evidence. GTK supplied independent GdkWaylandDisplay proof. The fixture was corrected to Meta.WindowClientType.WAYLAND before browser/terminal/editor results. The first editor accessibility getter was incorrect and caused a zero-input fixture failure; the corrected Atspi.Text getter established the subsequent real negative samples. Original failures remain in the private record archive.
+
+## Dependency provenance and cleanup
+
+The GTK4 package5.1.1-1build2 was37,662 bytes, pinned to the guest's cached official APT filename/size/SHA-256 d9268e4dc48d90e077cfbf1b41b6a95e20331d72e5404c7677f1dc03e991e90a. It was fetched from official archive.ubuntu.com through the host immediately before the parent narrowed the task to preexisting caches; it was not a preexisting cached package. No further download followed that instruction, guest network isolation stayed unchanged, and no host package was installed. The package was removed after the negative comparison. It cannot be cited as a dependency-only fix.
+
+Saved extension lists/global switch, idle0/lockfalse, original GDM bytes and session hints were restored; engine remained the original US engine. Test addon was deactivated, owned extensions removed, and no owned Fcitx/app/terminal process remained. Editor processes were explicitly terminated after their unsaved private empty samples (exit-15), not described as natural0. Browser and terminal/daemon normal exits were recorded. Guest then powered off normally, original docker wait0, stopped PID0/OOMfalse. Evidence and read-only parent remain; no production change, commit or new package followed this research.
+
+Conclusion: the final bounded handoff works for a real GNOME-owned native context with ordinary Fcitx frontends present, and ordinary Fcitx GTK3/terminal output works. It is not general automatic IBus ownership detection. GTK4 focus reporting and browser fixture startup remain unresolved; no safe universal fallback was established or enabled.
