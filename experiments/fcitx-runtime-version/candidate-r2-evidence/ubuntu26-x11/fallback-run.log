@@ -1,0 +1,6 @@
+/tmp/inkecho-native-test/InkEcho-0.10.2-x86_64.AppImage: OK
+已安装输入桥；运行状态需通过输入服务检查确认。
+{"mode": "fallback", "first_backend": "fcitx", "fcitx_error": "no_target", "fcitx_accepted": 0, "fcitx_uncertain": false, "count": 10, "backend": "keyboard", "a": "甲乙丙丁戊己庚辛壬癸", "b": "", "exact": true, "prefix": true, "passed": true}
+{"mode": "cancel", "first_backend": "fcitx", "fcitx_error": "no_target", "fcitx_accepted": 0, "fcitx_uncertain": false, "error": "input_cancelled", "a": "甲乙丙", "b": "", "exact": false, "prefix": true, "passed": true}
+{"mode": "switch", "first_backend": "fcitx", "fcitx_error": "no_target", "fcitx_accepted": 0, "fcitx_uncertain": false, "count": 60, "backend": "keyboard", "a": "甲乙", "b": "丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸", "exact": true, "prefix": true, "passed": true}
+未发现经过校验的输入桥；可能尚未安装。

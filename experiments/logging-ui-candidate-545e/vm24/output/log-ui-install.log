@@ -1,0 +1,11 @@
+{"passed": true, "fixed_code": "input_capability_unknown", "all_fixed_input_labels_logged": 35, "packaged_logging_sha256": "8180a4de054c285686c27b67290d72cbdcb93ab570db1327fb3886a53bafb4e9"}
+qt.multimedia.symbolsresolver: Couldn't load va-x11 library
+qt.multimedia.symbolsresolver: Couldn't resolve va-x11 symbols
+qt.multimedia.symbolsresolver: Couldn't load va-drm library
+qt.multimedia.symbolsresolver: Couldn't resolve va-drm symbols
+qt.multimedia.symbolsresolver: Couldn't load va library
+qt.multimedia.symbolsresolver: Couldn't resolve va symbols
+qt.multimedia.symbolsresolver: Couldn't load va(in plugin) library
+qt.multimedia.symbolsresolver: Couldn't resolve va(in plugin) symbols
+qt.multimedia.ffmpeg: Using Qt multimedia with FFmpeg version 9.0.1 LGPL version 2.1 or later
+qt.multimedia.pipewire.devicemonitor: Ignoring dummy output: std::map(std::pair("client.id", "32"), std::pair("factory.id", "18"), std::pair("media.class", "Audio/Sink"), std::pair("node.description", "Dummy Output"), std::pair("node.name", "auto_null"), std::pair("object.serial", "170"))

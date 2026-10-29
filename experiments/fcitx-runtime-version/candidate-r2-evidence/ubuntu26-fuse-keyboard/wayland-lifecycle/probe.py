@@ -1,0 +1,134 @@
+"""Owned native Wayland GTK targets, fixed synthetic input, disposable VM only."""
+
+import asyncio
+import json
+import os
+import subprocess
+import sys
+from pathlib import Path
+
+from inkecho.platform.fcitx5 import FcitxOutputError
+from inkecho.platform.output_router import OutputRouter
+from inkecho.platform.wayland_keyboard import keyboard_for_desktop
+
+ROOT = Path("/tmp/wayland-lifecycle")
+
+
+async def run(mode):
+    actors = []
+    router = OutputRouter(keyboard_for_desktop())
+    active = [True]
+    first = asyncio.Event()
+    text = "甲乙丙丁戊己庚辛壬癸" * (1 if mode == "fallback" else 6)
+
+    async def launch(name):
+        for suffix in ("-text", "-focus"):
+            (ROOT / (name + suffix)).unlink(missing_ok=True)
+        env = dict(
+            os.environ, GDK_BACKEND="wayland", GTK_IM_MODULE="gtk-im-context-simple"
+        )
+        for key in ("PYTHONHOME", "PYTHONPATH", "LD_LIBRARY_PATH", "QT_QPA_PLATFORM"):
+            env.pop(key, None)
+        actor = subprocess.Popen(
+            ["/usr/bin/python3", str(ROOT / "cross-target.py"), name], env=env
+        )
+        actors.append(actor)
+        for _ in range(100):
+            if (ROOT / (name + "-focus")).exists():
+                return
+            await asyncio.sleep(0.1)
+        raise RuntimeError("owned target did not focus")
+
+    async def send():
+        async with router.output_session():
+            count = await router.insert(
+                text, lambda: active[0], on_first_sent=lambda _: first.set()
+            )
+            return count, router.selected
+
+    result = {"mode": mode}
+    original_choose = router._choose_auto
+
+    async def observed_choose():
+        await original_choose()
+        result["first_backend"] = router.selected
+
+    router._choose_auto = observed_choose
+    original_factory = router._bridge_factory
+
+    def observed_factory():
+        bridge = original_factory()
+        original_insert = bridge.insert
+
+        async def observed_insert(*args, **kwargs):
+            try:
+                return await original_insert(*args, **kwargs)
+            except FcitxOutputError as error:
+                result["fcitx_error"] = error.code
+                result["fcitx_accepted"] = error.accepted
+                result["fcitx_uncertain"] = error.uncertain
+                raise
+
+        bridge.insert = observed_insert
+        return bridge
+
+    router._bridge_factory = observed_factory
+    try:
+        await launch("a")
+        await router.connect()
+        await router.prepare_task("auto")
+        task = asyncio.create_task(send())
+        await asyncio.wait_for(first.wait(), 20)
+        if mode == "cancel":
+            await asyncio.sleep(0.12)
+            active[0] = False
+        elif mode == "switch":
+            await launch("b")
+        try:
+            count, backend = await task
+            result.update(count=count, backend=backend)
+        except Exception as error:
+            result["error"] = getattr(error, "code", type(error).__name__)
+        await asyncio.sleep(1)
+        a = (ROOT / "a-text").read_text() if (ROOT / "a-text").exists() else ""
+        b = (ROOT / "b-text").read_text() if (ROOT / "b-text").exists() else ""
+        result.update(a=a, b=b, exact=(a + b == text), prefix=text.startswith(a + b))
+        actual_handoff = (
+            result.get("first_backend") == "fcitx"
+            and result.get("fcitx_error") == "no_target"
+            and result.get("fcitx_accepted") == 0
+            and result.get("fcitx_uncertain") is False
+        )
+        if mode == "fallback":
+            result["passed"] = (
+                actual_handoff
+                and result.get("backend") == "keyboard"
+                and result["exact"]
+            )
+        elif mode == "cancel":
+            result["passed"] = (
+                actual_handoff
+                and result.get("error") == "input_cancelled"
+                and 0 < len(a) < len(text)
+                and result["prefix"]
+            )
+        else:
+            result["passed"] = (
+                actual_handoff
+                and result.get("backend") == "keyboard"
+                and bool(a)
+                and bool(b)
+                and result["exact"]
+            )
+        print(json.dumps(result, ensure_ascii=False), flush=True)
+        if not result["passed"]:
+            raise RuntimeError("owned target assertion failed")
+    finally:
+        await router.aclose()
+        for actor in actors:
+            actor.terminate()
+        for actor in actors:
+            actor.wait(timeout=5)
+
+
+asyncio.run(run(sys.argv[1]))

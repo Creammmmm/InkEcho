@@ -1,0 +1,18 @@
+Type=wayland
+Active=yes
+LockedHint=no
+InkEcho-0.10.2-x86_64.AppImage: OK
+inkecho-presend-experiment@local.invalid
+  Name: InkEcho isolated pre-send experiment
+  Description: Disposable tests only; mode control intentionally untrusted
+  Path: /home/inkecho/.local/share/gnome-shell/extensions/inkecho-presend-experiment@local.invalid
+  Enabled: Yes
+  State: ACTIVE
+xkb:us::eng
+f727dc68cac12290fafd4702d3aeb776be62129c529808cd42689bdeb783b890  /tmp/presend/actor.py
+d5f45de6f7640b2c94c1afacc7871f9266a037935bcb020eb1c1166b86c24638  /tmp/presend/desktop-client.py
+begin_mode=none
+begin_mode=real
+begin_mode=partial
+begin_mode=lost
+{"owner": ":1.17", "gnome_shell_pid": 1407, "focused_fixture_ready": true, "cases": [{"mode": "none", "response": ["no_service"], "dispatch_count": 0, "panel_present": true, "received_chars": 0, "retry": "rejected"}, {"mode": "real", "response": ["attempted"], "dispatch_count": 1, "panel_present": true, "received_chars": 1, "retry": "rejected"}, {"mode": "partial", "response": ["attempted", "partial_no_service"], "dispatch_count": 1, "panel_present": true, "received_chars": 1, "retry": "rejected"}, {"mode": "lost", "response": ["timeout_unknown"], "dispatch_count": 1, "panel_present": true, "received_chars": 1, "retry": "not_sent"}], "passed": true}

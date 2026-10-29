@@ -1,0 +1,51 @@
+{
+  "quota_before": {
+    "used": 12447625216,
+    "remaining": 704047104
+  },
+  "removed": [
+    {
+      "path": "/tmp/inkecho-ui-read-build/source/build/InkEcho.AppDir",
+      "device": 47,
+      "inode": 564543,
+      "mtime_ns": 1793231194217749142,
+      "absent_after": true
+    },
+    {
+      "path": "/tmp/inkecho-ui-read-build/source/build/inkecho.squashfs",
+      "device": 47,
+      "inode": 574626,
+      "mtime_ns": 1793231203226522075,
+      "absent_after": true
+    },
+    {
+      "path": "/tmp/inkecho-current-build/source/build/InkEcho.AppDir",
+      "device": 47,
+      "inode": 578951,
+      "mtime_ns": 1793231585818265407,
+      "absent_after": true
+    },
+    {
+      "path": "/tmp/inkecho-current-build/source/build/inkecho.squashfs",
+      "device": 47,
+      "inode": 588934,
+      "mtime_ns": 1793231594851981011,
+      "absent_after": true
+    }
+  ],
+  "preserved_artifacts": [
+    {
+      "path": "/tmp/inkecho-ui-read-build/source/dist/InkEcho-0.10.2-x86_64.AppImage",
+      "sha256": "4e31088bfa605d564fd59ffa0ac9fcaf0e651ec7838f1de2c0e08d9c8dd6b3a1"
+    },
+    {
+      "path": "/tmp/inkecho-current-build/source/dist/InkEcho-0.10.2-x86_64.AppImage",
+      "sha256": "0eb0c745fb66fc045c1c32efd268fff27fb95e1dfaf6e08493058af9d9351152"
+    }
+  ],
+  "quota_after": {
+    "used": 11655118848,
+    "remaining": 1496553472
+  },
+  "quota_freed": 792506368
+}

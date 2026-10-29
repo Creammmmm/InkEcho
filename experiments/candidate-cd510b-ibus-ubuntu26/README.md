@@ -1,0 +1,15 @@
+# Ubuntu 26.04 Wayland: candidate cd510b explicit IBus
+
+Candidate 0.10.2 AppImage SHA-256 `cd510bade9fbb01e4f321fa33785df9c9f4d0627a1336db9e430f2d51073d1a8` was run in an independent network-isolated Ubuntu 26.04.1 QEMU `-snapshot` guest. The original guest disk, base image and test input share were mounted read-only. The AppImage was extracted without package source overlays. The IBus candidate extension was copied from that same extracted package into the disposable guest user's Shell extensions directory, and after restart reported `ACTIVE`; the four installed hashes in `setup.log` match the package hashes in `run.log`. The graphical session was active, unlocked GNOME Wayland; the engine was `xkb:us::eng`. No host session or real user data, real microphone, cloud API or clipboard was used.
+
+The test used bundled application Python with a synthetic recorder and stub transcription of 200 fixed characters, and owned GTK3 widgets. In `run.log`:
+
+- `full`: the owned TextView exactly contained all 200 characters; 200 IBus Commit timeout records were observed and the application emitted `ibus_delivery_unknown`, the message “IBus 已尝试输入，但无法确认目标是否收到；请检查光标位置，未自动重试。”, and `failed`. Actual owned-widget content demonstrates receipt for this case; the panel result alone does not acknowledge generic target receipt.
+- `cancel`: the first character caused a programmatic cancellation signal; the owned TextView contained a correct two-character prefix, with two Commit records and final `cancelled`. The second may already have been dispatched before the signal; no further characters were seen during the probe's 1.3-second settling interval. This does not test a physical Esc key.
+- `no-target`: the owned non-text GTK button window and button were confirmed active and focused before completion. Both owned TextViews stayed empty; 200 Commit records were followed by the same delivery-unknown diagnostic and message and `failed`. This verifies an observed non-text control, not that all possible virtual IBus contexts were absent.
+
+The unchanged probe's `passed` field is an older Fcitx-specific assertion and is false for these IBus samples; the conclusions above use actual result fields, event sequence and captured owned-widget contents, without changing raw logs. The `commit_timeout` entries count calls instrumented by the test, not proof that a target handled the text.
+
+Exact guest-run scripts have `.txt` suffixes. To reproduce in a disposable 26.04 GNOME Wayland guest, place them without suffix and the AppImage in read-only 9p share `inkecho_input`. Run `setup.sh`, wait for guest restart, then run `run.sh`. The scripts install and enable the extension only in the disposable guest. After the tests the guest shut down normally, Docker wait returned 0, and the container and temporary test SSH key were removed.
+
+This narrow test does not validate automatic IBus selection, arbitrary applications, same-callback focus races, Chrome or terminals, Ubuntu 24, real audio/API/hotkeys, or full release acceptance. It cannot establish target receipt for the non-text case, and no unconfirmed input was replayed by the probe.

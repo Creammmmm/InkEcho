@@ -1,0 +1,135 @@
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/tasks.py", line 520, in wait_for
+    return await fut
+           ^^^^^^^^^
+  File "/tmp/inkecho-text-probe/payload/dbus_next/aio/message_bus.py", line 305, in call
+    await future
+asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/inkecho-text-probe/payload/probe.py", line 176, in <module>
+    asyncio.run(probe())
+  File "/usr/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 687, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/tmp/inkecho-text-probe/payload/probe.py", line 114, in probe
+    values = await request(
+             ^^^^^^^^^^^^^^
+  File "/tmp/inkecho-text-probe/payload/probe.py", line 85, in request
+    await call(path, "org.freedesktop.portal.Request", "Close")
+  File "/tmp/inkecho-text-probe/payload/probe.py", line 39, in call
+    reply = await asyncio.wait_for(
+            ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/tasks.py", line 519, in wait_for
+    async with timeouts.timeout(timeout):
+  File "/usr/lib/python3.12/asyncio/timeouts.py", line 115, in __aexit__
+    raise TimeoutError from exc_val
+TimeoutError
+
+---second---
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/asyncio/tasks.py", line 520, in wait_for
+    return await fut
+           ^^^^^^^^^
+  File "/tmp/inkecho-text-probe/payload/dbus_next/aio/message_bus.py", line 305, in call
+    await future
+asyncio.exceptions.CancelledError
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/inkecho-text-probe/payload/probe.py", line 176, in <module>
+    asyncio.run(probe())
+  File "/usr/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 687, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/tmp/inkecho-text-probe/payload/probe.py", line 114, in probe
+    values = await request(
+             ^^^^^^^^^^^^^^
+  File "/tmp/inkecho-text-probe/payload/probe.py", line 85, in request
+    await call(path, "org.freedesktop.portal.Request", "Close")
+  File "/tmp/inkecho-text-probe/payload/probe.py", line 39, in call
+    reply = await asyncio.wait_for(
+            ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/tasks.py", line 519, in wait_for
+    async with timeouts.timeout(timeout):
+  File "/usr/lib/python3.12/asyncio/timeouts.py", line 115, in __aexit__
+    raise TimeoutError from exc_val
+TimeoutError
+
+---service---
+Oct 28 23:06:15 inkecho-noble-perf systemd[1202]: Starting org.gnome.Shell@wayland.service - GNOME Shell on Wayland...
+Oct 28 23:06:16 inkecho-noble-perf gnome-shell[1513]: Running GNOME Shell (using mutter 46.2) as a Wayland display server
+Oct 28 23:06:17 inkecho-noble-perf gnome-shell[1513]: Made thread 'KMS thread' realtime scheduled
+Oct 28 23:06:17 inkecho-noble-perf gnome-shell[1513]: libEGL warning: egl: failed to create dri2 screen
+Oct 28 23:06:17 inkecho-noble-perf gnome-shell[1513]: libEGL warning: egl: failed to create dri2 screen
+Oct 28 23:06:17 inkecho-noble-perf gnome-shell[1513]: libEGL warning: NEEDS EXTENSION: falling back to kms_swrast
+Oct 28 23:06:17 inkecho-noble-perf gnome-shell[1513]: Added device '/dev/dri/card0' (virtio_gpu) using atomic mode setting.
+Oct 28 23:06:17 inkecho-noble-perf gnome-shell[1513]: Failed to initialize accelerated iGPU/dGPU framebuffer sharing: Not hardware accelerated
+Oct 28 23:06:17 inkecho-noble-perf gnome-shell[1513]: Created gbm renderer for '/dev/dri/card0'
+Oct 28 23:06:17 inkecho-noble-perf gnome-shell[1513]: Boot VGA GPU /dev/dri/card0 selected as primary
+Oct 28 23:06:18 inkecho-noble-perf gnome-shell[1513]: Using public X11 display :0, (using :1 for managed services)
+Oct 28 23:06:18 inkecho-noble-perf gnome-shell[1513]: Using Wayland display name 'wayland-0'
+Oct 28 23:06:21 inkecho-noble-perf gnome-shell[1513]: Unset XDG_SESSION_ID, getCurrentSessionProxy() called outside a user session. Asking logind directly.
+Oct 28 23:06:21 inkecho-noble-perf gnome-shell[1513]: Will monitor session 1
+Oct 28 23:06:22 inkecho-noble-perf systemd[1202]: Started org.gnome.Shell@wayland.service - GNOME Shell on Wayland.
+Oct 28 23:06:23 inkecho-noble-perf gnome-shell[1513]: Gio.UnixInputStream has been moved to a separate platform-specific library. Please update your code to use GioUnix.InputStream instead.
+                                                      0 inhibit() ["resource:///org/gnome/shell/misc/loginManager.js":209:8]
+                                                      1 InterpretGeneratorResume() ["self-hosted":1461:33]
+                                                      2 AsyncFunctionNext() ["self-hosted":852:26]
+                                                      3 anonymous() ["resource:///org/gnome/shell/ui/init.js":21:19]
+Oct 28 23:06:24 inkecho-noble-perf gnome-shell[1513]: Error looking up permission: GDBus.Error:org.freedesktop.portal.Error.NotFound: No entry for geolocation
+Oct 28 23:06:29 inkecho-noble-perf gnome-shell[1513]: Failed to import DBusMenu, quicklists are not available: Error: Requiring Dbusmenu, version none: Typelib file for namespace 'Dbusmenu' (any version) not found
+Oct 28 23:06:29 inkecho-noble-perf gnome-shell[1513]: Failed to import DBusMenu, quicklists are not available: Error: Requiring Dbusmenu, version none: Typelib file for namespace 'Dbusmenu' (any version) not found
+Oct 28 23:06:29 inkecho-noble-perf gnome-shell[1513]: Failed to import DBusMenu, quicklists are not available: Error: Requiring Dbusmenu, version none: Typelib file for namespace 'Dbusmenu' (any version) not found
+Oct 28 23:06:31 inkecho-noble-perf gnome-shell[1513]: Window manager warning: Overwriting existing binding of keysym 32 with keysym 32 (keycode b).
+Oct 28 23:06:31 inkecho-noble-perf gnome-shell[1513]: Window manager warning: Overwriting existing binding of keysym 39 with keysym 39 (keycode 12).
+Oct 28 23:06:31 inkecho-noble-perf gnome-shell[1513]: Window manager warning: Overwriting existing binding of keysym 31 with keysym 31 (keycode a).
+Oct 28 23:06:31 inkecho-noble-perf gnome-shell[1513]: Window manager warning: Overwriting existing binding of keysym 33 with keysym 33 (keycode c).
+Oct 28 23:06:31 inkecho-noble-perf gnome-shell[1513]: Window manager warning: Overwriting existing binding of keysym 34 with keysym 34 (keycode d).
+Oct 28 23:06:31 inkecho-noble-perf gnome-shell[1513]: Window manager warning: Overwriting existing binding of keysym 33 with keysym 33 (keycode c).
+Oct 28 23:06:31 inkecho-noble-perf gnome-shell[1513]: Window manager warning: Overwriting existing binding of keysym 39 with keysym 39 (keycode 12).
+Oct 28 23:06:31 inkecho-noble-perf gnome-shell[1513]: Window manager warning: Overwriting existing binding of keysym 38 with keysym 38 (keycode 11).
+Oct 28 23:06:31 inkecho-noble-perf gnome-shell[1513]: Window manager warning: Overwriting existing binding of keysym 37 with keysym 37 (keycode 10).
+Oct 28 23:06:31 inkecho-noble-perf gnome-shell[1513]: Window manager warning: Overwriting existing binding of keysym 37 with keysym 37 (keycode 10).
+Oct 28 23:06:31 inkecho-noble-perf gnome-shell[1513]: Window manager warning: Overwriting existing binding of keysym 34 with keysym 34 (keycode d).
+Oct 28 23:06:31 inkecho-noble-perf gnome-shell[1513]: Window manager warning: Overwriting existing binding of keysym 38 with keysym 38 (keycode 11).
+Oct 28 23:06:31 inkecho-noble-perf gnome-shell[1513]: Window manager warning: Overwriting existing binding of keysym 36 with keysym 36 (keycode f).
+Oct 28 23:06:31 inkecho-noble-perf gnome-shell[1513]: Window manager warning: Overwriting existing binding of keysym 35 with keysym 35 (keycode e).
+Oct 28 23:06:31 inkecho-noble-perf gnome-shell[1513]: Window manager warning: Overwriting existing binding of keysym 36 with keysym 36 (keycode f).
+Oct 28 23:06:31 inkecho-noble-perf gnome-shell[1513]: Window manager warning: Overwriting existing binding of keysym 35 with keysym 35 (keycode e).
+Oct 28 23:06:31 inkecho-noble-perf gnome-shell[1513]: Window manager warning: Overwriting existing binding of keysym 31 with keysym 31 (keycode a).
+Oct 28 23:06:31 inkecho-noble-perf gnome-shell[1513]: Window manager warning: Overwriting existing binding of keysym 32 with keysym 32 (keycode b).
+Oct 28 23:06:33 inkecho-noble-perf gnome-shell[1513]: GFileInfo created without standard::icon
+Oct 28 23:06:33 inkecho-noble-perf gnome-shell[1513]: file ../../../gio/gfileinfo.c: line 1765 (g_file_info_get_icon): should not be reached
+Oct 28 23:06:33 inkecho-noble-perf gnome-shell[1513]: GNOME Shell started at Wed Oct 28 2026 23:06:22 GMT+0000 (Coordinated Universal Time)
+Oct 28 23:06:33 inkecho-noble-perf gnome-shell[1513]: Registering session with GDM
+Oct 28 23:06:33 inkecho-noble-perf gnome-shell[1513]: Launching DING process
+Oct 28 23:06:34 inkecho-noble-perf systemd[1202]: Starting xdg-desktop-portal-gnome.service - Portal service (GNOME implementation)...
+Oct 28 23:06:35 inkecho-noble-perf gnome-shell[1513]: GNOME Shell crashed with signal 11
+Oct 28 23:06:35 inkecho-noble-perf gnome-shell[1513]: == Stack trace for context 0x600f203bdb40 ==
+Oct 28 23:06:35 inkecho-noble-perf gnome-shell[1513]: #0   600f20489098 i   resource:///org/gnome/shell/ui/init.js:21 (322c96070bf0 @ 48)
+Oct 28 23:06:37 inkecho-noble-perf systemd[1202]: org.gnome.Shell@wayland.service: Main process exited, code=dumped, status=11/SEGV
+Oct 28 23:06:37 inkecho-noble-perf xdg-desktop-portal-gnome[2121]: Non-compatible display server, exposing settings only.
+Oct 28 23:06:38 inkecho-noble-perf systemd[1202]: Started xdg-desktop-portal-gnome.service - Portal service (GNOME implementation).
+Oct 28 23:06:38 inkecho-noble-perf systemd[1202]: org.gnome.Shell@wayland.service: Failed with result 'core-dump'.
+Oct 28 23:06:38 inkecho-noble-perf systemd[1202]: org.gnome.Shell@wayland.service: Triggering OnFailure= dependencies.
+Oct 28 23:06:38 inkecho-noble-perf systemd[1202]: org.gnome.Shell@wayland.service: Consumed 16.943s CPU time.
+Oct 28 23:06:38 inkecho-noble-perf systemd[1202]: Stopping xdg-desktop-portal-gnome.service - Portal service (GNOME implementation)...
+Oct 28 23:06:38 inkecho-noble-perf systemd[1202]: Stopped xdg-desktop-portal-gnome.service - Portal service (GNOME implementation).
+Oct 28 23:06:58 inkecho-noble-perf systemd[1202]: Dependency failed for xdg-desktop-portal-gnome.service - Portal service (GNOME implementation).
+Oct 28 23:06:58 inkecho-noble-perf systemd[1202]: xdg-desktop-portal-gnome.service: Job xdg-desktop-portal-gnome.service/start failed with result 'dependency'.

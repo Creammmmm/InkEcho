@@ -1,0 +1,10 @@
+set -eu
+root=/home/lth/github/InkEcho/build/ubuntu24-perf-vm
+lab=/tmp/fcitx-owner-lab
+image=inkecho-ubuntu24-perf-vm-tools:20261016
+uid=$(id -u)
+gid=$(id -g)
+kvmgroup=$(stat -c %g /dev/kvm)
+common="--mount type=bind,src=$root/base,dst=/base,readonly --mount type=bind,src=$root/state,dst=/original,readonly --mount type=bind,src=$root/seed,dst=/seed,readonly --mount type=bind,src=$lab/secrets,dst=/secrets,readonly --mount type=bind,src=$lab/input,dst=/input,readonly --mount type=bind,src=$lab/state,dst=/state --mount type=bind,src=$lab/output,dst=/output"
+docker run --rm --network none --user "$uid:$gid" --read-only --cap-drop ALL --security-opt no-new-privileges $common "$image" qemu-img create -f qcow2 -F qcow2 -b /original/guest.qcow2 /state/guest.qcow2
+docker run -d --name inkecho-owner-lab --network none --memory 5g --cpus 4 --pids-limit 256 --read-only --cap-drop ALL --security-opt no-new-privileges --device /dev/kvm --user "$uid:$gid" --group-add "$kvmgroup" --tmpfs /tmp:rw,nosuid,nodev,size=256m $common "$image" qemu-system-x86_64 -accel kvm -machine q35 -cpu host -smp 4 -m 4096 -drive file=/state/guest.qcow2,if=virtio,format=qcow2 -drive file=/seed/seed.iso,format=raw,media=cdrom,readonly=on -virtfs local,path=/input,mount_tag=inkecho_input,security_model=none,readonly=on,id=inshare -virtfs local,path=/output,mount_tag=inkecho_output,security_model=none,id=outshare -device virtio-vga -device virtio-net-pci,netdev=n1 -netdev user,id=n1,hostfwd=tcp:127.0.0.1:2222-:22 -vnc 127.0.0.1:0 -qmp tcp:127.0.0.1:4444,server=on,wait=off -serial file:/state/serial.log -monitor none

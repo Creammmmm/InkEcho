@@ -1,0 +1,14 @@
+set -eu
+export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus XDG_RUNTIME_DIR=/run/user/1000
+out=/mnt/output/gap-fcitx-auto26
+systemctl --user unset-environment XMODIFIERS GTK_IM_MODULE QT_IM_MODULE
+while IFS= read -r entry; do test -z "$entry" || systemctl --user set-environment "$entry"; done < "$out/system-environment-before.txt"
+systemctl --user show-environment | sed -n '/^XMODIFIERS=/p; /^GTK_IM_MODULE=/p; /^QT_IM_MODULE=/p' > "$out/system-environment-recovered.txt"
+gsettings get org.gnome.desktop.input-sources sources > "$out/input-sources-recovered.txt"
+cmp "$out/system-environment-before.txt" "$out/system-environment-recovered.txt"
+cmp "$out/input-sources-before.txt" "$out/input-sources-recovered.txt"
+printf 'environment_compare=0\nsource_compare=0\n'
+gdbus call --session --dest org.freedesktop.DBus --object-path /org/freedesktop/DBus --method org.freedesktop.DBus.NameHasOwner org.fcitx.Fcitx5
+! pgrep -x fcitx5
+/usr/bin/python3 /mnt/input/fcitx-auto/final-cleanup.py
+grep fuse.InkEcho /proc/self/mountinfo || true

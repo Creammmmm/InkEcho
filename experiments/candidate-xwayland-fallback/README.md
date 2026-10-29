@@ -1,0 +1,7 @@
+# XWayland candidate, isolated Ubuntu 24 Wayland
+
+A network-isolated Ubuntu 24 GNOME Wayland VM used a disposable qcow2 overlay, with its parent image mounted read-only. The AppImage SHA-256 was 222c017a4f9e10bf4d6422cf402a2b7ea57245adb267a4409cce87ca74551694; after extracting it, the test replaced **only** `packages/inkecho/platform/hybrid_keyboard.py` with the candidate whose SHA is in hashes.txt. This is not acceptance of an unmodified package. The test-only GNOME extension activates only the two owned GTK windows; it is not product code.
+
+`run-first.log` and `run-second.log` are separate runs. The simple XWayland GTK entry is reused per run, so displayed contents accumulate: full produces 风云Ω中, cancellation adds only 风, and controlled switching during the first-send callback adds only 风. The native GTK entry was empty; the second run also starts on native focus and reports unsupported_compositor without writing. No clipboard is used. Triggering the switch synchronously during the first press is test instrumentation, not a measurement of arbitrary real-world race timing.
+
+These are synthetic characters, not speech recognition or end-to-end app validation. X11 focus checking and event dispatch are separate operations; these samples cannot establish atomic current-focus behavior under racing changes. Only this GTK target and one compositor/session were tested, with no real browser or terminal, and no claim of Ubuntu 26 support or complete package acceptance is warranted.

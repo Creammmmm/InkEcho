@@ -1,0 +1,42 @@
+I2026-10-29 03:16:55.650016 instance.cpp:1346] Override Enabled Addons: {}
+I2026-10-29 03:16:55.650033 instance.cpp:1347] Override Disabled Addons: {clipboard, classicui, notificationitem, xcb, wayland}
+I2026-10-29 03:16:55.650707 addonmanager.cpp:195] Loaded addon unicode
+I2026-10-29 03:16:55.651304 addonmanager.cpp:195] Loaded addon quickphrase
+I2026-10-29 03:16:55.653366 addonmanager.cpp:195] Loaded addon keyboard
+I2026-10-29 03:16:55.653463 addonmanager.cpp:195] Loaded addon imselector
+I2026-10-29 03:16:55.654093 addonmanager.cpp:195] Loaded addon dbus
+I2026-10-29 03:16:55.654293 addonmanager.cpp:195] Loaded addon dbusfrontend
+I2026-10-29 03:16:55.656147 addonmanager.cpp:195] Loaded addon fcitx4frontend
+I2026-10-29 03:16:55.656472 addonmanager.cpp:195] Loaded addon ibusfrontend
+I2026-10-29 03:16:55.656581 addonmanager.cpp:195] Loaded addon inkecho
+I2026-10-29 03:16:55.656681 addonmanager.cpp:195] Loaded addon ownedtest
+I2026-10-29 03:16:55.669075 inputmethodmanager.cpp:190] Found 737 input method(s) in addon keyboard
+I2026-10-29 03:16:55.669160 inputmethodmanager.cpp:117] No valid input method group in configuration. Building a default one
+I2026-10-29 03:16:55.669176 instance.cpp:371] Items in Default: [InputMethodGroupItem(keyboard-us,layout=)]
+I2026-10-29 03:16:55.669182 instance.cpp:376] Generated groups: [Default]
+I2026-10-29 03:16:55.669379 addonmanager.cpp:195] Loaded addon kimpanel
+I2026-10-29 03:16:55.669486 addonmanager.cpp:195] Loaded addon virtualkeyboard
+I2026-10-29 03:16:55.669617 addonmanager.cpp:195] Loaded addon notifications
+I2026-10-29 03:16:55.669704 kimpanel.cpp:116] Kimpanel new owner: 
+I2026-10-29 03:16:55.669713 virtualkeyboard.cpp:223] VirtualKeyboard new owner: 
+double free or corruption (out)
+=========================
+Fcitx 5.1.7 -- Get Signal No.: 6
+Date: try "date -d @1793243816" if you are using GNU date ***
+ProcessID: 2834
+/usr/bin/fcitx5(+0x11b1d)[0x617486423b1d]
+/lib/x86_64-linux-gnu/libc.so.6(+0x45330)[0x78efe0e45330]
+/lib/x86_64-linux-gnu/libc.so.6(pthread_kill+0x11c)[0x78efe0e9ec0c]
+/lib/x86_64-linux-gnu/libc.so.6(gsignal+0x1e)[0x78efe0e4527e]
+/lib/x86_64-linux-gnu/libc.so.6(abort+0xdf)[0x78efe0e288ff]
+/lib/x86_64-linux-gnu/libc.so.6(+0x297b6)[0x78efe0e297b6]
+/lib/x86_64-linux-gnu/libc.so.6(+0xa90d5)[0x78efe0ea90d5]
+/lib/x86_64-linux-gnu/libc.so.6(+0xab200)[0x78efe0eab200]
+/lib/x86_64-linux-gnu/libc.so.6(__libc_free+0x7e)[0x78efe0eadeae]
+/tmp/inkecho-fcitx-v2/test-control-build/libownedtest.so(_ZN5fcitx12OwnedContextD0Ev+0x2d)[0x78efe06a19d3]
+/lib/x86_64-linux-gnu/libFcitx5Core.so.7(_ZN5fcitx19InputContextManager8finalizeEv+0xe5)[0x78efe16b1a95]
+/lib/x86_64-linux-gnu/libFcitx5Core.so.7(_ZN5fcitx8InstanceD1Ev+0x36)[0x78efe168c0e6]
+/usr/bin/fcitx5(+0xff92)[0x617486421f92]
+/lib/x86_64-linux-gnu/libc.so.6(+0x2a1ca)[0x78efe0e2a1ca]
+/lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0x8b)[0x78efe0e2a28b]
+/usr/bin/fcitx5(+0x113e5)[0x6174864233e5]

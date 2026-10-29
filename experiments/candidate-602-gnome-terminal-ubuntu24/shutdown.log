@@ -1,0 +1,6 @@
+Type=wayland
+State=active
+3765 bash -c loginctl show-session 6 -p Type -p State; pgrep -a -u inkecho -f "gnome-terminal-server"; ls -l /run/user/1000/wayland-0; dpkg-query -W -f="${Version}\n" gnome-terminal; sha256sum /tmp/inkecho-r4-test/probes/sender.py; sudo poweroff
+srwxrwxr-x 1 inkecho inkecho 0 Oct 28 20:25 /run/user/1000/wayland-0
+
+504ec2b4752997ceedcd46d8fb3082d0ef020b6bdb5265dfa70df7bd868118fc  /tmp/inkecho-r4-test/probes/sender.py

@@ -1,0 +1,17 @@
+#!/bin/bash
+set -eu
+mkdir -p /tmp/probe-out /tmp/inkecho-r4-test
+sudo mount -t 9p -o trans=virtio,version=9p2000.L inkoutput /tmp/probe-out
+exec > /tmp/probe-out/setup.log 2>&1
+cp /mnt/InkEcho-0.10.2-x86_64.AppImage /tmp/inkecho-r4-test/
+cd /tmp/inkecho-r4-test
+sha256sum InkEcho-0.10.2-x86_64.AppImage
+chmod +x InkEcho-0.10.2-x86_64.AppImage
+./InkEcho-0.10.2-x86_64.AppImage --appimage-extract >/dev/null
+tar -xf /mnt/source.tar -C squashfs-root/packages
+sha256sum squashfs-root/packages/inkecho/{app.py,core.py,platform/output_router.py}
+mkdir -p ~/.local/share/gnome-shell/extensions/inkecho-ibus-v2-prototype@local.invalid
+cp squashfs-root/packages/inkecho/platform/ibus_candidate/* ~/.local/share/gnome-shell/extensions/inkecho-ibus-v2-prototype@local.invalid/
+echo 'setup finished, rebooting'
+sync
+sudo reboot

@@ -1,0 +1,28 @@
+import os
+import sys
+import time
+from pathlib import Path
+import gi
+
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk
+
+name = sys.argv[1]
+root = Path('/tmp/inkecho-own-frame-r1')
+window = Gtk.Window(title='InkEcho frame test ' + name)
+window.set_default_size(300, 100)
+window.add(Gtk.Label(label='Isolated frame test ' + name))
+count = 0
+
+def tick(widget, clock):
+    global count
+    count += 1
+    (root / (name + '.txt')).write_text(str(count))
+    widget.queue_draw()
+    return True
+
+window.connect('destroy', Gtk.main_quit)
+window.show_all()
+window.add_tick_callback(tick)
+(root / (name + '.pid')).write_text(str(os.getpid()))
+Gtk.main()

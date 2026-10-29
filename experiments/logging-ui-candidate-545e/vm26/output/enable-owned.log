@@ -1,0 +1,9 @@
+DISPLAY=:0
+WAYLAND_DISPLAY=wayland-0
+XAUTHORITY=/run/user/1000/.mutter-Xwaylandauth.XF47X3
+XDG_SESSION_TYPE=wayland
+2 1000 inkecho -     1273 manager -    no -
+7 1000 inkecho seat0 4189 user    tty2 no -
+8 1000 inkecho -     5022 user    -    no -
+扩展文件已校验；自动输出时仍须验证当前目标和服务身份。
+actual_installation_state enabled

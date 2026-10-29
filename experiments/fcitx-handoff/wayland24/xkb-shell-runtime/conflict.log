@@ -1,0 +1,15 @@
+Warning: Permanently added '[127.0.0.1]:2222' (ED25519) to the list of known hosts.
+focus True True
+Apply 0 ('{"layouts":"us,us","variants":",","options":"","model":"pc105+inet"}',) 
+PressKey 0 ('sent',) 
+PressKey 0 ('sent',) 
+key 97 a
+initial 'a甲'
+change_options 0 
+PressKey 0 ('sent',) 
+key 65307 Escape
+Restore 0 ('restored-call',) 
+PressKey 0 ('sent',) 
+key 65509 Caps_Lock
+settings_final ['caps:escape']
+final_text 'a甲'

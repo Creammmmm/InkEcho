@@ -1,0 +1,8 @@
+xfce.desktop
+cat: /var/lib/AccountsService/users/inkecho: Permission denied
+[daemon]
+WaylandEnable=false
+AutomaticLoginEnable=true
+AutomaticLogin=inkecho
+/usr/bin/Xorg
+ubuntu-session	50.1-0ubuntu0.1

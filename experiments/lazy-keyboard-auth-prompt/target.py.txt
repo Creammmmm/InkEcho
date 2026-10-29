@@ -1,0 +1,15 @@
+import gi, os, subprocess, tempfile, json, sys
+gi.require_version('Gtk','3.0')
+from gi.repository import Gtk, GLib
+mode=sys.argv[1]; app='/tmp/inkecho-auth-experiment/squashfs-root'; out=tempfile.TemporaryFile(mode='w+'); err=tempfile.TemporaryFile(mode='w+'); proc=None
+win=Gtk.Window(title='InkEcho authorization test'); view=Gtk.TextView(); win.add(view); win.show_all(); win.present(); view.grab_focus()
+def start():
+ global proc
+ if not win.is_active() or not view.has_focus(): print(json.dumps({'error':'target_not_focused'}),flush=True); Gtk.main_quit(); return False
+ env=os.environ.copy(); env.update(PYTHONHOME=app+'/usr',PYTHONPATH=app+'/packages',LD_LIBRARY_PATH=app+'/usr/lib/inkecho',QT_QPA_PLATFORM='offscreen'); proc=subprocess.Popen([app+'/usr/bin/python3','/tmp/inkecho-auth-experiment/sender.py',mode],env=env,stdout=out,stderr=err); GLib.timeout_add(100,poll); return False
+def poll():
+ if proc.poll() is None: return True
+ GLib.timeout_add(800,finish); return False
+def finish():
+ b=view.get_buffer(); a,z=b.get_bounds(); text=b.get_text(a,z,True); out.seek(0); err.seek(0); print(json.dumps({'mode':mode,'text':text,'focused_at_end':view.has_focus(),'active_at_end':win.is_active(),'output':out.read(),'stderr':err.read()[-2000:]},ensure_ascii=False),flush=True); Gtk.main_quit(); return False
+GLib.timeout_add(1500,start); Gtk.main()

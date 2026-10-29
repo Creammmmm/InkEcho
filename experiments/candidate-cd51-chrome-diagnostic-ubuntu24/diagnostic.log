@@ -1,0 +1,56 @@
+Type=wayland
+State=active
+/tmp/inkecho-r4-test/InkEcho-0.10.2-x86_64.AppImage: OK
+6056b6073b2fc7a8564f61f01cf6db2c4c35ad15fef41ba21672c5508630d58b  /tmp/inkecho-r4-test/squashfs-root/packages/inkecho/platform/output_router.py
+af654c3a436a05a1c10cb3450ec0af851e6b74414e502c2b12425149a85d4605  /tmp/inkecho-r4-test/squashfs-root/packages/inkecho/app.py
+已安装输入桥；运行状态需通过输入服务检查确认。
+SERVER_PORT 38285
+CDP_TARGETS [ {
+   "description": "",
+   "devtoolsFrontendUrl": "https://chrome-devtools-frontend.appspot.com/serve_rev/@b510e9d7cd3a2fbd78d0ddc42234103206c5f78d/inspector.html?ws=127.0.0.1:9222/devtools/page/105125169AC1D7C7F1ED3D7CC276346E",
+   "id": "105125169AC1D7C7F1ED3D7CC276346E",
+   "title": "Google Hangouts",
+   "type": "background_page",
+   "url": "chrome-extension://nkeimhogjdpnpccoofpliimaahmaaome/background.html",
+   "webSocketDebuggerUrl": "ws://127.0.0.1:9222/devtools/page/105125169AC1D7C7F1ED3D7CC276346E"
+}, {
+   "description": "",
+   "devtoolsFrontendUrl": "https://chrome-devtools-frontend.appspot.com/serve_rev/@b510e9d7cd3a2fbd78d0ddc42234103206c5f78d/inspector.html?ws=127.0.0.1:9222/devtools/page/A23930083DD22DEC7E1CA2E22936043A",
+   "id": "A23930083DD22DEC7E1CA2E22936043A",
+   "title": "",
+   "type": "page",
+   "url": "http://127.0.0.1:38285/a",
+   "webSocketDebuggerUrl": "ws://127.0.0.1:9222/devtools/page/A23930083DD22DEC7E1CA2E22936043A"
+}, {
+   "description": "",
+   "devtoolsFrontendUrl": "https://chrome-devtools-frontend.appspot.com/serve_rev/@b510e9d7cd3a2fbd78d0ddc42234103206c5f78d/inspector.html?ws=127.0.0.1:9222/devtools/page/CDECCB7A560ED970000A400F68D810E7",
+   "id": "CDECCB7A560ED970000A400F68D810E7",
+   "title": "Omnibox Popup",
+   "type": "browser_ui",
+   "url": "chrome://omnibox-popup.top-chrome/",
+   "webSocketDebuggerUrl": "ws://127.0.0.1:9222/devtools/page/CDECCB7A560ED970000A400F68D810E7"
+}, {
+   "description": "",
+   "devtoolsFrontendUrl": "https://chrome-devtools-frontend.appspot.com/serve_rev/@b510e9d7cd3a2fbd78d0ddc42234103206c5f78d/inspector.html?ws=127.0.0.1:9222/devtools/page/7EF2D39AD6609A6FA54DDAE150E92670",
+   "id": "7EF2D39AD6609A6FA54DDAE150E92670",
+   "title": "Omnibox Popup",
+   "type": "browser_ui",
+   "url": "chrome://omnibox-popup.top-chrome/omnibox_popup_aim.html",
+   "webSocketDebuggerUrl": "ws://127.0.0.1:9222/devtools/page/7EF2D39AD6609A6FA54DDAE150E92670"
+}, {
+   "description": "",
+   "devtoolsFrontendUrl": "https://chrome-devtools-frontend.appspot.com/serve_rev/@b510e9d7cd3a2fbd78d0ddc42234103206c5f78d/worker_app.html?ws=127.0.0.1:9222/devtools/page/CF67F09860A84EC09825CEA5F0D1A81A",
+   "id": "CF67F09860A84EC09825CEA5F0D1A81A",
+   "title": "Service Worker chrome-extension://fignfifoniblkonapihmkfakmlgkbkcf/service_worker.js",
+   "type": "service_worker",
+   "url": "chrome-extension://fignfifoniblkonapihmkfakmlgkbkcf/service_worker.js",
+   "webSocketDebuggerUrl": "ws://127.0.0.1:9222/devtools/page/CF67F09860A84EC09825CEA5F0D1A81A"
+} ]
+
+{"mode": "full", "error": "initial_focus_missing", "focus": []}
+browser_timeout_or_error=full
+未发现经过校验的输入桥；可能尚未安装。
+[1028/194105.522770:WARNING:chrome/app/chrome_main_linux.cc:84] Read channel stable from /tmp/inkecho-browser/chrome/CHROME_VERSION_EXTRA
+
+DevTools listening on ws://127.0.0.1:9222/devtools/browser/eb162def-2c85-4f5a-87bf-272cf5af10d8
+[3396:3411:1028/194106.014519:ERROR:gpu/ipc/client/command_buffer_proxy_impl.cc:285] ContextResult::kTransientFailure: Failed to send GpuControl.CreateCommandBuffer.

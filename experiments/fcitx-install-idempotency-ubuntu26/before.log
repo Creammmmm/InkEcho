@@ -1,0 +1,193 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+_____ test_explicit_actions_check_pinned_files_and_preserve_loaded_library _____
+
+self = <inkecho.platform.fcitx5_install.FcitxInstaller object at 0x783cb08481a0>
+
+    def install(self):
+        system = self._system()
+        if self.source is None:
+            raise FcitxInstallError("应用中没有可用的输入桥候选文件。")
+        try:
+>           staging.stage(
+                self.source,
+                self.data_home,
+                os_id=system[0],
+                os_version=system[1],
+                architecture=system[2],
+                fcitx_version=system[3],
+            )
+
+src/inkecho/platform/fcitx5_install.py:73: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+candidate_dir = PosixPath('/tmp/pytest-of-lth/pytest-260/test_explicit_actions_check_pi0/source')
+data_home = PosixPath('/tmp/pytest-of-lth/pytest-260/test_explicit_actions_check_pi0/data')
+os_id = 'ubuntu', os_version = '26.04', architecture = 'x86_64'
+fcitx_version = '5.1.19'
+
+    def stage(
+        candidate_dir: Path,
+        data_home: Path,
+        *,
+        os_id: str,
+        os_version: str,
+        architecture: str,
+        fcitx_version: str,
+    ):
+        """Stage verified files, but do not refresh, install system files, or restart."""
+        if any(char in str(data_home) for char in "\\\r\n;\x00") or str(
+            data_home
+        ).strip() != str(data_home):
+            raise StagingError("unsafe_path")
+        if not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+", fcitx_version):
+            raise StagingError("invalid_fcitx_version")
+        with ExitStack() as stack:
+            source = _directory(candidate_dir, allow_root=True)
+            stack.callback(os.close, source)
+            data = _directory(data_home)
+            stack.callback(os.close, data)
+            manifest = json.loads(_read(source, "manifest.json", 65536, allow_root=True))
+            if not isinstance(manifest, dict):
+                raise StagingError("invalid_manifest")
+            if (
+                manifest.get("status") != "uninstalled-candidate"
+                or (
+                    manifest.get("os_id"),
+                    manifest.get("os_version"),
+                    manifest.get("architecture"),
+                    manifest.get("fcitx5_core_version"),
+                )
+                != BUILD_SYSTEM
+                or (os_id, os_version, architecture, fcitx_version) not in TESTED_SYSTEMS
+            ):
+                raise StagingError("incompatible_candidate")
+            output = _child(source, "candidate", create=False, allow_root=True)
+            stack.callback(os.close, output)
+            binary = _read(output, "libinkecho.so", 16 * 1024 * 1024, allow_root=True)
+            candidate_conf = _read(output, "inkecho.conf", 65536, allow_root=True)
+            machine = {"x86_64": 62, "aarch64": 183}.get(architecture)
+            if (
+                machine is None
+                or len(binary) < 64
+                or binary[:6] != b"\x7fELF\x02\x01"
+                or int.from_bytes(binary[16:18], "little") != 3
+                or int.from_bytes(binary[18:20], "little") != machine
+            ):
+                raise StagingError("invalid_library_architecture")
+            digest = hashlib.sha256(binary).hexdigest()
+            hashes = manifest.get("files_sha256", {})
+            if not isinstance(hashes, dict):
+                raise StagingError("invalid_manifest")
+            if (
+                hashes.get("libinkecho.so") != digest
+                or hashes.get("inkecho.conf") != hashlib.sha256(candidate_conf).hexdigest()
+            ):
+                raise StagingError("candidate_hash_mismatch")
+            if digest != TESTED_CANDIDATE_SHA256:
+                raise StagingError("unverified_candidate")
+            if candidate_conf != _conf("libinkecho", BUILD_SYSTEM[3]):
+                raise StagingError("invalid_candidate_description")
+            addon_parent = _child(data, "fcitx5")
+            stack.callback(os.close, addon_parent)
+            addon = _child(addon_parent, "addon")
+            stack.callback(os.close, addon)
+            # Check before writing the library, and still use O_EXCL at publication.
+            try:
+                os.stat("inkecho.conf", dir_fd=addon, follow_symlinks=False)
+            except FileNotFoundError:
+                pass
+            else:
+>               raise StagingError("description_exists")
+E               inkecho.platform.fcitx5_staging.StagingError: description_exists
+
+src/inkecho/platform/fcitx5_staging.py:190: StagingError
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = PosixPath('/tmp/pytest-of-lth/pytest-260/test_explicit_actions_check_pi0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x783cb081c2b0>
+
+    def test_explicit_actions_check_pinned_files_and_preserve_loaded_library(
+        tmp_path, monkeypatch
+    ):
+        source = tmp_path / "source"
+        candidate = source / "candidate"
+        candidate.mkdir(parents=True, mode=0o700)
+        source.chmod(0o700)
+        binary = b"\x7fELF\x02\x01" + bytes(10) + b"\x03\x00\x3e\x00" + bytes(44)
+        conf = staging._conf("libinkecho", "5.1.7")
+        digest = hashlib.sha256(binary).hexdigest()
+        monkeypatch.setattr(staging, "TESTED_CANDIDATE_SHA256", digest)
+        for name, content in (("libinkecho.so", binary), ("inkecho.conf", conf)):
+            path = candidate / name
+            path.write_bytes(content)
+            path.chmod(0o600)
+        manifest = {
+            "status": "uninstalled-candidate",
+            "os_id": "ubuntu",
+            "os_version": "24.04",
+            "architecture": "x86_64",
+            "fcitx5_core_version": "5.1.7",
+            "files_sha256": {
+                "libinkecho.so": digest,
+                "inkecho.conf": hashlib.sha256(conf).hexdigest(),
+            },
+        }
+        path = source / "manifest.json"
+        path.write_text(json.dumps(manifest))
+        path.chmod(0o600)
+        data = tmp_path / "data"
+        data.mkdir(mode=0o700)
+        calls = []
+    
+        def runner(args, **_kwargs):
+            calls.append(args)
+            return SimpleNamespace(
+                returncode=0, stdout="5.1.19" if args[-1] == "--version" else "()"
+            )
+    
+        monkeypatch.setattr(
+            "platform.freedesktop_os_release",
+            lambda: {"ID": "ubuntu", "VERSION_ID": "26.04"},
+        )
+        monkeypatch.setattr("platform.machine", lambda: "x86_64")
+        manager = FcitxInstaller(source=source, data_home=data, runner=runner)
+        assert "未发现" in manager.status()
+        assert all("Refresh" not in " ".join(call) for call in calls)
+        with pytest.raises(FcitxInstallError, match="先安装"):
+            manager.enable()
+        manager.install()
+        description = data / "fcitx5/addon/inkecho.conf"
+        original = description.read_bytes()
+        before = description.stat()
+>       manager.install()
+
+tests/test_fcitx5_install.py:64: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <inkecho.platform.fcitx5_install.FcitxInstaller object at 0x783cb08481a0>
+
+    def install(self):
+        system = self._system()
+        if self.source is None:
+            raise FcitxInstallError("应用中没有可用的输入桥候选文件。")
+        try:
+            staging.stage(
+                self.source,
+                self.data_home,
+                os_id=system[0],
+                os_version=system[1],
+                architecture=system[2],
+                fcitx_version=system[3],
+            )
+        except (OSError, ValueError, staging.StagingError) as exc:
+>           raise FcitxInstallError(
+                "安装未完成：文件校验失败或已有输入桥配置。"
+            ) from exc
+E           inkecho.platform.fcitx5_install.FcitxInstallError: 安装未完成：文件校验失败或已有输入桥配置。
+
+src/inkecho/platform/fcitx5_install.py:82: FcitxInstallError
+=========================== short test summary info ============================
+FAILED tests/test_fcitx5_install.py::test_explicit_actions_check_pinned_files_and_preserve_loaded_library
+1 failed in 0.06s

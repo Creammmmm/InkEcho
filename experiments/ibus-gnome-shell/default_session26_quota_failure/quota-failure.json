@@ -1,0 +1,12 @@
+{
+  "stage": "host payload archive before completed guest deployment",
+  "tool_exit": 120,
+  "observed_tool_errors": [
+    "cat: -: Disk quota exceeded",
+    "gzip: stdout: Disk quota exceeded",
+    "tar: payload.tar.gz wrote only 6144 of 10240 bytes"
+  ],
+  "provenance": "recorded functions.exec tool output; bootstrap.log may be empty because redirection itself hit quota",
+  "desktop_samples_completed": 0,
+  "default_source_patch": "/tmp/inkecho-owned-default/default-integration-r2.patch"
+}

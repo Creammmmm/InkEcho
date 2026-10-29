@@ -1,0 +1,62 @@
+set -eu
+umask 077
+root=/tmp/inkecho-fcitx-auto-package
+mkdir -p "$root"
+cp /mnt/input/InkEcho.AppImage "$root/InkEcho.AppImage"
+printf '%s  %s\n' 42118031876729529974e6c20d746638d5d09611f4bb34b4ae189fb4717ada7b "$root/InkEcho.AppImage" | sha256sum -c -
+chmod 700 "$root/InkEcho.AppImage"
+cd "$root"; ./InkEcho.AppImage --appimage-extract > /mnt/output/fcitx-auto-extract24.log
+cp /mnt/input/fcitx-auto/*.py "$root/"
+export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus XDG_RUNTIME_DIR=/run/user/1000 DISPLAY=:0 XDG_SESSION_TYPE=x11 XDG_CURRENT_DESKTOP=ubuntu:GNOME GDK_BACKEND=x11
+export XAUTHORITY="$(systemctl --user show-environment | sed -n 's/^XAUTHORITY=//p')"
+test -r "$XAUTHORITY"
+! pgrep -x fcitx5 >/dev/null
+out=/mnt/output/fcitx-auto24-r2
+mkdir -p "$out"
+base=$(mktemp -d /tmp/inkecho-fcitx-auto-data.XXXXXX)
+mkdir -m700 "$base/data" "$base/config" "$base/cache"
+export XDG_DATA_HOME="$base/data" APPDIR="$root/squashfs-root"
+systemctl --user show-environment | sed -n '/^XMODIFIERS=/p; /^GTK_IM_MODULE=/p; /^QT_IM_MODULE=/p' > "$out/system-environment-before.txt"
+gsettings get org.gnome.desktop.input-sources sources > "$out/input-sources-before.txt"
+fcitx5 --version > "$out/runtime-version.txt"
+package_python() { env PYTHONHOME="$APPDIR/usr" PYTHONPATH="$APPDIR/packages" LD_LIBRARY_PATH="$APPDIR/usr/lib/inkecho" QT_QPA_PLATFORM=offscreen "$APPDIR/usr/bin/python3" "$@"; }
+pid=''
+cleanup() {
+ set +e
+ package_python -c 'from inkecho.platform.fcitx5_install import FcitxInstaller; FcitxInstaller().disable()' > "$out/disable.log" 2>&1
+ if [ -n "$pid" ]; then kill "$pid" 2>/dev/null; wait "$pid"; printf 'daemon_wait=%s\n' "$?" > "$out/daemon-wait.txt"; fi
+ systemctl --user unset-environment XMODIFIERS GTK_IM_MODULE QT_IM_MODULE
+ while IFS= read -r entry; do test -z "$entry" || systemctl --user set-environment "$entry"; done < "$out/system-environment-before.txt"
+ systemctl --user show-environment | sed -n '/^XMODIFIERS=/p; /^GTK_IM_MODULE=/p; /^QT_IM_MODULE=/p' > "$out/system-environment-after.txt"
+ gsettings get org.gnome.desktop.input-sources sources > "$out/input-sources-after.txt"
+ gdbus call --session --dest org.freedesktop.DBus --object-path /org/freedesktop/DBus --method org.freedesktop.DBus.NameHasOwner org.fcitx.Fcitx5 > "$out/owner-after.txt"
+ find /run/user/1000 -maxdepth 2 -name '*inkecho*' > "$out/runtime-paths-after.txt"
+ cmp "$out/system-environment-before.txt" "$out/system-environment-after.txt"; printf 'environment_compare=%s\n' "$?" > "$out/restore-check.txt"
+ cmp "$out/input-sources-before.txt" "$out/input-sources-after.txt"; printf 'source_compare=%s\n' "$?" >> "$out/restore-check.txt"
+ rm -rf "$base"
+}
+trap cleanup EXIT
+package_python -c 'from inkecho.platform.fcitx5_install import FcitxInstaller; m=FcitxInstaller(); m.install(); print(m.status()); print(m.auto_version())' > "$out/install.log" 2>&1
+systemctl --user set-environment XMODIFIERS=@im=fcitx GTK_IM_MODULE=fcitx QT_IM_MODULE=fcitx
+# Actual system executable and desktop session bus; disable clipboard and IBus-service emulation.
+XDG_CONFIG_HOME="$base/config" XDG_CACHE_HOME="$base/cache" fcitx5 -D --keep --disable=clipboard,ibusfrontend,xim > "$out/fcitx.log" 2>&1 & pid=$!
+sleep 3
+kill -0 "$pid"
+package_python -c 'from inkecho.platform.fcitx5_install import FcitxInstaller; m=FcitxInstaller(); m.enable(); print(m.status())' > "$out/enable.log" 2>&1
+package_python "$root/system-evidence.py" > "$out/system-detection.json"
+export GTK_IM_MODULE=fcitx XMODIFIERS=@im=fcitx QT_IM_MODULE=fcitx INK_PROBE_MODE=auto INK_TARGET_KIND=normal
+for mode in switch cancel; do
+ /usr/bin/python3 "$root/target-focus.py" "$mode" > "$out/fcitx-$mode.jsonl" 2>&1
+done
+/usr/bin/python3 - "$out" <<'PY2'
+import json,sys
+from pathlib import Path
+root=Path(sys.argv[1]);checks={}
+for p in root.glob('*.jsonl'):
+ data=[]
+ for line in p.read_text().splitlines():
+  try:data.append(json.loads(line))
+  except ValueError:pass
+ checks[p.name]=bool(data and data[-1].get('passed'))
+(root/'passed-checks.json').write_text(json.dumps(checks,indent=2));print(json.dumps(checks));assert len(checks)==2 and all(checks.values())
+PY2

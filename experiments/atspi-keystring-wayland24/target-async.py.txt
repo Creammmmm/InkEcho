@@ -1,0 +1,20 @@
+import gi,json,os,subprocess,sys,time
+gi.require_version('Gtk','3.0')
+from gi.repository import Gtk,GLib
+w=Gtk.Window(title='InkEcho AT-SPI isolated target');e=Gtk.Entry();w.add(e);w.show_all();w.present();e.grab_focus();result={'backend':os.getenv('GDK_BACKEND'),'samples':[]};values=['b','甲乙'];n=0
+def step():
+ global n
+ if not (w.is_active() and e.has_focus()):result['error']='target_not_focused';print(json.dumps(result,ensure_ascii=False),flush=True);Gtk.main_quit();return False
+ if n==len(values):print(json.dumps(result,ensure_ascii=False),flush=True);Gtk.main_quit();return False
+ text=values[n];n+=1;e.set_text('');e.set_position(0);p=subprocess.Popen(['/usr/bin/python3','/tmp/inkecho-atspi-test/worker.py',text],stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True);start=time.monotonic()
+ def poll():
+  if p.poll() is None:
+   if time.monotonic()-start<5:return True
+   p.kill();p.wait();sample={'requested':text,'worker_error':'timeout'}
+  else:
+   out,err=p.communicate();sample={'requested':text,'worker_rc':p.returncode,'worker_stdout':out.strip(),'worker_stderr':err[-1000:]}
+  def observe():
+   sample.update(actual=e.get_text(),active=w.is_active(),focus=e.has_focus());result['samples'].append(sample);GLib.timeout_add(300,step);return False
+  GLib.timeout_add(1500,observe);return False
+ GLib.timeout_add(20,poll);return False
+GLib.timeout_add(3000,step);Gtk.main()

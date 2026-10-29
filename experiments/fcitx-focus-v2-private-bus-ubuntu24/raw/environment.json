@@ -1,0 +1,22 @@
+{
+  "os": {
+    "NAME": "Ubuntu",
+    "ID": "ubuntu",
+    "PRETTY_NAME": "Ubuntu 24.04.5 LTS",
+    "VERSION_ID": "24.04",
+    "VERSION": "24.04.5 LTS (Noble Numbat)",
+    "VERSION_CODENAME": "noble",
+    "ID_LIKE": "debian",
+    "HOME_URL": "https://www.ubuntu.com/",
+    "SUPPORT_URL": "https://help.ubuntu.com/",
+    "BUG_REPORT_URL": "https://bugs.launchpad.net/ubuntu/",
+    "PRIVACY_POLICY_URL": "https://www.ubuntu.com/legal/terms-and-policies/privacy-policy",
+    "UBUNTU_CODENAME": "noble",
+    "LOGO": "ubuntu-logo"
+  },
+  "uid": 1000,
+  "sdk": "fcitx5\t5.1.7-1build3\nlibfcitx5core-dev:amd64\t5.1.7-1build3\nlibfcitx5utils-dev:amd64\t5.1.7-1build3\n",
+  "compiler": "g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+  "cmake": "cmake version 3.28.3",
+  "v2_ldd": "\tlinux-vdso.so.1 (0x00007ffd7f395000)\n\tlibFcitx5Core.so.7 => /lib/x86_64-linux-gnu/libFcitx5Core.so.7 (0x00007833a5e8c000)\n\tlibFcitx5Config.so.6 => /lib/x86_64-linux-gnu/libFcitx5Config.so.6 (0x00007833a5e6c000)\n\tlibFcitx5Utils.so.2 => /lib/x86_64-linux-gnu/libFcitx5Utils.so.2 (0x00007833a5dc9000)\n\tlibstdc++.so.6 => /lib/x86_64-linux-gnu/libstdc++.so.6 (0x00007833a5a00000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007833a5d9b000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007833a5600000)\n\tlibxkbcommon.so.0 => /lib/x86_64-linux-gnu/libxkbcommon.so.0 (0x00007833a5d50000)\n\tlibuuid.so.1 => /lib/x86_64-linux-gnu/libuuid.so.1 (0x00007833a5d46000)\n\tlibsystemd.so.0 => /lib/x86_64-linux-gnu/libsystemd.so.0 (0x00007833a5920000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x00007833a5837000)\n\t/lib64/ld-linux-x86-64.so.2 (0x00007833a5fb9000)\n\tlibcap.so.2 => /lib/x86_64-linux-gnu/libcap.so.2 (0x00007833a5d37000)\n\tlibgcrypt.so.20 => /lib/x86_64-linux-gnu/libgcrypt.so.20 (0x00007833a54b7000)\n\tliblz4.so.1 => /lib/x86_64-linux-gnu/liblz4.so.1 (0x00007833a5d15000)\n\tliblzma.so.5 => /lib/x86_64-linux-gnu/liblzma.so.5 (0x00007833a5ce3000)\n\tlibzstd.so.1 => /lib/x86_64-linux-gnu/libzstd.so.1 (0x00007833a53fd000)\n\tlibgpg-error.so.0 => /lib/x86_64-linux-gnu/libgpg-error.so.0 (0x00007833a5cbc000)\n"
+}

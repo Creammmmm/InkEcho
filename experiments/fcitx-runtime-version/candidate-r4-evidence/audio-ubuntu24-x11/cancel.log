@@ -1,0 +1,33 @@
+/tmp/inkecho-audio-fcitx/InkEcho.AppImage: OK
+已安装输入桥；运行状态需通过输入服务检查确认。
+qt.multimedia.symbolsresolver: Couldn't load va-x11 library
+qt.multimedia.symbolsresolver: Couldn't resolve va-x11 symbols
+qt.multimedia.symbolsresolver: Couldn't load va-drm library
+qt.multimedia.symbolsresolver: Couldn't resolve va-drm symbols
+qt.multimedia.symbolsresolver: Couldn't load va library
+qt.multimedia.symbolsresolver: Couldn't resolve va symbols
+qt.multimedia.symbolsresolver: Couldn't load va(in plugin) library
+qt.multimedia.symbolsresolver: Couldn't resolve va(in plugin) symbols
+qt.multimedia.ffmpeg: Using Qt multimedia with FFmpeg version 9.0.1 LGPL version 2.1 or later
+qt.multimedia.pipewire.devicemonitor: Ignoring dummy output: std::map(std::pair("client.id", "32"), std::pair("factory.id", "18"), std::pair("media.class", "Audio/Sink"), std::pair("node.description", "Dummy Output"), std::pair("node.name", "auto_null"), std::pair("object.serial", "117"))
+Unhandled exception in client_connected_cb
+transport: <asyncio.sslproto._SSLProtocolTransport object at 0x75bd582fe0f0>
+Traceback (most recent call last):
+  File "/tmp/inkecho-audio-fcitx/pipeline.py", line 260, in polish
+    await writer.wait_closed()
+  File "/tmp/inkecho-audio-fcitx/squashfs-root/usr/lib/python3.13/asyncio/streams.py", line 358, in wait_closed
+    await self._protocol._get_close_waiter(self)
+TimeoutError: SSL shutdown timed out
+{"status": "passed", "synthetic_only": true, "input_transport": "fcitx_owned_target", "events_ms": {"toggle_requested": 0.0, "credential_wait_started": 423.376, "first_capture": 6.674, "play_requested": 82.433, "credential_wait_finished": 843.59, "first_audio_on_wire": 440.456, "stop_requested": 1346.247, "final_asr": 1470.647, "polishing_request": 1502.326, "polishing_first_delta": 1581.983, "first_sent_confirmed": 1587.652, "cancel_requested": 1587.67, "cancel_observation_started": 1589.155, "polishing_full_text": 2002.778, "cancel_observation_finished": 2846.207}, "marker_samples": 1601, "wire_bytes": 42950, "performance": {"schema_version": 1, "outcome": "cancelled", "events_ms": {"recording_started": 0.004, "recording_stop_requested": 1345.401, "recording_stopped": 1347.077, "asr_started": 422.31, "asr_completed": 1471.04, "polishing_started": 1471.105, "polishing_first_segment": 1583.372, "polishing_completed": null, "first_character_sent": 1586.787, "output_completed": null, "task_finished": 1586.908}, "durations_ms": {"stop_to_audio_ready_ms": 1.676, "asr_ms": 1048.731, "polishing_to_first_segment_ms": 112.268, "polishing_ms": null, "stop_to_first_character_ms": 241.386, "audio_ready_to_first_character_ms": 239.71, "output_ms": null, "stop_to_output_completed_ms": null, "stop_to_task_finished_ms": 241.508}}}
+Traceback (most recent call last):
+  File "/tmp/inkecho-audio-fcitx/pipeline.py", line 543, in <module>
+    loop.run_until_complete(run())
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "/tmp/inkecho-audio-fcitx/squashfs-root/packages/qasync/__init__.py", line 438, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/tmp/inkecho-audio-fcitx/pipeline.py", line 532, in run
+    not cleanup_errors
+    and report["balanced"]
+    and report["defaults_unchanged"]
+AssertionError

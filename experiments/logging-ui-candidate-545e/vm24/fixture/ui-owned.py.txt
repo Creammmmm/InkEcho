@@ -1,0 +1,45 @@
+"""Test-only observer presses the real packaged UI install button in own guest."""
+import asyncio,json,sys,time,subprocess,os
+from pathlib import Path
+from PySide6.QtWidgets import QApplication,QPushButton,QScrollArea
+import inkecho.__main__ as entry
+from inkecho.platform.owned_installation import verified_installation,UUID
+root=Path(os.environ.get('OWNED_UI_OUT','/mnt/output/owned-ui'));root.mkdir(exist_ok=True)
+report={'scope':'actual extracted package UI, programmatic real button click; isolated guest only'}
+def state():
+ return {k:subprocess.check_output(['gsettings','get','org.gnome.shell',k],text=True).strip() for k in ('enabled-extensions','disabled-extensions','disable-user-extensions')}
+async def observe(app):
+ try:
+  async with asyncio.timeout(15):
+   while True:
+    w=next((x for x in app.topLevelWidgets() if hasattr(x,'settings_page')),None)
+    if w:break
+    await asyncio.sleep(.1)
+   report['router_type']=type(w.session.inputs).__name__;assert report['router_type']=='DefaultAutoOutputRouter'
+   w.navigation.setCurrentRow(3);w.settings_page.tabs.setCurrentIndex(3)
+   compat=w.settings_page.compatibility
+   report['before']=state();report['initial_status']=compat.owned_status.text()
+   await asyncio.sleep(.8)
+   w.stack.currentWidget().ensureWidgetVisible(compat.owned_status,0,120)
+   await asyncio.sleep(.5);w.grab().save(str(root/'before.png'))
+   action='检查自动输入扩展' if verified_installation() else '安装自动输入扩展'
+   report['clicked']=action
+   button=next(x for x in compat.findChildren(QPushButton) if x.text()==action);button.click()
+   while not verified_installation():await asyncio.sleep(.1)
+   await asyncio.sleep(1)
+   report['installed_verified']=verified_installation();report['status']=compat.owned_status.text();report['after']=state();report['no_automatic_enable']=report['before']==report['after'];assert report['no_automatic_enable']
+   w.stack.currentWidget().ensureWidgetVisible(compat.owned_status,0,120)
+   await asyncio.sleep(.5)
+   w.grab().save(str(root/'installed.png'));report['passed']=True
+ except BaseException as e:
+  report['error']=type(e).__name__+':'+str(e);raise
+ finally:
+  (root/'result.json').write_text(json.dumps(report,ensure_ascii=False,indent=2))
+real=entry.run
+async def wrapped(app,*args):
+ task=asyncio.create_task(observe(app))
+ try:await real(app,*args)
+ finally:await task
+entry.run=wrapped
+sys.argv=['inkecho','--config-dir','/tmp/owned-ui-config','--data-dir','/tmp/owned-ui-data','--quit-after','18']
+entry.main()

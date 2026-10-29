@@ -1,0 +1,161 @@
+"""Real private Fcitx/Core/D-Bus; synthetic owned contexts, no GUI delivery claim."""
+import asyncio
+import hashlib
+import json
+import os
+import subprocess
+import sys
+import time
+from contextlib import asynccontextmanager
+from pathlib import Path
+
+ROOT = Path('/tmp/inkecho-fcitx-v2')
+sys.path[:0] = [str(ROOT/'src'), str(ROOT/'deps')]
+from dbus_next import Message, MessageType
+from dbus_next.aio import MessageBus
+from inkecho.platform.fcitx5 import Fcitx5Bridge, FcitxOutputError, INTERFACE
+from inkecho.platform.fcitx5_capability import Capability
+from inkecho.platform.output_router import OutputRouter, OutputRouterError
+
+variant = sys.argv[1]
+work = ROOT / ('real-bus-' + variant + '-r3')
+work.mkdir(mode=0o700, exist_ok=False)
+for folder in ['runtime','data/fcitx5/addon','config','home']:
+    (work/folder).mkdir(mode=0o700, parents=True, exist_ok=True)
+for key, value in {'HOME':str(work/'home'),'XDG_CONFIG_HOME':str(work/'config'),
+                   'XDG_DATA_HOME':str(work/'data'),'XDG_RUNTIME_DIR':str(work/'runtime')}.items():
+    os.environ[key]=value
+for key in ['DISPLAY','WAYLAND_DISPLAY','WAYLAND_SOCKET']:
+    os.environ.pop(key,None)
+for name, build, filename in [('inkecho',variant+'-build','libinkecho'),
+                              ('ownedtest','test-control-build','libownedtest')]:
+    template=(ROOT/build/'inkecho.conf').read_text()
+    template=template.replace('Library='+filename,'Library='+str(ROOT/build/filename))
+    (work/'data/fcitx5/addon'/ (name+'.conf')).write_text(template)
+log=(work/'fcitx.log').open('xb')
+argv=['/usr/bin/fcitx5','-D','--keep','--disable=wayland,xcb,notificationitem,classicui,clipboard']
+process=subprocess.Popen(argv,stdin=subprocess.DEVNULL,stdout=log,stderr=subprocess.STDOUT)
+report={'variant':variant,'scope':'real private D-Bus and Fcitx5 Core, owned synthetic InputContext/FocusGroups; no GUI','daemon':{'argv':argv,'pid':process.pid,'start':Path('/proc',str(process.pid),'stat').read_text().split(') ',1)[1].split()[19]},'checks':[],'passed':False}
+
+class SpyKeyboard:
+    def __init__(self): self.authorized=False; self.sent=[]
+    async def connect(self): pass
+    async def authorize(self,parent=''): self.authorized=True
+    @asynccontextmanager
+    async def output_session(self): yield
+    async def insert(self,text,can_continue,**kwargs):
+        assert can_continue(); self.sent.append(len(text)); return len(text)
+    async def aclose(self): pass
+
+async def run():
+    bus=await MessageBus().connect()
+    owner=None
+    async def raw(destination,path,interface,member,signature='',body=[]):
+        response=await asyncio.wait_for(bus.call(Message(destination=destination,path=path,interface=interface,member=member,signature=signature,body=body)),2)
+        assert response.message_type==MessageType.METHOD_RETURN,(member,response.error_name)
+        return response.body
+    try:
+        for _ in range(100):
+            try:
+                owner=(await raw('org.freedesktop.DBus','/org/freedesktop/DBus','org.freedesktop.DBus','GetNameOwner','s',['org.fcitx.Fcitx5']))[0]
+                break
+            except AssertionError:
+                assert process.poll() is None
+                await asyncio.sleep(.05)
+        assert owner is not None
+        async def call(member,signature='',body=[]):
+            return (await raw(owner,'/inkecho',INTERFACE,member,signature,body))[0]
+        async def control(member,signature='',body=[]):
+            return (await raw(owner,'/ownedtest','org.fcitx.Fcitx.OwnedTest1',member,signature,body))[0]
+        async def focus(mode):
+            count=await control('Focus','u',[mode]); assert count==({0:0,1:1,2:2,3:1}[mode]); return count
+        async def counts(): return [await control('CountA'),await control('CountB')]
+        introspection=(await raw(owner,'/inkecho','org.freedesktop.DBus.Introspectable','Introspect'))[0]
+        v2=variant=='product-native'
+        assert ('name="Begin2"' in introspection)==v2
+        report['runtime_version']=await call('RuntimeVersion')
+        report['begin2_advertised']=v2
+        for method in (['Begin','Begin2'] if v2 else ['Begin']):
+            cap=Capability(str(work/'runtime'))
+            try:
+                assert await call(method,'su' if method=='Begin2' else 's',[cap.token,2] if method=='Begin2' else [cap.token]) is True
+                statuses=[];before=await counts()
+                for mode,expected in [(0,3),(2,4 if method=='Begin2' else 3)]:
+                    await focus(mode)
+                    for _ in range(2):
+                        got=await call('Commit','sus',[cap.token,0,'甲']);assert got==expected;statuses.append(got)
+                assert await counts()==before
+                await focus(1);assert await call('Commit','sus',[cap.token,0,'甲'])==1
+                assert await call('Commit','sus',[cap.token,0,'甲'])==0
+                await focus(3);assert await call('Commit','sus',[cap.token,1,'乙'])==1
+                assert await counts()==[before[0]+1,before[1]+1]
+                assert await call('Cancel','s',[cap.token]) is True
+                assert await call('Commit','sus',[cap.token,2,'甲'])==0
+                report['checks'].append({'name':method+'_wire_compatibility','no_focus_and_multi_statuses':statuses,'sequence_preserved_when_unsent':True,'replay_rejected':True,'post_cancel_rejected':True,'counts_before':before,'counts_after':await counts()})
+            finally:cap.close()
+        if v2:
+            cap=Capability(str(work/'runtime'))
+            try:
+                assert await call('Begin2','su',[cap.token,99]) is False
+                assert await call('Begin','s',[cap.token]) is True
+                assert await call('Cancel','s',[cap.token]) is True
+                report['checks'].append({'name':'unsupported_v2_version_does_not_consume_capability','passed':True})
+            finally:cap.close()
+        # Current production client against both actual plugin versions.
+        client=Fcitx5Bridge()
+        await client.connect(expected_owner=owner)
+        assert client._detailed_focus==v2
+        before=await counts()
+        await focus(2)
+        async def recover_focus():
+            await asyncio.sleep(.04);await focus(1)
+        recover=asyncio.create_task(recover_focus())
+        assert await client.insert('甲',lambda:True,deadline=time.monotonic()+2)==1
+        await recover;assert await counts()==[before[0]+1,before[1]]
+        await client.aclose()
+        report['checks'].append({'name':'new_client_actual_plugin_focus_recovery','detailed_protocol':v2,'single_commit_exact':True})
+        # Actual auto routing with a recorder-only keyboard spy: no desktop keys.
+        for mode in [0,2]:
+            await focus(mode);before=await counts();keyboard=SpyKeyboard()
+            router=OutputRouter(keyboard)
+            async def detect(): return ('fcitx',owner)
+            router._system_detector=detect
+            await router.prepare_task('auto')
+            assert await router.insert('甲乙',lambda:True,deadline=time.monotonic()+3)==2
+            assert keyboard.sent==[2] and await counts()==before
+            report['checks'].append({'name':'real_bridge_zero_prefix_safe_fallback','focus_count':mode,'keyboard_spy_counts':keyboard.sent,'native_commits':0})
+        await focus(1);before=await counts();keyboard=SpyKeyboard();router=OutputRouter(keyboard)
+        router._system_detector=detect
+        await router.prepare_task('auto')
+        try:
+            async with router.output_session():
+                assert await router.insert('甲',lambda:True,deadline=time.monotonic()+2)==1
+                await focus(2)
+                await router.insert('乙',lambda:True,deadline=time.monotonic()+.08)
+            raise AssertionError('partial output unexpectedly resumed')
+        except OutputRouterError as error:
+            assert error.code in {'partial_input_failed','fcitx_delivery_unknown'},error.code
+            partial_code=error.code
+            assert error.acknowledged_attempts==1
+        assert keyboard.sent==[] and await counts()==[before[0]+1,before[1]]
+        report['checks'].append({'name':'real_bridge_partial_prefix_never_handoffs_or_replays','native_prefix':1,'keyboard_spy_counts':[],'error':partial_code})
+        report['protocol_checks_passed']=True
+    finally:
+        if owner:
+            try:report['quit_reply']=await raw(owner,'/ownedtest','org.fcitx.Fcitx.OwnedTest1','Quit')
+            except Exception as error:report['quit_reply_error_type']=type(error).__name__
+        bus.disconnect()
+        try:report['daemon']['original_wait_exit']=await asyncio.to_thread(process.wait,5)
+        except subprocess.TimeoutExpired:report['daemon']['wait_timeout']=True
+        report['passed'] = report.get('protocol_checks_passed',False) and report['daemon'].get('original_wait_exit') == 0
+        log.close()
+        (work/'result.json').write_text(json.dumps(report,indent=2)+'\n')
+
+try:
+    asyncio.run(run())
+except Exception as error:
+    report['error_type']=type(error).__name__
+    (work/'result.json').write_text(json.dumps(report,indent=2)+'\n')
+    raise
+if not report['passed']: raise RuntimeError('protocol_or_cleanup_failed')
+print(json.dumps({'variant':variant,'passed':report['passed'],'checks':len(report['checks']),'daemon_wait':report['daemon'].get('original_wait_exit')}))

@@ -1,0 +1,20 @@
+{
+  "path": "/tmp/inkecho-xwayland-candidate-20261029/vm24/state/guest.qcow2",
+  "device": 47,
+  "inode": 834363,
+  "allocated_bytes": 9834496,
+  "container_state": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-10-29T08:33:13.637567421Z",
+    "FinishedAt": "2026-10-29T08:36:47.47693111Z"
+  },
+  "reason": "Shared UID quota exhausted during boot, EXT4 journal aborted; no package checks ran; invalid environment discarded after container stop"
+}

@@ -1,0 +1,26 @@
+{
+  "scope": "actual native Wayland GTK fcitx frontend/private bus; two entries in one owned window only",
+  "passed": false,
+  "checks": [],
+  "environment": {
+    "DISPLAY": null,
+    "WAYLAND_DISPLAY": "wayland-0",
+    "XDG_SESSION_TYPE": "wayland",
+    "XDG_RUNTIME_DIR": "/run/user/1000"
+  },
+  "daemon_pid": 2660,
+  "target": {
+    "pid": 2661,
+    "start": "13397",
+    "display": "GdkWaylandDisplay",
+    "modules": {
+      "A": "fcitx",
+      "B": "fcitx"
+    },
+    "fcitx_module_loaded": true,
+    "expires_at": 374.06210062599996,
+    "public_text_only": true,
+    "screenshot_method": "owned_widget_draw_not_compositor_capture",
+    "window_active": true
+  }
+}

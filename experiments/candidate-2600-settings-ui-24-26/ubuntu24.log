@@ -1,0 +1,14 @@
+PRETTY_NAME="Ubuntu 24.04.5 LTS"
+NAME="Ubuntu"
+VERSION_ID="24.04"
+Type=x11
+Active=yes
+LockedHint=no
+InkEcho-0.10.2-x86_64.AppImage: OK
+cf36fa63ea821e441fa629ff603227c629ab30ff75533775079a50a42cd9b4a7  /tmp/inkecho-ui-b5/squashfs-root/packages/inkecho/ui/information.py
+2a7613a100f3029d51faa1619a37f39efa5b2e4d64dd33708bc265d68891366d  /tmp/inkecho-ui-b5/squashfs-root/packages/inkecho/config.py
+1fd46227ae9ff03b9dde342f606625326e00cb9cae4294f37725d9158c3c90c1  /tmp/inkecho-ui-b5/squashfs-root/packages/inkecho/app.py
+{"default": ["auto", 40, 40], "saved": ["ibus", 75, 60], "reloaded": ["ibus", 75, 60], "current_task_before_update": ["ibus", 75], "next_task": ["keyboard", 90], "qt_platform": "xcb", "xdg_session": "x11", "visible": true, "passed": true}
+{"phase": "write", "values": ["fcitx", 82, 64], "visible": true, "qt_platform": "xcb", "passed": true}
+{"phase": "read", "values": ["fcitx", 82, 64], "visible": true, "qt_platform": "xcb", "passed": true}
+{"cases": [{"phase": "before", "kind": "method", "shown": "auto", "stored": "auto", "message": "输入设置无法保存。"}, {"phase": "before", "kind": "mapping", "shown": 40, "stored": 40, "message": "输入设置无法保存。"}, {"phase": "before", "kind": "feedback", "shown": 40, "stored": 40, "message": "输入设置无法保存。"}, {"phase": "after", "kind": "method", "shown": "fcitx", "stored": "fcitx", "message": "输入设置无法保存。"}, {"phase": "after", "kind": "mapping", "shown": 75, "stored": 75, "message": "输入设置无法保存。"}, {"phase": "after", "kind": "feedback", "shown": 60, "stored": 60, "message": "输入设置无法保存。"}], "qt_platform": "xcb", "passed": true}

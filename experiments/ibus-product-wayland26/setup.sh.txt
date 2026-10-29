@@ -1,0 +1,14 @@
+set -eu
+export XDG_RUNTIME_DIR=/run/user/1000 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus DISPLAY=:0 WAYLAND_DISPLAY=wayland-0 XDG_SESSION_TYPE=wayland XDG_CURRENT_DESKTOP=ubuntu:GNOME
+mkdir -p /tmp/inkecho-r4-test/probes
+cd /tmp/inkecho-r4-test
+cp /tmp/InkEcho.AppImage ./InkEcho.AppImage
+chmod +x InkEcho.AppImage
+./InkEcho.AppImage --appimage-extract >/dev/null
+tar -xf /tmp/source.tar -C squashfs-root/packages
+cp /tmp/sender.py /tmp/target-focus.py probes/
+mkdir -p ~/.local/share/gnome-shell/extensions/inkecho-ibus-v2-prototype@local.invalid
+cp squashfs-root/packages/inkecho/platform/ibus_candidate/* ~/.local/share/gnome-shell/extensions/inkecho-ibus-v2-prototype@local.invalid/
+gsettings set org.gnome.shell enabled-extensions "['inkecho-ibus-v2-prototype@local.invalid']"
+gsettings set org.gnome.shell disable-user-extensions false
+printf 'setup complete\n'

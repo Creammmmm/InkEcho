@@ -1,0 +1,15 @@
+set -eu
+export XDG_RUNTIME_DIR=/run/user/1000 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus DISPLAY=:0 WAYLAND_DISPLAY=wayland-0 XDG_SESSION_TYPE=wayland XDG_CURRENT_DESKTOP=ubuntu:GNOME XMODIFIERS=@im=ibus
+export XAUTHORITY="$(systemctl --user show-environment | sed -n 's/^XAUTHORITY=//p')"
+sudo mount -t 9p -o trans=virtio,version=9p2000.L,ro inkecho_input /tmp/probe-input
+cp /tmp/probe-input/{actor_hold.py,observer.py} /tmp/ibus-engine-probe/
+sudo umount /tmp/probe-input
+engine=$(ibus engine); echo "actual_engine=$engine"
+for kind in entry button; do
+ rm -f /tmp/ibus-engine-probe/actor.out
+ env GDK_BACKEND=wayland GTK_IM_MODULE=ibus /usr/bin/python3 /tmp/ibus-engine-probe/actor_hold.py "$kind" > /tmp/ibus-engine-probe/actor.out 2>&1 & pid=$!
+ for i in $(seq 1 50); do test -s /tmp/ibus-engine-probe/actor.out && break; sleep .1; done
+ cat /tmp/ibus-engine-probe/actor.out
+ env GDK_BACKEND=wayland GTK_IM_MODULE=ibus /usr/bin/python3 /tmp/ibus-engine-probe/observer.py
+ wait "$pid"
+done

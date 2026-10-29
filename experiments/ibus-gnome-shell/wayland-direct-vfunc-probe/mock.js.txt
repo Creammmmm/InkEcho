@@ -1,0 +1,4 @@
+const {Clutter,GObject} = imports.gi;
+const F = GObject.registerClass(class F extends Clutter.InputFocus {vfunc_commit_text(s) {print(`called:${s}`);}});
+let f = new F();
+try { print(typeof f.vfunc_commit_text); f.vfunc_commit_text('甲'); print('invoke-ok'); } catch(e) { print(`invoke-error:${e}`); }

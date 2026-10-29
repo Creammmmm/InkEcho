@@ -1,0 +1,31 @@
+{
+  "container_state": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-10-29T11:45:47.121479859Z",
+    "FinishedAt": "2026-10-29T11:55:51.852784846Z"
+  },
+  "overlay": "/tmp/inkecho-owned-default-candidate-20261029/vm24/state/guest.qcow2",
+  "inode": 859584,
+  "uid": 1000,
+  "allocated_bytes": 1399930880,
+  "active_refs": [],
+  "before": {
+    "used": 13151670272,
+    "remaining": 2048
+  },
+  "after": {
+    "used": 11751739392,
+    "remaining": 1399932928
+  },
+  "freed_bytes": 1399930880,
+  "candidate_sha256": "77f252509097fe550188122acbe912783e9ad4b4ea33296fe23a2d64da3729ef",
+  "note": "Normal guest shutdown requested; SSH closed. stop then inspected exited0. Late quota I/O errors retained; overlay never reused."
+}

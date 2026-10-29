@@ -1,0 +1,38 @@
+import json,os,subprocess,time,tempfile
+from pathlib import Path
+from inkecho.platform.hotkeys import GnomeShortcuts, MEDIA, OWN_PATH
+
+def command(*args):
+ return subprocess.run(args,check=True,capture_output=True,text=True,timeout=15).stdout
+
+root=Path('/tmp/inkecho-desktop-r4'); base=root/'shortcut-private'; base.mkdir(mode=0o700)
+for name in ('config','data','state','cache','home'): (base/name).mkdir(mode=0o700)
+marker=base/'triggered'; wrapper=base/'trigger.sh'
+wrapper.write_text('#!/bin/sh\nprintf triggered > '+str(marker)+'\nexport HOME='+str(base/'home')+' XDG_CONFIG_HOME='+str(base/'config')+' XDG_DATA_HOME='+str(base/'data')+' XDG_STATE_HOME='+str(base/'state')+' XDG_CACHE_HOME='+str(base/'cache')+' APPIMAGE_EXTRACT_AND_RUN=1\nexec '+str(root/'InkEcho.AppImage')+' --toggle --config-dir '+str(base/'config'/'inkecho')+' --data-dir '+str(base/'data'/'inkecho')+'\n')
+wrapper.chmod(0o700)
+keys=GnomeShortcuts(); before=command('dconf','dump','/org/gnome/settings-daemon/plugins/media-keys/')
+paths=keys.settings.get(MEDIA,'custom-keybindings')
+assert OWN_PATH not in paths and command('dconf','dump',OWN_PATH) == ''
+assert all(keys.settings.get(keys.schema,key) == '' for key in ('name','command','binding'))
+try:
+ binding=keys.enable('F19',[str(wrapper)])
+ status=keys.status('F19',[str(wrapper)])
+ time.sleep(1)
+ command('xdotool','key','--clearmodifiers','F19')
+ for _ in range(60):
+  if marker.exists(): break
+  time.sleep(.1)
+ assert marker.read_text()=='triggered'
+ time.sleep(2)
+ # The cold --toggle command is intentionally harmless and must not start an app.
+ running=command('pgrep','-af','[i]nkecho') if subprocess.run(['pgrep','-f','[i]nkecho'],capture_output=True).returncode==0 else ''
+ # Only shell/SSH wrappers may contain the private path; inspect actual process arguments separately.
+ ps=command('ps','-eo','pid=,comm=,args=')
+ active=[line for line in ps.splitlines() if ' -m inkecho ' in line and str(base) in line]
+ assert not active
+ print(json.dumps({'binding':binding,'status':status,'synthetic_x11_key_triggered':True,'cold_toggle_no_live_app':True,'active_matching_app':active}))
+finally:
+ keys.disable()
+ after=command('dconf','dump','/org/gnome/settings-daemon/plugins/media-keys/')
+ print(json.dumps({'shortcut_settings_exactly_restored':after==before}))
+ assert after==before

@@ -1,0 +1,13 @@
+[daemon]
+AutomaticLoginEnable=true
+AutomaticLogin=inkecho
+WaylandEnable=false
+[User]
+Session=ubuntu
+Icon=/home/inkecho/.face
+SystemAccount=false
+
+[InputSource0]
+xkb=us
+ubuntu-wayland.desktop
+ubuntu.desktop

@@ -1,0 +1,18 @@
+SESSION  UID USER    SEAT  TTY  STATE  IDLE SINCE
+      4 1000 inkecho seat0 tty2 active no   -
+      5 1000 inkecho -     -    active no   -
+
+2 sessions listed.
+ 
+ 
+ 
+ 
+ 
+ 
+PORTAL_INTERFACES {"org.freedesktop.portal.RemoteDesktop": {"methods": ["CreateSession", "SelectDevices", "Start", "NotifyPointerMotion", "NotifyPointerMotionAbsolute", "NotifyPointerButton", "NotifyPointerAxis", "NotifyPointerAxisDiscrete", "NotifyKeyboardKeycode", "NotifyKeyboardKeysym", "NotifyTouchDown", "NotifyTouchMotion", "NotifyTouchUp", "ConnectToEIS"], "properties": [["AvailableDeviceTypes", "u"], ["version", "u"]]}}
+PORTAL_PROP version (2,)
+PORTAL_PROP AvailableDeviceTypes (7,)
+MUTTER_ROOT {"org.gnome.Mutter.RemoteDesktop": {"methods": ["CreateSession"], "properties": [["SupportedDeviceTypes", "u"], ["Version", "i"]]}}
+MUTTER_SESSION_PATH /org/gnome/Mutter/RemoteDesktop/Session/u1
+MUTTER_SESSION_INTERFACES {"org.gnome.Mutter.RemoteDesktop.Session": {"methods": ["Start", "Stop", "NotifyKeyboardKeycode", "NotifyKeyboardKeysym", "NotifyPointerButton", "NotifyPointerAxis", "NotifyPointerAxisDiscrete", "NotifyPointerMotionRelative", "NotifyPointerMotionAbsolute", "NotifyTouchDown", "NotifyTouchMotion", "NotifyTouchUp", "EnableClipboard", "DisableClipboard", "SetSelection", "SelectionWrite", "SelectionWriteDone", "SelectionRead", "ConnectToEIS"], "properties": [["SessionId", "s"], ["CapsLockState", "b"], ["NumLockState", "b"]]}}
+MUTTER_STOP_ERROR g-dbus-error-quark: GDBus.Error:org.freedesktop.DBus.Error.Failed: Session not started (0)

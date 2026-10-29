@@ -1,0 +1,14 @@
+DISPLAY=:0
+XDG_CURRENT_DESKTOP=ubuntu:GNOME
+XDG_SESSION_TYPE=wayland
+2 1000 inkecho -     1267 manager -    no -
+4 1000 inkecho seat0 2435 user    tty2 no -
+5 1000 inkecho -     3191 user    -    no -
+[User]
+Session=ubuntu
+XSession=xfce
+Icon=/home/inkecho/.face
+SystemAccount=false
+
+[InputSource0]
+xkb=us

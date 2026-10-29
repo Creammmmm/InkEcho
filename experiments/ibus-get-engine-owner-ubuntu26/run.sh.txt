@@ -1,0 +1,16 @@
+set -eu
+export XDG_RUNTIME_DIR=/run/user/1000 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus DISPLAY=:0 WAYLAND_DISPLAY=wayland-0 XDG_SESSION_TYPE=wayland XDG_CURRENT_DESKTOP=ubuntu:GNOME XMODIFIERS=@im=ibus
+export XAUTHORITY="$(systemctl --user show-environment | sed -n 's/^XAUTHORITY=//p')"
+mkdir -p /tmp/probe-input /tmp/ibus-engine-probe
+sudo mount -t 9p -o trans=virtio,version=9p2000.L,ro inkecho_input /tmp/probe-input
+cp /tmp/probe-input/actor.py /tmp/ibus-engine-probe/
+sudo umount /tmp/probe-input
+loginctl show-session 1 -p Type -p Active -p LockedHint
+echo sources:; gsettings get org.gnome.desktop.input-sources sources
+echo engine:; ibus engine
+sha256sum /tmp/ibus-engine-probe/actor.py
+for backend in wayland x11; do
+ for kind in entry button entry; do
+  env GDK_BACKEND="$backend" GTK_IM_MODULE=ibus timeout 15 /usr/bin/python3 /tmp/ibus-engine-probe/actor.py "$kind" || echo case_failed
+ done
+done

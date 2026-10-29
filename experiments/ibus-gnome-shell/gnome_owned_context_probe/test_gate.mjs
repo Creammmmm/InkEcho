@@ -1,0 +1,13 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+const code=fs.readFileSync(new URL('./extension/gate.js',import.meta.url),'utf8');
+const {verdict}=await import('data:text/javascript;base64,'+Buffer.from(code).toString('base64'));
+const base={native:true,focused:true,shellUi:false,shellPath:'/org/freedesktop/IBus/InputContext_3',preedit:false};
+assert.equal(verdict(base,base.shellPath),'gnome_owned_native_candidate');
+assert.equal(verdict(base,'/org/freedesktop/IBus/InputContext_spoof'),'context_mismatch');
+assert.equal(verdict(base,null),'context_mismatch');
+for(const k of ['native','focused'])assert.equal(verdict({...base,[k]:false},base.shellPath),'not_applicable');
+assert.equal(verdict({...base,shellUi:true},base.shellPath),'not_applicable');
+assert.equal(verdict({...base,shellPath:''},''),'not_applicable');
+for(const p of [true,null,undefined])assert.equal(verdict({...base,preedit:p},base.shellPath),'busy_or_unknown');
+console.log('10 predicate cases passed; no GI/desktop or receipt claim');

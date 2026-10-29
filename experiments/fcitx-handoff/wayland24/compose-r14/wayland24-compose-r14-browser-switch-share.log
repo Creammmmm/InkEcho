@@ -1,0 +1,38 @@
+/tmp/wayland24-compose-r14/portal_ui_action.py:20: DeprecationWarning: Atspi.Action.get_action_name is deprecated
+  if iface: actions=[iface.get_action_name(i) for i in range(iface.get_n_actions())]
+0 'Remote Desktop' frame ['window.close', 'default.activate'] checked False focused False
+1 '' panel [] checked False focused False
+2 '' panel [] checked False focused False
+3 '' panel [] checked False focused False
+4 '' panel [] checked False focused False
+5 '' scroll pane [] checked False focused False
+6 '' panel [] checked False focused False
+7 '' panel [] checked False focused False
+8 '' panel [] checked False focused False
+9 '' list [] checked False focused False
+10 'Allow Remote Interaction' list item [] checked True focused True
+11 '' panel [] checked False focused False
+12 '' panel [] checked False focused False
+13 'Allow Remote Interaction' label ['clipboard.copy', 'selection.delete', 'clipboard.paste', 'link.open', 'clipboard.cut', 'link.copy', 'menu.popup', 'selection.select-all'] checked False focused False
+12 '' panel [] checked False focused False
+13 'Allow Remote Interaction' check box ['toggle'] checked True focused False
+5 '' panel [] checked False focused False
+6 '' panel [] checked False focused False
+7 '' panel [] checked False focused False
+8 '' panel [] checked False focused False
+9 '' panel [] checked False focused False
+10 '' panel [] checked False focused False
+11 '' panel [] checked False focused False
+12 '' panel [] checked False focused False
+13 'Cancel' push button ['click'] checked False focused False
+14 'Cancel' label ['clipboard.copy', 'selection.delete', 'clipboard.paste', 'link.open', 'clipboard.cut', 'link.copy', 'menu.popup', 'selection.select-all'] checked False focused False
+11 '' panel [] checked False focused False
+12 'Remote Desktop' label ['clipboard.copy', 'selection.delete', 'clipboard.paste', 'link.open', 'clipboard.cut', 'link.copy', 'menu.popup', 'selection.select-all'] checked False focused False
+11 '' panel [] checked False focused False
+12 '' panel [] checked False focused False
+13 'Share' push button ['click'] checked False focused False
+14 'Share' label ['clipboard.copy', 'selection.delete', 'clipboard.paste', 'link.open', 'clipboard.cut', 'link.copy', 'menu.popup', 'selection.select-all'] checked False focused False
+5 '' panel [] checked False focused False
+6 '' panel [] checked False focused False
+7 '' panel [] checked False focused False
+action completed Share push button ['click']

@@ -1,0 +1,20 @@
+8409541cffa3e14600d18b5fd33d1159a176d9e349719baa0efea68c788c1c51  /mnt/source.tar
+4a2440e77caff2e671f6ba001c44c3aaed37f279f7876e8c0cd5e746359a2084  squashfs-root/packages/inkecho/app.py
+4ed8d143ed87073c62a9f2652a3dc4ae9f5ba3f2ded3c4952290331a95b9bf08  squashfs-root/packages/inkecho/platform/ibus_owned_auto.py
+cfd028de4276e50fc33802bc0426c7536c2cacd4db27372758dd3eae31b31430  squashfs-root/packages/inkecho/platform/ibus_owned_extension.py
+310ae57461b354fbc67cb7c371384d9b0482df4addbe00e48c457872dc5eb540  squashfs-root/packages/inkecho/ui/information.py
+router OwnedAutoOutputRouter
+configured owned_auto
+{"action": "install", "message": "扩展状态已更新。", "status": "未发现扩展或扩展服务不可用；安装后可能需要重新登录。"}
+{"action": "enable", "message": "操作未完成：扩展可能已存在、尚未加载，或当前桌面不支持。", "status": "未发现扩展或扩展服务不可用；安装后可能需要重新登录。"}
+{"action": "status", "message": "扩展状态已更新。", "status": "未发现扩展或扩展服务不可用；安装后可能需要重新登录。"}
+Extension “inkecho-ibus-owned-v4-prototype@local.invalid” doesn't exist
+CASE=full
+{"mode": "full", "exit": 0, "a": "", "b": "", "triggered": false, "switch_confirmed": false, "focus_in_b": false, "resumed": false, "fcitx_b_context_proved_by_receipt": false, "stdout": [{"ready": true}, {"events": [["status", "正在准备录音，请稍候。"], ["state", "recording"], ["status", "正在聆听"], ["state", "transcribing"], ["status", "正在转写"], ["state", "injecting"], ["status", "正在输入"], ["state", "failed"], ["diagnostic", "input_capability_unknown"], ["status", "无法确认当前输入目标或输入法状态，已停止输入，未自动切换或重试。"], ["problem", "无法确认当前输入目标或输入法状态，已停止输入，未自动切换或重试。"], ["finished", "failed"], ["state", "idle"]], "outcome": "failed", "origin": "/tmp/inkecho-r4-test/squashfs-root/packages/inkecho/app.py"}], "stderr": "", "events": [], "passed": false}
+CASE=cancel
+{"mode": "cancel", "exit": 0, "a": "", "b": "", "triggered": false, "switch_confirmed": false, "focus_in_b": false, "resumed": false, "fcitx_b_context_proved_by_receipt": false, "stdout": [{"ready": true}, {"events": [["status", "正在准备录音，请稍候。"], ["state", "recording"], ["status", "正在聆听"], ["state", "transcribing"], ["status", "正在转写"], ["state", "injecting"], ["status", "正在输入"], ["state", "failed"], ["diagnostic", "input_capability_unknown"], ["status", "无法确认当前输入目标或输入法状态，已停止输入，未自动切换或重试。"], ["problem", "无法确认当前输入目标或输入法状态，已停止输入，未自动切换或重试。"], ["finished", "failed"], ["state", "idle"]], "outcome": "failed", "origin": "/tmp/inkecho-r4-test/squashfs-root/packages/inkecho/app.py"}], "stderr": "", "events": [], "passed": false}
+CASE=no-target
+{"mode": "no-target", "exit": 0, "a": "", "b": "", "triggered": false, "switch_confirmed": false, "focus_in_b": false, "resumed": false, "fcitx_b_context_proved_by_receipt": false, "stdout": [{"ready": true}, {"events": [["status", "正在准备录音，请稍候。"], ["state", "recording"], ["status", "正在聆听"], ["state", "transcribing"], ["status", "正在转写"], ["state", "injecting"], ["status", "正在输入"], ["state", "failed"], ["diagnostic", "input_capability_unknown"], ["status", "无法确认当前输入目标或输入法状态，已停止输入，未自动切换或重试。"], ["problem", "无法确认当前输入目标或输入法状态，已停止输入，未自动切换或重试。"], ["finished", "failed"], ["state", "idle"]], "outcome": "failed", "origin": "/tmp/inkecho-r4-test/squashfs-root/packages/inkecho/app.py"}], "stderr": "", "events": [["no_target_focus", true, true, 125.280977545]], "passed": false}
+Extension “inkecho-ibus-owned-v4-prototype@local.invalid” does not exist
+Extension “inkecho-ibus-owned-v4-prototype@local.invalid” doesn't exist
+RUN_DONE

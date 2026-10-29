@@ -1,0 +1,18 @@
+set -eu
+umask 077
+root=/tmp/inkecho-fcitx-auto-package
+mkdir -p "$root" /mnt/output/matrix-xorg-ui26
+cp /mnt/input/InkEcho.AppImage "$root/InkEcho.AppImage"
+chmod +x "$root/InkEcho.AppImage"
+printf '%s  %s\n' 222c017a4f9e10bf4d6422cf402a2b7ea57245adb267a4409cce87ca74551694 "$root/InkEcho.AppImage" | sha256sum -c -
+export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus XDG_RUNTIME_DIR=/run/user/1000 DISPLAY=:0
+export XAUTHORITY="$(systemctl --user show-environment | sed -n 's/^XAUTHORITY=//p')"
+export XDG_SESSION_TYPE=x11 XDG_CURRENT_DESKTOP=XFCE QT_QPA_PLATFORM=xcb
+loginctl list-sessions --no-legend
+"$root/InkEcho.AppImage" --config-dir "$root/config" --data-dir "$root/data" --screenshot-dir /mnt/output/matrix-xorg-ui26 --quit-after 8 > /mnt/output/gmatrix-xorg-ui26.log 2>&1 & pid=$!
+for n in $(seq 1 40); do
+ if grep -q 'fuse.InkEcho.AppImage' /proc/$pid/mountinfo 2>/dev/null; then grep 'fuse.InkEcho.AppImage' /proc/$pid/mountinfo > /mnt/output/matrix-xorg-mount26.txt; break; fi
+ sleep .1
+done
+wait "$pid"
+printf 'gui_exit=0\n'

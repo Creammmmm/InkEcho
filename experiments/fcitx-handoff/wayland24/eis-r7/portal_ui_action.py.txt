@@ -1,0 +1,36 @@
+"""Operate only the named standard portal dialog in a disposable guest."""
+import gi,sys
+gi.require_version('Atspi','2.0')
+from gi.repository import Atspi
+Atspi.init()
+root=Atspi.get_desktop(0)
+apps=[root.get_child_at_index(i) for i in range(root.get_child_count())]
+apps=[a for a in apps if a.get_name()=='xdg-desktop-portal-gnome']
+assert len(apps)==1
+frames=[apps[0].get_child_at_index(i) for i in range(apps[0].get_child_count())]
+frames=[f for f in frames if f.get_name()=='Remote Desktop']
+assert len(frames)==1
+nodes=[]
+def visit(node,depth):
+ if depth>20: return
+ try:
+  name=node.get_name() or ''; role=node.get_role_name(); actions=[]
+  try:
+   iface=node.get_action_iface()
+   if iface: actions=[iface.get_action_name(i) for i in range(iface.get_n_actions())]
+  except Exception: pass
+  states=node.get_state_set(); checked=states.contains(Atspi.StateType.CHECKED)
+  focused=states.contains(Atspi.StateType.FOCUSED)
+  nodes.append((node,name,role,actions,checked,focused))
+  print(depth,repr(name),role,actions,'checked',checked,'focused',focused,flush=True)
+  for i in range(min(node.get_child_count(),60)): visit(node.get_child_at_index(i),depth+1)
+ except Exception as e: print('error',type(e).__name__,flush=True)
+visit(frames[0],0)
+if len(sys.argv)>1:
+ wanted=sys.argv[1]
+ matches=[x for x in nodes if x[1]==wanted and x[2]==sys.argv[2] and x[3]]
+ assert len(matches)==1, (wanted,[(x[1],x[2],x[3]) for x in matches])
+ node,name,role,actions,checked,focused=matches[0]
+ assert len(actions)==1,(name,actions)
+ assert node.get_action_iface().do_action(0)
+ print('action completed',name,role,actions,flush=True)

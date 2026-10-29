@@ -1,0 +1,9 @@
+Warning: Permanently added '[127.0.0.1]:2222' (ED25519) to the list of known hosts.
+('{"layouts":"us,us","variants":",","options":"","model":"pc105+inet"}',)
+('restored-call',)
+8d6e352a7deb3fbd480e850ef5483374ea557ce0054caa6b0862988dedea983d  /tmp/inkecho-xkb-before.xkb
+6b926167287c9e4d632725adb1cffaedab033ac6d348438d4416716ffbc5d1f3  /tmp/inkecho-xkb-during.xkb
+8d6e352a7deb3fbd480e850ef5483374ea557ce0054caa6b0862988dedea983d  /tmp/inkecho-xkb-after.xkb
+XWAYLAND_RESTORE_IDENTICAL
+/tmp/inkecho-xkb-before.xkb /tmp/inkecho-xkb-during.xkb differ: byte 44515, line 1423
+XWAYLAND_APPLY_DIFFERS

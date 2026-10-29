@@ -1,0 +1,28 @@
+import json, os, signal, subprocess, sys, tempfile, time
+from pathlib import Path
+mode=sys.argv[1]; root=Path('/tmp/inkecho-r4-test'); expected='风云日月山川河海'*25
+with tempfile.TemporaryDirectory() as d:
+ p=Path(d); out=p/'text'; state=p/'state'; fixture=subprocess.Popen(['/usr/bin/python3',str(root/'probes/vte_fixture.py'),str(out),str(state),'switch' if mode=='switch' else 'full'])
+ def read(path, default):
+  try: return json.loads(path.read_text())
+  except (OSError,ValueError): return default
+ for _ in range(200):
+  info=read(state,{});
+  if info.get('active') and info.get('focused'): break
+  time.sleep(.05)
+ else:
+  print(json.dumps({'mode':mode,'error':'focus_a_missing','state':info})); fixture.terminate(); fixture.wait(); sys.exit(1)
+ env=os.environ.copy(); app=root/'squashfs-root'; env.update(PYTHONHOME=str(app/'usr'), PYTHONPATH=str(app/'packages'), LD_LIBRARY_PATH=str(app/'usr/lib/inkecho'),QT_QPA_PLATFORM='offscreen',INK_TARGET_KIND='normal',INK_PROBE_MODE='auto'); o=tempfile.TemporaryFile(mode='w+'); e=tempfile.TemporaryFile(mode='w+'); sender=subprocess.Popen([str(app/'usr/bin/python3'),str(root/'probes/sender.py')],env=env,stdout=o,stderr=e)
+ switched=resume=cancel=False; cancel_text=None; end=time.monotonic()+40
+ while sender.poll() is None and time.monotonic()<end:
+  a=read(out,'')
+  if a and mode=='cancel' and not cancel: cancel=True; cancel_text=a; os.kill(sender.pid,signal.SIGUSR1)
+  if a and mode=='switch' and not switched: switched=True; os.kill(sender.pid,signal.SIGSTOP); os.kill(fixture.pid,signal.SIGUSR1)
+  if switched and not resume:
+   s=read(Path(str(state)+'.second'),{})
+   if s.get('active') and s.get('focused'): resume=True; os.kill(sender.pid,signal.SIGCONT)
+  time.sleep(.005)
+ if sender.poll() is None:
+  if switched and not resume: os.kill(sender.pid,signal.SIGCONT)
+  sender.terminate(); sender.wait(timeout=3)
+ time.sleep(1); a=read(out,''); b=read(Path(str(out)+'.second'),''); o.seek(0); e.seek(0); report={'mode':mode,'exit':sender.returncode,'a':a,'b':b,'lengths':[len(a),len(b)],'exact':a+b==expected,'prefix':expected.startswith(a+b),'cancel_sent':cancel,'text_at_cancel':cancel_text,'switched':switched,'resume':resume,'stdout':o.read(),'stderr':e.read()[-3000:]}; print(json.dumps(report,ensure_ascii=False),flush=True); fixture.terminate(); fixture.wait(timeout=3)

@@ -1,0 +1,22 @@
+import asyncio,json,tempfile
+from pathlib import Path
+from PySide6.QtWidgets import QApplication
+from inkecho.app import Session
+from inkecho.config import ConfigStore
+from inkecho.ui.information import CompatibilityPage
+app=QApplication([])
+async def main():
+ with tempfile.TemporaryDirectory(prefix='inkecho-readfail-') as d:
+  store=ConfigStore(Path(d));store.initialize();session=Session(store)
+  async def authorized(*a,**kw):return True
+  session.authorize_input=authorized
+  page=CompatibilityPage(session);page.show();app.processEvents();orig=store.load_settings
+  def fail():raise OSError('synthetic read failure')
+  store.load_settings=fail
+  page.refresh();failure=page.availability.text();assert failure=='输入设置无法读取，请检查配置文件。'
+  await page.enable();enable_message=page.message.text();assert enable_message==failure
+  store.load_settings=orig
+  page.refresh();recovered=page.availability.text();assert recovered!=failure and recovered
+  print(json.dumps({'failure':failure,'enable_failure':enable_message,'recovered':recovered,'visible':page.isVisible(),'qt_platform':app.platformName(),'passed':True},ensure_ascii=False),flush=True)
+  page.close();page.deleteLater();app.processEvents();await session.close()
+asyncio.run(main())

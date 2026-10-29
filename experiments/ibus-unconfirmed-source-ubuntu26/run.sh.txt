@@ -1,0 +1,28 @@
+#!/bin/bash
+set -eu
+mkdir -p /tmp/probe-out /tmp/inkecho-r4-test/probes
+sudo mount -t 9p -o trans=virtio,version=9p2000.L inkoutput /tmp/probe-out
+exec > /tmp/probe-out/run.log 2>&1
+export XDG_RUNTIME_DIR=/run/user/1000 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus DISPLAY=:0 WAYLAND_DISPLAY=wayland-0 XDG_SESSION_TYPE=wayland XDG_CURRENT_DESKTOP=ubuntu:GNOME GDK_BACKEND=wayland GTK_IM_MODULE=ibus XMODIFIERS=@im=ibus QT_IM_MODULE=ibus
+export XAUTHORITY="$(systemctl --user show-environment | sed -n 's/^XAUTHORITY=//p')"
+cp /mnt/InkEcho-0.10.2-x86_64.AppImage /tmp/inkecho-r4-test/
+cp /mnt/{sender.py,target-focus.py} /tmp/inkecho-r4-test/probes/
+cd /tmp/inkecho-r4-test
+sha256sum InkEcho-0.10.2-x86_64.AppImage
+chmod +x InkEcho-0.10.2-x86_64.AppImage
+./InkEcho-0.10.2-x86_64.AppImage --appimage-extract >/dev/null
+tar -xf /mnt/source.tar -C squashfs-root/packages
+sha256sum squashfs-root/packages/inkecho/{app.py,core.py,platform/output_router.py}
+loginctl show-session 1 -p Type -p Active -p LockedHint
+ibus engine
+gsettings set org.gnome.shell disable-user-extensions false
+gnome-extensions enable inkecho-ibus-v2-prototype@local.invalid
+sleep 3
+gnome-extensions info inkecho-ibus-v2-prototype@local.invalid
+for mode in full cancel fault no-target; do
+ echo "CASE=$mode"
+ timeout 55 /usr/bin/python3 /tmp/inkecho-r4-test/probes/target-focus.py "$mode" || true
+done
+echo RUN_DONE
+sync
+sudo poweroff

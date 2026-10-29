@@ -1,0 +1,27 @@
+// TEST ONLY: isolated service; mode control is intentionally unauthenticated.
+import Gio from 'gi://Gio';
+import GLib from 'gi://GLib';
+import IBus from 'gi://IBus';
+import {Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
+import {getIBusManager} from 'resource:///org/gnome/shell/misc/ibusManager.js';
+import {Gate} from './gate.js';
+import {consumeCapability} from './capability.js';
+const SERVICE='io.github.Creammmmm.InkEcho.PresendExperiment', PATH='/io/github/Creammmmm/InkEcho/PresendExperiment';
+const XML=`<node><interface name="${SERVICE}1"><method name="Begin"><arg type="s" direction="in"/><arg type="s" direction="in"/><arg type="b" direction="out"/></method><method name="Commit"><arg type="u" direction="in"/><arg type="s" direction="in"/><arg type="s" direction="out"/></method><method name="Cancel"><arg type="b" direction="out"/></method><method name="SetMode"><arg type="s" direction="in"/><arg type="b" direction="out"/></method><method name="Stats"><arg type="u" direction="out"/><arg type="b" direction="out"/></method></interface></node>`;
+export default class Candidate extends Extension {
+ enable(){this._mode='real';this._count=0;this._gate=new Gate(()=>{
+   const panel=getIBusManager()._panelService;
+   if(this._mode==='none'||(this._mode==='partial'&&this._count>0))return null;
+   if(!panel)return null;
+   return c=>{this._count++;panel.commit_text(IBus.Text.new_from_string(c));};
+ },([name,token])=>consumeCapability(name,token));
+ this._obj=Gio.DBusExportedObject.wrapJSObject(XML,this);this._obj.export(Gio.DBus.session,PATH);
+ this._owner=Gio.bus_own_name_on_connection(Gio.DBus.session,SERVICE,Gio.BusNameOwnerFlags.NONE,null,null);
+ this._watch=Gio.DBus.session.signal_subscribe('org.freedesktop.DBus','org.freedesktop.DBus','NameOwnerChanged','/org/freedesktop/DBus',null,Gio.DBusSignalFlags.NONE,(_c,_s,_p,_i,_n,v)=>{const [n,o,x]=v.deep_unpack();if(n.startsWith(':')&&o&&!x)this._gate.ownerLost(n);}); }
+ BeginAsync(args,call){call.return_value(new GLib.Variant('(b)',[this._gate.begin(call.get_sender(),args)]));}
+ CommitAsync([seq,c],call){const result=this._gate.commit(call.get_sender(),seq,c);if(this._mode==='lost')GLib.timeout_add(GLib.PRIORITY_DEFAULT,500,()=>{try{call.return_value(new GLib.Variant('(s)',[result]));}catch(_){}return GLib.SOURCE_REMOVE;});else call.return_value(new GLib.Variant('(s)',[result]));}
+ CancelAsync(_args,call){call.return_value(new GLib.Variant('(b)',[this._gate.cancel(call.get_sender())]));}
+ SetMode(mode){if(!['real','none','partial','lost'].includes(mode))return false;this._mode=mode;this._count=0;return true;}
+ Stats(){return [this._count,!!getIBusManager()._panelService];}
+ disable(){if(this._watch)Gio.DBus.session.signal_unsubscribe(this._watch);if(this._owner)Gio.bus_unown_name(this._owner);this._obj?.unexport();this._gate=null;}
+}

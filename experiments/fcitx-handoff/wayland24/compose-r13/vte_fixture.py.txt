@@ -1,0 +1,12 @@
+import json,sys
+from pathlib import Path
+import gi
+gi.require_version('Gtk','3.0'); gi.require_version('Vte','2.91')
+from gi.repository import Gtk, Vte, GLib
+output=Path(sys.argv[1]); output.write_text(json.dumps(''))
+w=Gtk.Window(title='InkEcho owned VTE input fixture'); w.set_default_size(640,360)
+t=Vte.Terminal(); w.add(t); w.show_all(); t.grab_focus(); w.present()
+script="import json,os,sys,tty; tty.setraw(0); data=b''; p=sys.argv[1];\nwhile True:\n b=os.read(0,1); data+=b; open(p,'w').write(json.dumps(data.decode('utf-8',errors='replace')))"
+t.spawn_async(Vte.PtyFlags.DEFAULT,None,['/usr/bin/python3','-u','-c',script,str(output)],[],GLib.SpawnFlags.DEFAULT,None,None,-1,None,None,None)
+state=Path(sys.argv[2]); GLib.timeout_add(50, lambda: (state.write_text(json.dumps({'active':w.is_active(),'focused':t.has_focus()})), True)[1])
+Gtk.main()

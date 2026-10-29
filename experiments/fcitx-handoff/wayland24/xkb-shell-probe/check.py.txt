@@ -1,0 +1,11 @@
+import ctypes, os
+l=ctypes.CDLL('libxkbcommon.so.0')
+class Names(ctypes.Structure): _fields_=[(n,ctypes.c_char_p) for n in ('rules','model','layout','variant','options')]
+l.xkb_context_new.argtypes=[ctypes.c_int];l.xkb_context_new.restype=ctypes.c_void_p
+l.xkb_keymap_new_from_names.argtypes=[ctypes.c_void_p,ctypes.POINTER(Names),ctypes.c_int];l.xkb_keymap_new_from_names.restype=ctypes.c_void_p
+l.xkb_keymap_get_as_string.argtypes=[ctypes.c_void_p,ctypes.c_int]; l.xkb_keymap_get_as_string.restype=ctypes.c_char_p
+for opt in (b'',b'inkecho:test'):
+ c=l.xkb_context_new(0); k=l.xkb_keymap_new_from_names(c,ctypes.byref(Names(b'evdev',b'pc105',b'us',b'',opt)),0)
+ print('option',opt,'compiled',bool(k));
+ if k:
+  s=l.xkb_keymap_get_as_string(k,1).decode(); print('\n'.join(x for x in s.splitlines() if '<I132>' in x or '<AE13>' in x or 'U7532' in x))

@@ -1,0 +1,355 @@
+{
+  "Id": "42fb3bf98fa7cd9f7dc89ac7321905bd1fbf17931f29fb938e044bf79baed60e",
+  "Created": "2026-10-29T12:06:12.159137338Z",
+  "Path": "qemu-system-x86_64",
+  "Args": [
+    "-accel",
+    "kvm",
+    "-machine",
+    "q35",
+    "-cpu",
+    "host",
+    "-smp",
+    "4",
+    "-m",
+    "4096",
+    "-drive",
+    "file=/state/guest.qcow2,if=virtio,format=qcow2",
+    "-drive",
+    "file=/seed/seed.iso,format=raw,media=cdrom,readonly=on",
+    "-virtfs",
+    "local,path=/input,mount_tag=inkecho_input,security_model=none,readonly=on,id=inshare",
+    "-virtfs",
+    "local,path=/output,mount_tag=inkecho_output,security_model=none,id=outshare",
+    "-device",
+    "virtio-vga",
+    "-device",
+    "virtio-net-pci,netdev=n1",
+    "-netdev",
+    "user,id=n1,hostfwd=tcp:127.0.0.1:2222-:22",
+    "-serial",
+    "file:/output/serial.log",
+    "-display",
+    "none",
+    "-monitor",
+    "none"
+  ],
+  "State": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-10-29T12:06:12.243449247Z",
+    "FinishedAt": "2026-10-29T12:11:56.871406804Z"
+  },
+  "Image": "sha256:849c832dda5155906c580d2a5c3147e2a9094350d626088faf2a456d345809b9",
+  "ResolvConfPath": "/var/lib/docker/containers/42fb3bf98fa7cd9f7dc89ac7321905bd1fbf17931f29fb938e044bf79baed60e/resolv.conf",
+  "HostnamePath": "/var/lib/docker/containers/42fb3bf98fa7cd9f7dc89ac7321905bd1fbf17931f29fb938e044bf79baed60e/hostname",
+  "HostsPath": "/var/lib/docker/containers/42fb3bf98fa7cd9f7dc89ac7321905bd1fbf17931f29fb938e044bf79baed60e/hosts",
+  "LogPath": "/var/lib/docker/containers/42fb3bf98fa7cd9f7dc89ac7321905bd1fbf17931f29fb938e044bf79baed60e/42fb3bf98fa7cd9f7dc89ac7321905bd1fbf17931f29fb938e044bf79baed60e-json.log",
+  "Name": "/inkecho-owned-gap24-20261029",
+  "RestartCount": 0,
+  "Driver": "overlayfs",
+  "Platform": "linux",
+  "MountLabel": "",
+  "ProcessLabel": "",
+  "AppArmorProfile": "docker-default",
+  "ExecIDs": null,
+  "HostConfig": {
+    "Binds": [
+      "/tmp/inkecho-owned-default-gap-20261029/vm24/input:/input:ro",
+      "/tmp/inkecho-owned-default-gap-20261029/vm24/output:/output",
+      "/tmp/inkecho-owned-default-gap-20261029/vm24/state:/state",
+      "/home/lth/github/InkEcho/build/ubuntu24-perf-vm/state:/parent:ro",
+      "/home/lth/github/InkEcho/build/ubuntu24-perf-vm/base:/base:ro",
+      "/home/lth/github/InkEcho/build/ubuntu24-perf-vm/seed:/seed:ro"
+    ],
+    "ContainerIDFile": "",
+    "LogConfig": {
+      "Type": "json-file",
+      "Config": {}
+    },
+    "NetworkMode": "none",
+    "PortBindings": {},
+    "RestartPolicy": {
+      "Name": "no",
+      "MaximumRetryCount": 0
+    },
+    "AutoRemove": false,
+    "VolumeDriver": "",
+    "VolumesFrom": null,
+    "ConsoleSize": [
+      0,
+      0
+    ],
+    "CapAdd": null,
+    "CapDrop": null,
+    "CgroupnsMode": "private",
+    "Dns": null,
+    "DnsOptions": [],
+    "DnsSearch": [],
+    "ExtraHosts": null,
+    "GroupAdd": [
+      "991"
+    ],
+    "IpcMode": "private",
+    "Cgroup": "",
+    "Links": null,
+    "OomScoreAdj": 0,
+    "PidMode": "",
+    "Privileged": false,
+    "PublishAllPorts": false,
+    "ReadonlyRootfs": false,
+    "SecurityOpt": [
+      "no-new-privileges"
+    ],
+    "UTSMode": "",
+    "UsernsMode": "",
+    "ShmSize": 67108864,
+    "Runtime": "runc",
+    "Isolation": "",
+    "CpuShares": 0,
+    "Memory": 0,
+    "NanoCpus": 0,
+    "CgroupParent": "",
+    "BlkioWeight": 0,
+    "BlkioWeightDevice": [],
+    "BlkioDeviceReadBps": [],
+    "BlkioDeviceWriteBps": [],
+    "BlkioDeviceReadIOps": [],
+    "BlkioDeviceWriteIOps": [],
+    "CpuPeriod": 0,
+    "CpuQuota": 0,
+    "CpuRealtimePeriod": 0,
+    "CpuRealtimeRuntime": 0,
+    "CpusetCpus": "",
+    "CpusetMems": "",
+    "Devices": [
+      {
+        "PathOnHost": "/dev/kvm",
+        "PathInContainer": "/dev/kvm",
+        "CgroupPermissions": "rwm"
+      }
+    ],
+    "DeviceCgroupRules": null,
+    "DeviceRequests": null,
+    "MemoryReservation": 0,
+    "MemorySwap": 0,
+    "MemorySwappiness": null,
+    "OomKillDisable": null,
+    "PidsLimit": null,
+    "Ulimits": [
+      {
+        "Name": "nofile",
+        "Hard": 524288,
+        "Soft": 8192
+      }
+    ],
+    "CpuCount": 0,
+    "CpuPercent": 0,
+    "IOMaximumIOps": 0,
+    "IOMaximumBandwidth": 0,
+    "MaskedPaths": [
+      "/proc/acpi",
+      "/proc/asound",
+      "/proc/interrupts",
+      "/proc/kcore",
+      "/proc/keys",
+      "/proc/latency_stats",
+      "/proc/sched_debug",
+      "/proc/scsi",
+      "/proc/timer_list",
+      "/proc/timer_stats",
+      "/sys/devices/virtual/powercap",
+      "/sys/firmware",
+      "/sys/devices/system/cpu/cpu0/thermal_throttle",
+      "/sys/devices/system/cpu/cpu1/thermal_throttle",
+      "/sys/devices/system/cpu/cpu2/thermal_throttle",
+      "/sys/devices/system/cpu/cpu3/thermal_throttle",
+      "/sys/devices/system/cpu/cpu4/thermal_throttle",
+      "/sys/devices/system/cpu/cpu5/thermal_throttle",
+      "/sys/devices/system/cpu/cpu6/thermal_throttle",
+      "/sys/devices/system/cpu/cpu7/thermal_throttle",
+      "/sys/devices/system/cpu/cpu8/thermal_throttle",
+      "/sys/devices/system/cpu/cpu9/thermal_throttle",
+      "/sys/devices/system/cpu/cpu10/thermal_throttle",
+      "/sys/devices/system/cpu/cpu11/thermal_throttle",
+      "/sys/devices/system/cpu/cpu12/thermal_throttle",
+      "/sys/devices/system/cpu/cpu13/thermal_throttle",
+      "/sys/devices/system/cpu/cpu14/thermal_throttle",
+      "/sys/devices/system/cpu/cpu15/thermal_throttle",
+      "/sys/devices/system/cpu/cpu16/thermal_throttle",
+      "/sys/devices/system/cpu/cpu17/thermal_throttle",
+      "/sys/devices/system/cpu/cpu18/thermal_throttle",
+      "/sys/devices/system/cpu/cpu19/thermal_throttle",
+      "/sys/devices/system/cpu/cpu20/thermal_throttle",
+      "/sys/devices/system/cpu/cpu21/thermal_throttle",
+      "/sys/devices/system/cpu/cpu22/thermal_throttle",
+      "/sys/devices/system/cpu/cpu23/thermal_throttle",
+      "/sys/devices/system/cpu/cpu24/thermal_throttle",
+      "/sys/devices/system/cpu/cpu25/thermal_throttle",
+      "/sys/devices/system/cpu/cpu26/thermal_throttle",
+      "/sys/devices/system/cpu/cpu27/thermal_throttle",
+      "/sys/devices/system/cpu/cpu28/thermal_throttle",
+      "/sys/devices/system/cpu/cpu29/thermal_throttle",
+      "/sys/devices/system/cpu/cpu30/thermal_throttle",
+      "/sys/devices/system/cpu/cpu31/thermal_throttle"
+    ],
+    "ReadonlyPaths": [
+      "/proc/bus",
+      "/proc/fs",
+      "/proc/irq",
+      "/proc/sys",
+      "/proc/sysrq-trigger"
+    ]
+  },
+  "Storage": {
+    "RootFS": {
+      "Snapshot": {
+        "Name": "overlayfs"
+      }
+    }
+  },
+  "Mounts": [
+    {
+      "Type": "bind",
+      "Source": "/tmp/inkecho-owned-default-gap-20261029/vm24/input",
+      "Destination": "/input",
+      "Mode": "ro",
+      "RW": false,
+      "Propagation": "rprivate"
+    },
+    {
+      "Type": "bind",
+      "Source": "/tmp/inkecho-owned-default-gap-20261029/vm24/output",
+      "Destination": "/output",
+      "Mode": "",
+      "RW": true,
+      "Propagation": "rprivate"
+    },
+    {
+      "Type": "bind",
+      "Source": "/tmp/inkecho-owned-default-gap-20261029/vm24/state",
+      "Destination": "/state",
+      "Mode": "",
+      "RW": true,
+      "Propagation": "rprivate"
+    },
+    {
+      "Type": "bind",
+      "Source": "/home/lth/github/InkEcho/build/ubuntu24-perf-vm/state",
+      "Destination": "/parent",
+      "Mode": "ro",
+      "RW": false,
+      "Propagation": "rprivate"
+    },
+    {
+      "Type": "bind",
+      "Source": "/home/lth/github/InkEcho/build/ubuntu24-perf-vm/base",
+      "Destination": "/base",
+      "Mode": "ro",
+      "RW": false,
+      "Propagation": "rprivate"
+    },
+    {
+      "Type": "bind",
+      "Source": "/home/lth/github/InkEcho/build/ubuntu24-perf-vm/seed",
+      "Destination": "/seed",
+      "Mode": "ro",
+      "RW": false,
+      "Propagation": "rprivate"
+    }
+  ],
+  "Config": {
+    "Hostname": "42fb3bf98fa7",
+    "Domainname": "",
+    "User": "1000:1000",
+    "AttachStdin": false,
+    "AttachStdout": false,
+    "AttachStderr": false,
+    "Tty": false,
+    "OpenStdin": false,
+    "StdinOnce": false,
+    "Env": [
+      "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+    ],
+    "Cmd": [
+      "qemu-system-x86_64",
+      "-accel",
+      "kvm",
+      "-machine",
+      "q35",
+      "-cpu",
+      "host",
+      "-smp",
+      "4",
+      "-m",
+      "4096",
+      "-drive",
+      "file=/state/guest.qcow2,if=virtio,format=qcow2",
+      "-drive",
+      "file=/seed/seed.iso,format=raw,media=cdrom,readonly=on",
+      "-virtfs",
+      "local,path=/input,mount_tag=inkecho_input,security_model=none,readonly=on,id=inshare",
+      "-virtfs",
+      "local,path=/output,mount_tag=inkecho_output,security_model=none,id=outshare",
+      "-device",
+      "virtio-vga",
+      "-device",
+      "virtio-net-pci,netdev=n1",
+      "-netdev",
+      "user,id=n1,hostfwd=tcp:127.0.0.1:2222-:22",
+      "-serial",
+      "file:/output/serial.log",
+      "-display",
+      "none",
+      "-monitor",
+      "none"
+    ],
+    "Image": "inkecho-ubuntu24-perf-vm-tools:20261016",
+    "Volumes": null,
+    "WorkingDir": "",
+    "Entrypoint": null,
+    "Labels": {
+      "org.opencontainers.image.version": "24.04"
+    }
+  },
+  "NetworkSettings": {
+    "SandboxID": "",
+    "SandboxKey": "",
+    "Ports": {},
+    "Networks": {
+      "none": {
+        "IPAMConfig": null,
+        "Links": null,
+        "Aliases": null,
+        "DriverOpts": null,
+        "GwPriority": 0,
+        "NetworkID": "63acd5591c8ca6fb8581f71fbe13f5f259c9d4f7d9ef905b86acf76396635c6d",
+        "EndpointID": "",
+        "Gateway": "",
+        "IPAddress": "",
+        "MacAddress": "",
+        "IPPrefixLen": 0,
+        "IPv6Gateway": "",
+        "GlobalIPv6Address": "",
+        "GlobalIPv6PrefixLen": 0,
+        "DNSNames": null
+      }
+    }
+  },
+  "ImageManifestDescriptor": {
+    "mediaType": "application/vnd.oci.image.manifest.v1+json",
+    "digest": "sha256:849c832dda5155906c580d2a5c3147e2a9094350d626088faf2a456d345809b9",
+    "size": 751,
+    "platform": {
+      "architecture": "amd64",
+      "os": "linux"
+    }
+  }
+}

@@ -1,0 +1,34 @@
+Type=wayland
+Active=yes
+LockedHint=no
+InkEcho-0.10.2-x86_64.AppImage: OK
+265369e0a18caaf4aaeb72b18e9fee165458b47731a5104f0868f8cd3fe6d8c6  squashfs-root/packages/inkecho/platform/ibus.py
+6e77884fec8d92ad5bceb6ff03ec29a6425b29b8c45b8dfabd2d939d93b103a8  squashfs-root/packages/inkecho/platform/output_router.py
+6900065ef4996dced1e451b7a0f14d744862e1da089e8474caf8d1789b9b9e6d  squashfs-root/packages/inkecho/platform/ibus_candidate/delivery_gate.js
+b9b762262dd38d3086f029747750a21cb8b62a46d73b05bf70c7fdc307a911b2  squashfs-root/packages/inkecho/platform/ibus_candidate/extension.js
+inkecho-ibus-v2-prototype@local.invalid
+  Name: InkEcho IBus v2 isolated prototype
+  Description: Unintegrated isolated experiment; not production supported
+  Path: /home/inkecho/.local/share/gnome-shell/extensions/inkecho-ibus-v2-prototype@local.invalid
+  Enabled: Yes
+  State: ACTIVE
+inkecho-presend-fault@local.invalid
+  Name: InkEcho isolated fault control
+  Description: Isolated fault injection only; not for user sessions
+  Path: /home/inkecho/.local/share/gnome-shell/extensions/inkecho-presend-fault@local.invalid
+  Enabled: Yes
+  State: ACTIVE
+xkb:us::eng
+PRESENT_BEFORE=(true,)
+CASE=normal
+{"mode": "full", "exit": 0, "a": "风云日月山川河海", "b": "", "triggered": true, "switch_confirmed": false, "focus_in_b": false, "resumed": false, "fcitx_b_context_proved_by_receipt": false, "stdout": [{"ready": true}, {"events": [["reply_sender", "GetNameOwner", "org.freedesktop.DBus", "org.freedesktop.DBus"], ["reply_sender", "GetConnectionUnixUser", "org.freedesktop.DBus", "org.freedesktop.DBus"], ["reply_sender", "GetConnectionUnixProcessID", "org.freedesktop.DBus", "org.freedesktop.DBus"], ["request_started", "Begin", 19.447993], ["reply_sender", "Begin", ":1.17", ":1.17"], ["commit_timeout", 3], ["ibus_commit_response", ["attempted"], ":1.17"], ["reply_sender", "Commit", ":1.17", ":1.17"], ["commit_timeout", 3], ["ibus_commit_response", ["attempted"], ":1.17"], ["commit_timeout", 3], ["ibus_commit_response", ["attempted"], ":1.17"], ["commit_timeout", 3], ["ibus_commit_response", ["attempted"], ":1.17"], ["commit_timeout", 3], ["ibus_commit_response", ["attempted"], ":1.17"], ["commit_timeout", 3], ["ibus_commit_response", ["attempted"], ":1.17"], ["commit_timeout", 3], ["ibus_commit_response", ["attempted"], ":1.17"], ["commit_timeout", 3], ["ibus_commit_response", ["attempted"], ":1.17"], ["request_started", "Cancel", 20.462787], ["reply_sender", "Cancel", ":1.17", ":1.17"], ["diagnostic", "ibus_delivery_unknown"], ["problem", "IBus 已尝试输入，但无法确认目标是否收到；请检查光标位置，未自动重试。"], ["finished", "failed"]], "outcome": "failed", "origin": "/tmp/inkecho-r4-test/squashfs-root/packages/inkecho/app.py"}], "stderr": "", "events": [["first_arrival", 20.453282832]], "passed": false}
+SET_UNAVAILABLE=(true,)
+PRESENT_FORCED=(false,)
+CASE=no_service_double
+{"mode": "full", "exit": 0, "a": "风云日月山川河海风云日月山川河海", "b": "", "triggered": true, "switch_confirmed": false, "focus_in_b": false, "resumed": false, "fcitx_b_context_proved_by_receipt": false, "stdout": [{"ready": true}, {"events": [["reply_sender", "GetNameOwner", "org.freedesktop.DBus", "org.freedesktop.DBus"], ["reply_sender", "GetConnectionUnixUser", "org.freedesktop.DBus", "org.freedesktop.DBus"], ["reply_sender", "GetConnectionUnixProcessID", "org.freedesktop.DBus", "org.freedesktop.DBus"], ["request_started", "Begin", 25.32149], ["reply_sender", "Begin", ":1.17", ":1.17"], ["commit_timeout", 3], ["ibus_commit_response", ["no_service"], ":1.17"], ["reply_sender", "Commit", ":1.17", ":1.17"], ["fast_close_begin", 26.326949], ["fast_close_end", 26.327163], ["hybrid_connect"], ["keyboard_connect"], ["hybrid_authorize"], ["finished", "succeeded"], ["next_task_start", 26.752853], ["request_started", "Begin", 26.755485], ["commit_timeout", 3], ["ibus_commit_response", ["no_service"], ":1.17"], ["fast_close_begin", 27.760763], ["fast_close_end", 27.761074], ["hybrid_connect"], ["keyboard_connect"], ["finished", "succeeded"]], "outcome": "succeeded", "origin": "/tmp/inkecho-r4-test/squashfs-root/packages/inkecho/app.py"}], "stderr": "", "events": [["first_arrival", 26.539702353]], "passed": false}
+CASE=cleanup_exception
+{"mode": "full", "exit": 0, "a": "", "b": "", "triggered": false, "switch_confirmed": false, "focus_in_b": false, "resumed": false, "fcitx_b_context_proved_by_receipt": false, "stdout": [{"ready": true}, {"events": [["reply_sender", "GetNameOwner", "org.freedesktop.DBus", "org.freedesktop.DBus"], ["reply_sender", "GetConnectionUnixUser", "org.freedesktop.DBus", "org.freedesktop.DBus"], ["reply_sender", "GetConnectionUnixProcessID", "org.freedesktop.DBus", "org.freedesktop.DBus"], ["request_started", "Begin", 32.92943], ["reply_sender", "Begin", ":1.17", ":1.17"], ["commit_timeout", 3], ["ibus_commit_response", ["no_service"], ":1.17"], ["reply_sender", "Commit", ":1.17", ":1.17"], ["fast_close_begin", 33.934611], ["injected_close_exception_after_disconnect"], ["fast_close_end", 33.93482], ["diagnostic", "input_cleanup_failed"], ["diagnostic", "injection_failed"], ["problem", "键盘输入未完成，未使用剪贴板回退。"], ["finished", "failed"]], "outcome": "failed", "origin": "/tmp/inkecho-r4-test/squashfs-root/packages/inkecho/app.py"}], "stderr": "", "events": [], "passed": false}
+RESTORE=(true,)
+PRESENT_AFTER=(true,)
+CASE=lost_reply
+{"mode": "full", "exit": 0, "a": "风", "b": "", "triggered": true, "switch_confirmed": false, "focus_in_b": false, "resumed": false, "fcitx_b_context_proved_by_receipt": false, "stdout": [{"ready": true}, {"events": [["reply_sender", "GetNameOwner", "org.freedesktop.DBus", "org.freedesktop.DBus"], ["reply_sender", "GetConnectionUnixUser", "org.freedesktop.DBus", "org.freedesktop.DBus"], ["reply_sender", "GetConnectionUnixProcessID", "org.freedesktop.DBus", "org.freedesktop.DBus"], ["request_started", "Begin", 38.783507], ["reply_sender", "Begin", ":1.17", ":1.17"], ["commit_timeout", 3], ["ibus_commit_response", ["attempted"], ":1.17"], ["simulated_reply_loss"], ["request_started", "Cancel", 39.792141], ["reply_sender", "Cancel", ":1.17", ":1.17"], ["diagnostic", "ibus_delivery_unknown"], ["problem", "IBus 已尝试输入，但无法确认目标是否收到；请检查光标位置，未自动重试。"], ["finished", "failed"]], "outcome": "failed", "origin": "/tmp/inkecho-r4-test/squashfs-root/packages/inkecho/app.py"}], "stderr": "", "events": [["first_arrival", 39.79260855]], "passed": false}

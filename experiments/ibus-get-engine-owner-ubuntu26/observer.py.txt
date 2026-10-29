@@ -1,0 +1,10 @@
+import json
+import gi
+gi.require_version('IBus','1.0')
+from gi.repository import Gio, IBus, GLib
+IBus.init(); bus=IBus.Bus.new(); path=bus.current_input_context()
+try:
+ reply=bus.get_connection().call_sync('org.freedesktop.IBus',path,'org.freedesktop.IBus.InputContext','GetEngine',None,None,Gio.DBusCallFlags.NONE,1500,None)
+ result={'kind':'return','variant_type':reply.get_type_string()}
+except GLib.Error as e: result={'kind':'error','name':Gio.DBusError.get_remote_error(e),'message':str(e),'code':e.code}
+print(json.dumps({'current_path':path,'cross_process_get_engine':result}),flush=True)

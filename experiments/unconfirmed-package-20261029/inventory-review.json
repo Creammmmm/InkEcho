@@ -1,0 +1,22 @@
+{
+  "artifact": "/tmp/inkecho-unconfirmed-candidate-20261029/source/dist/InkEcho-0.10.2-x86_64.AppImage",
+  "sha256": "222c017a4f9e10bf4d6422cf402a2b7ea57245adb267a4409cce87ca74551694",
+  "bytes": 104393208,
+  "version": "0.10.2",
+  "packaged_source_files": 80,
+  "all_packaged_app_source_matches_snapshot": true,
+  "all_packaged_app_source_matches_inventory": true,
+  "shared_changed_since_snapshot": [],
+  "unconfirmed_sources": {
+    "app.py": "a9f9484618d487cfd0b7b39836ae8bcfe576ee2cfb0fa50bfc6f6481fb988989",
+    "core.py": "c3fbaccb189a8d43eaaaff88c824968538a29456c43ab750db4d113333964f4b",
+    "statistics.py": "b2e9f5a28e363c8fd021344190d484be86d11cfea274f0c5c300be1d25893771",
+    "performance.py": "223a6dcef338533562c35fb916ef6e4a5e95d9d336c8c15e1bdb3e983306c3d4",
+    "platform/output_router.py": "df8dfc2d0e933ae748d833ae0cdc8b3432b76330b2e3be16f6e457346efb81ef",
+    "ui/window.py": "7e640803ff59854057710042d75f140479e4660ff137280fd7f4e6ecbecb785c",
+    "ui/overlay.py": "233d7ffc30a7383246592412eb890f82f8e42d289b5c4427fdae7b816f2a0c41",
+    "ui/overlay_host.py": "3668000b648a9e18a35cb61737ab199d693519da296b6c43970ea475b53b03b8",
+    "ui/overlay_proxy.py": "862c56b0d4fce32de6cdae36341bddf8dc533592624080ef21787f1fcb903501"
+  },
+  "actual_dual_system_acceptance": "pending; historical SHA421180 evidence not inherited"
+}

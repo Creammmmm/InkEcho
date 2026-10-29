@@ -1,0 +1,22 @@
+/tmp/inkecho-r4-test/InkEcho-0.10.2-x86_64.AppImage: OK
+c8918f6235325036a4bf605edc76579b2813e71d04343ca41e5edec981a7c6b5  /tmp/inkecho-r4-test/squashfs-root/packages/inkecho/platform/fcitx5.py
+119ebfaee65ce6a8b04e3652f9712c7916e57e73c64a37e3b59ac5844555033d  /tmp/inkecho-r4-test/squashfs-root/packages/inkecho/platform/framework_detection.py
+a64cf45e3a22bacbc82e7db61478a15769fb630812c3919c72f48a105998aa3a  /tmp/inkecho-r4-test/squashfs-root/packages/inkecho/platform/ibus.py
+已安装输入桥；运行状态需通过输入服务检查确认。
+已安装输入桥；运行状态需通过输入服务检查确认。
+before_manual
+{"label": "before_manual", "hints": {"GTK_IM_MODULE": "fcitx", "QT_IM_MODULE": "fcitx", "XMODIFIERS": "@im=fcitx"}, "owners": {"ibus_service_owner": "fcitx", "fcitx_service_owner": "fcitx"}, "hypothesis": ["fcitx", ":1.143"], "detected": ["fcitx", ":1.143"]}
+('5.1.19',)
+addon_before
+'inkecho', 'InkEcho', '', 3, false, true, false, ['core', 'dbus'], []), 
+()
+addon_after_disabled
+'inkecho', 'InkEcho', '', 3, false, false, false, ['core', 'dbus'], []), 
+{"label": "manual_disabled", "hints": {"GTK_IM_MODULE": "fcitx", "QT_IM_MODULE": "fcitx", "XMODIFIERS": "@im=fcitx"}, "owners": {"ibus_service_owner": "fcitx", "fcitx_service_owner": "fcitx"}, "hypothesis": ["fcitx", ":1.143"], "detected": null}
+('5.1.19',)
+()
+addon_after_enabled
+'inkecho', 'InkEcho', '', 3, false, true, false, ['core', 'dbus'], []), 
+{"label": "manual_enabled", "hints": {"GTK_IM_MODULE": "fcitx", "QT_IM_MODULE": "fcitx", "XMODIFIERS": "@im=fcitx"}, "owners": {"ibus_service_owner": "fcitx", "fcitx_service_owner": "fcitx"}, "hypothesis": ["fcitx", ":1.143"], "detected": ["fcitx", ":1.143"]}
+('5.1.19',)
+未发现经过校验的输入桥；可能尚未安装。

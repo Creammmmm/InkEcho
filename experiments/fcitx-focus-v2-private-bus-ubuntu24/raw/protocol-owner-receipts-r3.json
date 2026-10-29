@@ -1,0 +1,30 @@
+[
+  {
+    "argv": [
+      "dbus-run-session",
+      "--",
+      "/usr/bin/python3",
+      "/tmp/inkecho-fcitx-v2/run_protocol-r3.py",
+      "product-native"
+    ],
+    "pid": 3264,
+    "returncode": 0,
+    "stdout": "{\"variant\": \"product-native\", \"passed\": true, \"checks\": 7, \"daemon_wait\": 0}\n",
+    "stderr": "",
+    "original_wait_completed": true
+  },
+  {
+    "argv": [
+      "dbus-run-session",
+      "--",
+      "/usr/bin/python3",
+      "/tmp/inkecho-fcitx-v2/run_protocol-r3.py",
+      "legacy-native"
+    ],
+    "pid": 3270,
+    "returncode": 0,
+    "stdout": "{\"variant\": \"legacy-native\", \"passed\": true, \"checks\": 5, \"daemon_wait\": 0}\n",
+    "stderr": "",
+    "original_wait_completed": true
+  }
+]

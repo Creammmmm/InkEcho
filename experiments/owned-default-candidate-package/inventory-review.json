@@ -1,0 +1,47 @@
+{
+  "artifact": "/tmp/inkecho-owned-default-candidate-20261029/source/dist/InkEcho-0.10.2-x86_64.AppImage",
+  "sha256": "77f252509097fe550188122acbe912783e9ad4b4ea33296fe23a2d64da3729ef",
+  "bytes": 104401400,
+  "version": "0.10.2",
+  "all_app_files_match_frozen_source_and_inventory": true,
+  "app_files": 93,
+  "owned_v5_resources_match_all_pins": {
+    "capability.js": {
+      "sha256": "fcbaf3e7fd0184ca3141f3c4d811f7496ef753fd6282714ec128a26151a1c881",
+      "bytes": 2784
+    },
+    "delivery_gate.js": {
+      "sha256": "6900065ef4996dced1e451b7a0f14d744862e1da089e8474caf8d1789b9b9e6d",
+      "bytes": 1938
+    },
+    "extension.js": {
+      "sha256": "132e1b6d414863bc93191c649b7cac587709fc7dd83fd8551c59b5833ff3accd",
+      "bytes": 5144
+    },
+    "identity.js": {
+      "sha256": "5a50a88cc6f08619b4742e2f1c269a2dce7a517ece32176270ad69f3ffc8e9ac",
+      "bytes": 404
+    },
+    "metadata.json": {
+      "sha256": "3affc5dde73c67f8e6638d8dd115b3f7b9504b86ac29af147365675d28824549",
+      "bytes": 235
+    },
+    "owned_gate.js": {
+      "sha256": "55980b3f06324b79dcfd58d1a69f9ee8e08466e6bf68b1a1916c0afa012561bd",
+      "bytes": 2892
+    },
+    "probe.js": {
+      "sha256": "39adc6ccc1109bf7d9cae419314781164dccbf0a2f6d6a778888a15755a12dc4",
+      "bytes": 951
+    }
+  },
+  "critical_modules": {
+    "app.py": "98c26bd0a172acd9957f3e5ce4aa8cb54cd923066baaafcae1af03836bca8ca2",
+    "platform/ibus_owned.py": "9bb43cd20929ddb5b67dce411b82403886fa8b9f95edc16f591a8c654286ae0b",
+    "platform/ibus_owned_auto.py": "8ba388270895e8172504f5a0329b474cb5c4bcdf0e89a212177e70e3d3796ce0",
+    "platform/ibus_owned_default.py": "9718e496ca579393c3302eea946ef50720e771853fe31e88fe9f5f9d3851ec9f",
+    "platform/owned_installation.py": "d784d8f4d47a29ecf4ed1457fd1c1f55fae03070db442bf30ffccf6960a08175",
+    "platform/owned_extension.py": "f4088b7c99bdf79cccc3b76ba73dfb24d2763485418a77e3407d0fc3c64b9761",
+    "ui/information.py": "90391f7b5f975dff5d0173e0d9fdd604494ac77eb0e035d8a6e7e3edf99d7147"
+  }
+}

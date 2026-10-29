@@ -1,0 +1,24 @@
+import asyncio
+import gc
+import warnings
+from types import SimpleNamespace
+from inkecho.ui.widgets import Page
+
+async def operation():
+    pass
+
+async def main():
+    task = Page.run(SimpleNamespace(), operation())
+    task.cancel()
+    await asyncio.gather(task, return_exceptions=True)
+    del task
+    await asyncio.sleep(0)
+    gc.collect()
+
+with warnings.catch_warnings(record=True) as observed:
+    warnings.simplefilter('always', RuntimeWarning)
+    asyncio.run(main())
+    gc.collect()
+    for item in observed:
+        print(f'{item.category.__name__}: {item.message}')
+    assert not any('was never awaited' in str(item.message) for item in observed)

@@ -1,0 +1,20 @@
+import hashlib,json,os,shutil,tempfile
+from pathlib import Path
+from inkecho.integration import DesktopIntegration
+
+artifact=Path('/tmp/inkecho-desktop-r4/InkEcho.AppImage')
+assert hashlib.sha256(artifact.read_bytes()).hexdigest() == '852a9e53efd66c7a19806e2473726d1ae5cdae5306804992fbf7d925eb583a48'
+with tempfile.TemporaryDirectory(prefix='inkecho-private-integration-') as temp:
+ root=Path(temp); data=root/'data'; config=root/'config'; data.mkdir(); config.mkdir()
+ first=root/'original.AppImage'; shutil.copy2(artifact,first); first.chmod(0o700)
+ sentinel=config/'credentials.json'; sentinel.write_text('private synthetic sentinel')
+ item=DesktopIntegration(first,data_home=data,config_home=config)
+ item.install(); assert item.status()['current'] and not item.status()['autostart']
+ item.set_autostart(True); assert item.status()['autostart']
+ moved=root/'moved.AppImage'; first.rename(moved)
+ item=DesktopIntegration(moved,data_home=data,config_home=config)
+ assert item.status()['installed'] and not item.status()['current']
+ item.repair(); assert item.status()['current'] and item.status()['autostart']
+ item.set_autostart(False); assert not item.status()['autostart']
+ item.remove(); assert not item.status()['installed'] and sentinel.read_text()=='private synthetic sentinel'
+ print(json.dumps({'artifact_sha256':hashlib.sha256(artifact.read_bytes()).hexdigest(),'install':True,'autostart_enable_disable':True,'path_repair':True,'remove_preserves_synthetic_config':True,'package_module':__import__('inkecho.integration',fromlist=['x']).__file__}))

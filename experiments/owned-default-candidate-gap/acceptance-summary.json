@@ -1,0 +1,98 @@
+{
+  "24-keyboard-full": {
+    "passed": true,
+    "characters": 9,
+    "presses": 9,
+    "releases": 9,
+    "still_pressed": [],
+    "state_before": {
+      "kind": "actual-x11-server",
+      "down_keycodes": []
+    },
+    "state_after": {
+      "kind": "actual-x11-server",
+      "down_keycodes": []
+    }
+  },
+  "24-keyboard-cancel": {
+    "passed": true,
+    "characters": 1,
+    "presses": 1,
+    "releases": 1,
+    "still_pressed": [],
+    "state_before": {
+      "kind": "actual-x11-server",
+      "down_keycodes": []
+    },
+    "state_after": {
+      "kind": "actual-x11-server",
+      "down_keycodes": []
+    }
+  },
+  "26-keyboard-full": {
+    "passed": true,
+    "characters": 9,
+    "presses": 9,
+    "releases": 9,
+    "still_pressed": [],
+    "state_before": {
+      "kind": "native-mutter",
+      "keymap_sha256": "e9e6b45d29d38fa1d6a42847b1666d9b94c45160e61516632a326a4f10673ded",
+      "group": 0,
+      "depressed": 0,
+      "latched": 0,
+      "locked": 0
+    },
+    "state_after": {
+      "kind": "native-mutter",
+      "keymap_sha256": "e9e6b45d29d38fa1d6a42847b1666d9b94c45160e61516632a326a4f10673ded",
+      "group": 0,
+      "depressed": 0,
+      "latched": 0,
+      "locked": 0
+    }
+  },
+  "26-keyboard-cancel": {
+    "passed": true,
+    "characters": 1,
+    "presses": 1,
+    "releases": 1,
+    "still_pressed": [],
+    "state_before": {
+      "kind": "native-mutter",
+      "keymap_sha256": "e9e6b45d29d38fa1d6a42847b1666d9b94c45160e61516632a326a4f10673ded",
+      "group": 0,
+      "depressed": 0,
+      "latched": 0,
+      "locked": 0
+    },
+    "state_after": {
+      "kind": "native-mutter",
+      "keymap_sha256": "e9e6b45d29d38fa1d6a42847b1666d9b94c45160e61516632a326a4f10673ded",
+      "group": 0,
+      "depressed": 0,
+      "latched": 0,
+      "locked": 0
+    }
+  },
+  "24-fcitx-switch": {
+    "passed": true,
+    "a": 56,
+    "b": 144
+  },
+  "24-fcitx-cancel": {
+    "passed": true,
+    "a": 1,
+    "b": 0
+  },
+  "24-guard-full": {
+    "passed": true,
+    "a": 0,
+    "b": 0
+  },
+  "24-guard-cancel-after-real-zero": {
+    "passed": true,
+    "a": 0,
+    "b": 0
+  }
+}

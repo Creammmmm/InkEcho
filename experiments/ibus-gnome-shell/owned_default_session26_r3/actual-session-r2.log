@@ -1,0 +1,43 @@
+{"sender_pid": 3449, "interpreter": "/home/inkecho/inkecho-release-0.10.0-r1/extracted-r1/squashfs-root/usr/bin/python3"}
+{"app_source": "/home/inkecho/default-session26/source/inkecho/app.py", "app_sha256": "ad96bfa362d528cbbb583bc402a9f9702f0ecf81bba5ba65daa8b549c451d964", "python": "3.13.15 (main, Sep  1 2026, 14:18:08) [Clang 22.1.3 ]", "default_router": "DefaultAutoOutputRouter"}
+Traceback (most recent call last):
+  File "/home/inkecho/default-session26/session_run.py", line 83, in <module>
+    asyncio.run(main())
+    ~~~~~~~~~~~^^^^^^^^
+  File "/home/inkecho/inkecho-release-0.10.0-r1/extracted-r1/squashfs-root/usr/lib/python3.13/asyncio/runners.py", line 196, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "/home/inkecho/inkecho-release-0.10.0-r1/extracted-r1/squashfs-root/usr/lib/python3.13/asyncio/runners.py", line 119, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/inkecho/inkecho-release-0.10.0-r1/extracted-r1/squashfs-root/usr/lib/python3.13/asyncio/base_events.py", line 726, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/home/inkecho/default-session26/session_run.py", line 64, in main
+    OwnedExtensionManager().enable();cli('/usr/bin/gnome-extensions','enable','inkecho-v3-fixture@local.invalid');await asyncio.sleep(.3)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/home/inkecho/default-session26/source/inkecho/platform/owned_extension.py", line 64, in enable
+    self._verify_installed(self._run("info", UUID))
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/inkecho/default-session26/source/inkecho/platform/owned_extension.py", line 59, in _verify_installed
+    raise ExtensionError("扩展文件校验失败；未启用。") from None
+inkecho.platform.ibus_extension.ExtensionError: 扩展文件校验失败；未启用。
+{"sender_exit": 1}
+Traceback (most recent call last):
+  File "/tmp/inkecho-default-session26/vm_lab_r2.py", line 151, in <module>
+    run(
+    ~~~^
+        [
+        ^
+    ...<19 lines>...
+        ]
+        ^
+    )
+    ^
+  File "/tmp/inkecho-default-session26/vm_lab_r2.py", line 16, in run
+    return subprocess.run(args, check=True, **kw)
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/subprocess.py", line 578, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['docker', 'exec', '-i', 'inkecho-default-session26-r2-20261029', 'ssh', '-T', '-i', '/secrets/testkey', '-p2222', '-o', 'BatchMode=yes', '-o', 'ConnectTimeout=10', '-o', 'StrictHostKeyChecking=accept-new', '-o', 'UserKnownHostsFile=/state/known_hosts', 'inkecho@127.0.0.1', 'cat > /home/inkecho/default-session26/launch.py; python3 /home/inkecho/default-session26/launch.py']' returned non-zero exit status 1.

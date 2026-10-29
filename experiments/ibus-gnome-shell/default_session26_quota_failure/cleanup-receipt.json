@@ -1,0 +1,37 @@
+{
+  "container": "inkecho-default-session26-20261029",
+  "normal_shutdown_wait_exit": 0,
+  "state": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-10-29T11:02:45.289742763Z",
+    "FinishedAt": "2026-10-29T11:03:55.890465314Z"
+  },
+  "removed_only_rebuildable": [
+    {
+      "path": "/tmp/inkecho-default-session26/payload.tar.gz",
+      "size": 0
+    },
+    {
+      "path": "/tmp/inkecho-default-session26/lab/state/guest.qcow2",
+      "size": 20893696
+    }
+  ],
+  "retained": [
+    "payload source snapshot",
+    "source-pins.json",
+    "vm_lab.py",
+    "prepare.log",
+    "start.log",
+    "bootstrap.log",
+    "lab/state/serial.log"
+  ],
+  "no_further_tests": true
+}

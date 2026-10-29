@@ -1,0 +1,249 @@
+#!/usr/bin/env python3
+"""Keyboard-only portal Unicode test, exclusively in an owned blank GTK editor.
+
+Normal portal consent occurs before the fixture is opened. No persistence,
+clipboard, screen sharing, user document inspection, or input-method registration.
+"""
+
+import asyncio
+import ctypes
+import hashlib
+import time
+import json
+import os
+import subprocess
+import sys
+import tempfile
+import uuid
+from pathlib import Path
+
+from dbus_next import Message, MessageType, Variant
+from dbus_next.aio import MessageBus
+from inkecho.platform.eis import EISModifierObserver
+from inkecho.platform.wayland_keymap import _library as xkb_library, _symbols as xkb_symbols
+from historical_accessibility import AccessibilityInput, InputUnavailable
+
+DEST = "org.freedesktop.portal.Desktop"
+PATH = "/org/freedesktop/portal/desktop"
+IFACE = "org.freedesktop.portal.RemoteDesktop"
+SAMPLE = "你好 InkEcho，世界！ café Ω 😀\n第二行。"
+
+
+async def probe():
+    if os.environ.get("XDG_SESSION_TYPE") != "wayland":
+        raise RuntimeError("Native Wayland required")
+    bus = await MessageBus(negotiate_unix_fd=True).connect()
+    session = None
+    pending = {}
+    pressed = set()
+    fixture = None
+    access = AccessibilityInput()
+
+    async def call(path, interface, member, signature="", body=None):
+        reply = await asyncio.wait_for(
+            bus.call(
+                Message(
+                    destination=DEST,
+                    path=path,
+                    interface=interface,
+                    member=member,
+                    signature=signature,
+                    body=body or [],
+                )
+            ),
+            3,
+        )
+        if reply.message_type == MessageType.ERROR:
+            raise RuntimeError(reply.error_name)
+        return reply.body
+
+    def response(message):
+        if (
+            message.message_type == MessageType.SIGNAL
+            and message.interface == "org.freedesktop.portal.Request"
+            and message.member == "Response"
+        ):
+            future = pending.get(message.path)
+            if future is not None and not future.done():
+                future.set_result(message.body)
+
+    async def request(method, signature, arguments, options):
+        token = "inkecho_" + uuid.uuid4().hex
+        sender = bus.unique_name[1:].replace(".", "_")
+        path = f"/org/freedesktop/portal/desktop/request/{sender}/{token}"
+        future = asyncio.get_running_loop().create_future()
+        pending[path] = future
+        options["handle_token"] = Variant("s", token)
+        try:
+            result = await call(PATH, IFACE, method, signature, [*arguments, options])
+            if result != [path]:
+                raise RuntimeError("Unexpected request path")
+            code, values = await asyncio.wait_for(future, 60)
+            if code:
+                raise RuntimeError(f"portal_response_{code}")
+            return values
+        finally:
+            pending.pop(path, None)
+            if not future.done() or future.cancelled():
+                try:
+                    await call(path, "org.freedesktop.portal.Request", "Close")
+                except RuntimeError:
+                    pass
+
+    async def key(keysym, state):
+        await call(
+            PATH,
+            IFACE,
+            "NotifyKeyboardKeysym",
+            "oa{sv}iu",
+            [session, {}, keysym, state],
+        )
+
+    try:
+        bus.add_message_handler(response)
+        reply = await bus.call(
+            Message(
+                destination="org.freedesktop.DBus",
+                path="/org/freedesktop/DBus",
+                interface="org.freedesktop.DBus",
+                member="AddMatch",
+                signature="s",
+                body=[
+                    "type='signal',interface='org.freedesktop.portal.Request',member='Response'"
+                ],
+            )
+        )
+        if reply.message_type == MessageType.ERROR:
+            raise RuntimeError("Signal subscription failed")
+        values = await request(
+            "CreateSession",
+            "a{sv}",
+            [],
+            {"session_handle_token": Variant("s", "inkecho_" + uuid.uuid4().hex)},
+        )
+        session = values["session_handle"].value
+        await request(
+            "SelectDevices",
+            "oa{sv}",
+            [session],
+            {"types": Variant("u", 1), "persist_mode": Variant("u", 0)},
+        )
+        print(json.dumps({"waiting_for_standard_keyboard_consent": True}), flush=True)
+        values = await request("Start", "osa{sv}", [session, ""], {})
+        if values.get("devices", Variant("u", 0)).value != 1:
+            raise RuntimeError("Keyboard-only grant required")
+        print(json.dumps({"keyboard_only_granted": True}), flush=True)
+        reply = await bus.call(Message(destination=DEST,path=PATH,interface=IFACE,member='ConnectToEIS',signature='oa{sv}',body=[session,{}]))
+        if reply.message_type == MessageType.ERROR:
+            raise RuntimeError('ConnectToEIS:' + str(reply.error_name))
+        if len(reply.unix_fds) != 1:
+            raise RuntimeError('unexpected_eis_fd_count')
+        fd = reply.unix_fds[0]
+        observer = EISModifierObserver(fd)
+        os.close(fd)
+        try:
+            snapshot = await observer.wait_snapshot(5)
+            data = observer.keymap_bytes(snapshot['device_generation'], expected_revision=snapshot['revision'])
+            Path('/tmp/wayland24-r6/eis-keymap.xkb').write_bytes(data)
+            print(json.dumps({'eis_snapshot': snapshot,'keymap_sha256': hashlib.sha256(data).hexdigest(),'keymap_bytes':len(data)}),flush=True)
+            lib = xkb_library(); context = lib.xkb_context_new(0)
+            pointer = lib.xkb_keymap_new_from_string(context,data,1,0)
+            if not pointer: raise RuntimeError('invalid_xkb_keymap')
+            try:
+                codepoints = {}
+                unshifted_b = None
+                for name in ('xkb_keymap_min_keycode', 'xkb_keymap_max_keycode'):
+                    function = getattr(lib, name)
+                    function.argtypes = [ctypes.c_void_p]
+                    function.restype = ctypes.c_uint32
+                minimum = lib.xkb_keymap_min_keycode(pointer)
+                maximum = lib.xkb_keymap_max_keycode(pointer)
+                if minimum > maximum or maximum > 10000:
+                    raise RuntimeError('invalid_keycode_range')
+                print(json.dumps({'keycode_min': minimum, 'keycode_max': maximum}), flush=True)
+                for code in range(minimum, maximum + 1):
+                    if any(lib.xkb_keysym_to_utf32(sym)==ord('中') for sym in xkb_symbols(lib,pointer,code)):
+                        codepoints['中'] = code
+                    if any(lib.xkb_keysym_to_utf32(sym)==ord('😀') for sym in xkb_symbols(lib,pointer,code)):
+                        codepoints['😀'] = code
+                    syms=ctypes.c_void_p()
+                    n=lib.xkb_keymap_key_get_syms_by_level(pointer,code,0,0,ctypes.byref(syms))
+                    if n>0 and ord('b') in [lib.xkb_keysym_to_utf32(v) for v in ctypes.cast(syms,ctypes.POINTER(ctypes.c_uint32))[:n]]:
+                        unshifted_b=code
+                print(json.dumps({'xkb_keycodes':{'b':unshifted_b,'中':codepoints.get('中'),'😀':codepoints.get('😀')}} ,ensure_ascii=False),flush=True)
+                if unshifted_b is None: raise RuntimeError('ascii_control_unmapped')
+                if codepoints: raise RuntimeError('unicode_symbols_present_not_tested')
+                with tempfile.TemporaryDirectory(prefix='inkecho-eis-unicode-') as temporary:
+                    received=Path(temporary)/'received.json'
+                    env=dict(os.environ,GDK_BACKEND='wayland',GTK_IM_MODULE='gtk-im-context-simple')
+                    for name in ('PYTHONHOME','LD_LIBRARY_PATH'): env.pop(name,None)
+                    fixture=subprocess.Popen(['/usr/bin/python3',str(Path(__file__).with_name('wayland_editor_fixture.py')),str(received)],env=env,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+                    await access.connect()
+                    target=None
+                    for _ in range(50):
+                        try:
+                            candidate=await access.capture_target()
+                            if candidate.process_id==fixture.pid: target=candidate; break
+                        except InputUnavailable: pass
+                        await asyncio.sleep(.1)
+                    if target is None or not received.exists() or json.loads(received.read_text())!='':
+                        raise RuntimeError('owned_fixture_not_focused')
+                    dev=next(iter(observer._devices)); native=observer._lib
+                    for name,args in {'ei_device_start_emulating':[ctypes.c_void_p,ctypes.c_uint32],'ei_device_stop_emulating':[ctypes.c_void_p],'ei_device_keyboard_key':[ctypes.c_void_p,ctypes.c_uint32,ctypes.c_bool],'ei_device_frame':[ctypes.c_void_p,ctypes.c_uint64]}.items():
+                        function=getattr(native,name); function.argtypes=args; function.restype=None
+                    native.ei_device_start_emulating(dev,1)
+                    try:
+                        for pressed in (True,False):
+                            native.ei_device_keyboard_key(dev,unshifted_b-8,pressed)
+                            native.ei_device_frame(dev,time.monotonic_ns()//1000)
+                            native.ei_dispatch(observer._context)
+                            await asyncio.sleep(.1)
+                    finally:
+                        native.ei_device_stop_emulating(dev)
+                        native.ei_dispatch(observer._context)
+                    await asyncio.sleep(.4)
+                    actual=json.loads(received.read_text())
+                    print(json.dumps({'ascii_expected':'b','ascii_actual':actual,'unicode_control':'not_sent_no_mapped_key','native_wayland':True,'clipboard_used':False},ensure_ascii=False),flush=True)
+                    if actual!='b': raise RuntimeError('ascii_control_failed')
+            finally:
+                lib.xkb_keymap_unref(pointer); lib.xkb_context_unref(context)
+        finally:
+            observer.close()
+    finally:
+        for keysym in pressed:
+            try:
+                await key(keysym, 0)
+            except Exception:
+                pass
+        if session:
+            try:
+                await call(session, "org.freedesktop.portal.Session", "Close")
+            except Exception:
+                pass
+        access.close()
+        bus.disconnect()
+        if fixture is not None:
+            fixture.terminate()
+            try:
+                fixture.wait(timeout=3)
+            except subprocess.TimeoutExpired:
+                fixture.kill()
+                fixture.wait()
+
+
+if __name__ == "__main__":
+    try:
+        asyncio.run(probe())
+    except Exception as error:
+        print(
+            json.dumps(
+                {
+                    "failed": type(error).__name__,
+                    "reason": str(error)
+                    if isinstance(error, RuntimeError)
+                    else "probe_failed",
+                }
+            ),
+            flush=True,
+        )
+        sys.exit(1)

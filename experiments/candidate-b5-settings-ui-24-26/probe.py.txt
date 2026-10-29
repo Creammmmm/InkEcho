@@ -1,0 +1,51 @@
+import asyncio, json, os, tempfile
+from dataclasses import replace
+from pathlib import Path
+from PySide6.QtCore import QObject, Signal
+from PySide6.QtWidgets import QApplication
+from inkecho.app import Session
+from inkecho.config import ConfigStore, Provider
+from inkecho.ui.information import CompatibilityPage
+class Recorder(QObject):
+    level=Signal(float); finished=Signal(bytes,float); failed=Signal(str)
+    def start(self,*args,**kwargs): return True
+    def stop(self): pass
+    def cancel(self): pass
+app=QApplication([])
+async def main():
+    with tempfile.TemporaryDirectory(prefix='inkecho-ui-real-') as directory:
+        root=Path(directory); store=ConfigStore(root); store.initialize()
+        defaults=store.load_settings()
+        assert (defaults.output_method,defaults.x11_mapping_wait_ms,defaults.x11_feedback_timeout_ms)==('auto',40,40)
+        store.save_provider(Provider('probe','probe','transcription','qwen','https://invalid.example','probe','probe-key'))
+        store.save_settings(replace(defaults,transcription_provider='probe',polishing_enabled=False))
+        session=Session(store,recorder=Recorder())
+        methods=[]
+        async def authorized(mode=None): methods.append(mode); return True
+        async def key(_): return 'synthetic-test-key'
+        session.authorize_input=authorized; session.key=key
+        page=CompatibilityPage(session); page.show(); app.processEvents()
+        assert page.isVisible()
+        page.output_method.setCurrentIndex(page.output_method.findData('ibus'))
+        page.mapping_wait.setValue(75); page.feedback_timeout.setValue(60)
+        saved=store.load_settings(); assert (saved.output_method,saved.x11_mapping_wait_ms,saved.x11_feedback_timeout_ms)==('ibus',75,60)
+        page.close(); page.deleteLater(); app.processEvents(); await session.close()
+        store2=ConfigStore(root); after=store2.load_settings()
+        assert (after.output_method,after.x11_mapping_wait_ms,after.x11_feedback_timeout_ms)==('ibus',75,60)
+        session2=Session(store2,recorder=Recorder()); session2.authorize_input=authorized; session2.key=key
+        page2=CompatibilityPage(session2); page2.show(); app.processEvents()
+        assert (page2.output_method.currentData(),page2.mapping_wait.value(),page2.feedback_timeout.value())==('ibus',75,60)
+        reloaded=[page2.output_method.currentData(),page2.mapping_wait.value(),page2.feedback_timeout.value()]
+        await session2.toggle(); await asyncio.sleep(0)
+        assert session2.controller.task is not None
+        assert methods[-1]=='ibus' and session2.settings.x11_mapping_wait_ms==75
+        page2.output_method.setCurrentIndex(page2.output_method.findData('keyboard')); page2.mapping_wait.setValue(90)
+        assert session2.settings.output_method=='ibus' and session2.settings.x11_mapping_wait_ms==75
+        session2.cancel(); await asyncio.gather(*tuple(session2.cleanup_tasks),return_exceptions=True)
+        session2.last_toggle=0; await session2.toggle(); await asyncio.sleep(0)
+        assert session2.controller.task is not None and methods[-1]=='keyboard'
+        assert session2.settings.x11_mapping_wait_ms==90
+        print(json.dumps({'default':['auto',40,40],'saved':['ibus',75,60],'reloaded':reloaded,'current_task_before_update':['ibus',75],'next_task':[methods[-1],session2.settings.x11_mapping_wait_ms],'qt_platform':app.platformName(),'xdg_session':os.environ.get('XDG_SESSION_TYPE'),'visible':page2.isVisible(),'passed':True}),flush=True)
+        session2.cancel(); await asyncio.gather(*tuple(session2.cleanup_tasks),return_exceptions=True)
+        page2.close(); page2.deleteLater(); app.processEvents(); await session2.close()
+asyncio.run(main())

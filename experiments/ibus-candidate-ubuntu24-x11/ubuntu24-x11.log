@@ -1,0 +1,13 @@
+Warning: Permanently added '[127.0.0.1]:2222' (ED25519) to the list of known hosts.
+Type=x11
+Active=yes
+LockedHint=no
+xauthority=/run/user/1000/gdm/Xauthority
+inkecho-ibus-v2-prototype@local.invalid
+  Name: InkEcho IBus v2 isolated prototype
+  Description: Unintegrated isolated experiment; not production supported
+  Path: /home/inkecho/.local/share/gnome-shell/extensions/inkecho-ibus-v2-prototype@local.invalid
+  Enabled: No
+  State: INITIALIZED
+xkb:us::eng
+cp: cannot create regular file '/tmp/inkecho-r4-test/probes/target-focus.py': No such file or directory

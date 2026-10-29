@@ -1,0 +1,51 @@
+Warning: Permanently added '[127.0.0.1]:2222' (ED25519) to the list of known hosts.
+Type=wayland
+Active=yes
+LockedHint=no
+input_sources=[('xkb', 'us')]
+ibus_engine=xkb:us::eng
+inkecho-wayland-focus-probe@local.invalid
+  Name: InkEcho Wayland focus experiment
+  Description: Disposable isolated test only
+  Path: /home/inkecho/.local/share/gnome-shell/extensions/inkecho-wayland-focus-probe@local.invalid
+  Enabled: Yes
+  State: ACTIVE
+2cd60ba3e8e5fb9b9208176565a3c0241fc7416a89254374644f9a83873d6582  /tmp/inkecho-wayland-focus/actor.py
+9798e465b920534f240b14167a8a41f46e05a6ddca2438b2b8772e8f394d11b1  /tmp/inkecho-wayland-focus/probe.py
+0b6d526df9ee0cba6f46c9b515080d9d8f2177b794272afd8f2c1657e1fce8e1  /home/inkecho/.local/share/gnome-shell/extensions/inkecho-wayland-focus-probe@local.invalid/extension.js
+261f9f98f2b1d7fb9734c725d6bf13fe9a5b7ec077bf43315ca07e59034dc30d  /home/inkecho/.local/share/gnome-shell/extensions/inkecho-wayland-focus-probe@local.invalid/metadata.json
+activate wayland-ibus (true,)
+read wayland-ibus (false, '/org/freedesktop/IBus/InputContext_2', 'InkEcho isolated wayland-ibus')
+test wayland-ibus (true,)
+received wayland-ibus 甲
+current (objectpath '/org/freedesktop/IBus/InputContext_3',)
+activate button (true,)
+read button (false, '/org/freedesktop/IBus/InputContext_2', 'InkEcho isolated button')
+test button (true,)
+received button 
+current (objectpath '/org/freedesktop/IBus/InputContext_1',)
+activate x11-ibus (true,)
+read x11-ibus (false, '/org/freedesktop/IBus/InputContext_2', 'InkEcho isolated x11-ibus')
+test x11-ibus (true,)
+received x11-ibus 甲
+current (objectpath '/org/freedesktop/IBus/InputContext_4',)
+activate wayland-simple (true,)
+read wayland-simple (false, '/org/freedesktop/IBus/InputContext_2', 'InkEcho isolated wayland-simple')
+test wayland-simple (true,)
+received wayland-simple 
+current (objectpath '/org/freedesktop/IBus/InputContext_1',)
+activate simple (true,)
+read simple (false, '/org/freedesktop/IBus/InputContext_2', 'InkEcho isolated simple')
+test simple (true,)
+received simple 
+current (objectpath '/org/freedesktop/IBus/InputContext_1',)
+activate wayland-ibus (true,)
+read wayland-ibus (false, '/org/freedesktop/IBus/InputContext_2', 'InkEcho isolated wayland-ibus')
+test wayland-ibus (true,)
+received wayland-ibus 甲甲
+current (objectpath '/org/freedesktop/IBus/InputContext_3',)
+activate x11-ibus (true,)
+read x11-ibus (false, '/org/freedesktop/IBus/InputContext_2', 'InkEcho isolated x11-ibus')
+test x11-ibus (true,)
+received x11-ibus 甲甲
+current (objectpath '/org/freedesktop/IBus/InputContext_4',)

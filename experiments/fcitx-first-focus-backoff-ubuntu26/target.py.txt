@@ -1,0 +1,60 @@
+import json, os, signal, subprocess, sys, tempfile, time
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk, GLib
+mode = sys.argv[1]
+text = '风云日月山川河海' * 25
+button_window = Gtk.Window(title='InkEcho test nontext')
+button = Gtk.Button(label='No text input'); button_window.add(button)
+window = Gtk.Window(title='InkEcho test target')
+view = Gtk.TextView(); window.add(view)
+initial = window if mode == 'fallback' else button_window
+initial.show_all(); initial.present()
+(view if mode == 'fallback' else button).grab_focus()
+proc = None; events=[]
+out=tempfile.TemporaryFile(mode='w+'); err=tempfile.TemporaryFile(mode='w+')
+def activate_initial():
+    initial.present()
+    (view if mode == 'fallback' else button).grab_focus()
+    return False
+def change_target():
+    if mode == 'recover':
+        window.show_all(); window.present(); view.grab_focus()
+        window.present()
+        events.append(['target_requested',time.monotonic()]); GLib.timeout_add(10,check_focus)
+    elif mode == 'cancel':
+        events.append(['cancel_requested',time.monotonic()]); os.kill(proc.pid,signal.SIGUSR1)
+    return False
+def check_focus():
+    if window.is_active() and view.has_focus():
+        events.append(['target_focus_confirmed',time.monotonic()]); return False
+    return proc.poll() is None
+def launch():
+    global proc
+    focused=(view if mode == 'fallback' else button).has_focus()
+    if not initial.is_active() or not focused:
+        print(json.dumps({'mode':mode,'error':'initial_focus_failed','active':initial.is_active(),'focus':focused}),flush=True); Gtk.main_quit(); return False
+    events.append(['initial_focus_confirmed',time.monotonic()])
+    env=os.environ.copy(); root='/tmp/inkecho-r4-test/squashfs-root'
+    env.update(PYTHONHOME=root+'/usr',PYTHONPATH=root+'/packages',LD_LIBRARY_PATH=root+'/usr/lib/inkecho',QT_QPA_PLATFORM='offscreen',GTK_IM_MODULE='fcitx')
+    proc=subprocess.Popen([root+'/usr/bin/python3','/tmp/inkecho-r4-test/probes/sender.py'],env=env,stdout=out,stderr=err)
+    events.append(['sender_started',time.monotonic()])
+    if mode != 'fallback': GLib.timeout_add(1400,change_target)
+    GLib.timeout_add(50,poll); return False
+def poll():
+    if proc.poll() is None: return True
+    GLib.timeout_add(1000,finish); return False
+def finish():
+    buf=view.get_buffer(); a,z=buf.get_bounds(); got=buf.get_text(a,z,True)
+    out.seek(0); err.seek(0); raw=out.read(); stderr=err.read(); lines=[]
+    for line in raw.splitlines():
+        try: lines.append(json.loads(line))
+        except ValueError: pass
+    detail=next((x for x in lines if 'events' in x),{}); ev=detail.get('events',[])
+    statuses=[e for e in ev if e[0]=='commit_status']; statuses3=[e for e in statuses if e[1]==3]
+    if mode=='recover': passed=got==text and len(statuses3)>0 and any(x[0]=='target_focus_confirmed' for x in events) and detail.get('outcome')=='succeeded' and ['keyboard_insert_started'] not in ev
+    elif mode=='fallback': passed=got==text and any(x[:3]==['fcitx_error','no_target',0] for x in ev) and (['keyboard_insert_started'] in ev or ['hybrid_connect'] in ev) and detail.get('outcome')=='succeeded'
+    else: passed=not got and len(statuses3)>0 and any(x[0]=='cancel_requested' for x in events) and detail.get('outcome')=='cancelled' and ['keyboard_insert_started'] not in ev
+    print(json.dumps({'mode':mode,'passed':passed,'content':got,'events':events,'sender':lines,'stderr':stderr[-5000:]},ensure_ascii=False),flush=True); Gtk.main_quit(); return False
+GLib.timeout_add(1000,activate_initial); GLib.timeout_add(2000,launch); GLib.timeout_add_seconds(40,lambda:(print(json.dumps({'mode':mode,'error':'timeout'}),flush=True),Gtk.main_quit(),False)[-1]); Gtk.main()
+if proc and proc.poll() is None: proc.terminate(); proc.wait(timeout=3)

@@ -1,0 +1,235 @@
+{
+  "sha256": "222c017a4f9e10bf4d6422cf402a2b7ea57245adb267a4409cce87ca74551694",
+  "systems": {
+    "24": {
+      "runtime_version": "5.1.7",
+      "detector": {
+        "collected": [
+          "fcitx",
+          ":1.94"
+        ],
+        "detected": [
+          "fcitx",
+          ":1.94"
+        ],
+        "session_bus": "unix:path=/run/user/1000/bus",
+        "service": [
+          "fcitx",
+          ":1.94"
+        ]
+      },
+      "cases": {
+        "fallback-cancel.jsonl": {
+          "passed": true,
+          "a_codepoints": 1,
+          "b_codepoints": 0,
+          "target_im_environment": "gtk-im-context-simple",
+          "fcitx_module_loaded": false,
+          "display_backend": "X11Display",
+          "switch_confirmed": false,
+          "sender_paused": false,
+          "product_sha256": "a9f9484618d487cfd0b7b39836ae8bcfe576ee2cfb0fa50bfc6f6481fb988989",
+          "outcome": "cancelled",
+          "fallback_zero_send_evidence": [
+            [
+              "fcitx_error",
+              "no_target",
+              0,
+              0,
+              false
+            ]
+          ],
+          "keyboard_called": true
+        },
+        "fallback-full.jsonl": {
+          "passed": true,
+          "a_codepoints": 15,
+          "b_codepoints": 0,
+          "target_im_environment": "gtk-im-context-simple",
+          "fcitx_module_loaded": false,
+          "display_backend": "X11Display",
+          "switch_confirmed": false,
+          "sender_paused": false,
+          "product_sha256": "a9f9484618d487cfd0b7b39836ae8bcfe576ee2cfb0fa50bfc6f6481fb988989",
+          "outcome": "succeeded",
+          "fallback_zero_send_evidence": [
+            [
+              "fcitx_error",
+              "no_target",
+              0,
+              0,
+              false
+            ]
+          ],
+          "keyboard_called": true
+        },
+        "fcitx-cancel.jsonl": {
+          "passed": true,
+          "a_codepoints": 1,
+          "b_codepoints": 0,
+          "target_im_environment": "fcitx",
+          "fcitx_module_loaded": true,
+          "display_backend": "X11Display",
+          "switch_confirmed": false,
+          "sender_paused": false,
+          "product_sha256": "a9f9484618d487cfd0b7b39836ae8bcfe576ee2cfb0fa50bfc6f6481fb988989",
+          "outcome": "cancelled",
+          "fallback_zero_send_evidence": [],
+          "keyboard_called": false
+        },
+        "fcitx-switch.jsonl": {
+          "passed": true,
+          "a_codepoints": 43,
+          "b_codepoints": 157,
+          "target_im_environment": "fcitx",
+          "fcitx_module_loaded": true,
+          "display_backend": "X11Display",
+          "switch_confirmed": true,
+          "sender_paused": false,
+          "product_sha256": "a9f9484618d487cfd0b7b39836ae8bcfe576ee2cfb0fa50bfc6f6481fb988989",
+          "outcome": "succeeded",
+          "fallback_zero_send_evidence": [],
+          "keyboard_called": false
+        }
+      },
+      "restore": "environment_compare=0\nsource_compare=0\n",
+      "daemon_wait": "daemon_wait=0\n",
+      "owner_after": "(false,)\n",
+      "lock_cleanup": {
+        "capability_file_present": false,
+        "lock_existed": true,
+        "lock_released": true,
+        "lock_mode": "0o600"
+      },
+      "final_container": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-29T06:45:26.697314614Z",
+        "FinishedAt": "2026-10-29T06:49:17.173635462Z"
+      },
+      "engine_check": "xkb:us::eng"
+    },
+    "26": {
+      "runtime_version": "5.1.19",
+      "detector": {
+        "collected": [
+          "fcitx",
+          ":1.83"
+        ],
+        "detected": [
+          "fcitx",
+          ":1.83"
+        ],
+        "session_bus": "unix:path=/run/user/1000/bus",
+        "service": [
+          "fcitx",
+          ":1.83"
+        ]
+      },
+      "cases": {
+        "fallback-cancel.jsonl": {
+          "passed": true,
+          "a_codepoints": 1,
+          "b_codepoints": 0,
+          "target_im_environment": "gtk-im-context-simple",
+          "fcitx_module_loaded": false,
+          "display_backend": "GdkWaylandDisplay",
+          "switch_confirmed": false,
+          "sender_paused": false,
+          "product_sha256": "a9f9484618d487cfd0b7b39836ae8bcfe576ee2cfb0fa50bfc6f6481fb988989",
+          "outcome": "cancelled",
+          "fallback_zero_send_evidence": [
+            [
+              "fcitx_error",
+              "no_target",
+              0,
+              0,
+              false
+            ]
+          ],
+          "keyboard_called": true
+        },
+        "fallback-full.jsonl": {
+          "passed": true,
+          "a_codepoints": 15,
+          "b_codepoints": 0,
+          "target_im_environment": "gtk-im-context-simple",
+          "fcitx_module_loaded": false,
+          "display_backend": "GdkWaylandDisplay",
+          "switch_confirmed": false,
+          "sender_paused": false,
+          "product_sha256": "a9f9484618d487cfd0b7b39836ae8bcfe576ee2cfb0fa50bfc6f6481fb988989",
+          "outcome": "succeeded",
+          "fallback_zero_send_evidence": [
+            [
+              "fcitx_error",
+              "no_target",
+              0,
+              0,
+              false
+            ]
+          ],
+          "keyboard_called": true
+        },
+        "fcitx-cancel.jsonl": {
+          "passed": true,
+          "a_codepoints": 1,
+          "b_codepoints": 0,
+          "target_im_environment": "fcitx",
+          "fcitx_module_loaded": true,
+          "display_backend": "GdkWaylandDisplay",
+          "switch_confirmed": false,
+          "sender_paused": false,
+          "product_sha256": "a9f9484618d487cfd0b7b39836ae8bcfe576ee2cfb0fa50bfc6f6481fb988989",
+          "outcome": "cancelled",
+          "fallback_zero_send_evidence": [],
+          "keyboard_called": false
+        },
+        "fcitx-switch.jsonl": {
+          "passed": true,
+          "a_codepoints": 99,
+          "b_codepoints": 101,
+          "target_im_environment": "fcitx",
+          "fcitx_module_loaded": true,
+          "display_backend": "GdkWaylandDisplay",
+          "switch_confirmed": true,
+          "sender_paused": false,
+          "product_sha256": "a9f9484618d487cfd0b7b39836ae8bcfe576ee2cfb0fa50bfc6f6481fb988989",
+          "outcome": "succeeded",
+          "fallback_zero_send_evidence": [],
+          "keyboard_called": false
+        }
+      },
+      "restore": "environment_compare=0\nsource_compare=0\n",
+      "daemon_wait": "daemon_wait=0\n",
+      "owner_after": "(false,)\n",
+      "lock_cleanup": {
+        "capability_file_present": false,
+        "lock_existed": true,
+        "lock_released": true,
+        "lock_mode": "0o600"
+      },
+      "final_container": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-29T06:49:39.081309061Z",
+        "FinishedAt": "2026-10-29T06:50:51.985685186Z"
+      },
+      "engine_check": "IBUS_IS_BUS/No engine set; not verified"
+    }
+  }
+}

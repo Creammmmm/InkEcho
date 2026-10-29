@@ -1,0 +1,15 @@
+import asyncio,json,sys
+from pathlib import Path
+from PySide6.QtWidgets import QApplication
+from inkecho.app import Session
+from inkecho.config import ConfigStore
+from inkecho.ui.information import CompatibilityPage
+app=QApplication([]); root=Path(sys.argv[1]); store=ConfigStore(root)
+if sys.argv[2]=='write': store.initialize()
+session=Session(store); page=CompatibilityPage(session); page.show(); app.processEvents()
+if sys.argv[2]=='write':
+ page.output_method.setCurrentIndex(page.output_method.findData('fcitx')); page.mapping_wait.setValue(82); page.feedback_timeout.setValue(64)
+settings=store.load_settings(); result=(page.output_method.currentData(),page.mapping_wait.value(),page.feedback_timeout.value())
+assert result==('fcitx',82,64) and (settings.output_method,settings.x11_mapping_wait_ms,settings.x11_feedback_timeout_ms)==result
+print(json.dumps({'phase':sys.argv[2],'values':result,'visible':page.isVisible(),'qt_platform':app.platformName(),'passed':True}),flush=True)
+page.close(); page.deleteLater(); app.processEvents(); asyncio.run(session.close())

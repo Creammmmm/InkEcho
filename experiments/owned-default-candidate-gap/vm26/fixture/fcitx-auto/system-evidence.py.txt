@@ -1,0 +1,10 @@
+import asyncio,json,hashlib,os
+from pathlib import Path
+from inkecho.platform.framework_detection import collect_system_framework,detect_system_framework,owner_identity
+from dbus_next.aio import MessageBus
+async def run():
+ b=await MessageBus().connect()
+ try:
+  collected=await collect_system_framework();selected=await detect_system_framework();print(json.dumps({"collected":collected,"detected":selected,"session_bus":os.environ.get("DBUS_SESSION_BUS_ADDRESS"),"service":await owner_identity(b,"org.fcitx.Fcitx5",include_owner=True)},indent=2));assert selected and selected[0]=="fcitx"
+ finally:b.disconnect()
+asyncio.run(run())

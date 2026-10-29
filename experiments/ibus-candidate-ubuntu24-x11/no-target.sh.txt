@@ -1,0 +1,7 @@
+set -eu
+export XDG_RUNTIME_DIR=/run/user/1000 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus DISPLAY=:0 XDG_SESSION_TYPE=x11 XDG_CURRENT_DESKTOP=ubuntu:GNOME GDK_BACKEND=x11 GTK_IM_MODULE=ibus XMODIFIERS=@im=ibus QT_IM_MODULE=ibus
+export XAUTHORITY="$(systemctl --user show-environment | sed -n 's/^XAUTHORITY=//p')"
+sudo mount -t 9p -o trans=virtio,version=9p2000.L,ro inkecho_input /tmp/probe-input
+cp /tmp/probe-input/target-focus.py /tmp/inkecho-r4-test/probes/target-focus.py
+sudo umount /tmp/probe-input
+timeout 55 /usr/bin/python3 /tmp/inkecho-r4-test/probes/target-focus.py no-target

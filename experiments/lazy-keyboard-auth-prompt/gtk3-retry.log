@@ -1,0 +1,4 @@
+Warning: Permanently added '[127.0.0.1]:2222' (ED25519) to the list of known hosts.
+{"mode": "cancel", "text": "甲", "focused_at_end": true, "active_at_end": true, "output": "{\"mode\": \"cancel\", \"outcome\": [\"error\", \"KeyboardError\", \"input_cancelled\"], \"events\": [[\"authorize_start\", 96.81], [\"authorize_end\", 96.839, true]], \"notices\": [\"notice\"]}\n", "stderr": ""}
+{"mode": "timeout", "text": "", "focused_at_end": true, "active_at_end": true, "output": "{\"mode\": \"timeout\", \"outcome\": [\"error\", \"KeyboardError\", \"input_cancelled\"], \"events\": [[\"authorize_start\", 99.498], [\"authorize_end\", 99.5, true]], \"notices\": [\"notice\"]}\n", "stderr": ""}
+{"mode": "normal", "text": "甲乙", "focused_at_end": true, "active_at_end": true, "output": "{\"mode\": \"normal\", \"outcome\": [\"sent\", 2], \"events\": [[\"authorize_start\", 102.233], [\"authorize_end\", 102.238, true]], \"notices\": [\"notice\"]}\n", "stderr": ""}

@@ -1,0 +1,13 @@
+Warning: Permanently added '[127.0.0.1]:2222' (ED25519) to the list of known hosts.
+2fc46873ed00e8084ae5e8181a40055a586593fad0dad7c2d0f98163b22b1235  /tmp/ibus-probe/probe.py
+a075c81cbfa4b654eea804189b91a25d98c794b3b72d960d8274586915daf2a0  /tmp/ibus-probe/run.sh
+dbus-daemon[2360]: [session uid=1000 pid=2360] Activating service name='org.freedesktop.portal.IBus' requested by ':1.0' (uid=1000 pid=2364 comm="ibus-daemon --single --panel=disable --config=disa" label="unconfined")
+dbus-daemon[2360]: [session uid=1000 pid=2360] Successfully activated service 'org.freedesktop.portal.IBus'
+fake property declarations: [('ClientCommitPreedit', 'write'), ('ContentType', 'write'), ('EffectivePostProcessKeyEvent', 'write'), ('PostProcessKeyEvent', 'read')]
+real property declarations: [('ClientCommitPreedit', 'write'), ('ContentType', 'write'), ('EffectivePostProcessKeyEvent', 'write'), ('PostProcessKeyEvent', 'read')]
+Client [('error', 'org.freedesktop.DBus.Error.InvalidArgs'), ('error', 'org.freedesktop.DBus.Error.InvalidArgs')]
+ClientName [('error', 'org.freedesktop.DBus.Error.InvalidArgs'), ('error', 'org.freedesktop.DBus.Error.InvalidArgs')]
+Fake [('error', 'org.freedesktop.DBus.Error.InvalidArgs'), ('error', 'org.freedesktop.DBus.Error.InvalidArgs')]
+Capabilities [('error', 'org.freedesktop.DBus.Error.InvalidArgs'), ('error', 'org.freedesktop.DBus.Error.InvalidArgs')]
+identity properties absent or inaccessible in both contexts
+probe_exit=0

@@ -1,0 +1,60 @@
+// Isolated protocol fixture only; never installed into a user's Fcitx session.
+#include <memory>
+#include <fcitx-utils/dbus/bus.h>
+#include <fcitx-utils/dbus/objectvtable.h>
+#include <fcitx/addonfactory.h>
+#include <fcitx/addoninstance.h>
+#include <fcitx/addonmanager.h>
+#include <fcitx/inputcontext.h>
+#include <fcitx/inputcontextmanager.h>
+#include <fcitx/focusgroup.h>
+#include <fcitx/instance.h>
+#include <fcitx-module/dbus/dbus_public.h>
+namespace fcitx {
+class OwnedContext final : public InputContext {
+public:
+ explicit OwnedContext(InputContextManager &m) : InputContext(m, "inkecho-owned-protocol-fixture") { created(); }
+ ~OwnedContext() override { destroy(); }
+ const char *frontend() const override { return "inkecho-owned-test"; }
+ std::uint32_t delivered = 0;
+protected:
+ void commitStringImpl(const std::string &) override { ++delivered; }
+ void deleteSurroundingTextImpl(int, unsigned int) override {}
+ void forwardKeyImpl(const ForwardKeyEvent &) override {}
+ void updatePreeditImpl() override {}
+};
+class Control final : public AddonInstance, public dbus::ObjectVTable<Control> {
+public:
+ explicit Control(Instance *instance) : instance_(instance),
+  aGroup_("inkecho-owned:A", instance->inputContextManager()),
+  bGroup_("inkecho-owned:B", instance->inputContextManager()),
+  a_(instance->inputContextManager()), b_(instance->inputContextManager()) {
+  a_.setFocusGroup(&aGroup_); b_.setFocusGroup(&bGroup_);
+  auto *module=instance->addonManager().addon("dbus",true);
+  if (module) { auto *bus=module->call<IDBusModule::bus>();
+   if(bus) bus->addObjectVTable("/ownedtest", "org.fcitx.Fcitx.OwnedTest1", *this);
+  }
+ }
+ std::uint32_t focus(std::uint32_t mode) {
+  a_.focusOut(); b_.focusOut();
+  if(mode==1 || mode==2) a_.focusIn();
+  if(mode==2 || mode==3) b_.focusIn();
+  std::uint32_t count=0;
+  instance_->inputContextManager().foreachFocused([&](InputContext *){++count;return true;});
+  return count;
+ }
+ std::uint32_t countA(){return a_.delivered;}
+ std::uint32_t countB(){return b_.delivered;}
+ bool quit(){instance_->exit();return true;}
+ FCITX_OBJECT_VTABLE_METHOD(focus,"Focus","u","u");
+ FCITX_OBJECT_VTABLE_METHOD(countA,"CountA","","u");
+ FCITX_OBJECT_VTABLE_METHOD(countB,"CountB","","u");
+ FCITX_OBJECT_VTABLE_METHOD(quit,"Quit","","b");
+private:
+ Instance *instance_; FocusGroup aGroup_, bGroup_; OwnedContext a_, b_;
+};
+class Factory final : public AddonFactory {
+ AddonInstance *create(AddonManager *manager) override{return new Control(manager->instance());}
+};
+}
+FCITX_ADDON_FACTORY(fcitx::Factory);

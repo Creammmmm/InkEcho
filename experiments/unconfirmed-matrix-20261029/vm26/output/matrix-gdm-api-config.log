@@ -1,0 +1,38 @@
+/etc/gdm3/custom.conf
+/usr/bin/gdm-config
+/usr/share/dbus-1/system.d/gdm.conf
+ls: cannot access '/etc/gdm': No such file or directory
+drwxr-xr-x 2 root root 4096 Oct 29 07:17 /etc/gdm3
+drwxr-xr-x 3 root root   60 Oct 29 07:17 /run/gdm3
+-rw-r--r-- 1 root root    5 Oct 29 07:17 /run/gdm3.pid
+      @org.freedesktop.DBus.GLib.CSymbol("user_set_x_session")
+      SetXSession(in  s x_session);
+      @org.freedesktop.DBus.GLib.Async("")
+      @org.freedesktop.DBus.GLib.CSymbol("user_set_session")
+      SetSession(in  s session);
+      @org.freedesktop.DBus.GLib.Async("")
+      @org.freedesktop.DBus.GLib.CSymbol("user_set_session_type")
+      SetSessionType(in  s session_type);
+      @org.freedesktop.DBus.GLib.Async("")
+      SetLocation(in  s location);
+      @org.freedesktop.DBus.GLib.Async("")
+--
+      readonly as Languages = [];
+      readonly s Session = 'ubuntu';
+      readonly s SessionType = '';
+      readonly s FormatsLocale = 'C.UTF-8';
+      readonly aa{ss} InputSources = [{'xkb': 'us'}];
+      readonly s XSession = 'xfce';
+      readonly s Location = '';
+      readonly t LoginFrequency = 103;
+      readonly x LoginTime = 1793258276;
+--
+  @org.freedesktop.Accounts.VendorExtension("true")
+  @org.freedesktop.Accounts.Authentication.ChangeOwn("com.endlessm.ParentalControls.SessionLimits.ChangeOwn")
+  @org.freedesktop.Accounts.Authentication.ReadOwn("com.endlessm.ParentalControls.SessionLimits.ReadOwn")
+  @org.freedesktop.Accounts.Authentication.ChangeAny("com.endlessm.ParentalControls.SessionLimits.ChangeAny")
+  @org.freedesktop.Accounts.Authentication.ReadAny("com.endlessm.ParentalControls.SessionLimits.ReadAny")
+  interface com.endlessm.ParentalControls.SessionLimits {
+    methods:
+    signals:
+    properties:

@@ -21,8 +21,10 @@ Keep regressions for explicit cancellation, stale/replaced tasks and late replie
 current-cursor delivery; cleanup of held keys and mappings; bounded protocol
 handling; credential isolation and atomic owner-only files; and actual startup/IPC.
 Neither focus changes nor an uneditable initial location cancel recording.
-Never substitute clipboard or system input methods, replay uncertain input, or
-hide failing tests with selection/skip changes.
+Never substitute the clipboard, replay uncertain input, or hide failing tests
+with selection/skip changes. System input methods are an authorized optional
+output path; retain keyboard output, select by actual capability, and do not
+claim untested input-method paths as supported.
 
 ## Every package or release: four required categories
 

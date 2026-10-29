@@ -1,0 +1,22 @@
+Type=wayland
+State=active
+/tmp/inkecho-r4-test/InkEcho-0.10.2-x86_64.AppImage: OK
+6056b6073b2fc7a8564f61f01cf6db2c4c35ad15fef41ba21672c5508630d58b  /tmp/inkecho-r4-test/squashfs-root/packages/inkecho/platform/output_router.py
+af654c3a436a05a1c10cb3450ec0af851e6b74414e502c2b12425149a85d4605  /tmp/inkecho-r4-test/squashfs-root/packages/inkecho/app.py
+已安装输入桥；运行状态需通过输入服务检查确认。
+SERVER_PORT 42347
+SERVER_GET /a
+SERVER_SELFTEST 200
+CDP_ERROR <urlopen error [Errno 111] Connection refused>
+{"mode": "full", "error": "initial_focus_missing", "focus": []}
+browser_timeout_or_error=full
+未发现经过校验的输入桥；可能尚未安装。
+[1028/201041.336275:WARNING:chrome/app/chrome_main_linux.cc:84] Read channel stable from /tmp/inkecho-browser/chrome/CHROME_VERSION_EXTRA
+[3322:3322:1028/201041.784818:ERROR:chrome/browser/net/system_network_context_manager.cc:1002] Cannot use V8 Proxy resolver in single process mode.
+[3322:3322:1028/201041.804553:ERROR:chrome/browser/net/system_network_context_manager.cc:1002] Cannot use V8 Proxy resolver in single process mode.
+
+DevTools listening on ws://127.0.0.1:9222/devtools/browser/a4db4507-cebc-443a-8d9f-28fb64572140
+[3322:3322:1028/201041.872505:ERROR:chrome/browser/net/system_network_context_manager.cc:1002] Cannot use V8 Proxy resolver in single process mode.
+[1028/201041.927793:ERROR:third_party/crashpad/crashpad/snapshot/elf/elf_dynamic_array_reader.h:64] tag not found
+[1028/201041.937271:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq: No such file or directory (2)
+[1028/201041.937285:ERROR:third_party/crashpad/crashpad/util/file/file_io_posix.cc:145] open /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq: No such file or directory (2)

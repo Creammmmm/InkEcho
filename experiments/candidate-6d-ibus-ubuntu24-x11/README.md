@@ -1,0 +1,16 @@
+# Ubuntu 24.04 GNOME X11 explicit IBus candidate
+
+The unmodified AppImage 0.10.2, SHA-256 `6d537689d5e30f4611f1e8376025705bf5fcc26c9198c9cda7c51717d434e34a`, was extracted in a network-isolated Ubuntu 24.04 guest, using a disposable QEMU snapshot with original base and guest images mounted read-only. `setup.log` verifies the candidate and matching extension hashes. The extension is installed only inside the disposable guest and is not a replacement for the IBus service. `run.log` verifies the package again, enabled extension `ACTIVE`, session active and unlocked X11 and IBus engine `xkb:us::eng`.
+
+The application used synthetic audio and a stub transcriber; 200 fixed Chinese characters were delivered to owned GTK3 controls through the explicit IBus route. No host desktop, user data, clipboard, microphone, or cloud API was used. Raw events and contents are preserved in `run.log`:
+
+- `full`: first owned TextView received all 200 characters; there were 200 instrumented Commit calls, then `ibus_delivery_unknown` and failed outcome. Widget contents establish receipt for this test only, not a universal acknowledgement.
+- `cancel`: a signal on first text change caused cancellation; the widget had the first two characters, two Commit calls were traced, and no later character was seen during the 1.3-second target settling period. A second character may have already been dispatched before cancellation. This is not a physical Esc test.
+- `no-target`: an owned non-text button was confirmed active and focused before the transcriber finished. Neither TextView received text; 200 Commit calls ended with `ibus_delivery_unknown` and failed outcome. This establishes only this non-text case.
+- `switch-ready`: sender process was stopped at first receipt; a second owned TextView was confirmed active and focused, then sender was resumed. The first and second widgets received 2 and 198 characters respectively, concatenating to the original string; 200 Commit calls and the same unknown-delivery outcome followed. The forced pause establishes the switch but does not cover focus changes racing individual calls.
+
+The reply sender for Begin, Commit and Cancel was `:1.37`, the same destination. No keyboard fallback was recorded. The original probe's `passed` field is an obsolete Fcitx-specific assertion and must not be interpreted as these IBus tests passing or failing; use actual result fields and events. `commit_timeout` entries are traced call timeouts configured, not evidence of actual timeouts or target receipt.
+
+To reproduce only in an isolated matching guest, copy the candidate AppImage as `candidate.AppImage`, `setup.sh`, `run.sh`, `probes/ibus-sender.py`, and `probes/ibus-target.py` to a read-only 9p share tagged `inkecho_input`; execute `setup.sh`, reboot, then `run.sh`. The evidence copies have `.txt` suffixes; scripts are present unmodified from the run. The setup installs and enables the extension only in the guest. This targeted test is not full package acceptance: no real audio, model, shortcut, terminal/browser, native Wayland, automatic selection, or rapid focus race was tested.
+
+The guest completed poweroff normally, Docker wait returned 0, and the isolated container was removed (`shutdown.log`). The test SSH key was used on the host only and was not copied into the guest input share.

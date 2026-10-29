@@ -1,0 +1,7 @@
+# Ubuntu 24 Wayland XWayland actual application probe: inconclusive
+
+An isolated disposable VM mounted parent and Chrome read-only, with no external network. `apps.log` is the first run: Ubuntu 24 Wayland was active and unlocked; candidate AppImage SHA-256 222c017a4f9e10bf4d6422cf402a2b7ea57245adb267a4409cce87ca74551694 was extracted and only hybrid_keyboard.py was overlaid, SHA-256 204b46020cc7ed2aa287488388071cdc91b720fd3518a483e57140f697d3273f. Chrome 154.0.8037.97 started, but local test page emitted no focus event and no sender ran, so no input conclusion follows. Terminal was not reached because the original shell used `set -e`.
+
+After first run, the browser fixture was changed to activate its window, capture Chrome stderr and continue on failure; shell was changed to permit an existing Chrome mount. The saved scripts represent this updated, unexecuted version, not the exact first run. `apps-second.log` captures a repeat that stopped on an already mounted 9p filesystem. `apps-third.log` records a sandbox startup quota error; serial.log records guest disk write errors. SSH shutdown failed, so the isolated container was stopped and removed; the disposable overlay was deleted. No user data or user input method was accessed.
+
+The fixture has not established actual Chrome or GNOME Terminal output, cancellation, or focus-switch behavior. The existing GTK-only observations do not establish compatibility here. This is not original-package or release acceptance. No product fix is inferred from this infrastructure failure.

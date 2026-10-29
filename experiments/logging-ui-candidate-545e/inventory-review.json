@@ -1,0 +1,18 @@
+{
+  "artifact": "/tmp/inkecho-logging-ui-candidate-20261029/source/dist/InkEcho-0.10.2-x86_64.AppImage",
+  "sha256": "545e07e080f05b90fdec4216edf8ff10e3acf6167af3ef505b6fd0a351401c06",
+  "bytes": 104401400,
+  "version": "0.10.2",
+  "app_files": 93,
+  "all_app_files_match_source_and_inventory": true,
+  "owned_v5_resources_match_all_pins": true,
+  "logging_has_new_fixed_code": true,
+  "critical_modules": {
+    "app.py": "98c26bd0a172acd9957f3e5ce4aa8cb54cd923066baaafcae1af03836bca8ca2",
+    "logging.py": "8180a4de054c285686c27b67290d72cbdcb93ab570db1327fb3886a53bafb4e9",
+    "ui/information.py": "93d4b3c49f0e8772d860c531e4b236f37cbce7fb58cdaf5e34047d01b7a22f2c",
+    "platform/ibus_owned_default.py": "9718e496ca579393c3302eea946ef50720e771853fe31e88fe9f5f9d3851ec9f",
+    "platform/owned_installation.py": "d784d8f4d47a29ecf4ed1457fd1c1f55fae03070db442bf30ffccf6960a08175",
+    "platform/hybrid_keyboard.py": "204b46020cc7ed2aa287488388071cdc91b720fd3518a483e57140f697d3273f"
+  }
+}

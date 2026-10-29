@@ -1,0 +1,74 @@
+{
+  "fcitx-switch": {
+    "passed": true,
+    "exit": 0,
+    "a_count": 83,
+    "b_count": 117,
+    "switch_confirmed": true,
+    "resumed": false,
+    "display_backend": "GdkWaylandDisplay",
+    "backend_fcitx": true,
+    "keyboard_started": false,
+    "native_prefix": false,
+    "fcitx_errors": [],
+    "outcome": "succeeded"
+  },
+  "fcitx-cancel": {
+    "passed": true,
+    "exit": 0,
+    "a_count": 1,
+    "b_count": 0,
+    "switch_confirmed": false,
+    "resumed": false,
+    "display_backend": "GdkWaylandDisplay",
+    "backend_fcitx": true,
+    "keyboard_started": false,
+    "native_prefix": false,
+    "fcitx_errors": [],
+    "outcome": "cancelled"
+  },
+  "fallback-full": {
+    "passed": true,
+    "exit": 0,
+    "a_count": 15,
+    "b_count": 0,
+    "switch_confirmed": false,
+    "resumed": false,
+    "display_backend": "GdkWaylandDisplay",
+    "backend_fcitx": true,
+    "keyboard_started": true,
+    "native_prefix": true,
+    "fcitx_errors": [
+      [
+        "fcitx_error",
+        "no_target",
+        0,
+        0,
+        false
+      ]
+    ],
+    "outcome": "succeeded"
+  },
+  "fallback-cancel": {
+    "passed": true,
+    "exit": 0,
+    "a_count": 1,
+    "b_count": 0,
+    "switch_confirmed": false,
+    "resumed": false,
+    "display_backend": "GdkWaylandDisplay",
+    "backend_fcitx": true,
+    "keyboard_started": true,
+    "native_prefix": true,
+    "fcitx_errors": [
+      [
+        "fcitx_error",
+        "no_target",
+        0,
+        0,
+        false
+      ]
+    ],
+    "outcome": "cancelled"
+  }
+}

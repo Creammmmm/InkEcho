@@ -1,0 +1,6 @@
+/tmp/inkecho-r4-test/InkEcho-0.10.2-x86_64.AppImage: OK
+baf512df40aad6380a6a5672fb8026a2b361e4cff190fb78dbbf615c099989e9  /tmp/inkecho-r4-test/squashfs-root/packages/inkecho/platform/output_router.py
+74020662bfd0b0b65f31e2f40dba151eae02663bff8a0cf41134bb34ab90e346  /tmp/inkecho-r4-test/squashfs-root/packages/inkecho/app.py
+repeat_same_inode_mtime True
+已安装输入桥；运行状态需通过输入服务检查确认。
+{"mode": "full", "exit": 0, "a": "风云", "b": "", "triggered": true, "switch_confirmed": false, "focus_in_b": false, "resumed": false, "fcitx_b_context_proved_by_receipt": false, "stdout": [{"ready": true}, {"events": [["backend", "fcitx"], ["polish_delta", "two_synthetic_chars"], ["fcitx_insert_started"], ["commit_timeout", 3.0], ["commit_started", "/inkecho", 130.386334], ["commit_reply", "/inkecho", [1], 130.386735], ["commit_status", 1], ["commit_timeout", 3.0], ["commit_started", "/inkecho", 130.387014], ["commit_reply", "/inkecho", [1], 130.387207], ["second_reply_held", 130.387208], ["polish_failure_injected", 130.387224], ["diagnostic", "polishing_failed"], ["problem", "润色未完成；未继续输入或重放原文。"], ["finished", "failed", 1]], "outcome": "failed", "origin": "/tmp/inkecho-r4-test/squashfs-root/packages/inkecho/app.py"}], "stderr": "", "events": [["first_arrival", 130.386779252]], "passed": false}

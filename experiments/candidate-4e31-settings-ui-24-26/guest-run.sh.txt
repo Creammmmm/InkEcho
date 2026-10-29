@@ -1,0 +1,28 @@
+set -eu
+mode=$1
+cat /etc/os-release | head -3
+id=$(loginctl show-user inkecho -p Display --value)
+loginctl show-session "$id" -p Type -p Active -p LockedHint
+[ "$(loginctl show-session "$id" -p Type --value)" = "$mode" ]
+[ "$(loginctl show-session "$id" -p Active --value)" = yes ]
+[ "$(loginctl show-session "$id" -p LockedHint --value)" = no ]
+mkdir -p /tmp/ui-share /tmp/inkecho-ui-b5
+sudo mount -t 9p -o trans=virtio,version=9p2000.L,ro inkecho_input /tmp/ui-share
+cp /tmp/ui-share/* /tmp/inkecho-ui-b5/
+sudo umount /tmp/ui-share
+cd /tmp/inkecho-ui-b5
+printf '%s  %s\n' 4e31088bfa605d564fd59ffa0ac9fcaf0e651ec7838f1de2c0e08d9c8dd6b3a1 InkEcho-0.10.2-x86_64.AppImage | sha256sum -c -
+chmod +x InkEcho-0.10.2-x86_64.AppImage
+./InkEcho-0.10.2-x86_64.AppImage --appimage-extract >/dev/null
+root=/tmp/inkecho-ui-b5/squashfs-root
+export XDG_RUNTIME_DIR=/run/user/1000 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus DISPLAY=:0 XDG_SESSION_TYPE="$mode" XDG_CURRENT_DESKTOP=ubuntu:GNOME PYTHONHOME="$root/usr" PYTHONPATH="$root/packages" LD_LIBRARY_PATH="$root/usr/lib/inkecho" QT_PLUGIN_PATH="$root/packages/PySide6/Qt/plugins"
+export XAUTHORITY="$(systemctl --user show-environment | sed -n 's/^XAUTHORITY=//p')"
+if [ "$mode" = wayland ]; then export QT_QPA_PLATFORM=wayland WAYLAND_DISPLAY=wayland-0; else export QT_QPA_PLATFORM=xcb; fi
+sha256sum "$root/packages/inkecho/ui/information.py" "$root/packages/inkecho/config.py" "$root/packages/inkecho/app.py"
+timeout 30 "$root/usr/bin/python3" /tmp/inkecho-ui-b5/probe.py
+cfg=$(mktemp -d /tmp/inkecho-restart.XXXXXX)
+trap 'rm -rf "$cfg"' EXIT
+timeout 30 "$root/usr/bin/python3" /tmp/inkecho-ui-b5/restart_probe.py "$cfg" write
+timeout 30 "$root/usr/bin/python3" /tmp/inkecho-ui-b5/restart_probe.py "$cfg" read
+timeout 30 "$root/usr/bin/python3" /tmp/inkecho-ui-b5/failure.py
+timeout 30 "$root/usr/bin/python3" /tmp/inkecho-ui-b5/read_failure.py

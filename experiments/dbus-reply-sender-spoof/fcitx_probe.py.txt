@@ -1,0 +1,30 @@
+import asyncio,json
+from dbus_next import Message,MessageType
+from dbus_next.aio import MessageBus
+from inkecho.platform import fcitx5
+class Cap:
+ def __init__(self,_): self.token='a'*64
+ def close(self):pass
+async def main():
+ service=await MessageBus().connect(); attacker=await MessageBus().connect(); await service.request_name(fcitx5.SERVICE)
+ delivered=[]; observed=[]
+ def response(bus,msg,signature,body):
+  bus.send(Message(message_type=MessageType.METHOD_RETURN,destination=msg.sender,reply_serial=msg.serial,signature=signature,body=body))
+ def on_message(msg):
+  if msg.message_type!=MessageType.METHOD_CALL or msg.path!='/inkecho':return False
+  if msg.member=='Introspect': response(service,msg,'s',['<node><interface name="org.fcitx.Fcitx.InkEcho1"><method name="Begin"/><method name="Commit"/><method name="Cancel"/></interface></node>']);return True
+  if msg.member in ('Begin','Cancel'):response(service,msg,'b',[True]);return True
+  if msg.member=='Commit':
+   observed.append(msg.body[2])
+   if len(observed)==1:
+    delivered.append(msg.body[2]); response(attacker,msg,'u',[3])
+   else: response(service,msg,'u',[3])
+   return True
+ service.add_message_handler(on_message); fcitx5.FOCUS_WAIT_SECONDS=.05
+ bridge=fcitx5.Fcitx5Bridge(capability_factory=Cap,timeout=.5); await bridge.connect(expected_owner=service.unique_name)
+ try:
+  await bridge.insert('甲',lambda:True); result={'error':'none'}
+ except fcitx5.FcitxOutputError as e:result={'error':e.code,'accepted':e.accepted,'uncertain':e.uncertain,'offset':e.unsent_offset}
+ print(json.dumps({'service':service.unique_name,'attacker':attacker.unique_name,'delivered':delivered,'attempts':observed,'result':result},ensure_ascii=False))
+ await bridge.aclose(); service.disconnect();attacker.disconnect()
+asyncio.run(main())

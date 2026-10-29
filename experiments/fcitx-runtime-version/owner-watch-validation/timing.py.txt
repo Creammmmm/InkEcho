@@ -1,0 +1,28 @@
+import asyncio, hashlib, json, os, subprocess, time
+from pathlib import Path
+from inkecho.platform.fcitx5 import Fcitx5Bridge
+root=Path('/tmp/inkecho-owner-test')
+text='甲乙丙丁戊己庚辛壬癸'*20
+async def main():
+ for n in range(5):
+  for name in ('focus','text'): (root/name).unlink(missing_ok=True)
+  env=dict(os.environ, GTK_IM_MODULE='fcitx',GDK_BACKEND='wayland')
+  for key in ('PYTHONHOME','PYTHONPATH','LD_LIBRARY_PATH','QT_QPA_PLATFORM'): env.pop(key,None)
+  target=subprocess.Popen(['/usr/bin/python3',str(root/'target.py')],env=env)
+  try:
+   for _ in range(100):
+    if (root/'focus').exists(): break
+    await asyncio.sleep(.05)
+   else: raise RuntimeError('target did not focus')
+   bridge=Fcitx5Bridge(); await bridge.connect()
+   try:
+    start=time.monotonic(); count=await bridge.insert(text,lambda:True); elapsed=time.monotonic()-start
+    for _ in range(100):
+     if (root/'text').exists() and (root/'text').read_text()==text: break
+     await asyncio.sleep(.01)
+    else: raise RuntimeError('target content mismatch')
+    print(json.dumps({'case':os.environ['CASE'],'sample':n,'count':count,'seconds':elapsed,'exact':True,'module_sha256':hashlib.sha256(Path(__import__('inkecho.platform.fcitx5',fromlist=['x']).__file__).read_bytes()).hexdigest()}),flush=True)
+   finally: await bridge.aclose()
+  finally:
+   target.terminate(); target.wait(timeout=5)
+asyncio.run(main())

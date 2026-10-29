@@ -1,0 +1,17 @@
+{
+  "scope": "actual native Wayland GTK fcitx frontend/private bus; two entries in one owned window only",
+  "passed": false,
+  "checks": [],
+  "environment": {
+    "DISPLAY": null,
+    "WAYLAND_DISPLAY": "wayland-0",
+    "XDG_SESSION_TYPE": "wayland",
+    "XDG_RUNTIME_DIR": "/run/user/1000"
+  },
+  "daemon_pid": 2405,
+  "target_original_wait": 0,
+  "exit_reply": [],
+  "daemon_original_wait": 0,
+  "error_type": "AssertionError",
+  "error": ""
+}

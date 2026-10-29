@@ -1,0 +1,26 @@
+Type=wayland
+Active=yes
+LockedHint=no
+InkEcho.AppImage: OK
+inkecho-wayland-focus-probe@local.invalid
+  Name: InkEcho Wayland focus experiment
+  Description: Disposable isolated test only
+  Path: /home/inkecho/.local/share/gnome-shell/extensions/inkecho-wayland-focus-probe@local.invalid
+  Enabled: Yes
+  State: ACTIVE
+ACTIVATE=simple
+(true,)
+(false, '/org/freedesktop/IBus/InputContext_2', 'InkEcho isolated simple')
+{"raw_x_focus": 8388612, "active_window": 8388611, "selected_focus": 8388612, "code": "ok"}
+ACTIVATE=wayland
+(true,)
+(false, '/org/freedesktop/IBus/InputContext_2', 'InkEcho isolated wayland')
+{"raw_x_focus": 6291459, "active_window": 0, "selected_focus": null, "code": "unsupported_target"}
+ACTIVATE=simple
+(true,)
+(false, '/org/freedesktop/IBus/InputContext_2', 'InkEcho isolated simple')
+{"raw_x_focus": 8388612, "active_window": 8388611, "selected_focus": 8388612, "code": "ok"}
+ACTIVATE=wayland
+(true,)
+(false, '/org/freedesktop/IBus/InputContext_2', 'InkEcho isolated wayland')
+{"raw_x_focus": 6291459, "active_window": 0, "selected_focus": null, "code": "unsupported_target"}

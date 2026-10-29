@@ -1,0 +1,28 @@
+import asyncio,json
+from dbus_next import Message,MessageType
+from dbus_next.aio import MessageBus
+from inkecho.platform import ibus
+class Cap:
+ name='synthetic'; token='a'*64
+ def close(self):pass
+async def trusted(_owner):return True
+async def main():
+ service=await MessageBus().connect(); attacker=await MessageBus().connect(); await service.request_name(ibus.SERVICE)
+ seen=[]
+ def response(bus,msg,signature,body):
+  bus.send(Message(message_type=MessageType.METHOD_RETURN,destination=msg.sender,reply_serial=msg.serial,signature=signature,body=body))
+ def handler(msg):
+  if msg.message_type!=MessageType.METHOD_CALL or msg.path!=ibus.PATH:return False
+  if msg.member in ('Begin','Cancel'):response(service,msg,'b',[True]);return True
+  if msg.member=='Commit':
+   seen.append(msg.body[1])
+   if len(seen)==1: response(service,msg,'s',['attempted'])
+   else: response(service,msg,'s',['attempted'])
+   return True
+ service.add_message_handler(handler)
+ client=ibus.Client(Cap(),owner_verifier=trusted,timeout=.5);await client.begin()
+ try:result={'sent':await client.insert('甲乙',lambda:True)}
+ except ibus.CandidateError as e:result={'error':e.code}
+ print(json.dumps({'service':service.unique_name,'attacker':attacker.unique_name,'actual_commits':seen,'result':result},ensure_ascii=False))
+ await client.close();service.disconnect();attacker.disconnect()
+asyncio.run(main())

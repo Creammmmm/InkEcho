@@ -1,0 +1,14 @@
+PRETTY_NAME="Ubuntu 24.04.5 LTS"
+NAME="Ubuntu"
+VERSION_ID="24.04"
+Type=x11
+Active=yes
+LockedHint=no
+InkEcho-0.10.2-x86_64.AppImage: OK
+7eb4d122f33f09ea0baaf005838412d1e2092678232506a64c055f2f05ff9541  /tmp/inkecho-ui-b5/squashfs-root/packages/inkecho/ui/information.py
+2a7613a100f3029d51faa1619a37f39efa5b2e4d64dd33708bc265d68891366d  /tmp/inkecho-ui-b5/squashfs-root/packages/inkecho/config.py
+1fd46227ae9ff03b9dde342f606625326e00cb9cae4294f37725d9158c3c90c1  /tmp/inkecho-ui-b5/squashfs-root/packages/inkecho/app.py
+{"default": ["auto", 40, 40], "saved": ["ibus", 75, 60], "reloaded": ["ibus", 75, 60], "current_task_before_update": ["ibus", 75], "next_task": ["keyboard", 90], "qt_platform": "xcb", "xdg_session": "x11", "visible": true, "passed": true}
+{"phase": "write", "values": ["fcitx", 82, 64], "visible": true, "qt_platform": "xcb", "passed": true}
+{"phase": "read", "values": ["fcitx", 82, 64], "visible": true, "qt_platform": "xcb", "passed": true}
+{"method_shown": "auto", "method_stored": "auto", "method_message": "输入设置无法保存。", "mapping_shown": 75, "mapping_stored": 40, "mapping_message": "输入设置无法保存。", "visible": true, "qt_platform": "xcb"}

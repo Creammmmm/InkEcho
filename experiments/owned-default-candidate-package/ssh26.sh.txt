@@ -1,0 +1,2 @@
+#!/bin/sh
+exec ssh -F /dev/null -o BatchMode=yes -o ConnectTimeout=8 -o StrictHostKeyChecking=accept-new -o UserKnownHostsFile=/tmp/inkecho-owned-default-candidate-20261029/vm26/known_hosts -o 'ProxyCommand=python3 /tmp/inkecho-owned-default-candidate-20261029/vm26/client.py' -i /home/lth/github/InkEcho/build/ubuntu26-release-vm/secrets/testkey inkecho@inkecho26 "$@"

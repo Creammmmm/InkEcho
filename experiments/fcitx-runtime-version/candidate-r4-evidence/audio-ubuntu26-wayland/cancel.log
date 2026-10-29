@@ -1,0 +1,17 @@
+/tmp/inkecho-audio-fcitx/InkEcho.AppImage: OK
+已安装输入桥；运行状态需通过输入服务检查确认。
+qt.multimedia.symbolsresolver: Couldn't load va-x11 library
+qt.multimedia.symbolsresolver: Couldn't resolve va-x11 symbols
+qt.multimedia.ffmpeg: Using Qt multimedia with FFmpeg version 9.0.1 LGPL version 2.1 or later
+qt.multimedia.pipewire.devicemonitor: Ignoring dummy output: std::map(std::pair("client.id", "39"), std::pair("factory.id", "19"), std::pair("media.class", "Audio/Sink"), std::pair("node.description", "Dummy Output"), std::pair("node.name", "auto_null"), std::pair("object.serial", "123"))
+Unhandled exception in client_connected_cb
+transport: <asyncio.sslproto._SSLProtocolTransport object at 0x76dfec0c60f0>
+Traceback (most recent call last):
+  File "/tmp/inkecho-audio-fcitx/pipeline.py", line 260, in polish
+    await writer.wait_closed()
+  File "/tmp/inkecho-audio-fcitx/squashfs-root/usr/lib/python3.13/asyncio/streams.py", line 358, in wait_closed
+    await self._protocol._get_close_waiter(self)
+TimeoutError: SSL shutdown timed out
+{"status": "passed", "synthetic_only": true, "input_transport": "fcitx_owned_target", "events_ms": {"toggle_requested": 0.0, "credential_wait_started": 423.776, "first_capture": 6.807, "play_requested": 85.677, "credential_wait_finished": 844.65, "first_audio_on_wire": 436.902, "stop_requested": 1370.227, "final_asr": 1489.705, "polishing_request": 1533.833, "polishing_first_delta": 1613.726, "first_sent_confirmed": 1619.684, "cancel_requested": 1619.703, "cancel_observation_started": 1621.694, "polishing_full_text": 2034.394, "cancel_observation_finished": 2882.856}, "marker_samples": 1601, "wire_bytes": 43636, "performance": {"schema_version": 1, "outcome": "cancelled", "events_ms": {"recording_started": 0.005, "recording_stop_requested": 1369.368, "recording_stopped": 1371.207, "asr_started": 422.678, "asr_completed": 1490.057, "polishing_started": 1490.118, "polishing_first_segment": 1615.019, "polishing_completed": null, "first_character_sent": 1618.805, "output_completed": null, "task_finished": 1618.93}, "durations_ms": {"stop_to_audio_ready_ms": 1.839, "asr_ms": 1067.379, "polishing_to_first_segment_ms": 124.901, "polishing_ms": null, "stop_to_first_character_ms": 249.437, "audio_ready_to_first_character_ms": 247.598, "output_ms": null, "stop_to_output_completed_ms": null, "stop_to_task_finished_ms": 249.562}}}
+本cancel_prefix 1
+未发现经过校验的输入桥；可能尚未安装。

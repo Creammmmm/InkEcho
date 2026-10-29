@@ -1,0 +1,21 @@
+import os,json,stat,fcntl
+from pathlib import Path
+root='/tmp/inkecho-owned-default-acceptance';matches=[]
+for p in Path('/proc').glob('[0-9]*/environ'):
+ try:
+  if p.stat().st_uid!=os.getuid() or int(p.parent.name)==os.getpid():continue
+  env=p.read_bytes().split(b'\0')
+  args=p.with_name('cmdline').read_bytes().split(b'\0')
+  if any(x.startswith(('APPDIR='+root).encode()) or x==('APPIMAGE='+root+'/InkEcho.AppImage').encode() for x in env) or (root+'/InkEcho.AppImage').encode() in args:matches.append({'pid':int(p.parent.name),'command':b' '.join(args).decode(errors='replace')})
+ except OSError:pass
+runtime=Path(os.environ['XDG_RUNTIME_DIR']);paths=[]
+for p in runtime.glob('*inkecho*'):
+ try:
+  s=p.lstat();item={'path':str(p),'mode':oct(stat.S_IMODE(s.st_mode)),'uid':s.st_uid}
+  if p.name.endswith('.lock') and stat.S_ISREG(s.st_mode):
+   fd=os.open(p,os.O_RDWR|os.O_NOFOLLOW|os.O_NONBLOCK)
+   try:fcntl.flock(fd,fcntl.LOCK_EX|fcntl.LOCK_NB);item['advisory_lock_free']=True;fcntl.flock(fd,fcntl.LOCK_UN)
+   finally:os.close(fd)
+  paths.append(item)
+ except OSError as e:paths.append({'path':str(p),'error':type(e).__name__})
+report={'candidate_processes_after_tests':matches,'runtime_paths':paths};report['passed']=not matches and all(not x['path'].endswith('.cap') and not x.get('error') for x in paths);Path('/mnt/output/final-resource-check.json').write_text(json.dumps(report,indent=2));print(json.dumps(report));assert report['passed']

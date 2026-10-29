@@ -1,0 +1,32 @@
+{
+  "private_config": "/tmp/inkecho-owned-default-acceptance/config",
+  "before_processes": [],
+  "cases": [
+    {
+      "action": "toggle",
+      "exit": 0,
+      "processes": [],
+      "socket_exists": false,
+      "lock_exists": false,
+      "stderr": ""
+    },
+    {
+      "action": "cancel",
+      "exit": 0,
+      "processes": [],
+      "socket_exists": false,
+      "lock_exists": false,
+      "stderr": ""
+    },
+    {
+      "action": "quit",
+      "exit": 0,
+      "processes": [],
+      "socket_exists": false,
+      "lock_exists": false,
+      "stderr": ""
+    }
+  ],
+  "config_data_unchanged": true,
+  "passed": true
+}

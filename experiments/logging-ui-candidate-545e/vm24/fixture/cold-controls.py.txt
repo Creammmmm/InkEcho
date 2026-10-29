@@ -1,0 +1,18 @@
+import hashlib,json,os,subprocess,time
+from pathlib import Path
+root=Path('/tmp/inkecho-owned-default-acceptance');config=root/'config';data=root/'data';artifact=root/'InkEcho.AppImage'
+def hashes():return {str(p.relative_to(root)):hashlib.sha256(p.read_bytes()).hexdigest() for d in (config,data) for p in d.rglob('*') if p.is_file()}
+def matching():
+ matches=[]
+ for p in Path('/proc').glob('[0-9]*/cmdline'):
+  try:
+   args=p.read_bytes().split(b'\0')
+   if b'--config-dir' in args and str(config).encode() in args:matches.append(int(p.parent.name))
+  except OSError:pass
+ return matches
+identity=hashlib.sha256(str(config.resolve()).encode()).hexdigest()[:16];name=f'inkecho-{os.getuid()}-{identity}';runtime=Path(os.environ['XDG_RUNTIME_DIR']);before=hashes();report={'private_config':str(config),'before_processes':matching(),'cases':[]};assert not report['before_processes']
+for action in ('toggle','cancel','quit'):
+ result=subprocess.run([str(artifact),'--'+action,'--config-dir',str(config),'--data-dir',str(data)],capture_output=True,text=True,timeout=5)
+ time.sleep(.3);item={'action':action,'exit':result.returncode,'processes':matching(),'socket_exists':(runtime/name).exists(),'lock_exists':(runtime/(name+'.lock')).exists(),'stderr':result.stderr[-500:]};report['cases'].append(item);assert item['exit']==0 and not item['processes'] and not item['socket_exists'] and not item['lock_exists'],item
+report['config_data_unchanged']=before==hashes();assert report['config_data_unchanged'];report['passed']=True
+Path('/mnt/output/cold-controls.json').write_text(json.dumps(report,indent=2));print(json.dumps(report))

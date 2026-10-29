@@ -1,0 +1,20 @@
+# Candidate 45a: Fcitx repeated installation and input by session
+
+2026-10-29: candidate AppImage SHA-256 `45a1d170773e4adb3153d4209008b584c8d79e14ac01e4db6cc7e2bfda5dc451`. Built independently from the then-current workspace using the project's build recipe, uv standalone Python, and existing pinned runtime/system-dependency caches. `build/build-latest.log` records the build; the extracted package `packages/inkecho` matched the independent snapshot's entire `src/inkecho` byte-for-byte excluding `__pycache__`, and that snapshot matched the working tree at the end of testing. `build/latest-hashes.txt` records candidate and key module hashes. This comparison does not validate dependencies, all packaged assets, or future source changes.
+
+An initial candidate `2afb9b1c8283f833ec713cee50c55e9f77caed8b34bb36bc0476c7b05d8ccc10` was built before an IBus source update; `build/2af-worktree.diff` identifies that difference. Its earlier 24 X11 and 26 Wayland logs are preserved separately as `2af.log` and must not be mixed with the final candidate's results. The 45a package was rebuilt after incorporating that update.
+
+For 45a, independent QEMU snapshots used read-only guest/base/seed files, no external network or host user data, and disposable test XDG configurations with private Fcitx. Sessions were switched only in disposable guest layers and both containers stopped/removed afterward. Inventories record exact session type, active and unlocked state; 24.04.5 GNOME used Fcitx 5.1.7, 26.04.1 GNOME/ XFCE used Fcitx 5.1.19. The script explicitly executes install twice and asserts the add-on description's inode and mtime are unchanged before requesting enable. Package source was never overlaid in guest.
+
+| 45a guest and actual session | Repeat install | Automatic and explicit Fcitx | Cancels | Simple-context zero-prefix keyboard fallback |
+| --- | --- | --- | --- | --- |
+| 24 GNOME X11 | unchanged, pass | 200/200 each, pass | 1 and 1 character, pass | 200/200, pass |
+| 24 GNOME Wayland | unchanged, pass | 200/200 each, pass | 1 and 1 character, pass | 0, failed `unsupported_compositor` |
+| 26 GNOME Wayland | unchanged, pass | 200/200 each, pass | 1 and 1 character, pass | 200/200, outcome succeeded, probe `passed=false` |
+| 26 XFCE X11 | unchanged, pass | 200/200 each, pass | 1 and 1 character, pass | 200/200, pass |
+
+The 26 Wayland fallback probe's old assertion only recognizes the X11 `KeyboardInput.insert` call, so its original false is retained; actual log shows `no_target` with zero accepted, hybrid Wayland authorization, exact 200 received characters and succeeded. The 24 Wayland fallback failure is real and retained; no universal keyboard fallback support is claimed. Cancellation uses SIGUSR1 rather than a physical Escape key. Input data is a fixed synthetic transcript via a substitute recorder and recognizer into self-created GTK controls, not real microphone, cloud recognition, actual browser or terminal, or end-to-end user workflow. This is partial package testing, not full dual-system acceptance or release authorization.
+
+To reproduce in isolated matching guests, copy exact original AppImage to `/tmp/inkecho-r4-test/`, and the supplied scripts to its `probes/` folder. Confirm the session, display and user bus; `run.sh` uses GNOME environment, `run-xfce.sh` uses XFCE. Execute `bash probes/run.sh <full-sha> x11` or `wayland` (or `run-xfce.sh` for XFCE X11). The scripts start a private Fcitx and modify test-session environment and XDG config; do not run on a real user desktop. Their test `probe-key` is synthetic. The old test tool's 26 Wayland fallback assertion limitation is not repaired in these logs. Fcitx installer/daemon restart and input of arbitrary apps, IBus, physical shortcut, UI, update flow and full release checks were not covered here.
+
+The archived Python probes have a `.py.txt` suffix to preserve their exact executed bytes. When copying them to the isolated guest, remove the final `.txt` suffix so the original shell scripts find their expected `.py` filenames; leave the scripts and historical logs unchanged.

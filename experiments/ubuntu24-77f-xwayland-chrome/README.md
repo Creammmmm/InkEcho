@@ -1,0 +1,7 @@
+# Ubuntu 24 Wayland, 77f252 Chrome XWayland probe: inconclusive
+
+An isolated network-none Ubuntu 24.04.5 GNOME Wayland VM used its parent image and Chrome mounted read-only. Candidate AppImage SHA-256 `77f252509097fe550188122acbe912783e9ad4b4ea33296fe23a2d64da3729ef` was verified and extracted with no source overlay. The disposable GNOME extension was used solely to activate owned test windows. Chrome 154.0.8037.97 was started with an isolated temporary profile, software settings disabling GPU, proxy and shared-memory usage, and `--ozone-platform=x11`; it was pointed to a local-only HTTP contenteditable page.
+
+For both `full` and `cancel`, Chrome stayed running but the local server observed no GET or page events, all attempts to activate the expected window title returned false, and the harness withheld the sender. These are setup/focus failures, not input failures and not successful cancellation. No actual user browser, user data or network was accessed. The prior 77f GNOME Terminal sample remains separate. Do not infer cause from a missing page or claim Chrome compatibility.
+
+Following the bounded samples, two SSH attempts timed out during banner exchange while the container remained running and was not reported OOM-killed. Normal shutdown via SSH also failed; the isolated container was stopped and removed and its writable overlay deleted. No evidence here covers actual Chrome text delivery, complete Session routing, cloud recognition, arbitrary focus races or release acceptance.

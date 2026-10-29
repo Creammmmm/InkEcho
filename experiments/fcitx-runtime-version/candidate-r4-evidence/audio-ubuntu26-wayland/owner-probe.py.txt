@@ -1,0 +1,42 @@
+import asyncio
+import json
+from dbus_next.aio import MessageBus
+from dbus_next.service import ServiceInterface, method
+from inkecho.platform.fcitx5 import Fcitx5Bridge, FcitxOutputError, SERVICE, INTERFACE
+
+class Cap:
+    def __init__(self, _): self.token = 'a' * 64
+    def close(self): self.token = ''
+
+class Old(ServiceInterface):
+    def __init__(self):
+        super().__init__(INTERFACE)
+        self.text=[]
+    @method()
+    def Begin(self, token: 's') -> 'b': return True
+    @method()
+    def Cancel(self, token: 's') -> 'b': return True
+    @method()
+    def Commit(self, token: 's', sequence: 'u', text: 's') -> 'u':
+        self.text.append(text)
+        return 1
+
+async def main():
+    oldbus = await MessageBus().connect()
+    old = Old(); oldbus.export('/inkecho', old)
+    await oldbus.request_name(SERVICE)
+    bridge=Fcitx5Bridge(capability_factory=Cap)
+    await bridge.connect(expected_owner=oldbus.unique_name)
+    assert await bridge.insert('甲', lambda: True) == 1
+    await oldbus.release_name(SERVICE)
+    newbus=await MessageBus().connect(); await newbus.request_name(SERVICE)
+    await asyncio.sleep(0.05)
+    try:
+        await bridge.insert('乙', lambda: True)
+        raise AssertionError('stale owner accepted second commit')
+    except FcitxOutputError as e:
+        assert e.code=='owner_changed' and e.accepted==1 and not e.safe_to_fallback
+        print(json.dumps({'old_unique':oldbus.unique_name,'new_unique':newbus.unique_name,'old_alive':oldbus.connected,'old_received':old.text,'error':e.code,'accepted':e.accepted},ensure_ascii=False))
+    await bridge.aclose(); oldbus.disconnect(); newbus.disconnect()
+
+asyncio.run(main())

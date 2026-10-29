@@ -1,0 +1,35 @@
+import os, subprocess, sys
+from pathlib import Path
+sys.path.insert(0,'/tmp/inkecho-ext')
+from ibus_extension import ExtensionManager, UUID
+m=ExtensionManager(source=Path('/tmp/inkecho-ext/ibus_candidate'))
+def info():
+ r=subprocess.run(['/usr/bin/gnome-extensions','info',UUID],capture_output=True,text=True)
+ print('INFO_RC',r.returncode,'INFO_BEGIN\n'+r.stdout+'INFO_END',flush=True)
+ return r.stdout
+if '--installed' not in sys.argv:
+ print('INSTALL',flush=True)
+ m.install()
+print('ENABLE',flush=True)
+try:m.enable()
+except Exception as e:print('ENABLE_ERROR',type(e).__name__,str(e),flush=True)
+raw=info()
+print('STATUS_VALID',m.status(),flush=True)
+pathlines=[line.split(':',1)[1].strip() for line in raw.splitlines() if line.strip().startswith('Path:')]
+if len(pathlines)==1:
+ p=Path(pathlines[0])/'delivery_gate.js'; old=p.read_bytes()
+ try:
+  p.write_bytes(old+b'\n// isolated test modification\n')
+  print('STATUS_MODIFIED',m.status(),flush=True)
+ finally:p.write_bytes(old)
+ print('STATUS_RESTORED',m.status(),flush=True)
+ missing='\n'.join(line for line in raw.splitlines() if not line.strip().startswith('Path:'))+'\n'
+ orig=m._run;m._run=lambda *args: missing
+ print('STATUS_MISSING_PATH_SIMULATED',m.status(),flush=True)
+ m._run=orig
+else: print('NO_PATH_FROM_INFO',flush=True)
+try:m.disable()
+except Exception as e:print('DISABLE_ERROR',type(e).__name__,str(e),flush=True)
+r=subprocess.run(['/usr/bin/gnome-extensions','uninstall',UUID],capture_output=True,text=True)
+print('UNINSTALL_RC',r.returncode,'UNINSTALL_ERR',r.stderr.strip(),flush=True)
+print('STATUS_ABSENT',m.status(),flush=True)

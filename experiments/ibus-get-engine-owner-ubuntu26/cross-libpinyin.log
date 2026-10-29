@@ -1,0 +1,13 @@
+Warning: Permanently added '[127.0.0.1]:2222' (ED25519) to the list of known hosts.
+expected value:
+  [(\047ibus\047, \047libpinyin\047)]
+    ^                                
+sources:
+[('xkb', 'us')]
+engine:
+xkb:us::eng
+actual_engine=xkb:us::eng
+{"kind": "entry", "backend": "wayland", "module": "ibus", "window_active": true, "widget_focus": true, "current_path": "/org/freedesktop/IBus/InputContext_12", "get_engine": {"kind": "return", "sha256": "c35038251c6ff9a1609232ab77fd5830979212e227fcb683c1c56a4ffe21aebc", "variant_type": "(v)"}}
+{"current_path": "/org/freedesktop/IBus/InputContext_12", "cross_process_get_engine": {"kind": "error", "name": null, "message": "g-io-error-quark: Timeout was reached (24)", "code": 24}}
+{"kind": "button", "backend": "wayland", "module": "ibus", "window_active": true, "widget_focus": true, "current_path": "/org/freedesktop/IBus/InputContext_1", "get_engine": {"kind": "error", "name": null, "message": "g-io-error-quark: Timeout was reached (24)", "domain": "g-io-error-quark", "code": 24}}
+{"current_path": "/org/freedesktop/IBus/InputContext_1", "cross_process_get_engine": {"kind": "error", "name": null, "message": "g-io-error-quark: Timeout was reached (24)", "code": 24}}

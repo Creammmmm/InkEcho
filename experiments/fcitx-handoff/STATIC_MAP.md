@@ -1,0 +1,14 @@
+# X11 fixed mapping lifetime against a paused receiver
+
+On Ubuntu 26.04.1, XFCE X11 in a disposable QEMU desktop, an owned GTK simple entry was focused. Two previously empty adjacent X11 keycodes were mapped to fixed characters `甲乙`; the target was then paused using `SIGSTOP`. The probe sent both keycodes using XTEST, including releases, and performed `XSync` after each event. Two independent runs compared when the original keymap was restored:
+
+- `held`: after the receiver was resumed and had time to process the keys, the target contained `甲乙`.
+- `early_restore`: the map was restored while the target was still paused, before it was resumed. The target contained an empty string.
+
+Both runs returned the complete `xmodmap -pke` output to its initial SHA-256 `39e6f5ca54e6b88038fd40cb6873adb456bc4abdc2273b40143659e0ee111ff7`. The experiment uses two known characters and does not consume real user text, use a clipboard or system input method, or interact with the user's desktop. The guest account session was restored from its persistent backup and compared; the guest shut down with exit 0.
+
+Raw output is `build/handoff-review/static-map/desktop26.log`, SHA-256 `32ae3f5bf027e13b64154e8dc027b30c0acb8941fe994ea501baa8cd5ef27a5c`. The exact original probe is `build/handoff-review/static-map/probe.py`, SHA-256 `b9ea6a217c46868df8748b330b385749f094c94f5d3d8971eca075c8271c8b1e`; its fixed GTK target `target.py` has SHA-256 `d5ecb06be3fd9dfaa5c2e249bb42f2c0702e422624a9bb393f472cdd8317e76c`. The versioned `static_map.py` has since been formatted (SHA-256 `8b8d1d0c75232708c501442e0e8693ba915c02fbffd0fc96d4d8b749e4cfaf76`) and has not been rerun.
+
+For reproduction, use only a disposable active X11 desktop with `xdotool`, `xmodmap`, GTK 3, and XTEST. Copy the tested probe or versioned `static_map.py` to `/tmp/static-map/probe.py` and `target.py` to `/tmp/static-map/target.py`. Export that guest session's `DISPLAY`, `XAUTHORITY`, `XDG_RUNTIME_DIR`, and `DBUS_SESSION_BUS_ADDRESS`, then run `/usr/bin/python3 /tmp/static-map/probe.py held` and `/usr/bin/python3 /tmp/static-map/probe.py early_restore`. The probe restores the mappings in its cleanup; it must not run on a real user desktop because X11 maps are global.
+
+This controlled result shows that a server-side XSync following queued XTEST events does not mean a paused receiver has decoded them. Retaining a static map can work for this finite sample while held, but a fixed number of available slots cannot represent arbitrary distinct Unicode text at once, and removing or reusing mappings while an unknown target is delayed remains unsafe. The `held` control waited until a cooperating test receiver processed events and is not a universal delivery guarantee. This is not a production cross-framework solution, package acceptance, or proof of behavior across other applications or sessions.

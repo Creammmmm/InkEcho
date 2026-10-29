@@ -1,0 +1,27 @@
+import asyncio,json,tempfile
+from pathlib import Path
+from PySide6.QtWidgets import QApplication
+from inkecho.app import Session
+from inkecho.config import ConfigStore
+from inkecho.ui.information import CompatibilityPage
+app=QApplication([]); reports=[]
+for phase in ('before','after'):
+ for kind in ('method','mapping','feedback'):
+  with tempfile.TemporaryDirectory(prefix='inkecho-failure-') as d:
+   store=ConfigStore(Path(d));store.initialize();session=Session(store);page=CompatibilityPage(session);page.show();app.processEvents()
+   orig=store.save_settings
+   def fail(value):
+    if phase=='after':orig(value)
+    raise OSError('synthetic failure')
+   store.save_settings=fail
+   if kind=='method':page.output_method.setCurrentIndex(page.output_method.findData('fcitx'))
+   elif kind=='mapping':page.mapping_wait.setValue(75)
+   else:page.feedback_timeout.setValue(60)
+   app.processEvents();settings=store.load_settings()
+   shown={'method':page.output_method.currentData(),'mapping':page.mapping_wait.value(),'feedback':page.feedback_timeout.value()}[kind]
+   stored={'method':settings.output_method,'mapping':settings.x11_mapping_wait_ms,'feedback':settings.x11_feedback_timeout_ms}[kind]
+   expected=({'method':'auto','mapping':40,'feedback':40} if phase=='before' else {'method':'fcitx','mapping':75,'feedback':60})[kind]
+   assert shown==stored==expected and page.message.text()=='输入设置无法保存。' and page.isVisible()
+   reports.append({'phase':phase,'kind':kind,'shown':shown,'stored':stored,'message':page.message.text()})
+   store.save_settings=orig;page.close();page.deleteLater();app.processEvents();asyncio.run(session.close())
+print(json.dumps({'cases':reports,'qt_platform':app.platformName(),'passed':True},ensure_ascii=False),flush=True)

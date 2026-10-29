@@ -1,0 +1,23 @@
+{"shortcut_settings_exactly_restored": false}
+Traceback (most recent call last):
+  File "/tmp/inkecho-desktop-r4/shortcut_probe.py", line 25, in <module>
+    assert marker.read_text()=='triggered'
+           ~~~~~~~~~~~~~~~~^^
+  File "/tmp/inkecho-desktop-r4/squashfs-root/usr/lib/python3.13/pathlib/_local.py", line 546, in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/inkecho-desktop-r4/squashfs-root/usr/lib/python3.13/pathlib/_abc.py", line 632, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/inkecho-desktop-r4/squashfs-root/usr/lib/python3.13/pathlib/_local.py", line 537, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/inkecho-desktop-r4/shortcut-private/triggered'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/tmp/inkecho-desktop-r4/shortcut_probe.py", line 38, in <module>
+    assert after==before
+           ^^^^^^^^^^^^^
+AssertionError

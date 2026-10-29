@@ -1,0 +1,27 @@
+inkecho-ibus-v2-prototype@local.invalid
+  Name: InkEcho IBus v2 isolated prototype
+  Description: Unintegrated isolated experiment; not production supported
+  Path: /home/inkecho/.local/share/gnome-shell/extensions/inkecho-ibus-v2-prototype@local.invalid
+  Enabled: Yes
+  State: INACTIVE
+CASE=full
+{"probe": "windowactivate", "wid": "6291459", "rc": 0, "stderr": ""}
+{"probe": "windowactivate", "wid": "6291459", "rc": 0, "stderr": ""}
+{"probe": "windowactivate", "wid": "6291459", "rc": 0, "stderr": ""}
+{"probe": "windowactivate", "wid": "6291459", "rc": 0, "stderr": ""}
+{"mode": "full", "error": "initial_focus_missing", "focus": [["a", "focus", false, 0, 323.546118001]]}
+fixture_failed
+CASE=cancel
+{"probe": "windowactivate", "wid": "6291459", "rc": 0, "stderr": ""}
+{"probe": "windowactivate", "wid": "6291459", "rc": 0, "stderr": ""}
+{"probe": "windowactivate", "wid": "6291459", "rc": 0, "stderr": ""}
+{"probe": "windowactivate", "wid": "6291459", "rc": 0, "stderr": ""}
+{"mode": "cancel", "error": "initial_focus_missing", "focus": [["a", "focus", false, 0, 338.694204736]]}
+fixture_failed
+CASE=switch
+{"probe": "windowactivate", "wid": "6291459", "rc": 0, "stderr": ""}
+{"probe": "windowactivate", "wid": "6291459", "rc": 0, "stderr": ""}
+{"probe": "windowactivate", "wid": "6291459", "rc": 0, "stderr": ""}
+{"probe": "windowactivate", "wid": "6291459", "rc": 0, "stderr": ""}
+{"mode": "switch", "error": "initial_focus_missing", "focus": [["a", "focus", false, 0, 353.864571213]]}
+fixture_failed

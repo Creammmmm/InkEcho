@@ -1,0 +1,46 @@
+cp /mnt/input/pipeline_receiver_cancel.py /tmp/inkecho-owned-default-acceptance/pipeline_receiver_cancel.py
+set -eu
+umask 077
+root=/tmp/inkecho-owned-default-acceptance
+export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus XDG_RUNTIME_DIR=/run/user/1000 DISPLAY=:0
+export XAUTHORITY="$(systemctl --user show-environment | sed -n 's/^XAUTHORITY=//p')"
+export XDG_CURRENT_DESKTOP=ubuntu:GNOME XDG_SESSION_TYPE=wayland GDK_BACKEND=wayland
+export WAYLAND_DISPLAY=wayland-0
+export APPDIR="$root/squashfs-root"
+package_python() { env PYTHONHOME="$APPDIR/usr" PYTHONPATH="$APPDIR/packages" LD_LIBRARY_PATH="$APPDIR/usr/lib/inkecho" QT_QPA_PLATFORM=offscreen "$APPDIR/usr/bin/python3" "$@"; }
+sleep 2
+out=/mnt/output/protocol26
+mkdir -p "$out"
+cp "$root/pipeline_receiver_cancel.py" "$root/target.py" "$root/http_asr.py" "$out/"
+cp /mnt/input/protocol-run.sh "$out/run.sh"
+package_python "$root/http_asr.py" "$out/http-asr.json" > "$out/http-asr.log" 2>&1
+for backend in keyboard; do
+for mode in normal cancel-after-first; do
+ work="$out/$backend-$mode";mkdir -p "$work"
+ INKECHO_PIPELINE_ROOT="$work" /usr/bin/python3 "$root/target.py" > "$work/target.log" 2>&1 & actor=$!
+ trap 'kill "$actor" 2>/dev/null || true; wait "$actor" 2>/dev/null || true' EXIT
+ sleep 2
+ if [ "$XDG_SESSION_TYPE" = x11 ]; then
+  window=$(xdotool search --pid "$actor" --onlyvisible --name '^InkEcho candidate owned protocol target$' | tail -1)
+  xdotool windowactivate "$window"
+ fi
+ /usr/bin/python3 -c 'import json,time,sys;from pathlib import Path;p=Path(sys.argv[1]);s=json.loads(p.read_text());assert s["active"] and s["focused"] and time.monotonic()-s["time"]<.25 and s["text"]=="",s' "$work/target.json"
+ set +e
+ package_python "$root/pipeline_receiver_cancel.py" --package-root "$APPDIR/packages" --output "$work/report.json" --case "$mode" --backend "$backend" > "$work/pipeline.log" 2>&1
+ result=$?
+ set -e
+ printf '%s\n' "$result" > "$work/pipeline-exit.txt"
+ /usr/bin/python3 -c 'import sys;from pathlib import Path;Path(sys.argv[2]).write_bytes(Path(sys.argv[1]).read_bytes())' "$work/target.json" "$work/target-at-finish.json"
+ sleep 1.3
+ /usr/bin/python3 -c 'import sys;from pathlib import Path;Path(sys.argv[2]).write_bytes(Path(sys.argv[1]).read_bytes())' "$work/target.json" "$work/target-after-delay.json"
+ /usr/bin/python3 - "$work" "$mode" "$backend" <<'PY2'
+import json,sys
+from pathlib import Path
+p=Path(sys.argv[1]);a=json.loads((p/'target-at-finish.json').read_text());b=json.loads((p/'target-after-delay.json').read_text());expected='你好 InkEcho，café Ω 😀\n第二行。' if sys.argv[3]=='ibus' else '你好 InkEcho，café Ω\n第二行。';normal=sys.argv[2]=='normal';r={'text_exact':a['text']==expected if normal else bool(a['text']) and len(a['text'])<len(expected) and expected.startswith(a['text']),'no_late_text':a['text']==b['text'],'old_target_untouched':a.get('first_text')=='' and a.get('window_count')==2,'received_codepoints':[ord(c) for c in b['text']],'pipeline_exit':int((p/'pipeline-exit.txt').read_text())};r['passed']=r['text_exact'] and r['no_late_text'] and r['old_target_untouched'] and r['pipeline_exit']==0;(p/'receiver.json').write_text(json.dumps(r,indent=2));print(json.dumps(r));assert r['passed']
+PY2
+ kill "$actor";wait "$actor" || true
+ trap - EXIT
+ test "$result" = 0
+done
+
+done

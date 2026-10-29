@@ -1,0 +1,16 @@
+#!/bin/bash
+set -eu
+export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus XDG_RUNTIME_DIR=/run/user/1000 WAYLAND_DISPLAY=wayland-0 XDG_SESSION_TYPE=wayland
+export DISPLAY=:0
+export XAUTHORITY=$(find /run/user/1000 -maxdepth 1 -name '.mutter-Xwaylandauth.*' | head -1)
+gsettings set org.gnome.desktop.input-sources xkb-options "[]"
+sleep 1
+gdbus call --session --dest org.example.InkEchoXkbProbe --object-path /org/example/InkEchoXkbProbe --method org.example.InkEchoXkbProbe.Apply
+gsettings set org.gnome.desktop.input-sources xkb-options "['caps:escape']"
+sleep 1
+printf 'before_disable: '; xmodmap -pke | grep '^keycode  *66 ='
+gnome-extensions disable inkecho-xkb-probe@local.invalid
+sleep 1
+printf 'after_disable: '; xmodmap -pke | grep '^keycode  *66 ='
+printf 'setting: '; gsettings get org.gnome.desktop.input-sources xkb-options
+printf 'owner: '; gdbus call --session --dest org.freedesktop.DBus --object-path /org/freedesktop/DBus --method org.freedesktop.DBus.NameHasOwner org.example.InkEchoXkbProbe

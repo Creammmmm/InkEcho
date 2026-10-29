@@ -1,0 +1,16 @@
+import os,ctypes,json,asyncio,hashlib
+if os.environ.get('XDG_SESSION_TYPE')=='wayland':
+ async def run():
+  from inkecho.platform.wayland_worker import MutterSession
+  m=MutterSession()
+  try:
+   await m.connect();await m.authorize();s,data=await m.snapshot(refresh=True)
+   print(json.dumps({'kind':'native-mutter','keymap_sha256':hashlib.sha256(data).hexdigest(),**{k:s[k] for k in ('group','depressed','latched','locked')}}))
+  finally:await m.close()
+ asyncio.run(run())
+else:
+ x=ctypes.CDLL('libX11.so.6');x.XOpenDisplay.argtypes=[ctypes.c_char_p];x.XOpenDisplay.restype=ctypes.c_void_p;x.XQueryKeymap.argtypes=[ctypes.c_void_p,ctypes.c_void_p];x.XCloseDisplay.argtypes=[ctypes.c_void_p]
+ d=x.XOpenDisplay(None);assert d
+ try:
+  a=ctypes.create_string_buffer(32);assert x.XQueryKeymap(d,a);print(json.dumps({'kind':'actual-x11-server','down_keycodes':[i for i in range(256) if a.raw[i//8]&(1<<(i%8))]}))
+ finally:x.XCloseDisplay(d)

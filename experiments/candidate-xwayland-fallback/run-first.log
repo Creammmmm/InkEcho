@@ -1,0 +1,30 @@
+Type=wayland
+Active=yes
+LockedHint=no
+InkEcho.AppImage: OK
+inkecho-wayland-focus-probe@local.invalid
+  Name: InkEcho Wayland focus experiment
+  Description: Disposable isolated test only
+  Path: /home/inkecho/.local/share/gnome-shell/extensions/inkecho-wayland-focus-probe@local.invalid
+  Enabled: Yes
+  State: ACTIVE
+CANDIDATE SOURCE HASH 204b46020cc7ed2aa287488388071cdc91b720fd3518a483e57140f697d3273f  hybrid_keyboard.py
+(true,)
+MODE=full
+authorized True xonly True
+completed 4
+simple=风云Ω中
+wayland=
+(true,)
+MODE=cancel
+authorized True xonly True
+error KeyboardError input_cancelled input_cancelled
+simple=风云Ω中风
+wayland=
+(true,)
+MODE=switch
+authorized True xonly True
+switch 0 (true,) 
+error KeyboardError unsupported_compositor unsupported_compositor
+simple=风云Ω中风风
+wayland=

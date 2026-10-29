@@ -1,0 +1,16 @@
+import Gio from 'gi://Gio';
+import GLib from 'gi://GLib';
+import {Gate} from './gate.js';
+import {consumeCapability} from './capability.js';
+const SERVICE='io.github.Creammmmm.InkEcho.PresendExperiment', PATH='/io/github/Creammmmm/InkEcho/PresendExperiment';
+const xml=`<node><interface name="${SERVICE}1"><method name="Begin"><arg type="s" direction="in"/><arg type="s" direction="in"/><arg type="b" direction="out"/></method><method name="Commit"><arg type="u" direction="in"/><arg type="s" direction="in"/><arg type="s" direction="out"/></method><method name="Cancel"><arg type="b" direction="out"/></method></interface></node>`;
+const mode=GLib.getenv('TEST_MODE');let count=0;
+class Service {
+ constructor(){this.gate=new Gate(()=>mode==='none'||(mode==='partial'&&count>0)?null:(_)=>{count++;print(`dispatch=${count}`);},([name,token])=>consumeCapability(name,token));}
+ BeginAsync(args,call){call.return_value(new GLib.Variant('(b)',[this.gate.begin(call.get_sender(),args)]));}
+ CommitAsync([seq,char],call){const result=this.gate.commit(call.get_sender(),seq,char);if(mode==='lost') GLib.timeout_add(GLib.PRIORITY_DEFAULT,500,()=>{try{call.return_value(new GLib.Variant('(s)',[result]));}catch(_){}return GLib.SOURCE_REMOVE;});else call.return_value(new GLib.Variant('(s)',[result]));}
+ CancelAsync(_args,call){call.return_value(new GLib.Variant('(b)',[this.gate.cancel(call.get_sender())]));}
+}
+const service=new Service();const obj=Gio.DBusExportedObject.wrapJSObject(xml,service);obj.export(Gio.DBus.session,PATH);
+Gio.DBus.session.signal_subscribe('org.freedesktop.DBus','org.freedesktop.DBus','NameOwnerChanged','/org/freedesktop/DBus',null,Gio.DBusSignalFlags.NONE,(_c,_s,_p,_i,_n,v)=>{const [n,o,x]=v.deep_unpack();if(n.startsWith(':')&&o&&!x)service.gate.ownerLost(n);});
+Gio.bus_own_name_on_connection(Gio.DBus.session,SERVICE,Gio.BusNameOwnerFlags.NONE,()=>print('ready'),null);new GLib.MainLoop(null,false).run();

@@ -1,0 +1,8 @@
+Warning: Permanently added '[127.0.0.1]:2222' (ED25519) to the list of known hosts.
+/mnt/input/runtime/target.py:2: PyGIWarning: Gtk was imported without specifying a version first. Use gi.require_version('Gtk', '4.0') before import to ensure that the right version gets loaded.
+  from gi.repository import Gtk, GLib
+Traceback (most recent call last):
+  File "/mnt/input/runtime/target.py", line 4, in <module>
+    entry=Gtk.Entry();win.add(entry);win.show_all();win.present();entry.grab_focus()
+                      ^^^^^^^
+AttributeError: 'Window' object has no attribute 'add'

@@ -1,0 +1,22 @@
+........................................................................ [ 39%]
+........................................................................ [ 79%]
+.....................................E                                   [100%]
+==================================== ERRORS ====================================
+_ ERROR at setup of test_feedback_timeout_uses_recording_task_settings_snapshot _
+
+tmp_path = PosixPath('/tmp/pytest-of-lth/pytest-255/test_feedback_timeout_uses_rec0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x71a45e1b5cc0>
+
+    @pytest.fixture
+    def factory(tmp_path, monkeypatch):
+        monkeypatch.setenv("XDG_SESSION_TYPE", "x11")
+        store = ConfigStore(tmp_path)
+        store.initialize()
+        # Legacy configured-user fixture; first-run now intentionally stays empty.
+>       from synthetic_providers import SYNTHETIC_PROVIDERS
+E       ModuleNotFoundError: No module named 'synthetic_providers'
+
+tests/test_application.py:76: ModuleNotFoundError
+=========================== short test summary info ============================
+ERROR tests/test_application.py::test_feedback_timeout_uses_recording_task_settings_snapshot
+181 passed, 1 error in 2.32s

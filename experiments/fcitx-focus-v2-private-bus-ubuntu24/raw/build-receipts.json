@@ -1,0 +1,71 @@
+[
+  {
+    "argv": [
+      "cmake",
+      "-S",
+      "/tmp/inkecho-fcitx-v2/product-native",
+      "-B",
+      "/tmp/inkecho-fcitx-v2/product-native-build"
+    ],
+    "returncode": 0,
+    "stdout": "-- The CXX compiler identification is GNU 13.3.0\n-- Detecting CXX compiler ABI info\n-- Detecting CXX compiler ABI info - done\n-- Check for working CXX compiler: /usr/bin/c++ - skipped\n-- Detecting CXX compile features\n-- Detecting CXX compile features - done\n-- Configuring done (0.2s)\n-- Generating done (0.0s)\n-- Build files have been written to: /tmp/inkecho-fcitx-v2/product-native-build\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "cmake",
+      "--build",
+      "/tmp/inkecho-fcitx-v2/product-native-build",
+      "-j2"
+    ],
+    "returncode": 0,
+    "stdout": "[ 50%] Building CXX object CMakeFiles/inkecho.dir/inkecho.cpp.o\n[100%] Linking CXX shared module libinkecho.so\n[100%] Built target inkecho\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "cmake",
+      "-S",
+      "/tmp/inkecho-fcitx-v2/legacy-native",
+      "-B",
+      "/tmp/inkecho-fcitx-v2/legacy-native-build"
+    ],
+    "returncode": 0,
+    "stdout": "-- The CXX compiler identification is GNU 13.3.0\n-- Detecting CXX compiler ABI info\n-- Detecting CXX compiler ABI info - done\n-- Check for working CXX compiler: /usr/bin/c++ - skipped\n-- Detecting CXX compile features\n-- Detecting CXX compile features - done\n-- Configuring done (0.1s)\n-- Generating done (0.0s)\n-- Build files have been written to: /tmp/inkecho-fcitx-v2/legacy-native-build\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "cmake",
+      "--build",
+      "/tmp/inkecho-fcitx-v2/legacy-native-build",
+      "-j2"
+    ],
+    "returncode": 0,
+    "stdout": "[ 50%] Building CXX object CMakeFiles/inkecho.dir/inkecho.cpp.o\n[100%] Linking CXX shared module libinkecho.so\n[100%] Built target inkecho\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "cmake",
+      "-S",
+      "/tmp/inkecho-fcitx-v2/test-control",
+      "-B",
+      "/tmp/inkecho-fcitx-v2/test-control-build"
+    ],
+    "returncode": 0,
+    "stdout": "-- The CXX compiler identification is GNU 13.3.0\n-- Detecting CXX compiler ABI info\n-- Detecting CXX compiler ABI info - done\n-- Check for working CXX compiler: /usr/bin/c++ - skipped\n-- Detecting CXX compile features\n-- Detecting CXX compile features - done\n-- Configuring done (0.1s)\n-- Generating done (0.0s)\n-- Build files have been written to: /tmp/inkecho-fcitx-v2/test-control-build\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "cmake",
+      "--build",
+      "/tmp/inkecho-fcitx-v2/test-control-build",
+      "-j2"
+    ],
+    "returncode": 0,
+    "stdout": "[ 50%] Building CXX object CMakeFiles/ownedtest.dir/control.cpp.o\n[100%] Linking CXX shared module libownedtest.so\n[100%] Built target ownedtest\n",
+    "stderr": ""
+  }
+]

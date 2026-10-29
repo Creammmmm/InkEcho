@@ -1,0 +1,52 @@
+[1029/025150.348565:WARNING:chrome/app/chrome_main_linux.cc:84] Read channel stable from /tmp/inkecho-browser/chrome/CHROME_VERSION_EXTRA
+Google Chrome 154.0.8037.97 
+InkEcho-0.10.2-x86_64.AppImage: OK
+inkecho-ibus-v2-prototype@local.invalid
+  Name: InkEcho IBus v2 isolated prototype
+  Description: Unintegrated isolated experiment; not production supported
+  Path: /home/inkecho/.local/share/gnome-shell/extensions/inkecho-ibus-v2-prototype@local.invalid
+  Enabled: Yes
+  State: ACTIVE
+CASE=full
+{"probe": "windowactivate", "wid": "6291459", "rc": 0, "stderr": ""}
+Traceback (most recent call last):
+  File "/tmp/inkecho-r4-test/probes/browser.py", line 35, in <module>
+    from websockets.sync.client import connect
+ModuleNotFoundError: No module named 'websockets'
+fixture_failed
+CASE=cancel
+{"probe": "windowactivate", "wid": "20971523", "rc": 0, "stderr": ""}
+Traceback (most recent call last):
+  File "/tmp/inkecho-r4-test/probes/browser.py", line 35, in <module>
+    from websockets.sync.client import connect
+ModuleNotFoundError: No module named 'websockets'
+fixture_failed
+CASE=switch
+Traceback (most recent call last):
+  File "/tmp/inkecho-r4-test/probes/browser.py", line 16, in <module>
+    profile=tempfile.mkdtemp(prefix='inkecho-chrome-profile-'); chrome='/tmp/inkecho-browser/chrome/chrome'; state.chrome=subprocess.Popen([chrome,'--no-sandbox','--remote-debugging-port=9222','--remote-allow-origins=*','--no-first-run','--no-default-browser-check','--disable-popup-blocking','--disable-background-networking','--disable-sync','--disable-features=OptimizationHints,MediaRouter','--ozone-platform=x11','--gtk-version=3','--user-data-dir='+profile,'http://127.0.0.1:%d/a'%port],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+                                                                                                                          ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/subprocess.py", line 1039, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                        pass_fds, cwd, env,
+                        ^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+                        gid, gids, uid, umask,
+                        ^^^^^^^^^^^^^^^^^^^^^^
+                        start_new_session, process_group)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/subprocess.py", line 1875, in _execute_child
+    self._posix_spawn(args, executable, env, restore_signals, close_fds,
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                      p2cread, p2cwrite,
+                      ^^^^^^^^^^^^^^^^^^
+                      c2pread, c2pwrite,
+                      ^^^^^^^^^^^^^^^^^^
+                      errread, errwrite)
+                      ^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/subprocess.py", line 1819, in _posix_spawn
+    self.pid = os.posix_spawn(executable, args, env, **kwargs)
+               ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 24] Too many open files: '/tmp/inkecho-browser/chrome/chrome'
+fixture_failed

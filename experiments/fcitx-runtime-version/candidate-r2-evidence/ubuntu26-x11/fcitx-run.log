@@ -1,0 +1,47 @@
+/tmp/inkecho-native-test/InkEcho-0.10.2-x86_64.AppImage: OK
+已安装输入桥；运行状态需通过输入服务检查确认。
+XGetWindowProperty[_NET_WM_DESKTOP] failed (code=1)
+Traceback (most recent call last):
+  File "/tmp/inkecho-native-test/probes/target-focus.py", line 26, in changed
+    subprocess.run(['xdotool','windowactivate','--sync',str(windows[1].get_window().get_xid())], check=False, timeout=3)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/subprocess.py", line 557, in run
+    stdout, stderr = process.communicate(input, timeout=timeout)
+                     ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/subprocess.py", line 1221, in communicate
+    stdout, stderr = self._communicate(input, endtime, timeout)
+                     ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/subprocess.py", line 2179, in _communicate
+    self.wait(timeout=self._remaining_time(endtime))
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/subprocess.py", line 1279, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/subprocess.py", line 2076, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['xdotool', 'windowactivate', '--sync', '23068699']' timed out after 3 seconds
+{"error": "timeout", "mode": "switch-ready"}
+{"mode": "cancel", "exit": 0, "a": "甲乙", "b": "", "triggered": true, "switch_confirmed": false, "focus_in_b": false, "resumed": false, "fcitx_b_context_proved_by_receipt": false, "stdout": [{"ready": true}, {"events": [["backend", "fcitx"], ["commit_status", 1], ["finished", "cancelled"]], "outcome": "cancelled", "origin": "/tmp/inkecho-native-test/squashfs-root/packages/inkecho/app.py"}], "stderr": "", "events": [["first_arrival", 283.297927727]], "passed": true}
+XGetWindowProperty[_NET_WM_DESKTOP] failed (code=1)
+Traceback (most recent call last):
+  File "/tmp/inkecho-native-test/probes/target-focus.py", line 26, in changed
+    subprocess.run(['xdotool','windowactivate','--sync',str(windows[1].get_window().get_xid())], check=False, timeout=3)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/subprocess.py", line 557, in run
+    stdout, stderr = process.communicate(input, timeout=timeout)
+                     ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/subprocess.py", line 1221, in communicate
+    stdout, stderr = self._communicate(input, endtime, timeout)
+                     ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/subprocess.py", line 2179, in _communicate
+    self.wait(timeout=self._remaining_time(endtime))
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/subprocess.py", line 1279, in wait
+    return self._wait(timeout=timeout)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/subprocess.py", line 2076, in _wait
+    raise TimeoutExpired(self.args, timeout)
+subprocess.TimeoutExpired: Command '['xdotool', 'windowactivate', '--sync', '23068699']' timed out after 3 seconds
+{"error": "timeout", "mode": "switch-ready"}
+{"mode": "cancel", "exit": 0, "a": "甲乙", "b": "", "triggered": true, "switch_confirmed": false, "focus_in_b": false, "resumed": false, "fcitx_b_context_proved_by_receipt": false, "stdout": [{"ready": true}, {"events": [["backend", "fcitx"], ["commit_status", 1], ["finished", "cancelled"]], "outcome": "cancelled", "origin": "/tmp/inkecho-native-test/squashfs-root/packages/inkecho/app.py"}], "stderr": "", "events": [["first_arrival", 329.199412392]], "passed": true}
+未发现经过校验的输入桥；可能尚未安装。

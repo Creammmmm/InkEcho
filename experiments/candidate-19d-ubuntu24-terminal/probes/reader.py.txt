@@ -1,0 +1,11 @@
+import json, os, sys, tty
+from pathlib import Path
+path = Path(sys.argv[1]); Path(str(path)+'.pid').write_text(str(os.getpid())); tty.setraw(0); data=b''
+def publish(target, value):
+ tmp=Path(str(target)+'.tmp'); tmp.write_text(json.dumps(value)); os.replace(tmp,target)
+def update():
+ publish(path, data.decode('utf8',errors='ignore'))
+ publish(Path(str(path)+'.raw'), data.hex())
+update()
+while True:
+ data+=os.read(0,1); update()

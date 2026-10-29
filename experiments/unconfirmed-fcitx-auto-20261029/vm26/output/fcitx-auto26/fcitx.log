@@ -1,0 +1,78 @@
+I2026-10-29 06:49:59.584684 instance.cpp:1420] Override Enabled Addons: {}
+I2026-10-29 06:49:59.586875 instance.cpp:1421] Override Disabled Addons: {xim, ibusfrontend, clipboard}
+I2026-10-29 06:49:59.589529 addonmanager.cpp:204] Loaded addon wayland
+I2026-10-29 06:49:59.589867 addonmanager.cpp:204] Loaded addon unicode
+I2026-10-29 06:49:59.647627 xcbconnection.cpp:178] Set XFIXES client disconnect mode to TERMINATE
+I2026-10-29 06:49:59.647877 xcbconnection.cpp:198] Connecting to X11 display, display name::0.
+I2026-10-29 06:49:59.647962 xcbconnection.cpp:203] X11 display: :0 is xwayland.
+I2026-10-29 06:49:59.648078 addonmanager.cpp:204] Loaded addon xcb
+I2026-10-29 06:49:59.649357 addonmanager.cpp:204] Loaded addon quickphrase
+I2026-10-29 06:49:59.649755 keyboard.cpp:229] Attempting to load keyboard from: ["/usr/share/X11/xkb"] Rule: evdev
+I2026-10-29 06:49:59.651817 addonmanager.cpp:204] Loaded addon keyboard
+I2026-10-29 06:49:59.652192 addonmanager.cpp:204] Loaded addon imselector
+I2026-10-29 06:49:59.652505 addonmanager.cpp:204] Loaded addon waylandim
+I2026-10-29 06:49:59.653663 addonmanager.cpp:204] Loaded addon dbus
+I2026-10-29 06:49:59.654257 addonmanager.cpp:204] Loaded addon dbusfrontend
+I2026-10-29 06:49:59.654776 addonmanager.cpp:204] Loaded addon fcitx4frontend
+I2026-10-29 06:49:59.654979 addonmanager.cpp:204] Loaded addon inkecho
+I2026-10-29 06:49:59.671306 inputmethodmanager.cpp:210] Found 748 input method(s) in addon keyboard
+I2026-10-29 06:49:59.671597 inputmethodmanager.cpp:132] No valid input method group in configuration. Building a default one
+I2026-10-29 06:49:59.671839 instance.cpp:396] Items in Default: [InputMethodGroupItem(keyboard-us,layout=)]
+I2026-10-29 06:49:59.671902 instance.cpp:401] Generated groups: [Default]
+I2026-10-29 06:49:59.683283 addonmanager.cpp:204] Loaded addon kimpanel
+I2026-10-29 06:49:59.683735 addonmanager.cpp:204] Loaded addon virtualkeyboard
+I2026-10-29 06:49:59.691993 classicui.cpp:89] Created classicui for x11 display::0
+I2026-10-29 06:49:59.692202 classicui.cpp:110] Created classicui for wayland display:
+I2026-10-29 06:49:59.692343 addonmanager.cpp:204] Loaded addon classicui
+I2026-10-29 06:49:59.692671 addonmanager.cpp:204] Loaded addon notificationitem
+I2026-10-29 06:49:59.695294 addonmanager.cpp:204] Loaded addon notifications
+I2026-10-29 06:49:59.699760 dbusmodule.cpp:841] Service name change: org.fcitx.Fcitx5  :1.83
+I2026-10-29 06:49:59.699953 kimpanel.cpp:116] Kimpanel new owner: 
+I2026-10-29 06:49:59.700064 virtualkeyboard.cpp:218] VirtualKeyboard new owner: 
+I2026-10-29 06:49:59.700185 portalsettingmonitor.cpp:97] A new portal show up, start a new query.
+I2026-10-29 06:49:59.700879 xcbconnection.cpp:178] Set XFIXES client disconnect mode to TERMINATE
+I2026-10-29 06:49:59.701199 xcbconnection.cpp:198] Connecting to X11 display, display name:unix:/tmp/.X11-unix/X1.
+I2026-10-29 06:49:59.701334 xcbconnection.cpp:203] X11 display: unix:/tmp/.X11-unix/X1 is xwayland.
+I2026-10-29 06:49:59.701791 classicui.cpp:89] Created classicui for x11 display:unix:/tmp/.X11-unix/X1
+I2026-10-29 06:49:59.702123 portalsettingmonitor.cpp:97] A new portal show up, start a new query.
+I2026-10-29 06:50:02.641705 inputmethodmanager.cpp:210] Found 748 input method(s) in addon keyboard
+I2026-10-29 06:50:06.834034 waylandmodule.cpp:663] Wayland self diagnose information
+I2026-10-29 06:50:06.834775 waylandmodule.cpp:664] Using Wayland native input method protocol: 0
+I2026-10-29 06:50:06.835017 waylandmodule.cpp:666] Toolkit specific environment variable detected by process:
+I2026-10-29 06:50:06.835359 waylandmodule.cpp:668] GTK_IM_MODULE=
+I2026-10-29 06:50:06.836112 waylandmodule.cpp:669] QT_IM_MODULE=
+I2026-10-29 06:50:06.836781 waylandmodule.cpp:670] QT_IM_MODULES=
+=========================
+Fcitx 5.1.19 -- Get Signal No.: 15
+Date: try "date -d @1793256628" if you are using GNU date ***
+ProcessID: 2248
+fcitx5(+0x18e5e) [0x5b4ae919be5e]
+/usr/lib/x86_64-linux-gnu/libc.so.6(+0x45cb0) [0x780af7645cb0]
+/usr/lib/x86_64-linux-gnu/libc.so.6(+0xac802) [0x780af76ac802]
+/usr/lib/x86_64-linux-gnu/libc.so.6(+0xa039c) [0x780af76a039c]
+/usr/lib/x86_64-linux-gnu/libc.so.6(epoll_wait+0x25) [0x780af77378b5]
+/usr/lib/x86_64-linux-gnu/libsystemd.so.0(sd_event_wait+0x181) [0x780af7532021]
+/usr/lib/x86_64-linux-gnu/libsystemd.so.0(sd_event_run+0x15b) [0x780af753333b]
+/usr/lib/x86_64-linux-gnu/libsystemd.so.0(sd_event_loop+0x5f) [0x780af75334df]
+/usr/lib/x86_64-linux-gnu/libFcitx5Utils.so.2(_ZN5fcitx9EventLoop4execEv+0x2b) [0x780af7e0828b]
+/usr/lib/x86_64-linux-gnu/libFcitx5Core.so.7(_ZN5fcitx8Instance4execEv+0x5b) [0x780af7ec211b]
+fcitx5(+0x16e3b) [0x5b4ae9199e3b]
+/usr/lib/x86_64-linux-gnu/libc.so.6(+0x2a601) [0x780af762a601]
+/usr/lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0x88) [0x780af762a718]
+fcitx5(+0x18215) [0x5b4ae919b215]
+I2026-10-29 06:50:28.698178 addonmanager.cpp:306] Unloading addon notifications
+I2026-10-29 06:50:28.698403 addonmanager.cpp:306] Unloading addon notificationitem
+I2026-10-29 06:50:28.698622 addonmanager.cpp:306] Unloading addon classicui
+I2026-10-29 06:50:28.699154 addonmanager.cpp:306] Unloading addon virtualkeyboard
+I2026-10-29 06:50:28.699349 addonmanager.cpp:306] Unloading addon kimpanel
+I2026-10-29 06:50:28.699468 addonmanager.cpp:306] Unloading addon inkecho
+I2026-10-29 06:50:28.699684 addonmanager.cpp:306] Unloading addon fcitx4frontend
+I2026-10-29 06:50:28.699752 addonmanager.cpp:306] Unloading addon dbusfrontend
+I2026-10-29 06:50:28.699819 addonmanager.cpp:306] Unloading addon dbus
+I2026-10-29 06:50:28.700009 addonmanager.cpp:306] Unloading addon waylandim
+I2026-10-29 06:50:28.700107 addonmanager.cpp:306] Unloading addon imselector
+I2026-10-29 06:50:28.700170 addonmanager.cpp:306] Unloading addon keyboard
+I2026-10-29 06:50:28.700358 addonmanager.cpp:306] Unloading addon quickphrase
+I2026-10-29 06:50:28.700629 addonmanager.cpp:306] Unloading addon xcb
+I2026-10-29 06:50:28.700847 addonmanager.cpp:306] Unloading addon unicode
+I2026-10-29 06:50:28.700950 addonmanager.cpp:306] Unloading addon wayland

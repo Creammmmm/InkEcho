@@ -1,0 +1,17 @@
+{
+  "scope": "actual GTK fcitx frontend/private bus; fixed owned controls only",
+  "passed": false,
+  "checks": [],
+  "environment": {
+    "DISPLAY": ":0",
+    "WAYLAND_DISPLAY": null,
+    "XDG_SESSION_TYPE": "x11",
+    "XDG_RUNTIME_DIR": "/run/user/1000"
+  },
+  "daemon_pid": 2580,
+  "A_original_wait": 0,
+  "exit_reply": [],
+  "daemon_original_wait": 0,
+  "error_type": "AssertionError",
+  "error": ""
+}

@@ -1,0 +1,5 @@
+QT_IM_MODULE=ibus
+XDG_SESSION_TYPE=wayland
+XMODIFIERS=@im=ibus
+1469 /usr/bin/ibus-daemon --panel disable
+vte-version 0 76 0

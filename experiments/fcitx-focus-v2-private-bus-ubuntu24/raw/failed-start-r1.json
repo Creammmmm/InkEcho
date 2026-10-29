@@ -1,0 +1,17 @@
+{
+  "state": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 1,
+    "Error": "",
+    "StartedAt": "2026-10-29T03:08:53.955543404Z",
+    "FinishedAt": "2026-10-29T03:08:54.146818179Z"
+  },
+  "logs": "Could not access KVM kernel module: Permission denied\nqemu-system-x86_64: -accel kvm: failed to initialize kvm: Permission denied\n",
+  "reason": "wrong supplemental KVM group108; actual device group991; guest never booted"
+}

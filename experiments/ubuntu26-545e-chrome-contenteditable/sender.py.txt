@@ -1,0 +1,129 @@
+import asyncio, json, os, signal, sys, tempfile, time
+from dataclasses import replace
+from pathlib import Path
+from PySide6.QtCore import QCoreApplication, QObject, Signal
+from inkecho.app import Session
+from inkecho.config import ConfigStore
+from inkecho.providers import Result, Usage
+import inkecho.app, inkecho.platform.output_router
+
+TEXT='风云日月山川河海' * 25
+class Recorder(QObject):
+    level=Signal(float); finished=Signal(bytes,float); failed=Signal(str)
+    def start(self,*a,**kw): return True
+    def stop(self): self.finished.emit(b'fixed-test-audio', 1.0)
+    def cancel(self): pass
+class Client:
+    async def transcribe(self,*a):
+        await asyncio.sleep(1)
+        return Result(TEXT, Usage(), 0.1)
+async def run():
+    from inkecho.config import Provider
+    with tempfile.TemporaryDirectory(prefix='inkecho-session-cfg-') as d:
+        store=ConfigStore(Path(d)); store.initialize()
+        store.save_provider(Provider('probe','probe','transcription','qwen','https://invalid.example','probe','probe-key'))
+        store.save_settings(replace(store.load_settings(),transcription_provider='probe',polishing_enabled=False,output_method=os.environ.get('INK_PROBE_MODE', 'auto')))
+        session=Session(store,recorder=Recorder(),client=Client())
+        async def key(_): return 'disposable'
+        session.key=key
+        events=[]
+        replacement=None
+        original_wait_for=asyncio.wait_for
+        async def traced_wait_for(awaitable, timeout):
+            frame=getattr(awaitable, 'cr_frame', None)
+            message=frame.f_locals.get('message') if frame else None
+            if getattr(message, 'member', None)=='Commit':
+                events.append(['commit_timeout', round(timeout, 6)])
+            return await original_wait_for(awaitable, timeout)
+        asyncio.wait_for=traced_wait_for
+        from inkecho.platform.fcitx5 import Fcitx5Bridge, FcitxOutputError
+        from inkecho.platform.keyboard import KeyboardInput
+        real_fcitx_insert=Fcitx5Bridge.insert
+        async def tracked_fcitx(self,*args,**kwargs):
+            events.append(['fcitx_insert_started'])
+            try:
+                return await real_fcitx_insert(self,*args,**kwargs)
+            except FcitxOutputError as error:
+                events.append(['fcitx_error',error.code,error.accepted,error.unsent_offset,error.uncertain])
+                raise
+        Fcitx5Bridge.insert=tracked_fcitx
+        real_keyboard_insert=KeyboardInput.insert
+        async def tracked_keyboard(self,*args,**kwargs):
+            events.append(['keyboard_insert_started'])
+            return await real_keyboard_insert(self,*args,**kwargs)
+        KeyboardInput.insert=tracked_keyboard
+        from dbus_next.aio import MessageBus
+        original_call = MessageBus.call
+        async def observed_call(bus, message, *args, **kwargs):
+            nonlocal replacement
+            call_started = time.monotonic()
+            if message.member == 'Commit': events.append(['commit_started', message.path, round(call_started,6)])
+            try:
+                response = await original_call(bus, message, *args, **kwargs)
+            except BaseException as error:
+                if message.member == 'Commit' and message.path == '/inkecho':
+                    events.append(['commit_call_exception', type(error).__name__, round(time.monotonic()-call_started, 4)])
+                raise
+            if message.member == 'Commit': events.append(['commit_reply', message.path, response.body, round(time.monotonic(),6)])
+            if message.member == 'Commit' and message.path == '/inkecho':
+                events.append(['commit_status', response.body[0]])
+                await asyncio.sleep(.025)  # Controlled test delay after bridge reply.
+                if os.environ.get('INK_TARGET_KIND')=='owner' and response.body==[1] and replacement is None:
+                    os.kill(int(os.environ['TEST_FCITX_PID']), signal.SIGTERM)
+                    await asyncio.sleep(.25)
+                    replacement=await MessageBus().connect()
+                    result=await replacement.request_name('org.fcitx.Fcitx5')
+                    if int(result)!=1: raise RuntimeError('replacement_did_not_acquire_name')
+                    events.append(['owner_replaced',str(result),replacement.unique_name])
+            return response
+        MessageBus.call = observed_call
+        session.diagnostic.connect(lambda s: events.append(['diagnostic',s]))
+        session.problem.connect(lambda s: events.append(['problem',s]))
+        session.finished.connect(lambda o: events.append(['finished',o.get('outcome'),o.get('characters')]))
+        old_prepare=session.inputs.prepare_task
+        async def watched_prepare(*args, **kwargs):
+            result = await old_prepare(*args, **kwargs)
+            if result == 'fcitx': events.append(['backend', 'fcitx'])
+            return result
+        session.inputs.prepare_task=watched_prepare
+        from inkecho.platform.hybrid_keyboard import HybridKeyboardInput
+        hybrid_connect = HybridKeyboardInput.connect
+        hybrid_authorize = HybridKeyboardInput.authorize
+        async def observed_hybrid_connect(self):
+            events.append(['hybrid_connect'])
+            return await hybrid_connect(self)
+        async def observed_hybrid_authorize(self, *args):
+            events.append(['hybrid_authorize'])
+            return await hybrid_authorize(self, *args)
+        HybridKeyboardInput.connect = observed_hybrid_connect
+        HybridKeyboardInput.authorize = observed_hybrid_authorize
+        real_connect = KeyboardInput.connect
+        async def observed_keyboard_connect(self):
+            events.append(['keyboard_connect'])
+            return await real_connect(self)
+        KeyboardInput.connect = observed_keyboard_connect
+        orig=session.inputs._choose_auto
+        async def observed(*args):
+            await orig(*args)
+            events.append(['backend',session.inputs.selected])
+        session.inputs._choose_auto=observed
+        def cancel_observed():
+            bridge = session.inputs._selected
+            client = getattr(bridge, '_client', None)
+            events.append(['cancel_handler', round(time.monotonic(),6), getattr(bridge, '_accepted', None), getattr(client, '_sequence', None), session.inputs.acknowledged_attempts])
+            session.cancel()
+        asyncio.get_running_loop().add_signal_handler(signal.SIGUSR1,cancel_observed)
+        await session.initialize()
+        await asyncio.wait_for(session.toggle(),20)
+        if not session.recorder: raise RuntimeError('no recorder')
+        print(json.dumps({'ready':True}),flush=True)
+        session.stop_recording()
+        for _ in range(800):
+            if not session.pending: break
+            await asyncio.sleep(.025)
+        await asyncio.sleep(1.2)
+        print(json.dumps({'events':events,'outcome':str(session.controller.outcome),'origin':str(Path(inkecho.app.__file__).resolve())},ensure_ascii=False),flush=True)
+        await session.close()
+        if replacement is not None: replacement.disconnect()
+QCoreApplication([])
+asyncio.run(run())

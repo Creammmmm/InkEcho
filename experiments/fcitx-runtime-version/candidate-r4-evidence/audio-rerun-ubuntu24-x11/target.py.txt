@@ -1,0 +1,13 @@
+import sys
+from pathlib import Path
+import gi
+gi.require_version('Gtk', '3.0')
+from gi.repository import GLib, Gtk
+root=Path('/tmp/inkecho-audio-fcitx')
+w=Gtk.Window(title='InkEcho isolated audio target')
+e=Gtk.Entry(); w.add(e)
+e.connect('changed',lambda item:(root/'text').write_text(item.get_text()))
+e.connect('focus-in-event',lambda *_:((root/'focus').write_text('yes'),False)[1])
+w.show_all(); w.present(); e.grab_focus()
+GLib.timeout_add_seconds(60,Gtk.main_quit)
+Gtk.main()

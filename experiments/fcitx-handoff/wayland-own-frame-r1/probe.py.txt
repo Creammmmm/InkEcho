@@ -1,0 +1,43 @@
+import json
+import os
+from pathlib import Path
+import signal
+import subprocess
+import time
+
+root = Path('/tmp/inkecho-own-frame-r1')
+procs = []
+
+def counts():
+    return {name: int((root / (name + '.txt')).read_text()) for name in ('A', 'B')}
+
+try:
+    for name in ('A', 'B'):
+        procs.append(subprocess.Popen(['/usr/bin/python3', str(root / 'actor.py'), name]))
+    deadline = time.monotonic() + 10
+    while not all((root / (name + '.txt')).exists() for name in ('A', 'B')):
+        if time.monotonic() >= deadline:
+            raise RuntimeError('actors not ready')
+        time.sleep(.05)
+    os.kill(procs[1].pid, signal.SIGSTOP)
+    deadline = time.monotonic() + 3
+    while '\nState:\tT' not in Path('/proc/%d/status' % procs[1].pid).read_text():
+        if time.monotonic() >= deadline:
+            raise RuntimeError('target not stopped')
+        time.sleep(.01)
+    before = counts()
+    start = time.monotonic()
+    time.sleep(.25)
+    after = counts()
+    elapsed_ms = (time.monotonic() - start) * 1000
+    os.kill(procs[1].pid, signal.SIGCONT)
+    print(json.dumps({'before': before, 'after': after, 'elapsed_ms': elapsed_ms,
+                      'a_advanced': after['A'] > before['A'],
+                      'b_stopped': after['B'] == before['B']}), flush=True)
+finally:
+    for proc in procs:
+        if proc.poll() is None:
+            os.kill(proc.pid, signal.SIGCONT)
+            proc.terminate()
+    for proc in procs:
+        proc.wait(timeout=5)

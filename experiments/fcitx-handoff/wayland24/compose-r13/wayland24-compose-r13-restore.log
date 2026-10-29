@@ -1,0 +1,4 @@
+QT_IM_MODULE=ibus
+XMODIFIERS=@im=ibus
+4185 bash -lc systemctl --user show-environment | grep -E "^(XMODIFIERS|GTK_IM_MODULE|QT_IM_MODULE)=" || true; pgrep -a -f "inkecho-owned-browser-|wayland24-compose-r13|chrome.*inkecho-owned" || true; sudo cp -p /var/tmp/inkecho-compose-r13-gdm /etc/gdm3/custom.conf && sudo cp -p /var/tmp/inkecho-compose-r13-account /var/lib/AccountsService/users/inkecho && sudo cmp /var/tmp/inkecho-compose-r13-gdm /etc/gdm3/custom.conf && sudo cmp /var/tmp/inkecho-compose-r13-account /var/lib/AccountsService/users/inkecho && rm -rf /tmp/wayland24-compose-r13 && sudo rm /var/tmp/inkecho-compose-r13-gdm /var/tmp/inkecho-compose-r13-account && echo restored
+restored

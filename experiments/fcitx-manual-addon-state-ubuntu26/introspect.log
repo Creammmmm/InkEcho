@@ -1,0 +1,111 @@
+/tmp/inkecho-r4-test/InkEcho-0.10.2-x86_64.AppImage: OK
+c8918f6235325036a4bf605edc76579b2813e71d04343ca41e5edec981a7c6b5  /tmp/inkecho-r4-test/squashfs-root/packages/inkecho/platform/fcitx5.py
+3c76d50b2a1af82301e82cf727bad9b1f71d5cef3f4e5e4284530cb5416aadf1  /tmp/inkecho-r4-test/squashfs-root/packages/inkecho/platform/framework_detection.py
+a64cf45e3a22bacbc82e7db61478a15769fb630812c3919c72f48a105998aa3a  /tmp/inkecho-r4-test/squashfs-root/packages/inkecho/platform/ibus.py
+已安装输入桥；运行状态需通过输入服务检查确认。
+已安装输入桥；运行状态需通过输入服务检查确认。
+before_manual
+{"label": "before_manual", "hints": {"GTK_IM_MODULE": "fcitx", "QT_IM_MODULE": "fcitx", "XMODIFIERS": "@im=fcitx"}, "owners": {"ibus_service_owner": "fcitx", "fcitx_service_owner": "fcitx"}, "hypothesis": ["fcitx", ":1.86"], "detected": ["fcitx", ":1.86"]}
+('5.1.19',)
+node /controller {
+  interface org.freedesktop.DBus.Peer {
+    methods:
+      Ping();
+      GetMachineId(out s machine_uuid);
+    signals:
+    properties:
+  };
+  interface org.freedesktop.DBus.Introspectable {
+    methods:
+      Introspect(out s xml_data);
+    signals:
+    properties:
+  };
+  interface org.freedesktop.DBus.Properties {
+    methods:
+      Get(in  s interface_name,
+          in  s property_name,
+          out v value);
+      GetAll(in  s interface_name,
+             out a{sv} props);
+      Set(in  s interface_name,
+          in  s property_name,
+          in  v value);
+    signals:
+      PropertiesChanged(s interface_name,
+                        a{sv} changed_properties,
+                        as invalidated_properties);
+    properties:
+  };
+  interface org.fcitx.Fcitx.Controller1 {
+    methods:
+      Activate();
+      AddInputMethodGroup(in  s arg_0);
+      AddonForIM(in  s arg_0,
+                 out s arg_1);
+      AvailableInputMethods(out a(ssssssb) arg_0);
+      AvailableKeyboardLayouts(out a(ssasa(ssas)) arg_0);
+      CanRestart(out b arg_0);
+      CheckUpdate(out b arg_0);
+      Configure();
+      ConfigureAddon(in  s arg_0);
+      ConfigureIM(in  s arg_0);
+      CurrentInputMethod(out s arg_0);
+      CurrentInputMethodGroup(out s arg_0);
+      CurrentInputMethodInfo(out s arg_0,
+                             out s arg_1,
+                             out s arg_2,
+                             out s arg_3,
+                             out s arg_4,
+                             out s arg_5,
+                             out s arg_6,
+                             out b arg_7,
+                             out s arg_8,
+                             out a{sv} arg_9);
+      CurrentUI(out s arg_0);
+      Deactivate();
+      DebugInfo(out s arg_0);
+      Exit();
+      FullInputMethodGroupInfo(in  s arg_0,
+                               out s arg_1,
+                               out s arg_2,
+                               out s arg_3,
+                               out a{sv} arg_4,
+                               out a(sssssssbsa{sv}) arg_5);
+      GetAddons(out a(sssibb) arg_0);
+      GetAddonsV2(out a(sssibbbasas) arg_0);
+      GetConfig(in  s arg_0,
+                out v arg_1,
+                out a(sa(sssva{sv})) arg_2);
+      InputMethodGroupInfo(in  s arg_0,
+                           out s arg_1,
+                           out a(ss) arg_2);
+      InputMethodGroups(out as arg_0);
+      OpenWaylandConnection(in  s arg_0);
+      OpenWaylandConnectionSocket(in  h arg_0);
+      OpenX11Connection(in  s arg_0);
+      Refresh();
+      ReloadAddonConfig(in  s arg_0);
+      ReloadConfig();
+      RemoveInputMethodGroup(in  s arg_0);
+      ReopenWaylandConnectionSocket(in  s arg_0,
+                                    in  h arg_1);
+      ResetIMList();
+      Restart();
+      Save();
+      SetAddonsState(in  a(sb) arg_0);
+      SetConfig(in  s arg_0,
+                in  v arg_1);
+      SetCurrentIM(in  s arg_0);
+      SetInputMethodGroupInfo(in  s arg_0,
+                              in  s arg_1,
+                              in  a(ss) arg_2);
+      SetLogRule(in  s arg_0);
+      State(out i arg_0);
+      SwitchInputMethodGroup(in  s arg_0);
+      Toggle();
+    signals:
+      InputMethodGroupsChanged();
+    properties:
+  };
+};

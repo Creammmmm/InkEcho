@@ -1,0 +1,14 @@
+/tmp/inkecho-audio-fcitx/InkEcho.AppImage: OK
+已安装输入桥；运行状态需通过输入服务检查确认。
+qt.multimedia.symbolsresolver: Couldn't load va-x11 library
+qt.multimedia.symbolsresolver: Couldn't resolve va-x11 symbols
+qt.multimedia.symbolsresolver: Couldn't load va-drm library
+qt.multimedia.symbolsresolver: Couldn't resolve va-drm symbols
+qt.multimedia.symbolsresolver: Couldn't load va library
+qt.multimedia.symbolsresolver: Couldn't resolve va symbols
+qt.multimedia.symbolsresolver: Couldn't load va(in plugin) library
+qt.multimedia.symbolsresolver: Couldn't resolve va(in plugin) symbols
+qt.multimedia.ffmpeg: Using Qt multimedia with FFmpeg version 9.0.1 LGPL version 2.1 or later
+qt.multimedia.pipewire.devicemonitor: Ignoring dummy output: std::map(std::pair("client.id", "32"), std::pair("factory.id", "18"), std::pair("media.class", "Audio/Sink"), std::pair("node.description", "Dummy Output"), std::pair("node.name", "auto_null"), std::pair("object.serial", "80"))
+{"status": "passed", "synthetic_only": true, "input_transport": "fcitx_owned_target", "events_ms": {"toggle_requested": 0.0, "credential_wait_started": 415.053, "first_capture": 7.537, "play_requested": 82.378, "credential_wait_finished": 814.989, "first_audio_on_wire": 437.095, "stop_requested": 1291.266, "final_asr": 1414.982, "polishing_request": 1479.209, "polishing_first_delta": 1558.643, "polishing_full_text": 1978.877}, "marker_samples": 1601, "wire_bytes": 41584, "performance": {"schema_version": 1, "outcome": "succeeded", "events_ms": {"recording_started": 0.005, "recording_stop_requested": 1290.206, "recording_stopped": 1292.096, "asr_started": 413.819, "asr_completed": 1414.998, "polishing_started": 1415.058, "polishing_first_segment": 1558.487, "polishing_completed": 1981.468, "first_character_sent": 1559.571, "output_completed": 1998.017, "task_finished": 1998.065}, "durations_ms": {"stop_to_audio_ready_ms": 1.889, "asr_ms": 1001.179, "polishing_to_first_segment_ms": 143.429, "polishing_ms": 566.41, "stop_to_first_character_ms": 269.365, "audio_ready_to_first_character_ms": 267.476, "output_ms": 438.445, "stop_to_output_completed_ms": 707.81, "stop_to_task_finished_ms": 707.858}}}
+本地完整链路测试。未发现经过校验的输入桥；可能尚未安装。

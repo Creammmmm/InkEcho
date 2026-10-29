@@ -36,7 +36,10 @@ has focus at delivery; a later character may enter a newly focused window. Focus
 changes alone do not cancel a task. Explicit cancellation, expiry and replacement
 stop unsent output, release held keys and restore owned mappings. Already emitted
 input cannot be retracted; ambiguous delivery is never automatically replayed.
-Neither clipboard nor system input methods are used, including on failure.
+Clipboard output is never used. The default output router retains simulated
+keyboard transport and may select an explicitly installed optional input-method
+bridge after capability and identity checks; users can also select a method.
+Unknown delivery is not replayed through another transport.
 
 ## Modules and boundaries
 
@@ -68,7 +71,12 @@ window to choose XWayland events or the native GNOME route. The native guardian
 is a separate process with bounded IPC, one current character per acknowledgement
 and recovery on cancellation or EOF. Other sessions use the X11 keyboard adapter;
 this is not a claim that every other desktop is supported. Transport failure does
-not fall back to clipboard or an input method.
+not fall back to clipboard or replay uncertain input through another method.
+The enclosing default router gives verified Fcitx priority, and optionally probes
+the separately enabled GNOME-owned bridge. Missing or explicitly disabled optional
+extensions retain legacy policy; damaged or uncertain installations fail closed
+unless the verified Fcitx route itself succeeds. These checks are bounded evidence,
+not universal target attribution or application-delivery acknowledgement.
 
 The main settings window stays native Wayland. Its overlay uses an independent
 XCB display host with non-activating window flags and bounded display-only IPC;

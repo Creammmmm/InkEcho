@@ -1,0 +1,12 @@
+import gi,os,sys
+from pathlib import Path
+gi.require_version('Gtk','3.0')
+from gi.repository import Gtk,GLib
+p=Path(sys.argv[1]);w=Gtk.Window(title='InkEcho isolated presend target');w.set_default_size(500,160);v=Gtk.TextView();w.add(v)
+def write(_):
+ b=v.get_buffer();a,z=b.get_bounds();p.write_text(b.get_text(a,z,True))
+v.get_buffer().connect('changed',write);w.show_all();w.present();v.grab_focus()
+def ready():
+ if w.is_active() and v.has_focus():p.write_text('');Path(str(p)+'.ready').write_text('ready');return False
+ return True
+GLib.timeout_add(50,ready);Gtk.main()

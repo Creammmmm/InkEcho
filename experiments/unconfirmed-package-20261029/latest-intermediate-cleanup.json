@@ -1,0 +1,28 @@
+{
+  "quota_before": {
+    "used": 12844326912,
+    "remaining": 307345408
+  },
+  "artifact_preserved_sha256": "207b97eb667e5439137b51963a2aa09515c7ba50a83496d9c10070e989252685",
+  "removed": [
+    {
+      "path": "/tmp/inkecho-latest-candidate/source/build/InkEcho.AppDir",
+      "device": 47,
+      "inode": 241767,
+      "mtime_ns": 1793211588554958159,
+      "absent_after": true
+    },
+    {
+      "path": "/tmp/inkecho-latest-candidate/source/build/inkecho.squashfs",
+      "device": 47,
+      "inode": 251828,
+      "mtime_ns": 1793211597574906114,
+      "absent_after": true
+    }
+  ],
+  "quota_after": {
+    "used": 12447612928,
+    "remaining": 704059392
+  },
+  "quota_freed": 396713984
+}

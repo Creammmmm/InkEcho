@@ -1,0 +1,176 @@
+#!/usr/bin/env python3
+"""Keyboard-only portal Unicode test, exclusively in an owned blank GTK editor.
+
+Normal portal consent occurs before the fixture is opened. No persistence,
+clipboard, screen sharing, user document inspection, or input-method registration.
+"""
+
+import asyncio
+import ctypes
+import hashlib
+import time
+import json
+import os
+import subprocess
+import sys
+import tempfile
+import uuid
+from pathlib import Path
+
+from dbus_next import Message, MessageType, Variant
+from dbus_next.aio import MessageBus
+
+DEST = "org.freedesktop.portal.Desktop"
+PATH = "/org/freedesktop/portal/desktop"
+IFACE = "org.freedesktop.portal.RemoteDesktop"
+SAMPLE = "你好 InkEcho，世界！ café Ω 😀\n第二行。"
+
+
+async def probe():
+    if os.environ.get("XDG_SESSION_TYPE") != "wayland":
+        raise RuntimeError("Native Wayland required")
+    bus = await MessageBus(negotiate_unix_fd=True).connect()
+    session = None
+    pending = {}
+    pressed = set()
+    fixture = None
+
+    async def call(path, interface, member, signature="", body=None):
+        reply = await asyncio.wait_for(
+            bus.call(
+                Message(
+                    destination=DEST,
+                    path=path,
+                    interface=interface,
+                    member=member,
+                    signature=signature,
+                    body=body or [],
+                )
+            ),
+            20,
+        )
+        if reply.message_type == MessageType.ERROR:
+            raise RuntimeError(reply.error_name)
+        return reply.body
+
+    def response(message):
+        if (
+            message.message_type == MessageType.SIGNAL
+            and message.interface == "org.freedesktop.portal.Request"
+            and message.member == "Response"
+        ):
+            future = pending.get(message.path)
+            if future is not None and not future.done():
+                future.set_result(message.body)
+
+    async def request(method, signature, arguments, options):
+        token = "inkecho_" + uuid.uuid4().hex
+        sender = bus.unique_name[1:].replace(".", "_")
+        path = f"/org/freedesktop/portal/desktop/request/{sender}/{token}"
+        future = asyncio.get_running_loop().create_future()
+        pending[path] = future
+        options["handle_token"] = Variant("s", token)
+        try:
+            result = await call(PATH, IFACE, method, signature, [*arguments, options])
+            if result != [path]:
+                raise RuntimeError("Unexpected request path")
+            code, values = await asyncio.wait_for(future, 60)
+            if code:
+                raise RuntimeError(f"portal_response_{code}")
+            return values
+        finally:
+            pending.pop(path, None)
+            if not future.done() or future.cancelled():
+                try:
+                    await call(path, "org.freedesktop.portal.Request", "Close")
+                except RuntimeError:
+                    pass
+
+    async def key(keysym, state):
+        await call(
+            PATH,
+            IFACE,
+            "NotifyKeyboardKeysym",
+            "oa{sv}iu",
+            [session, {}, keysym, state],
+        )
+
+    try:
+        bus.add_message_handler(response)
+        reply = await bus.call(
+            Message(
+                destination="org.freedesktop.DBus",
+                path="/org/freedesktop/DBus",
+                interface="org.freedesktop.DBus",
+                member="AddMatch",
+                signature="s",
+                body=[
+                    "type='signal',interface='org.freedesktop.portal.Request',member='Response'"
+                ],
+            )
+        )
+        if reply.message_type == MessageType.ERROR:
+            raise RuntimeError("Signal subscription failed")
+        values = await request(
+            "CreateSession",
+            "a{sv}",
+            [],
+            {"session_handle_token": Variant("s", "inkecho_" + uuid.uuid4().hex)},
+        )
+        session = values["session_handle"].value
+        await request(
+            "SelectDevices",
+            "oa{sv}",
+            [session],
+            {"types": Variant("u", 1), "persist_mode": Variant("u", 0)},
+        )
+        print(json.dumps({"waiting_for_standard_keyboard_consent": True}), flush=True)
+        values = await request("Start", "osa{sv}", [session, ""], {})
+        if values.get("devices", Variant("u", 0)).value != 1:
+            raise RuntimeError("Keyboard-only grant required")
+        print(json.dumps({"keyboard_only_granted": True}), flush=True)
+        reply = await bus.call(Message(destination=DEST,path=PATH,interface=IFACE,member='ConnectToEIS',signature='oa{sv}',body=[session,{}]))
+        if reply.message_type == MessageType.ERROR:
+            raise RuntimeError('ConnectToEIS:' + str(reply.error_name))
+        if len(reply.unix_fds) != 1:
+            raise RuntimeError('unexpected_eis_fd_count')
+        fd = reply.unix_fds[0]
+        lib = ctypes.CDLL(str(Path(__file__).with_name('libei.so.1.6.0')))
+        sigs = {'ei_new_sender':([ctypes.c_void_p],ctypes.c_void_p),'ei_setup_backend_fd':([ctypes.c_void_p,ctypes.c_int],ctypes.c_int),'ei_dispatch':([ctypes.c_void_p],None),'ei_get_event':([ctypes.c_void_p],ctypes.c_void_p),'ei_event_get_type':([ctypes.c_void_p],ctypes.c_int),'ei_event_type_to_string':([ctypes.c_int],ctypes.c_char_p),'ei_event_get_seat':([ctypes.c_void_p],ctypes.c_void_p),'ei_seat_has_capability':([ctypes.c_void_p,ctypes.c_int],ctypes.c_bool),'ei_seat_bind_capabilities':([ctypes.c_void_p],None),'ei_event_get_device':([ctypes.c_void_p],ctypes.c_void_p),'ei_device_has_capability':([ctypes.c_void_p,ctypes.c_int],ctypes.c_bool),'ei_event_unref':([ctypes.c_void_p],ctypes.c_void_p),'ei_unref':([ctypes.c_void_p],ctypes.c_void_p)}
+        for name,(args,ret) in sigs.items():
+            fn=getattr(lib,name); fn.argtypes=args; fn.restype=ret
+        ctx=lib.ei_new_sender(None)
+        if not ctx: raise RuntimeError('ei_new_sender')
+        if lib.ei_setup_backend_fd(ctx,os.dup(fd)) < 0: raise RuntimeError('ei_setup')
+        os.close(fd)
+        saw_seat=False; saw_device=False; end=time.monotonic()+8
+        try:
+            while time.monotonic()<end:
+                lib.ei_dispatch(ctx)
+                while event := lib.ei_get_event(ctx):
+                    try:
+                        kind=lib.ei_event_type_to_string(lib.ei_event_get_type(event)).decode()
+                        print(json.dumps({'event':kind}),flush=True)
+                        if kind=='EI_EVENT_SEAT_ADDED':
+                            seat=lib.ei_event_get_seat(event)
+                            keyboard=lib.ei_seat_has_capability(seat,4); text=lib.ei_seat_has_capability(seat,64)
+                            print(json.dumps({'seat_keyboard':keyboard,'seat_text':text}),flush=True)
+                            saw_seat=True
+                            if text: lib.ei_seat_bind_capabilities(seat,ctypes.c_int(64),ctypes.c_int(0))
+                            elif keyboard: lib.ei_seat_bind_capabilities(seat,ctypes.c_int(4),ctypes.c_int(0))
+                        elif kind=='EI_EVENT_DEVICE_ADDED':
+                            device=lib.ei_event_get_device(event)
+                            print(json.dumps({'device_keyboard':lib.ei_device_has_capability(device,4),'device_text':lib.ei_device_has_capability(device,64)}),flush=True)
+                            saw_device=True
+                    finally: lib.ei_event_unref(event)
+                if saw_seat and saw_device: break
+                await asyncio.sleep(.02)
+            print(json.dumps({'seat_observed':saw_seat,'device_observed':saw_device}),flush=True)
+        finally: lib.ei_unref(ctx)
+    finally:
+        if session:
+            try: await call(session, 'org.freedesktop.portal.Session', 'Close')
+            except Exception: print('session_close_failed',flush=True)
+        bus.disconnect()
+
+asyncio.run(probe())

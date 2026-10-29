@@ -1,0 +1,38 @@
+import json,os,subprocess,time
+from pathlib import Path
+root=Path('/tmp/inkecho-shell-r16')
+env=os.environ.copy();actors=[];events=[]
+base=['gdbus','call','--session','--dest','io.github.Creammmmm.InkEcho.IsolatedCommitR16','--object-path','/io/github/Creammmmm/InkEcho/IsolatedCommitR16','--method']
+def call(name,*args): return subprocess.check_output(base+['io.github.Creammmmm.InkEcho.IsolatedCommitR161.'+name,*args],env=env,text=True,timeout=4).strip()
+def contents(): return {n:(root/(n+'.txt')).read_text() for n in ('A','B','X')}
+def activate(name):
+ result=call('Activate','InkEcho isolated '+name)
+ for _ in range(40):
+  state=call('Read')
+  if 'InkEcho isolated '+name in state and ((name == 'X' and state.startswith('(false,')) or (name != 'X' and state.startswith('(true,'))): return result,state
+  time.sleep(.05)
+ raise RuntimeError('owned_activation_not_confirmed_'+name)
+try:
+ for name,backend,module in [('A','wayland',None),('B','wayland',None),('X','x11','gtk-im-context-simple')]:
+  e=env.copy();e['GDK_BACKEND']=backend
+  if module:e['GTK_IM_MODULE']=module
+  else:e.pop('GTK_IM_MODULE',None)
+  actors.append(subprocess.Popen(['/usr/bin/python3',str(root/'actor.py'),name],env=e))
+ time.sleep(2)
+ for n in ('A','B','X'):
+  if not (root/(n+'.txt')).exists(): raise RuntimeError('fixture_not_ready_'+n)
+ events.append({'case':'cancel_before','activate':activate('A'),'begin':call('Begin'),'cancel':call('Cancel'),'send':call('Send','normal')})
+ time.sleep(.3);events[-1]['text']=contents()
+ events.append({'case':'normal','activate':activate('A'),'begin':call('Begin'),'send':call('Send','normal')})
+ time.sleep(.3);events[-1]['text']=contents()
+ events.append({'case':'cancel_after','activate':activate('A'),'begin':call('Begin'),'send_and_cancel':call('Send','cancel'),'send_after_cancel':call('Send','normal')})
+ time.sleep(.3);events[-1]['text']=contents()
+ events.append({'case':'focus_race','activate':activate('A'),'begin':call('Begin'),'send_switch_same_callback':call('Send','switch')})
+ time.sleep(.5);events[-1]['after_focus']=call('Read');events[-1]['text']=contents()
+ events.append({'case':'xwayland_simple','activate':activate('X'),'begin':call('Begin'),'send':call('Send','normal')})
+ time.sleep(.3);events[-1]['text']=contents()
+ print(json.dumps({'events':events},ensure_ascii=False),flush=True)
+finally:
+ for p in actors:
+  if p.poll() is None:p.terminate()
+ for p in actors:p.wait(timeout=5)

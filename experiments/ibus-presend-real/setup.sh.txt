@@ -1,0 +1,9 @@
+set -eu
+export XDG_RUNTIME_DIR=/run/user/1000 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus
+mkdir -p /tmp/presend-share "$HOME/.local/share/gnome-shell/extensions/inkecho-presend-experiment@local.invalid"
+sudo mount -t 9p -o trans=virtio,version=9p2000.L,ro inkecho_input /tmp/presend-share
+cp /tmp/presend-share/{extension.js,metadata.json,gate.js,capability.js} "$HOME/.local/share/gnome-shell/extensions/inkecho-presend-experiment@local.invalid/"
+sha256sum /tmp/presend-share/{extension.js,metadata.json,gate.js,capability.js} "$HOME/.local/share/gnome-shell/extensions/inkecho-presend-experiment@local.invalid/"*
+sudo umount /tmp/presend-share
+gsettings set org.gnome.shell disable-user-extensions false
+sudo reboot

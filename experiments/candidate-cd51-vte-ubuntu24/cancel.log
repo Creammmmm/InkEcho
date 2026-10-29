@@ -1,0 +1,6 @@
+/tmp/inkecho-r4-test/InkEcho-0.10.2-x86_64.AppImage: OK
+6056b6073b2fc7a8564f61f01cf6db2c4c35ad15fef41ba21672c5508630d58b  /tmp/inkecho-r4-test/squashfs-root/packages/inkecho/platform/output_router.py
+af654c3a436a05a1c10cb3450ec0af851e6b74414e502c2b12425149a85d4605  /tmp/inkecho-r4-test/squashfs-root/packages/inkecho/app.py
+已安装输入桥；运行状态需通过输入服务检查确认。
+{"mode": "cancel", "exit": 0, "a": "风", "b": "", "lengths": [1, 0], "exact": false, "prefix": true, "cancel_sent": true, "text_at_cancel": "风", "switched": false, "resume": false, "stdout": "{\"ready\": true}\n{\"events\": [[\"backend\", \"fcitx\"], [\"fcitx_insert_started\"], [\"commit_timeout\", 3.0], [\"commit_started\"], [\"commit_status\", 1], [\"cancel_handler\"], [\"finished\", \"cancelled\"]], \"outcome\": \"cancelled\", \"origin\": \"/tmp/inkecho-r4-test/squashfs-root/packages/inkecho/app.py\"}\n", "stderr": ""}
+未发现经过校验的输入桥；可能尚未安装。

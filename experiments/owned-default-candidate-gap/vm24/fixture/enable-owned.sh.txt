@@ -1,0 +1,14 @@
+set -eu
+umask 077
+export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus XDG_RUNTIME_DIR=/run/user/1000
+systemctl --user show-environment | sed -n '/^XDG_SESSION_TYPE=/p;/^WAYLAND_DISPLAY=/p;/^DISPLAY=/p;/^XAUTHORITY=/p'
+loginctl list-sessions --no-legend
+export XDG_SESSION_TYPE=wayland WAYLAND_DISPLAY=wayland-0 XDG_CURRENT_DESKTOP=ubuntu:GNOME DISPLAY=:0
+a=/tmp/inkecho-owned-default-acceptance/squashfs-root
+export APPDIR="$a" PYTHONHOME="$a/usr" PYTHONPATH="$a/packages" LD_LIBRARY_PATH="$a/usr/lib/inkecho"
+"$a/usr/bin/python3" - <<'PY'
+import asyncio,json
+from inkecho.platform.owned_extension import OwnedExtensionManager
+from inkecho.platform.owned_installation import installation_state,verified_installation
+m=OwnedExtensionManager();m.enable();print(m.status());assert verified_installation();print('actual_installation_state',asyncio.run(installation_state()))
+PY

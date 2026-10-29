@@ -1,0 +1,33 @@
+import asyncio,json,os
+from pathlib import Path
+from dbus_next import Message,MessageType
+from dbus_next.aio import MessageBus
+from inkecho.platform.ibus_lifecycle import Capability
+SERVICE='io.github.Creammmmm.InkEcho.PresendExperiment';PATH='/io/github/Creammmmm/InkEcho/PresendExperiment';INTERFACE=SERVICE+'1'
+async def main():
+ mode=os.environ['TEST_MODE']; bus=await MessageBus().connect();other=await MessageBus().connect();cap=Capability(Path(os.environ['XDG_RUNTIME_DIR']))
+ async def request(conn,dest,member,signature='',body=None,timeout=1):
+  return await asyncio.wait_for(conn.call(Message(destination=dest,path=PATH,interface=INTERFACE,member=member,signature=signature,body=body or [])),timeout)
+ daemon=await bus.call(Message(destination='org.freedesktop.DBus',path='/org/freedesktop/DBus',interface='org.freedesktop.DBus',member='GetNameOwner',signature='s',body=[SERVICE]));assert daemon.sender=='org.freedesktop.DBus';owner=daemon.body[0]
+ wrong=await request(other,owner,'Begin','ss',[cap.name,'0'*64]);assert wrong.sender==owner and wrong.body==[False]
+ begin=await request(bus,owner,'Begin','ss',[cap.name,cap.token]);assert begin.sender==owner and begin.body==[True]
+ foreign=await request(other,owner,'Commit','us',[0,'甲']);assert foreign.sender==owner and foreign.body==['rejected']
+ attempts=0; replies=[]
+ try:
+  first=await request(bus,owner,'Commit','us',[0,'甲'],timeout=.1 if mode=='lost' else 1)
+  assert first.sender==owner and first.message_type==MessageType.METHOD_RETURN
+  replies.append(first.body[0]);attempts+=first.body==['attempted']
+  if mode=='partial':
+   second=await request(bus,owner,'Commit','us',[1,'乙']);assert second.sender==owner;replies.append(second.body[0])
+ except asyncio.TimeoutError: replies.append('timeout_unknown')
+ if mode=='none':assert replies==['no_service'] and attempts==0
+ if mode=='partial':assert replies==['attempted','partial_no_service'] and attempts==1
+ if mode=='lost':assert replies==['timeout_unknown']
+ # A response timeout is always unknown: do not submit a retry.
+ if mode!='lost':
+  retry=await request(bus,owner,'Commit','us',[0,'甲']);assert retry.body==['rejected']
+ cancel=await request(bus,owner,'Cancel');assert cancel.sender==owner and cancel.body==[True]
+ after=await request(bus,owner,'Commit','us',[0,'甲']);assert after.body==['rejected']
+ print(json.dumps({'mode':mode,'owner':owner,'invalid_capability':'rejected','foreign_sender':'rejected','replies':replies,'cancelled':'rejected','passed':True}),flush=True)
+ bus.disconnect();other.disconnect();cap.close()
+asyncio.run(main())

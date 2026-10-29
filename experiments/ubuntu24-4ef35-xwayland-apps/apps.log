@@ -1,0 +1,21 @@
+Type=wayland
+Active=yes
+LockedHint=no
+InkEcho.AppImage: OK
+Original package; no source overlay
+inkecho-wayland-focus-probe@local.invalid
+  Name: InkEcho Wayland focus experiment
+  Description: Disposable isolated test only
+  Path: /home/inkecho/.local/share/gnome-shell/extensions/inkecho-wayland-focus-probe@local.invalid
+  Enabled: Yes
+  State: ACTIVE
+Chrome version: [1029/085810.269659:WARNING:chrome/app/chrome_main_linux.cc:84] Read channel stable from /tmp/inkecho-browser/chrome/CHROME_VERSION_EXTRA
+Google Chrome 154.0.8037.97 
+terminal version: # GNOME Terminal 3.52.0 using VTE 0.76.0 +BIDI +GNUTLS +ICU +SYSTEMD
+(false,)
+TERMINAL=full
+authorized True xonly True
+error KeyboardError unsupported_compositor unsupported_compositor
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/xw-terminal-received'

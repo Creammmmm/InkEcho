@@ -1,0 +1,13 @@
+Type=wayland
+Active=yes
+LockedHint=yes
+1405 /usr/bin/gnome-shell --mode=ubuntu
+false
+inkecho-ibus-v2-prototype@local.invalid
+  Name: InkEcho IBus v2 isolated prototype
+  Description: Unintegrated isolated experiment; not production supported
+  Path: /home/inkecho/.local/share/gnome-shell/extensions/inkecho-ibus-v2-prototype@local.invalid
+  Enabled: Yes
+  State: INACTIVE
+(false,)
+tmpfs           2.0G  409M  1.6G  21% /tmp

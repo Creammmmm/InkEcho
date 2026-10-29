@@ -1,0 +1,67 @@
+[
+  {
+    "run": "protocol26-r3/ibus-cancel-after-first",
+    "outcome": "cancelled",
+    "characters": 1,
+    "diagnostics": [],
+    "defaults_unchanged": true,
+    "cleanup_errors": [],
+    "native_map_restored": null
+  },
+  {
+    "run": "protocol26-r3/ibus-normal",
+    "outcome": "failed",
+    "characters": 24,
+    "diagnostics": [
+      "ibus_delivery_unknown"
+    ],
+    "defaults_unchanged": true,
+    "cleanup_errors": [],
+    "native_map_restored": null
+  },
+  {
+    "run": "protocol26-r3/keyboard-cancel-after-first",
+    "outcome": "cancelled",
+    "characters": 0,
+    "diagnostics": [],
+    "defaults_unchanged": true,
+    "cleanup_errors": [],
+    "native_map_restored": null
+  },
+  {
+    "run": "protocol26-r3/keyboard-normal",
+    "outcome": "succeeded",
+    "characters": 22,
+    "diagnostics": [],
+    "defaults_unchanged": true,
+    "cleanup_errors": [],
+    "native_map_restored": null
+  },
+  {
+    "run": "protocol26-r4/keyboard-cancel-after-first",
+    "outcome": "cancelled",
+    "characters": 0,
+    "diagnostics": [],
+    "defaults_unchanged": true,
+    "cleanup_errors": [],
+    "native_map_restored": true
+  },
+  {
+    "run": "protocol26-r4/keyboard-normal",
+    "outcome": "succeeded",
+    "characters": 22,
+    "diagnostics": [],
+    "defaults_unchanged": true,
+    "cleanup_errors": [],
+    "native_map_restored": true
+  },
+  {
+    "run": "protocol26-r5/keyboard-normal",
+    "outcome": "succeeded",
+    "characters": 22,
+    "diagnostics": [],
+    "defaults_unchanged": true,
+    "cleanup_errors": [],
+    "native_map_restored": true
+  }
+]

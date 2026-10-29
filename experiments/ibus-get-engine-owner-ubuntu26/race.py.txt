@@ -1,0 +1,24 @@
+import json,time,gi
+gi.require_version('Gtk','3.0'); gi.require_version('IBus','1.0')
+from gi.repository import Gtk,GLib,Gio,IBus
+IBus.init(); bus=IBus.Bus.new()
+a=Gtk.Window(title='InkEcho isolated race entry'); entry=Gtk.Entry(); a.add(entry); a.show_all(); a.present(); entry.grab_focus()
+b=Gtk.Window(title='InkEcho isolated race button'); button=Gtk.Button(label='No text'); b.add(button)
+started=time.monotonic(); original=None
+def first():
+ global original
+ if not(a.is_active() and entry.has_focus()):
+  if time.monotonic()-started<10:return True
+  print(json.dumps({'error':'entry_focus_missing'}),flush=True);Gtk.main_quit();return False
+ original=bus.current_input_context(); b.show_all();b.present();button.grab_focus(); GLib.timeout_add(100,second);return False
+def second():
+ if not (b.is_active() and button.has_focus()):
+  if time.monotonic()-started<10:return True
+  print(json.dumps({'error':'button_focus_missing'}),flush=True);Gtk.main_quit();return False
+ current=bus.current_input_context()
+ try:
+  result=bus.get_connection().call_sync('org.freedesktop.IBus',original,'org.freedesktop.IBus.InputContext','GetEngine',None,None,Gio.DBusCallFlags.NONE,1500,None)
+  outcome={'kind':'return','type':result.get_type_string()}
+ except GLib.Error as e:outcome={'kind':'error','code':e.code,'message':str(e)}
+ print(json.dumps({'entry_context_at_start':original,'button_context_after_switch':current,'button_active':b.is_active(),'button_focus':button.has_focus(),'stale_context_query':outcome}),flush=True);Gtk.main_quit();return False
+GLib.timeout_add(300,first);Gtk.main()

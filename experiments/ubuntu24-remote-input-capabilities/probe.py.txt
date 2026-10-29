@@ -1,0 +1,25 @@
+import gi, json, xml.etree.ElementTree as ET
+from gi.repository import Gio,GLib
+bus=Gio.bus_get_sync(Gio.BusType.SESSION,None)
+def call(dest,path,iface,method,params=None,timeout=5000):
+ return bus.call_sync(dest,path,iface,method,params,None,Gio.DBusCallFlags.NONE,timeout,None)
+def methods(dest,path):
+ xml=call(dest,path,'org.freedesktop.DBus.Introspectable','Introspect').unpack()[0]
+ root=ET.fromstring(xml);out={}
+ for iface in root.findall('interface'):
+  name=iface.get('name')
+  if 'RemoteDesktop' in name:out[name]={'methods':[m.get('name') for m in iface.findall('method')],'properties':[(p.get('name'),p.get('type')) for p in iface.findall('property')]}
+ return out
+p='/org/freedesktop/portal/desktop';d='org.freedesktop.portal.Desktop'
+print('PORTAL_INTERFACES',json.dumps(methods(d,p)),flush=True)
+for prop in ('version','AvailableDeviceTypes'):
+ try:print('PORTAL_PROP',prop,call(d,p,'org.freedesktop.DBus.Properties','Get',GLib.Variant('(ss)',('org.freedesktop.portal.RemoteDesktop',prop))).unpack(),flush=True)
+ except GLib.Error as e:print('PORTAL_PROP_ERROR',prop,str(e),flush=True)
+d='org.gnome.Mutter.RemoteDesktop';p='/org/gnome/Mutter/RemoteDesktop'; print('MUTTER_ROOT',json.dumps(methods(d,p)),flush=True)
+s=None
+try:
+ s=call(d,p,d,'CreateSession').unpack()[0];print('MUTTER_SESSION_PATH',s,flush=True);print('MUTTER_SESSION_INTERFACES',json.dumps(methods(d,s)),flush=True)
+finally:
+ if s:
+  try:print('MUTTER_STOP',call(d,s,d+'.Session','Stop').unpack(),flush=True)
+  except GLib.Error as e:print('MUTTER_STOP_ERROR',str(e),flush=True)

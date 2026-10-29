@@ -1,0 +1,16 @@
+Warning: Permanently added '[127.0.0.1]:2222' (ED25519) to the list of known hosts.
+Type=wayland
+Active=yes
+LockedHint=no
+xkb:us::eng
+1ffc471eb913d3f86db2acbe5b10a97825b48bd3563cfcbd75535dbaa6720b3d  /tmp/atspi-owned/actor.py
+aeeb414abefe94dd89cf89ed91c3e6842529b825394f6e682e1a98f2a863f695  /tmp/atspi-owned/observer.py
+CASE=ibus/entry
+{"pid": 2315, "kind": "entry", "window_active": true, "widget_focus": true}
+{"owned_pid": 2315, "focused_roles": [{"role": "text", "editable": true, "focused": true}], "current_ibus_path": "/org/freedesktop/IBus/InputContext_3"}
+CASE=gtk-im-context-simple/entry
+{"pid": 2400, "kind": "entry", "window_active": true, "widget_focus": true}
+{"owned_pid": 2400, "focused_roles": [{"role": "text", "editable": true, "focused": true}], "current_ibus_path": "/org/freedesktop/IBus/InputContext_1"}
+CASE=ibus/button
+{"pid": 2477, "kind": "button", "window_active": true, "widget_focus": true}
+{"owned_pid": 2477, "focused_roles": [{"role": "button", "editable": false, "focused": true}], "current_ibus_path": "/org/freedesktop/IBus/InputContext_1"}

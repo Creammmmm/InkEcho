@@ -1,0 +1,20 @@
+/tmp/wayland-lifecycle/InkEcho-0.10.2-x86_64.AppImage: OK
+已安装输入桥；运行状态需通过输入服务检查确认。
+Traceback (most recent call last):
+  File "/tmp/wayland-lifecycle/probe.py", line 112, in <module>
+    asyncio.run(run(sys.argv[1]))
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/tmp/wayland-lifecycle/squashfs-root/usr/lib/python3.13/asyncio/runners.py", line 196, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "/tmp/wayland-lifecycle/squashfs-root/usr/lib/python3.13/asyncio/runners.py", line 119, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/tmp/wayland-lifecycle/squashfs-root/usr/lib/python3.13/asyncio/base_events.py", line 726, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/tmp/wayland-lifecycle/probe.py", line 70, in run
+    await launch("a")
+  File "/tmp/wayland-lifecycle/probe.py", line 35, in launch
+    raise RuntimeError("owned target did not focus")
+RuntimeError: owned target did not focus

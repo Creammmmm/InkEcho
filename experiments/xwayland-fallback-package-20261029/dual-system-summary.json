@@ -1,0 +1,356 @@
+{
+  "sha256": "4ef35afaf863562a38bd90646cc6d4337d20c22545aa080876ddaab0a5d667e5",
+  "systems": {
+    "24": {
+      "cases": {
+        "normal": {
+          "receiver": {
+            "text_exact": true,
+            "no_late_text": true,
+            "old_target_untouched": true,
+            "received_codepoints": [
+              20320,
+              22909,
+              32,
+              73,
+              110,
+              107,
+              69,
+              99,
+              104,
+              111,
+              65292,
+              99,
+              97,
+              102,
+              233,
+              32,
+              937,
+              10,
+              31532,
+              20108,
+              34892,
+              12290
+            ],
+            "pipeline_exit": 0,
+            "passed": true
+          },
+          "outcome": "succeeded",
+          "cleanup_errors": [],
+          "defaults_unchanged": true,
+          "mapping_restored": true,
+          "native_map_restored": null,
+          "cancel": null,
+          "hybrid_sha256": null
+        },
+        "cancel": {
+          "receiver": {
+            "text_exact": true,
+            "no_late_text": true,
+            "old_target_untouched": true,
+            "received_codepoints": [
+              20320
+            ],
+            "pipeline_exit": 0,
+            "passed": true
+          },
+          "outcome": "cancelled",
+          "cleanup_errors": [],
+          "defaults_unchanged": true,
+          "mapping_restored": true,
+          "native_map_restored": null,
+          "cancel": {
+            "trigger": "independent owned receiver first nonempty text",
+            "epoch_before": 1,
+            "epoch_after": 3,
+            "task_inactive": true,
+            "receiver_codepoints_at_cancel": 1,
+            "sender_observation_seconds": 1.2600719239999876
+          },
+          "hybrid_sha256": null
+        }
+      },
+      "http_asr": {
+        "passed": true,
+        "synthetic_wav": true,
+        "real_cloud": false,
+        "module": "/tmp/inkecho-xwayland-acceptance/squashfs-root/packages/inkecho/providers.py",
+        "module_sha256": "0e4015a5e5b3a7793e47e48f0f14399933c5fdd352411cc9b3d2aa87f6419867",
+        "wire_wav_exact": true,
+        "request_path": "POST /v1/chat/completions HTTP/1.1",
+        "returned_codepoints": [
+          20320,
+          22909,
+          65292,
+          72,
+          84,
+          84,
+          80,
+          32,
+          937,
+          32,
+          128512,
+          12290
+        ],
+        "server_handlers_remaining": 0
+      },
+      "final_container": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-29T08:37:41.275776706Z",
+        "FinishedAt": "2026-10-29T08:48:01.15396216Z"
+      }
+    },
+    "26": {
+      "cases": {
+        "normal": {
+          "receiver": {
+            "text_exact": true,
+            "no_late_text": true,
+            "old_target_untouched": true,
+            "received_codepoints": [
+              20320,
+              22909,
+              32,
+              73,
+              110,
+              107,
+              69,
+              99,
+              104,
+              111,
+              65292,
+              99,
+              97,
+              102,
+              233,
+              32,
+              937,
+              10,
+              31532,
+              20108,
+              34892,
+              12290
+            ],
+            "pipeline_exit": 0,
+            "passed": true
+          },
+          "outcome": "succeeded",
+          "cleanup_errors": [],
+          "defaults_unchanged": true,
+          "mapping_restored": null,
+          "native_map_restored": true,
+          "cancel": null,
+          "hybrid_sha256": "204b46020cc7ed2aa287488388071cdc91b720fd3518a483e57140f697d3273f"
+        },
+        "cancel": {
+          "receiver": {
+            "text_exact": true,
+            "no_late_text": true,
+            "old_target_untouched": true,
+            "received_codepoints": [
+              20320
+            ],
+            "pipeline_exit": 0,
+            "passed": true
+          },
+          "outcome": "cancelled",
+          "cleanup_errors": [],
+          "defaults_unchanged": true,
+          "mapping_restored": null,
+          "native_map_restored": true,
+          "cancel": {
+            "trigger": "independent owned receiver first nonempty text",
+            "epoch_before": 1,
+            "epoch_after": 3,
+            "task_inactive": true,
+            "receiver_codepoints_at_cancel": 1,
+            "sender_observation_seconds": 1.1467960179999963
+          },
+          "hybrid_sha256": "204b46020cc7ed2aa287488388071cdc91b720fd3518a483e57140f697d3273f"
+        }
+      },
+      "http_asr": {
+        "passed": true,
+        "synthetic_wav": true,
+        "real_cloud": false,
+        "module": "/tmp/inkecho-xwayland-acceptance/squashfs-root/packages/inkecho/providers.py",
+        "module_sha256": "0e4015a5e5b3a7793e47e48f0f14399933c5fdd352411cc9b3d2aa87f6419867",
+        "wire_wav_exact": true,
+        "request_path": "POST /v1/chat/completions HTTP/1.1",
+        "returned_codepoints": [
+          20320,
+          22909,
+          65292,
+          72,
+          84,
+          84,
+          80,
+          32,
+          937,
+          32,
+          128512,
+          12290
+        ],
+        "server_handlers_remaining": 0
+      },
+      "final_container": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-29T08:48:35.074605533Z",
+        "FinishedAt": "2026-10-29T08:50:01.871807325Z"
+      }
+    }
+  },
+  "24_wayland_boundary": {
+    "matrix-fallback24/native-full.jsonl": {
+      "passed": true,
+      "display_backend": "GdkWaylandDisplay",
+      "a_length": 0,
+      "b_length": 0,
+      "outcome": "failed",
+      "hybrid_sha256": null,
+      "events": [
+        [
+          "backend",
+          "fcitx"
+        ],
+        [
+          "fcitx_insert_started"
+        ],
+        [
+          "fcitx_error",
+          "no_target",
+          0,
+          0,
+          false
+        ],
+        [
+          "hybrid_connect"
+        ],
+        [
+          "keyboard_connect"
+        ],
+        [
+          "hybrid_authorize"
+        ],
+        [
+          "diagnostic",
+          "unsupported_compositor"
+        ],
+        [
+          "problem",
+          "\u5f53\u524d GNOME Wayland \u7f3a\u5c11 Unicode \u952e\u76d8\u6620\u5c04\u63a5\u53e3\u3002Ubuntu 24.04 / GNOME 46 \u8bf7\u5728\u767b\u5f55\u754c\u9762\u9009\u62e9\u300cUbuntu on Xorg\u300d\uff1b\u7a0b\u5e8f\u4e0d\u4f1a\u81ea\u52a8\u66f4\u6539\u7cfb\u7edf\u4f1a\u8bdd\u3002"
+        ],
+        [
+          "finished",
+          "failed"
+        ]
+      ]
+    },
+    "matrix-fallback24-r2/xwayland-full.jsonl": {
+      "passed": true,
+      "display_backend": "X11Display",
+      "a_length": 15,
+      "b_length": 0,
+      "outcome": "succeeded",
+      "hybrid_sha256": "204b46020cc7ed2aa287488388071cdc91b720fd3518a483e57140f697d3273f",
+      "events": [
+        [
+          "backend",
+          "fcitx"
+        ],
+        [
+          "fcitx_insert_started"
+        ],
+        [
+          "fcitx_error",
+          "no_target",
+          0,
+          0,
+          false
+        ],
+        [
+          "hybrid_connect"
+        ],
+        [
+          "keyboard_connect"
+        ],
+        [
+          "hybrid_authorize"
+        ],
+        [
+          "keyboard_insert_started"
+        ],
+        [
+          "keyboard_backend",
+          "x11_prefix"
+        ],
+        [
+          "finished",
+          "succeeded"
+        ]
+      ]
+    },
+    "matrix-fallback24-r2/xwayland-cancel.jsonl": {
+      "passed": true,
+      "display_backend": "X11Display",
+      "a_length": 1,
+      "b_length": 0,
+      "outcome": "cancelled",
+      "hybrid_sha256": "204b46020cc7ed2aa287488388071cdc91b720fd3518a483e57140f697d3273f",
+      "events": [
+        [
+          "backend",
+          "fcitx"
+        ],
+        [
+          "fcitx_insert_started"
+        ],
+        [
+          "fcitx_error",
+          "no_target",
+          0,
+          0,
+          false
+        ],
+        [
+          "hybrid_connect"
+        ],
+        [
+          "keyboard_connect"
+        ],
+        [
+          "hybrid_authorize"
+        ],
+        [
+          "keyboard_insert_started"
+        ],
+        [
+          "keyboard_backend",
+          "x11_prefix"
+        ],
+        [
+          "finished",
+          "cancelled"
+        ]
+      ]
+    }
+  },
+  "required_dual_os_subset_passed": true,
+  "old_222c_results_inherited": false
+}

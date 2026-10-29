@@ -1,0 +1,15 @@
+import subprocess, gi
+gi.require_version('Gtk','3.0')
+from gi.repository import Gtk, GLib
+w=Gtk.Window(title='InkEcho concurrent probe'); e=Gtk.Entry(); w.add(e); w.show_all(); w.present(); e.grab_focus()
+def call(method):
+ p=subprocess.run(['gdbus','call','--session','--dest','org.example.InkEchoXkbProbe','--object-path','/org/example/InkEchoXkbProbe','--method','org.example.InkEchoXkbProbe.'+method],capture_output=True,text=True,timeout=5); print(method,p.returncode,p.stdout.strip(),p.stderr.strip(),flush=True)
+def step1():
+ print('focus',w.is_active(),e.has_focus(),flush=True)
+ if not w.is_active() or not e.has_focus(): Gtk.main_quit(); return False
+ call('Apply'); call('Apply'); call('Restore'); GLib.timeout_add(700,step2); return False
+def step2():
+ call('Press'); GLib.timeout_add(700,step3); return False
+def step3():
+ print('text_after_first_restore',repr(e.get_text()),flush=True); call('Restore'); Gtk.main_quit(); return False
+GLib.timeout_add(2000,step1); Gtk.main()

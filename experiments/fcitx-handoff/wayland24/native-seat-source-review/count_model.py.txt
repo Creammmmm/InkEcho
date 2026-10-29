@@ -1,0 +1,20 @@
+"""Offline model of Mutter 46 seat button-count condition; not a runtime test."""
+def run(events):
+    count = 0
+    delivered = []
+    for device, state in events:
+        if state:
+            count += 1
+        elif count:
+            count -= 1
+        if (state and count > 1) or (not state and count != 0):
+            continue
+        delivered.append((device, state, count))
+    return delivered
+
+physical_overlap = [('physical',1),('virtual',1),('virtual',0),('physical',0)]
+virtual_only = [('virtual',1),('virtual',0)]
+print('virtual_only:', run(virtual_only))
+print('physical_overlap:', run(physical_overlap))
+assert run(virtual_only) == [('virtual',1,1),('virtual',0,0)]
+assert run(physical_overlap) == [('physical',1,1),('physical',0,0)]

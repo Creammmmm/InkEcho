@@ -1,0 +1,37 @@
+qt.multimedia.symbolsresolver: Couldn't load va-x11 library
+qt.multimedia.symbolsresolver: Couldn't resolve va-x11 symbols
+qt.multimedia.ffmpeg: Using Qt multimedia with FFmpeg version 9.0.1 LGPL version 2.1 or later
+qt.multimedia.pipewire.devicemonitor: Ignoring dummy output: std::map(std::pair("client.id", "33"), std::pair("factory.id", "19"), std::pair("media.class", "Audio/Sink"), std::pair("node.description", "Dummy Output"), std::pair("node.name", "auto_null"), std::pair("object.serial", "127"))
+Traceback (most recent call last):
+  File "/tmp/inkecho-v2-protocol-acceptance/pipeline.py", line 444, in run
+    assert result["outcome"] == "succeeded"
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/tmp/inkecho-v2-protocol-acceptance/pipeline.py", line 565, in <module>
+    loop.run_until_complete(run())
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "/tmp/inkecho-v2-protocol-acceptance/squashfs-root/packages/qasync/__init__.py", line 438, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/tmp/inkecho-v2-protocol-acceptance/pipeline.py", line 552, in run
+    json.dump(report, stream, indent=2, ensure_ascii=False)
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/inkecho-v2-protocol-acceptance/squashfs-root/usr/lib/python3.13/json/__init__.py", line 181, in dump
+    for chunk in iterable:
+                 ^^^^^^^^
+  File "/tmp/inkecho-v2-protocol-acceptance/squashfs-root/usr/lib/python3.13/json/encoder.py", line 435, in _iterencode
+    yield from _iterencode_dict(o, _current_indent_level)
+  File "/tmp/inkecho-v2-protocol-acceptance/squashfs-root/usr/lib/python3.13/json/encoder.py", line 409, in _iterencode_dict
+    yield from chunks
+  File "/tmp/inkecho-v2-protocol-acceptance/squashfs-root/usr/lib/python3.13/json/encoder.py", line 409, in _iterencode_dict
+    yield from chunks
+  File "/tmp/inkecho-v2-protocol-acceptance/squashfs-root/usr/lib/python3.13/json/encoder.py", line 442, in _iterencode
+    o = _default(o)
+  File "/tmp/inkecho-v2-protocol-acceptance/squashfs-root/usr/lib/python3.13/json/encoder.py", line 182, in default
+    raise TypeError(f'Object of type {o.__class__.__name__} '
+                    f'is not JSON serializable')
+TypeError: Object of type Usage is not JSON serializable

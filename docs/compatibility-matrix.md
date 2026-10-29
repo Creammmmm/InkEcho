@@ -2,8 +2,10 @@
 
 Updated: 2026-10-17. **Pending is not supported.** Evidence is specific to
 version, host/guest session, target and workflow. A passed keyboard fixture
-is not full voice-input or desktop support. No current path uses clipboard
-or system input-method submission, including as a fallback.
+is not full voice-input or desktop support. Clipboard output is never used.
+Current source permits optional input-method bridges and defaults to capability-based
+auto selection; this does not extend the historical package results below. See the
+[current routing rules](user-guide.md#输入方式与自动选择).
 
 ## Current a14 same-artifact dual-Ubuntu scope
 

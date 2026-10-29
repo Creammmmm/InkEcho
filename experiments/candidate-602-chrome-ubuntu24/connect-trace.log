@@ -1,0 +1,249 @@
+/tmp/inkecho-r4-test/InkEcho-0.10.2-x86_64.AppImage: OK
+6056b6073b2fc7a8564f61f01cf6db2c4c35ad15fef41ba21672c5508630d58b  /tmp/inkecho-r4-test/squashfs-root/packages/inkecho/platform/output_router.py
+af654c3a436a05a1c10cb3450ec0af851e6b74414e502c2b12425149a85d4605  /tmp/inkecho-r4-test/squashfs-root/packages/inkecho/app.py
+已安装输入桥；运行状态需通过输入服务检查确认。
+SERVER_PORT 41529
+SERVER_GET /a
+SERVER_SELFTEST 200
+CDP_PAGE {'id': 1, 'result': {'result': {'type': 'string', 'value': '{"ready":"complete","url":"about:blank","focus":false}'}}}
+CDP_ERROR timed out in 2.0s
+{"mode": "full", "error": "initial_focus_missing", "focus": []}
+browser_timeout_or_error=full
+未发现经过校验的输入桥；可能尚未安装。
+[1028/201207.974821:WARNING:chrome/app/chrome_main_linux.cc:84] Read channel stable from /tmp/inkecho-browser/chrome/CHROME_VERSION_EXTRA
+
+DevTools listening on ws://127.0.0.1:9222/devtools/browser/cf399841-bf3b-45f5-b9cd-af1e6844b44e
+--- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=4089, si_uid=1000, si_status=0, si_utime=0, si_stime=0} ---
+connect(26, {sa_family=AF_UNIX, sun_path="/run/user/1000/wayland-0"}, 27) = 0
+connect(27, {sa_family=AF_UNIX, sun_path="/run/user/1000/wayland-0"}, 27) = 0
+--- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_KILLED, si_pid=4160, si_uid=1000, si_status=SIGTERM, si_utime=0, si_stime=1 /* 0.01 s */} ---
++++ exited with 0 +++
+--- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=4091, si_uid=1000, si_status=0, si_utime=0, si_stime=0} ---
++++ exited with 0 +++
+--- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_KILLED, si_pid=4257, si_uid=1000, si_status=SIGTERM, si_utime=1 /* 0.01 s */, si_stime=2 /* 0.02 s */} ---
+connect(95, {sa_family=AF_UNIX, sun_path="/var/run/nscd/socket"}, 110) = -1 ENOENT (No such file or directory)
+connect(43, {sa_family=AF_UNIX, sun_path="/var/run/nscd/socket"}, 110) = -1 ENOENT (No such file or directory)
+connect(43, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(43, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(118, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(114, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(63, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(63, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(114, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(114, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(156, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(156, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(149, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(149, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(149, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(149, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(149, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(149, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(178, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(178, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(114, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(114, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(45, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(63, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(63, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(22, {sa_family=AF_UNIX, sun_path="/run/dbus/system_bus_socket"}, 29) = 0
+connect(36, {sa_family=AF_UNIX, sun_path="/run/user/1000/bus"}, 20) = 0
+--- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_KILLED, si_pid=4218, si_uid=1000, si_status=SIGTERM, si_utime=1 /* 0.01 s */, si_stime=2 /* 0.02 s */} ---
+--- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=4235, si_uid=1000, si_status=0, si_utime=0, si_stime=2 /* 0.02 s */} ---
+--- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_KILLED, si_pid=4254, si_uid=1000, si_status=SIGTERM, si_utime=1 /* 0.01 s */, si_stime=2 /* 0.02 s */} ---
+connect(124, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(124, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(30, {sa_family=AF_UNIX, sun_path="/run/user/1000/bus"}, 110) = 0
++++ exited with 0 +++
+--- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_KILLED, si_pid=4217, si_uid=1000, si_status=SIGTERM, si_utime=1 /* 0.01 s */, si_stime=2 /* 0.02 s */} ---
+--- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=4237, si_uid=1000, si_status=0, si_utime=1 /* 0.01 s */, si_stime=2 /* 0.02 s */} ---
+--- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_KILLED, si_pid=4172, si_uid=1000, si_status=SIGTERM, si_utime=2 /* 0.02 s */, si_stime=2 /* 0.02 s */} ---
++++ exited with 0 +++
+connect(18, {sa_family=AF_INET6, sin6_port=htons(443), sin6_flowinfo=htonl(0), inet_pton(AF_INET6, "2001:4860:4860::8888", &sin6_addr), sin6_scope_id=0}, 28) = 0
+connect(18, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(19, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(20, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(21, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(22, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(23, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(23, {sa_family=AF_INET, sin_port=htons(41529), sin_addr=inet_addr("127.0.0.1")}, 16) = -1 EINPROGRESS (Operation now in progress)
+connect(19, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(24, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(25, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(26, {sa_family=AF_INET, sin_port=htons(443), sin_addr=inet_addr("127.0.0.1")}, 16) = 0
+connect(26, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(27, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(28, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(29, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(19, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(29, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(19, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(24, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(25, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(23, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(24, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(25, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(26, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(27, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(28, {sa_family=AF_INET, sin_port=htons(41529), sin_addr=inet_addr("127.0.0.1")}, 16) = -1 EINPROGRESS (Operation now in progress)
+connect(29, {sa_family=AF_INET, sin_port=htons(41529), sin_addr=inet_addr("127.0.0.1")}, 16) = -1 EINPROGRESS (Operation now in progress)
+connect(23, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(24, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(25, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(26, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(30, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(31, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(32, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(25, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(26, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(27, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(30, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(24, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(25, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(26, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(27, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(30, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(25, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(30, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(26, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(27, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(30, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(31, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(32, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(33, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(26, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(27, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(30, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(31, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(32, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(33, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(26, {sa_family=AF_INET6, sin6_port=htons(443), sin6_flowinfo=htonl(0), inet_pton(AF_INET6, "2001:4860:4860::8888", &sin6_addr), sin6_scope_id=0}, 28) = 0
+connect(26, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(27, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(30, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(31, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(32, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(33, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(26, {sa_family=AF_INET6, sin6_port=htons(443), sin6_flowinfo=htonl(0), inet_pton(AF_INET6, "2001:4860:4860::8888", &sin6_addr), sin6_scope_id=0}, 28) = 0
+connect(26, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(27, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(30, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(31, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(32, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(33, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(26, {sa_family=AF_INET6, sin6_port=htons(443), sin6_flowinfo=htonl(0), inet_pton(AF_INET6, "2001:4860:4860::8888", &sin6_addr), sin6_scope_id=0}, 28) = 0
+connect(26, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(27, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(30, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(31, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(32, {sa_family=AF_INET, sin_port=htons(443), sin_addr=inet_addr("127.0.0.1")}, 16) = 0
+connect(32, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(33, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(26, {sa_family=AF_INET6, sin6_port=htons(443), sin6_flowinfo=htonl(0), inet_pton(AF_INET6, "2001:4860:4860::8888", &sin6_addr), sin6_scope_id=0}, 28) = 0
+connect(26, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(27, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(30, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(31, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(32, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
+connect(33, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0
++++ exited with 0 +++
++++ killed by SIGTERM +++
++++ exited with 0 +++
++++ killed by SIGTERM +++
+--- SIGTERM {si_signo=SIGTERM, si_code=SI_USER, si_pid=4088, si_uid=1000} ---
++++ killed by SIGTERM +++
++++ exited with 0 +++
++++ exited with 0 +++
++++ exited with 0 +++
++++ exited with 0 +++
++++ exited with 0 +++
++++ exited with 0 +++
++++ exited with 0 +++
++++ killed by SIGTERM +++
++++ killed by SIGTERM +++
++++ killed by SIGTERM +++
++++ killed by SIGTERM +++
+--- SIGTERM {si_signo=SIGTERM, si_code=SI_USER, si_pid=4088, si_uid=1000} ---
++++ killed by SIGTERM +++
++++ killed by SIGTERM +++
++++ exited with 0 +++
++++ exited with 0 +++
++++ killed by SIGTERM +++
++++ killed by SIGTERM +++
+--- SIGTERM {si_signo=SIGTERM, si_code=SI_USER, si_pid=4088, si_uid=1000} ---
++++ killed by SIGTERM +++
+--- SIGTERM {si_signo=SIGTERM, si_code=SI_USER, si_pid=4088, si_uid=1000} ---
++++ killed by SIGTERM +++
++++ killed by SIGTERM +++
++++ killed by SIGTERM +++
++++ killed by SIGTERM +++
++++ killed by SIGTERM +++
++++ killed by SIGTERM +++
++++ killed by SIGTERM +++
++++ killed by SIGTERM +++
++++ killed by SIGTERM +++
++++ killed by SIGTERM +++
++++ killed by SIGTERM +++
++++ killed by SIGTERM +++
++++ killed by SIGTERM +++
++++ killed by SIGTERM +++
++++ killed by SIGTERM +++
++++ killed by SIGTERM +++
++++ killed by SIGTERM +++
++++ exited with 0 +++
++++ exited with 0 +++
++++ exited with 0 +++
++++ exited with 0 +++
++++ exited with 0 +++
++++ exited with 0 +++
++++ exited with 0 +++
++++ exited with 0 +++
++++ exited with 0 +++
++++ exited with 0 +++
++++ exited with 0 +++
++++ exited with 0 +++
+???( <unfinished ...>
++++ exited with 0 +++
++++ exited with 0 +++
++++ exited with 0 +++
++++ exited with 0 +++
++++ exited with 0 +++
++++ exited with 0 +++
++++ exited with 0 +++
++++ killed by SIGTERM +++
++++ exited with 0 +++
++++ killed by SIGTERM +++
+--- SIGTERM {si_signo=SIGTERM, si_code=SI_USER, si_pid=4088, si_uid=1000} ---
++++ killed by SIGTERM +++
++++ killed by SIGTERM +++
++++ killed by SIGTERM +++
++++ killed by SIGTERM +++
+--- SIGTERM {si_signo=SIGTERM, si_code=SI_USER, si_pid=4088, si_uid=1000} ---
++++ killed by SIGTERM +++
++++ killed by SIGTERM +++
++++ killed by SIGTERM +++
++++ killed by SIGTERM +++
++++ killed by SIGTERM +++
++++ killed by SIGTERM +++
++++ killed by SIGTERM +++
++++ killed by SIGTERM +++
+???( <unfinished ...>
++++ killed by SIGTERM +++
++++ killed by SIGTERM +++
++++ killed by SIGTERM +++
++++ killed by SIGTERM +++
++++ exited with 0 +++
++++ exited with 0 +++
++++ exited with 0 +++
++++ exited with 0 +++
++++ exited with 0 +++
++++ exited with 0 +++
++++ exited with 0 +++
++++ exited with 0 +++
++++ exited with 0 +++
++++ exited with 0 +++
++++ exited with 0 +++
++++ exited with 0 +++
+--- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=4274, si_uid=1000, si_status=0, si_utime=1 /* 0.01 s */, si_stime=2 /* 0.02 s */} ---
++++ exited with 0 +++
++++ exited with 0 +++

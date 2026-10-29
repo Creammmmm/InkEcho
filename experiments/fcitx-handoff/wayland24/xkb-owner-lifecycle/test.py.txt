@@ -1,0 +1,40 @@
+import gi, subprocess, os, hashlib, glob
+from gi.repository import GLib,Gio
+gi.require_version('Gtk','3.0')
+from gi.repository import Gtk
+addr=Gio.dbus_address_get_for_bus_sync(Gio.BusType.SESSION,None)
+def conn():return Gio.DBusConnection.new_for_address_sync(addr,Gio.DBusConnectionFlags.AUTHENTICATION_CLIENT|Gio.DBusConnectionFlags.MESSAGE_BUS_CONNECTION,None,None)
+def call(c,m):
+ try:return c.call_sync('org.example.InkEchoXkbProbe','/org/example/InkEchoXkbProbe','org.example.InkEchoXkbProbe',m,None,GLib.VariantType.new('(s)'),Gio.DBusCallFlags.NONE,3000,None).unpack()[0]
+ except Exception as e:return 'ERROR:'+str(e)
+def xkb():
+ pid=subprocess.check_output(['pgrep','-u','inkecho','-x','gnome-shell'],text=True).splitlines()[0]
+ parts=open('/proc/'+pid+'/environ','rb').read().split(b'\0'); env=os.environ.copy()
+ for part in parts:
+  if b'=' in part:
+   k,v=part.split(b'=',1)
+   if k in (b'DISPLAY',b'XAUTHORITY'):env[k.decode()]=v.decode()
+ auth=glob.glob('/run/user/1000/.mutter-Xwaylandauth.*'); env['XAUTHORITY']=auth[0] if auth else env.get('XAUTHORITY',''); p=subprocess.run(['xkbcomp','-xkb',env.get('DISPLAY',':0'),'-'],env=env,capture_output=True)
+ return p.returncode,hashlib.sha256(p.stdout).hexdigest(),p.stderr.decode()[:200]
+a,b=conn(),conn();w=Gtk.Window(title='isolated ownership');entry=Gtk.Entry();w.add(entry);w.show_all();w.present();entry.grab_focus()
+def first():
+ print('focus',w.is_active(),entry.has_focus(),'initial-map',xkb(),flush=True)
+ if not w.is_active() or not entry.has_focus():Gtk.main_quit();return False
+ print('owner-acquire',call(a,'Apply'),'contender-acquire',call(b,'Apply'),'contender-press',call(b,'Press'),'owner-press',call(a,'Press'),flush=True)
+ GLib.timeout_add(600,change);return False
+def change():
+ print('before-change',repr(entry.get_text()),'acquired-map',xkb(),flush=True)
+ subprocess.run(['gsettings','set','org.gnome.desktop.input-sources','xkb-options',"['caps:escape']"],check=True)
+ GLib.timeout_add(1000,after_change);return False
+def after_change():
+ print('after-config-map',xkb(),flush=True); print('after-config owner-press',call(a,'Press'),'new-owner-acquire',call(b,'Apply'),'new-owner-press',call(b,'Press'),flush=True)
+ GLib.timeout_add(600,disconnect);return False
+def disconnect():
+ print('before-disconnect',repr(entry.get_text()),'acquired-map-2',xkb(),flush=True);b.close_sync(None)
+ GLib.timeout_add(900,after_disconnect);return False
+def after_disconnect():
+ print('after-owner-loss map',xkb(),flush=True);print('after-owner-loss acquire',call(a,'Apply'),'press',call(a,'Press'),'restore',call(a,'Restore'),flush=True)
+ GLib.timeout_add(600,finish);return False
+def finish():
+ print('final',repr(entry.get_text()),'restored-map',xkb(),flush=True);print('settings',subprocess.check_output(['gsettings','get','org.gnome.desktop.input-sources','xkb-options'],text=True).strip(),flush=True);Gtk.main_quit();return False
+GLib.timeout_add(3000,first);Gtk.main()

@@ -1,0 +1,32 @@
+import gi, subprocess
+
+gi.require_version('Gtk','3.0')
+from gi.repository import Gtk, GLib
+w=Gtk.Window(title='InkEcho isolated XKB conflict test');e=Gtk.Entry();w.add(e);w.show_all();w.present();e.grab_focus()
+def event(_w,event):
+ print('key',event.keyval,Gtk.accelerator_name(event.keyval,0),flush=True)
+ return False
+w.connect('key-press-event',event)
+def call(method,*args):
+ p=subprocess.run(['gdbus','call','--session','--dest','org.example.InkEchoXkbProbe','--object-path','/org/example/InkEchoXkbProbe','--method','org.example.InkEchoXkbProbe.'+method,*args],capture_output=True,text=True,timeout=5)
+ print(method,p.returncode,p.stdout.strip(),p.stderr.strip(),flush=True)
+def step1():
+ print('focus',w.is_active(),e.has_focus(),flush=True)
+ if not w.is_active() or not e.has_focus():Gtk.main_quit();return False
+ call('Apply');GLib.timeout_add(700,step2);return False
+def step2():
+ call('PressKey','30');call('PressKey','124');GLib.timeout_add(700,step3);return False
+def step3():
+ print('initial',repr(e.get_text()),flush=True)
+ p=subprocess.run(['gsettings','set','org.gnome.desktop.input-sources','xkb-options',"['caps:escape']"],capture_output=True,text=True);print('change_options',p.returncode,p.stderr.strip(),flush=True)
+ GLib.timeout_add(1000,step4);return False
+def step4():
+ call('PressKey','58');GLib.timeout_add(700,step5);return False
+def step5():
+ call('Restore');GLib.timeout_add(700,step6);return False
+def step6():
+ call('PressKey','58');GLib.timeout_add(700,step7);return False
+def step7():
+ p=subprocess.run(['gsettings','get','org.gnome.desktop.input-sources','xkb-options'],capture_output=True,text=True);print('settings_final',p.stdout.strip(),flush=True)
+ print('final_text',repr(e.get_text()),flush=True);Gtk.main_quit();return False
+GLib.timeout_add(2500,step1);Gtk.main()

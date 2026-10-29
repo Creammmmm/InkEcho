@@ -1,0 +1,83 @@
+import asyncio,json,os,signal,subprocess,sys,time
+from pathlib import Path
+from inkecho.platform.fcitx5 import Fcitx5Bridge
+root=Path('/tmp/inkecho-transport-pacing-r1'); mode=sys.argv[1]
+text='甲乙丙丁戊己庚辛壬癸'*10
+async def main():
+ target=None; service=int(os.environ['TEST_FCITX_PID']); stopped=False
+ bridge=Fcitx5Bridge(); cancel=asyncio.Event(); baseline=None; pacing=0.0
+ second=None; switch_task=None
+ observed=[]; stall_index=7; accepted=0; outcome='unknown'; deadline=time.monotonic()+30
+ try:
+  for name in ('probe-text','probe-focus','second-text','second-focus'): (root/name).unlink(missing_ok=True)
+  env=dict(os.environ,GDK_BACKEND='wayland',GTK_IM_MODULE='fcitx')
+  for k in ('PYTHONHOME','PYTHONPATH','LD_LIBRARY_PATH'): env.pop(k,None)
+  target=subprocess.Popen(['/usr/bin/python3',str(root/'target.py'),'probe'],env=env)
+  for _ in range(100):
+   if target.poll() is not None: raise RuntimeError('owned_target_exited')
+   if (root/'probe-focus').exists(): break
+   await asyncio.sleep(.1)
+  else: raise RuntimeError('owned_focus_timeout')
+  await bridge.connect(); real_call=bridge._bus.call
+  async def observed_call(message,*args,**kwargs):
+   nonlocal baseline,pacing,stopped,accepted,second,switch_task
+   if message.member!='Commit': return await real_call(message,*args,**kwargs)
+   if mode in ('adaptive','cancel','switch','normal-adaptive') and pacing:
+    started=time.monotonic()
+    if mode=='cancel': asyncio.get_running_loop().call_later(.01,cancel.set)
+    try:
+     await asyncio.wait_for(cancel.wait(),timeout=min(pacing,max(0,deadline-started)))
+     observed.append({'cancel_during_wait_ms':round((time.monotonic()-started)*1000,3)})
+     raise asyncio.CancelledError
+    except TimeoutError:
+     observed.append({'pacing_wait_ms':round((time.monotonic()-started)*1000,3)})
+   if cancel.is_set() or time.monotonic()>=deadline: raise asyncio.CancelledError
+   index=sum(1 for e in observed if 'request_ms' in e)+1
+   if index==stall_index and mode not in ('normal-baseline','normal-adaptive'):
+    os.kill(service,signal.SIGSTOP); stopped=True
+    def resume():
+     nonlocal stopped
+     if stopped: os.kill(service,signal.SIGCONT); stopped=False
+    asyncio.get_running_loop().call_later(.08,resume)
+   started=time.monotonic(); result=await real_call(message,*args,**kwargs); elapsed=time.monotonic()-started
+   if result.body==[1]: accepted+=1
+   if baseline is None: baseline=elapsed
+   else:
+    excess=max(0.,elapsed-max(2*baseline,baseline+.010))
+    pacing=min(.040,max(excess,pacing*.75))
+    baseline+= (elapsed-baseline)*(.02 if elapsed>baseline else .25)
+   observed.append({'request_ms':round(elapsed*1000,3),'accepted':result.body==[1],'next_budget_ms':round(pacing*1000,3)})
+   if mode=='switch' and index==stall_index:
+    async def launch_second():
+     nonlocal second
+     second=subprocess.Popen(['/usr/bin/python3',str(root/'target.py'),'second'],env=env)
+     for _ in range(100):
+      if second.poll() is not None: raise RuntimeError('second_target_exited')
+      if (root/'second-focus').exists(): return
+      await asyncio.sleep(.01)
+     raise RuntimeError('second_focus_timeout')
+    switch_task=asyncio.create_task(launch_second())
+   return result
+  bridge._bus.call=observed_call
+  try:
+   insert_start=time.monotonic()
+   sent=await bridge.insert(text,lambda:not cancel.is_set(),deadline=deadline)
+   duration_ms=round((time.monotonic()-insert_start)*1000,3)
+   outcome='completed'
+  except asyncio.CancelledError: sent=None; outcome='cancelled'; duration_ms=round((time.monotonic()-insert_start)*1000,3)
+  if switch_task is not None: await switch_task
+  await asyncio.sleep(1.2)
+  second_text=(root/'second-text').read_text() if (root/'second-text').exists() else ''
+  actual=(root/'probe-text').read_text() if (root/'probe-text').exists() else ''
+  print(json.dumps({'mode':mode,'duration_ms':duration_ms,'outcome':outcome,'sent':sent,'accepted':accepted,'target_chars':len(actual),'exact_prefix':text.startswith(actual+second_text),'exact_full':text==actual+second_text,'target_text':actual,'second_text':second_text,'events':observed},ensure_ascii=False),flush=True)
+  assert text.startswith(actual+second_text) and len(actual+second_text)==accepted
+  if mode=='cancel': assert outcome=='cancelled' and 0<accepted<len(text) and any('cancel_during_wait_ms' in e for e in observed)
+  else: assert outcome=='completed' and sent==len(text) and text==actual+second_text
+  if mode=='switch': assert second_text and (root/'second-focus').exists()
+ finally:
+  if stopped: os.kill(service,signal.SIGCONT)
+  await bridge.aclose()
+  for process in (target,second):
+   if process and process.poll() is None: process.terminate()
+   if process: process.wait(timeout=5)
+asyncio.run(main())

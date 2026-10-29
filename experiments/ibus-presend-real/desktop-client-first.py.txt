@@ -1,0 +1,49 @@
+import asyncio,json,os,subprocess,sys,tempfile
+from pathlib import Path
+from dbus_next import Message,MessageType
+from dbus_next.aio import MessageBus
+from inkecho.platform.ibus_lifecycle import Capability
+SERVICE='io.github.Creammmmm.InkEcho.PresendExperiment';PATH='/io/github/Creammmmm/InkEcho/PresendExperiment';IFACE=SERVICE+'1'
+async def main():
+ with tempfile.TemporaryDirectory(prefix='inkecho-presend-target-') as d:
+  target=Path(d)/'text';env=os.environ.copy();env.pop('PYTHONHOME',None);env.pop('PYTHONPATH',None);env.pop('LD_LIBRARY_PATH',None);env.pop('QT_PLUGIN_PATH',None);env['GTK_IM_MODULE']='ibus';env['GDK_BACKEND']='wayland'
+  actor=subprocess.Popen(['/usr/bin/python3','/tmp/presend/actor.py',str(target)],env=env)
+  try:
+   for _ in range(100):
+    if Path(str(target)+'.ready').exists():break
+    await asyncio.sleep(.05)
+   assert Path(str(target)+'.ready').exists(),'target_not_focused'
+   bus=await MessageBus().connect();foreign=await MessageBus().connect()
+   async def daemon(member,body):return await bus.call(Message(destination='org.freedesktop.DBus',path='/org/freedesktop/DBus',interface='org.freedesktop.DBus',member=member,signature='s',body=body))
+   o=await daemon('GetNameOwner',[SERVICE]);assert o.sender=='org.freedesktop.DBus';owner=o.body[0]
+   uid=await daemon('GetConnectionUnixUser',[owner]);pid=await daemon('GetConnectionUnixProcessID',[owner]);assert uid.sender==pid.sender=='org.freedesktop.DBus' and uid.body==[os.getuid()] and Path(f'/proc/{pid.body[0]}/exe').resolve()==Path('/usr/bin/gnome-shell')
+   async def call(conn,method,sig='',args=None,timeout=2):
+    reply=await asyncio.wait_for(conn.call(Message(destination=owner,path=PATH,interface=IFACE,member=method,signature=sig,body=args or [])),timeout)
+    assert reply.sender==owner and reply.message_type==MessageType.METHOD_RETURN
+    return reply.body
+   seen=[];expected=''
+   for mode in ('none','real','partial','lost'):
+    assert await call(bus,'SetMode','s',[mode])==[True]
+    cap=Capability(Path(os.environ['XDG_RUNTIME_DIR']))
+    assert await call(foreign,'Begin','ss',[cap.name,'0'*64])==[False]
+    assert await call(bus,'Begin','ss',[cap.name,cap.token])==[True]
+    assert await call(foreign,'Commit','us',[0,'甲'])==['rejected']
+    before=target.read_text();responses=[]
+    try:
+     first=await call(bus,'Commit','us',[0,'甲'],timeout=.12 if mode=='lost' else 2);responses+=first
+     if mode=='partial':responses+=await call(bus,'Commit','us',[1,'乙'])
+    except asyncio.TimeoutError:responses=['timeout_unknown']
+    await asyncio.sleep(.35)
+    text=target.read_text();stats=await call(bus,'Stats')
+    if mode=='none':assert responses==['no_service'] and stats==[0,True] and text==before
+    if mode=='real':assert responses==['attempted'] and stats==[1,True] and text==before+'甲'
+    if mode=='partial':assert responses==['attempted','partial_no_service'] and stats==[1,True] and text==before+'甲'
+    if mode=='lost':assert responses==['timeout_unknown'] and stats==[1,True] and text==before+'甲'
+    if mode!='lost':assert await call(bus,'Commit','us',[0,'甲'])==['rejected']
+    assert await call(bus,'Cancel')==[True]
+    assert await call(bus,'Commit','us',[0,'甲'])==['rejected']
+    cap.close();seen.append({'mode':mode,'response':responses,'dispatch_count':stats[0],'panel_present':stats[1],'received_chars':len(text)-len(before),'retry':'not_sent' if mode=='lost' else 'rejected'})
+   bus.disconnect();foreign.disconnect();print(json.dumps({'owner':owner,'gnome_shell_pid':pid.body[0],'focused_fixture_ready':True,'cases':seen,'passed':True},ensure_ascii=False),flush=True)
+  finally:
+   actor.terminate();actor.wait(timeout=5)
+asyncio.run(main())

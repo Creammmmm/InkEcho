@@ -1,0 +1,37 @@
+BROWSER=full
+{"mode": "full", "error": "initial_focus_missing", "chrome_exit": null, "events": []}
+BROWSER_FAILED=full
+[1029/085908.123340:WARNING:chrome/app/chrome_main_linux.cc:84] Read channel stable from /tmp/inkecho-browser/chrome/CHROME_VERSION_EXTRA
+[2632:2645:1029/085908.523808:ERROR:gpu/ipc/client/command_buffer_proxy_impl.cc:285] ContextResult::kTransientFailure: Failed to send GpuControl.CreateCommandBuffer.
+BROWSER=cancel
+{"mode": "cancel", "error": "initial_focus_missing", "chrome_exit": null, "events": []}
+BROWSER_FAILED=cancel
+[1029/085918.843908:WARNING:chrome/app/chrome_main_linux.cc:84] Read channel stable from /tmp/inkecho-browser/chrome/CHROME_VERSION_EXTRA
+[2869:2883:1029/085919.246060:ERROR:gpu/ipc/client/command_buffer_proxy_impl.cc:285] ContextResult::kTransientFailure: Failed to send GpuControl.CreateCommandBuffer.
+BROWSER=switch
+{"mode": "switch", "error": "initial_focus_missing", "chrome_exit": null, "events": []}
+BROWSER_FAILED=switch
+[1029/085929.100129:WARNING:chrome/app/chrome_main_linux.cc:84] Read channel stable from /tmp/inkecho-browser/chrome/CHROME_VERSION_EXTRA
+[3106:3121:1029/085929.528430:ERROR:gpu/ipc/client/command_buffer_proxy_impl.cc:285] ContextResult::kTransientFailure: Failed to send GpuControl.CreateCommandBuffer.
+/tmp/xw-tty-error:
+Traceback (most recent call last):
+  File "/tmp/xwtest/tty.py", line 3, in <module>
+    fd=sys.stdin.fileno(); tty.setraw(fd)
+                           ^^^^^^^^^^
+AttributeError: module 'tty' has no attribute 'setraw'
+/tmp/xw-tty-stderr:
+(false,)
+TERMINAL=full
+authorized True xonly True
+error KeyboardError unsupported_compositor unsupported_compositor
+terminal_bytes= FILE_MISSING
+(false,)
+TERMINAL=cancel
+authorized True xonly True
+error KeyboardError unsupported_compositor unsupported_compositor
+terminal_bytes= FILE_MISSING
+(false,)
+TERMINAL=switch
+authorized True xonly True
+error KeyboardError unsupported_compositor unsupported_compositor
+terminal_bytes= FILE_MISSING

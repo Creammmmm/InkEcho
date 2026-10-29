@@ -1,0 +1,21 @@
+import json,sys
+from pathlib import Path
+import gi
+gi.require_version('Gio','2.0')
+from gi.repository import Gio
+settings=Gio.Settings.new('org.gnome.shell')
+saved=Path('/var/tmp/inkecho-shell-r16-settings.json')
+uid='inkecho-isolated-commit-r16@local.invalid'
+if sys.argv[1]=='install':
+ if saved.exists():raise RuntimeError('settings_backup_exists')
+ before={'enabled':settings.get_strv('enabled-extensions'),'disabled':settings.get_boolean('disable-user-extensions')}
+ if uid in before['enabled']:raise RuntimeError('extension_already_enabled')
+ saved.write_text(json.dumps(before));saved.chmod(0o600)
+ settings.set_strv('enabled-extensions',before['enabled']+[uid]);settings.set_boolean('disable-user-extensions',False)
+ print(json.dumps({'saved':before,'now':settings.get_strv('enabled-extensions')}))
+elif sys.argv[1]=='restore':
+ before=json.loads(saved.read_text());settings.set_strv('enabled-extensions',before['enabled']);settings.set_boolean('disable-user-extensions',before['disabled'])
+ actual={'enabled':settings.get_strv('enabled-extensions'),'disabled':settings.get_boolean('disable-user-extensions')}
+ print(json.dumps({'expected':before,'actual':actual,'restored':actual==before}));
+ if actual!=before:raise RuntimeError('restore_mismatch')
+else:raise RuntimeError('unknown_action')

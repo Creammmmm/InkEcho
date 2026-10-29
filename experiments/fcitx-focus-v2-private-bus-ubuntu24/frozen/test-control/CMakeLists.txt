@@ -1,0 +1,11 @@
+cmake_minimum_required(VERSION 3.18)
+project(owned_test_fcitx5 LANGUAGES CXX)
+find_package(Fcitx5Core REQUIRED)
+find_package(Fcitx5Utils REQUIRED)
+find_path(FCITX5_MODULE_INCLUDE_DIR fcitx-module/dbus/dbus_public.h
+          PATH_SUFFIXES Fcitx5/Module REQUIRED)
+add_library(ownedtest MODULE control.cpp)
+target_compile_features(ownedtest PRIVATE cxx_std_20)
+target_include_directories(ownedtest PRIVATE "${FCITX5_MODULE_INCLUDE_DIR}")
+target_link_libraries(ownedtest PRIVATE Fcitx5::Core Fcitx5::Utils)
+configure_file(inkecho.conf.in inkecho.conf @ONLY)

@@ -1,0 +1,16 @@
+from pathlib import Path
+import subprocess,json,sys,ctypes,os,hashlib
+b=Path('/tmp/inkecho-owned-default-gap-20261029');n=sys.argv[1];assert n in ('24','26');name=f'inkecho-owned-gap{n}-20261029';r=json.loads(subprocess.check_output(['docker','inspect',name]))[0];assert not r['State']['Running'] and r['State']['Pid']==0 and r['State']['ExitCode']==0
+p=b/f'vm{n}/state/guest.qcow2';st=p.stat();refs=[]
+for fd in Path('/proc').glob('[0-9]*/fd/*'):
+ try:
+  if str(fd.resolve())==str(p):refs.append(str(fd))
+ except OSError:pass
+assert not refs
+class Q(ctypes.Structure):_fields_=[(n,ctypes.c_uint64) for n in ['hard','soft','used','ihard','isoft','iused','btime','itime']]+[('valid',ctypes.c_uint32)]
+def quota():
+ q=Q();fd=os.open('/tmp',os.O_RDONLY|os.O_DIRECTORY)
+ try:assert ctypes.CDLL(None).syscall(443,fd,0x80000700,os.getuid(),ctypes.byref(q))==0
+ finally:os.close(fd)
+ return {'used':q.used,'remaining':q.hard*1024-q.used}
+a=b/f'vm{n}/input/InkEcho.AppImage';digest=hashlib.sha256(a.read_bytes()).hexdigest();assert digest=='77f252509097fe550188122acbe912783e9ad4b4ea33296fe23a2d64da3729ef';before=quota();p.unlink();after=quota();record={'container_state':r['State'],'overlay':str(p),'inode':st.st_ino,'uid':st.st_uid,'allocated_bytes':st.st_blocks*512,'active_refs':refs,'before':before,'after':after,'freed_bytes':before['used']-after['used'],'candidate_sha256':digest};(b/f'vm{n}/output/overlay-cleanup.json').write_text(json.dumps(record,indent=2));(b/f'vm{n}/output/final-container.json').write_text(json.dumps(r,indent=2));print(json.dumps(record,indent=2))

@@ -1,0 +1,8 @@
+{"waiting_for_standard_keyboard_consent": true}
+{"keyboard_only_granted": true}
+{"snapshot_failure": "snapshot_timeout", "device_states": [{"resumed": true, "keymap_bytes": 68405, "snapshot": null}]}
+{"eis_snapshot": null, "keymap_sha256": "7f05616da2b8268871bb8b0a45fce919615a260e8bd307016db9e217514fcfe3", "keymap_bytes": 68405}
+{"keycode_min": 9, "keycode_max": 708}
+{"xkb_keycodes": {"b": 56, "中": null, "😀": null}}
+{"ascii_expected": "b", "ascii_actual": "b", "unicode_control": "not_sent_no_mapped_key", "native_wayland": true, "clipboard_used": false}
+{"compose_actual": "b中", "second_actual": null, "scenario": "selection", "method": "ctrl_shift_u", "target": "browser", "clipboard_used": false}

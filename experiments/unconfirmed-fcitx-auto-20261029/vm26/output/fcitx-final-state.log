@@ -1,0 +1,4 @@
+{"capability_file_present": false, "lock_existed": true, "lock_released": true, "lock_mode": "0o600"}
+
+(process:3145): IBUS-CRITICAL **: 06:50:48.930: ibus_bus_get_global_engine: assertion 'IBUS_IS_BUS (bus)' failed
+No engine is set.

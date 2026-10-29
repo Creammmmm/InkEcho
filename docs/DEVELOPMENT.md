@@ -13,7 +13,10 @@ keyboard semantics: send text to the cursor that has focus at delivery time. If
 focus changes while text is being emitted, later characters may go to the new
 focus; do not pin delivery to a previously captured object or window.
 
-Use neither the clipboard nor a system input method. Transport availability and
+Never use the clipboard. The user now authorizes a system input method as an
+optional delivery path alongside the existing simulated keyboard; retain an
+automatic mode and a user-selectable method. Select a verified available backend
+before output, and never claim untested combinations are supported. Transport availability and
 Unicode behavior require fresh platform evidence; historical targeted AT-SPI
 acceptance does not validate this revised behavior. Keep historical reports
 intact and record new results in
@@ -43,7 +46,9 @@ remaining text, and never replay ambiguous partial output automatically.
 - Keep provider HTTP details outside UI code and platform APIs behind adapters.
   Raise specific errors at boundaries; never silently swallow failures.
 - Never log keys, audio, transcript text or user prompt contents. Never use the
-  clipboard or a system input method as a delivery path or fallback. Treat explicit
+  clipboard as a delivery path or fallback. A system input method is permitted
+  only when its actual delivery capability is established; never replay output
+  after an ambiguous send. Treat explicit
   cancellation and stale tasks as hard stops, not focus changes.
 
 ## English commits with one purpose
@@ -212,8 +217,8 @@ matrices when the changed behavior or a support claim requires them.
   do not cancel, output follows the current cursor, and switching focus during
   emission permits subsequent characters to reach the new focus. Do not weaken
   task-ID/epoch checks to achieve the focus behavior.
-- Verify keyboard transport and mixed Unicode in the actual desktop, with neither
-  clipboard nor system input method. Separately label synthetic/headless evidence,
+- Verify each claimed keyboard or input-method transport and mixed Unicode in the
+  actual desktop without the clipboard. Separately label synthetic/headless evidence,
   owned test targets and measured application support. Record cancellation during
   partial output, held-key cleanup and unavailable/denied transport behavior.
 - Test global shortcuts, F13/F14, microphone input, Unicode insertion and overlay

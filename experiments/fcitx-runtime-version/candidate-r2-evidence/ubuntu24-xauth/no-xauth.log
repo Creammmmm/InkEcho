@@ -1,0 +1,4 @@
+/tmp/inkecho-native-test/InkEcho-0.10.2-x86_64.AppImage: OK
+已安装输入桥；运行状态需通过输入服务检查确认。
+{"mode": "cancel", "exit": 0, "a": "甲乙", "b": "", "triggered": true, "switch_confirmed": false, "focus_in_b": false, "resumed": false, "fcitx_b_context_proved_by_receipt": false, "stdout": [{"ready": true}, {"events": [["backend", "fcitx"], ["commit_status", 1], ["finished", "cancelled"]], "outcome": "cancelled", "origin": "/tmp/inkecho-native-test/squashfs-root/packages/inkecho/app.py"}], "stderr": "Authorization required, but no authorization protocol specified\n\n", "events": [["first_arrival", 260.236931249]], "passed": true}
+未发现经过校验的输入桥；可能尚未安装。

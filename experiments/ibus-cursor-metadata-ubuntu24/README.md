@@ -1,0 +1,9 @@
+# IBus panel cursor metadata: isolated Ubuntu 24
+
+Ubuntu 24.04.5 / IBus `1.5.29-rc2` was tested in an externally network-isolated KVM container using a temporary QEMU snapshot; original and backing disks were mounted read-only and no host user credentials were mounted. The probe starts its own private D-Bus session, IBus daemon and panel with temporary home and runtime directories. It uses only a synthetic input context and synthetic rectangle; no desktop input method, user text, clipboard or actual application is touched.
+
+The panel observed a synthetic real context focus followed by cursor rectangle `(11, 22, 3, 4)`. When the context was unfocused and the fake context became current, it received the fake focus event but no cursor-reset event; the prior rectangle was therefore still the last observed cursor metadata. A cursor update from the now-unfocused synthetic context produced no panel event. The script exited successfully; stdout and stderr and exact executed script bytes are preserved.
+
+This confirms the corresponding 26.04 private-bus counterexample on the tested 24.04 IBus version: a nonempty last observed cursor rectangle does not by itself establish that the current context is a real focused receiver. A more restrictive focus-bound cache could discard the stale value, but this test does not establish how frequently real clients update it, correlate it with the foreground window, or guarantee delivery across focus changes. It is not a real desktop delivery or AppImage test; no product code or automatic IBus routing was changed.
+
+Reproduce in a disposable environment by placing `run.sh` and `probe.py` together (remove `.txt`) and running `bash run.sh`; the runner creates and destroys its private bus, daemon and temporary directories. The guest received QMP system_powerdown, docker wait returned 0, and the container was removed.

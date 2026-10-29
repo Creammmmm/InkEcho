@@ -1,0 +1,468 @@
+"""Task-scoped output selection. No output is retried after a send starts.
+
+The Session uses this adapter; input-method availability and desktop support
+still require independent real-desktop and package acceptance.
+"""
+
+import asyncio
+import os
+import time
+from collections.abc import AsyncIterator, Callable, Mapping
+from contextlib import AsyncExitStack, asynccontextmanager
+
+from inkecho.platform.fcitx5 import Fcitx5Bridge, FcitxOutputError
+from inkecho.platform.framework_detection import (
+    detect_system_framework,
+    verified_explicit_fcitx_owner,
+)
+from inkecho.platform.ibus import IBusBridge, IBusBridgeError
+from inkecho.platform.keyboard import KeyboardError
+from inkecho.text_normalization import normalize_newlines
+
+
+class OutputRouterError(KeyboardError):
+    """Fixed diagnostic codes, without the text passed to a transport."""
+
+    def __init__(self, code: str):
+        self.code = code
+        RuntimeError.__init__(self, code)
+
+
+def detect_input_framework(environ: Mapping[str, str] | None = None) -> str | None:
+    env = os.environ if environ is None else environ
+    # Conflicting indicators are not reliable evidence of a selected framework.
+    values = (
+        env.get("XMODIFIERS", "").removeprefix("@im="),
+        env.get("GTK_IM_MODULE", ""),
+        env.get("QT_IM_MODULE", ""),
+    )
+    known = {value.lower() for value in values if value.lower() in {"fcitx", "ibus"}}
+    return next(iter(known)) if len(known) == 1 else None
+
+
+class OutputRouter:
+    """One prepared backend and one exclusive output scope per task.
+
+    Call prepare_task once per recording task and discard_task on cancellation,
+    including when that task never opens an output scope. A new task must prepare
+    again so that framework and configuration changes can take effect.
+    """
+
+    supports_first_sent_callback = True
+
+    def __init__(
+        self,
+        keyboard,
+        *,
+        bridge_factory=Fcitx5Bridge,
+        ibus_factory=IBusBridge,
+        detector=None,
+    ):
+        self.keyboard = keyboard
+        self._bridge_factory = bridge_factory
+        self._ibus_factory = ibus_factory
+        self._detector = detector or detect_input_framework
+        self._system_detector = detect_system_framework
+        self._explicit_fcitx_detector = verified_explicit_fcitx_owner
+        self._selected = None
+        self._kind = None
+        self._owner = None
+        self._failed = False
+        self._closed = False
+        self._busy = False
+        self._preparing = None
+        self._auto_pending = False
+        self._auto_task = False
+        self._scope_stack = None
+        self._keyboard_error = None
+        self._keyboard_parent = ""
+        self._keyboard_notice = None
+        self._ibus_attempted = False
+
+    @property
+    def selected(self):
+        return self._kind
+
+    @property
+    def connected(self):
+        return not self._closed
+
+    @property
+    def authorized(self):
+        return self._selected is not None
+
+    @property
+    def backend(self):
+        return getattr(self.keyboard, "backend", None)
+
+    async def connect(self):
+        if self._closed:
+            raise OutputRouterError("session_closed")
+
+    def set_mapping_wait_reader(self, reader):
+        configure = getattr(self.keyboard, "set_mapping_wait_reader", None)
+        if callable(configure):
+            configure(reader)
+
+    def set_feedback_timeout_reader(self, reader):
+        configure = getattr(self.keyboard, "set_feedback_timeout_reader", None)
+        if callable(configure):
+            configure(reader)
+
+    async def prepare_task(
+        self,
+        mode: str = "auto",
+        parent_window: str = "",
+        *,
+        on_keyboard_authorization: Callable[[], None] | None = None,
+    ) -> str:
+        if self._closed:
+            raise OutputRouterError("session_closed")
+        if (
+            self._selected is not None
+            or self._owner is not None
+            or self._busy
+            or self._preparing is not None
+        ):
+            raise OutputRouterError("busy")
+        self._preparing = asyncio.current_task()
+        try:
+            return await self._prepare_task(
+                mode, parent_window, on_keyboard_authorization
+            )
+        finally:
+            self._preparing = None
+
+    async def _prepare_task(
+        self, mode: str, parent_window: str, on_keyboard_authorization
+    ) -> str:
+        if mode not in {"auto", "keyboard", "fcitx", "ibus"}:
+            raise OutputRouterError("unsupported_output_method")
+        # Neither environment variables nor bridge presence establish that the
+        # current target uses that bridge. Auto remains on the known keyboard
+        # path until a trustworthy target-capability check is available.
+        framework = "keyboard" if mode == "auto" else mode
+        if framework in {"fcitx", "ibus"}:
+            bridge = (
+                self._bridge_factory() if framework == "fcitx" else self._ibus_factory()
+            )
+            try:
+                if framework == "fcitx":
+                    owner = await self._explicit_fcitx_detector()
+                    if owner is None:
+                        raise FcitxOutputError("unavailable")
+                    await bridge.connect(expected_owner=owner)
+                    if await self._explicit_fcitx_detector() != owner:
+                        raise FcitxOutputError("unavailable")
+                else:
+                    await bridge.connect()
+            except (FcitxOutputError, IBusBridgeError) as error:
+                await bridge.aclose()
+                allowed = {
+                    "unavailable",
+                    "authorization_failed",
+                    "permission_denied",
+                    "untrusted_owner",
+                }
+                code = error.code if error.code in allowed else "unavailable"
+                raise OutputRouterError(f"{framework}_{code}") from None
+            except BaseException:
+                await bridge.aclose()
+                raise
+            else:
+                self._selected, self._kind = bridge, framework
+                self._failed = False
+                return self._kind
+
+        self._keyboard_parent = parent_window
+        self._keyboard_notice = on_keyboard_authorization
+        self._selected, self._kind = self.keyboard, "keyboard"
+        self._auto_pending = mode == "auto"
+        self._auto_task = mode == "auto"
+        self._failed = False
+        if mode != "auto":
+            try:
+                await self._prepare_keyboard()
+            except BaseException:
+                self._selected = self._kind = None
+                raise
+        return self._kind
+
+    @staticmethod
+    def _check_task(can_continue, deadline):
+        if not can_continue():
+            raise OutputRouterError("input_cancelled")
+        if deadline is not None and time.monotonic() >= deadline:
+            raise OutputRouterError("expired")
+
+    async def _prepare_keyboard(self, can_continue=lambda: True, deadline=None):
+        if deadline is None:
+            deadline = time.monotonic() + 60.0
+        self._check_task(can_continue, deadline)
+        task = asyncio.create_task(self._connect_keyboard())
+        try:
+            while not task.done():
+                self._check_task(can_continue, deadline)
+                timeout = (
+                    0.05
+                    if deadline is None
+                    else min(0.05, max(0, deadline - time.monotonic()))
+                )
+                await asyncio.wait({task}, timeout=timeout)
+            try:
+                await task
+            except (KeyboardError, OutputRouterError):
+                raise
+            except Exception:
+                if not self._auto_task:
+                    raise
+                raise KeyboardError("display_unavailable") from None
+            self._check_task(can_continue, deadline)
+        finally:
+            if not task.done():
+                task.cancel()
+            await asyncio.gather(task, return_exceptions=True)
+
+    async def _connect_keyboard(self):
+        await self.keyboard.connect()
+        if not self.keyboard.authorized:
+            if self._keyboard_notice is not None:
+                self._keyboard_notice()
+            await self.keyboard.authorize(self._keyboard_parent)
+        if not self.keyboard.authorized:
+            raise KeyboardError("permission_required")
+
+    async def discard_task(self):
+        if self._owner is not None or self._busy or self._preparing is not None:
+            raise OutputRouterError("busy")
+        selected, self._selected = self._selected, None
+        self._kind = None
+        self._auto_pending = False
+        self._auto_task = False
+        self._keyboard_error = None
+        self._keyboard_parent = ""
+        self._keyboard_notice = None
+        self._failed = False
+        self._ibus_attempted = False
+        if selected is not None and selected is not self.keyboard:
+            await selected.aclose()
+
+    async def abort_task(self):
+        preparing = self._preparing
+        if preparing is not None and preparing is not asyncio.current_task():
+            preparing.cancel()
+            await asyncio.gather(preparing, return_exceptions=True)
+        owner = self._owner
+        if owner is not None and owner is not asyncio.current_task():
+            owner.cancel()
+            await asyncio.gather(owner, return_exceptions=True)
+        if self._owner is None and not self._busy and self._preparing is None:
+            await self.discard_task()
+
+    @asynccontextmanager
+    async def output_session(self) -> AsyncIterator[None]:
+        owner = asyncio.current_task()
+        if owner is None or self._owner is not None or self._busy:
+            raise OutputRouterError("busy")
+        if self._selected is None:
+            raise OutputRouterError("output_not_prepared")
+        self._owner = owner
+        try:
+            async with AsyncExitStack() as stack:
+                self._scope_stack = stack
+                if not self._auto_pending and self._selected is self.keyboard:
+                    await stack.enter_async_context(self.keyboard.output_session())
+                yield
+                if self._failed:
+                    raise OutputRouterError("output_failed")
+                if self._ibus_attempted:
+                    # Panel calls do not acknowledge delivery to a target.
+                    raise OutputRouterError("ibus_delivery_unknown")
+        except BaseException:
+            self._failed = True
+            raise
+        finally:
+            self._scope_stack = None
+            self._owner = None
+            await self.discard_task()
+
+    async def _wait_auto_preflight(
+        self, awaitable, can_continue, deadline, *, timeout=None
+    ):
+        """Stop preflight on task cancellation or expiry before any input."""
+        task = asyncio.create_task(awaitable)
+        end = time.monotonic() + timeout if timeout is not None else None
+        try:
+            while not task.done():
+                self._check_task(can_continue, deadline)
+                now = time.monotonic()
+                if end is not None and now >= end:
+                    raise TimeoutError
+                delay = 0.05
+                if end is not None:
+                    delay = min(delay, max(0, end - now))
+                if deadline is not None:
+                    delay = min(delay, max(0, deadline - now))
+                await asyncio.wait({task}, timeout=delay)
+            self._check_task(can_continue, deadline)
+            return task.result()
+        finally:
+            if not task.done():
+                task.cancel()
+            await asyncio.gather(task, return_exceptions=True)
+
+    @staticmethod
+    async def _abort_preflight_bridge(bridge):
+        abort = getattr(bridge, "abort_preflight", None)
+        if callable(abort):
+            await abort()
+        else:
+            await bridge.aclose()
+
+    async def _choose_auto(self, can_continue=lambda: True, deadline=None):
+        self._auto_pending = False
+        try:
+            evidence = await self._wait_auto_preflight(
+                self._system_detector(), can_continue, deadline, timeout=1.5
+            )
+        except OutputRouterError:
+            raise
+        except Exception:
+            evidence = None
+        framework, expected_owner = (
+            evidence
+            if isinstance(evidence, tuple)
+            and len(evidence) == 2
+            and evidence[0] in {"fcitx", "ibus"}
+            and isinstance(evidence[1], str)
+            and evidence[1].startswith(":")
+            else (None, None)
+        )
+        if framework in {"fcitx", "ibus"}:
+            bridge = (
+                self._bridge_factory() if framework == "fcitx" else self._ibus_factory()
+            )
+            try:
+                if framework == "fcitx":
+                    pending_connect = bridge.connect(expected_owner=expected_owner)
+                else:
+                    pending_connect = bridge.connect()
+                await self._wait_auto_preflight(pending_connect, can_continue, deadline)
+                refreshed = await self._wait_auto_preflight(
+                    self._system_detector(), can_continue, deadline, timeout=1.5
+                )
+                if refreshed != evidence:
+                    raise RuntimeError("owner_changed")
+            except OutputRouterError:
+                await self._abort_preflight_bridge(bridge)
+                raise
+            except asyncio.CancelledError:
+                await self._abort_preflight_bridge(bridge)
+                raise
+            except Exception:
+                await bridge.aclose()
+            else:
+                self._selected, self._kind = bridge, framework
+        if self._selected is self.keyboard:
+            await self._prepare_keyboard(can_continue, deadline)
+            self._check_task(can_continue, deadline)
+            await self._scope_stack.enter_async_context(self.keyboard.output_session())
+
+    async def insert(
+        self,
+        text: str,
+        can_continue: Callable[[], bool],
+        *,
+        deadline: float | None = None,
+        on_first_sent: Callable[[float | None], None] | None = None,
+    ) -> int:
+        if isinstance(text, str):
+            text = normalize_newlines(text)
+        if self._busy or (
+            self._owner is not None and self._owner is not asyncio.current_task()
+        ):
+            raise OutputRouterError("busy")
+        if self._selected is None:
+            raise OutputRouterError("output_not_prepared")
+        if self._owner is None:
+            async with self.output_session():
+                return await self.insert(
+                    text, can_continue, deadline=deadline, on_first_sent=on_first_sent
+                )
+        if self._failed:
+            raise OutputRouterError("output_failed")
+        self._busy = True
+        try:
+            if self._auto_pending:
+                if not can_continue():
+                    raise OutputRouterError("input_cancelled")
+                await self._choose_auto(can_continue, deadline)
+                if not can_continue():
+                    raise OutputRouterError("input_cancelled")
+            result = await self._selected.insert(
+                text, can_continue, deadline=deadline, on_first_sent=on_first_sent
+            )
+            if self._kind == "ibus" and type(result) is int and result > 0:
+                self._ibus_attempted = True
+            return result
+        except FcitxOutputError as error:
+            offset = error.unsent_offset
+            if (
+                self._auto_task
+                and self._kind == "fcitx"
+                and error.code == "no_target"
+                and not error.uncertain
+                and error.accepted == 0
+                and type(offset) is int
+                and offset == 0
+                and offset < len(text)
+            ):
+                try:
+                    if not can_continue():
+                        raise OutputRouterError("input_cancelled")
+                    bridge = self._selected
+                    await bridge.aclose()
+                    self._selected, self._kind = self.keyboard, "keyboard"
+                    await self._prepare_keyboard(can_continue, deadline)
+                    self._check_task(can_continue, deadline)
+                    await self._scope_stack.enter_async_context(
+                        self.keyboard.output_session()
+                    )
+                    if not can_continue():
+                        raise OutputRouterError("input_cancelled")
+                    sent = await self.keyboard.insert(
+                        text[offset:],
+                        can_continue,
+                        deadline=deadline,
+                        on_first_sent=on_first_sent if offset == 0 else None,
+                    )
+                    return offset + sent
+                except asyncio.CancelledError:
+                    self._failed = True
+                    raise
+                except Exception:
+                    self._failed = True
+                    raise
+            self._failed = True
+            if (
+                error.accepted > 0
+                and not error.uncertain
+                and error.code in {"no_target", "expired", "owner_changed"}
+            ):
+                if not can_continue():
+                    raise OutputRouterError("input_cancelled") from None
+                raise OutputRouterError("partial_input_failed") from None
+            raise OutputRouterError(f"{self._kind}_" + error.code) from None
+        except IBusBridgeError as error:
+            self._failed = True
+            raise OutputRouterError(f"{self._kind}_" + error.code) from None
+        except BaseException:
+            self._failed = True
+            raise
+        finally:
+            self._busy = False
+
+    async def aclose(self):
+        self._closed = True
+        await self.abort_task()
+        await self.keyboard.aclose()

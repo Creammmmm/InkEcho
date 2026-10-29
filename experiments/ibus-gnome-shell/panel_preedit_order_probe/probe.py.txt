@@ -1,0 +1,74 @@
+"""Test isolated panel commit during synthetic libpinyin preedit."""
+
+import os
+import subprocess
+import time
+from pathlib import Path
+
+import gi
+
+gi.require_version("IBus", "1.0")
+from gi.repository import GLib, IBus  # noqa: E402
+
+assert os.environ["INKECHO_ISOLATED_BUS"] == "1"
+assert os.environ["IBUS_ADDRESS"].startswith(f"unix:path={Path.home()}/")
+IBus.init()
+bus = IBus.Bus.new()
+assert bus.is_connected()
+panel = IBus.PanelService.new(bus.get_connection())
+assert bus.request_name(IBus.SERVICE_PANEL, 0) == 1
+config = subprocess.Popen(["/usr/libexec/ibus-memconf", "--ibus"])
+engine = subprocess.Popen(["/usr/libexec/ibus-engine-libpinyin", "--ibus"])
+
+
+def pump(seconds=0.5):
+    end = time.monotonic() + seconds
+    while time.monotonic() < end:
+        while GLib.MainContext.default().pending():
+            GLib.MainContext.default().iteration(False)
+        time.sleep(0.01)
+
+
+try:
+    pump(3)
+    assert config.poll() is None and engine.poll() is None
+    assert bus.set_global_engine("libpinyin")
+    ctx = bus.create_input_context("inkecho-preedit-lab")
+    ctx.set_capabilities(IBus.Capabilite.FOCUS | IBus.Capabilite.PREEDIT_TEXT)
+    events = []
+    received = []
+    ctx.connect(
+        "update-preedit-text",
+        lambda _ctx, _text, _pos, visible: events.append(("preedit", visible)),
+    )
+    ctx.connect("commit-text", lambda _ctx, text: (events.append(("commit", None)), received.append(text.get_text())))
+    ctx.focus_in()
+    pump()
+    assert bus.current_input_context() == ctx.get_object_path()
+    baseline = len(events)
+    assert ctx.process_key_event(ord("n"), 0, 0)
+    assert ctx.process_key_event(ord("i"), 0, 0)
+    pump()
+    before = events[baseline:]
+    print("after synthetic keys:", before, flush=True)
+    assert ("preedit", True) in before and ("commit", None) not in before
+    marker = len(events)
+    panel.commit_text(IBus.Text.new_from_string("甲"))
+    pump()
+    panel_events = events[marker:]
+    print("after panel commit:", panel_events, flush=True)
+    assert panel_events == [("commit", None)]
+    marker = len(events)
+    assert ctx.process_key_event(ord(" "), 0, 0)
+    pump()
+    later = events[marker:]
+    print("after synthetic space:", later, flush=True)
+    assert ("commit", None) in later
+    print("fixed synthetic committed values:", received, flush=True)
+    print("engine remains:", bus.get_global_engine().get_name(), flush=True)
+    assert bus.get_global_engine().get_name() == "libpinyin"
+finally:
+    for process in (engine, config):
+        if process.poll() is None:
+            process.terminate()
+        process.wait(timeout=5)

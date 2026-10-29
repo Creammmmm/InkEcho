@@ -1,0 +1,1 @@
+4498 bash -c export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus XDG_RUNTIME_DIR=/run/user/1000; pgrep -af "InkEcho.AppImage|inkecho.platform.*worker"; grep fuse.InkEcho /proc/self/mountinfo

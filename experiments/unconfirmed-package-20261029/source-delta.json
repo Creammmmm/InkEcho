@@ -1,0 +1,462 @@
+{
+  "README.md": {
+    "old": null,
+    "new": "18e63c69e96c86bcbf69dd44c8dbb8dc3b6cf2609c48e9b5ddd9de4ef946bc32"
+  },
+  "docs/ibus-v3-r2-pending-focus-validation.md": {
+    "old": null,
+    "new": "bcbf692992d527f65a2b7aa23428b6203c06d05cfa398fccd1646301b0b560c9"
+  },
+  "docs/fcitx-auto-wayland-current-candidate-validation.md": {
+    "old": null,
+    "new": "4c93e000ea6ff0658fbd2edcd5dafd8e5102cdcc9b7d3a88f57f477325afd25d"
+  },
+  "docs/ibus-v3-r2-isolated-26-validation.md": {
+    "old": null,
+    "new": "1ff6217e6c33bfc38b4252eb4daa15ec76f38945dfcd60bb0082c3eff24dc61b"
+  },
+  "docs/current-v2-appimage-candidate-validation.md": {
+    "old": null,
+    "new": "4ee51f65e851e05641f7c04f1747cb06eb7ac8ddc8a5822a613f7bdedd46b73f"
+  },
+  "docs/native-keyboard-alternative-focus-stress.md": {
+    "old": null,
+    "new": "39bd96a589b710256b8086914733a34b28f94d460a33fe0ed6e621f3d0cb146e"
+  },
+  "docs/ibus-normal-application-reachability.md": {
+    "old": null,
+    "new": "5f12b2e9c42218a169447f134bb281baf9f9034b748edf8b7381264b538884f3"
+  },
+  "docs/fcitx-auto-current-candidate-validation.md": {
+    "old": null,
+    "new": "f45b02959ebaef258bbfe699a2d9f3a3f67e754aadb7ecfe7033dfa9b096a1a9"
+  },
+  "tests/test_startup_shortcut_health.py": {
+    "old": null,
+    "new": "193bf4d08d8c6a91d63483177340a7aab1d132f735bbdd7d76e4e1321a6a157e"
+  },
+  "tests/test_xorg_pair.py": {
+    "old": null,
+    "new": "49644dac16ec21961d59bc91cadc3542cc9402e7b68b22b43d1969572635055f"
+  },
+  "tests/test_application.py": {
+    "old": null,
+    "new": "f40ba015e3b31e893b3f280cdab1784cb5ae1dab1f26c5a11f41346a7b9b06c9"
+  },
+  "tests/test_ibus_connect.py": {
+    "old": null,
+    "new": "f1ef07b8556f0cf62cb81add76fe45968c1169e846dfd04485176fcab217ec25"
+  },
+  "tests/test_platform_capabilities.py": {
+    "old": null,
+    "new": "c138021ddd4ce6f15aff9d734d9bd6d22339beddd30687ba93f9a88dce34592c"
+  },
+  "tests/test_providers.py": {
+    "old": null,
+    "new": "a1d826d0f80591bf93b1bf96363556b8632de29be4ec11ec69f48e77f7ccd8a8"
+  },
+  "tests/test_workspace.py": {
+    "old": null,
+    "new": "63f88a457cb146273a6473e174bd1b29b1f3e85ddc5b532708c1d057fc6539a1"
+  },
+  "tests/test_fcitx_task_policy_experiment.py": {
+    "old": null,
+    "new": "c034797d8e58c94e2819dd1e3d085b646081538ac610f6f201616460282d94df"
+  },
+  "tests/test_step_realtime.py": {
+    "old": null,
+    "new": "87fcf74aa7029a1101cc7c5eb7d5efcefeb86e9d1c3302dac1da4fd8000147ad"
+  },
+  "tests/test_desktop_app_probe.py": {
+    "old": null,
+    "new": "285701064a32ad34d240f383b2f265fc6729ce215e8d4bbf4ff52b968dc6c332"
+  },
+  "tests/test_logging.py": {
+    "old": null,
+    "new": "6ee82379d0071e48914a97b76846431aca7b8c9b1ba1bf7ef7c108aa332eb43b"
+  },
+  "tests/test_model_style_layout.py": {
+    "old": null,
+    "new": "8fcf74cab3f2c6843da4d9b9089d805ef06e7ab55059d90b4500c411d3b0412e"
+  },
+  "tests/test_task_escape.py": {
+    "old": null,
+    "new": "d430c4ce21516ded9198e4de289ad4c1bd66e3e2dc1813ffe8b89224487b6157"
+  },
+  "tests/test_provider_guidance.py": {
+    "old": null,
+    "new": "bdc2cc3000d5291172bf06ba05d87bdb9b77cc22a45c75334a0285eba7726220"
+  },
+  "tests/test_desktop_acceptance.py": {
+    "old": null,
+    "new": "c57b7145e2d447834a5fb8a706ab11b7ba06ff71d4d700f38a84a53e90280195"
+  },
+  "tests/test_application_early_realtime.py": {
+    "old": null,
+    "new": "8fffa66ba1200b7be70cd1491ba63a11c02a8276fa5ade9e2d458b0ca593e307"
+  },
+  "tests/test_startup.py": {
+    "old": null,
+    "new": "7ff6f459c1192cc4f762ad99adb79dd7ed28bc55bcea6b613e2a3bfcc9afda05"
+  },
+  "tests/test_x11_feedback.py": {
+    "old": null,
+    "new": "11cd69395f7af25a79e9a067b979ad82a4a7033b6f2e8bea9d0d5fb2a8afda58"
+  },
+  "tests/test_config.py": {
+    "old": null,
+    "new": "b1ae479f75d0382e86dcd5e757bf7ea87f021f88903b6c7759a29f6cf5216793"
+  },
+  "tests/test_dashboard_layout.py": {
+    "old": null,
+    "new": "e2db82ef9e4e6e20b6f23e254cd45dc3db2416929e0607f016af9f7af3c5d9e7"
+  },
+  "tests/test_provider_catalog.py": {
+    "old": null,
+    "new": "3f4c1a4d526d175a86581329b2e9aa56d23a6f9ea3fcf50598611829be522d8e"
+  },
+  "tests/test_autostart_autosave.py": {
+    "old": null,
+    "new": "38399ba614d6d4b00caafa71842fce2a51875903bad0d35fbfc56d790a4bddd2"
+  },
+  "tests/test_polish_stream_probe.py": {
+    "old": null,
+    "new": "71a36915e62f87f93eda79c4a7b626c4b1b1e0b6a4b128fdf1e437e576c020f7"
+  },
+  "tests/test_fcitx5_staging.py": {
+    "old": null,
+    "new": "994ba96cd034223d7ebf9122add0f013f5fe1ec3832dfaf739de4b0c98ca6517"
+  },
+  "tests/test_hotkeys.py": {
+    "old": null,
+    "new": "49e34eb4843fc5a4d8556cd3e70f234b555f2690a47610a6fd522689745ed3d8"
+  },
+  "tests/test_fcitx5_install.py": {
+    "old": null,
+    "new": "300ee96cbf53e54b8f7e47254317c8cafa1fb64bad4598872e778a9cfd603113"
+  },
+  "tests/test_provider_capability.py": {
+    "old": null,
+    "new": "2e670af44b60f2daddff31af500be28a23583abf04c444aeaa924411927c8c0c"
+  },
+  "tests/test_fcitx_focus_protocol.py": {
+    "old": null,
+    "new": "5cfee6fa39426e86a9e075dc6accaa05128a559c585dc3133382ed7e2319a7a7"
+  },
+  "tests/test_overlay_probe.py": {
+    "old": null,
+    "new": "3913b0f755a1fe230b1beb9faf3ed9af11164b1919ec415223743ccfadc69d4c"
+  },
+  "tests/test_framework_detection.py": {
+    "old": null,
+    "new": "5474ea230a2a0b4a2aae11e1cf5cb5e5b9f806835f7fcfd3bce85ea28d7dc365"
+  },
+  "tests/test_http_asr.py": {
+    "old": null,
+    "new": "cab9eac0d861d48cf264ef7645d53a054837903fef34bc698e2747747ae432fa"
+  },
+  "tests/test_overlay_host.py": {
+    "old": null,
+    "new": "d0559fe9d16ddec8783577e5e650128313975dda13025775cfadce952f0de600"
+  },
+  "tests/test_wayland_keyboard.py": {
+    "old": null,
+    "new": "ff30eeec8f38193b3c0ca348d2839561198c0938bb4427e2420280ab01d85c4c"
+  },
+  "tests/test_audio.py": {
+    "old": null,
+    "new": "b7327071e32f4ef18decd32a4747a6c11aed9fe80c06a0055d796794662b09b4"
+  },
+  "tests/test_model_configuration.py": {
+    "old": null,
+    "new": "35ca8190ccefa7d41af4e0f024150f3732079cf86c6a80d12841342296ac5bfc"
+  },
+  "tests/test_ibus_presend.py": {
+    "old": null,
+    "new": "72a5698dffca6bbc9369025f50017cb542a97449caa3daf3998a790d627003db"
+  },
+  "tests/test_native_wayland_probe.py": {
+    "old": null,
+    "new": "fbb1e344b072c013084bad3c46d0bc2fd0e72edc8eb9b528db8ba143cb002377"
+  },
+  "tests/test_keyboard_latency_probe.py": {
+    "old": null,
+    "new": "4454f5c99aa94cd69aba7f825421301c786e001df92a650edd651c953f14a619"
+  },
+  "tests/test_billing_updates.py": {
+    "old": null,
+    "new": "234176801a42af1c1f0914fc2153152a42d33c9b5c8238751ac4707756af871e"
+  },
+  "tests/test_audio_probe.py": {
+    "old": null,
+    "new": "3a682732b78b2ba0b195434f40f33948ee94006fbf866b8cc9a5f21834f80ab5"
+  },
+  "tests/test_dual_ubuntu_packaging.py": {
+    "old": null,
+    "new": "1aeb1256dbe8ed48ded2eb0846034d30495a133287d46ad87ca3e577af507150"
+  },
+  "tests/test_performance.py": {
+    "old": null,
+    "new": "10fe978794d98c1750605f1073cd246402e0eb97d6708205347d1dee180a7008"
+  },
+  "tests/test_hybrid_keyboard.py": {
+    "old": null,
+    "new": "fe604b8ea38cae73d600de2e6a101b51febc9ad3fe2ccb5a5ca05f7e4e145135"
+  },
+  "tests/test_ui.py": {
+    "old": null,
+    "new": "883d5963f8cc190c527059316134e45cf314cc4ebfa3549bc4aae16f452ea73a"
+  },
+  "tests/test_eis.py": {
+    "old": null,
+    "new": "e528c22c6b3487369e8571a12c05364a7e415aeb2b15ce4daa42edf97fe43276"
+  },
+  "tests/test_ibus_install_io.py": {
+    "old": null,
+    "new": "fd4a34ce22d2a6c21295ae2c3a14f6d477f8af591993aba1192c68ae26f6f914"
+  },
+  "tests/test_qwen_vad.py": {
+    "old": null,
+    "new": "6207ee606ae161b0b4c0e97e22ebdfe74282a1435a3219376b83f285907b98b4"
+  },
+  "tests/test_packaging.py": {
+    "old": null,
+    "new": "85d92d09ab2caa10eceeb63bfc67fc3c6f06ea6ca75767d8421d0e13fc286cf7"
+  },
+  "tests/test_statistics.py": {
+    "old": null,
+    "new": "2bd9b77bed6bd2b05439dbd76159e200e2f7d26a6a91072e50efc1f9ccfed57e"
+  },
+  "tests/test_realtime_silence_probe.py": {
+    "old": null,
+    "new": "002399ae1eab17f8e474e630d53b68adfd6b51c52e47dfd3fdc5c2970ba435b6"
+  },
+  "tests/test_realtime_preview.py": {
+    "old": null,
+    "new": "3f071678f4462a054ea99b21bba21a72db2abc877b8eae47c847c3fa130d8dcf"
+  },
+  "tests/test_dashscope_realtime.py": {
+    "old": null,
+    "new": "0ed89b355dbc411949bc3cd92e76dec348fe60139d29fc5016af2913016d20dc"
+  },
+  "tests/test_signed_asr.py": {
+    "old": null,
+    "new": "f5dfa2382a79f32261e0ccd7a376bb3e2f7cb15d9ab5900bda51149965bc2946"
+  },
+  "tests/test_ibus.py": {
+    "old": null,
+    "new": "5309ef9717e34612a4449e41170ba4ce3ffa93d4d3fe7434aa6adfb92ea17b0f"
+  },
+  "tests/test_artifact_acceptance_controls.py": {
+    "old": null,
+    "new": "4d50ae64ede798601a3c94998789e40dc173ead12f9459cd3251fc6000575034"
+  },
+  "tests/test_runtime.py": {
+    "old": null,
+    "new": "9ec2df3962a5408d182b77a92081fe6bb40064a4aa21c4157a8290d23f88733c"
+  },
+  "tests/test_x11_acceptance.py": {
+    "old": null,
+    "new": "de01102120308c88c90d421908f87815dfdc2b5f9f4c16b36808554758773a6f"
+  },
+  "tests/test_fcitx5.py": {
+    "old": null,
+    "new": "397fed3f2ea06c4028ac82d8916dde0a028beb0674050fbf286dd94c1d2ead1a"
+  },
+  "tests/test_realtime.py": {
+    "old": null,
+    "new": "2faefa61f604e8d1e1b28e296349985a67a96600f82f5dad5775845d676c5bdd"
+  },
+  "tests/test_integration.py": {
+    "old": null,
+    "new": "58dd362f116b6a2c333ea265ffc88a4e4a87a8c38c64ade2309ed1042c717057"
+  },
+  "tests/test_output_router.py": {
+    "old": null,
+    "new": "e78a8b9928f2321f392020086caf7057502af792e21924df688dff32845a5081"
+  },
+  "tests/test_host_mixed_probe.py": {
+    "old": null,
+    "new": "ee0fd8ceb7a906bf1cddf7350a9c1eb0eba856c1a5e4e17ea8dd9d4b95caeaa0"
+  },
+  "tests/test_package_factory_mixed.py": {
+    "old": null,
+    "new": "93afd9351ddf37966d3f9aad8909c0548592164507edba45ead8c949d0a7d7f0"
+  },
+  "tests/test_xorg_mapping_notification.py": {
+    "old": null,
+    "new": "feb0c9aee9757e2246a30b37433f1c66e21d9c821ae9726503d061d6ae2d4952"
+  },
+  "tests/test_keyboard.py": {
+    "old": null,
+    "new": "af6e28524d8ed25207bffbefc3f2398883e8c4ac35608f0acdb3af86c5b32829"
+  },
+  "tests/test_performance_package_probe.py": {
+    "old": null,
+    "new": "90202c7b8bc9934aea92727a06969e756f0d95ff4b0673146fc8807ee33801d3"
+  },
+  "tests/test_xorg_pair_session.py": {
+    "old": null,
+    "new": "b2caad100275abe287d50f33b43a9bf8bb57faf8a7e1e8a8ddbb0ade78a5beeb"
+  },
+  "tests/test_workflow.py": {
+    "old": null,
+    "new": "80e88351ef0892f350df23c60dce87598d88622a4e970aba5c14a4086b72caba"
+  },
+  "tests/test_portal_escape.py": {
+    "old": null,
+    "new": "89092bb0ec5bd354aaf35c364d16c4ff3e7cd81dccbc82c8c516f3d6813093f0"
+  },
+  "tests/conftest.py": {
+    "old": null,
+    "new": "8d2a283790285b202dcd2a943dc63070b2621a8d7aa528fc76decb6d7b8710d4"
+  },
+  "tests/test_versioning.py": {
+    "old": null,
+    "new": "758d384dde104e641ba9fc34ee69685b2af8a9eff1ebc109d41b66b21232d8e9"
+  },
+  "tests/test_x11_mapping_wait_probe.py": {
+    "old": null,
+    "new": "4eeddb37bcb5b471d5390139343534d990ecf40f494f931348b971bc16628365"
+  },
+  "tests/test_application_streaming.py": {
+    "old": null,
+    "new": "6c0542206dd1bb3513c669e007f922708f90d862123b0562eeb8740e17820dde"
+  },
+  "tests/test_provider_package_probe.py": {
+    "old": null,
+    "new": "910798657dfe6c5ccbfadd9b50b4bfc52fa33ee5cdeb540e8912a783751b145a"
+  },
+  "tests/test_application_realtime.py": {
+    "old": null,
+    "new": "dd492d54d215d994751d25f1f6d426790e75927cc88444a6566a5d536276c043"
+  },
+  "tests/test_desktop_preflight.py": {
+    "old": null,
+    "new": "31c24e5e07c4a939ddefdaa2aa1314d97f597b7b35e4028bfafd4db399095121"
+  },
+  "tests/test_fcitx5_bundle.py": {
+    "old": null,
+    "new": "8230d7de4fcbd7a6b0f54631aa0b74749a8d0acefd2e8bdd95a46511455bf627"
+  },
+  "tests/test_ui_task_lifecycle.py": {
+    "old": null,
+    "new": "1422f629bae8add55b25d2b5e06a1c46ab54e1caf66f1eb9bae7a0c079923cad"
+  },
+  "tests/test_polish_protocols.py": {
+    "old": null,
+    "new": "b42375f901997e3b3507fc92aa0f1b1cfff8024f58aef96ed99cc9be829e20ea"
+  },
+  "tests/test_ui_protocol_acceptance.py": {
+    "old": null,
+    "new": "8a6674bcdd21dccdfb96564d4147673962c435877b5fb7b6192c25685ea64b68"
+  },
+  "tests/test_fcitx5_capability.py": {
+    "old": null,
+    "new": "0043dda12ee17168daad6af43f033b9a8480402a15b0d1a565eefa261aea8b24"
+  },
+  "tests/test_input_speed_probe.py": {
+    "old": null,
+    "new": "87d3cee30b8c97d901e8651a7f2c7991441b4d236b317b5f01cf56a3b64ab045"
+  },
+  "tests/test_wayland_worker.py": {
+    "old": null,
+    "new": "ba3abf16289720f22e5756ce7fbc902fb32372fc4b842d8ca7710d13f17ab735"
+  },
+  "tests/test_ibus_extension.py": {
+    "old": null,
+    "new": "aff880f0af5da7d5b52e3a18e24617961b920e623ec0a26cb6250daf1c444d25"
+  },
+  "tests/test_output_pacing.py": {
+    "old": null,
+    "new": "7eb63e7caf49228593660f8ac1b531e1be7e349c35770a83e30492b787e96d8a"
+  },
+  "tests/test_streaming_output.py": {
+    "old": null,
+    "new": "338654fda9ff761d15c669d46eee20929e18dbc599f8736af0425034ac680b7e"
+  },
+  "tests/test_wayland_keymap.py": {
+    "old": null,
+    "new": "7fe8cc635be2fcecd79ac383641514e7fbed59dcdda5a0c89f3a1a6570d0667f"
+  },
+  "tests/test_polish_stream.py": {
+    "old": null,
+    "new": "32507460707618c886a7573b4a118cc3ddef47968f173930a3bf4904cca8a26b"
+  },
+  "tests/test_core.py": {
+    "old": null,
+    "new": "f61a63edb223f1a8ba7214fef8cd22786a153d42be24d8042a3e9594e90a9ec4"
+  },
+  "tests/test_security.py": {
+    "old": null,
+    "new": "fcf4f38323664b71478b08fab31404e23da9d40788ce154fa418d8d33ab743bd"
+  },
+  "tests/test_runtime_streaming.py": {
+    "old": null,
+    "new": "162ab8327739d0698720ff5402cc0537c28782093c9c07692bd9c1be3dcdcc63"
+  },
+  "tests/test_notifications.py": {
+    "old": null,
+    "new": "a7856d5dff701c9427f9e79094a6908ba6eccefaaef0766de1c094ddab84f93e"
+  },
+  "src/inkecho/performance.py": {
+    "old": "4957fe5e2ed956be3b238387f0b31eaac34fcfb772b524dde244bf38db7167cb",
+    "new": "223a6dcef338533562c35fb916ef6e4a5e95d9d336c8c15e1bdb3e983306c3d4"
+  },
+  "src/inkecho/statistics.py": {
+    "old": "0a873f3069f4645e8967b138bfd16975831f78875ae994f95a64e4b837e5c62d",
+    "new": "b2e9f5a28e363c8fd021344190d484be86d11cfea274f0c5c300be1d25893771"
+  },
+  "src/inkecho/core.py": {
+    "old": "0bc3cd55b7c91001eb55950543488d7d9cf8b21cfa8caf59fa36975930d348c6",
+    "new": "c3fbaccb189a8d43eaaaff88c824968538a29456c43ab750db4d113333964f4b"
+  },
+  "src/inkecho/app.py": {
+    "old": "8af5a728a16894e7f011388cea5e9607ae4228db0c9d421104acf94d6f3ffc8a",
+    "new": "a9f9484618d487cfd0b7b39836ae8bcfe576ee2cfb0fa50bfc6f6481fb988989"
+  },
+  "src/inkecho/ui/window.py": {
+    "old": "5ed86abeb61a0c44078175c4756f4122721bfff432a4c1a0fa7f22098d68a812",
+    "new": "7e640803ff59854057710042d75f140479e4660ff137280fd7f4e6ecbecb785c"
+  },
+  "src/inkecho/ui/overlay.py": {
+    "old": "0615972f883bae4fce73045a1f4e724db4b58425309a9f421a2f554446dc3f3c",
+    "new": "233d7ffc30a7383246592412eb890f82f8e42d289b5c4427fdae7b816f2a0c41"
+  },
+  "src/inkecho/ui/overlay_proxy.py": {
+    "old": "35867c789014373cbb40f347f10fb35cbcba7db5b1037c5b0d5bfc6b3b0c02e2",
+    "new": "862c56b0d4fce32de6cdae36341bddf8dc533592624080ef21787f1fcb903501"
+  },
+  "src/inkecho/ui/overlay_host.py": {
+    "old": "be13fd156f8cd16453d1c5051eab20c3f74eec0877e38da56e3001d62122012e",
+    "new": "3668000b648a9e18a35cb61737ab199d693519da296b6c43970ea475b53b03b8"
+  },
+  "src/inkecho/platform/output_router.py": {
+    "old": "8d4d907f531b9137ec604c23a72f94b2d071e91e606a291d77e6aa568bb9d729",
+    "new": "df8dfc2d0e933ae748d833ae0cdc8b3432b76330b2e3be16f6e457346efb81ef"
+  },
+  "tests/fixtures/blue-inkecho-16.png": {
+    "old": null,
+    "new": "1bf1fc3351a6222de719c3a6c1be706575c54350bbc25b6dd41019c41a94a311"
+  },
+  "tests/fixtures/legacy-inkecho.svg": {
+    "old": null,
+    "new": "df9f4e49cbfe80a6754ff133b2548968550ba74965b69388c6ccdf0ce64a5cc6"
+  },
+  "tests/fixtures/legacy-inkecho-16.png": {
+    "old": null,
+    "new": "d26847979e9f027f02d5c46849875c5c47382878b24fe787229184a4a43637ed"
+  },
+  "tests/native/test_fcitx5_task_gate.cpp": {
+    "old": null,
+    "new": "34ba5f2438f6bf422f049d477c7ce6a2c430c614c4efb8f67103d86219a22c0d"
+  },
+  "tests/native/test_fcitx5_scalar.cpp": {
+    "old": null,
+    "new": "ec79cbb24785df6807a11ef59618c08241be426e1d6560d97315909f3f6859c9"
+  },
+  "tests/native/test_fcitx5_focus.cpp": {
+    "old": null,
+    "new": "d1e2d78fdf5cc6d479a21432179e1ccc0a97d53cf952f473d5f802647e7a39b9"
+  }
+}

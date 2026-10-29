@@ -1,0 +1,248 @@
+ng (16s / 1min 30s)
+
+M
+[K[  [0;31m*[0;1;31m*[0m[0;31m* [0m] Job snapd.service/stop running (16s / 1min 30s)
+
+M
+[K[ [0;31m*[0;1;31m*[0m[0;31m*  [0m] Job snapd.service/stop running (17s / 1min 30s)
+
+M
+[K[[0;31m*[0;1;31m*[0m[0;31m*   [0m] Job snapd.service/stop running (17s / 1min 30s)
+
+M
+[K[[0;1;31m*[0m[0;31m*    [0m] Job snapd.service/stop running (18s / 1min 30s)
+
+M
+[K[[0m[0;31m*     [0m] Job snapd.service/stop running (18s / 1min 30s)
+
+M
+[K[[0;1;31m*[0m[0;31m*    [0m] Job snapd.service/stop running (19s / 1min 30s)
+
+M
+[K[[0;31m*[0;1;31m*[0m[0;31m*   [0m] Job snapd.service/stop running (19s / 1min 30s)
+
+M
+[K[ [0;31m*[0;1;31m*[0m[0;31m*  [0m] Job snapd.service/stop running (20s / 1min 30s)
+
+M
+[K[  [0;31m*[0;1;31m*[0m[0;31m* [0m] Job snapd.service/stop running (20s / 1min 30s)
+
+M
+[K[   [0;31m*[0;1;31m*[0m[0;31m*[0m] Job snapd.service/stop running (21s / 1min 30s)
+
+M
+[K[    [0;31m*[0;1;31m*[0m] Job snapd.service/stop running (21s / 1min 30s)
+
+M
+[K[     [0;31m*[0m] Job snapd.service/stop running (22s / 1min 30s)
+
+M
+[K[    [0;31m*[0;1;31m*[0m] Job snapd.service/stop running (22s / 1min 30s)
+
+M
+[K[   [0;31m*[0;1;31m*[0m[0;31m*[0m] Job snapd.service/stop running (23s / 1min 30s)
+
+M
+[K[  [0;31m*[0;1;31m*[0m[0;31m* [0m] Job snapd.service/stop running (23s / 1min 30s)
+
+M
+[K[ [0;31m*[0;1;31m*[0m[0;31m*  [0m] Job snapd.service/stop running (24s / 1min 30s)
+
+M
+[K[[0;31m*[0;1;31m*[0m[0;31m*   [0m] Job snapd.service/stop running (24s / 1min 30s)
+
+M
+[K[[0;1;31m*[0m[0;31m*    [0m] Job snapd.service/stop running (25s / 1min 30s)
+
+M
+[K[[0m[0;31m*     [0m] Job snapd.service/stop running (25s / 1min 30s)
+
+M
+[K[[0;1;31m*[0m[0;31m*    [0m] Job snapd.service/stop running (26s / 1min 30s)
+
+M
+[K[[0;31m*[0;1;31m*[0m[0;31m*   [0m] Job snapd.service/stop running (26s / 1min 30s)
+
+M
+[K[ [0;31m*[0;1;31m*[0m[0;31m*  [0m] Job snapd.service/stop running (27s / 1min 30s)
+
+M
+[K[  [0;31m*[0;1;31m*[0m[0;31m* [0m] Job snapd.service/stop running (27s / 1min 30s)
+
+M
+[K[   [0;31m*[0;1;31m*[0m[0;31m*[0m] Job snapd.service/stop running (28s / 1min 30s)
+
+M
+[K[    [0;31m*[0;1;31m*[0m] Job snapd.service/stop running (28s / 1min 30s)
+
+M
+[K[     [0;31m*[0m] Job snapd.service/stop running (29s / 1min 30s)
+
+M
+[K[[0;32m  OK  [0m] Stopped [0;1;39msnapd.service[0m - Snap Daemon.
+
+[K[[0;32m  OK  [0m] Stopped target [0;1;39mbasic.target[0m - Basic System.
+
+[[0;32m  OK  [0m] Stopped target [0;1;39mpaths.target[0m - Path Units.
+
+[[0;32m  OK  [0m] Stopped [0;1;39mcups.path[0m - CUPS Scheduler.
+
+[[0;32m  OK  [0m] Stopped [0;1;39mwhoopsie.path[0m - Start whoo…cation of the /var/crash directory.
+
+[[0;32m  OK  [0m] Stopped target [0;1;39mslices.target[0m - Slice Units.
+
+[[0;32m  OK  [0m] Removed slice [0;1;39muser.slice[0m - User and Session Slice.
+
+[[0;32m  OK  [0m] Stopped target [0;1;39msockets.target[0m - Socket Units.
+
+[[0;32m  OK  [0m] Stopped target [0;1;39mtime-set.target[0m - System Time Set.
+
+[[0;32m  OK  [0m] Closed [0;1;39mavahi-daemon.socket[0m - Avahi…DNS/DNS-SD Stack Activation Socket.
+
+[[0;32m  OK  [0m] Closed [0;1;39mcups.socket[0m - CUPS Scheduler.
+
+[[0;32m  OK  [0m] Closed [0;1;39miscsid.socket[0m - Open-iSCSI iscsid Socket.
+
+[[0;32m  OK  [0m] Closed [0;1;39mlxd-installer.socket[0m - Helper to install lxd snap on demand.
+
+[[0;32m  OK  [0m] Closed [0;1;39msnapd.socket[0m - Socket activation for snappy daemon.
+
+[[0;32m  OK  [0m] Closed [0;1;39mssh.socket[0m - OpenBSD Secure Shell server socket.
+
+[[0;32m  OK  [0m] Closed [0;1;39msyslog.socket[0m - Syslog Socket.
+
+[[0;32m  OK  [0m] Closed [0;1;39msystemd-networkd.socket[0m - Network Service Netlink Socket.
+
+[[0;32m  OK  [0m] Closed [0;1;39msystemd-oomd.socket[0m - Users… Out-Of-Memory (OOM) Killer Socket.
+
+[[0;32m  OK  [0m] Closed [0;1;39muuidd.socket[0m - UUID daemon activation socket.
+
+[[0;32m  OK  [0m] Stopped target [0;1;39msysinit.target[0m - System Initialization.
+
+[[0;32m  OK  [0m] Stopped target [0;1;39mcryptsetup.target[0m - Local Encrypted Volumes.
+
+[[0;32m  OK  [0m] Stopped [0;1;39msystemd-ask-password-conso…[0mequests to Console Directory Watch.
+
+[[0;32m  OK  [0m] Stopped [0;1;39msystemd-ask-password-wall.…[0md Requests to Wall Directory Watch.
+
+[[0;32m  OK  [0m] Stopped target [0;1;39mintegritysetup.targ…[0m Local Integrity Protected Volumes.
+
+[[0;32m  OK  [0m] Stopped target [0;1;39mswap.target[0m - Swaps.
+
+[[0;32m  OK  [0m] Stopped target [0;1;39mveritysetup.target[0m - Local Verity Protected Volumes.
+
+[[0;32m  OK  [0m] Stopped [0;1;39mcloud-init.service[0m - Cloud-init: Network Stage.
+
+[[0;32m  OK  [0m] Stopped [0;1;39mcloud-init-local.service[0m -…ud-init: Local Stage (pre-network).
+
+         Stopping [0;1;39msystemd-binfmt.service[0m - Set Up Additional Binary Formats...
+
+         Stopping [0;1;39msystemd-resolved.service[0m - Network Name Resolution...
+
+         Stopping [0;1;39msystemd-timesyncd.service[0m - Network Time Synchronization...
+
+         Stopping [0;1;39msystemd-update-utmp.servi…[0mord System Boot/Shutdown in UTMP...
+
+[[0;32m  OK  [0m] Stopped [0;1;39msystemd-binfmt.service[0m - Set Up Additional Binary Formats.
+
+[[0;32m  OK  [0m] Unset automount [0;1;39mproc-sys-fs-binfmt…[0mormats File System Automount Point.
+
+[[0;32m  OK  [0m] Stopped [0;1;39msystemd-resolved.service[0m - Network Name Resolution.
+
+[[0;32m  OK  [0m] Stopped [0;1;39msystemd-timesyncd.service[0m - Network Time Synchronization.
+
+[[0;32m  OK  [0m] Stopped [0;1;39msystemd-update-utmp.servic…[0mecord System Boot/Shutdown in UTMP.
+
+[[0;32m  OK  [0m] Stopped [0;1;39msystemd-sysctl.service[0m - Apply Kernel Variables.
+
+[[0;32m  OK  [0m] Stopped [0;1;39msystemd-modules-load.service[0m - Load Kernel Modules.
+
+[[0;32m  OK  [0m] Stopped [0;1;39msystemd-tmpfiles-setup.ser…[0mate Volatile Files and Directories.
+
+[[0;32m  OK  [0m] Stopped target [0;1;39mlocal-fs.target[0m - Local File Systems.
+
+[[0;32m  OK  [0m] Stopped target [0;1;39msnapd.mounts.target[0m - Mounted snaps.
+
+         Unmounting [0;1;39mboot-efi.mount[0m - /boot/efi...
+
+         Unmounting [0;1;39mmedia-inkecho-cidata1.mount[0m - /media/inkecho/cidata1...
+
+         Unmounting [0;1;39mmnt-input.mount[0m - /mnt/input...
+
+         Unmounting [0;1;39mmnt-output.mount[0m - /mnt/output...
+
+         Unmounting [0;1;39msnap-bare-5.mount[0m - Mount unit for bare, revision 5...
+
+         Unmounting [0;1;39msnap-core24-2124.mount[0m …t unit for core24, revision 2124...
+
+         Unmounting [0;1;39msnap-firefox-9057.mount[0m… unit for firefox, revision 9057...
+
+         Unmounting [0;1;39msnap-gnome\x2d46\x2d240…[0m for gnome-46-2404, revision 168...
+
+         Unmounting [0;1;39msnap-gtk\x2dcommon\x2dt…[0mgtk-common-themes, revision 1535...
+
+         Unmounting [0;1;39msnap-mesa\x2d2404-1839.…[0mnit for mesa-2404, revision 1839...
+
+         Unmounting [0;1;39msnap-snapd-28254.mount[0m …t unit for snapd, revision 28254...
+
+[[0;32m  OK  [0m] Unmounted [0;1;39mboot-efi.mount[0m - /boot/efi.
+
+[[0;32m  OK  [0m] Unmounted [0;1;39mmedia-inkecho-cidata1.mount[0m - /media/inkecho/cidata1.
+
+[[0;32m  OK  [0m] Unmounted [0;1;39mmnt-input.mount[0m - /mnt/input.
+
+[[0;32m  OK  [0m] Unmounted [0;1;39mmnt-output.mount[0m - /mnt/output.
+
+[[0;32m  OK  [0m] Unmounted [0;1;39msnap-bare-5.mount[0m - Mount unit for bare, revision 5.
+
+[[0;32m  OK  [0m] Unmounted [0;1;39msnap-core24-2124.mount[0m -…unt unit for core24, revision 2124.
+
+[[0;32m  OK  [0m] Unmounted [0;1;39msnap-firefox-9057.mount[0m …nt unit for firefox, revision 9057.
+
+[[0;32m  OK  [0m] Unmounted [0;1;39msnap-gnome\x2d46\x2d2404…[0mit for gnome-46-2404, revision 168.
+
+[[0;32m  OK  [0m] Unmounted [0;1;39msnap-gtk\x2dcommon\x2dth…[0mr gtk-common-themes, revision 1535.
+
+[[0;32m  OK  [0m] Unmounted [0;1;39msnap-mesa\x2d2404-1839.m…[0m unit for mesa-2404, revision 1839.
+
+[[0;32m  OK  [0m] Unmounted [0;1;39msnap-snapd-28254.mount[0m -…unt unit for snapd, revision 28254.
+
+[[0;32m  OK  [0m] Stopped target [0;1;39msnapd.mounts-pre.target[0m - Mounting snaps.
+
+         Unmounting [0;1;39mboot.mount[0m - /boot...
+
+[[0;32m  OK  [0m] Stopped [0;1;39msystemd-fsck@dev-disk-by\x…[0mm Check on /dev/disk/by-label/UEFI.
+
+[[0;32m  OK  [0m] Unmounted [0;1;39mboot.mount[0m - /boot.
+
+[[0;32m  OK  [0m] Reached target [0;1;39mumount.target[0m - Unmount All Filesystems.
+
+[[0;32m  OK  [0m] Stopped [0;1;39msystemd-fsck@dev-disk-by\x…[0mm Check on /dev/disk/by-label/BOOT.
+
+[[0;32m  OK  [0m] Removed slice [0;1;39msystem-systemd\x2dfs…slice[0m - Slice /system/systemd-fsck.
+
+[[0;32m  OK  [0m] Stopped target [0;1;39mlocal-fs-pre.target[0m…Preparation for Local File Systems.
+
+         Stopping [0;1;39mlvm2-monitor.service[0m - Mo…ing dmeventd or progress polling...
+
+         Stopping [0;1;39mmultipathd.service[0m - Devi…pper Multipath Device Controller...
+
+[[0;32m  OK  [0m] Stopped [0;1;39msystemd-tmpfiles-setup-dev…[0mCreate Static Device Nodes in /dev.
+
+[[0;32m  OK  [0m] Stopped [0;1;39msystemd-tmpfiles-setup-dev…[0mic Device Nodes in /dev gracefully.
+
+[[0;32m  OK  [0m] Stopped [0;1;39mmultipathd.service[0m - Devic…Mapper Multipath Device Controller.
+
+[[0;32m  OK  [0m] Stopped [0;1;39msystemd-remount-fs.service[0m…mount Root and Kernel File Systems.
+
+[[0;32m  OK  [0m] Stopped [0;1;39mlvm2-monitor.service[0m - Mon…using dmeventd or progress polling.
+
+[[0;32m  OK  [0m] Reached target [0;1;39mshutdown.target[0m - System Shutdown.
+
+[[0;32m  OK  [0m] Reached target [0;1;39mfinal.target[0m - Late Shutdown Services.
+
+[[0;32m  OK  [0m] Finished [0;1;39msystemd-poweroff.service[0m - System Power Off.
+
+[[0;32m  OK  [0m] Reached target [0;1;39mpoweroff.target[0m - System Power Off.
+
+[  757.463759] reboot: Power down

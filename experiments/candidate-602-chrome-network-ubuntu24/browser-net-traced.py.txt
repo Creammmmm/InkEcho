@@ -1,0 +1,78 @@
+import http.server, threading, subprocess, os, sys, json, time, signal, tempfile, urllib.parse
+mode=sys.argv[1]; expected='风云日月山川河海'*25
+class State:
+ proc=None; chrome=None; values={'a':'','b':''}; focus=[]; cancel_sent=False; switched=False; resume=False
+state=State()
+class Handler(http.server.BaseHTTPRequestHandler):
+ def log_message(self,*args): pass
+ def do_GET(self):
+  print('SERVER_GET',self.path,flush=True)
+  name=urllib.parse.urlparse(self.path).path.strip('/') or 'a'; self.send_response(200); self.send_header('Content-Type','text/html'); self.end_headers(); self.wfile.write(('''<html><body><textarea id="target" autofocus rows="10" cols="60"></textarea><script>let n='%s'; let t=document.getElementById('target'); function send(type){fetch('/event',{method:'POST',body:JSON.stringify({name:n,type:type,value:t.value,focused:document.hasFocus()&&document.activeElement===t})});} window.addEventListener('focus',()=>{t.focus();send('focus')}); t.addEventListener('input',()=>{send('input'); if(n==='a' && '%s'==='switch' && !window.sw){window.sw=true; window.open('/b','other','width=550,height=250');}}); t.focus();setTimeout(()=>send('focus'),1000);setInterval(()=>send('snapshot'),250);</script></body></html>'''%(name,mode)).encode())
+ def do_POST(self):
+  print('SERVER_POST',self.path,flush=True)
+  data=json.loads(self.rfile.read(int(self.headers['Content-Length']))); self.send_response(204); self.end_headers(); name=data['name']; state.values[name]=data['value']; state.focus.append([name,data['type'],data['focused'],len(data['value']),time.monotonic()]);
+  if state.proc and name=='a' and data['type']=='input' and not state.cancel_sent and mode=='cancel': state.cancel_sent=True; os.kill(state.proc.pid,signal.SIGUSR1)
+  if state.proc and name=='a' and data['type']=='input' and not state.switched and mode=='switch': state.switched=True; os.kill(state.proc.pid,signal.SIGSTOP)
+  if state.proc and name=='b' and data['type']=='focus' and data['focused'] and state.switched and not state.resume: state.resume=True; os.kill(state.proc.pid,signal.SIGCONT)
+server=http.server.ThreadingHTTPServer(('127.0.0.1',0),Handler); threading.Thread(target=server.serve_forever,daemon=True).start(); port=server.server_address[1];print('SERVER_PORT',port,flush=True);import urllib.request;print('SERVER_SELFTEST',urllib.request.urlopen('http://127.0.0.1:%d/a'%port,timeout=2).status,flush=True)
+profile=tempfile.mkdtemp(prefix='inkecho-chrome-profile-'); chrome='/tmp/inkecho-browser/chrome/chrome'; state.chrome=subprocess.Popen(['/usr/bin/strace','-ff','-tt','-T','-yy','-e','trace=connect,getsockopt,poll,ppoll,epoll_wait,accept,accept4','-o','/tmp/chrome-connect',chrome,'--no-sandbox','--disable-gpu','--no-zygote','--disable-dev-shm-usage','--disable-extensions','--no-proxy-server','--remote-debugging-port=9222','--remote-allow-origins=*','--no-first-run','--no-default-browser-check','--disable-popup-blocking','--disable-background-networking','--disable-sync','--disable-features=OptimizationHints,MediaRouter','--ozone-platform=wayland','--gtk-version=3','--user-data-dir='+profile,'http://127.0.0.1:%d/a'%port],stdout=subprocess.DEVNULL,stderr=open("/tmp/inkecho-chrome-stderr.log","w"))
+for _ in range(300):
+ if _ == 80:
+  try:
+   print('NAMESPACE_SERVER',os.readlink('/proc/self/ns/net'),'PID',os.getpid(),flush=True)
+   todo=[state.chrome.pid];seen=set()
+   while todo and len(seen)<40:
+    pid=todo.pop()
+    if pid in seen:continue
+    seen.add(pid)
+    try:
+     print('NAMESPACE_CHILD',pid,os.readlink('/proc/%d/ns/net'%pid),flush=True)
+     todo.extend(int(x) for x in open('/proc/%d/task/%d/children'%(pid,pid)).read().split())
+    except (OSError,ValueError):pass
+   print('SOCKETS',subprocess.run(['/usr/bin/ss','-nt'],capture_output=True,text=True,timeout=3).stdout,flush=True)
+   print('LOAD',open('/proc/loadavg').read().strip(),flush=True)
+  except Exception as e:print('DIAG_ERROR',str(e),flush=True)
+ if _ == 120:
+  try:
+   import urllib.request
+   targets=json.load(urllib.request.urlopen('http://127.0.0.1:9222/json/list',timeout=2))
+   for target in targets:
+    if target.get('url','').startswith('http://127.0.0.1:%d/'%port):
+     from websockets.sync.client import connect
+     with connect(target['webSocketDebuggerUrl'],open_timeout=2,close_timeout=2) as ws:
+      ws.send(json.dumps({'id':1,'method':'Runtime.evaluate','params':{'expression':'JSON.stringify({ready:document.readyState,url:location.href,focus:document.hasFocus()})','returnByValue':True}}))
+      for attempt in range(8):
+       reply=json.loads(ws.recv(timeout=2))
+       if reply.get('id')==1: print('CDP_PAGE',reply,flush=True);break
+      ws.send(json.dumps({'id':2,'method':'Network.enable'}))
+      ws.send(json.dumps({'id':3,'method':'Page.navigate','params':{'url':'http://127.0.0.1:%d/a'%port}}))
+      for attempt in range(20):
+       reply=json.loads(ws.recv(timeout=2))
+       if reply.get('id')==3: print('CDP_NAVIGATE',reply,flush=True); break
+      for line in open('/proc/meminfo'):
+       if line.startswith(('MemAvailable:', 'SwapFree:')):print('RESOURCE',line.strip(),flush=True)
+  except Exception as e: print('CDP_ERROR',str(e),flush=True)
+ if any(e[0]=='a' and e[1]=='focus' and e[2] for e in state.focus): break
+ time.sleep(.05)
+else: print(json.dumps({'mode':mode,'error':'initial_focus_missing','focus':state.focus}),flush=True); state.chrome.terminate(); sys.exit(1)
+root='/tmp/inkecho-r4-test/squashfs-root'; env=os.environ.copy(); env.update(PYTHONHOME=root+'/usr', PYTHONPATH=root+'/packages', LD_LIBRARY_PATH=root+'/usr/lib/inkecho',QT_QPA_PLATFORM='offscreen',GTK_IM_MODULE='fcitx',INK_TARGET_KIND='normal',INK_PROBE_MODE='auto')
+out=tempfile.TemporaryFile(mode='w+'); err=tempfile.TemporaryFile(mode='w+'); state.proc=subprocess.Popen([root+'/usr/bin/python3','/tmp/inkecho-r4-test/probes/sender.py'],env=env,stdout=out,stderr=err)
+try: rc=state.proc.wait(timeout=40)
+except subprocess.TimeoutExpired:
+ if state.switched and not state.resume: os.kill(state.proc.pid,signal.SIGCONT)
+ state.proc.terminate(); rc=state.proc.wait(timeout=3)
+time.sleep(1)
+# Independent CDP reads of the final DOM values, without fetching user content.
+import urllib.request
+from websockets.sync.client import connect
+final_dom={}
+for target in json.load(urllib.request.urlopen('http://127.0.0.1:9222/json/list',timeout=3)):
+ url=target.get('url',''); name=urllib.parse.urlparse(url).path.strip('/')
+ if name not in ('a','b') or not url.startswith('http://127.0.0.1:%d/'%port): continue
+ with connect(target['webSocketDebuggerUrl'],open_timeout=3,close_timeout=3) as ws:
+  ws.send(json.dumps({'id':1,'method':'Runtime.evaluate','params':{'expression':"JSON.stringify({value:document.getElementById('target').value,focus:document.hasFocus()})",'returnByValue':True}}))
+  while True:
+   reply=json.loads(ws.recv(timeout=3))
+   if reply.get('id')==1: break
+  final_dom[name]=json.loads(reply['result']['result']['value'])
+out.seek(0); err.seek(0); a,b=state.values['a'],state.values['b']; result={'mode':mode,'exit':rc,'a':a,'b':b,'focus':state.focus,'cancel_sent':state.cancel_sent,'switched':state.switched,'resume':state.resume,'stdout':out.read(),'stderr':err.read()[-3000:]}; result['final_dom']=final_dom; result['dom_exact']=final_dom.get('a',{}).get('value','')+final_dom.get('b',{}).get('value','')==expected; result['exact']=a+b==expected; result['prefix']=expected.startswith(a+b); result['lengths']=[len(a),len(b)]; print(json.dumps(result,ensure_ascii=False),flush=True); server.shutdown(); state.chrome.terminate(); state.chrome.wait(timeout=5)

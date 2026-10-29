@@ -1,0 +1,13 @@
+import hashlib,json
+from pathlib import Path
+from inkecho.app import KEYBOARD_LABELS
+from inkecho.logging import CODES,DiagnosticLog
+import inkecho.logging
+out=Path('/mnt/output/packaged-log-check');out.mkdir(exist_ok=True)
+log=DiagnosticLog(out/'diagnostics')
+try:
+ for code in KEYBOARD_LABELS:log.record('error',code)
+finally:log.close()
+assert not set(KEYBOARD_LABELS)-CODES
+report={'passed':True,'fixed_code':'input_capability_unknown','all_fixed_input_labels_logged':len(KEYBOARD_LABELS),'packaged_logging_sha256':hashlib.sha256(Path(inkecho.logging.__file__).read_bytes()).hexdigest()}
+(out/'report.json').write_text(json.dumps(report,indent=2));print(json.dumps(report))

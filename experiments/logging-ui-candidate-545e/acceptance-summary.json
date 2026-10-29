@@ -1,0 +1,520 @@
+{
+  "artifact": {
+    "artifact": "/tmp/inkecho-logging-ui-candidate-20261029/source/dist/InkEcho-0.10.2-x86_64.AppImage",
+    "sha256": "545e07e080f05b90fdec4216edf8ff10e3acf6167af3ef505b6fd0a351401c06",
+    "bytes": 104401400,
+    "version": "0.10.2",
+    "app_files": 93,
+    "all_app_files_match_source_and_inventory": true,
+    "owned_v5_resources_match_all_pins": true,
+    "logging_has_new_fixed_code": true,
+    "critical_modules": {
+      "app.py": "98c26bd0a172acd9957f3e5ce4aa8cb54cd923066baaafcae1af03836bca8ca2",
+      "logging.py": "8180a4de054c285686c27b67290d72cbdcb93ab570db1327fb3886a53bafb4e9",
+      "ui/information.py": "93d4b3c49f0e8772d860c531e4b236f37cbce7fb58cdaf5e34047d01b7a22f2c",
+      "platform/ibus_owned_default.py": "9718e496ca579393c3302eea946ef50720e771853fe31e88fe9f5f9d3851ec9f",
+      "platform/owned_installation.py": "d784d8f4d47a29ecf4ed1457fd1c1f55fae03070db442bf30ffccf6960a08175",
+      "platform/hybrid_keyboard.py": "204b46020cc7ed2aa287488388071cdc91b720fd3518a483e57140f697d3273f"
+    }
+  },
+  "systems": {
+    "24": {
+      "cold_controls": {
+        "private_config": "/tmp/inkecho-owned-default-acceptance/config",
+        "before_processes": [],
+        "cases": [
+          {
+            "action": "toggle",
+            "exit": 0,
+            "processes": [],
+            "socket_exists": false,
+            "lock_exists": false,
+            "stderr": ""
+          },
+          {
+            "action": "cancel",
+            "exit": 0,
+            "processes": [],
+            "socket_exists": false,
+            "lock_exists": false,
+            "stderr": ""
+          },
+          {
+            "action": "quit",
+            "exit": 0,
+            "processes": [],
+            "socket_exists": false,
+            "lock_exists": false,
+            "stderr": ""
+          }
+        ],
+        "config_data_unchanged": true,
+        "passed": true
+      },
+      "packaged_logging": {
+        "passed": true,
+        "fixed_code": "input_capability_unknown",
+        "all_fixed_input_labels_logged": 35,
+        "packaged_logging_sha256": "8180a4de054c285686c27b67290d72cbdcb93ab570db1327fb3886a53bafb4e9"
+      },
+      "owned_ui": {
+        "scope": "actual extracted package UI, programmatic real button click; isolated guest only",
+        "router_type": "DefaultAutoOutputRouter",
+        "before": {
+          "enabled-extensions": "@as []",
+          "disabled-extensions": "['inkecho-ibus-candidate@local.invalid', 'inkecho-ibus-focus-probe@local.invalid', 'inkecho-ibus-v2-prototype@local.invalid']",
+          "disable-user-extensions": "false"
+        },
+        "initial_status": "\u5c1a\u672a\u68c0\u67e5\u6269\u5c55\u72b6\u6001\u3002",
+        "clicked": "\u5b89\u88c5\u81ea\u52a8\u8f93\u5165\u6269\u5c55",
+        "installed_verified": true,
+        "status": "\u5f53\u524d\u7248\u672c\u7684\u53ef\u9009\u8f93\u5165\u6269\u5c55\u672a\u5b89\u88c5\u3001\u4e0d\u53ef\u7528\u6216\u672a\u901a\u8fc7\u6821\u9a8c\u3002",
+        "after": {
+          "enabled-extensions": "@as []",
+          "disabled-extensions": "['inkecho-ibus-candidate@local.invalid', 'inkecho-ibus-focus-probe@local.invalid', 'inkecho-ibus-v2-prototype@local.invalid']",
+          "disable-user-extensions": "false"
+        },
+        "no_automatic_enable": true,
+        "passed": true
+      },
+      "resource_cleanup": {
+        "candidate_processes_after_tests": [],
+        "runtime_paths": [
+          {
+            "path": "/run/user/1000/inkecho-fcitx-candidate.lock",
+            "mode": "0o600",
+            "uid": 1000,
+            "advisory_lock_free": true
+          }
+        ],
+        "passed": true
+      },
+      "gui": {
+        "screenshots": 5,
+        "platform": "xcb",
+        "visible": true
+      },
+      "pipelines": {
+        "protocol24-r2": {
+          "http_asr_passed": true,
+          "cases": {
+            "keyboard-cancel-after-first": {
+              "selected": "keyboard",
+              "outcome": "cancelled",
+              "received": 1,
+              "no_late": true,
+              "old_target_empty": true,
+              "configured_vad": false,
+              "manual_negotiation": true
+            },
+            "keyboard-normal": {
+              "selected": "keyboard",
+              "outcome": "succeeded",
+              "received": 22,
+              "no_late": true,
+              "old_target_empty": true,
+              "configured_vad": false,
+              "manual_negotiation": true
+            }
+          }
+        },
+        "vad-config-protocol24-r2": {
+          "http_asr_passed": true,
+          "cases": {
+            "keyboard-normal": {
+              "selected": "keyboard",
+              "outcome": "succeeded",
+              "received": 22,
+              "no_late": true,
+              "old_target_empty": true,
+              "configured_vad": true,
+              "manual_negotiation": true
+            }
+          }
+        },
+        "owned-protocol24": {
+          "http_asr_passed": true,
+          "cases": {
+            "auto-cancel-after-first": {
+              "selected": "ibus",
+              "outcome": "cancelled",
+              "received": 3,
+              "no_late": true,
+              "old_target_empty": true,
+              "configured_vad": false,
+              "manual_negotiation": true
+            },
+            "auto-normal": {
+              "selected": "ibus",
+              "outcome": "unconfirmed",
+              "received": 22,
+              "no_late": true,
+              "old_target_empty": true,
+              "configured_vad": false,
+              "manual_negotiation": true
+            }
+          }
+        }
+      },
+      "keyboard_monitor": {
+        "cancel": {
+          "characters": 1,
+          "presses": 1,
+          "releases": 1,
+          "before": {
+            "kind": "actual-x11-server",
+            "down_keycodes": []
+          },
+          "after": {
+            "kind": "actual-x11-server",
+            "down_keycodes": []
+          }
+        },
+        "full": {
+          "characters": 9,
+          "presses": 9,
+          "releases": 9,
+          "before": {
+            "kind": "actual-x11-server",
+            "down_keycodes": []
+          },
+          "after": {
+            "kind": "actual-x11-server",
+            "down_keycodes": []
+          }
+        }
+      },
+      "fcitx": {
+        "fcitx-disabled-fallback24/fallback-cancel": {
+          "passed": true,
+          "a": 1,
+          "b": 0,
+          "backend_display": "X11Display"
+        },
+        "fcitx-disabled-fallback24/fallback-full": {
+          "passed": true,
+          "a": 15,
+          "b": 0,
+          "backend_display": "X11Display"
+        },
+        "fcitx-enabled-complete24/guard-cancel": {
+          "passed": true,
+          "a": 0,
+          "b": 0,
+          "backend_display": "GdkWaylandDisplay"
+        },
+        "fcitx-enabled-complete24/guard-full": {
+          "passed": true,
+          "a": 0,
+          "b": 0,
+          "backend_display": "GdkWaylandDisplay"
+        },
+        "fcitx-enabled-complete24/fcitx-cancel": {
+          "passed": true,
+          "a": 1,
+          "b": 0,
+          "backend_display": "GdkWaylandDisplay"
+        },
+        "fcitx-enabled-complete24/fcitx-switch": {
+          "passed": true,
+          "a": 36,
+          "b": 164,
+          "backend_display": "GdkWaylandDisplay"
+        }
+      },
+      "overlay_cleanup": {
+        "container_state": {
+          "Status": "exited",
+          "Running": false,
+          "Paused": false,
+          "Restarting": false,
+          "OOMKilled": false,
+          "Dead": false,
+          "Pid": 0,
+          "ExitCode": 0,
+          "Error": "",
+          "StartedAt": "2026-10-29T12:54:39.813811149Z",
+          "FinishedAt": "2026-10-29T13:07:18.106064482Z"
+        },
+        "overlay": "/tmp/inkecho-logging-ui-candidate-20261029/vm24/state/guest.qcow2",
+        "inode": 895991,
+        "uid": 1000,
+        "allocated_bytes": 594612224,
+        "active_refs": [],
+        "before": {
+          "used": 12603158528,
+          "remaining": 548513792
+        },
+        "after": {
+          "used": 12008546304,
+          "remaining": 1143126016
+        },
+        "freed_bytes": 594612224,
+        "candidate_sha256": "545e07e080f05b90fdec4216edf8ff10e3acf6167af3ef505b6fd0a351401c06"
+      }
+    },
+    "26": {
+      "cold_controls": {
+        "private_config": "/tmp/inkecho-owned-default-acceptance/config",
+        "before_processes": [],
+        "cases": [
+          {
+            "action": "toggle",
+            "exit": 0,
+            "processes": [],
+            "socket_exists": false,
+            "lock_exists": false,
+            "stderr": ""
+          },
+          {
+            "action": "cancel",
+            "exit": 0,
+            "processes": [],
+            "socket_exists": false,
+            "lock_exists": false,
+            "stderr": ""
+          },
+          {
+            "action": "quit",
+            "exit": 0,
+            "processes": [],
+            "socket_exists": false,
+            "lock_exists": false,
+            "stderr": ""
+          }
+        ],
+        "config_data_unchanged": true,
+        "passed": true
+      },
+      "packaged_logging": {
+        "passed": true,
+        "fixed_code": "input_capability_unknown",
+        "all_fixed_input_labels_logged": 35,
+        "packaged_logging_sha256": "8180a4de054c285686c27b67290d72cbdcb93ab570db1327fb3886a53bafb4e9"
+      },
+      "owned_ui": {
+        "scope": "actual extracted package UI, programmatic real button click; isolated guest only",
+        "router_type": "DefaultAutoOutputRouter",
+        "before": {
+          "enabled-extensions": "@as []",
+          "disabled-extensions": "['inkecho-ibus-probe@local.invalid', 'inkecho-ibus-candidate@local.invalid', 'inkecho-ibus-v2-prototype@local.invalid', 'inkecho-wayland-focus-probe@local.invalid', 'inkecho-direct-focus-probe@local.invalid', 'inkecho-focus-object-probe@local.invalid', 'inkecho-ibus-auto-v3-probe@local.invalid', 'inkecho-ime-order-probe@local.invalid', 'inkecho-ime-epoch-probe@local.invalid']",
+          "disable-user-extensions": "false"
+        },
+        "initial_status": "\u5c1a\u672a\u68c0\u67e5\u6269\u5c55\u72b6\u6001\u3002",
+        "clicked": "\u5b89\u88c5\u81ea\u52a8\u8f93\u5165\u6269\u5c55",
+        "installed_verified": true,
+        "status": "\u5f53\u524d\u7248\u672c\u7684\u53ef\u9009\u8f93\u5165\u6269\u5c55\u672a\u5b89\u88c5\u3001\u4e0d\u53ef\u7528\u6216\u672a\u901a\u8fc7\u6821\u9a8c\u3002",
+        "after": {
+          "enabled-extensions": "@as []",
+          "disabled-extensions": "['inkecho-ibus-probe@local.invalid', 'inkecho-ibus-candidate@local.invalid', 'inkecho-ibus-v2-prototype@local.invalid', 'inkecho-wayland-focus-probe@local.invalid', 'inkecho-direct-focus-probe@local.invalid', 'inkecho-focus-object-probe@local.invalid', 'inkecho-ibus-auto-v3-probe@local.invalid', 'inkecho-ime-order-probe@local.invalid', 'inkecho-ime-epoch-probe@local.invalid']",
+          "disable-user-extensions": "false"
+        },
+        "no_automatic_enable": true,
+        "passed": true
+      },
+      "resource_cleanup": {
+        "candidate_processes_after_tests": [],
+        "runtime_paths": [
+          {
+            "path": "/run/user/1000/inkecho-fcitx-candidate.lock",
+            "mode": "0o600",
+            "uid": 1000,
+            "advisory_lock_free": true
+          }
+        ],
+        "passed": true
+      },
+      "gui": {
+        "screenshots": 5,
+        "platform": "wayland",
+        "visible": true
+      },
+      "pipelines": {
+        "protocol26": {
+          "http_asr_passed": true,
+          "cases": {
+            "keyboard-cancel-after-first": {
+              "selected": "keyboard",
+              "outcome": "cancelled",
+              "received": 1,
+              "no_late": true,
+              "old_target_empty": true,
+              "configured_vad": false,
+              "manual_negotiation": true
+            },
+            "keyboard-normal": {
+              "selected": "keyboard",
+              "outcome": "succeeded",
+              "received": 22,
+              "no_late": true,
+              "old_target_empty": true,
+              "configured_vad": false,
+              "manual_negotiation": true
+            }
+          }
+        },
+        "vad-config-protocol26": {
+          "http_asr_passed": true,
+          "cases": {
+            "keyboard-normal": {
+              "selected": "keyboard",
+              "outcome": "succeeded",
+              "received": 22,
+              "no_late": true,
+              "old_target_empty": true,
+              "configured_vad": true,
+              "manual_negotiation": true
+            }
+          }
+        },
+        "owned-protocol26": {
+          "http_asr_passed": true,
+          "cases": {
+            "auto-cancel-after-first": {
+              "selected": "ibus",
+              "outcome": "cancelled",
+              "received": 3,
+              "no_late": true,
+              "old_target_empty": true,
+              "configured_vad": false,
+              "manual_negotiation": true
+            },
+            "auto-normal": {
+              "selected": "ibus",
+              "outcome": "unconfirmed",
+              "received": 22,
+              "no_late": true,
+              "old_target_empty": true,
+              "configured_vad": false,
+              "manual_negotiation": true
+            }
+          }
+        }
+      },
+      "keyboard_monitor": {
+        "cancel": {
+          "characters": 1,
+          "presses": 1,
+          "releases": 1,
+          "before": {
+            "kind": "native-mutter",
+            "keymap_sha256": "e9e6b45d29d38fa1d6a42847b1666d9b94c45160e61516632a326a4f10673ded",
+            "group": 0,
+            "depressed": 0,
+            "latched": 0,
+            "locked": 0
+          },
+          "after": {
+            "kind": "native-mutter",
+            "keymap_sha256": "e9e6b45d29d38fa1d6a42847b1666d9b94c45160e61516632a326a4f10673ded",
+            "group": 0,
+            "depressed": 0,
+            "latched": 0,
+            "locked": 0
+          }
+        },
+        "full": {
+          "characters": 9,
+          "presses": 9,
+          "releases": 9,
+          "before": {
+            "kind": "native-mutter",
+            "keymap_sha256": "e9e6b45d29d38fa1d6a42847b1666d9b94c45160e61516632a326a4f10673ded",
+            "group": 0,
+            "depressed": 0,
+            "latched": 0,
+            "locked": 0
+          },
+          "after": {
+            "kind": "native-mutter",
+            "keymap_sha256": "e9e6b45d29d38fa1d6a42847b1666d9b94c45160e61516632a326a4f10673ded",
+            "group": 0,
+            "depressed": 0,
+            "latched": 0,
+            "locked": 0
+          }
+        }
+      },
+      "fcitx": {
+        "fcitx-disabled-fallback26/fallback-cancel": {
+          "passed": true,
+          "a": 1,
+          "b": 0,
+          "backend_display": "X11Display",
+          "key_monitor": {
+            "presses": 1,
+            "releases": 1,
+            "before": {
+              "kind": "actual-x11-server",
+              "down_keycodes": []
+            },
+            "after": {
+              "kind": "actual-x11-server",
+              "down_keycodes": []
+            }
+          }
+        },
+        "fcitx-disabled-fallback26/fallback-full": {
+          "passed": true,
+          "a": 15,
+          "b": 0,
+          "backend_display": "X11Display",
+          "key_monitor": {
+            "presses": 15,
+            "releases": 15,
+            "before": {
+              "kind": "actual-x11-server",
+              "down_keycodes": []
+            },
+            "after": {
+              "kind": "actual-x11-server",
+              "down_keycodes": []
+            }
+          }
+        },
+        "fcitx-owned-enabled26/fcitx-cancel": {
+          "passed": true,
+          "a": 1,
+          "b": 0,
+          "backend_display": "GdkWaylandDisplay"
+        },
+        "fcitx-owned-enabled26/fcitx-switch": {
+          "passed": true,
+          "a": 69,
+          "b": 131,
+          "backend_display": "GdkWaylandDisplay"
+        }
+      },
+      "overlay_cleanup": {
+        "container_state": {
+          "Status": "exited",
+          "Running": false,
+          "Paused": false,
+          "Restarting": false,
+          "OOMKilled": false,
+          "Dead": false,
+          "Pid": 0,
+          "ExitCode": 0,
+          "Error": "",
+          "StartedAt": "2026-10-29T13:07:48.262032547Z",
+          "FinishedAt": "2026-10-29T13:17:31.083515509Z"
+        },
+        "overlay": "/tmp/inkecho-logging-ui-candidate-20261029/vm26/state/guest.qcow2",
+        "inode": 897943,
+        "uid": 1000,
+        "allocated_bytes": 63180800,
+        "active_refs": [],
+        "before": {
+          "used": 12073476096,
+          "remaining": 1078196224
+        },
+        "after": {
+          "used": 12010295296,
+          "remaining": 1141377024
+        },
+        "freed_bytes": 63180800,
+        "candidate_sha256": "545e07e080f05b90fdec4216edf8ff10e3acf6167af3ef505b6fd0a351401c06"
+      }
+    }
+  }
+}

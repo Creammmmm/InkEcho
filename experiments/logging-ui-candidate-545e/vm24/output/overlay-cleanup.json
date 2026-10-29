@@ -1,0 +1,30 @@
+{
+  "container_state": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-10-29T12:54:39.813811149Z",
+    "FinishedAt": "2026-10-29T13:07:18.106064482Z"
+  },
+  "overlay": "/tmp/inkecho-logging-ui-candidate-20261029/vm24/state/guest.qcow2",
+  "inode": 895991,
+  "uid": 1000,
+  "allocated_bytes": 594612224,
+  "active_refs": [],
+  "before": {
+    "used": 12603158528,
+    "remaining": 548513792
+  },
+  "after": {
+    "used": 12008546304,
+    "remaining": 1143126016
+  },
+  "freed_bytes": 594612224,
+  "candidate_sha256": "545e07e080f05b90fdec4216edf8ff10e3acf6167af3ef505b6fd0a351401c06"
+}

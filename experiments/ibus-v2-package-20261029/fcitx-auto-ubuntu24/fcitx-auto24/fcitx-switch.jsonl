@@ -1,0 +1,7 @@
+XGetWindowProperty[_NET_WM_DESKTOP] failed (code=1)
+Traceback (most recent call last):
+  File "/tmp/inkecho-fcitx-auto-package/target-focus.py", line 74, in finish
+    report={'mode':mode,'exit':proc.returncode,'a':a,'b':b,'triggered':triggered,'switch_confirmed':switch_confirmed,'focus_in_b':focus_in_b,'resumed':resumed,'fcitx_b_context_proved_by_receipt':bool(b),'stdout':lines,'stderr':stderr[-5000:],'events':events,'target_im_environment':os.environ.get('GTK_IM_MODULE'),'fcitx_module_loaded':'im-fcitx5.so' in Path('/proc/self/maps').read_text(),'target_pid':os.getpid()}
+                                                                                                                                                                                                                                                                                                                                                                  ^^^^
+NameError: name 'Path' is not defined
+{"error": "timeout", "mode": "switch"}

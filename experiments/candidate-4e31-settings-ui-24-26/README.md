@@ -1,0 +1,13 @@
+# Candidate 4e31: settings read-failure recovery on Ubuntu 24/26
+
+AppImage 0.10.2 SHA-256 `4e31088bfa605d564fd59ffa0ac9fcaf0e651ec7838f1de2c0e08d9c8dd6b3a1` was built from the 2026-10-29 07:46:33 +08:00 snapshot. Empty `package.diff` compares extracted `packages/inkecho` to the complete snapshot, and empty `worktree.diff` compares snapshot to then-current working source, excluding bytecode caches. This candidate predates the later bridge-operation status-message fix; no results here test it. Comparisons do not establish all dependencies/assets or future source changes.
+
+Separate externally network-isolated QEMU snapshots used original guest/base/seed disks and input shares read-only. Ubuntu 24.04.5 was active unlocked GNOME X11 / Qt xcb; Ubuntu 26.04.1 was active unlocked GNOME Wayland / Qt wayland. Each log checks the exact candidate SHA and packaged module hashes. The probes render real packaged CompatibilityPage, ConfigStore and Session with temporary configuration directories; widgets are changed programmatically, not through physical mouse or keyboard. No host user configuration, real input method, clipboard, audio or credentials were accessed. The test SSH key remained on the host.
+
+Both logs show default auto / 40 ms / 40 ms, automatic save, reconstructed page and task-snapshot behavior, plus independent writer then reader processes loading Fcitx/82/64. Before-write and after-write OSError injection for output method, mapping wait and feedback timeout resulted in displayed values matching actual on-disk values and a save failure message in all six cases on each desktop.
+
+The additional read test injects an OSError through a temporary ConfigStore substitute after the real page is displayed. Both `refresh()` and `enable()` visibly reported that input settings cannot be read; after restoring reads, `refresh()` returned to the normal automatic-mode status. Input authorization was substituted, so this does not test actual bridge connection or the later bridge-operation status fix. The task probe also substitutes recorder and key lookup. Injected failures are not real hardware/filesystem failures; actual input delivery, real microphones and APIs, desktop focus races and complete release acceptance remain untested.
+
+To reproduce only in equivalent isolated guests, put the exact AppImage and archived scripts (remove `.txt` suffixes) on a read-only 9p share tagged `inkecho_input` and run `guest-run.sh x11` or `wayland` for the matching active unlocked session. Each process is bounded to 30 seconds. Guest provisioning is a prerequisite.
+
+Both guests powered off normally, each Docker wait returned 0, and both temporary containers were removed (`shutdown24.log`, `shutdown26.log`).

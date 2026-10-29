@@ -1,0 +1,15 @@
+set -eu
+export XDG_RUNTIME_DIR=/run/user/1000 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus DISPLAY=:0 XDG_SESSION_TYPE=x11 XDG_CURRENT_DESKTOP=ubuntu:GNOME
+mkdir -p /tmp/probe-input /tmp/inkecho-r4-test
+sudo mount -t 9p -o trans=virtio,version=9p2000.L,ro inkecho_input /tmp/probe-input
+cp /tmp/probe-input/candidate.AppImage /tmp/inkecho-r4-test/InkEcho-0.10.2-x86_64.AppImage
+cd /tmp/inkecho-r4-test
+printf '%s  %s\n' b2d47dee9295dadbbbff644e0f9553875ef7ac8971a97c56eec7de68d603c5d2 InkEcho-0.10.2-x86_64.AppImage | sha256sum -c -
+chmod +x InkEcho-0.10.2-x86_64.AppImage
+./InkEcho-0.10.2-x86_64.AppImage --appimage-extract >/dev/null
+mkdir -p ~/.local/share/gnome-shell/extensions/inkecho-ibus-v2-prototype@local.invalid
+cp squashfs-root/packages/inkecho/platform/ibus_candidate/* ~/.local/share/gnome-shell/extensions/inkecho-ibus-v2-prototype@local.invalid/
+sha256sum squashfs-root/packages/inkecho/platform/ibus_candidate/* ~/.local/share/gnome-shell/extensions/inkecho-ibus-v2-prototype@local.invalid/*
+gsettings set org.gnome.shell disable-user-extensions false
+sudo umount /tmp/probe-input
+sudo reboot

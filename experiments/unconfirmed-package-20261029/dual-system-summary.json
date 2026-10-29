@@ -1,0 +1,373 @@
+{
+  "24": {
+    "cases": {
+      "ibus-cancel-after-first": {
+        "task_result": {
+          "audio_seconds": 1.2355,
+          "characters": 1,
+          "outcome": "cancelled",
+          "polishing_calls": 1,
+          "transcription_calls": 1,
+          "transcription_seconds": 0.9813567709999802
+        },
+        "diagnostics": [],
+        "defaults_unchanged": true,
+        "mapping_restored": null,
+        "native_map_restored": null,
+        "cleanup_errors": [],
+        "observed_ibus_uncertainty_contract": null,
+        "receiver": {
+          "text_exact": true,
+          "no_late_text": true,
+          "old_target_untouched": true,
+          "received_codepoints": [
+            20320
+          ],
+          "pipeline_exit": 0,
+          "passed": true
+        },
+        "actual_app_module_sha256": "a9f9484618d487cfd0b7b39836ae8bcfe576ee2cfb0fa50bfc6f6481fb988989"
+      },
+      "ibus-normal": {
+        "task_result": {
+          "audio_seconds": 1.3635,
+          "characters": 24,
+          "outcome": "unconfirmed",
+          "polishing_calls": 1,
+          "polishing_seconds": 0.5769288320000214,
+          "transcription_calls": 1,
+          "transcription_seconds": 1.054166136000049
+        },
+        "diagnostics": [
+          "ibus_delivery_unknown"
+        ],
+        "defaults_unchanged": true,
+        "mapping_restored": null,
+        "native_map_restored": null,
+        "cleanup_errors": [],
+        "observed_ibus_uncertainty_contract": true,
+        "receiver": {
+          "text_exact": true,
+          "no_late_text": true,
+          "old_target_untouched": true,
+          "received_codepoints": [
+            20320,
+            22909,
+            32,
+            73,
+            110,
+            107,
+            69,
+            99,
+            104,
+            111,
+            65292,
+            99,
+            97,
+            102,
+            233,
+            32,
+            937,
+            32,
+            128512,
+            10,
+            31532,
+            20108,
+            34892,
+            12290
+          ],
+          "pipeline_exit": 0,
+          "passed": true
+        },
+        "actual_app_module_sha256": "a9f9484618d487cfd0b7b39836ae8bcfe576ee2cfb0fa50bfc6f6481fb988989"
+      },
+      "keyboard-cancel-after-first": {
+        "task_result": {
+          "audio_seconds": 1.2995,
+          "characters": 0,
+          "outcome": "cancelled",
+          "polishing_calls": 1,
+          "transcription_calls": 1,
+          "transcription_seconds": 1.0353159949999622
+        },
+        "diagnostics": [],
+        "defaults_unchanged": true,
+        "mapping_restored": true,
+        "native_map_restored": null,
+        "cleanup_errors": [],
+        "observed_ibus_uncertainty_contract": null,
+        "receiver": {
+          "text_exact": true,
+          "no_late_text": true,
+          "old_target_untouched": true,
+          "received_codepoints": [
+            20320
+          ],
+          "pipeline_exit": 0,
+          "passed": true
+        },
+        "actual_app_module_sha256": "a9f9484618d487cfd0b7b39836ae8bcfe576ee2cfb0fa50bfc6f6481fb988989"
+      },
+      "keyboard-normal": {
+        "task_result": {
+          "audio_seconds": 1.3635,
+          "characters": 22,
+          "outcome": "succeeded",
+          "polishing_calls": 1,
+          "polishing_seconds": 0.5543199859999959,
+          "transcription_calls": 1,
+          "transcription_seconds": 1.0766487310000343
+        },
+        "diagnostics": [],
+        "defaults_unchanged": true,
+        "mapping_restored": true,
+        "native_map_restored": null,
+        "cleanup_errors": [],
+        "observed_ibus_uncertainty_contract": null,
+        "receiver": {
+          "text_exact": true,
+          "no_late_text": true,
+          "old_target_untouched": true,
+          "received_codepoints": [
+            20320,
+            22909,
+            32,
+            73,
+            110,
+            107,
+            69,
+            99,
+            104,
+            111,
+            65292,
+            99,
+            97,
+            102,
+            233,
+            32,
+            937,
+            10,
+            31532,
+            20108,
+            34892,
+            12290
+          ],
+          "pipeline_exit": 0,
+          "passed": true
+        },
+        "actual_app_module_sha256": "a9f9484618d487cfd0b7b39836ae8bcfe576ee2cfb0fa50bfc6f6481fb988989"
+      }
+    },
+    "http_asr": {
+      "passed": true,
+      "synthetic_wav": true,
+      "real_cloud": false,
+      "module": "/tmp/inkecho-unconfirmed-acceptance/squashfs-root/packages/inkecho/providers.py",
+      "module_sha256": "0e4015a5e5b3a7793e47e48f0f14399933c5fdd352411cc9b3d2aa87f6419867",
+      "wire_wav_exact": true,
+      "request_path": "POST /v1/chat/completions HTTP/1.1",
+      "returned_codepoints": [
+        20320,
+        22909,
+        65292,
+        72,
+        84,
+        84,
+        80,
+        32,
+        937,
+        32,
+        128512,
+        12290
+      ],
+      "server_handlers_remaining": 0
+    }
+  },
+  "26": {
+    "cases": {
+      "ibus-cancel-after-first": {
+        "task_result": {
+          "audio_seconds": 1.2783125,
+          "characters": 1,
+          "outcome": "cancelled",
+          "polishing_calls": 1,
+          "transcription_calls": 1,
+          "transcription_seconds": 1.0018626839999882
+        },
+        "diagnostics": [],
+        "defaults_unchanged": true,
+        "mapping_restored": null,
+        "native_map_restored": null,
+        "cleanup_errors": [],
+        "observed_ibus_uncertainty_contract": null,
+        "receiver": {
+          "text_exact": true,
+          "no_late_text": true,
+          "old_target_untouched": true,
+          "received_codepoints": [
+            20320
+          ],
+          "pipeline_exit": 0,
+          "passed": true
+        },
+        "actual_app_module_sha256": "a9f9484618d487cfd0b7b39836ae8bcfe576ee2cfb0fa50bfc6f6481fb988989"
+      },
+      "ibus-normal": {
+        "task_result": {
+          "audio_seconds": 1.3209375,
+          "characters": 24,
+          "outcome": "unconfirmed",
+          "polishing_calls": 1,
+          "polishing_seconds": 0.5729194980000045,
+          "transcription_calls": 1,
+          "transcription_seconds": 1.0212115970000042
+        },
+        "diagnostics": [
+          "ibus_delivery_unknown"
+        ],
+        "defaults_unchanged": true,
+        "mapping_restored": null,
+        "native_map_restored": null,
+        "cleanup_errors": [],
+        "observed_ibus_uncertainty_contract": true,
+        "receiver": {
+          "text_exact": true,
+          "no_late_text": true,
+          "old_target_untouched": true,
+          "received_codepoints": [
+            20320,
+            22909,
+            32,
+            73,
+            110,
+            107,
+            69,
+            99,
+            104,
+            111,
+            65292,
+            99,
+            97,
+            102,
+            233,
+            32,
+            937,
+            32,
+            128512,
+            10,
+            31532,
+            20108,
+            34892,
+            12290
+          ],
+          "pipeline_exit": 0,
+          "passed": true
+        },
+        "actual_app_module_sha256": "a9f9484618d487cfd0b7b39836ae8bcfe576ee2cfb0fa50bfc6f6481fb988989"
+      },
+      "keyboard-cancel-after-first": {
+        "task_result": {
+          "audio_seconds": 1.363625,
+          "characters": 0,
+          "outcome": "cancelled",
+          "polishing_calls": 1,
+          "transcription_calls": 1,
+          "transcription_seconds": 1.0665440359999963
+        },
+        "diagnostics": [],
+        "defaults_unchanged": true,
+        "mapping_restored": null,
+        "native_map_restored": true,
+        "cleanup_errors": [],
+        "observed_ibus_uncertainty_contract": null,
+        "receiver": {
+          "text_exact": true,
+          "no_late_text": true,
+          "old_target_untouched": true,
+          "received_codepoints": [
+            20320
+          ],
+          "pipeline_exit": 0,
+          "passed": true
+        },
+        "actual_app_module_sha256": "a9f9484618d487cfd0b7b39836ae8bcfe576ee2cfb0fa50bfc6f6481fb988989"
+      },
+      "keyboard-normal": {
+        "task_result": {
+          "audio_seconds": 1.299625,
+          "characters": 22,
+          "outcome": "succeeded",
+          "polishing_calls": 1,
+          "polishing_seconds": 0.5430973499999965,
+          "transcription_calls": 1,
+          "transcription_seconds": 1.0003457800000035
+        },
+        "diagnostics": [],
+        "defaults_unchanged": true,
+        "mapping_restored": null,
+        "native_map_restored": true,
+        "cleanup_errors": [],
+        "observed_ibus_uncertainty_contract": null,
+        "receiver": {
+          "text_exact": true,
+          "no_late_text": true,
+          "old_target_untouched": true,
+          "received_codepoints": [
+            20320,
+            22909,
+            32,
+            73,
+            110,
+            107,
+            69,
+            99,
+            104,
+            111,
+            65292,
+            99,
+            97,
+            102,
+            233,
+            32,
+            937,
+            10,
+            31532,
+            20108,
+            34892,
+            12290
+          ],
+          "pipeline_exit": 0,
+          "passed": true
+        },
+        "actual_app_module_sha256": "a9f9484618d487cfd0b7b39836ae8bcfe576ee2cfb0fa50bfc6f6481fb988989"
+      }
+    },
+    "http_asr": {
+      "passed": true,
+      "synthetic_wav": true,
+      "real_cloud": false,
+      "module": "/tmp/inkecho-unconfirmed-acceptance/squashfs-root/packages/inkecho/providers.py",
+      "module_sha256": "0e4015a5e5b3a7793e47e48f0f14399933c5fdd352411cc9b3d2aa87f6419867",
+      "wire_wav_exact": true,
+      "request_path": "POST /v1/chat/completions HTTP/1.1",
+      "returned_codepoints": [
+        20320,
+        22909,
+        65292,
+        72,
+        84,
+        84,
+        80,
+        32,
+        937,
+        32,
+        128512,
+        12290
+      ],
+      "server_handlers_remaining": 0
+    }
+  },
+  "sha256": "222c017a4f9e10bf4d6422cf402a2b7ea57245adb267a4409cce87ca74551694",
+  "both_same_artifact_required_subset_passed": true,
+  "limits": "Owned GTK/generated audio/local TLS fixtures; no physical microphone, real cloud credentials, physical hotkeys or full application/session matrix; IBus receipt remains unconfirmed."
+}

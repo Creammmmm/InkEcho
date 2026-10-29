@@ -1,0 +1,9 @@
+/tmp/inkecho-owned-default-acceptance/InkEcho.AppImage: OK
+1 1000 inkecho seat0 1259 user    tty2 no -
+2 1000 inkecho -     1273 manager -    no -
+4 1000 inkecho -     2247 user    -    no -
+gui_exit=0
+{"private_config": "/tmp/inkecho-owned-default-acceptance/config", "before_processes": [], "cases": [{"action": "toggle", "exit": 0, "processes": [], "socket_exists": false, "lock_exists": false, "stderr": ""}, {"action": "cancel", "exit": 0, "processes": [], "socket_exists": false, "lock_exists": false, "stderr": ""}, {"action": "quit", "exit": 0, "processes": [], "socket_exists": false, "lock_exists": false, "stderr": ""}], "config_data_unchanged": true, "passed": true}
+{"text_exact": true, "no_late_text": true, "old_target_untouched": true, "received_codepoints": [20320, 22909, 32, 73, 110, 107, 69, 99, 104, 111, 65292, 99, 97, 102, 233, 32, 937, 10, 31532, 20108, 34892, 12290], "pipeline_exit": 0, "passed": true}
+{"text_exact": true, "no_late_text": true, "old_target_untouched": true, "received_codepoints": [20320], "pipeline_exit": 0, "passed": true}
+{"text_exact": true, "no_late_text": true, "old_target_untouched": true, "received_codepoints": [20320, 22909, 32, 73, 110, 107, 69, 99, 104, 111, 65292, 99, 97, 102, 233, 32, 937, 10, 31532, 20108, 34892, 12290], "pipeline_exit": 0, "passed": true}

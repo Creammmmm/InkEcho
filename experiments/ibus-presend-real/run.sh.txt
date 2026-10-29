@@ -1,0 +1,20 @@
+set -eu
+export XDG_RUNTIME_DIR=/run/user/1000 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus DISPLAY=:0 WAYLAND_DISPLAY=wayland-0 XDG_SESSION_TYPE=wayland XDG_CURRENT_DESKTOP=ubuntu:GNOME
+id=$(loginctl show-user inkecho -p Display --value);loginctl show-session "$id" -p Type -p Active -p LockedHint
+[ "$(loginctl show-session "$id" -p Type --value)" = wayland ]
+mkdir -p /tmp/presend-share /tmp/presend
+sudo mount -t 9p -o trans=virtio,version=9p2000.L,ro inkecho_input /tmp/presend-share
+cp /tmp/presend-share/{actor.py,desktop-client.py,InkEcho-0.10.2-x86_64.AppImage} /tmp/presend/
+sudo umount /tmp/presend-share
+cd /tmp/presend
+printf '%s  %s\n' b2d47dee9295dadbbbff644e0f9553875ef7ac8971a97c56eec7de68d603c5d2 InkEcho-0.10.2-x86_64.AppImage | sha256sum -c -
+chmod +x InkEcho-0.10.2-x86_64.AppImage
+./InkEcho-0.10.2-x86_64.AppImage --appimage-extract >/dev/null
+gnome-extensions enable inkecho-presend-experiment@local.invalid
+sleep 3
+gnome-extensions info inkecho-presend-experiment@local.invalid
+ibus engine
+root=/tmp/presend/squashfs-root
+export PYTHONHOME="$root/usr" PYTHONPATH="$root/packages" LD_LIBRARY_PATH="$root/usr/lib/inkecho" QT_QPA_PLATFORM=offscreen
+sha256sum /tmp/presend/{actor.py,desktop-client.py}
+timeout 40 "$root/usr/bin/python3" /tmp/presend/desktop-client.py

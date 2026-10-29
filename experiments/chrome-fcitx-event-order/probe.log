@@ -1,0 +1,3 @@
+original: a=9, b_input_events=191, b_last5=[187, 188, 190, 191, 189], reported=[9, 189]
+controlled handler fixture: newest observed=191, after delayed old snapshot=189
+sequenced handler: delayed old snapshot rejected, retained=191

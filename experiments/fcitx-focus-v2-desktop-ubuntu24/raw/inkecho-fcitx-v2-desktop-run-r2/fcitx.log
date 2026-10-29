@@ -1,0 +1,32 @@
+I2026-10-29 03:36:44.614104 instance.cpp:1346] Override Enabled Addons: {}
+I2026-10-29 03:36:44.614120 instance.cpp:1347] Override Disabled Addons: {clipboard, classicui, notificationitem, xcb, wayland}
+I2026-10-29 03:36:44.614769 addonmanager.cpp:195] Loaded addon unicode
+I2026-10-29 03:36:44.615375 addonmanager.cpp:195] Loaded addon quickphrase
+I2026-10-29 03:36:44.617441 addonmanager.cpp:195] Loaded addon keyboard
+I2026-10-29 03:36:44.617563 addonmanager.cpp:195] Loaded addon imselector
+I2026-10-29 03:36:44.618102 addonmanager.cpp:195] Loaded addon dbus
+I2026-10-29 03:36:44.618297 addonmanager.cpp:195] Loaded addon dbusfrontend
+I2026-10-29 03:36:44.619698 addonmanager.cpp:195] Loaded addon fcitx4frontend
+I2026-10-29 03:36:44.620019 addonmanager.cpp:195] Loaded addon ibusfrontend
+I2026-10-29 03:36:44.620135 addonmanager.cpp:195] Loaded addon inkecho
+I2026-10-29 03:36:44.632581 inputmethodmanager.cpp:190] Found 737 input method(s) in addon keyboard
+I2026-10-29 03:36:44.632665 inputmethodmanager.cpp:117] No valid input method group in configuration. Building a default one
+I2026-10-29 03:36:44.632682 instance.cpp:371] Items in Default: [InputMethodGroupItem(keyboard-us,layout=)]
+I2026-10-29 03:36:44.632688 instance.cpp:376] Generated groups: [Default]
+I2026-10-29 03:36:44.632864 addonmanager.cpp:195] Loaded addon kimpanel
+I2026-10-29 03:36:44.632958 addonmanager.cpp:195] Loaded addon virtualkeyboard
+I2026-10-29 03:36:44.633089 addonmanager.cpp:195] Loaded addon notifications
+I2026-10-29 03:36:44.633170 kimpanel.cpp:116] Kimpanel new owner: 
+I2026-10-29 03:36:44.633178 virtualkeyboard.cpp:223] VirtualKeyboard new owner: 
+I2026-10-29 03:37:38.864619 addonmanager.cpp:298] Unloading addon notifications
+I2026-10-29 03:37:38.864643 addonmanager.cpp:298] Unloading addon virtualkeyboard
+I2026-10-29 03:37:38.864656 addonmanager.cpp:298] Unloading addon kimpanel
+I2026-10-29 03:37:38.864665 addonmanager.cpp:298] Unloading addon inkecho
+I2026-10-29 03:37:38.864702 addonmanager.cpp:298] Unloading addon ibusfrontend
+I2026-10-29 03:37:38.865456 addonmanager.cpp:298] Unloading addon fcitx4frontend
+I2026-10-29 03:37:38.865481 addonmanager.cpp:298] Unloading addon dbusfrontend
+I2026-10-29 03:37:38.865495 addonmanager.cpp:298] Unloading addon dbus
+I2026-10-29 03:37:38.865531 addonmanager.cpp:298] Unloading addon imselector
+I2026-10-29 03:37:38.865542 addonmanager.cpp:298] Unloading addon keyboard
+I2026-10-29 03:37:38.865593 addonmanager.cpp:298] Unloading addon quickphrase
+I2026-10-29 03:37:38.865652 addonmanager.cpp:298] Unloading addon unicode

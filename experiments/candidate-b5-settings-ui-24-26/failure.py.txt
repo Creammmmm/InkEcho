@@ -1,0 +1,20 @@
+import asyncio,json,sys,tempfile
+from pathlib import Path
+from PySide6.QtWidgets import QApplication
+from inkecho.app import Session
+from inkecho.config import ConfigStore
+from inkecho.ui.information import CompatibilityPage
+app=QApplication([])
+with tempfile.TemporaryDirectory(prefix='inkecho-failure-') as d:
+ store=ConfigStore(Path(d)); store.initialize(); session=Session(store); page=CompatibilityPage(session);page.show();app.processEvents()
+ orig=store.save_settings
+ def fail(_): raise OSError('synthetic failure')
+ store.save_settings=fail
+ page.output_method.setCurrentIndex(page.output_method.findData('fcitx')); app.processEvents()
+ result={'method_shown':page.output_method.currentData(),'method_stored':store.load_settings().output_method,'method_message':page.message.text()}
+ page.mapping_wait.setValue(75);app.processEvents()
+ result.update(mapping_shown=page.mapping_wait.value(),mapping_stored=store.load_settings().x11_mapping_wait_ms,mapping_message=page.message.text(),visible=page.isVisible(),qt_platform=app.platformName())
+ assert result['method_stored']=='auto' and result['method_shown']=='auto' and result['method_message']=='输入设置无法保存。'
+ assert result['mapping_stored']==40 and result['mapping_message']=='输入设置无法保存。'
+ print(json.dumps(result,ensure_ascii=False),flush=True)
+ store.save_settings=orig;page.close();page.deleteLater();app.processEvents();asyncio.run(session.close())

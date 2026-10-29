@@ -1,0 +1,6 @@
+扩展已安装但未运行。
+@as []
+
+(process:5153): IBUS-CRITICAL **: 06:40:24.234: ibus_bus_get_global_engine: assertion 'IBUS_IS_BUS (bus)' failed
+No engine is set.
+5121 bash -c root=/tmp/inkecho-unconfirmed-acceptance; export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus XDG_RUNTIME_DIR=/run/user/1000 DISPLAY=:0; export XAUTHORITY="$(systemctl --user show-environment | sed -n "s/^XAUTHORITY=//p")"; export APPDIR="$root/squashfs-root" PYTHONHOME="$root/squashfs-root/usr" PYTHONPATH="$root/squashfs-root/packages" LD_LIBRARY_PATH="$root/squashfs-root/usr/lib/inkecho"; "$APPDIR/usr/bin/python3" -c "from inkecho.platform.ibus_extension import ExtensionManager; m=ExtensionManager();m.disable();print(m.status())"; unset PYTHONHOME PYTHONPATH; gsettings get org.gnome.shell enabled-extensions; ibus engine; pactl list short modules | grep inkecho || true; find /run/user/1000 -maxdepth 3 -name "*.cap" -print; grep fuse.InkEcho /proc/self/mountinfo || true; pgrep -af "^(/tmp/\\.mount_.*|.*/python.*-m inkecho.platform.*)" || true; sudo shutdown -h now

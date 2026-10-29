@@ -1,0 +1,17 @@
+Service=gdm-autologin
+Desktop=
+Leader=2435
+Type=wayland
+    988       1 systemd-logind
+   1230       1 agetty
+   2427       1 gdm3
+   2435    2427 gdm-session-wor
+   2441    2435 gdm-wayland-ses
+   2453    2441 gnome-session-i
+   2474    1267 gnome-session-c
+   2493    1267 gnome-session-s
+   2499    1267 gnome-shell
+   3110    1267 gnome-control-c
+/home/inkecho/.profile:1:# ~/.profile: executed by the command interpreter for login shells.
+  gdm.service                                    loaded    active   running GNOME Display Manager
+  getty-static.service                           loaded    inactive dead    getty on tty2-tty6 if dbus and logind are not available

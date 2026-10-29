@@ -1,0 +1,53 @@
+PRETTY_NAME="Ubuntu 24.04.5 LTS"
+NAME="Ubuntu"
+VERSION_ID="24.04"
+GNOME Shell 46.0
+5.1.7
+Type=x11
+Active=yes
+LockedHint=no
+/tmp/inkecho-r4-test/InkEcho-0.10.2-x86_64.AppImage: OK
+6056b6073b2fc7a8564f61f01cf6db2c4c35ad15fef41ba21672c5508630d58b  /tmp/inkecho-r4-test/squashfs-root/packages/inkecho/platform/output_router.py
+775de69704161e08c15e3966bab502b73abf0d4750c05c52d79dfa32ea74d333  /tmp/inkecho-r4-test/squashfs-root/packages/inkecho/app.py
+已安装输入桥；运行状态需通过输入服务检查确认。
+Traceback (most recent call last):
+  File "/tmp/inkecho-r4-test/probes/target-focus.py", line 11, in <module>
+    w=Gtk.Window(title=title); w.set_default_size(550,250)
+      ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3/dist-packages/gi/overrides/Gtk.py", line 508, in __init__
+    raise RuntimeError(
+RuntimeError: Gtk couldn't be initialized. Use Gtk.init_check() if you want to handle this case.
+normal_timeout_or_error=full
+Traceback (most recent call last):
+  File "/tmp/inkecho-r4-test/probes/target-focus.py", line 11, in <module>
+    w=Gtk.Window(title=title); w.set_default_size(550,250)
+      ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3/dist-packages/gi/overrides/Gtk.py", line 508, in __init__
+    raise RuntimeError(
+RuntimeError: Gtk couldn't be initialized. Use Gtk.init_check() if you want to handle this case.
+normal_timeout_or_error=cancel
+Traceback (most recent call last):
+  File "/tmp/inkecho-r4-test/probes/target-focus.py", line 11, in <module>
+    w=Gtk.Window(title=title); w.set_default_size(550,250)
+      ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3/dist-packages/gi/overrides/Gtk.py", line 508, in __init__
+    raise RuntimeError(
+RuntimeError: Gtk couldn't be initialized. Use Gtk.init_check() if you want to handle this case.
+normal_timeout_or_error=full
+Traceback (most recent call last):
+  File "/tmp/inkecho-r4-test/probes/target-focus.py", line 11, in <module>
+    w=Gtk.Window(title=title); w.set_default_size(550,250)
+      ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3/dist-packages/gi/overrides/Gtk.py", line 508, in __init__
+    raise RuntimeError(
+RuntimeError: Gtk couldn't be initialized. Use Gtk.init_check() if you want to handle this case.
+normal_timeout_or_error=cancel
+Traceback (most recent call last):
+  File "/tmp/inkecho-r4-test/probes/target-focus.py", line 11, in <module>
+    w=Gtk.Window(title=title); w.set_default_size(550,250)
+      ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3/dist-packages/gi/overrides/Gtk.py", line 508, in __init__
+    raise RuntimeError(
+RuntimeError: Gtk couldn't be initialized. Use Gtk.init_check() if you want to handle this case.
+fallback_timeout_or_error=full
+未发现经过校验的输入桥；可能尚未安装。

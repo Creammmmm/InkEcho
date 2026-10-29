@@ -1,0 +1,10 @@
+import json,os,sys,time,gi
+gi.require_version('Gtk','3.0')
+from gi.repository import Gtk,GLib
+kind=sys.argv[1]; w=Gtk.Window(title='InkEcho isolated AT-SPI probe'); v=Gtk.Button(label='Test') if kind=='button' else Gtk.Entry(); w.add(v); w.show_all(); w.present(); v.grab_focus(); start=time.monotonic()
+def ready():
+ if not (w.is_active() and v.has_focus()):
+  if time.monotonic()-start<10:return True
+  print(json.dumps({'error':'focus_unconfirmed'}),flush=True); Gtk.main_quit();return False
+ print(json.dumps({'pid':os.getpid(),'kind':kind,'window_active':w.is_active(),'widget_focus':v.has_focus()}),flush=True);GLib.timeout_add_seconds(12,Gtk.main_quit);return False
+GLib.timeout_add(200,ready);Gtk.main()

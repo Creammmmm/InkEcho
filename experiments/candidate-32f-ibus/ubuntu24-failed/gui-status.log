@@ -1,0 +1,8 @@
+Type=x11
+Active=yes
+LockedHint=no
+1480 /usr/bin/gnome-shell
+1553 /usr/libexec/gnome-shell-calendar-server
+1572 /usr/bin/gjs -m /usr/share/gnome-shell/org.gnome.Shell.Notifications
+1920 /usr/bin/gjs -m /usr/share/gnome-shell/org.gnome.ScreenSaver
+2062 gjs /usr/share/gnome-shell/extensions/ding@rastersoft.com/app/ding.js -E -P /usr/share/gnome-shell/extensions/ding@rastersoft.com/app

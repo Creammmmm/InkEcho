@@ -1,0 +1,21 @@
+import gi, subprocess, time, json
+gi.require_version("Gtk", "3.0")
+from gi.repository import Gtk, GLib
+win=Gtk.Window(title='InkEcho isolated xkb test')
+entry=Gtk.Entry();win.add(entry);win.show_all();win.present();entry.grab_focus()
+def call(method):
+ p=subprocess.run(['gdbus','call','--session','--dest','org.example.InkEchoXkbProbe','--object-path','/org/example/InkEchoXkbProbe','--method','org.example.InkEchoXkbProbe.'+method],capture_output=True,text=True,timeout=5)
+ print(method,p.returncode,p.stdout.strip(),p.stderr.strip(),flush=True)
+def first():
+ print('focus',win.is_active(),entry.has_focus(),flush=True)
+ if not win.is_active() or not entry.has_focus():Gtk.main_quit();return False
+ call('Apply');GLib.timeout_add(800,second);return False
+def second():
+ call('Press');GLib.timeout_add(800,third);return False
+def third():
+ print('after_apply_press',repr(entry.get_text()),flush=True);call('Restore');GLib.timeout_add(800,fourth);return False
+def fourth():
+ call('Press');GLib.timeout_add(800,fifth);return False
+def fifth():
+ print('after_restore_press',repr(entry.get_text()),flush=True);Gtk.main_quit();return False
+GLib.timeout_add(2500,first);Gtk.main()

@@ -1,0 +1,26 @@
+import hashlib, json, os, sys, time
+import gi
+gi.require_version('Gtk','3.0')
+gi.require_version('IBus','1.0')
+from gi.repository import Gtk, GLib, Gio, IBus
+kind=sys.argv[1]
+w=Gtk.Window(title='InkEcho private engine probe '+kind); w.set_default_size(400,200)
+v=Gtk.Button(label='No text') if kind=='button' else Gtk.Entry()
+w.add(v); w.show_all(); w.present(); v.grab_focus()
+start=time.monotonic()
+def examine():
+ if not (w.is_active() and v.has_focus()):
+  if time.monotonic()-start < 10:return True
+  print(json.dumps({'kind':kind,'error':'focus_unconfirmed','window_active':w.is_active(),'widget_focus':v.has_focus()}),flush=True); Gtk.main_quit(); return False
+ IBus.init(); bus=IBus.Bus.new()
+ if not bus.is_connected():
+  print(json.dumps({'kind':kind,'error':'ibus_disconnected'}),flush=True); Gtk.main_quit(); return False
+ path=bus.current_input_context()
+ try:
+  result=bus.get_connection().call_sync('org.freedesktop.IBus', path, 'org.freedesktop.IBus.InputContext', 'GetEngine', None,None,Gio.DBusCallFlags.NONE,2000,None)
+  value=result.print_(True)
+  engine={'kind':'return','sha256':hashlib.sha256(value.encode()).hexdigest(),'variant_type':result.get_type_string()}
+ except GLib.Error as e: engine={'kind':'error','name':Gio.DBusError.get_remote_error(e),'message':str(e),'domain':str(e.domain),'code':e.code}
+ print(json.dumps({'kind':kind,'backend':os.environ.get('GDK_BACKEND'),'module':os.environ.get('GTK_IM_MODULE'),'window_active':w.is_active(),'widget_focus':v.has_focus(),'current_path':path,'get_engine':engine}),flush=True)
+ Gtk.main_quit();return False
+GLib.timeout_add(300,examine); Gtk.main()

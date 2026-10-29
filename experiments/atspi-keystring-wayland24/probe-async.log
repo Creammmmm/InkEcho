@@ -1,0 +1,11 @@
+Type=wayland
+State=active
+engine_before xkb:us::eng
+@as []
+8d6e352a7deb3fbd480e850ef5483374ea557ce0054caa6b0862988dedea983d  /mnt/inkecho-output/before.xkb
+{"backend": "wayland", "samples": [{"requested": "b", "worker_rc": 0, "worker_stdout": "{\"result\": true}", "worker_stderr": "", "actual": "", "active": true, "focus": true}, {"requested": "甲乙", "worker_rc": 0, "worker_stdout": "{\"result\": true}", "worker_stderr": "", "actual": "", "active": true, "focus": true}]}
+8d6e352a7deb3fbd480e850ef5483374ea557ce0054caa6b0862988dedea983d  /mnt/inkecho-output/middle.xkb
+{"backend": "x11", "samples": [{"requested": "b", "worker_rc": 0, "worker_stdout": "{\"result\": true}", "worker_stderr": "", "actual": "", "active": true, "focus": true}, {"requested": "甲乙", "worker_rc": 0, "worker_stdout": "{\"result\": true}", "worker_stderr": "", "actual": "", "active": true, "focus": true}]}
+8d6e352a7deb3fbd480e850ef5483374ea557ce0054caa6b0862988dedea983d  /mnt/inkecho-output/after.xkb
+engine_after xkb:us::eng
+@as []

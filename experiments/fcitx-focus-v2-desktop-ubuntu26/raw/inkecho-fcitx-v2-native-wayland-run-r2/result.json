@@ -1,0 +1,50 @@
+{
+  "scope": "actual native Wayland GTK fcitx frontend/private bus; two entries in one owned window only",
+  "passed": true,
+  "checks": [
+    {
+      "name": "actual_native_Wayland_child_A_B_A_same_task",
+      "actual": [
+        "\u7532\u4e19\u4e01",
+        "\u4e59"
+      ],
+      "exact": true
+    },
+    {
+      "name": "actual_cancel_first_prefix",
+      "actual": [
+        "\u7532\u4e19\u4e01\u620a",
+        "\u4e59"
+      ],
+      "tail_seconds": 1.2536022230000015,
+      "exact": true
+    }
+  ],
+  "environment": {
+    "DISPLAY": null,
+    "WAYLAND_DISPLAY": "wayland-0",
+    "XDG_SESSION_TYPE": "wayland",
+    "XDG_RUNTIME_DIR": "/run/user/1000"
+  },
+  "daemon_pid": 2660,
+  "target": {
+    "pid": 2661,
+    "start": "13397",
+    "display": "GdkWaylandDisplay",
+    "modules": {
+      "A": "fcitx",
+      "B": "fcitx"
+    },
+    "fcitx_module_loaded": true,
+    "expires_at": 374.06210062599996,
+    "public_text_only": true,
+    "screenshot_method": "owned_widget_draw_not_compositor_capture",
+    "window_active": true
+  },
+  "cancel_at": 210.573525867,
+  "cancel_error": "cancelled",
+  "delivery_checks_passed": true,
+  "target_original_wait": 0,
+  "exit_reply": [],
+  "daemon_original_wait": 0
+}

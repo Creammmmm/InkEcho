@@ -1,0 +1,14 @@
+DESKTOP_SESSION=ubuntu
+DISPLAY=:0
+GNOME_DESKTOP_SESSION_ID=this-is-deprecated
+XAUTHORITY=/run/user/1000/gdm/Xauthority
+XDG_CURRENT_DESKTOP=ubuntu:GNOME
+XDG_SESSION_DESKTOP=ubuntu
+1463 /usr/bin/gnome-shell
+1532 /usr/libexec/gnome-shell-calendar-server
+/tmp/inkecho-r4-test/InkEcho-0.10.2-x86_64.AppImage: OK
+507c15ece743535a3a9d9442665010b43ed721550ee2a7b37b27fb8fdf165f25  /tmp/inkecho-r4-test/squashfs-root/packages/inkecho/platform/fcitx5.py
+已安装输入桥；运行状态需通过输入服务检查确认。
+XGetWindowProperty[_NET_ACTIVE_WINDOW] failed (code=1)
+{"mode": "switch", "error": "target_a_not_focused", "view_focus": false, "x11_focus": ""}
+未发现经过校验的输入桥；可能尚未安装。

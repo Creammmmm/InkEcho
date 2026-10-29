@@ -1,0 +1,30 @@
+EXPECTED_SESSION=x11
+PRETTY_NAME="Ubuntu 24.04.5 LTS"
+NAME="Ubuntu"
+VERSION_ID="24.04"
+GNOME Shell 46.0
+5.1.7
+Type=x11
+Active=yes
+LockedHint=no
+/tmp/inkecho-r4-test/InkEcho-0.10.2-x86_64.AppImage: OK
+eaeb8b644b003e90c92712291aa61557d371fe6f199dcc546f4412c79a946d2d  /tmp/inkecho-r4-test/squashfs-root/packages/inkecho/platform/output_router.py
+775de69704161e08c15e3966bab502b73abf0d4750c05c52d79dfa32ea74d333  /tmp/inkecho-r4-test/squashfs-root/packages/inkecho/app.py
+repeat_same_inode_mtime True
+已安装输入桥；运行状态需通过输入服务检查确认。
+XGetWindowProperty[_NET_ACTIVE_WINDOW] failed (code=1)
+XGetWindowProperty[_NET_ACTIVE_WINDOW] failed (code=1)
+{"mode": "full", "error": "target_a_not_focused", "view_focus": false, "x11_focus": ""}
+XGetWindowProperty[_NET_ACTIVE_WINDOW] failed (code=1)
+XGetWindowProperty[_NET_ACTIVE_WINDOW] failed (code=1)
+{"mode": "cancel", "error": "target_a_not_focused", "view_focus": false, "x11_focus": ""}
+XGetWindowProperty[_NET_ACTIVE_WINDOW] failed (code=1)
+XGetWindowProperty[_NET_ACTIVE_WINDOW] failed (code=1)
+{"mode": "full", "error": "target_a_not_focused", "view_focus": false, "x11_focus": ""}
+XGetWindowProperty[_NET_ACTIVE_WINDOW] failed (code=1)
+XGetWindowProperty[_NET_ACTIVE_WINDOW] failed (code=1)
+{"mode": "cancel", "error": "target_a_not_focused", "view_focus": false, "x11_focus": ""}
+XGetWindowProperty[_NET_ACTIVE_WINDOW] failed (code=1)
+XGetWindowProperty[_NET_ACTIVE_WINDOW] failed (code=1)
+{"mode": "full", "error": "target_a_not_focused", "view_focus": false, "x11_focus": ""}
+未发现经过校验的输入桥；可能尚未安装。

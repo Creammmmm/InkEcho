@@ -1,0 +1,9 @@
+/tmp/inkecho-audio-fcitx/InkEcho.AppImage: OK
+已安装输入桥；运行状态需通过输入服务检查确认。
+qt.multimedia.symbolsresolver: Couldn't load va-x11 library
+qt.multimedia.symbolsresolver: Couldn't resolve va-x11 symbols
+qt.multimedia.ffmpeg: Using Qt multimedia with FFmpeg version 9.0.1 LGPL version 2.1 or later
+qt.multimedia.pipewire.devicemonitor: Ignoring dummy output: std::map(std::pair("client.id", "39"), std::pair("factory.id", "19"), std::pair("media.class", "Audio/Sink"), std::pair("node.description", "Dummy Output"), std::pair("node.name", "auto_null"), std::pair("object.serial", "87"))
+{"status": "passed", "synthetic_only": true, "input_transport": "fcitx_owned_target", "events_ms": {"toggle_requested": 0.0, "credential_wait_started": 423.875, "first_capture": 9.357, "play_requested": 88.264, "credential_wait_finished": 843.193, "first_audio_on_wire": 446.398, "stop_requested": 1369.066, "final_asr": 1491.951, "polishing_request": 1569.737, "polishing_first_delta": 1647.456, "first_sent_confirmed": 1654.267, "cancel_requested": 1654.284, "cancel_observation_started": 1656.336, "polishing_full_text": 2067.533, "cancel_observation_finished": 2891.475}, "marker_samples": 1600, "wire_bytes": 43636, "performance": {"schema_version": 1, "outcome": "cancelled", "events_ms": {"recording_started": 0.007, "recording_stop_requested": 1367.979, "recording_stopped": 1369.811, "asr_started": 422.622, "asr_completed": 1492.173, "polishing_started": 1492.239, "polishing_first_segment": 1648.693, "polishing_completed": null, "first_character_sent": 1653.159, "output_completed": null, "task_finished": 1653.284}, "durations_ms": {"stop_to_audio_ready_ms": 1.832, "asr_ms": 1069.552, "polishing_to_first_segment_ms": 156.455, "polishing_ms": null, "stop_to_first_character_ms": 285.18, "audio_ready_to_first_character_ms": 283.348, "output_ms": null, "stop_to_output_completed_ms": null, "stop_to_task_finished_ms": 285.305}}}
+本cancel_prefix 1
+未发现经过校验的输入桥；可能尚未安装。

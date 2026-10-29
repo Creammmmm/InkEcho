@@ -1,0 +1,4 @@
+Type=x11
+Active=yes
+LockedHint=no
+1443 bash -c id=$(loginctl show-user inkecho -p Display --value); loginctl show-session "$id" -p Type -p Active -p LockedHint; systemctl --user show-environment | sed -n "/^XDG_CURRENT_DESKTOP=/p"; pgrep -af "xfce4-session|gnome-shell" || true

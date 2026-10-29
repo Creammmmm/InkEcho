@@ -1,0 +1,91 @@
+"""Disposable graphical guest only. Read only the owned synthetic GTK target."""
+
+import asyncio
+import json
+import os
+import signal
+import subprocess
+from contextlib import asynccontextmanager
+from pathlib import Path
+
+from inkecho.platform.output_router import OutputRouter, OutputRouterError
+from inkecho.platform.fcitx5_install import FcitxInstaller
+from inkecho.platform.framework_detection import (
+    _live_fcitx_version_matches,
+    collect_system_framework,
+)
+
+
+class Keyboard:
+    authorized = True
+
+    async def connect(self):
+        pass
+
+    @asynccontextmanager
+    async def output_session(self):
+        yield
+
+    async def insert(self, text, can_continue, **kwargs):
+        raise AssertionError("unexpected keyboard output")
+
+    async def aclose(self):
+        pass
+
+
+async def run():
+    result = {}
+    system = await collect_system_framework()
+    version = await asyncio.to_thread(FcitxInstaller().auto_version)
+    print(json.dumps({"system": system, "verified_disk_version": version}), flush=True)
+    if system and version:
+        print(json.dumps({"live_version_matches": await _live_fcitx_version_matches(system[1], version)}), flush=True)
+    target = Path(os.environ["INK_TEST_TARGET"])
+    for mode, character in (("auto", "甲"), ("fcitx", "乙")):
+        router = OutputRouter(Keyboard())
+        await router.prepare_task(mode)
+        async with router.output_session():
+            result[mode + "_sent"] = await router.insert(character, lambda: True)
+            result[mode + "_selected"] = router.selected
+        await asyncio.sleep(0.4)
+        await router.aclose()
+    assert result["auto_selected"] == result["fcitx_selected"] == "fcitx"
+    assert target.read_text() == "甲乙"
+    router = OutputRouter(Keyboard())
+    await router.prepare_task("fcitx")
+    try:
+        await router.insert("丙", lambda: False)
+    except OutputRouterError as error:
+        result["cancel"] = error.code
+    else:
+        raise AssertionError("cancelled task accepted input")
+    await router.aclose()
+    await asyncio.sleep(0.4)
+    assert target.read_text() == "甲乙"
+    router = OutputRouter(Keyboard())
+    await router.prepare_task("fcitx")
+    os.kill(int(os.environ["INK_TEST_FCITX_PID"]), signal.SIGTERM)
+    await asyncio.sleep(0.5)
+    replacement = subprocess.Popen(
+        ["/usr/bin/fcitx5", "-D", "--keep", "--disable=clipboard"],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
+    try:
+        await asyncio.sleep(1)
+        try:
+            await router.insert("丁", lambda: True)
+        except OutputRouterError as error:
+            result["replaced_service"] = error.code
+        else:
+            raise AssertionError("old owner unexpectedly accepted input")
+        assert result["replaced_service"] == "fcitx_delivery_unknown"
+        assert target.read_text() == "甲乙"
+    finally:
+        await router.aclose()
+        replacement.terminate()
+        replacement.wait(timeout=5)
+    print(json.dumps(result, ensure_ascii=False))
+
+
+asyncio.run(run())

@@ -1,0 +1,7 @@
+{"shortcut_settings_exactly_restored": true}
+Traceback (most recent call last):
+  File "/tmp/inkecho-desktop-r4/shortcut_probe.py", line 18, in <module>
+    binding=keys.enable('Ctrl+Alt+F12',[str(wrapper)])
+  File "/tmp/inkecho-desktop-r4/squashfs-root/packages/inkecho/platform/hotkeys.py", line 184, in enable
+    raise ShortcutError("This shortcut is already assigned in GNOME settings.")
+inkecho.platform.hotkeys.ShortcutError: This shortcut is already assigned in GNOME settings.

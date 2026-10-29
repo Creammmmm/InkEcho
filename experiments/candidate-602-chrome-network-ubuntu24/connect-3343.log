@@ -1,0 +1,599 @@
+20:18:02.331283 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=268648, u64=11458973014376}}], 16, 0) = 1 <0.000012>
+20:18:02.331330 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000004>
+20:18:02.331365 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 0) = 1 <0.000006>
+20:18:02.331556 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 0) = 1 <0.000006>
+20:18:02.331626 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 0) = 1 <0.000006>
+20:18:02.331736 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 0) = 1 <0.000006>
+20:18:02.331814 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000007>
+20:18:02.331838 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 0) = 1 <0.000006>
+20:18:02.331931 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000005>
+20:18:02.331954 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000005>
+20:18:02.332087 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000005>
+20:18:02.332148 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000006>
+20:18:02.332171 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000005>
+20:18:02.332414 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000005>
+20:18:02.332443 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000006>
+20:18:02.332832 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000008>
+20:18:02.332859 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000008>
+20:18:02.332913 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000010>
+20:18:02.332941 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000013>
+20:18:02.332979 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000021>
+20:18:02.333024 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000008>
+20:18:02.333051 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000012>
+20:18:02.333119 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000011>
+20:18:02.333196 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000012>
+20:18:02.333322 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000008>
+20:18:02.333349 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000010>
+20:18:02.333383 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000009>
+20:18:02.333413 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000014>
+20:18:02.333581 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000007>
+20:18:02.333610 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000007>
+20:18:02.333750 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000005>
+20:18:02.333786 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000007>
+20:18:02.333832 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000006>
+20:18:02.333852 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000006>
+20:18:02.333877 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000007>
+20:18:02.333963 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000008>
+20:18:02.333993 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000014>
+20:18:02.334031 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000016>
+20:18:02.334072 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000008>
+20:18:02.334096 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000009>
+20:18:02.334153 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000008>
+20:18:02.334181 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000010>
+20:18:02.334212 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000012>
+20:18:02.334241 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=268648, u64=11458973014376}}], 16, 4999) = 1 <0.000149>
+20:18:02.334419 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000006>
+20:18:02.334439 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000006>
+20:18:02.334459 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000005>
+20:18:02.334474 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000003>
+20:18:02.334487 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 4999) = 1 <0.065361>
+20:18:02.400005 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 0) = 1 <0.000009>
+20:18:02.400069 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000007>
+20:18:02.400089 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 4933) = 1 <0.028950>
+20:18:02.429166 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000016>
+20:18:02.429220 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 4904) = 1 <0.000029>
+20:18:02.429350 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000017>
+20:18:02.429389 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 4904) = 1 <0.102021>
+20:18:02.532708 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 0) = 1 <0.000012>
+20:18:02.533758 connect(18<UDPv6:[19891]>, {sa_family=AF_INET6, sin6_port=htons(443), sin6_flowinfo=htonl(0), inet_pton(AF_INET6, "2001:4860:4860::8888", &sin6_addr), sin6_scope_id=0}, 28) = 0 <0.000048>
+20:18:02.536442 connect(18<UDP:[0.0.0.0:37535]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000013>
+20:18:02.537346 connect(19<UDP:[0.0.0.0:38805]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000015>
+20:18:02.537805 connect(20<UDP:[0.0.0.0:24153]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000016>
+20:18:02.538131 connect(21<UDP:[0.0.0.0:56770]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000010>
+20:18:02.538819 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}, {events=EPOLLIN, data={u32=1047976, u64=11458973793704}}, {events=EPOLLIN, data={u32=1295816, u64=11458974041544}}, {events=EPOLLIN, data={u32=1295336, u64=11458974041064}}], 16, 0) = 4 <0.000011>
+20:18:02.542567 connect(23<UDP:[0.0.0.0:37770]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000191>
+20:18:02.543515 connect(18<UDP:[0.0.0.0:17852]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000018>
+20:18:02.543862 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 0) = 1 <0.000011>
+20:18:02.544067 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 0) = 1 <0.000006>
+20:18:02.544261 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 0) = 1 <0.000008>
+20:18:02.544688 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 0) = 1 <0.000012>
+20:18:02.545189 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 0) = 1 <0.000157>
+20:18:02.546699 connect(18<TCP:[19907]>, {sa_family=AF_INET, sin_port=htons(42057), sin_addr=inet_addr("127.0.0.1")}, 16) = -1 EINPROGRESS (Operation now in progress) <0.000048>
+20:18:02.549197 getsockopt(18<TCP:[127.0.0.1:37440->127.0.0.1:42057]>, SOL_SOCKET, SO_ERROR, [0], [4]) = 0 <0.000070>
+20:18:02.552048 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}, {events=EPOLLOUT, data={u32=1649384, u64=11458974395112}}], 16, 0) = 2 <0.000015>
+20:18:02.553840 getsockopt(18<TCP:[127.0.0.1:37440->127.0.0.1:42057]>, SOL_SOCKET, SO_ERROR, [0], [4]) = 0 <0.000786>
+20:18:02.554820 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 0) = 1 <0.000006>
+20:18:02.555454 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000012>
+20:18:02.555483 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000007>
+20:18:02.555500 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000006>
+20:18:02.555572 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000039>
+20:18:02.555726 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000028>
+20:18:02.555793 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=1873384, u64=11458974619112}}], 16, 0) = 1 <0.000031>
+20:18:02.556052 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000022>
+20:18:02.556106 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000013>
+20:18:02.556146 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000019>
+20:18:02.556211 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000016>
+20:18:02.556248 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000179>
+20:18:02.556465 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000028>
+20:18:02.556526 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000074>
+20:18:02.556656 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000030>
+20:18:02.556706 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000027>
+20:18:02.556784 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000017>
+20:18:02.556859 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000030>
+20:18:02.556912 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000032>
+20:18:02.556963 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000036>
+20:18:02.557025 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000063>
+20:18:02.557600 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000020>
+20:18:02.557659 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000039>
+20:18:02.557749 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000035>
+20:18:02.557913 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000022>
+20:18:02.558187 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000014>
+20:18:02.558239 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000023>
+20:18:02.558283 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=268648, u64=11458973014376}}], 16, 231) = 1 <0.000690>
+20:18:02.559055 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000018>
+20:18:02.559102 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=268648, u64=11458973014376}}], 16, 230) = 1 <0.000120>
+20:18:02.559297 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000018>
+20:18:02.559337 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 230) = 1 <0.005340>
+20:18:02.564773 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000040>
+20:18:02.564839 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 224) = 1 <0.006657>
+20:18:02.571782 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000039>
+20:18:02.571841 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 217) = 1 <0.003705>
+20:18:02.575760 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000017>
+20:18:02.576262 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000052>
+20:18:02.576348 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000024>
+20:18:02.576414 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 4757) = 1 <0.000075>
+20:18:02.576638 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000030>
+20:18:02.576725 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 4757) = 1 <0.000237>
+20:18:02.577213 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000039>
+20:18:02.577317 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 4756) = 1 <0.000800>
+20:18:02.579226 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 0) = 1 <0.000024>
+20:18:02.580366 connect(19<UDP:[0.0.0.0:4289]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000039>
+20:18:02.581045 connect(21<UDP:[0.0.0.0:56294]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000022>
+20:18:02.581694 connect(23<UDP:[0.0.0.0:51548]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000027>
+20:18:02.582370 connect(25<UDP:[0.0.0.0:9426]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000019>
+20:18:02.583031 connect(27<UDP:[0.0.0.0:19803]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000032>
+20:18:02.583345 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}, {events=EPOLLIN, data={u32=2164552, u64=11458974910280}}], 16, 0) = 2 <0.000053>
+20:18:02.584046 connect(28<UDP:[19950]>, {sa_family=AF_INET, sin_port=htons(443), sin_addr=inet_addr("127.0.0.1")}, 16) = 0 <0.000043>
+20:18:02.584858 connect(28<UDP:[0.0.0.0:23771]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000024>
+20:18:02.585975 connect(29<UDP:[0.0.0.0:3707]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000112>
+20:18:02.586694 connect(30<UDP:[0.0.0.0:44691]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000015>
+20:18:02.587401 connect(31<UDP:[0.0.0.0:18080]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000014>
+20:18:02.588598 connect(32<UDP:[0.0.0.0:43664]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000013>
+20:18:02.588975 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=2166184, u64=11458974911912}}, {events=EPOLLIN, data={u32=2168392, u64=11458974914120}}, {events=EPOLLIN, data={u32=2168104, u64=11458974913832}}], 16, 0) = 3 <0.000041>
+20:18:02.589428 connect(33<UDP:[0.0.0.0:15277]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000034>
+20:18:02.590436 connect(28<UDP:[0.0.0.0:33484]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000031>
+20:18:02.591673 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=2166856, u64=11458974912584}}], 16, 0) = 1 <0.000049>
+20:18:02.592378 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 0) = 1 <0.000044>
+20:18:02.593013 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000019>
+20:18:02.593060 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 4740) = 1 <0.003567>
+20:18:02.597327 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 0) = 1 <0.000038>
+20:18:02.598229 connect(18<UDP:[0.0.0.0:65317]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000011>
+20:18:02.598634 connect(19<UDP:[0.0.0.0:59749]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000022>
+20:18:02.599245 connect(21<UDP:[0.0.0.0:18967]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000023>
+20:18:02.599469 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}, {events=EPOLLIN, data={u32=2165416, u64=11458974911144}}, {events=EPOLLIN, data={u32=2164744, u64=11458974910472}}, {events=EPOLLIN, data={u32=2168488, u64=11458974914216}}], 16, 0) = 4 <0.000036>
+20:18:02.600211 connect(25<UDP:[0.0.0.0:12660]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000020>
+20:18:02.601449 connect(18<UDP:[0.0.0.0:64601]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000037>
+20:18:02.602785 connect(25<UDP:[0.0.0.0:27841]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000029>
+20:18:02.603573 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}, {events=EPOLLIN, data={u32=2167240, u64=11458974912968}}], 16, 0) = 2 <0.000020>
+20:18:02.604654 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000041>
+20:18:02.604718 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=1873384, u64=11458974619112}}], 16, 245) = 1 <0.003024>
+20:18:02.608412 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000065>
+20:18:02.608515 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 242) = 1 <0.003932>
+20:18:02.613370 connect(18<TCP:[20039]>, {sa_family=AF_INET, sin_port=htons(42057), sin_addr=inet_addr("127.0.0.1")}, 16) = -1 EINPROGRESS (Operation now in progress) <0.000134>
+20:18:02.615781 getsockopt(18<TCP:[127.0.0.1:37452->127.0.0.1:42057]>, SOL_SOCKET, SO_ERROR, [0], [4]) = 0 <0.000077>
+20:18:02.619427 connect(19<TCP:[20047]>, {sa_family=AF_INET, sin_port=htons(42057), sin_addr=inet_addr("127.0.0.1")}, 16) = -1 EINPROGRESS (Operation now in progress) <0.000139>
+20:18:02.621972 getsockopt(19<TCP:[127.0.0.1:37468->127.0.0.1:42057]>, SOL_SOCKET, SO_ERROR, [0], [4]) = 0 <0.000018>
+20:18:02.624284 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}, {events=EPOLLOUT, data={u32=1647080, u64=11458974392808}}, {events=EPOLLOUT, data={u32=1644872, u64=11458974390600}}], 16, 0) = 3 <0.000051>
+20:18:02.625047 getsockopt(18<TCP:[127.0.0.1:37452->127.0.0.1:42057]>, SOL_SOCKET, SO_ERROR, [0], [4]) = 0 <0.000024>
+20:18:02.625207 getsockopt(19<TCP:[127.0.0.1:37468->127.0.0.1:42057]>, SOL_SOCKET, SO_ERROR, [0], [4]) = 0 <0.000035>
+20:18:02.625385 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 0) = 1 <0.000025>
+20:18:02.625706 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000029>
+20:18:02.625791 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000031>
+20:18:02.625889 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000045>
+20:18:02.625977 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000031>
+20:18:02.626091 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000039>
+20:18:02.626170 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000023>
+20:18:02.626232 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000058>
+20:18:02.626726 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000024>
+20:18:02.626787 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000023>
+20:18:02.626834 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000031>
+20:18:02.626891 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=1873384, u64=11458974619112}}], 16, 4706) = 1 <0.005201>
+20:18:02.632914 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000038>
+20:18:02.632989 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 4700) = 1 <0.000181>
+20:18:02.634189 connect(21<UDP:[0.0.0.0:48219]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000037>
+20:18:02.635507 connect(25<UDP:[0.0.0.0:31271]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000039>
+20:18:02.636180 connect(27<UDP:[0.0.0.0:54840]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000022>
+20:18:02.637015 connect(28<UDP:[0.0.0.0:26283]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000020>
+20:18:02.637489 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=2163880, u64=11458974909608}}, {events=EPOLLIN, data={u32=2164072, u64=11458974909800}}], 16, 0) = 2 <0.000021>
+20:18:02.638583 connect(29<UDP:[0.0.0.0:7616]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000011>
+20:18:02.639116 connect(30<UDP:[0.0.0.0:7228]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000031>
+20:18:02.639783 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000236>
+20:18:02.640056 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 4694) = 1 <0.009079>
+20:18:02.650173 connect(21<UDP:[0.0.0.0:27440]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000094>
+20:18:02.651145 connect(25<UDP:[0.0.0.0:55380]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000010>
+20:18:02.651932 connect(27<UDP:[0.0.0.0:57719]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000029>
+20:18:02.653003 connect(28<UDP:[0.0.0.0:22228]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000027>
+20:18:02.653613 connect(29<UDP:[0.0.0.0:17581]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000020>
+20:18:02.654409 connect(30<UDP:[0.0.0.0:11522]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000032>
+20:18:02.654842 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=2163592, u64=11458974909320}}], 16, 0) = 1 <0.000029>
+20:18:02.655345 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000007>
+20:18:02.655369 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000007>
+20:18:02.655389 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 250) = 1 <0.008890>
+20:18:02.664512 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000051>
+20:18:02.664616 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 241) = 1 <0.000037>
+20:18:02.665058 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000021>
+20:18:02.665194 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 240) = 1 <0.011710>
+20:18:02.677507 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=2164072, u64=11458974909800}}], 16, 0) = 1 <0.000009>
+20:18:02.677845 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000028>
+20:18:02.677889 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 228) = 1 <0.002249>
+20:18:02.681605 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000024>
+20:18:02.681671 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 224) = 1 <0.000480>
+20:18:02.682246 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000065>
+20:18:02.682584 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 0) = 1 <0.000065>
+20:18:02.682771 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000020>
+20:18:02.682817 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=268648, u64=11458973014376}}], 16, 4651) = 1 <0.029675>
+20:18:02.712751 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000038>
+20:18:02.712857 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=2164072, u64=11458974909800}}], 16, 4621) = 1 <0.007219>
+20:18:02.720250 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000048>
+20:18:02.720361 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 4613) = 1 <0.078657>
+20:18:02.799117 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000016>
+20:18:02.799151 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 4534) = 1 <0.003548>
+20:18:02.802830 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000015>
+20:18:02.802860 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 4530) = 1 <0.000877>
+20:18:02.803852 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000024>
+20:18:02.803894 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000011>
+20:18:02.803917 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 4529) = 1 <0.000010>
+20:18:02.804017 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000011>
+20:18:02.804061 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 4529) = 1 <0.000054>
+20:18:02.804156 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000004>
+20:18:02.804174 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000008>
+20:18:02.804207 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 4529) = 1 <0.003823>
+20:18:02.808453 connect(27<UDP:[0.0.0.0:3139]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000018>
+20:18:02.809082 connect(28<UDP:[0.0.0.0:28528]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000011>
+20:18:02.809316 connect(29<UDP:[0.0.0.0:55970]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000018>
+20:18:02.809461 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=1648712, u64=11458974394440}}, {events=EPOLLIN, data={u32=2163592, u64=11458974909320}}], 16, 0) = 2 <0.000014>
+20:18:02.809727 connect(30<UDP:[0.0.0.0:48246]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000015>
+20:18:02.810309 connect(27<UDP:[0.0.0.0:13901]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000020>
+20:18:02.810491 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=2163784, u64=11458974909512}}], 16, 0) = 1 <0.000021>
+20:18:02.810829 connect(30<UDP:[0.0.0.0:5734]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000008>
+20:18:02.810937 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=1648040, u64=11458974393768}}], 16, 0) = 1 <0.000007>
+20:18:02.811154 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000010>
+20:18:02.811184 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 4522) = 1 <0.003369>
+20:18:02.814707 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000012>
+20:18:02.814746 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 4519) = 1 <0.014557>
+20:18:02.829390 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000014>
+20:18:02.829469 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 4504) = 1 <0.015396>
+20:18:02.845036 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 0) = 1 <0.000010>
+20:18:02.845248 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000007>
+20:18:02.845274 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000010>
+20:18:02.845302 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000012>
+20:18:02.845332 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=268648, u64=11458973014376}}], 16, 4488) = 1 <0.001282>
+20:18:02.847126 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000008>
+20:18:02.847154 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 4486) = 1 <0.009808>
+20:18:02.857072 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000007>
+20:18:02.857097 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 4476) = 1 <0.056141>
+20:18:02.913405 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000008>
+20:18:02.913435 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=1647848, u64=11458974393576}}], 16, 4420) = 1 <0.000043>
+20:18:02.913620 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000019>
+20:18:02.913661 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=1647848, u64=11458974393576}}], 16, 4420) = 1 <0.011235>
+20:18:02.924979 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000017>
+20:18:02.925101 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 4408) = 1 <0.010390>
+20:18:02.935614 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000018>
+20:18:02.935651 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 4398) = 1 <0.096737>
+20:18:03.032544 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000013>
+20:18:03.032586 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 4301) = 1 <0.000060>
+20:18:03.032838 connect(28<UDP:[0.0.0.0:28505]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000018>
+20:18:03.033078 connect(29<UDP:[0.0.0.0:12668]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000009>
+20:18:03.033279 connect(30<UDP:[0.0.0.0:9938]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000008>
+20:18:03.033384 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=2175688, u64=11458974921416}}, {events=EPOLLIN, data={u32=2175304, u64=11458974921032}}], 16, 0) = 2 <0.000011>
+20:18:03.033624 connect(31<UDP:[0.0.0.0:13215]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000011>
+20:18:03.033900 connect(32<UDP:[0.0.0.0:6543]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000009>
+20:18:03.034001 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=2177992, u64=11458974923720}}, {events=EPOLLIN, data={u32=2177704, u64=11458974923432}}, {events=EPOLLIN, data={u32=2175688, u64=11458974921416}}], 16, 0) = 3 <0.000008>
+20:18:03.034159 connect(33<UDP:[0.0.0.0:24570]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000008>
+20:18:03.034594 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000005>
+20:18:03.034620 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 4299) = 1 <0.001539>
+20:18:03.036245 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000005>
+20:18:03.036269 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 4297) = 1 <0.400839>
+20:18:03.437257 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000013>
+20:18:03.437287 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 3896) = 1 <0.000092>
+20:18:03.437598 connect(28<UDP:[0.0.0.0:16665]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000015>
+20:18:03.437860 connect(29<UDP:[0.0.0.0:27631]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000011>
+20:18:03.438123 connect(30<UDP:[0.0.0.0:50066]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000011>
+20:18:03.438311 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=2175592, u64=11458974921320}}, {events=EPOLLIN, data={u32=2175400, u64=11458974921128}}, {events=EPOLLIN, data={u32=1650632, u64=11458974396360}}], 16, 0) = 3 <0.000012>
+20:18:03.438544 connect(31<UDP:[0.0.0.0:23833]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000012>
+20:18:03.438845 connect(32<UDP:[0.0.0.0:14515]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000011>
+20:18:03.439200 connect(33<UDP:[0.0.0.0:5225]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000013>
+20:18:03.439369 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=2177992, u64=11458974923720}}, {events=EPOLLIN, data={u32=2175592, u64=11458974921320}}], 16, 0) = 2 <0.000011>
+20:18:03.439803 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000009>
+20:18:03.439841 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 3894) = 1 <0.002086>
+20:18:03.442037 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000005>
+20:18:03.442072 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 3891) = 1 <0.801116>
+20:18:04.243372 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000010>
+20:18:04.243413 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 3090) = 1 <0.000092>
+20:18:04.243713 connect(28<UDPv6:[18340]>, {sa_family=AF_INET6, sin6_port=htons(443), sin6_flowinfo=htonl(0), inet_pton(AF_INET6, "2001:4860:4860::8888", &sin6_addr), sin6_scope_id=0}, 28) = 0 <0.000024>
+20:18:04.244007 connect(28<UDP:[0.0.0.0:50580]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000016>
+20:18:04.244294 connect(29<UDP:[0.0.0.0:30570]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000019>
+20:18:04.244559 connect(30<UDP:[0.0.0.0:26277]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000014>
+20:18:04.244770 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=2175688, u64=11458974921416}}, {events=EPOLLIN, data={u32=2175304, u64=11458974921032}}, {events=EPOLLIN, data={u32=2177800, u64=11458974923528}}], 16, 0) = 3 <0.000013>
+20:18:04.245010 connect(31<UDP:[0.0.0.0:11169]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000013>
+20:18:04.245344 connect(32<UDP:[0.0.0.0:54171]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000013>
+20:18:04.245808 connect(33<UDP:[0.0.0.0:24144]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000044>
+20:18:04.246058 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=1650632, u64=11458974396360}}, {events=EPOLLIN, data={u32=2175688, u64=11458974921416}}, {events=EPOLLIN, data={u32=2175304, u64=11458974921032}}], 16, 0) = 3 <0.000014>
+20:18:04.246591 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000023>
+20:18:04.246645 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 3087) = 1 <0.002436>
+20:18:04.249222 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000006>
+20:18:04.249258 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 3084) = 1 <1.599391>
+20:18:05.848967 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000012>
+20:18:05.849012 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1484) = 1 <0.000650>
+20:18:05.849877 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000029>
+20:18:05.849941 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=268648, u64=11458973014376}}], 16, 1483) = 1 <0.000058>
+20:18:05.850124 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000016>
+20:18:05.850174 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1483) = 1 <0.000192>
+20:18:05.850758 connect(28<UDPv6:[19300]>, {sa_family=AF_INET6, sin6_port=htons(443), sin6_flowinfo=htonl(0), inet_pton(AF_INET6, "2001:4860:4860::8888", &sin6_addr), sin6_scope_id=0}, 28) = 0 <0.000021>
+20:18:05.853107 connect(28<UDP:[0.0.0.0:36249]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000043>
+20:18:05.853593 connect(29<UDP:[0.0.0.0:63216]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000023>
+20:18:05.853971 connect(30<UDP:[0.0.0.0:13138]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000008>
+20:18:05.854119 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}, {events=EPOLLIN, data={u32=2175496, u64=11458974921224}}, {events=EPOLLIN, data={u32=2175880, u64=11458974921608}}, {events=EPOLLIN, data={u32=2177896, u64=11458974923624}}], 16, 0) = 4 <0.000006>
+20:18:05.854285 connect(31<UDP:[0.0.0.0:3568]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000009>
+20:18:05.854496 connect(32<UDP:[0.0.0.0:42104]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000013>
+20:18:05.854778 connect(33<UDP:[0.0.0.0:48542]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000008>
+20:18:05.854863 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=2177512, u64=11458974923240}}, {events=EPOLLIN, data={u32=2175496, u64=11458974921224}}], 16, 0) = 2 <0.000008>
+20:18:05.855125 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000006>
+20:18:05.855152 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1478) = 1 <0.001514>
+20:18:05.856762 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000005>
+20:18:05.856790 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1477) = 1 <0.021534>
+20:18:05.878478 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000017>
+20:18:05.878522 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000102>
+20:18:05.878643 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000007>
+20:18:05.878676 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000006>
+20:18:05.878697 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1455) = 1 <0.000638>
+20:18:05.879515 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 0) = 1 <0.000008>
+20:18:05.879577 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000010>
+20:18:05.879603 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1454) = 1 <0.000012>
+20:18:05.879650 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000007>
+20:18:05.879670 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1454) = 1 <0.002113>
+20:18:05.881837 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000016>
+20:18:05.881874 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1451) = 1 <0.040079>
+20:18:05.922110 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000011>
+20:18:05.922140 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=2326760, u64=11458975072488}}], 16, 1411) = 1 <0.000262>
+20:18:05.922564 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000012>
+20:18:05.922592 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=2326760, u64=11458975072488}}], 16, 1411) = 1 <0.017507>
+20:18:05.940324 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000021>
+20:18:05.940380 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1393) = 1 <0.001430>
+20:18:05.941899 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000014>
+20:18:05.942026 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1391) = 1 <0.024164>
+20:18:05.966287 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000018>
+20:18:05.966331 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1367) = 1 <0.000022>
+20:18:05.966415 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000022>
+20:18:05.966465 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1367) = 1 <0.000030>
+20:18:05.966548 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000016>
+20:18:05.966586 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1367) = 1 <0.000117>
+20:18:05.966774 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000014>
+20:18:05.966818 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN|EPOLLHUP, data={u32=2326760, u64=11458975072488}}], 16, 1367) = 1 <0.002776>
+20:18:05.969751 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 0) = 1 <0.000014>
+20:18:05.969868 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000010>
+20:18:05.969908 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000012>
+20:18:05.969952 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000008>
+20:18:05.969973 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000014>
+20:18:05.970009 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1363) = 1 <0.003046>
+20:18:05.973177 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000006>
+20:18:05.973195 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000005>
+20:18:05.973216 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1360) = 1 <0.000052>
+20:18:05.973312 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 0) = 1 <0.000008>
+20:18:05.973372 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 0) = 1 <0.000014>
+20:18:05.973426 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000008>
+20:18:05.973454 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1360) = 1 <0.000401>
+20:18:05.973976 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=2330888, u64=11458975076616}}], 16, 0) = 1 <0.000008>
+20:18:05.974119 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000013>
+20:18:05.974147 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1359) = 1 <0.000847>
+20:18:05.975099 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000006>
+20:18:05.975116 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=2330888, u64=11458975076616}}], 16, 1358) = 1 <0.001541>
+20:18:05.976847 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000009>
+20:18:05.976899 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=2330888, u64=11458975076616}}], 16, 1356) = 1 <0.000861>
+20:18:05.978066 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000024>
+20:18:05.978114 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1355) = 1 <0.000688>
+20:18:05.978862 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000010>
+20:18:05.978888 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1354) = 1 <0.028218>
+20:18:06.007174 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000021>
+20:18:06.007213 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1326) = 1 <0.000071>
+20:18:06.007337 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 0) = 1 <0.000014>
+20:18:06.007409 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000016>
+20:18:06.007448 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1326) = 1 <0.000132>
+20:18:06.007665 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 0) = 1 <0.000018>
+20:18:06.008215 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000016>
+20:18:06.008267 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN|EPOLLHUP, data={u32=2330888, u64=11458975076616}}], 16, 1325) = 1 <0.002115>
+20:18:06.010660 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000007>
+20:18:06.010706 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1323) = 1 <0.003811>
+20:18:06.014602 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 0) = 1 <0.000017>
+20:18:06.014709 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000027>
+20:18:06.014777 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000009>
+20:18:06.014807 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000012>
+20:18:06.014849 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1319) = 1 <0.000870>
+20:18:06.015840 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000013>
+20:18:06.015880 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000010>
+20:18:06.015916 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1317) = 1 <0.000030>
+20:18:06.016009 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 0) = 1 <0.000011>
+20:18:06.016082 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000011>
+20:18:06.016133 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1317) = 1 <0.000971>
+20:18:06.017227 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000014>
+20:18:06.017272 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1316) = 1 <0.019228>
+20:18:06.036658 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000011>
+20:18:06.036687 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=2331176, u64=11458975076904}}], 16, 1297) = 1 <0.000036>
+20:18:06.036867 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=2331176, u64=11458975076904}}], 16, 0) = 1 <0.000006>
+20:18:06.036990 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000021>
+20:18:06.037178 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=2331176, u64=11458975076904}}], 16, 1296) = 1 <0.020222>
+20:18:06.057702 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000024>
+20:18:06.057749 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1276) = 1 <0.000505>
+20:18:06.058310 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000008>
+20:18:06.058333 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1275) = 1 <0.030663>
+20:18:06.089079 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 0) = 1 <0.000015>
+20:18:06.089137 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000008>
+20:18:06.089164 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1244) = 1 <0.000102>
+20:18:06.089336 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000018>
+20:18:06.089398 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1244) = 1 <0.002525>
+20:18:06.092100 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000014>
+20:18:06.092133 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000011>
+20:18:06.092163 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000011>
+20:18:06.092192 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000011>
+20:18:06.092219 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN|EPOLLHUP, data={u32=2331176, u64=11458975076904}}], 16, 1241) = 1 <0.004168>
+20:18:06.096636 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 0) = 1 <0.000012>
+20:18:06.096714 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 0) = 1 <0.000007>
+20:18:06.096752 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000009>
+20:18:06.096773 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1237) = 1 <0.000006>
+20:18:06.096810 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000006>
+20:18:06.096828 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1237) = 1 <0.000046>
+20:18:06.096907 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000008>
+20:18:06.096929 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1236) = 1 <0.002364>
+20:18:06.101703 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=2330984, u64=11458975076712}}], 16, 0) = 1 <0.000010>
+20:18:06.101799 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000010>
+20:18:06.101832 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=2330984, u64=11458975076712}}], 16, 1232) = 1 <0.002693>
+20:18:06.104642 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000013>
+20:18:06.104679 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=2330984, u64=11458975076712}}], 16, 1229) = 1 <0.002114>
+20:18:06.107079 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000010>
+20:18:06.107113 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1226) = 1 <0.003586>
+20:18:06.110752 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000006>
+20:18:06.110776 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1223) = 1 <0.036534>
+20:18:06.147376 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000013>
+20:18:06.147414 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1186) = 1 <0.000042>
+20:18:06.147503 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000010>
+20:18:06.147530 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1186) = 1 <0.000047>
+20:18:06.147650 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000014>
+20:18:06.147677 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN|EPOLLHUP, data={u32=2330984, u64=11458975076712}}], 16, 1186) = 1 <0.003150>
+20:18:06.150955 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000010>
+20:18:06.150991 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1182) = 1 <0.001713>
+20:18:06.152876 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000007>
+20:18:06.152897 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000006>
+20:18:06.152914 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1180) = 1 <0.000006>
+20:18:06.152965 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000006>
+20:18:06.152984 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000007>
+20:18:06.153007 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1180) = 1 <0.001384>
+20:18:06.154451 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000006>
+20:18:06.154470 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000011>
+20:18:06.154497 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1179) = 1 <0.000004>
+20:18:06.154546 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 0) = 1 <0.000010>
+20:18:06.154603 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 0) = 1 <0.000007>
+20:18:06.154655 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000008>
+20:18:06.154674 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1179) = 1 <0.001216>
+20:18:06.156021 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000011>
+20:18:06.156047 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1177) = 1 <0.004061>
+20:18:06.160277 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000008>
+20:18:06.160298 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=2328872, u64=11458975074600}}], 16, 1173) = 1 <0.000083>
+20:18:06.160466 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000018>
+20:18:06.160508 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=2328872, u64=11458975074600}}], 16, 1173) = 1 <0.002199>
+20:18:06.162878 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000018>
+20:18:06.162927 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=2328872, u64=11458975074600}}], 16, 1170) = 1 <0.006831>
+20:18:06.170017 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000038>
+20:18:06.170083 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1163) = 1 <0.000465>
+20:18:06.170702 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000024>
+20:18:06.170744 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1163) = 1 <0.036621>
+20:18:06.207471 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000026>
+20:18:06.207523 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN|EPOLLHUP, data={u32=2328872, u64=11458975074600}}], 16, 1126) = 1 <0.002349>
+20:18:06.210052 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000015>
+20:18:06.210080 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1123) = 1 <0.003425>
+20:18:06.213614 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000013>
+20:18:06.213647 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000010>
+20:18:06.213672 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1120) = 1 <0.000033>
+20:18:06.213785 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000007>
+20:18:06.213806 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000008>
+20:18:06.213826 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1120) = 1 <0.001313>
+20:18:06.215198 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000019>
+20:18:06.215231 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000011>
+20:18:06.215260 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1118) = 1 <0.000006>
+20:18:06.215309 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000012>
+20:18:06.215336 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1118) = 1 <0.000011>
+20:18:06.215389 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000014>
+20:18:06.215425 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1118) = 1 <0.004604>
+20:18:06.220284 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000034>
+20:18:06.220377 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1113) = 1 <0.010474>
+20:18:06.231175 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=2176648, u64=11458974922376}}], 16, 0) = 1 <0.000030>
+20:18:06.231799 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000010>
+20:18:06.231829 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=2176648, u64=11458974922376}}], 16, 1102) = 1 <0.024575>
+20:18:06.256752 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000015>
+20:18:06.256813 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1077) = 1 <0.001465>
+20:18:06.258406 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000013>
+20:18:06.258446 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1075) = 1 <0.045940>
+20:18:06.304556 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 0) = 1 <0.000021>
+20:18:06.304673 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000026>
+20:18:06.304748 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1029) = 1 <0.000023>
+20:18:06.304848 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000027>
+20:18:06.304907 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1028) = 1 <0.000021>
+20:18:06.305057 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000035>
+20:18:06.305111 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1028) = 1 <0.002924>
+20:18:06.308159 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 0) = 1 <0.000014>
+20:18:06.308246 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000024>
+20:18:06.308311 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000037>
+20:18:06.308396 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000018>
+20:18:06.308444 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN|EPOLLHUP, data={u32=2176648, u64=11458974922376}}], 16, 1025) = 1 <0.000017>
+20:18:06.308659 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000017>
+20:18:06.308699 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1025) = 1 <0.003349>
+20:18:06.312121 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000005>
+20:18:06.312136 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000005>
+20:18:06.312161 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1021) = 1 <0.000320>
+20:18:06.312514 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000007>
+20:18:06.312555 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1021) = 1 <0.000132>
+20:18:06.312726 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000009>
+20:18:06.312756 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1021) = 1 <0.000020>
+20:18:06.312814 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000010>
+20:18:06.312839 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1021) = 1 <0.003001>
+20:18:06.316022 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000015>
+20:18:06.316059 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1017) = 1 <0.004557>
+20:18:06.320787 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=2175880, u64=11458974921608}}], 16, 0) = 1 <0.000005>
+20:18:06.320857 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000005>
+20:18:06.320874 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=2175880, u64=11458974921608}}], 16, 1012) = 1 <0.002648>
+20:18:06.323664 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000007>
+20:18:06.323686 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=2175880, u64=11458974921608}}], 16, 1010) = 1 <0.002632>
+20:18:06.326460 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000028>
+20:18:06.326504 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1007) = 1 <0.002202>
+20:18:06.328767 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000231>
+20:18:06.329029 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 1005) = 1 <0.022270>
+20:18:06.351391 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 0) = 1 <0.000012>
+20:18:06.351498 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000027>
+20:18:06.351555 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 982) = 1 <0.000095>
+20:18:06.351706 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 0) = 1 <0.000008>
+20:18:06.351758 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000026>
+20:18:06.351803 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN|EPOLLHUP, data={u32=2175880, u64=11458974921608}}], 16, 982) = 1 <0.002840>
+20:18:06.355080 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000017>
+20:18:06.355111 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 978) = 1 <0.000775>
+20:18:06.356095 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000008>
+20:18:06.356119 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 977) = 0 <0.977450>
+20:18:07.333661 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000015>
+20:18:07.333718 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 5222) = 1 <0.457801>
+20:18:07.791598 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000005>
+20:18:07.791625 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 4764) = 1 <0.004765>
+20:18:07.796592 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000014>
+20:18:07.796643 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000022>
+20:18:07.796691 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 4759) = 1 <0.000028>
+20:18:07.796832 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000005>
+20:18:07.796851 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 4758) = 1 <0.000079>
+20:18:07.796969 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000005>
+20:18:07.796986 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 4758) = 1 <0.000007>
+20:18:07.797038 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 0) = 1 <0.000008>
+20:18:07.797078 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 0) = 1 <0.000004>
+20:18:07.797113 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000009>
+20:18:07.797134 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 4758) = 1 <0.000016>
+20:18:07.797192 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 0) = 1 <0.000007>
+20:18:07.797250 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000007>
+20:18:07.797358 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 0) = 1 <0.000010>
+20:18:07.797437 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 0) = 1 <0.000006>
+20:18:07.797494 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 0) = 1 <0.000012>
+20:18:07.797552 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000013>
+20:18:07.797586 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 4758) = 1 <0.000110>
+20:18:07.797791 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000006>
+20:18:07.797822 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 4757) = 1 <0.000306>
+20:18:07.798255 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000013>
+20:18:07.798287 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 4757) = 1 <0.000614>
+20:18:07.799052 connect(28<UDPv6:[21437]>, {sa_family=AF_INET6, sin6_port=htons(443), sin6_flowinfo=htonl(0), inet_pton(AF_INET6, "2001:4860:4860::8888", &sin6_addr), sin6_scope_id=0}, 28) = 0 <0.000021>
+20:18:07.799299 connect(28<UDP:[0.0.0.0:36580]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000015>
+20:18:07.799650 connect(29<UDP:[0.0.0.0:20527]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000019>
+20:18:07.800255 connect(30<UDP:[0.0.0.0:4351]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000012>
+20:18:07.800641 connect(31<UDP:[0.0.0.0:12258]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000009>
+20:18:07.800797 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}, {events=EPOLLIN, data={u32=2330504, u64=11458975076232}}, {events=EPOLLIN, data={u32=2178280, u64=11458974924008}}, {events=EPOLLIN, data={u32=2330120, u64=11458975075848}}], 16, 0) = 4 <0.000025>
+20:18:07.800929 connect(32<UDP:[21449]>, {sa_family=AF_INET, sin_port=htons(443), sin_addr=inet_addr("127.0.0.1")}, 16) = 0 <0.000009>
+20:18:07.801225 connect(32<UDP:[0.0.0.0:40048]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000009>
+20:18:07.801681 connect(33<UDP:[0.0.0.0:25935]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000009>
+20:18:07.802058 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000011>
+20:18:07.802095 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 4753) = 1 <0.000548>
+20:18:07.802868 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000013>
+20:18:07.802906 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000010>
+20:18:07.802930 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 4752) = 1 <0.001025>
+20:18:07.804094 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000027>
+20:18:07.804145 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 4751) = 1 <1.994984>
+20:18:09.799240 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000064>
+20:18:09.799350 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 2756) = 0 <2.760728>
+20:18:12.560239 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000018>
+20:18:12.560290 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 49771) = 1 <1.645250>
+20:18:14.205853 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000040>
+20:18:14.205932 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 48126) = 1 <0.000089>
+20:18:14.206242 connect(28<UDPv6:[21858]>, {sa_family=AF_INET6, sin6_port=htons(443), sin6_flowinfo=htonl(0), inet_pton(AF_INET6, "2001:4860:4860::8888", &sin6_addr), sin6_scope_id=0}, 28) = 0 <0.000026>
+20:18:14.206570 connect(28<UDP:[0.0.0.0:61734]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000018>
+20:18:14.206855 connect(29<UDP:[0.0.0.0:41973]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000013>
+20:18:14.207146 connect(30<UDP:[0.0.0.0:52056]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000019>
+20:18:14.207307 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=2330120, u64=11458975075848}}, {events=EPOLLIN, data={u32=2327240, u64=11458975072968}}, {events=EPOLLIN, data={u32=2328872, u64=11458975074600}}], 16, 0) = 3 <0.000013>
+20:18:14.207674 connect(31<UDP:[0.0.0.0:26120]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000018>
+20:18:14.208257 connect(32<UDP:[0.0.0.0:35278]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000014>
+20:18:14.208697 connect(33<UDP:[0.0.0.0:29600]>, {sa_family=AF_INET, sin_port=htons(53), sin_addr=inet_addr("127.0.0.53")}, 16) = 0 <0.000013>
+20:18:14.208879 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=2177608, u64=11458974923336}}, {events=EPOLLIN, data={u32=2330120, u64=11458975075848}}], 16, 0) = 2 <0.000011>
+20:18:14.209392 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000020>
+20:18:14.209444 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 6000) = 1 <0.002283>
+20:18:14.211849 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000020>
+20:18:14.211896 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 48120) = 1 <3.654357>
+20:18:17.866443 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 0) = 1 <0.000035>
+20:18:17.866604 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000029>
+20:18:17.866682 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 44465) = 1 <0.000204>
+20:18:17.867042 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 0) = 1 <0.000041>
+20:18:17.867238 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000026>
+20:18:17.867312 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN|EPOLLHUP, data={u32=2164072, u64=11458974909800}}], 16, 44464) = 1 <0.004110>
+20:18:17.871774 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000029>
+20:18:17.871825 epoll_wait(16<anon_inode:[eventpoll]>, [{events=EPOLLIN, data={u32=90984, u64=11458972836712}}], 16, 44460) = 1 <0.000661>
+20:18:17.872695 epoll_wait(16<anon_inode:[eventpoll]>, [], 16, 0) = 0 <0.000006>
+20:18:17.872727 epoll_wait(16<anon_inode:[eventpoll]>, 

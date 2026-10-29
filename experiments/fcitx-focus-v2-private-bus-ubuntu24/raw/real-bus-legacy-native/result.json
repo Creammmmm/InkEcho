@@ -1,0 +1,70 @@
+{
+  "variant": "legacy-native",
+  "scope": "real private D-Bus and Fcitx5 Core, owned synthetic InputContext/FocusGroups; no GUI",
+  "daemon": {
+    "argv": [
+      "/usr/bin/fcitx5",
+      "-D",
+      "--keep",
+      "--disable=wayland,xcb,notificationitem,classicui,clipboard"
+    ],
+    "pid": 2834,
+    "start": "43946",
+    "original_wait_exit": -6
+  },
+  "checks": [
+    {
+      "name": "Begin_wire_compatibility",
+      "no_focus_and_multi_statuses": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "sequence_preserved_when_unsent": true,
+      "replay_rejected": true,
+      "post_cancel_rejected": true,
+      "counts_before": [
+        0,
+        0
+      ],
+      "counts_after": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "new_client_actual_plugin_focus_recovery",
+      "detailed_protocol": false,
+      "single_commit_exact": true
+    },
+    {
+      "name": "real_bridge_zero_prefix_safe_fallback",
+      "focus_count": 0,
+      "keyboard_spy_counts": [
+        2
+      ],
+      "native_commits": 0
+    },
+    {
+      "name": "real_bridge_zero_prefix_safe_fallback",
+      "focus_count": 2,
+      "keyboard_spy_counts": [
+        2
+      ],
+      "native_commits": 0
+    },
+    {
+      "name": "real_bridge_partial_prefix_never_handoffs_or_replays",
+      "native_prefix": 1,
+      "keyboard_spy_counts": [],
+      "error": "partial_input_failed"
+    }
+  ],
+  "passed": true,
+  "runtime_version": "5.1.7",
+  "begin2_advertised": false,
+  "quit_reply": [
+    true
+  ]
+}

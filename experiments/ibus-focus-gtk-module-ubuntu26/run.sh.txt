@@ -1,0 +1,15 @@
+set -eu
+export XDG_RUNTIME_DIR=/run/user/1000 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus DISPLAY=:0 WAYLAND_DISPLAY=wayland-0 XDG_SESSION_TYPE=wayland XDG_CURRENT_DESKTOP=ubuntu:GNOME
+export XAUTHORITY="$(systemctl --user show-environment | sed -n 's/^XAUTHORITY=//p')"
+mkdir -p /tmp/ibus-focus-input /tmp/inkecho-wayland-focus
+sudo mount -t 9p -o trans=virtio,version=9p2000.L,ro inkecho_input /tmp/ibus-focus-input
+cp /tmp/ibus-focus-input/{actor.py,probe.py} /tmp/inkecho-wayland-focus/
+sudo umount /tmp/ibus-focus-input
+loginctl show-session 1 -p Type -p Active -p LockedHint
+printf 'input_sources='; gsettings get org.gnome.desktop.input-sources sources
+printf 'ibus_engine='; ibus engine || true
+gnome-extensions enable inkecho-wayland-focus-probe@local.invalid
+sleep 3
+gnome-extensions info inkecho-wayland-focus-probe@local.invalid
+sha256sum /tmp/inkecho-wayland-focus/*.py ~/.local/share/gnome-shell/extensions/inkecho-wayland-focus-probe@local.invalid/*
+timeout 60 /usr/bin/python3 /tmp/inkecho-wayland-focus/probe.py

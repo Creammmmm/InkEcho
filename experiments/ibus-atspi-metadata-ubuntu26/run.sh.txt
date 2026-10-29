@@ -1,0 +1,20 @@
+set -eu
+export XDG_RUNTIME_DIR=/run/user/1000 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus DISPLAY=:0 WAYLAND_DISPLAY=wayland-0 XDG_SESSION_TYPE=wayland XDG_CURRENT_DESKTOP=ubuntu:GNOME GDK_BACKEND=wayland XMODIFIERS=@im=ibus
+mkdir -p /tmp/atspi-share /tmp/atspi-owned
+sudo mount -t 9p -o trans=virtio,version=9p2000.L,ro inkecho_input /tmp/atspi-share
+cp /tmp/atspi-share/{actor.py,observer.py} /tmp/atspi-owned/
+sudo umount /tmp/atspi-share
+loginctl show-session 1 -p Type -p Active -p LockedHint
+ibus engine
+sha256sum /tmp/atspi-owned/*.py
+for item in 'ibus entry' 'gtk-im-context-simple entry' 'ibus button'; do
+ set -- $item; module=$1; kind=$2
+ echo "CASE=$module/$kind"
+ env GTK_IM_MODULE="$module" /usr/bin/python3 /tmp/atspi-owned/actor.py "$kind" > /tmp/atspi-owned/actor.out 2>&1 & pid=$!
+ for n in $(seq 1 100); do test -s /tmp/atspi-owned/actor.out && break; sleep .1; done
+ cat /tmp/atspi-owned/actor.out
+ /usr/bin/python3 /tmp/atspi-owned/observer.py "$pid" || echo observer_failed
+ kill "$pid" 2>/dev/null || true
+ wait "$pid" 2>/dev/null || true
+ rm -f /tmp/atspi-owned/actor.out
+done

@@ -1,0 +1,7 @@
+Warning: Permanently added 'localhost' (ED25519) to the list of known hosts.
+SESSION  UID USER    SEAT  TTY  STATE  IDLE SINCE
+      1 1000 inkecho seat0 tty2 active no   -
+      3 1000 inkecho -     -    active no   -
+
+2 sessions listed.
+{"platform": "xcb", "environment": "Ubuntu 24.04.5 LTS · ubuntu:GNOME · x11", "scope": "当前键盘输入方式面向 X11 / XWayland 应用，无需远程控制授权。此方式不支持原生 Wayland 应用；未经实测的应用不保证兼容。", "initial_method": "auto", "mapping_wait": 40, "feedback_wait": 40, "methods": [{"name": "自动选择", "value": "auto", "saved": "auto", "status": "自动模式按系统状态选择 Fcitx5 或键盘；应用可能使用不同输入方式。"}, {"name": "模拟键盘", "value": "keyboard", "saved": "keyboard", "status": "键盘输入服务尚未连接。"}, {"name": "Fcitx5（需要 InkEcho 输入桥）", "value": "fcitx", "saved": "fcitx", "status": "Fcitx5 输入桥将在任务开始时检查；未安装或未运行时无法输出。"}, {"name": "IBus（实验性，需要手动启用扩展）", "value": "ibus", "saved": "ibus", "status": "IBus 仅尝试提交；目标未接入时可能没有文字，无法自动确认接收。"}], "changed_mapping_wait": 73, "changed_feedback_wait": 74}

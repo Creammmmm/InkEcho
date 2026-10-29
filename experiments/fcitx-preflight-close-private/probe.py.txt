@@ -1,0 +1,69 @@
+import asyncio, json, time
+from dbus_next.aio import MessageBus
+from dbus_next import Message
+from dbus_next.service import ServiceInterface, method
+from inkecho.platform.fcitx5 import Fcitx5Bridge
+from inkecho.platform.output_router import OutputRouter, OutputRouterError
+
+class Service(ServiceInterface):
+    def __init__(self):
+        super().__init__('org.fcitx.Fcitx.InkEcho1')
+        self.begins = self.cancels = self.commits = 0
+    @method()
+    def Begin(self, token: 's') -> 'b':
+        self.begins += 1
+        return True
+    @method()
+    async def Cancel(self, token: 's') -> 'b':
+        self.cancels += 1
+        await asyncio.sleep(5)
+        return True
+    @method()
+    def Commit(self, token: 's', seq: 'u', char: 's') -> 'u':
+        self.commits += 1
+        return 1
+
+class Capability:
+    def __init__(self, _runtime): self.token='a'*64; self.closed=False
+    def close(self): self.closed=True; self.token=''
+class Keyboard:
+    def __init__(self): self.connected=False; self.sent=[]
+    async def connect(self): self.connected=True
+    async def aclose(self): pass
+
+async def run():
+    servicebus=await MessageBus().connect()
+    obj=Service(); servicebus.export('/inkecho', obj)
+    await servicebus.request_name('org.fcitx.Fcitx5')
+    caps=[]
+    def makecap(path):
+        cap=Capability(path); caps.append(cap); return cap
+    bridge=Fcitx5Bridge(capability_factory=makecap, timeout=3)
+    keyboard=Keyboard(); router=OutputRouter(keyboard,bridge_factory=lambda:bridge)
+    actual_connect=bridge.connect
+    unique_client=None
+    async def observed_connect(**kwargs):
+        nonlocal unique_client
+        await actual_connect(**kwargs)
+        unique_client=bridge._bus.unique_name
+    bridge.connect=observed_connect
+    count=0
+    async def detector():
+        nonlocal count
+        count+=1
+        if count==2: await asyncio.sleep(8)
+        return ('fcitx', servicebus.unique_name)
+    router._system_detector=detector
+    await router.prepare_task('auto')
+    start=time.monotonic()
+    try: await router.insert('甲',lambda:True,deadline=start+0.2)
+    except OutputRouterError as e: outcome=e.code
+    else: outcome='unexpected_success'
+    elapsed=round(time.monotonic()-start,3)
+    await asyncio.sleep(0.05)
+    reply=await servicebus.call(Message(destination='org.freedesktop.DBus',path='/org/freedesktop/DBus',interface='org.freedesktop.DBus',member='NameHasOwner',signature='s',body=[unique_client]))
+    print(json.dumps({'outcome':outcome,'elapsed_s':elapsed,'begins':obj.begins,'cancels_received':obj.cancels,'commits':obj.commits,'keyboard_connected':keyboard.connected,'bridge_bus_none':bridge._bus is None,'client_owner_still_present':reply.body[0],'cap_closed': bool(caps and caps[0].closed)},ensure_ascii=False),flush=True)
+    if obj.cancels:
+        await asyncio.sleep(5.1)
+    servicebus.disconnect()
+asyncio.run(run())

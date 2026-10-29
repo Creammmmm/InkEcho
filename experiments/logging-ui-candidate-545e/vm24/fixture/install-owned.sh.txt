@@ -1,0 +1,14 @@
+set -eu
+export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus XDG_RUNTIME_DIR=/run/user/1000
+root=/tmp/inkecho-owned-default-acceptance/squashfs-root
+export APPDIR="$root" PYTHONHOME="$root/usr" PYTHONPATH="$root/packages" LD_LIBRARY_PATH="$root/usr/lib/inkecho"
+"$root/usr/bin/python3" - <<'PY'
+import json,subprocess,hashlib
+from pathlib import Path
+from inkecho.platform.owned_extension import OwnedExtensionManager
+from inkecho.platform.owned_installation import verified_installation
+before=subprocess.check_output(['gsettings','get','org.gnome.shell','enabled-extensions'],text=True)
+OwnedExtensionManager().install();assert verified_installation()
+after=subprocess.check_output(['gsettings','get','org.gnome.shell','enabled-extensions'],text=True);assert before==after
+print(json.dumps({'installed_verified':True,'enable_unchanged':True,'packaged_app_sha256':hashlib.sha256(Path(__import__('inkecho.app',fromlist=['']).__file__).read_bytes()).hexdigest()}))
+PY

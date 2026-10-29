@@ -1,0 +1,7 @@
+import os,fcntl,json,stat
+from pathlib import Path
+runtime=Path('/run/user/1000');lock=runtime/'inkecho-fcitx-candidate.lock';cap=runtime/'inkecho-fcitx-candidate.cap';report={'capability_file_present':cap.exists(),'lock_existed':lock.exists()}
+assert not report['capability_file_present']
+if lock.exists():
+ fd=os.open(lock,os.O_RDWR|os.O_NOFOLLOW);info=os.fstat(fd);fcntl.flock(fd,fcntl.LOCK_EX|fcntl.LOCK_NB);report.update(lock_released=True,lock_mode=oct(stat.S_IMODE(info.st_mode)));entry=lock.stat();assert (info.st_dev,info.st_ino)==(entry.st_dev,entry.st_ino) and info.st_uid==os.getuid() and stat.S_ISREG(info.st_mode);lock.unlink();os.close(fd)
+Path('/mnt/output/fcitx-auto-final-cleanup24.json').write_text(json.dumps(report,indent=2));print(json.dumps(report))

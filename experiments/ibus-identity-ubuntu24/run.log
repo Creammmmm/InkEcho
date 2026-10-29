@@ -1,0 +1,15 @@
+PRETTY_NAME="Ubuntu 24.04.5 LTS"
+NAME="Ubuntu"
+VERSION_ID="24.04"
+VERSION="24.04.5 LTS (Noble Numbat)"
+VERSION_CODENAME=noble
+IBus 1.5.29-rc2
+own unique name lookup passed
+process lookup unavailable: org.freedesktop.DBus.Error.UnknownMethod
+fake property declarations: [('ClientCommitPreedit', 'write'), ('ContentType', 'write'), ('EffectivePostProcessKeyEvent', 'write'), ('PostProcessKeyEvent', 'read')]
+real property declarations: [('ClientCommitPreedit', 'write'), ('ContentType', 'write'), ('EffectivePostProcessKeyEvent', 'write'), ('PostProcessKeyEvent', 'read')]
+Client [('error', 'org.freedesktop.DBus.Error.InvalidArgs'), ('error', 'org.freedesktop.DBus.Error.InvalidArgs')]
+ClientName [('error', 'org.freedesktop.DBus.Error.InvalidArgs'), ('error', 'org.freedesktop.DBus.Error.InvalidArgs')]
+Fake [('error', 'org.freedesktop.DBus.Error.InvalidArgs'), ('error', 'org.freedesktop.DBus.Error.InvalidArgs')]
+Capabilities [('error', 'org.freedesktop.DBus.Error.InvalidArgs'), ('error', 'org.freedesktop.DBus.Error.InvalidArgs')]
+identity properties absent or inaccessible in both contexts

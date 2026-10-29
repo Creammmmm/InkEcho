@@ -1,0 +1,6 @@
+/tmp/wayland-lifecycle/InkEcho-0.10.2-x86_64.AppImage: OK
+已安装输入桥；运行状态需通过输入服务检查确认。
+{"mode": "fallback", "count": 10, "backend": "keyboard", "a": "甲乙丙丁戊己庚辛壬癸", "b": "", "exact": true, "prefix": true, "passed": true}
+{"mode": "cancel", "error": "input_cancelled", "a": "甲乙丙丁戊己庚", "b": "", "exact": false, "prefix": true, "passed": true}
+{"mode": "switch", "count": 60, "backend": "keyboard", "a": "甲乙丙丁戊己庚辛", "b": "壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸", "exact": true, "prefix": true, "passed": true}
+未发现经过校验的输入桥；可能尚未安装。

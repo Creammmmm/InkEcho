@@ -1,0 +1,29 @@
+Type=wayland
+Active=yes
+LockedHint=no
+InkEcho.AppImage: OK
+Original candidate, no source overlay
+inkecho-wayland-focus-probe@local.invalid
+  Name: InkEcho Wayland focus experiment
+  Description: Disposable isolated test only
+  Path: /home/inkecho/.local/share/gnome-shell/extensions/inkecho-wayland-focus-probe@local.invalid
+  Enabled: Yes
+  State: ACTIVE
+[1029/123109.731235:WARNING:chrome/app/chrome_main_linux.cc:84] Read channel stable from /tmp/inkecho-browser/chrome/CHROME_VERSION_EXTRA
+Google Chrome 154.0.8037.97 
+BROWSER=full
+activate 20 0 (false,) 
+activate 60 0 (false,) 
+activate 120 0 (false,) 
+activate 200 0 (false,) 
+{"mode": "full", "error": "initial_focus_missing", "chrome_exit": null, "gets": [], "events": []}
+BROWSER_FAILED=full
+[1029/123110.018047:WARNING:chrome/app/chrome_main_linux.cc:84] Read channel stable from /tmp/inkecho-browser/chrome/CHROME_VERSION_EXTRA
+BROWSER=cancel
+activate 20 0 (false,) 
+activate 60 0 (false,) 
+activate 120 0 (false,) 
+activate 200 0 (false,) 
+{"mode": "cancel", "error": "initial_focus_missing", "chrome_exit": null, "gets": [], "events": []}
+BROWSER_FAILED=cancel
+[1029/123125.465739:WARNING:chrome/app/chrome_main_linux.cc:84] Read channel stable from /tmp/inkecho-browser/chrome/CHROME_VERSION_EXTRA

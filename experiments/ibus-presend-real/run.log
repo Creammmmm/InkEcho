@@ -1,0 +1,30 @@
+Type=wayland
+Active=yes
+LockedHint=no
+InkEcho-0.10.2-x86_64.AppImage: OK
+inkecho-presend-experiment@local.invalid
+  Name: InkEcho isolated pre-send experiment
+  Description: Disposable tests only; mode control intentionally untrusted
+  Path: /home/inkecho/.local/share/gnome-shell/extensions/inkecho-presend-experiment@local.invalid
+  Enabled: Yes
+  State: ACTIVE
+xkb:us::eng
+f727dc68cac12290fafd4702d3aeb776be62129c529808cd42689bdeb783b890  /tmp/presend/actor.py
+ceb441fedc54348690f269e5454085b96d31ef6a401ed33902490759688dc3c2  /tmp/presend/desktop-client.py
+Traceback (most recent call last):
+  File "/tmp/presend/desktop-client.py", line 49, in <module>
+    asyncio.run(main())
+    ~~~~~~~~~~~^^^^^^^^
+  File "/tmp/presend/squashfs-root/usr/lib/python3.13/asyncio/runners.py", line 196, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "/tmp/presend/squashfs-root/usr/lib/python3.13/asyncio/runners.py", line 119, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/tmp/presend/squashfs-root/usr/lib/python3.13/asyncio/base_events.py", line 726, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/tmp/presend/desktop-client.py", line 29, in main
+    assert await call(bus,'Begin','ss',[cap.name,cap.token])==[True]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

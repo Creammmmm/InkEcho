@@ -1,0 +1,9 @@
+focus True True initial-map (1, 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855', 'Authorization required, but no authorization protocol specified\n\nError:            Cannot open display ":0"\n                  Exiting\n')
+owner-acquire acquired contender-acquire busy contender-press not-owner owner-press sent
+before-change '甲' acquired-map (1, 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855', 'Authorization required, but no authorization protocol specified\n\nError:            Cannot open display ":0"\n                  Exiting\n')
+after-config owner-press not-owner new-owner-acquire acquired new-owner-press sent
+before-disconnect '甲甲' acquired-map-2 (1, 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855', 'Authorization required, but no authorization protocol specified\n\nError:            Cannot open display ":0"\n                  Exiting\n')
+after-owner-loss map (1, 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855', 'Authorization required, but no authorization protocol specified\n\nError:            Cannot open display ":0"\n                  Exiting\n')
+after-owner-loss acquire acquired press sent restore restored
+final '甲甲甲' restored-map (1, 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855', 'Authorization required, but no authorization protocol specified\n\nError:            Cannot open display ":0"\n                  Exiting\n')
+settings ['caps:escape']

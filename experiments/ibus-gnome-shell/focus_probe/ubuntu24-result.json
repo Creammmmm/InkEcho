@@ -1,0 +1,14 @@
+{
+  "session": "Ubuntu 24.04 GNOME 46 X11",
+  "ibus_window_focused": true,
+  "ibus_current_context": "/org/freedesktop/IBus/InputContext_3",
+  "ibus_panel_focus": "/org/freedesktop/IBus/InputContext_3",
+  "ibus_text": "甲",
+  "simple_window_focused": true,
+  "simple_current_context": "/org/freedesktop/IBus/InputContext_1",
+  "simple_panel_focus": "/org/freedesktop/IBus/InputContext_1",
+  "observed_transition": ["out:/org/freedesktop/IBus/InputContext_3", "in:/org/freedesktop/IBus/InputContext_1"],
+  "simple_attempted_count": 1,
+  "simple_text": "",
+  "result": "nonempty focus path alone cannot prove deliverable target"
+}

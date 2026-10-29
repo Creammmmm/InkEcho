@@ -1,0 +1,31 @@
+/tmp/inkecho-r4-test/InkEcho-0.10.2-x86_64.AppImage: OK
+f53e8699bafad46e03c60d6e0f82d881be658e65b210cba2e95701a40ffd20a6  /tmp/inkecho-r4-test/squashfs-root/packages/inkecho/platform/fcitx5_install.py
+f53e8699bafad46e03c60d6e0f82d881be658e65b210cba2e95701a40ffd20a6  /tmp/inkecho-r4-test/probes/installer-patched.py
+TEST_ONLY_INSTALLER_OVERRIDE
+pre_install
+{"label": "pre_install", "hints": {"GTK_IM_MODULE": "fcitx", "QT_IM_MODULE": "fcitx", "XMODIFIERS": "@im=fcitx"}, "owners": {"ibus_service_owner": "fcitx", "fcitx_service_owner": "fcitx"}, "hypothesis": ["fcitx", ":1.131"], "detected": null}
+Error: GDBus.Error:org.freedesktop.DBus.Error.UnknownObject: Unknown object '/inkecho'.
+已安装输入桥；运行状态需通过输入服务检查确认。
+before_repeat inode=5256 mtime_ns=2026-10-28 21:48:17.534028192 +0000 size=281
+已安装输入桥；运行状态需通过输入服务检查确认。
+after_repeat inode=5256 mtime_ns=2026-10-28 21:48:17.534028192 +0000 size=281
+已安装输入桥；运行状态需通过输入服务检查确认。
+after_install_enable
+{"label": "after_install_enable", "hints": {"GTK_IM_MODULE": "fcitx", "QT_IM_MODULE": "fcitx", "XMODIFIERS": "@im=fcitx"}, "owners": {"ibus_service_owner": "fcitx", "fcitx_service_owner": "fcitx"}, "hypothesis": ["fcitx", ":1.131"], "detected": ["fcitx", ":1.131"]}
+('5.1.19',)
+after_restart_no_enable
+{"label": "after_restart_no_enable", "hints": {"GTK_IM_MODULE": "fcitx", "QT_IM_MODULE": "fcitx", "XMODIFIERS": "@im=fcitx"}, "owners": {"ibus_service_owner": "fcitx", "fcitx_service_owner": "fcitx"}, "hypothesis": ["fcitx", ":1.152"], "detected": ["fcitx", ":1.152"]}
+('5.1.19',)
+未发现经过校验的输入桥；可能尚未安装。
+after_disable
+{"label": "after_disable", "hints": {"GTK_IM_MODULE": "fcitx", "QT_IM_MODULE": "fcitx", "XMODIFIERS": "@im=fcitx"}, "owners": {"ibus_service_owner": "fcitx", "fcitx_service_owner": "fcitx"}, "hypothesis": ["fcitx", ":1.152"], "detected": null}
+('5.1.19',)
+reinstall_after_disable
+已安装输入桥；运行状态需通过输入服务检查确认。
+{"label": "after_reinstall", "hints": {"GTK_IM_MODULE": "fcitx", "QT_IM_MODULE": "fcitx", "XMODIFIERS": "@im=fcitx"}, "owners": {"ibus_service_owner": "fcitx", "fcitx_service_owner": "fcitx"}, "hypothesis": ["fcitx", ":1.152"], "detected": ["fcitx", ":1.152"]}
+已安装输入桥；运行状态需通过输入服务检查确认。
+{"label": "after_reenable", "hints": {"GTK_IM_MODULE": "fcitx", "QT_IM_MODULE": "fcitx", "XMODIFIERS": "@im=fcitx"}, "owners": {"ibus_service_owner": "fcitx", "fcitx_service_owner": "fcitx"}, "hypothesis": ["fcitx", ":1.152"], "detected": ["fcitx", ":1.152"]}
+未发现经过校验的输入桥；可能尚未安装。
+after_disabled_restart
+{"label": "after_disabled_restart", "hints": {"GTK_IM_MODULE": "fcitx", "QT_IM_MODULE": "fcitx", "XMODIFIERS": "@im=fcitx"}, "owners": {"ibus_service_owner": "fcitx", "fcitx_service_owner": "fcitx"}, "hypothesis": ["fcitx", ":1.181"], "detected": null}
+Error: GDBus.Error:org.freedesktop.DBus.Error.UnknownObject: Unknown object '/inkecho'.

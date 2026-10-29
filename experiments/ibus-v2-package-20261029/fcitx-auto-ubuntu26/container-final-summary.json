@@ -1,0 +1,98 @@
+{
+  "state": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-10-29T04:47:08.3440975Z",
+    "FinishedAt": "2026-10-29T04:50:16.066703338Z"
+  },
+  "mounts": [
+    {
+      "Type": "bind",
+      "Source": "/home/lth/github/InkEcho/build/ubuntu26-release-vm/state",
+      "Destination": "/parent",
+      "Mode": "",
+      "RW": false,
+      "Propagation": "rprivate"
+    },
+    {
+      "Type": "bind",
+      "Source": "/home/lth/github/InkEcho/build/ubuntu26-release-vm/base",
+      "Destination": "/base",
+      "Mode": "",
+      "RW": false,
+      "Propagation": "rprivate"
+    },
+    {
+      "Type": "bind",
+      "Source": "/home/lth/github/InkEcho/build/ubuntu26-release-vm/seed",
+      "Destination": "/seed",
+      "Mode": "",
+      "RW": false,
+      "Propagation": "rprivate"
+    },
+    {
+      "Type": "bind",
+      "Source": "/tmp/inkecho-v2-appimage-candidate-20261029/vm26/state",
+      "Destination": "/state",
+      "Mode": "",
+      "RW": true,
+      "Propagation": "rprivate"
+    },
+    {
+      "Type": "bind",
+      "Source": "/tmp/inkecho-v2-appimage-candidate-20261029/vm26/input",
+      "Destination": "/input",
+      "Mode": "",
+      "RW": false,
+      "Propagation": "rprivate"
+    },
+    {
+      "Type": "bind",
+      "Source": "/tmp/inkecho-v2-appimage-candidate-20261029/vm26/output",
+      "Destination": "/output",
+      "Mode": "",
+      "RW": true,
+      "Propagation": "rprivate"
+    }
+  ],
+  "command": [
+    "qemu-system-x86_64",
+    "-accel",
+    "kvm",
+    "-machine",
+    "q35",
+    "-cpu",
+    "host",
+    "-smp",
+    "4",
+    "-m",
+    "4096",
+    "-drive",
+    "file=/state/guest.qcow2,if=virtio,format=qcow2",
+    "-drive",
+    "file=/seed/seed.iso,format=raw,media=cdrom,readonly=on",
+    "-device",
+    "virtio-vga",
+    "-device",
+    "virtio-net-pci,netdev=n1,mac=52:54:00:26:10:24",
+    "-netdev",
+    "user,id=n1,hostfwd=tcp:127.0.0.1:2222-:22",
+    "-virtfs",
+    "local,path=/input,mount_tag=inkecho_input,security_model=none,readonly=on,id=inshare",
+    "-virtfs",
+    "local,path=/output,mount_tag=inkecho_output,security_model=none,id=outshare",
+    "-serial",
+    "file:/output/serial.log",
+    "-display",
+    "none",
+    "-monitor",
+    "none"
+  ]
+}

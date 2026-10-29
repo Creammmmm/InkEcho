@@ -1,0 +1,12 @@
+InkEcho-0.10.2-x86_64.AppImage: OK
+Traceback (most recent call last):
+  File "<stdin>", line 6, in <module>
+  File "/usr/lib/python3.12/zipfile/__init__.py", line 1854, in write
+    zinfo = ZipInfo.from_file(filename, arcname,
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/zipfile/__init__.py", line 589, in from_file
+    zinfo = cls(arcname, date_time)
+            ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/zipfile/__init__.py", line 414, in __init__
+    raise ValueError('ZIP does not support timestamps before 1980')
+ValueError: ZIP does not support timestamps before 1980

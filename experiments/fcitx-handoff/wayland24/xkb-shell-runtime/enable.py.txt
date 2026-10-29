@@ -1,0 +1,7 @@
+import gi
+from gi.repository import Gio
+s=Gio.Settings.new('org.gnome.shell')
+print('before',s.get_strv('enabled-extensions'),s.get_boolean('disable-user-extensions'))
+s.set_strv('enabled-extensions',s.get_strv('enabled-extensions')+['inkecho-xkb-probe@local.invalid'])
+s.set_boolean('disable-user-extensions',False)
+print('after',s.get_strv('enabled-extensions'),s.get_boolean('disable-user-extensions'))

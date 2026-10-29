@@ -1,0 +1,5 @@
+sources=[('xkb', 'us')]
+extensions=@as []
+disabled=false
+engine=xkb:us::eng
+bus-owner=(false,)

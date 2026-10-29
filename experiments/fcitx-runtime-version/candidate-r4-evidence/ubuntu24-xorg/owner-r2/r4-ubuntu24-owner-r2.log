@@ -1,0 +1,5 @@
+/tmp/inkecho-r4-owner-r2/InkEcho-0.10.2-x86_64.AppImage: OK
+ec6fa4434a31ebd94222777d4f63d9755952d08acb2c46ab4b92b8e5799322f9  /tmp/inkecho-r4-owner-r2/squashfs-root/packages/inkecho/platform/fcitx5.py
+已安装输入桥；运行状态需通过输入服务检查确认。
+{"mode": "owner", "exit": 0, "a": "天", "b": "", "triggered": true, "switch_confirmed": false, "focus_in_b": false, "resumed": false, "fcitx_b_context_proved_by_receipt": false, "stdout": [{"ready": true}, {"events": [["backend", "fcitx"], ["fcitx_insert_started"], ["commit_timeout", 3.0], ["commit_status", 1], ["owner_replaced", "RequestNameReply.PRIMARY_OWNER", ":1.179"], ["fcitx_error", "owner_changed", 1, null, false], ["diagnostic", "partial_input_failed"], ["problem", "部分文字已尝试输入，剩余内容未能完成，请检查目标位置。"], ["finished", "failed"]], "outcome": "failed", "origin": "/tmp/inkecho-r4-owner-r2/squashfs-root/packages/inkecho/app.py"}], "stderr": "", "events": [["first_arrival", 387.31956446]], "passed": true}
+未发现经过校验的输入桥；可能尚未安装。

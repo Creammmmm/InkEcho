@@ -1,0 +1,17 @@
+import json,sys,gi
+gi.require_version('Atspi','2.0');gi.require_version('IBus','1.0')
+from gi.repository import Atspi,IBus
+pid=int(sys.argv[1]); Atspi.init(); desk=Atspi.get_desktop(0); found=[]
+def walk(node,depth=0):
+ if depth>16:return
+ states=node.get_state_set()
+ if states.contains(Atspi.StateType.FOCUSED):
+  found.append({'role':node.get_role_name(),'editable':states.contains(Atspi.StateType.EDITABLE),'focused':True})
+ for i in range(min(node.get_child_count(),100)):
+  child=node.get_child_at_index(i)
+  if child:walk(child,depth+1)
+for i in range(desk.get_child_count()):
+ app=desk.get_child_at_index(i)
+ if app and app.get_process_id()==pid:walk(app)
+IBus.init(); bus=IBus.Bus.new(); path=bus.current_input_context() if bus.is_connected() else None
+print(json.dumps({'owned_pid':pid,'focused_roles':found,'current_ibus_path':path}),flush=True)

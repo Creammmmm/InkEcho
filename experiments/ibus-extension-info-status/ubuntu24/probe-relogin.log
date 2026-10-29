@@ -1,0 +1,20 @@
+SESSION  UID USER    SEAT  TTY  STATE  IDLE SINCE
+      5 1000 inkecho seat0 tty2 active no   -
+      6 1000 inkecho -     -    active no   -
+
+2 sessions listed.
+ENABLE
+INFO_RC 0 INFO_BEGIN
+inkecho-ibus-v2-prototype@local.invalid
+  Name: InkEcho IBus v2 isolated prototype
+  Description: Unintegrated isolated experiment; not production supported
+  Path: /home/inkecho/.local/share/gnome-shell/extensions/inkecho-ibus-v2-prototype@local.invalid
+  Enabled: Yes
+  State: ACTIVE
+INFO_END
+STATUS_VALID 扩展显示正在运行，安装文件已校验；运行代码和输入框兼容性尚未确认。
+STATUS_MODIFIED 扩展文件未通过校验；无法确认当前安装的是 InkEcho 扩展。
+STATUS_RESTORED 扩展显示正在运行，安装文件已校验；运行代码和输入框兼容性尚未确认。
+STATUS_MISSING_PATH_SIMULATED 扩展文件未通过校验；无法确认当前安装的是 InkEcho 扩展。
+UNINSTALL_RC 0 UNINSTALL_ERR 
+STATUS_ABSENT 未发现扩展或扩展服务不可用；安装后可能需要重新登录。

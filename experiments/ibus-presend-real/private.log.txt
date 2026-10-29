@@ -1,0 +1,44 @@
+MODE=none
+{"mode": "none", "owner": ":1.0", "invalid_capability": "rejected", "foreign_sender": "rejected", "replies": ["no_service"], "cancelled": "rejected", "passed": true}
+ready
+
+(gjs:522325): Gjs-WARNING **: 07:53:29.565: Gio.UnixInputStream has been moved to a separate platform-specific library. Please update your code to use GioUnix.InputStream instead.
+0 get() ["resource:///org/gnome/gjs/modules/core/_common.js":190:42]
+1 consumeCapability() ["file:///tmp/ibus-presend-real/capability.js":25:9]
+2 Service/this.gate<() ["file:///tmp/ibus-presend-real/private-service.js":9:163]
+3 begin() ["file:///tmp/ibus-presend-real/gate.js":5:69]
+4 BeginAsync() ["file:///tmp/ibus-presend-real/private-service.js":10:76]
+5 _handleMethodCall() ["resource:///org/gnome/gjs/modules/core/overrides/Gio.js":407:31]
+6 _wrapJSObject/<() ["resource:///org/gnome/gjs/modules/core/overrides/Gio.js":448:34]
+7 <TOP LEVEL> ["file:///tmp/ibus-presend-real/private-service.js":16:139]
+
+MODE=partial
+{"mode": "partial", "owner": ":1.3", "invalid_capability": "rejected", "foreign_sender": "rejected", "replies": ["attempted", "partial_no_service"], "cancelled": "rejected", "passed": true}
+ready
+
+(gjs:522345): Gjs-WARNING **: 07:53:29.698: Gio.UnixInputStream has been moved to a separate platform-specific library. Please update your code to use GioUnix.InputStream instead.
+0 get() ["resource:///org/gnome/gjs/modules/core/_common.js":190:42]
+1 consumeCapability() ["file:///tmp/ibus-presend-real/capability.js":25:9]
+2 Service/this.gate<() ["file:///tmp/ibus-presend-real/private-service.js":9:163]
+3 begin() ["file:///tmp/ibus-presend-real/gate.js":5:69]
+4 BeginAsync() ["file:///tmp/ibus-presend-real/private-service.js":10:76]
+5 _handleMethodCall() ["resource:///org/gnome/gjs/modules/core/overrides/Gio.js":407:31]
+6 _wrapJSObject/<() ["resource:///org/gnome/gjs/modules/core/overrides/Gio.js":448:34]
+7 <TOP LEVEL> ["file:///tmp/ibus-presend-real/private-service.js":16:139]
+
+dispatch=1
+MODE=lost
+{"mode": "lost", "owner": ":1.6", "invalid_capability": "rejected", "foreign_sender": "rejected", "replies": ["timeout_unknown"], "cancelled": "rejected", "passed": true}
+ready
+
+(gjs:522365): Gjs-WARNING **: 07:53:29.817: Gio.UnixInputStream has been moved to a separate platform-specific library. Please update your code to use GioUnix.InputStream instead.
+0 get() ["resource:///org/gnome/gjs/modules/core/_common.js":190:42]
+1 consumeCapability() ["file:///tmp/ibus-presend-real/capability.js":25:9]
+2 Service/this.gate<() ["file:///tmp/ibus-presend-real/private-service.js":9:163]
+3 begin() ["file:///tmp/ibus-presend-real/gate.js":5:69]
+4 BeginAsync() ["file:///tmp/ibus-presend-real/private-service.js":10:76]
+5 _handleMethodCall() ["resource:///org/gnome/gjs/modules/core/overrides/Gio.js":407:31]
+6 _wrapJSObject/<() ["resource:///org/gnome/gjs/modules/core/overrides/Gio.js":448:34]
+7 <TOP LEVEL> ["file:///tmp/ibus-presend-real/private-service.js":16:139]
+
+dispatch=1

@@ -1,0 +1,22 @@
+import GLib from 'gi://GLib';
+import Gio from 'gi://Gio';
+import {consumeCapability} from './capability.js';
+function require(condition, message) { if (!condition) throw new Error(message); }
+const root = GLib.getenv('XDG_RUNTIME_DIR');
+const token = 'a'.repeat(64);
+const name = 'cap-' + '1'.repeat(32);
+const path = `${root}/${name}`;
+GLib.file_set_contents(path, token);
+GLib.chmod(path, 0o600);
+require(!consumeCapability(name, 'b'.repeat(64)), 'wrong token');
+require(consumeCapability(name, token), 'valid consume');
+require(!consumeCapability(name, token), 'replay');
+require(GLib.file_test(`${root}/used-${name}`, GLib.FileTest.EXISTS), 'consumed preserved');
+GLib.file_set_contents(path, token);
+GLib.chmod(path, 0o600);
+require(!consumeCapability(name, token), 'must not overwrite consumed destination');
+require(GLib.file_test(path, GLib.FileTest.EXISTS), 'source retained on conflict');
+GLib.unlink(path);
+Gio.File.new_for_path(path).make_symbolic_link(`${root}/used-${name}`, null);
+require(!consumeCapability(name, token), 'symlink denied');
+print('GJS descriptor and no-replace move checks passed');

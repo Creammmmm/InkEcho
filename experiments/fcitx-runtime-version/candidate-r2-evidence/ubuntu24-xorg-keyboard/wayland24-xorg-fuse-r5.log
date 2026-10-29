@@ -1,0 +1,5 @@
+mount_process_alive=yes
+mountpoint=yes
+fuse.InkEcho-0.10.2-x86_64.AppImage
+app_run_present
+after_stop=unmounted

@@ -1,0 +1,6 @@
+/tmp/inkecho-r4-test/InkEcho-0.10.2-x86_64.AppImage: OK
+6e77884fec8d92ad5bceb6ff03ec29a6425b29b8c45b8dfabd2d939d93b103a8  /tmp/inkecho-r4-test/squashfs-root/packages/inkecho/platform/output_router.py
+50e4b782baf204c7bd817f470ad21d7365d9cc74cde8b7fa0e930bd3e3c3021b  /tmp/inkecho-r4-test/squashfs-root/packages/inkecho/app.py
+repeat_same_inode_mtime True
+已安装输入桥；运行状态需通过输入服务检查确认。
+{"mode": "owner", "exit": 0, "a": "风", "b": "", "triggered": true, "switch_confirmed": false, "focus_in_b": false, "resumed": false, "fcitx_b_context_proved_by_receipt": false, "stdout": [{"ready": true}, {"events": [["backend", "fcitx"], ["fcitx_insert_started"], ["commit_timeout", 3.0], ["commit_status", 1], ["owner_replaced", "RequestNameReply.PRIMARY_OWNER", ":1.136"], ["fcitx_error", "owner_changed", 1, null, false], ["diagnostic", "partial_input_failed"], ["problem", "部分文字已尝试输入，剩余内容未能完成，请检查目标位置。"], ["finished", "failed", 1]], "outcome": "failed", "origin": "/tmp/inkecho-r4-test/squashfs-root/packages/inkecho/app.py"}], "stderr": "", "events": [["first_arrival", 100.812079086]], "passed": true}

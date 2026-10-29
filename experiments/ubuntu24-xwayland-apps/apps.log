@@ -1,0 +1,15 @@
+Type=wayland
+Active=yes
+LockedHint=no
+222c017a4f9e10bf4d6422cf402a2b7ea57245adb267a4409cce87ca74551694  InkEcho.AppImage
+204b46020cc7ed2aa287488388071cdc91b720fd3518a483e57140f697d3273f  hybrid_keyboard.py
+inkecho-wayland-focus-probe@local.invalid
+  Name: InkEcho Wayland focus experiment
+  Description: Disposable isolated test only
+  Path: /home/inkecho/.local/share/gnome-shell/extensions/inkecho-wayland-focus-probe@local.invalid
+  Enabled: Yes
+  State: ACTIVE
+Chrome version: [1029/083233.067482:WARNING:chrome/app/chrome_main_linux.cc:84] Read channel stable from /tmp/inkecho-browser/chrome/CHROME_VERSION_EXTRA
+Google Chrome 154.0.8037.97 
+BROWSER=full
+{"mode": "full", "error": "initial_focus_missing", "chrome_exit": null, "events": []}

@@ -1,0 +1,10 @@
+import sys
+from pathlib import Path
+import gi
+gi.require_version('Gtk','3.0')
+from gi.repository import GLib,Gtk
+root=Path('/tmp/inkecho-shell-r16'); name=sys.argv[1]
+w=Gtk.Window(title='InkEcho isolated '+name); v=Gtk.Entry(); w.add(v)
+output=root/(name+'.txt'); output.write_text('')
+v.connect('changed',lambda e:output.write_text(e.get_text()))
+w.show_all(); v.grab_focus(); GLib.timeout_add_seconds(80,Gtk.main_quit); Gtk.main()

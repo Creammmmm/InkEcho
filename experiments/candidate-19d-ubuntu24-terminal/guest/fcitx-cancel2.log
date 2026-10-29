@@ -1,0 +1,6 @@
+/tmp/inkecho-r4-test/InkEcho-0.10.2-x86_64.AppImage: OK
+baf512df40aad6380a6a5672fb8026a2b361e4cff190fb78dbbf615c099989e9  /tmp/inkecho-r4-test/squashfs-root/packages/inkecho/platform/output_router.py
+b8ae00d086323dc3b18e0e66ce054147568290ca9843ac0620f794541487757d  /tmp/inkecho-r4-test/squashfs-root/packages/inkecho/app.py
+已安装输入桥；运行状态需通过输入服务检查确认。
+{"mode": "cancel", "exit": 0, "a": "风云", "b": "", "lengths": [2, 0], "exact": false, "prefix": true, "cancel_sent": true, "text_at_cancel": "风云", "raw_at_cancel": "e9a38ee4ba91", "signal_at": 275.857314612, "raw_final": "e9a38ee4ba91", "switched": false, "resumed": false, "stdout": "{\"ready\": true}\n{\"events\": [[\"backend\", \"fcitx\"], [\"fcitx_insert_started\"], [\"commit_timeout\", 3.0], [\"commit_started\", \"/inkecho\", 275.818873], [\"commit_reply\", \"/inkecho\", [1], 275.819882], [\"commit_status\", 1], [\"commit_timeout\", 3.0], [\"commit_started\", \"/inkecho\", 275.848345], [\"commit_reply\", \"/inkecho\", [1], 275.849764], [\"commit_status\", 1], [\"cancel_handler\", 275.857698, 1, null, 1], [\"finished\", \"cancelled\", 1]], \"outcome\": \"cancelled\", \"origin\": \"/tmp/inkecho-r4-test/squashfs-root/packages/inkecho/app.py\"}\n", "stderr": ""}
+未发现经过校验的输入桥；可能尚未安装。

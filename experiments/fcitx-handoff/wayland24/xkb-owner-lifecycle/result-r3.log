@@ -1,0 +1,10 @@
+focus True True initial-map (0, '8d6e352a7deb3fbd480e850ef5483374ea557ce0054caa6b0862988dedea983d', 'Warning:          Could not load keyboard geometry for :0\n                  BadName (named color or font does not exist)\n                  Resulting keymap file will not describe geometry\n')
+owner-acquire acquired contender-acquire busy contender-press not-owner owner-press sent
+before-change '甲' acquired-map (0, '6b926167287c9e4d632725adb1cffaedab033ac6d348438d4416716ffbc5d1f3', 'Warning:          Could not load keyboard geometry for :0\n                  BadName (named color or font does not exist)\n                  Resulting keymap file will not describe geometry\n')
+after-config-map (0, 'ded2a09c3a818e7722565c9b7b328b06fb04d8bd41ca526f41098cdb1b8a5d87', 'Warning:          Could not load keyboard geometry for :0\n                  BadName (named color or font does not exist)\n                  Resulting keymap file will not describe geometry\n')
+after-config owner-press not-owner new-owner-acquire acquired new-owner-press sent
+before-disconnect '甲甲' acquired-map-2 (0, 'b917e999c7191d95185aaa2fc9b668f8d84b5cade590cb662193629f0f935d95', 'Warning:          Could not load keyboard geometry for :0\n                  BadName (named color or font does not exist)\n                  Resulting keymap file will not describe geometry\n')
+after-owner-loss map (0, 'ded2a09c3a818e7722565c9b7b328b06fb04d8bd41ca526f41098cdb1b8a5d87', 'Warning:          Could not load keyboard geometry for :0\n                  BadName (named color or font does not exist)\n                  Resulting keymap file will not describe geometry\n')
+after-owner-loss acquire acquired press sent restore restored
+final '甲甲甲' restored-map (0, 'ded2a09c3a818e7722565c9b7b328b06fb04d8bd41ca526f41098cdb1b8a5d87', 'Warning:          Could not load keyboard geometry for :0\n                  BadName (named color or font does not exist)\n                  Resulting keymap file will not describe geometry\n')
+settings ['caps:escape']

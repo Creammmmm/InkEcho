@@ -1,0 +1,101 @@
+import json, os, signal, subprocess, sys, tempfile, time
+from pathlib import Path
+import gi
+gi.require_version('Gtk','3.0')
+from gi.repository import Gtk, GLib
+if os.environ.get('XDG_SESSION_TYPE') == 'x11':
+    gi.require_version('GdkX11','3.0')
+    from gi.repository import GdkX11
+mode=sys.argv[1]; text=os.environ.get('INK_TEST_TEXT','风云日月山川河海'*25)
+windows=[]; views=[]; proc=None; triggered=False; switch_confirmed=False; focus_in_b=False; resumed=False; events=[]
+for title in ('InkEcho owned target A','InkEcho owned target B'):
+    w=Gtk.Window(title=title); w.set_default_size(550,250)
+    v=Gtk.TextView(); w.add(v); windows.append(w); views.append(v)
+button_window=Gtk.Window(title='InkEcho no input target'); button=Gtk.Button(label='No text input'); button_window.add(button)
+windows[0].show_all(); windows[0].present(); views[0].grab_focus()
+def activate_first():
+    if os.environ.get('XDG_SESSION_TYPE') == 'x11' and windows[0].get_window():
+        subprocess.run(['xdotool','windowactivate','--sync',str(windows[0].get_window().get_xid())], timeout=3, check=False)
+        views[0].grab_focus()
+    return False
+GLib.timeout_add(200, activate_first)
+out=tempfile.TemporaryFile(mode='w+'); err=tempfile.TemporaryFile(mode='w+')
+def contents(v):
+    b=v.get_buffer(); a,z=b.get_bounds(); return b.get_text(a,z,True)
+def changed(_):
+    global triggered
+    if triggered or proc is None: return
+    triggered=True; events.append(['first_arrival',time.monotonic()])
+    if mode in ('switch','switch-ready'):
+        if mode=='switch-ready': os.kill(proc.pid, signal.SIGSTOP); events.append(['sender_stopped',time.monotonic()])
+        windows[1].show_all(); windows[1].present(); views[1].grab_focus()
+        if os.environ.get('XDG_SESSION_TYPE') == 'x11':
+            subprocess.Popen(['xdotool','windowactivate',str(windows[1].get_window().get_xid())])
+        GLib.timeout_add(20,check_focus)
+    elif mode=='gap':
+        button_window.show_all(); button_window.present(); button.grab_focus(); events.append(['no_input_presented',time.monotonic()]); GLib.timeout_add(80,focus_b)
+    elif mode=='cancel':
+        os.kill(proc.pid,signal.SIGUSR1)
+def focus_b():
+    windows[1].show_all(); windows[1].present(); views[1].grab_focus(); events.append(['focus_b_requested',time.monotonic()]); GLib.timeout_add(20,check_focus); return False
+def on_focus_b(_view, _event):
+    global focus_in_b
+    focus_in_b=True; events.append(['target_b_focus_in',time.monotonic()]); return False
+views[1].connect('focus-in-event', on_focus_b)
+def check_focus():
+    global switch_confirmed, resumed
+    if windows[1].is_active() and focus_in_b and views[1].has_focus():
+        switch_confirmed=True; events.append(['target_b_control_focused',time.monotonic()])
+        if mode=='switch-ready': GLib.timeout_add(200,resume_sender)
+        return False
+    return not proc or proc.poll() is None
+def resume_sender():
+    global resumed
+    if proc and proc.poll() is None and windows[1].is_active() and views[1].has_focus():
+        resumed=True; events.append(['sender_resumed',time.monotonic()]); os.kill(proc.pid,signal.SIGCONT)
+    return False
+views[0].get_buffer().connect('changed',changed)
+def launch():
+    global proc
+    if not windows[0].is_active():
+        print(json.dumps({'mode':mode,'error':'target_a_not_focused','view_focus':views[0].has_focus(),'x11_focus':subprocess.run(['xdotool','getwindowfocus','getwindowname'],capture_output=True,text=True).stdout.strip()}),flush=True); Gtk.main_quit(); return False
+    env=os.environ.copy();env.pop("XDG_DATA_HOME",None); root='/tmp/inkecho-owned-default-acceptance/squashfs-root'
+    env.update(PYTHONHOME=root+'/usr',PYTHONPATH=root+'/packages',LD_LIBRARY_PATH=root+'/usr/lib/inkecho',QT_QPA_PLATFORM='offscreen',GTK_IM_MODULE='fcitx')
+    proc=subprocess.Popen([root+'/usr/bin/python3','/tmp/inkecho-owned-default-acceptance/sender.py'],env=env,stdout=out,stderr=err)
+    GLib.timeout_add(50,poll); return False
+def poll():
+    if proc.poll() is None: return True
+    GLib.timeout_add(1300,finish); return False
+def finish():
+    a,b=map(contents,views); out.seek(0); err.seek(0); stdout=out.read(); stderr=err.read()
+    lines=[]
+    for line in stdout.splitlines():
+        try: lines.append(json.loads(line))
+        except ValueError: pass
+    report={'mode':mode,'exit':proc.returncode,'a':a,'b':b,'triggered':triggered,'switch_confirmed':switch_confirmed,'focus_in_b':focus_in_b,'resumed':resumed,'fcitx_b_context_proved_by_receipt':bool(b),'stdout':lines,'stderr':stderr[-5000:],'events':events,'target_im_environment':os.environ.get('GTK_IM_MODULE'),'fcitx_module_loaded':'im-fcitx5.so' in Path('/proc/self/maps').read_text(),'target_pid':os.getpid(),'display_backend':type(windows[0].get_display()).__name__,'wayland_display':os.environ.get('WAYLAND_DISPLAY')}
+    result=next((x for x in lines if 'events' in x),{})
+    events_out=result.get('events',[])
+    if os.environ.get('INK_TARGET_KIND')=='owner':
+        route=(['backend','fcitx'] in events_out and any(e[0]=='owner_replaced' for e in events_out) and any(e[:2]==['fcitx_error','owner_changed'] for e in events_out) and ['keyboard_insert_started'] not in events_out and sum(e==['commit_status',1] for e in events_out)==1)
+    elif os.environ.get('INK_TARGET_KIND')=='normal':
+        route=(['backend','fcitx'] in events_out and ['commit_status',1] in events_out and ['keyboard_insert_started'] not in events_out and not any(e[0]=='fcitx_error' for e in events_out))
+    else:
+        route=(['backend','fcitx'] in events_out and ['fcitx_error','no_target',0,0,False] in events_out and ['keyboard_insert_started'] in events_out and events_out.index(['fcitx_error','no_target',0,0,False]) < events_out.index(['keyboard_insert_started']))
+    ok=(proc.returncode==0 and route and triggered)
+    if mode in ('switch','switch-ready','gap'):
+        ok=ok and switch_confirmed and bool(b) and a+b==text
+        if mode=='gap': ok=ok and ['commit_status',3] in result.get('events',[])
+    elif mode=='owner': ok=ok and not b and len(a)==1 and text.startswith(a) and 'FAILED' in result.get('outcome','').upper()
+    elif mode=='full': ok=ok and not b and a==text and 'SUCCEEDED' in result.get('outcome','').upper()
+    else: ok=ok and not b and 0<len(a)<len(text) and text.startswith(a) and 'CANCELLED' in result.get('outcome','').upper()
+    report['passed']=ok
+    print(json.dumps(report,ensure_ascii=False),flush=True); Gtk.main_quit(); return False
+def activate_a():
+    if os.environ.get('XDG_SESSION_TYPE') == 'x11':
+        subprocess.run(['xdotool','windowactivate','--sync',str(windows[0].get_window().get_xid())], check=False, timeout=3)
+        views[0].grab_focus()
+    return False
+GLib.timeout_add(1000,activate_a); GLib.timeout_add(2000,launch); GLib.timeout_add_seconds(40,lambda:(print(json.dumps({'error':'timeout','mode':mode}),flush=True),Gtk.main_quit(),False)[-1]); Gtk.main()
+if proc and proc.poll() is None:
+    if mode=='switch-ready': os.kill(proc.pid,signal.SIGCONT)
+    proc.terminate(); proc.wait(timeout=3)

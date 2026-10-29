@@ -1,0 +1,14 @@
+# Candidate b2d: Ubuntu 24 Wayland GNOME Terminal
+
+AppImage 0.10.2 SHA-256 `b2d47dee9295dadbbbff644e0f9553875ef7ac8971a97c56eec7de68d603c5d2` was checked in a network-isolated Ubuntu 24.04.5 QEMU snapshot with original disk/base/seed and input share read-only. The desktop session was Wayland, active and unlocked; GNOME Shell 46.0, Fcitx 5.1.7 and GNOME Terminal 3.52.0-1ubuntu2. The terminal server's own native Wayland/XWayland backend was not established. The initial guest session was changed from X11 to Wayland only in its disposable snapshot. The candidate was extracted without source overlays. No real user data, host desktop or input method, real credentials, clipboard, actual microphone or cloud API were used; the Fcitx configuration and test credential were disposable, and the test SSH key remained on the host.
+
+The real GNOME Terminal launched a custom raw-mode Python reader, not a shell. Packaged Session sent a synthetic 200-character Chinese transcript using stub recording and transcription. Each Fcitx Commit reply was artificially delayed 25 ms by the probe, so these samples do not measure typing speed. Both original logs are retained:
+
+- First run `terminal.log`: full sample received all 200; controlled switch gave 1 and 199 characters. The cancel sample did not run because the terminal reader did not become ready (`terminal_a_not_ready`); do not count it as a pass or product failure.
+- Same guest retry `terminal-retry.log`: full sample received all 200 and succeeded. Cancellation sent SIGUSR1 after first receipt; the reader contained the same one-character prefix at cancellation and completion and the outcome was cancelled. Controlled switch stopped the sender on first arrival, opened a second terminal and waited for its reader plus two seconds before resuming; the readers received 1 and 199 characters respectively, concatenating exactly, and the task succeeded.
+
+The second terminal's focus was not separately verified; actual receipt demonstrates only this sample. The cancellation is not a physical Esc test and cannot prove already queued messages are recallable. Fcitx Commit success is an attempted delivery, not a generic target acknowledgement. This does not test real speech, providers, browser, actual shell/CLI programs, unpaused focus races, Ubuntu 26 or full package/release acceptance.
+
+To reproduce only in a comparable isolated guest, copy the exact AppImage and probe files to a read-only 9p share tagged `inkecho_input`, removing `.txt` from archived filenames; run `guest-run.sh` after confirming the active unlocked Wayland session. The scripts start a private Fcitx and alter guest-only session environment; never run against a real desktop. Guest provisioning is a prerequisite.
+
+The guest powered off normally, Docker wait returned 0 and the container was removed (`shutdown.log`).

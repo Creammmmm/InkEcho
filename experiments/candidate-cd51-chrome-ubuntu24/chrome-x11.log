@@ -1,0 +1,15 @@
+Type=wayland
+State=active
+[1028/193444.450556:WARNING:chrome/app/chrome_main_linux.cc:84] Read channel stable from /tmp/inkecho-browser/chrome/CHROME_VERSION_EXTRA
+Google Chrome 154.0.8037.97 
+/tmp/inkecho-r4-test/InkEcho-0.10.2-x86_64.AppImage: OK
+6056b6073b2fc7a8564f61f01cf6db2c4c35ad15fef41ba21672c5508630d58b  /tmp/inkecho-r4-test/squashfs-root/packages/inkecho/platform/output_router.py
+af654c3a436a05a1c10cb3450ec0af851e6b74414e502c2b12425149a85d4605  /tmp/inkecho-r4-test/squashfs-root/packages/inkecho/app.py
+已安装输入桥；运行状态需通过输入服务检查确认。
+{"mode": "full", "error": "initial_focus_missing", "focus": []}
+browser_timeout_or_error=full
+{"mode": "cancel", "error": "initial_focus_missing", "focus": []}
+browser_timeout_or_error=cancel
+{"mode": "switch", "error": "initial_focus_missing", "focus": []}
+browser_timeout_or_error=switch
+未发现经过校验的输入桥；可能尚未安装。

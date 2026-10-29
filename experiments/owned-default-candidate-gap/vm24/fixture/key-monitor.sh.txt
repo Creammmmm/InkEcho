@@ -1,0 +1,14 @@
+set -eu
+umask 077
+root=/tmp/inkecho-owned-default-acceptance
+cp /mnt/input/fcitx-auto/sender.py "$root/sender.py"
+cp /mnt/input/fcitx-auto/target-monitor.py "$root/target-focus.py"
+export APPDIR="$root/squashfs-root" DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus XDG_RUNTIME_DIR=/run/user/1000 DISPLAY=:0 XDG_SESSION_TYPE=x11 XDG_CURRENT_DESKTOP=ubuntu:GNOME GDK_BACKEND=x11
+export XAUTHORITY="$(systemctl --user show-environment | sed -n 's/^XAUTHORITY=//p')"
+
+export GTK_IM_MODULE=gtk-im-context-simple INK_TARGET_KIND=keyboard INK_PROBE_MODE=keyboard INK_TEST_TEXT='甲Ωcafé
+乙。'
+mkdir -p /mnt/output/key-monitor24
+for mode in full cancel; do
+ /usr/bin/python3 "$root/target-focus.py" "$mode" > /mnt/output/key-monitor24/$mode.jsonl 2>&1
+done

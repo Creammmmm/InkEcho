@@ -1,0 +1,29 @@
+Type=wayland
+Active=yes
+LockedHint=no
+InkEcho.AppImage: OK
+Original candidate, no source overlay
+inkecho-wayland-focus-probe@local.invalid
+  Name: InkEcho Wayland focus experiment
+  Description: Disposable isolated test only
+  Path: /home/inkecho/.local/share/gnome-shell/extensions/inkecho-wayland-focus-probe@local.invalid
+  Enabled: Yes
+  State: ACTIVE
+# GNOME Terminal 3.52.0 using VTE 0.76.0 +BIDI +GNUTLS +ICU +SYSTEMD
+/tmp/xw-tty-stderr:
+ACTIVATE
+(true,)
+(false, '/org/freedesktop/IBus/InputContext_2', 'InkEcho isolated terminal')
+{"raw_x_focus": 8388622, "active_window": 8388621, "selected_focus": 8388622, "code": "ok"}
+TERMINAL=full
+authorized True xonly True
+completed 4
+terminal_bytes= b'\xe9\xa3\x8e\xe4\xba\x91\xce\xa9\xe4\xb8\xad'
+ACTIVATE
+(true,)
+(false, '/org/freedesktop/IBus/InputContext_2', 'InkEcho isolated terminal')
+{"raw_x_focus": 8388622, "active_window": 8388621, "selected_focus": 8388622, "code": "ok"}
+TERMINAL=cancel
+authorized True xonly True
+error KeyboardError input_cancelled input_cancelled
+terminal_bytes= b'\xe9\xa3\x8e\xe4\xba\x91\xce\xa9\xe4\xb8\xad\xe9\xa3\x8e'

@@ -1,0 +1,32 @@
+{
+  "scope": "actual GTK fcitx frontend/private bus; fixed owned controls only",
+  "passed": false,
+  "checks": [],
+  "environment": {
+    "DISPLAY": ":0",
+    "WAYLAND_DISPLAY": null,
+    "XDG_SESSION_TYPE": "x11",
+    "XDG_RUNTIME_DIR": "/run/user/1000"
+  },
+  "daemon_pid": 2878,
+  "A": {
+    "pid": 2879,
+    "start": "24148",
+    "xid": 10485763,
+    "display": "X11Display",
+    "module": "fcitx",
+    "fcitx_module_loaded": true,
+    "expires_at": 481.742283346,
+    "public_text_only": true
+  },
+  "B": {
+    "pid": 2897,
+    "start": "24196",
+    "xid": 39845891,
+    "display": "X11Display",
+    "module": "fcitx",
+    "fcitx_module_loaded": true,
+    "expires_at": 482.03715645,
+    "public_text_only": true
+  }
+}

@@ -1,0 +1,16 @@
+set -u
+export XDG_RUNTIME_DIR=/run/user/1000 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus DISPLAY=:0 WAYLAND_DISPLAY=wayland-0 XDG_SESSION_TYPE=wayland XDG_CURRENT_DESKTOP=ubuntu:GNOME
+export XAUTHORITY="$(systemctl --user show-environment | sed -n 's/^XAUTHORITY=//p')"
+loginctl show-session 4 -p Type -p State
+/usr/bin/ibus engine 2>&1 | sed 's/^/engine_before /'
+gsettings get org.gnome.desktop.input-sources xkb-options
+xkbcomp -xkb "$DISPLAY" /mnt/inkecho-output/before.xkb 2>/mnt/inkecho-output/xkb-before.err
+sha256sum /mnt/inkecho-output/before.xkb
+GDK_BACKEND=wayland /usr/bin/python3 /tmp/inkecho-atspi-test/target.py
+xkbcomp -xkb "$DISPLAY" /mnt/inkecho-output/middle.xkb 2>/mnt/inkecho-output/xkb-middle.err
+sha256sum /mnt/inkecho-output/middle.xkb
+GDK_BACKEND=x11 /usr/bin/python3 /tmp/inkecho-atspi-test/target.py
+xkbcomp -xkb "$DISPLAY" /mnt/inkecho-output/after.xkb 2>/mnt/inkecho-output/xkb-after.err
+sha256sum /mnt/inkecho-output/after.xkb
+/usr/bin/ibus engine 2>&1 | sed 's/^/engine_after /'
+gsettings get org.gnome.desktop.input-sources xkb-options

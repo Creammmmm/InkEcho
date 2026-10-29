@@ -1,0 +1,17 @@
+usage: __main__.py [-h] [--show | --toggle | --cancel | --quit | --background]
+                   [--config-dir CONFIG_DIR] [--data-dir DATA_DIR]
+                   [--screenshot-dir SCREENSHOT_DIR] [--quit-after QUIT_AFTER]
+
+InkEcho Linux voice input
+
+options:
+  -h, --help            show this help message and exit
+  --show
+  --toggle
+  --cancel
+  --quit
+  --background
+  --config-dir CONFIG_DIR
+  --data-dir DATA_DIR
+  --screenshot-dir SCREENSHOT_DIR
+  --quit-after QUIT_AFTER

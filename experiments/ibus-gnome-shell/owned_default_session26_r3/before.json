@@ -1,0 +1,7 @@
+{
+  "enabled-extensions": "@as []",
+  "disabled-extensions": "['inkecho-ibus-probe@local.invalid', 'inkecho-ibus-candidate@local.invalid', 'inkecho-ibus-v2-prototype@local.invalid', 'inkecho-wayland-focus-probe@local.invalid', 'inkecho-direct-focus-probe@local.invalid', 'inkecho-focus-object-probe@local.invalid', 'inkecho-ibus-auto-v3-probe@local.invalid', 'inkecho-ime-order-probe@local.invalid', 'inkecho-ime-epoch-probe@local.invalid', 'inkecho-ibus-v3-candidate@local.invalid', 'inkecho-v3-fixture@local.invalid']",
+  "disable-user-extensions": "false",
+  "idle-delay": "uint32 300",
+  "lock-enabled": "true"
+}

@@ -1,0 +1,1 @@
+Initial mounting attempt before tests failed: /mnt/input and /mnt/output did not exist in fresh26 child overlay. Both mount commands returned mount point does not exist; output redirection also failed. No candidate/daemon/target was started. Corrected only guest mountpoint preparation with sudo mkdir -p and retried same live VM.

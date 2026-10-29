@@ -1,0 +1,171 @@
+{
+  "24": {
+    "keyboard-normal": {
+      "task_result": {
+        "audio_seconds": 1.384875,
+        "characters": 22,
+        "outcome": "succeeded",
+        "polishing_calls": 1,
+        "polishing_seconds": 0.5554759159999776,
+        "transcription_calls": 1,
+        "transcription_seconds": 1.0808960189999937
+      },
+      "diagnostics": [],
+      "cleanup_errors": [],
+      "defaults_unchanged": true,
+      "mapping_restored": true,
+      "receiver": {
+        "text_exact": true,
+        "no_late_text": true,
+        "old_target_untouched": true,
+        "received_codepoints": [
+          20320,
+          22909,
+          32,
+          73,
+          110,
+          107,
+          69,
+          99,
+          104,
+          111,
+          65292,
+          99,
+          97,
+          102,
+          233,
+          32,
+          937,
+          10,
+          31532,
+          20108,
+          34892,
+          12290
+        ],
+        "pipeline_exit": 0,
+        "passed": true
+      },
+      "package_imports": true
+    },
+    "keyboard-cancel-after-first": {
+      "task_result": {
+        "audio_seconds": 1.3635,
+        "characters": 0,
+        "outcome": "cancelled",
+        "polishing_calls": 1,
+        "transcription_calls": 1,
+        "transcription_seconds": 1.0729110160000062
+      },
+      "diagnostics": [],
+      "cleanup_errors": [],
+      "defaults_unchanged": true,
+      "mapping_restored": true,
+      "receiver": {
+        "text_exact": true,
+        "no_late_text": true,
+        "old_target_untouched": true,
+        "received_codepoints": [
+          20320
+        ],
+        "pipeline_exit": 0,
+        "passed": true
+      },
+      "package_imports": true
+    },
+    "http_asr": {
+      "passed": true,
+      "wire_wav_exact": true,
+      "server_handlers_remaining": 0
+    },
+    "container_final": {
+      "Status": "exited",
+      "Running": false,
+      "ExitCode": 0,
+      "OOMKilled": false
+    }
+  },
+  "26": {
+    "keyboard-normal": {
+      "task_result": {
+        "audio_seconds": 1.299625,
+        "characters": 22,
+        "outcome": "succeeded",
+        "polishing_calls": 1,
+        "polishing_seconds": 0.5289549670000042,
+        "transcription_calls": 1,
+        "transcription_seconds": 1.0325253070000144
+      },
+      "diagnostics": [],
+      "cleanup_errors": [],
+      "defaults_unchanged": true,
+      "mapping_restored": true,
+      "receiver": {
+        "text_exact": true,
+        "no_late_text": true,
+        "received_codepoints": [
+          20320,
+          22909,
+          32,
+          73,
+          110,
+          107,
+          69,
+          99,
+          104,
+          111,
+          65292,
+          99,
+          97,
+          102,
+          233,
+          32,
+          937,
+          10,
+          31532,
+          20108,
+          34892,
+          12290
+        ],
+        "pipeline_exit": 0,
+        "passed": true
+      },
+      "package_imports": true
+    },
+    "keyboard-cancel-after-first": {
+      "task_result": {
+        "audio_seconds": 1.299625,
+        "characters": 0,
+        "outcome": "cancelled",
+        "polishing_calls": 1,
+        "transcription_calls": 1,
+        "transcription_seconds": 1.034754807000013
+      },
+      "diagnostics": [],
+      "cleanup_errors": [],
+      "defaults_unchanged": true,
+      "mapping_restored": true,
+      "receiver": {
+        "text_exact": true,
+        "no_late_text": true,
+        "received_codepoints": [
+          20320
+        ],
+        "pipeline_exit": 0,
+        "passed": true
+      },
+      "package_imports": true
+    },
+    "http_asr": {
+      "passed": true,
+      "wire_wav_exact": true,
+      "server_handlers_remaining": 0
+    },
+    "container_final": {
+      "Status": "exited",
+      "Running": false,
+      "ExitCode": 0,
+      "OOMKilled": false
+    }
+  },
+  "artifact_sha256": "42118031876729529974e6c20d746638d5d09611f4bb34b4ae189fb4717ada7b"
+}

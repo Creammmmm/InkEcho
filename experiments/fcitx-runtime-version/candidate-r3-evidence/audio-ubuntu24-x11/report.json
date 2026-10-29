@@ -1,0 +1,226 @@
+{
+  "public_sample": "本地完整链路测试。",
+  "events": [],
+  "import_root": "/tmp/inkecho-audio-fcitx/squashfs-root/packages",
+  "package_imports": true,
+  "case": "normal",
+  "target_scope": "isolated own GTK fcitx input target",
+  "factory_type": "OutputRouter",
+  "origins_before": {
+    "inkecho": {
+      "path": "/tmp/inkecho-audio-fcitx/squashfs-root/packages/inkecho/__init__.py",
+      "sha256": "4a56d79a7c4cbbd7fe47723e8d49ba250e6342796c8e883db1cf3d7e21409a53"
+    },
+    "inkecho.audio": {
+      "path": "/tmp/inkecho-audio-fcitx/squashfs-root/packages/inkecho/audio.py",
+      "sha256": "7a7c52be4465858476f0b85e12832fa6846aed0f1355ab1bb98efbe1febfdd53"
+    },
+    "inkecho.config": {
+      "path": "/tmp/inkecho-audio-fcitx/squashfs-root/packages/inkecho/config.py",
+      "sha256": "2a7613a100f3029d51faa1619a37f39efa5b2e4d64dd33708bc265d68891366d"
+    },
+    "inkecho.core": {
+      "path": "/tmp/inkecho-audio-fcitx/squashfs-root/packages/inkecho/core.py",
+      "sha256": "0bc3cd55b7c91001eb55950543488d7d9cf8b21cfa8caf59fa36975930d348c6"
+    },
+    "inkecho.performance": {
+      "path": "/tmp/inkecho-audio-fcitx/squashfs-root/packages/inkecho/performance.py",
+      "sha256": "4957fe5e2ed956be3b238387f0b31eaac34fcfb772b524dde244bf38db7167cb"
+    },
+    "inkecho.platform.output_pacing": {
+      "path": "/tmp/inkecho-audio-fcitx/squashfs-root/packages/inkecho/platform/output_pacing.py",
+      "sha256": "7d74ae4f5bdc343f2ca65d523c09849c05fe0d63c00a01f51a18478c0f18d13e"
+    },
+    "inkecho.platform.keyboard": {
+      "path": "/tmp/inkecho-audio-fcitx/squashfs-root/packages/inkecho/platform/keyboard.py",
+      "sha256": "6cb115b287231c4f4025d286c8dd69af329fb9161254674179f2cc3f82cb571b"
+    },
+    "inkecho.platform.fcitx5_capability": {
+      "path": "/tmp/inkecho-audio-fcitx/squashfs-root/packages/inkecho/platform/fcitx5_capability.py",
+      "sha256": "6bdbe4337547b929010fa3f654892138a58e14f5cf964ddb7629bdefc07850c5"
+    },
+    "inkecho.platform.fcitx5": {
+      "path": "/tmp/inkecho-audio-fcitx/squashfs-root/packages/inkecho/platform/fcitx5.py",
+      "sha256": "bf07c2476489590ba56f6ea20d5c65dea15b7f410394bf0efc443806856cfee1"
+    },
+    "inkecho.platform.framework_detection": {
+      "path": "/tmp/inkecho-audio-fcitx/squashfs-root/packages/inkecho/platform/framework_detection.py",
+      "sha256": "6e1edfdeb5df82900749934eb4fc3e77306817af7565e1cb9681b4126a8b6db6"
+    },
+    "inkecho.platform.ibus_lifecycle": {
+      "path": "/tmp/inkecho-audio-fcitx/squashfs-root/packages/inkecho/platform/ibus_lifecycle.py",
+      "sha256": "f2345bef05a6a030076252456dc159120973660a8e0b172ef6582933454c1355"
+    },
+    "inkecho.platform.ibus": {
+      "path": "/tmp/inkecho-audio-fcitx/squashfs-root/packages/inkecho/platform/ibus.py",
+      "sha256": "a6a7e19984fc5dabb43bca9ee844a32beaf88997fe6078fa777f0df2fe5f2ac5"
+    },
+    "inkecho.text_normalization": {
+      "path": "/tmp/inkecho-audio-fcitx/squashfs-root/packages/inkecho/text_normalization.py",
+      "sha256": "81812f2c6157f310ddf4f14bbccb9afa165e7e001fa08497a74053551ff27c32"
+    },
+    "inkecho.platform.output_router": {
+      "path": "/tmp/inkecho-audio-fcitx/squashfs-root/packages/inkecho/platform/output_router.py",
+      "sha256": "bf253079c826b80725a14ca9a8ed726a40e40e45aa00286937e02bac01cf2613"
+    },
+    "inkecho.platform.wayland_keyboard": {
+      "path": "/tmp/inkecho-audio-fcitx/squashfs-root/packages/inkecho/platform/wayland_keyboard.py",
+      "sha256": "bd76f5d8bb972fce9a7c3bd0dcbfc44fc61f128ab3e6b27bbe7415da4eff29bf"
+    },
+    "inkecho.provider_catalog": {
+      "path": "/tmp/inkecho-audio-fcitx/squashfs-root/packages/inkecho/provider_catalog.py",
+      "sha256": "79ff7b639c9b91df6697edef433bdfa40eb16fe2d1207722325a231759038dc6"
+    },
+    "inkecho.providers": {
+      "path": "/tmp/inkecho-audio-fcitx/squashfs-root/packages/inkecho/providers.py",
+      "sha256": "0e4015a5e5b3a7793e47e48f0f14399933c5fdd352411cc9b3d2aa87f6419867"
+    },
+    "inkecho.realtime": {
+      "path": "/tmp/inkecho-audio-fcitx/squashfs-root/packages/inkecho/realtime.py",
+      "sha256": "c9a997a59e250e1938e4478e9a125cca25d68665d3607b7d54dd8c31f78e31da"
+    },
+    "inkecho.security": {
+      "path": "/tmp/inkecho-audio-fcitx/squashfs-root/packages/inkecho/security.py",
+      "sha256": "be28a62da5ae8c38456b60bfb62a3ea8692bddbbcf07ce8584edd43b07141219"
+    },
+    "inkecho.streaming_output": {
+      "path": "/tmp/inkecho-audio-fcitx/squashfs-root/packages/inkecho/streaming_output.py",
+      "sha256": "147fff1ed12852c83a34caca13368162a2dd5b7047ef7fcb41c9b249d911cdfd"
+    },
+    "inkecho.app": {
+      "path": "/tmp/inkecho-audio-fcitx/squashfs-root/packages/inkecho/app.py",
+      "sha256": "9169e22b43dcbceeb64cae2b5c78a977380d7c6c45c4d5cea8da6aee32e7913d"
+    },
+    "inkecho.runtime": {
+      "path": "/tmp/inkecho-audio-fcitx/squashfs-root/packages/inkecho/runtime.py",
+      "sha256": "28508099d1811f27562b548c71403c85601bab2e961a68db77ca72692ea798bf"
+    }
+  },
+  "selected_backend": "fcitx",
+  "local_server_errors": [
+    "ConnectionClosedError"
+  ],
+  "clock_origin_monotonic": 299.922369927,
+  "timeline_monotonic": {
+    "toggle_requested": 299.922369927,
+    "credential_wait_started": 300.346285327,
+    "first_capture": 299.92797953,
+    "play_requested": 300.004522554,
+    "credential_wait_finished": 300.766712944,
+    "first_audio_on_wire": 300.355788956,
+    "stop_requested": 301.291484685,
+    "final_asr": 301.41858208,
+    "polishing_request": 301.453904184,
+    "polishing_first_delta": 301.532719085,
+    "polishing_full_text": 301.953821463
+  },
+  "defaults_unchanged": true,
+  "origins_after": {
+    "inkecho": {
+      "path": "/tmp/inkecho-audio-fcitx/squashfs-root/packages/inkecho/__init__.py",
+      "sha256": "4a56d79a7c4cbbd7fe47723e8d49ba250e6342796c8e883db1cf3d7e21409a53"
+    },
+    "inkecho.audio": {
+      "path": "/tmp/inkecho-audio-fcitx/squashfs-root/packages/inkecho/audio.py",
+      "sha256": "7a7c52be4465858476f0b85e12832fa6846aed0f1355ab1bb98efbe1febfdd53"
+    },
+    "inkecho.config": {
+      "path": "/tmp/inkecho-audio-fcitx/squashfs-root/packages/inkecho/config.py",
+      "sha256": "2a7613a100f3029d51faa1619a37f39efa5b2e4d64dd33708bc265d68891366d"
+    },
+    "inkecho.core": {
+      "path": "/tmp/inkecho-audio-fcitx/squashfs-root/packages/inkecho/core.py",
+      "sha256": "0bc3cd55b7c91001eb55950543488d7d9cf8b21cfa8caf59fa36975930d348c6"
+    },
+    "inkecho.performance": {
+      "path": "/tmp/inkecho-audio-fcitx/squashfs-root/packages/inkecho/performance.py",
+      "sha256": "4957fe5e2ed956be3b238387f0b31eaac34fcfb772b524dde244bf38db7167cb"
+    },
+    "inkecho.platform.output_pacing": {
+      "path": "/tmp/inkecho-audio-fcitx/squashfs-root/packages/inkecho/platform/output_pacing.py",
+      "sha256": "7d74ae4f5bdc343f2ca65d523c09849c05fe0d63c00a01f51a18478c0f18d13e"
+    },
+    "inkecho.platform.keyboard": {
+      "path": "/tmp/inkecho-audio-fcitx/squashfs-root/packages/inkecho/platform/keyboard.py",
+      "sha256": "6cb115b287231c4f4025d286c8dd69af329fb9161254674179f2cc3f82cb571b"
+    },
+    "inkecho.platform.fcitx5_capability": {
+      "path": "/tmp/inkecho-audio-fcitx/squashfs-root/packages/inkecho/platform/fcitx5_capability.py",
+      "sha256": "6bdbe4337547b929010fa3f654892138a58e14f5cf964ddb7629bdefc07850c5"
+    },
+    "inkecho.platform.fcitx5": {
+      "path": "/tmp/inkecho-audio-fcitx/squashfs-root/packages/inkecho/platform/fcitx5.py",
+      "sha256": "bf07c2476489590ba56f6ea20d5c65dea15b7f410394bf0efc443806856cfee1"
+    },
+    "inkecho.platform.framework_detection": {
+      "path": "/tmp/inkecho-audio-fcitx/squashfs-root/packages/inkecho/platform/framework_detection.py",
+      "sha256": "6e1edfdeb5df82900749934eb4fc3e77306817af7565e1cb9681b4126a8b6db6"
+    },
+    "inkecho.platform.ibus_lifecycle": {
+      "path": "/tmp/inkecho-audio-fcitx/squashfs-root/packages/inkecho/platform/ibus_lifecycle.py",
+      "sha256": "f2345bef05a6a030076252456dc159120973660a8e0b172ef6582933454c1355"
+    },
+    "inkecho.platform.ibus": {
+      "path": "/tmp/inkecho-audio-fcitx/squashfs-root/packages/inkecho/platform/ibus.py",
+      "sha256": "a6a7e19984fc5dabb43bca9ee844a32beaf88997fe6078fa777f0df2fe5f2ac5"
+    },
+    "inkecho.text_normalization": {
+      "path": "/tmp/inkecho-audio-fcitx/squashfs-root/packages/inkecho/text_normalization.py",
+      "sha256": "81812f2c6157f310ddf4f14bbccb9afa165e7e001fa08497a74053551ff27c32"
+    },
+    "inkecho.platform.output_router": {
+      "path": "/tmp/inkecho-audio-fcitx/squashfs-root/packages/inkecho/platform/output_router.py",
+      "sha256": "bf253079c826b80725a14ca9a8ed726a40e40e45aa00286937e02bac01cf2613"
+    },
+    "inkecho.platform.wayland_keyboard": {
+      "path": "/tmp/inkecho-audio-fcitx/squashfs-root/packages/inkecho/platform/wayland_keyboard.py",
+      "sha256": "bd76f5d8bb972fce9a7c3bd0dcbfc44fc61f128ab3e6b27bbe7415da4eff29bf"
+    },
+    "inkecho.provider_catalog": {
+      "path": "/tmp/inkecho-audio-fcitx/squashfs-root/packages/inkecho/provider_catalog.py",
+      "sha256": "79ff7b639c9b91df6697edef433bdfa40eb16fe2d1207722325a231759038dc6"
+    },
+    "inkecho.providers": {
+      "path": "/tmp/inkecho-audio-fcitx/squashfs-root/packages/inkecho/providers.py",
+      "sha256": "0e4015a5e5b3a7793e47e48f0f14399933c5fdd352411cc9b3d2aa87f6419867"
+    },
+    "inkecho.realtime": {
+      "path": "/tmp/inkecho-audio-fcitx/squashfs-root/packages/inkecho/realtime.py",
+      "sha256": "c9a997a59e250e1938e4478e9a125cca25d68665d3607b7d54dd8c31f78e31da"
+    },
+    "inkecho.security": {
+      "path": "/tmp/inkecho-audio-fcitx/squashfs-root/packages/inkecho/security.py",
+      "sha256": "be28a62da5ae8c38456b60bfb62a3ea8692bddbbcf07ce8584edd43b07141219"
+    },
+    "inkecho.streaming_output": {
+      "path": "/tmp/inkecho-audio-fcitx/squashfs-root/packages/inkecho/streaming_output.py",
+      "sha256": "147fff1ed12852c83a34caca13368162a2dd5b7047ef7fcb41c9b249d911cdfd"
+    },
+    "inkecho.app": {
+      "path": "/tmp/inkecho-audio-fcitx/squashfs-root/packages/inkecho/app.py",
+      "sha256": "9169e22b43dcbceeb64cae2b5c78a977380d7c6c45c4d5cea8da6aee32e7913d"
+    },
+    "inkecho.runtime": {
+      "path": "/tmp/inkecho-audio-fcitx/squashfs-root/packages/inkecho/runtime.py",
+      "sha256": "28508099d1811f27562b548c71403c85601bab2e961a68db77ca72692ea798bf"
+    },
+    "inkecho.asr_streaming": {
+      "path": "/tmp/inkecho-audio-fcitx/squashfs-root/packages/inkecho/asr_streaming.py",
+      "sha256": "a6426173cadd5a159679cf4032989190c11a33c98d57ab7bb59712fc8324a3f4"
+    },
+    "inkecho.platform.fcitx5_staging": {
+      "path": "/tmp/inkecho-audio-fcitx/squashfs-root/packages/inkecho/platform/fcitx5_staging.py",
+      "sha256": "7b259e99d5c78793d6cd23b42267ac01e23d3b0fff3f3e079fb40012c34d49c0"
+    },
+    "inkecho.platform.fcitx5_install": {
+      "path": "/tmp/inkecho-audio-fcitx/squashfs-root/packages/inkecho/platform/fcitx5_install.py",
+      "sha256": "1cf5b7ae2081ad0f915aba94949d85f965446ca29e31116dd7fdc31ff6dbec8d"
+    },
+    "inkecho.polish_stream": {
+      "path": "/tmp/inkecho-audio-fcitx/squashfs-root/packages/inkecho/polish_stream.py",
+      "sha256": "47588cd3b4e546e6a8f6eef1057208d32c49ce6cee564919e1f42660b10582dd"
+    }
+  },
+  "balanced": true,
+  "cleanup_errors": []
+}

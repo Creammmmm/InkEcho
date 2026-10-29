@@ -1,0 +1,11 @@
+import asyncio
+from dbus_next import Message
+from dbus_next.aio import MessageBus
+
+async def main():
+    bus = await MessageBus().connect()
+    reply = await bus.call(Message(destination='org.freedesktop.DBus', path='/org/freedesktop/DBus', interface='org.freedesktop.DBus', member='GetNameOwner', signature='s', body=['org.freedesktop.DBus']))
+    print('sender:', reply.sender, 'body:', reply.body)
+    bus.disconnect()
+
+asyncio.run(main())

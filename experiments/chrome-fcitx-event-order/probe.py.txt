@@ -1,0 +1,71 @@
+import http.server
+import json
+import pathlib
+import threading
+import urllib.request
+
+log = pathlib.Path('/home/lth/github/InkEcho/experiments/chrome-fcitx-route-ubuntu26/browser-xwayland.log')
+samples = []
+for line in log.read_text().splitlines():
+    try:
+        entry = json.loads(line)
+    except json.JSONDecodeError:
+        continue
+    if isinstance(entry, dict) and entry.get('mode') == 'switch':
+        samples.append(entry)
+assert len(samples) == 1
+sample = samples[0]
+events = [e for e in sample['focus'] if e[0] == 'b' and e[1] == 'input']
+assert [e[3] for e in events[-5:]] == [187, 188, 190, 191, 189]
+assert sample['lengths'] == [9, 189]
+assert len(events) == 191
+print('original: a=%s, b_input_events=%d, b_last5=%s, reported=%s' %
+      (sample['lengths'][0], len(events), [e[3] for e in events[-5:]], sample['lengths']))
+
+# Replicate original ThreadingHTTPServer handler's state assignment using
+# two isolated local threads. The original network I/O itself is not tested.
+older_waiting = threading.Event()
+release_older = threading.Event()
+state = {"value": "", "serial": -1}
+def handler(serial):
+    data = {"serial": serial, "value": "字" * serial}
+    if serial == 189:
+        older_waiting.set()
+        assert release_older.wait(5)
+    state["value"] = data["value"]
+    state["serial"] = data["serial"]
+old = threading.Thread(target=handler, args=(189,))
+old.start()
+assert older_waiting.wait(5)
+handler(191)
+assert len(state["value"]) == 191
+release_older.set()
+old.join(5)
+assert not old.is_alive()
+assert state["serial"] == 189 and len(state["value"]) == 189
+print("controlled handler fixture: newest observed=191, after delayed old snapshot=%d" % len(state["value"]))
+
+# Proposed fixture correction: compare each page-local event sequence inside
+# the same lock as the state update. Do not infer delivery to any application.
+older_waiting.clear()
+release_older.clear()
+state = {'value': '', 'serial': -1}
+lock = threading.Lock()
+def sequenced_handler(serial):
+    data = {'serial': serial, 'value': '字' * serial}
+    if serial == 189:
+        older_waiting.set()
+        assert release_older.wait(5)
+    with lock:
+        if data['serial'] > state['serial']:
+            state['value'] = data['value']
+            state['serial'] = data['serial']
+old = threading.Thread(target=sequenced_handler, args=(189,))
+old.start()
+assert older_waiting.wait(5)
+sequenced_handler(191)
+release_older.set()
+old.join(5)
+assert not old.is_alive()
+assert state['serial'] == 191 and len(state['value']) == 191
+print('sequenced handler: delayed old snapshot rejected, retained=%d' % len(state['value']))

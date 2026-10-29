@@ -1,0 +1,27 @@
+import http.server, threading, subprocess, os, sys, json, time, signal, tempfile, urllib.parse
+mode=sys.argv[1]; expected='风云日月山川河海'*25
+class State:
+ proc=None; chrome=None; values={'a':'','b':''}; focus=[]; cancel_sent=False; switched=False; resume=False
+state=State()
+class Handler(http.server.BaseHTTPRequestHandler):
+ def log_message(self,*args): pass
+ def do_GET(self):
+  name=urllib.parse.urlparse(self.path).path.strip('/') or 'a'; self.send_response(200); self.send_header('Content-Type','text/html'); self.end_headers(); self.wfile.write(('''<html><body><textarea id="target" autofocus rows="10" cols="60"></textarea><script>let n='%s'; let t=document.getElementById('target'); function send(type){fetch('/event',{method:'POST',body:JSON.stringify({name:n,type:type,value:t.value,focused:document.hasFocus()&&document.activeElement===t})});} window.addEventListener('focus',()=>{t.focus();send('focus')}); t.addEventListener('input',()=>{send('input'); if(n==='a' && '%s'==='switch' && !window.sw){window.sw=true; window.open('/b','other','width=550,height=250');}}); t.focus();setTimeout(()=>send('focus'),1000);</script></body></html>'''%(name,mode)).encode())
+ def do_POST(self):
+  data=json.loads(self.rfile.read(int(self.headers['Content-Length']))); self.send_response(204); self.end_headers(); name=data['name']; state.values[name]=data['value']; state.focus.append([name,data['type'],data['focused'],len(data['value']),time.monotonic()]);
+  if state.proc and name=='a' and data['type']=='input' and not state.cancel_sent and mode=='cancel': state.cancel_sent=True; os.kill(state.proc.pid,signal.SIGUSR1)
+  if state.proc and name=='a' and data['type']=='input' and not state.switched and mode=='switch': state.switched=True; os.kill(state.proc.pid,signal.SIGSTOP)
+  if state.proc and name=='b' and data['type']=='focus' and data['focused'] and state.switched and not state.resume: state.resume=True; os.kill(state.proc.pid,signal.SIGCONT)
+server=http.server.ThreadingHTTPServer(('127.0.0.1',0),Handler); threading.Thread(target=server.serve_forever,daemon=True).start(); port=server.server_address[1]
+profile=tempfile.mkdtemp(prefix='inkecho-chrome-profile-'); chrome='/tmp/inkecho-browser/chrome/chrome'; state.chrome=subprocess.Popen([chrome,'--no-sandbox','--no-first-run','--no-default-browser-check','--disable-popup-blocking','--disable-background-networking','--disable-sync','--disable-features=OptimizationHints,MediaRouter','--ozone-platform=x11','--gtk-version=3','--user-data-dir='+profile,'http://127.0.0.1:%d/a'%port],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+for _ in range(200):
+ if any(e[0]=='a' and e[1]=='focus' and e[2] for e in state.focus): break
+ time.sleep(.05)
+else: print(json.dumps({'mode':mode,'error':'initial_focus_missing','focus':state.focus}),flush=True); state.chrome.terminate(); sys.exit(1)
+root='/tmp/inkecho-r4-test/squashfs-root'; env=os.environ.copy(); env.update(PYTHONHOME=root+'/usr', PYTHONPATH=root+'/packages', LD_LIBRARY_PATH=root+'/usr/lib/inkecho',QT_QPA_PLATFORM='offscreen',GTK_IM_MODULE='ibus',INK_TARGET_KIND='normal',INK_PROBE_MODE='ibus')
+out=tempfile.TemporaryFile(mode='w+'); err=tempfile.TemporaryFile(mode='w+'); state.proc=subprocess.Popen([root+'/usr/bin/python3','/tmp/inkecho-r4-test/probes/sender.py'],env=env,stdout=out,stderr=err)
+try: rc=state.proc.wait(timeout=40)
+except subprocess.TimeoutExpired:
+ if state.switched and not state.resume: os.kill(state.proc.pid,signal.SIGCONT)
+ state.proc.terminate(); rc=state.proc.wait(timeout=3)
+time.sleep(1); out.seek(0); err.seek(0); a,b=state.values['a'],state.values['b']; result={'mode':mode,'exit':rc,'a':a,'b':b,'focus':state.focus,'cancel_sent':state.cancel_sent,'switched':state.switched,'resume':state.resume,'stdout':out.read(),'stderr':err.read()[-3000:]}; result['exact']=a+b==expected; result['prefix']=expected.startswith(a+b); result['lengths']=[len(a),len(b)]; print(json.dumps(result,ensure_ascii=False),flush=True); server.shutdown(); state.chrome.terminate(); state.chrome.wait(timeout=5)

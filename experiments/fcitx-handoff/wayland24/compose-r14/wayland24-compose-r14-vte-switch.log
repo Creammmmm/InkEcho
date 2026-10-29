@@ -1,0 +1,47 @@
+{"waiting_for_standard_keyboard_consent": true}
+{"keyboard_only_granted": true}
+{"snapshot_failure": "snapshot_timeout", "device_states": [{"resumed": true, "keymap_bytes": 68405, "snapshot": null}]}
+{"eis_snapshot": null, "keymap_sha256": "7f05616da2b8268871bb8b0a45fce919615a260e8bd307016db9e217514fcfe3", "keymap_bytes": 68405}
+{"keycode_min": 9, "keycode_max": 708}
+{"xkb_keycodes": {"b": 56, "中": null, "😀": null}}
+Traceback (most recent call last):
+{"failed": "RuntimeError", "reason": "owned_fixture_not_focused"}
+  File "/tmp/wayland24-compose-r14/eis_probe.py", line 307, in <module>
+    asyncio.run(probe())
+    ~~~~~~~~~~~^^^^^^^^^
+  File "/tmp/wayland24-compose-r14/squashfs-root/usr/lib/python3.13/asyncio/runners.py", line 196, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "/tmp/wayland24-compose-r14/squashfs-root/usr/lib/python3.13/asyncio/runners.py", line 119, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/tmp/wayland24-compose-r14/squashfs-root/usr/lib/python3.13/asyncio/base_events.py", line 726, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/tmp/wayland24-compose-r14/eis_probe.py", line 213, in probe
+    else: raise RuntimeError('owned_fixture_not_focused')
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: owned_fixture_not_focused
+Traceback (most recent call last):
+  File "/home/lth/github/InkEcho/scripts/validation/ubuntu24_vm.py", line 479, in <module>
+    main()
+    ~~~~^^
+  File "/home/lth/github/InkEcho/scripts/validation/ubuntu24_vm.py", line 422, in main
+    docker(
+    ~~~~~~^
+        [
+        ^
+    ...<18 lines>...
+        ]
+        ^
+    )
+    ^
+  File "/home/lth/github/InkEcho/scripts/validation/ubuntu24_vm.py", line 50, in docker
+    return run(["docker", *arguments], **options)
+  File "/home/lth/github/InkEcho/scripts/validation/ubuntu24_vm.py", line 41, in run
+    return subprocess.run(command, check=True, **options)
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/subprocess.py", line 578, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['docker', 'exec', '--interactive', 'inkecho-ubuntu24-perf-vm', 'ssh', '-i', '/secrets/testkey', '-p', '2222', '-o', 'BatchMode=yes', '-o', 'ConnectTimeout=20', '-o', 'StrictHostKeyChecking=accept-new', '-o', 'UserKnownHostsFile=/state/known_hosts', 'inkecho@127.0.0.1', "bash -lc 'export XDG_RUNTIME_DIR=/run/user/1000 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus WAYLAND_DISPLAY=wayland-0 DISPLAY=:0 XDG_SESSION_TYPE=wayland XDG_CURRENT_DESKTOP=ubuntu:GNOME; export APPDIR=/tmp/wayland24-compose-r14/squashfs-root PYTHONHOME=/tmp/wayland24-compose-r14/squashfs-root/usr PYTHONPATH=/tmp/wayland24-compose-r14/squashfs-root/packages LD_LIBRARY_PATH=/tmp/wayland24-compose-r14/squashfs-root/usr/lib/inkecho; umask 077; /tmp/wayland24-compose-r14/squashfs-root/usr/bin/python3 /tmp/wayland24-compose-r14/eis_probe.py vte switch'"]' returned non-zero exit status 1.

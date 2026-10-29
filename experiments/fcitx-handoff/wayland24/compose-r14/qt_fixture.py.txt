@@ -1,0 +1,11 @@
+import json, sys
+from pathlib import Path
+from PySide6.QtCore import QTimer
+from PySide6.QtWidgets import QApplication, QTextEdit
+app=QApplication([])
+output=Path(sys.argv[1]); output.write_text(json.dumps(''))
+window=QTextEdit(); window.setWindowTitle('InkEcho owned Qt input fixture'); window.resize(640,360)
+window.textChanged.connect(lambda: output.write_text(json.dumps(window.toPlainText())))
+window.show(); window.activateWindow(); window.setFocus()
+state=Path(sys.argv[2]); timer=QTimer(); timer.timeout.connect(lambda: state.write_text(json.dumps({'active':window.isActiveWindow(),'focused':window.hasFocus()}))); timer.start(50)
+app.exec()

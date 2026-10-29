@@ -1,0 +1,23 @@
+Type=wayland
+Active=yes
+LockedHint=no
+InkEcho-0.10.2-x86_64.AppImage: OK
+02fdefd9b0ffeee15fe7da8c32e05f3d321eadcc73545e6e3cf400b687cc9dcf  squashfs-root/packages/inkecho/platform/ibus.py
+baf512df40aad6380a6a5672fb8026a2b361e4cff190fb78dbbf615c099989e9  squashfs-root/packages/inkecho/platform/output_router.py
+6900065ef4996dced1e451b7a0f14d744862e1da089e8474caf8d1789b9b9e6d  squashfs-root/packages/inkecho/platform/ibus_candidate/delivery_gate.js
+b9b762262dd38d3086f029747750a21cb8b62a46d73b05bf70c7fdc307a911b2  squashfs-root/packages/inkecho/platform/ibus_candidate/extension.js
+inkecho-ibus-v2-prototype@local.invalid
+  Name: InkEcho IBus v2 isolated prototype
+  Description: Unintegrated isolated experiment; not production supported
+  Path: /home/inkecho/.local/share/gnome-shell/extensions/inkecho-ibus-v2-prototype@local.invalid
+  Enabled: Yes
+  State: ACTIVE
+inkecho-presend-fault@local.invalid
+  Name: InkEcho isolated fault control
+  Description: Isolated fault injection only; not for user sessions
+  Path: /home/inkecho/.local/share/gnome-shell/extensions/inkecho-presend-fault@local.invalid
+  Enabled: Yes
+  State: ACTIVE
+xkb:us::eng
+CASE=polish_fail_ibus
+{"mode": "full", "exit": 0, "a": "风云", "b": "", "triggered": true, "switch_confirmed": false, "focus_in_b": false, "resumed": false, "fcitx_b_context_proved_by_receipt": false, "stdout": [{"ready": true}, {"events": [["polish_delta", "two_synthetic_chars"], ["commit_timeout", 3], ["commit_started", "/io/github/Creammmmm/InkEcho/IBusCandidateV2", 37.991991], ["commit_reply", "/io/github/Creammmmm/InkEcho/IBusCandidateV2", ["attempted"], 37.992404], ["commit_timeout", 3], ["commit_started", "/io/github/Creammmmm/InkEcho/IBusCandidateV2", 37.992434], ["commit_reply", "/io/github/Creammmmm/InkEcho/IBusCandidateV2", ["attempted"], 37.992838], ["second_reply_held", 37.992839], ["polish_failure_injected", 37.992852], ["diagnostic", "polishing_failed"], ["problem", "润色未完成；未继续输入或重放原文。"], ["finished", "failed", 1]], "outcome": "failed", "origin": "/tmp/inkecho-r4-test/squashfs-root/packages/inkecho/app.py"}], "stderr": "", "events": [["first_arrival", 37.992500787]], "passed": false}

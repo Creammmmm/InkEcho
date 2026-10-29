@@ -1,0 +1,14 @@
+DISPLAY=:0
+XAUTHORITY=/run/user/1000/gdm/Xauthority
+XDG_SESSION_TYPE=x11
+SESSION  UID USER    SEAT  TTY  STATE  IDLE SINCE
+      1 1000 inkecho seat0 tty2 active no   -
+      5 1000 inkecho -     -    active no   -
+
+2 sessions listed.
+1210 /usr/lib/xorg/Xorg vt2 -displayfd 3 -auth /run/user/1000/gdm/Xauthority -nolisten tcp -background none -noreset -keeptty -novtswitch -verbose 3
+1452 /usr/bin/gnome-shell
+1532 /usr/libexec/gnome-shell-calendar-server
+1558 /usr/bin/gjs -m /usr/share/gnome-shell/org.gnome.Shell.Notifications
+1899 /usr/bin/gjs -m /usr/share/gnome-shell/org.gnome.ScreenSaver
+2056 gjs /usr/share/gnome-shell/extensions/ding@rastersoft.com/app/ding.js -E -P /usr/share/gnome-shell/extensions/ding@rastersoft.com/app

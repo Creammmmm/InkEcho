@@ -1,0 +1,29 @@
+import json,os,sys
+from dataclasses import dataclass
+from types import SimpleNamespace
+from PySide6.QtCore import QTimer
+from PySide6.QtWidgets import QApplication,QScrollArea
+from inkecho.ui.information import CompatibilityPage
+from inkecho.ui.widgets import STYLE
+@dataclass
+class S:
+ output_method:str='auto'
+ x11_mapping_wait_ms:int=40
+ x11_feedback_timeout_ms:int=40
+class Store:
+ def __init__(self):self.s=S()
+ def load_settings(self):return self.s
+ def save_settings(self,s):self.s=s
+store=Store(); keyboard=SimpleNamespace(connected=False,authorized=False)
+s=SimpleNamespace(store=store,inputs=SimpleNamespace(backend='gnome-wayland' if os.environ.get('XDG_SESSION_TYPE')=='wayland' else 'x11',keyboard=keyboard),connected=False,controller=SimpleNamespace(task=None),preparing=False,testing=False)
+app=QApplication([]);app.setStyleSheet(STYLE)
+p=CompatibilityPage(s);scroll=QScrollArea();scroll.setWidgetResizable(True);scroll.setWidget(p);scroll.resize(1150,900);scroll.show()
+def run():
+ data={'platform':app.platformName(),'environment':p.environment.text(),'scope':p.scope.text(),'initial_method':store.s.output_method,'mapping_wait':p.mapping_wait.value(),'feedback_wait':p.feedback_timeout.value(),'methods':[]}
+ p.grab().save('/tmp/inkecho-ui-page.png')
+ for i in range(p.output_method.count()):
+  p.output_method.setCurrentIndex(i);p.refresh();data['methods'].append({'name':p.output_method.itemText(i),'value':p.output_method.itemData(i),'saved':store.s.output_method,'status':p.availability.text()})
+ p.mapping_wait.setValue(73);p.feedback_timeout.setValue(74)
+ data['changed_mapping_wait']=store.s.x11_mapping_wait_ms;data['changed_feedback_wait']=store.s.x11_feedback_timeout_ms
+ print(json.dumps(data,ensure_ascii=False),flush=True);app.quit()
+QTimer.singleShot(1500,run);app.exec()

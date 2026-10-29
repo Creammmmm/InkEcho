@@ -1,0 +1,54 @@
+import json, os, shutil, signal, sys, tempfile, time, urllib.request
+from pathlib import Path
+from websockets.sync.client import connect
+from natural_owned_browser import NaturalOwnedBrowser
+
+out=Path(sys.argv[1]); state=Path(sys.argv[2]); scenario=sys.argv[3]
+root=Path(tempfile.mkdtemp(prefix='inkecho-owned-browser-'))
+class Fixture(NaturalOwnedBrowser):
+    def page(self):
+        page=super().page()
+        if scenario == 'selection':
+            page=page.replace(b'f.focus();record()});', b"f.focus();f.value='SEED';f.setSelectionRange(0,4);record()});", 1)
+        return page
+
+def bring(browser):
+    port=int((browser.profile/'DevToolsActivePort').read_text().splitlines()[0])
+    with urllib.request.urlopen('http://127.0.0.1:%d/json/list'%port, timeout=3) as response:
+        pages=json.load(response)
+    endpoint=next(p['webSocketDebuggerUrl'] for p in pages if p.get('type')=='page')
+    with connect(endpoint,open_timeout=3,close_timeout=1,max_size=16384,ping_interval=None,proxy=None) as ws:
+        ws.send(json.dumps({'id':1,'method':'Page.bringToFront'})); ws.recv(timeout=3)
+
+browsers=[]; current=0; switch=False; running=True
+
+def on_switch(*_):
+    global switch
+    switch=True
+
+def stop(*_):
+    global running
+    running=False
+signal.signal(signal.SIGUSR1,on_switch); signal.signal(signal.SIGTERM,stop)
+try:
+    browsers.append(Fixture(root/'a',field='textarea',platform='wayland').start(reviewed=True))
+    if scenario=='switch': browsers.append(Fixture(root/'b',field='textarea',platform='wayland').start(reviewed=True))
+    for _ in range(100):
+        if all(b.snapshot() is not None and (b.profile/'DevToolsActivePort').exists() for b in browsers): break
+        time.sleep(.1)
+    bring(browsers[0])
+    while running:
+        if switch:
+            bring(browsers[1]); current=1; switch=False
+        for index,b in enumerate(browsers):
+            s=b.snapshot()
+            if s:
+                target=out if index==0 else Path(str(out)+'.second')
+                focus=state if index==0 else Path(str(state)+'.second')
+                target.write_text(json.dumps(s['text']))
+                focus.write_text(json.dumps({'active':s['document_focused'],'focused':s['field_focused']}))
+        time.sleep(.05)
+finally:
+    for b in reversed(browsers):
+        if b.process and b.process.poll() is None: b.close()
+    if all(b.closed for b in browsers): shutil.rmtree(root)

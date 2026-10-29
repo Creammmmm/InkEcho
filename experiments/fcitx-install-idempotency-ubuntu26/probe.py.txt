@@ -1,0 +1,7 @@
+import asyncio, json, os, subprocess
+from inkecho.platform.framework_detection import collect_system_framework, detect_system_framework, probe
+async def main():
+ env=subprocess.check_output(['/usr/bin/systemctl','--user','show-environment'],text=True)
+ hints={k:v for line in env.splitlines() if '=' in line for k,v in [line.split('=',1)] if k in ('XMODIFIERS','GTK_IM_MODULE','QT_IM_MODULE')}
+ print(json.dumps({'label':os.environ['LABEL'],'hints':hints,'owners':await probe(),'hypothesis':await collect_system_framework(),'detected':await detect_system_framework()}),flush=True)
+asyncio.run(main())

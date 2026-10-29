@@ -1,0 +1,28 @@
+Type=wayland
+State=active
+/tmp/inkecho-r4-test/InkEcho-0.10.2-x86_64.AppImage: OK
+6056b6073b2fc7a8564f61f01cf6db2c4c35ad15fef41ba21672c5508630d58b  /tmp/inkecho-r4-test/squashfs-root/packages/inkecho/platform/output_router.py
+af654c3a436a05a1c10cb3450ec0af851e6b74414e502c2b12425149a85d4605  /tmp/inkecho-r4-test/squashfs-root/packages/inkecho/app.py
+已安装输入桥；运行状态需通过输入服务检查确认。
+SERVER_PORT 42057
+SERVER_GET /a
+SERVER_SELFTEST 200
+NAMESPACE_SERVER net:[4026531840] PID 3293
+NAMESPACE_CHILD 3296 net:[4026531840]
+NAMESPACE_CHILD 3299 net:[4026531840]
+SOCKETS State Recv-Q Send-Q Local Address:Port  Peer Address:Port Process
+ESTAB 0      0          10.0.2.15:22        10.0.2.2:59980       
+ESTAB 0      0          127.0.0.1:42057    127.0.0.1:37452       
+ESTAB 0      0          127.0.0.1:37468    127.0.0.1:42057       
+ESTAB 0      0          127.0.0.1:37452    127.0.0.1:42057       
+ESTAB 0      0          127.0.0.1:42057    127.0.0.1:37468       
+
+LOAD 0.46 0.12 0.04 2/708 3437
+CDP_PAGE {'id': 1, 'result': {'result': {'type': 'string', 'value': '{"ready":"complete","url":"about:blank","focus":false}'}}}
+CDP_ERROR timed out in 2.0s
+{"mode": "full", "error": "initial_focus_missing", "focus": []}
+browser_timeout_or_error=full
+未发现经过校验的输入桥；可能尚未安装。
+[1028/201801.721791:WARNING:chrome/app/chrome_main_linux.cc:84] Read channel stable from /tmp/inkecho-browser/chrome/CHROME_VERSION_EXTRA
+
+DevTools listening on ws://127.0.0.1:9222/devtools/browser/ae5c4876-9c1c-44a7-90cd-2b53b636ea6e

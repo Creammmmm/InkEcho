@@ -1,0 +1,21 @@
+/tmp/inkecho-fcitx-auto-package/InkEcho.AppImage: OK
+[1029/070443.091932:WARNING:chrome/app/chrome_main_linux.cc:84] Read channel stable from /tmp/inkecho-fcitx-auto-package/chrome/CHROME_VERSION_EXTRA
+Traceback (most recent call last):
+  File "<stdin>", line 10, in <module>
+  File "/usr/lib/python3.14/pathlib/__init__.py", line 810, in write_text
+    with self.open(mode='w', encoding=encoding, errors=errors, newline=newline) as f:
+         ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/pathlib/__init__.py", line 772, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 24] Too many open files: '/mnt/output/gap-fcitx-auto26/passed-checks.json'
+/mnt/input/gap-browser-run.sh: 29: cannot create /mnt/output/gap-fcitx-auto26/disable.log: Too many open files
+/mnt/input/gap-browser-run.sh: 30: cannot create /mnt/output/gap-fcitx-auto26/daemon-wait.txt: Too many open files
+/mnt/input/gap-browser-run.sh: 33: cannot create /mnt/output/gap-fcitx-auto26/system-environment-after.txt: Too many open files
+/mnt/input/gap-browser-run.sh: 34: cannot create /mnt/output/gap-fcitx-auto26/input-sources-after.txt: Too many open files
+/mnt/input/gap-browser-run.sh: 35: cannot create /mnt/output/gap-fcitx-auto26/owner-after.txt: Too many open files
+/mnt/input/gap-browser-run.sh: 36: cannot create /mnt/output/gap-fcitx-auto26/runtime-paths-after.txt: Too many open files
+cmp: /mnt/output/gap-fcitx-auto26/system-environment-after.txt: Too many open files
+/mnt/input/gap-browser-run.sh: 37: cannot create /mnt/output/gap-fcitx-auto26/restore-check.txt: Too many open files
+cmp: /mnt/output/gap-fcitx-auto26/input-sources-after.txt: Too many open files
+/mnt/input/gap-browser-run.sh: 38: cannot create /mnt/output/gap-fcitx-auto26/restore-check.txt: Too many open files

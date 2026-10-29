@@ -1,0 +1,12 @@
+# Ubuntu 24.04 X11 focus diagnostic retest
+
+This repeats the candidate 207b focus diagnostic from `../candidate-207b-x11-focus-diagnostic/`, using the exact same scripts and unmodified AppImage (SHA-256 `207b97eb667e5439137b51963a2aa09515c7ba50a83496d9c10070e989252685`). An Ubuntu 24.04.5 KVM guest ran with a temporary QEMU snapshot, original guest and base disks mounted read-only, and a network-isolated container. It used the disposable VM SSH key only on the host; no host credentials directory was mounted. Test text is synthetic. SSH initially timed out during boot but recovered once the same guest reached its login prompt.
+
+The guest reported an active X11 seat and `DISPLAY=:0`. The first diagnostic run again failed its `target_a_not_focused` prerequisite, so no sender ran. A screenshot immediately after this failure (`overview-after-failed-probe.png`) showed the GNOME Activities overview. In the disposable guest, sending Escape closed that overview before the second run; the unchanged diagnostic was then run twice:
+
+- `run-r2.log`: A received two characters, B received the other 198 after confirmed focus; concatenation exactly matched the expected 200 characters. Fcitx returned a definite zero-prefix no-target result before keyboard fallback; the sample passed.
+- `run-r3.log`: A received one character and B received the other 199, again exactly matching all 200 characters; the sample passed.
+
+The old `unsupported_target` failure did not recur and neither passing run captured focus-error metadata. This does not establish the root cause of the original failure, prove universal X11 compatibility, or constitute final package acceptance. No product code was changed. The screenshot indicates the overview was open after the failed prerequisite and leaving it preceded passing runs; it does not establish why the overview was open or the cause of the earlier candidate failure.
+
+For reproduction, start a network-isolated disposable guest with the disk backing chain read-only and a temporary QEMU snapshot, copy the scripts from the previous diagnostic record and the same AppImage into `/tmp/inkecho-r4-test`, and run `bash probes/run.sh 207b97eb667e5439137b51963a2aa09515c7ba50a83496d9c10070e989252685 x11` from that directory with an active unlocked X11 desktop. If the Activities overview is open, close it in the disposable guest before the run. The guest received QMP `system_powerdown`, `docker wait` returned 0, and the temporary container was removed.

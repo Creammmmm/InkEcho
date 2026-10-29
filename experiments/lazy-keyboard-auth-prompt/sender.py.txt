@@ -1,0 +1,33 @@
+import asyncio, json, os, sys, time
+from inkecho.platform.output_router import OutputRouter
+from inkecho.platform.wayland_keyboard import keyboard_for_desktop
+from inkecho.platform.wayland_keyboard import WaylandKeyboardInput
+from inkecho.platform.keyboard import KeyboardError
+
+mode=sys.argv[1]; events=[]; allowed=[True]
+old=WaylandKeyboardInput.authorize
+async def observe(self,*a):
+    events.append(['authorize_start',round(time.monotonic(),3)])
+    if mode=='cancel':
+        asyncio.get_running_loop().call_later(.05,lambda: allowed.__setitem__(0,False))
+    try:
+        return await old(self,*a)
+    finally:
+        events.append(['authorize_end',round(time.monotonic(),3),self.authorized])
+WaylandKeyboardInput.authorize=observe
+async def main():
+    r=OutputRouter(keyboard_for_desktop())
+    async def none(): return None
+    r._system_detector=none
+    notices=[]
+    try:
+        await r.prepare_task('auto',on_keyboard_authorization=lambda: notices.append('notice'))
+        deadline=time.monotonic()+(.1 if mode=='timeout' else 15)
+        n=await r.insert('甲乙',lambda:allowed[0],deadline=deadline)
+        outcome=['sent',n]
+    except BaseException as e:
+        outcome=['error',type(e).__name__,getattr(e,'code',None)]
+    try: await asyncio.wait_for(r.aclose(),5)
+    except BaseException as e: events.append(['cleanup_error',type(e).__name__])
+    print(json.dumps({'mode':mode,'outcome':outcome,'events':events,'notices':notices},ensure_ascii=False),flush=True)
+asyncio.run(main())

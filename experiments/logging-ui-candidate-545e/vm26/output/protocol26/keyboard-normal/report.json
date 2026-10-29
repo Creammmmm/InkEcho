@@ -1,0 +1,337 @@
+{
+  "public_sample": "你好 InkEcho，café Ω\n第二行。",
+  "events": [],
+  "import_root": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages",
+  "package_imports": true,
+  "configured_vad": false,
+  "case": "normal",
+  "keyboard_event_counts_not_instrumented": true,
+  "defaults_before": [
+    "auto_null",
+    "auto_null.monitor"
+  ],
+  "tls_close": [
+    "closed"
+  ],
+  "native_map_before": {
+    "sha256": "e9e6b45d29d38fa1d6a42847b1666d9b94c45160e61516632a326a4f10673ded",
+    "group": 0,
+    "depressed": 0,
+    "latched": 0,
+    "locked": 0
+  },
+  "target_scope": "isolated own GTK TextView target",
+  "factory_type": "DefaultAutoOutputRouter",
+  "inputs_injected": false,
+  "origins_before": {
+    "inkecho": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/__init__.py",
+      "sha256": "4a56d79a7c4cbbd7fe47723e8d49ba250e6342796c8e883db1cf3d7e21409a53"
+    },
+    "inkecho.audio": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/audio.py",
+      "sha256": "7a7c52be4465858476f0b85e12832fa6846aed0f1355ab1bb98efbe1febfdd53"
+    },
+    "inkecho.config": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/config.py",
+      "sha256": "2a7613a100f3029d51faa1619a37f39efa5b2e4d64dd33708bc265d68891366d"
+    },
+    "inkecho.core": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/core.py",
+      "sha256": "c3fbaccb189a8d43eaaaff88c824968538a29456c43ab750db4d113333964f4b"
+    },
+    "inkecho.performance": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/performance.py",
+      "sha256": "223a6dcef338533562c35fb916ef6e4a5e95d9d336c8c15e1bdb3e983306c3d4"
+    },
+    "inkecho.platform.framework_detection": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/platform/framework_detection.py",
+      "sha256": "119ebfaee65ce6a8b04e3652f9712c7916e57e73c64a37e3b59ac5844555033d"
+    },
+    "inkecho.platform.ibus_lifecycle": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/platform/ibus_lifecycle.py",
+      "sha256": "f2345bef05a6a030076252456dc159120973660a8e0b172ef6582933454c1355"
+    },
+    "inkecho.platform.ibus": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/platform/ibus.py",
+      "sha256": "02fdefd9b0ffeee15fe7da8c32e05f3d321eadcc73545e6e3cf400b687cc9dcf"
+    },
+    "inkecho.platform.ibus_owned": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/platform/ibus_owned.py",
+      "sha256": "9bb43cd20929ddb5b67dce411b82403886fa8b9f95edc16f591a8c654286ae0b"
+    },
+    "inkecho.platform.fcitx5_capability": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/platform/fcitx5_capability.py",
+      "sha256": "6bdbe4337547b929010fa3f654892138a58e14f5cf964ddb7629bdefc07850c5"
+    },
+    "inkecho.platform.fcitx5": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/platform/fcitx5.py",
+      "sha256": "7bb21cfbff3b1fc44a5f0b5bdd719bfefe6adb0066730b477296831b30eb47d2"
+    },
+    "inkecho.platform.output_pacing": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/platform/output_pacing.py",
+      "sha256": "7d74ae4f5bdc343f2ca65d523c09849c05fe0d63c00a01f51a18478c0f18d13e"
+    },
+    "inkecho.platform.keyboard": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/platform/keyboard.py",
+      "sha256": "6cb115b287231c4f4025d286c8dd69af329fb9161254674179f2cc3f82cb571b"
+    },
+    "inkecho.text_normalization": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/text_normalization.py",
+      "sha256": "81812f2c6157f310ddf4f14bbccb9afa165e7e001fa08497a74053551ff27c32"
+    },
+    "inkecho.platform.output_router": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/platform/output_router.py",
+      "sha256": "a45e0d6cbfdcb563b2e48d8ac3f8147d86c253fa8802a03bf3c03d1e6f72d247"
+    },
+    "inkecho.platform.ibus_owned_auto": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/platform/ibus_owned_auto.py",
+      "sha256": "8ba388270895e8172504f5a0329b474cb5c4bcdf0e89a212177e70e3d3796ce0"
+    },
+    "inkecho.platform.owned_installation": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/platform/owned_installation.py",
+      "sha256": "d784d8f4d47a29ecf4ed1457fd1c1f55fae03070db442bf30ffccf6960a08175"
+    },
+    "inkecho.platform.ibus_owned_default": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/platform/ibus_owned_default.py",
+      "sha256": "9718e496ca579393c3302eea946ef50720e771853fe31e88fe9f5f9d3851ec9f"
+    },
+    "inkecho.platform.wayland_keyboard": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/platform/wayland_keyboard.py",
+      "sha256": "bd76f5d8bb972fce9a7c3bd0dcbfc44fc61f128ab3e6b27bbe7415da4eff29bf"
+    },
+    "inkecho.provider_catalog": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/provider_catalog.py",
+      "sha256": "79ff7b639c9b91df6697edef433bdfa40eb16fe2d1207722325a231759038dc6"
+    },
+    "inkecho.providers": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/providers.py",
+      "sha256": "0e4015a5e5b3a7793e47e48f0f14399933c5fdd352411cc9b3d2aa87f6419867"
+    },
+    "inkecho.realtime": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/realtime.py",
+      "sha256": "c9a997a59e250e1938e4478e9a125cca25d68665d3607b7d54dd8c31f78e31da"
+    },
+    "inkecho.security": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/security.py",
+      "sha256": "be28a62da5ae8c38456b60bfb62a3ea8692bddbbcf07ce8584edd43b07141219"
+    },
+    "inkecho.streaming_output": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/streaming_output.py",
+      "sha256": "147fff1ed12852c83a34caca13368162a2dd5b7047ef7fcb41c9b249d911cdfd"
+    },
+    "inkecho.app": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/app.py",
+      "sha256": "98c26bd0a172acd9957f3e5ce4aa8cb54cd923066baaafcae1af03836bca8ca2"
+    },
+    "inkecho.runtime": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/runtime.py",
+      "sha256": "28508099d1811f27562b548c71403c85601bab2e961a68db77ca72692ea798bf"
+    },
+    "inkecho.platform.eis": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/platform/eis.py",
+      "sha256": "a9343b0e4fd84c3ba8adda37e7fc5f9d7554eb7b78aab5179851587bfb0cfd19"
+    },
+    "inkecho.platform.wayland_keymap": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/platform/wayland_keymap.py",
+      "sha256": "884d12541b48e434f3eb087f339aa71e87b1d506fd8978484b969b342dc3260a"
+    },
+    "inkecho.platform.wayland_worker": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/platform/wayland_worker.py",
+      "sha256": "45330a05e596c9b280d579457cc37bf7af7b4180762a7a1c3a78ef3ecb68c6eb"
+    },
+    "inkecho.platform.hybrid_keyboard": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/platform/hybrid_keyboard.py",
+      "sha256": "204b46020cc7ed2aa287488388071cdc91b720fd3518a483e57140f697d3273f"
+    }
+  },
+  "diagnostics": [],
+  "selected_backend": "keyboard",
+  "actual_manual_negotiation": true,
+  "owned_focus_switch_requested_while_recording": true,
+  "task_result": {
+    "audio_seconds": 1.3209375,
+    "characters": 22,
+    "outcome": "succeeded",
+    "polishing_calls": 1,
+    "polishing_seconds": 0.49984968300000787,
+    "transcription_calls": 1,
+    "transcription_seconds": 1.0222824209999999
+  },
+  "local_server_errors": [
+    "ConnectionClosedError"
+  ],
+  "clock_origin_monotonic": 161.735228954,
+  "timeline_monotonic": {
+    "toggle_requested": 161.735228954,
+    "credential_wait_started": 162.158984151,
+    "first_capture": 161.742264809,
+    "play_requested": 161.816828893,
+    "credential_wait_finished": 162.580035578,
+    "first_audio_on_wire": 162.17999023,
+    "stop_requested": 163.058118689,
+    "final_asr": 163.179768985,
+    "polishing_request": 163.213421308,
+    "polishing_first_delta": 163.292908099,
+    "polishing_full_text": 163.674559851
+  },
+  "native_map_after": {
+    "sha256": "e9e6b45d29d38fa1d6a42847b1666d9b94c45160e61516632a326a4f10673ded",
+    "group": 0,
+    "depressed": 0,
+    "latched": 0,
+    "locked": 0
+  },
+  "native_map_restored": true,
+  "defaults_observed": [
+    [
+      "@DEFAULT_SINK@",
+      "auto_null.monitor"
+    ],
+    [
+      "auto_null",
+      "auto_null.monitor"
+    ],
+    [
+      "auto_null",
+      "auto_null.monitor"
+    ],
+    [
+      "auto_null",
+      "auto_null.monitor"
+    ]
+  ],
+  "defaults_unchanged": true,
+  "origins_after": {
+    "inkecho": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/__init__.py",
+      "sha256": "4a56d79a7c4cbbd7fe47723e8d49ba250e6342796c8e883db1cf3d7e21409a53"
+    },
+    "inkecho.audio": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/audio.py",
+      "sha256": "7a7c52be4465858476f0b85e12832fa6846aed0f1355ab1bb98efbe1febfdd53"
+    },
+    "inkecho.config": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/config.py",
+      "sha256": "2a7613a100f3029d51faa1619a37f39efa5b2e4d64dd33708bc265d68891366d"
+    },
+    "inkecho.core": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/core.py",
+      "sha256": "c3fbaccb189a8d43eaaaff88c824968538a29456c43ab750db4d113333964f4b"
+    },
+    "inkecho.performance": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/performance.py",
+      "sha256": "223a6dcef338533562c35fb916ef6e4a5e95d9d336c8c15e1bdb3e983306c3d4"
+    },
+    "inkecho.platform.framework_detection": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/platform/framework_detection.py",
+      "sha256": "119ebfaee65ce6a8b04e3652f9712c7916e57e73c64a37e3b59ac5844555033d"
+    },
+    "inkecho.platform.ibus_lifecycle": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/platform/ibus_lifecycle.py",
+      "sha256": "f2345bef05a6a030076252456dc159120973660a8e0b172ef6582933454c1355"
+    },
+    "inkecho.platform.ibus": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/platform/ibus.py",
+      "sha256": "02fdefd9b0ffeee15fe7da8c32e05f3d321eadcc73545e6e3cf400b687cc9dcf"
+    },
+    "inkecho.platform.ibus_owned": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/platform/ibus_owned.py",
+      "sha256": "9bb43cd20929ddb5b67dce411b82403886fa8b9f95edc16f591a8c654286ae0b"
+    },
+    "inkecho.platform.fcitx5_capability": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/platform/fcitx5_capability.py",
+      "sha256": "6bdbe4337547b929010fa3f654892138a58e14f5cf964ddb7629bdefc07850c5"
+    },
+    "inkecho.platform.fcitx5": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/platform/fcitx5.py",
+      "sha256": "7bb21cfbff3b1fc44a5f0b5bdd719bfefe6adb0066730b477296831b30eb47d2"
+    },
+    "inkecho.platform.output_pacing": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/platform/output_pacing.py",
+      "sha256": "7d74ae4f5bdc343f2ca65d523c09849c05fe0d63c00a01f51a18478c0f18d13e"
+    },
+    "inkecho.platform.keyboard": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/platform/keyboard.py",
+      "sha256": "6cb115b287231c4f4025d286c8dd69af329fb9161254674179f2cc3f82cb571b"
+    },
+    "inkecho.text_normalization": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/text_normalization.py",
+      "sha256": "81812f2c6157f310ddf4f14bbccb9afa165e7e001fa08497a74053551ff27c32"
+    },
+    "inkecho.platform.output_router": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/platform/output_router.py",
+      "sha256": "a45e0d6cbfdcb563b2e48d8ac3f8147d86c253fa8802a03bf3c03d1e6f72d247"
+    },
+    "inkecho.platform.ibus_owned_auto": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/platform/ibus_owned_auto.py",
+      "sha256": "8ba388270895e8172504f5a0329b474cb5c4bcdf0e89a212177e70e3d3796ce0"
+    },
+    "inkecho.platform.owned_installation": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/platform/owned_installation.py",
+      "sha256": "d784d8f4d47a29ecf4ed1457fd1c1f55fae03070db442bf30ffccf6960a08175"
+    },
+    "inkecho.platform.ibus_owned_default": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/platform/ibus_owned_default.py",
+      "sha256": "9718e496ca579393c3302eea946ef50720e771853fe31e88fe9f5f9d3851ec9f"
+    },
+    "inkecho.platform.wayland_keyboard": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/platform/wayland_keyboard.py",
+      "sha256": "bd76f5d8bb972fce9a7c3bd0dcbfc44fc61f128ab3e6b27bbe7415da4eff29bf"
+    },
+    "inkecho.provider_catalog": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/provider_catalog.py",
+      "sha256": "79ff7b639c9b91df6697edef433bdfa40eb16fe2d1207722325a231759038dc6"
+    },
+    "inkecho.providers": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/providers.py",
+      "sha256": "0e4015a5e5b3a7793e47e48f0f14399933c5fdd352411cc9b3d2aa87f6419867"
+    },
+    "inkecho.realtime": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/realtime.py",
+      "sha256": "c9a997a59e250e1938e4478e9a125cca25d68665d3607b7d54dd8c31f78e31da"
+    },
+    "inkecho.security": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/security.py",
+      "sha256": "be28a62da5ae8c38456b60bfb62a3ea8692bddbbcf07ce8584edd43b07141219"
+    },
+    "inkecho.streaming_output": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/streaming_output.py",
+      "sha256": "147fff1ed12852c83a34caca13368162a2dd5b7047ef7fcb41c9b249d911cdfd"
+    },
+    "inkecho.app": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/app.py",
+      "sha256": "98c26bd0a172acd9957f3e5ce4aa8cb54cd923066baaafcae1af03836bca8ca2"
+    },
+    "inkecho.runtime": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/runtime.py",
+      "sha256": "28508099d1811f27562b548c71403c85601bab2e961a68db77ca72692ea798bf"
+    },
+    "inkecho.platform.eis": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/platform/eis.py",
+      "sha256": "a9343b0e4fd84c3ba8adda37e7fc5f9d7554eb7b78aab5179851587bfb0cfd19"
+    },
+    "inkecho.platform.wayland_keymap": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/platform/wayland_keymap.py",
+      "sha256": "884d12541b48e434f3eb087f339aa71e87b1d506fd8978484b969b342dc3260a"
+    },
+    "inkecho.platform.wayland_worker": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/platform/wayland_worker.py",
+      "sha256": "45330a05e596c9b280d579457cc37bf7af7b4180762a7a1c3a78ef3ecb68c6eb"
+    },
+    "inkecho.platform.hybrid_keyboard": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/platform/hybrid_keyboard.py",
+      "sha256": "204b46020cc7ed2aa287488388071cdc91b720fd3518a483e57140f697d3273f"
+    },
+    "inkecho.asr_streaming": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/asr_streaming.py",
+      "sha256": "a6426173cadd5a159679cf4032989190c11a33c98d57ab7bb59712fc8324a3f4"
+    },
+    "inkecho.polish_stream": {
+      "path": "/tmp/inkecho-owned-default-acceptance/squashfs-root/packages/inkecho/polish_stream.py",
+      "sha256": "47588cd3b4e546e6a8f6eef1057208d32c49ce6cee564919e1f42660b10582dd"
+    }
+  },
+  "balanced": true,
+  "cleanup_errors": []
+}

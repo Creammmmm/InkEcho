@@ -1,0 +1,227 @@
+FFF                                                                      [100%]
+=================================== FAILURES ===================================
+______ test_abort_preflight_disconnects_without_waiting_for_remote_cancel ______
+
+    def test_abort_preflight_disconnects_without_waiting_for_remote_cancel():
+        async def run():
+            bus = FakeBus()
+            caps = []
+    
+            def make_cap(runtime):
+                cap = FakeCapability(runtime)
+                caps.append(cap)
+                return cap
+    
+            client = Fcitx5Bridge(bus_factory=lambda: bus, capability_factory=make_cap)
+            await client.connect()
+            await client.abort_preflight()
+            assert bus.disconnected and caps[0].token == ""
+            assert client._bus is None and client._capability is None
+            assert not any(call.member in ("Cancel", "Commit") for call in bus.calls)
+    
+>       asyncio.run(run())
+
+tests/test_fcitx5.py:1142: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/home/lth/.local/share/uv/python/cpython-3.13.15-linux-x86_64-gnu/lib/python3.13/asyncio/runners.py:196: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/home/lth/.local/share/uv/python/cpython-3.13.15-linux-x86_64-gnu/lib/python3.13/asyncio/runners.py:119: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/lth/.local/share/uv/python/cpython-3.13.15-linux-x86_64-gnu/lib/python3.13/asyncio/base_events.py:726: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    async def run():
+        bus = FakeBus()
+        caps = []
+    
+        def make_cap(runtime):
+            cap = FakeCapability(runtime)
+            caps.append(cap)
+            return cap
+    
+        client = Fcitx5Bridge(bus_factory=lambda: bus, capability_factory=make_cap)
+        await client.connect()
+>       await client.abort_preflight()
+              ^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'Fcitx5Bridge' object has no attribute 'abort_preflight'
+
+tests/test_fcitx5.py:1137: AttributeError
+_____________ test_abort_preflight_refuses_after_uncertain_commit ______________
+
+    def test_abort_preflight_refuses_after_uncertain_commit():
+        async def run():
+            bus = FakeBus([reply([2])])
+            client = Fcitx5Bridge(bus_factory=lambda: bus, capability_factory=FakeCapability)
+            await client.connect()
+            with pytest.raises(FcitxOutputError, match="delivery_unknown"):
+                await client.insert("甲", lambda: True)
+            with pytest.raises(FcitxOutputError):
+                await client.abort_preflight()
+            assert not bus.disconnected
+            await client.aclose()
+            assert bus.disconnected
+            assert sum(call.member == "Commit" for call in bus.calls) == 1
+            assert sum(call.member == "Cancel" for call in bus.calls) == 1
+    
+>       asyncio.run(run())
+
+tests/test_fcitx5.py:1160: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/home/lth/.local/share/uv/python/cpython-3.13.15-linux-x86_64-gnu/lib/python3.13/asyncio/runners.py:196: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/home/lth/.local/share/uv/python/cpython-3.13.15-linux-x86_64-gnu/lib/python3.13/asyncio/runners.py:119: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/lth/.local/share/uv/python/cpython-3.13.15-linux-x86_64-gnu/lib/python3.13/asyncio/base_events.py:726: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    async def run():
+        bus = FakeBus([reply([2])])
+        client = Fcitx5Bridge(bus_factory=lambda: bus, capability_factory=FakeCapability)
+        await client.connect()
+        with pytest.raises(FcitxOutputError, match="delivery_unknown"):
+            await client.insert("甲", lambda: True)
+        with pytest.raises(FcitxOutputError):
+>           await client.abort_preflight()
+                  ^^^^^^^^^^^^^^^^^^^^^^
+E           AttributeError: 'Fcitx5Bridge' object has no attribute 'abort_preflight'
+
+tests/test_fcitx5.py:1153: AttributeError
+___________ test_auto_expired_recheck_aborts_unsent_bridge_preflight ___________
+
+self = <inkecho.platform.output_router.OutputRouter object at 0x7245eb3aa120>
+can_continue = <function test_auto_expired_recheck_aborts_unsent_bridge_preflight.<locals>.run.<locals>.<lambda> at 0x7245eb777ba0>
+deadline = 109104.643189173
+
+    async def _choose_auto(self, can_continue=lambda: True, deadline=None):
+        self._auto_pending = False
+        try:
+            evidence = await self._wait_auto_preflight(
+                self._system_detector(), can_continue, deadline, timeout=1.5
+            )
+        except OutputRouterError:
+            raise
+        except Exception:
+            evidence = None
+        framework, expected_owner = (
+            evidence
+            if isinstance(evidence, tuple)
+            and len(evidence) == 2
+            and evidence[0] in {"fcitx", "ibus"}
+            and isinstance(evidence[1], str)
+            and evidence[1].startswith(":")
+            else (None, None)
+        )
+        if framework in {"fcitx", "ibus"}:
+            bridge = (
+                self._bridge_factory() if framework == "fcitx" else self._ibus_factory()
+            )
+            try:
+                if framework == "fcitx":
+                    pending_connect = bridge.connect(expected_owner=expected_owner)
+                else:
+                    pending_connect = bridge.connect()
+                await self._wait_auto_preflight(pending_connect, can_continue, deadline)
+>               refreshed = await self._wait_auto_preflight(
+                    self._system_detector(), can_continue, deadline, timeout=1.5
+                )
+
+src/inkecho/platform/output_router.py:343: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/inkecho/platform/output_router.py:297: in _wait_auto_preflight
+    self._check_task(can_continue, deadline)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+can_continue = <function test_auto_expired_recheck_aborts_unsent_bridge_preflight.<locals>.run.<locals>.<lambda> at 0x7245eb777ba0>
+deadline = 109104.643189173
+
+    @staticmethod
+    def _check_task(can_continue, deadline):
+        if not can_continue():
+            raise OutputRouterError("input_cancelled")
+        if deadline is not None and time.monotonic() >= deadline:
+>           raise OutputRouterError("expired")
+E           inkecho.platform.output_router.OutputRouterError: expired
+
+src/inkecho/platform/output_router.py:196: OutputRouterError
+
+During handling of the above exception, another exception occurred:
+
+    def test_auto_expired_recheck_aborts_unsent_bridge_preflight():
+        async def run():
+            import time
+    
+            class Tracked(Bridge):
+                def __init__(self):
+                    super().__init__()
+                    self.aborted = False
+    
+                async def abort_preflight(self):
+                    self.aborted = True
+                    self.closed = True
+    
+                async def aclose(self):
+                    raise AssertionError("slow normal close is not preflight abort")
+    
+            keyboard, bridge = Keyboard(), Tracked()
+            router = OutputRouter(keyboard, bridge_factory=lambda: bridge)
+            calls = 0
+    
+            async def detect():
+                nonlocal calls
+                calls += 1
+                if calls == 2:
+                    await asyncio.Event().wait()
+                return ("fcitx", ":1.8")
+    
+            router._system_detector = detect
+            await router.prepare_task("auto")
+            with pytest.raises(OutputRouterError, match="expired"):
+                await asyncio.wait_for(router.insert("甲", lambda: True, deadline=time.monotonic() + 0.1), 0.5)
+            assert bridge.aborted and keyboard.sent == bridge.sent == []
+    
+>       asyncio.run(run())
+
+tests/test_output_router.py:1036: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/home/lth/.local/share/uv/python/cpython-3.13.15-linux-x86_64-gnu/lib/python3.13/asyncio/runners.py:196: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/home/lth/.local/share/uv/python/cpython-3.13.15-linux-x86_64-gnu/lib/python3.13/asyncio/runners.py:119: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/home/lth/.local/share/uv/python/cpython-3.13.15-linux-x86_64-gnu/lib/python3.13/asyncio/base_events.py:726: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/test_output_router.py:1033: in run
+    await asyncio.wait_for(router.insert("甲", lambda: True, deadline=time.monotonic() + 0.1), 0.5)
+/home/lth/.local/share/uv/python/cpython-3.13.15-linux-x86_64-gnu/lib/python3.13/asyncio/tasks.py:507: in wait_for
+    return await fut
+           ^^^^^^^^^
+src/inkecho/platform/output_router.py:381: in insert
+    return await self.insert(
+src/inkecho/platform/output_router.py:391: in insert
+    await self._choose_auto(can_continue, deadline)
+src/inkecho/platform/output_router.py:349: in _choose_auto
+    await bridge.aclose()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <test_output_router.test_auto_expired_recheck_aborts_unsent_bridge_preflight.<locals>.run.<locals>.Tracked object at 0x7245eb3a9fd0>
+
+    async def aclose(self):
+>       raise AssertionError("slow normal close is not preflight abort")
+E       AssertionError: slow normal close is not preflight abort
+
+tests/test_output_router.py:1017: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_fcitx5.py::test_abort_preflight_disconnects_without_waiting_for_remote_cancel
+FAILED tests/test_fcitx5.py::test_abort_preflight_refuses_after_uncertain_commit
+FAILED tests/test_output_router.py::test_auto_expired_recheck_aborts_unsent_bridge_preflight
+3 failed, 116 deselected in 0.34s

@@ -1,0 +1,4 @@
+XGetWindowProperty[_NET_ACTIVE_WINDOW] failed (code=1)
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+AssertionError: {'text': '', 'first_text': '', 'window_count': 1, 'active': False, 'focused': False, 'time': 268.690059824}

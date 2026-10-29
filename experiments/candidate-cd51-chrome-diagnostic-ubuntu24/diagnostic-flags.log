@@ -1,0 +1,53 @@
+/tmp/inkecho-r4-test/InkEcho-0.10.2-x86_64.AppImage: OK
+6056b6073b2fc7a8564f61f01cf6db2c4c35ad15fef41ba21672c5508630d58b  /tmp/inkecho-r4-test/squashfs-root/packages/inkecho/platform/output_router.py
+af654c3a436a05a1c10cb3450ec0af851e6b74414e502c2b12425149a85d4605  /tmp/inkecho-r4-test/squashfs-root/packages/inkecho/app.py
+已安装输入桥；运行状态需通过输入服务检查确认。
+SERVER_PORT 40983
+CDP_TARGETS [ {
+   "description": "",
+   "devtoolsFrontendUrl": "https://chrome-devtools-frontend.appspot.com/serve_rev/@b510e9d7cd3a2fbd78d0ddc42234103206c5f78d/inspector.html?ws=127.0.0.1:9222/devtools/page/884CF7FF9D159CA0F247B7300A52AB5B",
+   "id": "884CF7FF9D159CA0F247B7300A52AB5B",
+   "title": "Google Hangouts",
+   "type": "background_page",
+   "url": "chrome-extension://nkeimhogjdpnpccoofpliimaahmaaome/background.html",
+   "webSocketDebuggerUrl": "ws://127.0.0.1:9222/devtools/page/884CF7FF9D159CA0F247B7300A52AB5B"
+}, {
+   "description": "",
+   "devtoolsFrontendUrl": "https://chrome-devtools-frontend.appspot.com/serve_rev/@b510e9d7cd3a2fbd78d0ddc42234103206c5f78d/inspector.html?ws=127.0.0.1:9222/devtools/page/6CD8F1A5C14BBA8C15DD676FD3C12036",
+   "id": "6CD8F1A5C14BBA8C15DD676FD3C12036",
+   "title": "",
+   "type": "page",
+   "url": "http://127.0.0.1:40983/a",
+   "webSocketDebuggerUrl": "ws://127.0.0.1:9222/devtools/page/6CD8F1A5C14BBA8C15DD676FD3C12036"
+}, {
+   "description": "",
+   "devtoolsFrontendUrl": "https://chrome-devtools-frontend.appspot.com/serve_rev/@b510e9d7cd3a2fbd78d0ddc42234103206c5f78d/inspector.html?ws=127.0.0.1:9222/devtools/page/2C63833406BDDC3F801026CF6003ACE8",
+   "id": "2C63833406BDDC3F801026CF6003ACE8",
+   "title": "Omnibox Popup",
+   "type": "browser_ui",
+   "url": "chrome://omnibox-popup.top-chrome/",
+   "webSocketDebuggerUrl": "ws://127.0.0.1:9222/devtools/page/2C63833406BDDC3F801026CF6003ACE8"
+}, {
+   "description": "",
+   "devtoolsFrontendUrl": "https://chrome-devtools-frontend.appspot.com/serve_rev/@b510e9d7cd3a2fbd78d0ddc42234103206c5f78d/inspector.html?ws=127.0.0.1:9222/devtools/page/810EAF81406A757BD968436EEC1F6A96",
+   "id": "810EAF81406A757BD968436EEC1F6A96",
+   "title": "Omnibox Popup",
+   "type": "browser_ui",
+   "url": "chrome://omnibox-popup.top-chrome/omnibox_popup_aim.html",
+   "webSocketDebuggerUrl": "ws://127.0.0.1:9222/devtools/page/810EAF81406A757BD968436EEC1F6A96"
+}, {
+   "description": "",
+   "devtoolsFrontendUrl": "https://chrome-devtools-frontend.appspot.com/serve_rev/@b510e9d7cd3a2fbd78d0ddc42234103206c5f78d/worker_app.html?ws=127.0.0.1:9222/devtools/page/4D2D4F41AE037ABF34A87AA046A8BF2C",
+   "id": "4D2D4F41AE037ABF34A87AA046A8BF2C",
+   "title": "Service Worker chrome-extension://fignfifoniblkonapihmkfakmlgkbkcf/service_worker.js",
+   "type": "service_worker",
+   "url": "chrome-extension://fignfifoniblkonapihmkfakmlgkbkcf/service_worker.js",
+   "webSocketDebuggerUrl": "ws://127.0.0.1:9222/devtools/page/4D2D4F41AE037ABF34A87AA046A8BF2C"
+} ]
+
+{"mode": "full", "error": "initial_focus_missing", "focus": []}
+browser_timeout_or_error=full
+未发现经过校验的输入桥；可能尚未安装。
+[1028/194151.263312:WARNING:chrome/app/chrome_main_linux.cc:84] Read channel stable from /tmp/inkecho-browser/chrome/CHROME_VERSION_EXTRA
+
+DevTools listening on ws://127.0.0.1:9222/devtools/browser/7d8f2346-da7d-46b6-bf87-59cb026651f1

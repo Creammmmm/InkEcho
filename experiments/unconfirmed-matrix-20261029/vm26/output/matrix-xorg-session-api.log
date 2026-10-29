@@ -1,0 +1,14 @@
+DISPLAY=:0
+XDG_CURRENT_DESKTOP=XFCE
+XDG_SESSION_TYPE=x11
+3673 /usr/lib/xorg/Xorg vt2 -displayfd 3 -auth /run/user/1000/gdm/Xauthority -background none -noreset -keeptty -novtswitch -verbose 3
+3701 xfce4-session
+Desktop=
+Type=tty
+State=active
+Desktop=
+Type=unspecified
+State=active
+Desktop=
+Type=x11
+State=active

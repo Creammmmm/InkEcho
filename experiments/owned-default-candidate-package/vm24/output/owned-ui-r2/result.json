@@ -1,0 +1,20 @@
+{
+  "scope": "actual extracted package UI, programmatic real button click; isolated guest only",
+  "router_type": "DefaultAutoOutputRouter",
+  "before": {
+    "enabled-extensions": "@as []",
+    "disabled-extensions": "['inkecho-ibus-candidate@local.invalid', 'inkecho-ibus-focus-probe@local.invalid', 'inkecho-ibus-v2-prototype@local.invalid']",
+    "disable-user-extensions": "false"
+  },
+  "initial_status": "尚未检查扩展状态。",
+  "clicked": "检查自动输入扩展",
+  "installed_verified": true,
+  "status": "当前版本的可选输入扩展未安装、不可用或未通过校验。",
+  "after": {
+    "enabled-extensions": "@as []",
+    "disabled-extensions": "['inkecho-ibus-candidate@local.invalid', 'inkecho-ibus-focus-probe@local.invalid', 'inkecho-ibus-v2-prototype@local.invalid']",
+    "disable-user-extensions": "false"
+  },
+  "no_automatic_enable": true,
+  "passed": true
+}

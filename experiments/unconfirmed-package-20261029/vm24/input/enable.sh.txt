@@ -1,0 +1,5 @@
+set -eu
+root=/tmp/inkecho-unconfirmed-acceptance
+export DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus XDG_RUNTIME_DIR=/run/user/1000
+export APPDIR="$root/squashfs-root" PYTHONHOME="$root/squashfs-root/usr" PYTHONPATH="$root/squashfs-root/packages" LD_LIBRARY_PATH="$root/squashfs-root/usr/lib/inkecho"
+"$APPDIR/usr/bin/python3" -c 'from inkecho.platform.ibus_extension import ExtensionManager; m=ExtensionManager(); m.enable(); print(m.status())'

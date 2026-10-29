@@ -1,0 +1,7 @@
+option b'' compiled True
+	<AE13> = 132;
+	alias <I132> = <AE13>;
+option b'inkecho:test' compiled True
+	<AE13> = 132;
+	alias <I132> = <AE13>;
+	key <AE13> {	[ 0x1007532 ] };

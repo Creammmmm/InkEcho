@@ -1,0 +1,16 @@
+/tmp/inkecho-r4-test/InkEcho-0.10.2-x86_64.AppImage: OK
+c8918f6235325036a4bf605edc76579b2813e71d04343ca41e5edec981a7c6b5  /tmp/inkecho-r4-test/squashfs-root/packages/inkecho/platform/fcitx5.py
+3c76d50b2a1af82301e82cf727bad9b1f71d5cef3f4e5e4284530cb5416aadf1  /tmp/inkecho-r4-test/squashfs-root/packages/inkecho/platform/framework_detection.py
+a64cf45e3a22bacbc82e7db61478a15769fb630812c3919c72f48a105998aa3a  /tmp/inkecho-r4-test/squashfs-root/packages/inkecho/platform/ibus.py
+pre_install
+{"label": "pre_install", "hints": {"GTK_IM_MODULE": "fcitx", "QT_IM_MODULE": "fcitx", "XMODIFIERS": "@im=fcitx"}, "owners": {"ibus_service_owner": "fcitx", "fcitx_service_owner": "fcitx"}, "hypothesis": ["fcitx", ":1.86"], "detected": null}
+已安装输入桥；运行状态需通过输入服务检查确认。
+after_install_no_enable
+{"label": "after_install_no_enable", "hints": {"GTK_IM_MODULE": "fcitx", "QT_IM_MODULE": "fcitx", "XMODIFIERS": "@im=fcitx"}, "owners": {"ibus_service_owner": "fcitx", "fcitx_service_owner": "fcitx"}, "hypothesis": ["fcitx", ":1.86"], "detected": null}
+after_restart_no_enable
+{"label": "after_restart_no_enable", "hints": {"GTK_IM_MODULE": "fcitx", "QT_IM_MODULE": "fcitx", "XMODIFIERS": "@im=fcitx"}, "owners": {"ibus_service_owner": "fcitx", "fcitx_service_owner": "fcitx"}, "hypothesis": ["fcitx", ":1.110"], "detected": ["fcitx", ":1.110"]}
+('5.1.19',)
+未发现经过校验的输入桥；可能尚未安装。
+after_disable
+{"label": "after_disable", "hints": {"GTK_IM_MODULE": "fcitx", "QT_IM_MODULE": "fcitx", "XMODIFIERS": "@im=fcitx"}, "owners": {"ibus_service_owner": "fcitx", "fcitx_service_owner": "fcitx"}, "hypothesis": ["fcitx", ":1.110"], "detected": null}
+('5.1.19',)

@@ -1,0 +1,51 @@
+import asyncio,json,os,signal,subprocess,time
+from pathlib import Path
+from inkecho.platform.fcitx5 import Fcitx5Bridge,FcitxOutputError
+root=Path('/tmp/inkecho-frame-hint-r1')
+async def main():
+ target=None; stopped=False; bridge=Fcitx5Bridge(); events=[]; active=True
+ def state():
+  return next(line for line in Path('/proc/%d/status'%target.pid).read_text().splitlines() if line.startswith('State:'))
+ try:
+  for name in ('probe-text','probe-focus'): (root/name).unlink(missing_ok=True)
+  env=dict(os.environ,GDK_BACKEND='wayland',GTK_IM_MODULE='fcitx')
+  for key in ('PYTHONHOME','PYTHONPATH','LD_LIBRARY_PATH'): env.pop(key,None)
+  target=subprocess.Popen(['/usr/bin/python3',str(root/'target.py'),'probe'],env=env)
+  for _ in range(100):
+   if target.poll() is not None: raise RuntimeError('owned_target_exited')
+   if (root/'probe-focus').exists(): break
+   await asyncio.sleep(.1)
+  else: raise RuntimeError('owned_focus_timeout')
+  await bridge.connect()
+  assert await bridge.insert('甲',lambda:active)==1
+  for _ in range(50):
+   if (root/'probe-text').exists() and (root/'probe-text').read_text()=='甲': break
+   await asyncio.sleep(.05)
+  else: raise RuntimeError('baseline_not_received')
+  os.kill(target.pid,signal.SIGSTOP); stopped=True
+  for _ in range(50):
+   if state().split()[1]=='T': break
+   await asyncio.sleep(.01)
+  else: raise RuntimeError('target_not_stopped')
+  start=time.monotonic(); sent=await bridge.insert('乙',lambda:active); ack=time.monotonic()
+  events.append({'sent':sent,'ack_ms':round((ack-start)*1000,3),'target_state':state(),'at_ack':(root/'probe-text').read_text()})
+  active=False
+  try: await bridge.insert('丙',lambda:active)
+  except FcitxOutputError as e: events.append({'cancel_result':e.code,'accepted':e.accepted})
+  else: raise RuntimeError('cancel_not_honored')
+  await asyncio.sleep(.04)
+  events.append({'after_40ms_while_stopped':(root/'probe-text').read_text(),'state':state()})
+  os.kill(target.pid,signal.SIGCONT); stopped=False
+  for _ in range(50):
+   if (root/'probe-text').read_text()=='甲乙': break
+   await asyncio.sleep(.05)
+  await asyncio.sleep(.4)
+  text=(root/'probe-text').read_text(); events.append({'after_resume':text})
+  print(json.dumps({'events':events,'target_pid':target.pid,'no_clipboard':True},ensure_ascii=False),flush=True)
+  assert events[0]['sent']==1 and events[0]['at_ack']=='甲' and events[2]['after_40ms_while_stopped']=='甲' and text=='甲乙'
+ finally:
+  if stopped and target and target.poll() is None: os.kill(target.pid,signal.SIGCONT)
+  await bridge.aclose()
+  if target and target.poll() is None: target.terminate()
+  if target: target.wait(timeout=5)
+asyncio.run(main())

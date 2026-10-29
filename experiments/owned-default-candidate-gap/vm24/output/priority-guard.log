@@ -1,0 +1,13 @@
+DISPLAY=:0
+WAYLAND_DISPLAY=wayland-0
+XAUTHORITY=/run/user/1000/.mutter-Xwaylandauth.1AL8X3
+XDG_SESSION_TYPE=wayland
+5 1000 inkecho seat0 tty2 active no -
+6 1000 inkecho -     -    active no -
+扩展文件已校验；自动输出时仍须验证当前目标和服务身份。
+actual_installation_state enabled
+/tmp/inkecho-owned-default-acceptance/InkEcho.AppImage: OK
+{"guard-cancel.jsonl": false, "guard-full.jsonl": true, "fcitx-cancel.jsonl": true, "fcitx-switch.jsonl": true}
+Traceback (most recent call last):
+  File "<stdin>", line 10, in <module>
+AssertionError

@@ -1,0 +1,16 @@
+Warning: Permanently added 'localhost' (ED25519) to the list of known hosts.
+SESSION  UID USER    SEAT  TTY  STATE  IDLE SINCE
+      1 1000 inkecho seat0 tty2 active no   -
+      3 1000 inkecho -     -    active no   -
+
+2 sessions listed.
+INSTALL
+ENABLE
+ENABLE_ERROR ExtensionError 操作未完成：扩展可能已存在、尚未加载，或当前桌面不支持。
+INFO_RC 2 INFO_BEGIN
+INFO_END
+STATUS_VALID 未发现扩展或扩展服务不可用；安装后可能需要重新登录。
+NO_PATH_FROM_INFO
+DISABLE_ERROR ExtensionError 操作未完成：扩展可能已存在、尚未加载，或当前桌面不支持。
+UNINSTALL_RC 2 UNINSTALL_ERR Extension “inkecho-ibus-v2-prototype@local.invalid” doesn't exist
+STATUS_ABSENT 未发现扩展或扩展服务不可用；安装后可能需要重新登录。

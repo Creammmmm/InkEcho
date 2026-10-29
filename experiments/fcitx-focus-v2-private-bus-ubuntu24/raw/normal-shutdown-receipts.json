@@ -1,0 +1,16 @@
+[
+  {
+    "command": "python3 -c 'import pathlib,json,subprocess,os\nmatches=[]\nfor p in pathlib.Path('\\''/proc'\\'').iterdir():\n if not p.name.isdigit() or int(p.name)==os.getpid():continue\n try:\n  argv=(p/'\\''cmdline'\\'').read_bytes().split(bytes([0]))\n  if argv and argv[0] in [b'\\''/usr/bin/fcitx5'\\'',b'\\''fcitx5'\\'']:\n   env=(p/'\\''environ'\\'').read_bytes()\n   if b'\\''/tmp/inkecho-fcitx-v2/real-bus-'\\'' in env:matches.append(int(p.name))\n except OSError:pass\nprint(json.dumps({'\\''owned_private_fcitx_processes'\\'':matches}),flush=True)\nassert not matches\n'",
+    "returncode": 0,
+    "stdout": "{\"owned_private_fcitx_processes\": []}\n",
+    "stderr": "",
+    "original_wait_completed": true
+  },
+  {
+    "command": "sudo -n /usr/bin/systemctl poweroff",
+    "returncode": 0,
+    "stdout": "",
+    "stderr": "",
+    "original_wait_completed": true
+  }
+]

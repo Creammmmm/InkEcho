@@ -1,0 +1,260 @@
+[
+  {
+    "case": "selected",
+    "state": {
+      "focused": {
+        "native": true,
+        "ibus": false,
+        "simple": false,
+        "button": false
+      },
+      "active": true,
+      "text": {
+        "native": "",
+        "ibus": "",
+        "simple": ""
+      }
+    },
+    "router": "DefaultAutoOutputRouter",
+    "selected": "ibus",
+    "count": 2
+  },
+  {
+    "case": "output_diagnostic",
+    "state": {
+      "focused": {
+        "native": true,
+        "ibus": false,
+        "simple": false,
+        "button": false
+      },
+      "active": true,
+      "text": {
+        "native": "",
+        "ibus": "",
+        "simple": ""
+      }
+    },
+    "code": "ibus_delivery_unknown",
+    "attempts": 2
+  },
+  {
+    "case": "installed_native",
+    "state": {
+      "focused": {
+        "native": true,
+        "ibus": false,
+        "simple": false,
+        "button": false
+      },
+      "active": true,
+      "text": {
+        "native": "\u7532\u4e59",
+        "ibus": "",
+        "simple": ""
+      }
+    },
+    "installation": "enabled",
+    "switches": {
+      "enabled-extensions": "['inkecho-v3-fixture@local.invalid', 'inkecho-ibus-owned-v5-prototype@local.invalid']",
+      "disabled-extensions": "@as []",
+      "disable-user-extensions": "false"
+    }
+  },
+  {
+    "case": "output_diagnostic",
+    "state": {
+      "focused": {
+        "native": true,
+        "ibus": false,
+        "simple": false,
+        "button": false
+      },
+      "active": true,
+      "text": {
+        "native": "\u7532\u4e59",
+        "ibus": "",
+        "simple": ""
+      }
+    },
+    "code": "ibus_cancelled",
+    "attempts": 1
+  },
+  {
+    "case": "session_cancel_tail",
+    "state": {
+      "focused": {
+        "native": true,
+        "ibus": false,
+        "simple": false,
+        "button": false
+      },
+      "active": true,
+      "text": {
+        "native": "\u7532\u4e59\u4e19",
+        "ibus": "",
+        "simple": ""
+      }
+    }
+  },
+  {
+    "case": "output_diagnostic",
+    "state": {
+      "focused": {
+        "native": true,
+        "ibus": false,
+        "simple": false,
+        "button": false
+      },
+      "active": true,
+      "text": {
+        "native": "\u7532\u4e59\u4e19",
+        "ibus": "",
+        "simple": ""
+      }
+    },
+    "code": "ibus_delivery_unknown",
+    "attempts": 0
+  },
+  {
+    "case": "session_preedit_preserved",
+    "state": {
+      "focused": {
+        "native": true,
+        "ibus": false,
+        "simple": false,
+        "button": false
+      },
+      "active": true,
+      "text": {
+        "native": "\u7532\u4e59\u4e19\u4f60",
+        "ibus": "",
+        "simple": ""
+      }
+    }
+  },
+  {
+    "case": "selected",
+    "state": {
+      "focused": {
+        "native": true,
+        "ibus": false,
+        "simple": false,
+        "button": false
+      },
+      "active": true,
+      "text": {
+        "native": "\u5df1",
+        "ibus": "",
+        "simple": ""
+      }
+    },
+    "router": "DefaultAutoOutputRouter",
+    "selected": "keyboard",
+    "count": 2
+  },
+  {
+    "case": "disabled_list_fallback",
+    "state": {
+      "focused": {
+        "native": true,
+        "ibus": false,
+        "simple": false,
+        "button": false
+      },
+      "active": true,
+      "text": {
+        "native": "\u5df1\u5e9a",
+        "ibus": "",
+        "simple": ""
+      }
+    },
+    "installation": "disabled",
+    "switches": {
+      "enabled-extensions": "['inkecho-v3-fixture@local.invalid', 'inkecho-ibus-owned-v5-prototype@local.invalid']",
+      "disabled-extensions": "['inkecho-ibus-owned-v5-prototype@local.invalid']",
+      "disable-user-extensions": "false"
+    }
+  },
+  {
+    "case": "selected",
+    "state": {
+      "focused": {
+        "native": true,
+        "ibus": false,
+        "simple": false,
+        "button": false
+      },
+      "active": true,
+      "text": {
+        "native": "\u5df1\u5e9a",
+        "ibus": "",
+        "simple": ""
+      }
+    },
+    "router": "DefaultAutoOutputRouter",
+    "selected": "keyboard",
+    "count": 1
+  },
+  {
+    "case": "global_disabled_fallback",
+    "state": {
+      "focused": {
+        "native": true,
+        "ibus": false,
+        "simple": false,
+        "button": false
+      },
+      "active": true,
+      "text": {
+        "native": "\u5df1\u5e9a\u8f9b",
+        "ibus": "",
+        "simple": ""
+      }
+    },
+    "installation": "disabled",
+    "switches": {
+      "enabled-extensions": "['inkecho-v3-fixture@local.invalid', 'inkecho-ibus-owned-v5-prototype@local.invalid']",
+      "disabled-extensions": "@as []",
+      "disable-user-extensions": "true"
+    }
+  },
+  {
+    "case": "selected",
+    "state": {
+      "focused": {
+        "native": true,
+        "ibus": false,
+        "simple": false,
+        "button": false
+      },
+      "active": true,
+      "text": {
+        "native": "\u5df1\u5e9a\u8f9b\u58ec",
+        "ibus": "",
+        "simple": ""
+      }
+    },
+    "router": "DefaultAutoOutputRouter",
+    "selected": "keyboard",
+    "count": 2
+  },
+  {
+    "case": "enabled_xwayland_fallback",
+    "state": {
+      "focused": {
+        "native": true,
+        "ibus": false,
+        "simple": false,
+        "button": false
+      },
+      "active": true,
+      "text": {
+        "native": "\u5df1\u5e9a\u8f9b\u58ec\u7678",
+        "ibus": "",
+        "simple": ""
+      }
+    },
+    "installation": "enabled"
+  }
+]

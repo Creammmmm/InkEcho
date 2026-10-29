@@ -1,0 +1,7 @@
+dbus-daemon[475985]: [session uid=1000 pid=475985 pidfd=5] Activating service name='org.freedesktop.portal.IBus' requested by ':1.0' (uid=1000 pid=475990 comm="ibus-daemon --single --panel=disable --config=disa" label="chatgpt (unconfined)")
+Not connected to the ibus bus
+dbus-daemon[475985]: [session uid=1000 pid=475985 pidfd=5] Activated service 'org.freedesktop.portal.IBus' failed: Process org.freedesktop.portal.IBus exited with status 1
+real events [('focus', '/org/freedesktop/IBus/InputContext_1'), ('focus', '/org/freedesktop/IBus/InputContext_2'), ('cursor', (11, 22, 3, 4))]
+events on fake focus [('focus', '/org/freedesktop/IBus/InputContext_1')]
+previous cursor position remains last observed metadata
+unfocused client cursor update []

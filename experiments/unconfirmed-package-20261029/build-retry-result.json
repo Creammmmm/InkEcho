@@ -1,0 +1,15 @@
+{
+  "build_retry_exit": 120,
+  "quota_remaining_after_exit_bytes": 2048,
+  "artifact_created": false,
+  "cleaned": [
+    {
+      "path": "/tmp/inkecho-unconfirmed-candidate-20261029/source/build/InkEcho.AppDir",
+      "allocated_bytes": 642068480
+    },
+    {
+      "path": "/tmp/inkecho-unconfirmed-candidate-20261029/source/build/system-deps",
+      "allocated_bytes": 61984768
+    }
+  ]
+}

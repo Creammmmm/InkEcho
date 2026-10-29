@@ -1,0 +1,5 @@
+import json,os,sys,tty
+from pathlib import Path
+path=Path(sys.argv[1]);Path(str(path)+'.pid').write_text(str(os.getpid()));tty.setraw(0);data=b'';path.write_text(json.dumps(''))
+while True:
+ data+=os.read(0,1);path.write_text(json.dumps(data.decode('utf8',errors='replace')))

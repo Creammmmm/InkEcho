@@ -1,0 +1,9 @@
+# 32f: explicit IBus no-service fallback on Ubuntu 24 Wayland
+
+AppImage SHA-256 `32f20808a0143d61bf24b2809a11d47344688a7e7edb690684f9e47cfd50bfa5`, unchanged and extracted in the disposable guest. `guest/graphical.log` records an active unlocked Wayland session; `guest/setup.log` and `guest/run.log` record the candidate and extension source hashes. A KVM overlay was backed by an original read-only guest disk; the base and seed were also mounted read-only. setup.sh changes desktop session and network wait only within that temporary guest.
+
+The unmodified product extension and the separate unauthenticated fault helper were installed into the isolated guest. The helper (under fault/) forces a null panel reference; it is test-only and must never be shipped or installed in a user session. The test restores the panel afterwards. Original probe scripts are saved with `.py.txt` suffix and need restoration for a disposable-only reproduction.
+
+In a GTK test target with synthetic audio/transcription, normal IBus dispatch received all eight characters while correctly reporting `ibus_delivery_unknown` because target receipt is not acknowledged by IBus. With artificial absent panel, the genuine Shell owner `:1.32` returned `no_service` before any commit; the keyboard route was tried, failed with `unsupported_compositor` on GNOME 46 Wayland and presented the Xorg guidance; the target received no characters. Simulated first-reply loss after a real attempted commit received one character, reported `ibus_delivery_unknown`, and performed no keyboard fallback or replay. This is not a true wire-level lost message or an actual IBus daemon crash.
+
+No claim is made about production audio/network providers, other application targets or complete package acceptance. Results are only for the specified candidate, environment and synthetic samples. The guest extension cleanup and poweroff are recorded; original disks remain unchanged.

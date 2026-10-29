@@ -1,0 +1,11 @@
+[User]
+Session=ubuntu
+Icon=/home/inkecho/.face
+SystemAccount=false
+
+[InputSource0]
+xkb=us
+Name=Xfce Session
+Exec=startxfce4
+/usr/bin/startxfce4
+/usr/bin/Xorg

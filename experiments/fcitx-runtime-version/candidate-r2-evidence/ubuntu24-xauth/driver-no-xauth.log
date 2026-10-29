@@ -1,0 +1,12 @@
+Authorization required, but no authorization protocol specified
+
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    from inkecho.platform.keyboard import _XTestDriver; d=_XTestDriver(); d.close()
+                                                          ~~~~~~~~~~~~^^
+  File "/tmp/inkecho-native-test/squashfs-root/packages/inkecho/platform/keyboard.py", line 411, in __init__
+    super().__init__()
+    ~~~~~~~~~~~~~~~~^^
+  File "/tmp/inkecho-native-test/squashfs-root/packages/inkecho/platform/keyboard.py", line 167, in __init__
+    raise KeyboardError("display_unavailable")
+inkecho.platform.keyboard.KeyboardError: display_unavailable

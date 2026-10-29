@@ -1,0 +1,29 @@
+[
+  {
+    "argv": [
+      "cmake",
+      "--build",
+      "/tmp/inkecho-fcitx-v2/test-control-build",
+      "-j2"
+    ],
+    "pid": 3086,
+    "returncode": 0,
+    "stdout": "[ 50%] Building CXX object CMakeFiles/ownedtest.dir/control.cpp.o\n[100%] Linking CXX shared module libownedtest.so\n[100%] Built target ownedtest\n",
+    "stderr": "",
+    "original_wait_completed": true
+  },
+  {
+    "argv": [
+      "dbus-run-session",
+      "--",
+      "/usr/bin/python3",
+      "/tmp/inkecho-fcitx-v2/run_protocol.py",
+      "product-native"
+    ],
+    "pid": 3110,
+    "returncode": 1,
+    "stdout": "",
+    "stderr": "Traceback (most recent call last):\n  File \"/tmp/inkecho-fcitx-v2/run_protocol.py\", line 134, in run\n    await router.insert('\u4e59',lambda:True,deadline=time.monotonic()+.08)\n  File \"/tmp/inkecho-fcitx-v2/src/inkecho/platform/output_router.py\", line 522, in insert\n    raise OutputRouterError(\ninkecho.platform.output_router.OutputRouterError: fcitx_delivery_unknown\n\nDuring handling of the above exception, another exception occurred:\n\nTraceback (most recent call last):\n  File \"/tmp/inkecho-fcitx-v2/run_protocol.py\", line 154, in <module>\n    asyncio.run(run())\n  File \"/usr/lib/python3.12/asyncio/runners.py\", line 194, in run\n    return runner.run(main)\n           ^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/asyncio/runners.py\", line 118, in run\n    return self._loop.run_until_complete(task)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/asyncio/base_events.py\", line 687, in run_until_complete\n    return future.result()\n           ^^^^^^^^^^^^^^^\n  File \"/tmp/inkecho-fcitx-v2/run_protocol.py\", line 137, in run\n    assert error.code=='partial_input_failed',error.code\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: fcitx_delivery_unknown\n",
+    "original_wait_completed": true
+  }
+]

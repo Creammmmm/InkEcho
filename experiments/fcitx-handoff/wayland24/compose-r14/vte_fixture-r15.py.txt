@@ -1,0 +1,26 @@
+import json,signal,sys
+from pathlib import Path
+import gi
+gi.require_version('Gtk','3.0'); gi.require_version('Vte','2.91')
+from gi.repository import Gtk, Vte, GLib
+out=Path(sys.argv[1]); state=Path(sys.argv[2]); scenario=sys.argv[3]
+windows=[]; terminals=[]
+script="import json,os,sys,tty; tty.setraw(0); data=b''; p=sys.argv[1];\nwhile True:\n b=os.read(0,1); data+=b; open(p,'w').write(json.dumps(data.decode('utf-8',errors='replace')))"
+for index in range(2 if scenario=='switch' else 1):
+ output=out if index==0 else Path(str(out)+'.second'); output.write_text(json.dumps(''))
+ w=Gtk.Window(title='InkEcho owned VTE %d'%index); w.set_default_size(640,360)
+ t=Vte.Terminal(); w.add(t); w.show_all()
+ t.spawn_async(Vte.PtyFlags.DEFAULT,None,['/usr/bin/python3','-u','-c',script,str(output)],[],GLib.SpawnFlags.DEFAULT,None,None,-1,None,None,None)
+ windows.append(w); terminals.append(t)
+def focus(index):
+ windows[index].present(); terminals[index].grab_focus(); return False
+signal.signal(signal.SIGUSR1,lambda *_:GLib.idle_add(focus,1))
+focus(0)
+GLib.timeout_add(500,focus,0)
+def record():
+ for index,(w,t) in enumerate(zip(windows,terminals)):
+  path=state if index==0 else Path(str(state)+'.second')
+  path.write_text(json.dumps({'active':w.is_active(),'focused':t.has_focus()}))
+ return True
+GLib.timeout_add(50,record)
+Gtk.main()
