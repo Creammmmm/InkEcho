@@ -1,6 +1,6 @@
 [project]
 name = "inkecho"
-version = "0.10.2"
+version = "0.10.3"
 description = "A privacy-conscious Linux voice input application"
 requires-python = ">=3.12"
 dependencies = [
@@ -19,6 +19,9 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.ruff]
+# Historical experiment probes and fixtures are immutable verification evidence.
+# Maintained application code, tests and validation tools belong outside this archive.
+extend-exclude = ["experiments"]
 line-length = 88
 target-version = "py312"
 
