@@ -64,3 +64,31 @@ exceeded the UNIX socket pathname limit for unrelated IBus tests. Final complete
 workflow checks must use a short private runtime temporary root, retain that
 failed log, and generate a receipt for the exact final clean commit. Switching
 temporary filesystems alone does not fix the production inode-ownership defect.
+
+## Repeated-cancellation test fixture
+
+The source regression's simulated provider originally ignored one cancellation
+and waited again. Terminal cleanup and replacement preparation can legitimately
+cancel it more than once, so the fixture sometimes exited before reaching its
+required late callback. This was a fixture scheduling failure, not evidence of
+late product output. The original failed workflow is preserved above.
+
+The maintained fixture now ignores repeated cancellation until its own bounded
+release, observes cancellation and explicitly injects another cancellation wave
+before replacement. It still forces the late callback attempt and requires zero
+batches, zero finished count, closed old bridge and an intact new recording task.
+No production task-ID, expiry, epoch or output checks were relaxed.
+
+Independent short-runtime validation executed the five original cases, thirty
+replacement repetitions and two repeated protocol cases: **37 passed in 0.25
+seconds**. The repetition runner is local to the review; the maintained five
+cases reproduce with:
+
+```sh
+.venv/bin/python -m pytest -q tests/test_fcitx_neighbor_safety.py \
+  --basetemp /run/user/1000/inkecho-cancel-test-UNIQUE
+```
+
+Apply the same private-directory precautions above. These are synthetic provider
+and transport checks; they do not establish microphone, website or new package
+compatibility. Historical experiment implementations were not changed.

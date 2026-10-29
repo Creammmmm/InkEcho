@@ -24,17 +24,24 @@ def test_retained_first_scalar_late_provider_never_crosses_task(sessions, action
         release = asyncio.Event()
         ready = asyncio.Event()
         late = asyncio.Event()
+        cancellation_seen = asyncio.Event()
+        producer_tasks = []
         buses = []
         bridges = []
 
         class Producer(Client):
             async def polish_stream(self, *a):
+                producer_tasks.append(asyncio.current_task())
                 await a[-1]("甲")
                 entered.set()
-                try:
-                    await release.wait()
-                except asyncio.CancelledError:
-                    await release.wait()
+                # A provider may ignore repeated cancellation, including one
+                # caused by replacement preparation after explicit cancellation.
+                while not release.is_set():
+                    try:
+                        await release.wait()
+                    except asyncio.CancelledError:
+                        cancellation_seen.set()
+                        continue
                 late.set()
                 await a[-1]("迟到")
                 return Result("甲迟到", Usage(), 0)
@@ -85,6 +92,11 @@ def test_retained_first_scalar_late_provider_never_crosses_task(sessions, action
             else:
                 session.cancel()
             if action == "replace":
+                await asyncio.wait_for(cancellation_seen.wait(), 1)
+                # Make the replacement cancellation wave deterministic instead
+                # of depending on cleanup task scheduling under the full suite.
+                producer_tasks[0].cancel()
+                await asyncio.sleep(0)
                 session.last_toggle = 0
                 await session.toggle()
                 newid = session.controller.task.id
