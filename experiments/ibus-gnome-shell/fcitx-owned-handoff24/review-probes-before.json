@@ -1,0 +1,146 @@
+[
+  {
+    "case": "no_service",
+    "error": [
+      "OutputRouterError",
+      "input_capability_unknown",
+      0
+    ],
+    "owned_sent": [],
+    "keyboard_sent": [],
+    "fc_closed": 1,
+    "owned_closed": 1,
+    "selected": null,
+    "counts": {
+      "state": 2,
+      "detect": 5,
+      "probe": 2
+    }
+  },
+  {
+    "case": "stop_connect",
+    "error": [
+      "OutputRouterError",
+      "input_cancelled",
+      0
+    ],
+    "owned_sent": [],
+    "keyboard_sent": [],
+    "fc_closed": 1,
+    "owned_closed": 1,
+    "selected": null,
+    "counts": {
+      "state": 2,
+      "detect": 4,
+      "probe": 1
+    }
+  },
+  {
+    "case": "cancel_connect",
+    "error": [
+      "CancelledError",
+      null,
+      null
+    ],
+    "owned_sent": [],
+    "keyboard_sent": [],
+    "fc_closed": 1,
+    "owned_closed": 1,
+    "selected": null,
+    "counts": {
+      "state": 2,
+      "detect": 4,
+      "probe": 1
+    }
+  },
+  {
+    "case": "stop_refresh",
+    "error": [
+      "OutputRouterError",
+      "input_cancelled",
+      0
+    ],
+    "owned_sent": [],
+    "keyboard_sent": [],
+    "fc_closed": 1,
+    "owned_closed": 1,
+    "selected": null,
+    "counts": {
+      "state": 2,
+      "detect": 4,
+      "probe": 2
+    }
+  },
+  {
+    "case": "stop_close",
+    "error": [
+      "OutputRouterError",
+      "input_cancelled",
+      0
+    ],
+    "owned_sent": [],
+    "keyboard_sent": [],
+    "fc_closed": 1,
+    "owned_closed": 1,
+    "selected": null,
+    "counts": {
+      "state": 2,
+      "detect": 5,
+      "probe": 2
+    }
+  },
+  {
+    "case": "close_error",
+    "error": [
+      "OutputRouterError",
+      "input_cleanup_failed",
+      0
+    ],
+    "owned_sent": [],
+    "keyboard_sent": [],
+    "fc_closed": 1,
+    "owned_closed": 1,
+    "selected": null,
+    "counts": {
+      "state": 2,
+      "detect": 5,
+      "probe": 2
+    }
+  },
+  {
+    "case": "connect_error",
+    "error": [
+      "OutputRouterError",
+      "ibus_unavailable",
+      0
+    ],
+    "owned_sent": [],
+    "keyboard_sent": [],
+    "fc_closed": 1,
+    "owned_closed": 1,
+    "selected": null,
+    "counts": {
+      "state": 2,
+      "detect": 4,
+      "probe": 1
+    }
+  },
+  {
+    "case": "probe_error",
+    "error": [
+      "TimeoutError",
+      null,
+      null
+    ],
+    "owned_sent": [],
+    "keyboard_sent": [],
+    "fc_closed": 1,
+    "owned_closed": 0,
+    "selected": null,
+    "counts": {
+      "state": 2,
+      "detect": 4,
+      "probe": 1
+    }
+  }
+]

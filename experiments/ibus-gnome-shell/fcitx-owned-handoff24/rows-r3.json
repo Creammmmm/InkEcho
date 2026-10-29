@@ -1,0 +1,74 @@
+[
+  {
+    "case": "product-normal",
+    "code": "ibus_delivery_unknown",
+    "state": {
+      "focused": {
+        "native": true,
+        "ibus": false,
+        "simple": false,
+        "button": false
+      },
+      "active": true,
+      "text": {
+        "native": "\u7532\u4e59",
+        "ibus": "",
+        "simple": ""
+      }
+    }
+  },
+  {
+    "case": "preedit",
+    "code": "ibus_delivery_unknown",
+    "state": {
+      "focused": {
+        "native": true,
+        "ibus": false,
+        "simple": false,
+        "button": false
+      },
+      "active": true,
+      "text": {
+        "native": "\u7532\u4e59",
+        "ibus": "",
+        "simple": ""
+      }
+    }
+  },
+  {
+    "case": "cancel",
+    "code": "ibus_cancelled",
+    "state": {
+      "focused": {
+        "native": true,
+        "ibus": false,
+        "simple": false,
+        "button": false
+      },
+      "active": true,
+      "text": {
+        "native": "\u7532\u4e59\u4f60\u4e19",
+        "ibus": "",
+        "simple": ""
+      }
+    }
+  },
+  {
+    "case": "no-text-target",
+    "code": "input_capability_unknown",
+    "state": {
+      "focused": {
+        "native": false,
+        "ibus": false,
+        "simple": false,
+        "button": true
+      },
+      "active": true,
+      "text": {
+        "native": "\u7532\u4e59\u4f60\u4e19",
+        "ibus": "",
+        "simple": ""
+      }
+    }
+  }
+]diff --git a/experiments/ibus-gnome-shell/fcitx-owned-handoff24/offline-regression.log b/experiments/ibus-gnome-shell/fcitx-owned-handoff24/offline-regression.log

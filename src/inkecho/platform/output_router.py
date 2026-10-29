@@ -287,6 +287,7 @@ class OutputRouter:
         self._failed = False
         self._ibus_attempted = False
         self._ibus_acknowledged_attempts = 0
+        self._owned_handoff_scope = False
         if selected is not None and selected is not self.keyboard:
             await selected.aclose()
 
@@ -489,7 +490,10 @@ class OutputRouter:
             offset = error.unsent_offset
             if (
                 self._auto_task
-                and getattr(self, "_fcitx_keyboard_fallback_allowed", True)
+                and (
+                    getattr(self, "_fcitx_keyboard_fallback_allowed", True)
+                    or callable(getattr(self, "_handoff_unsent_fcitx", None))
+                )
                 and self._kind == "fcitx"
                 and error.code in {"no_target", "ambiguous_target"}
                 and not error.uncertain
@@ -501,6 +505,10 @@ class OutputRouter:
                 try:
                     if not can_continue():
                         raise OutputRouterError("input_cancelled")
+                    if not getattr(self, "_fcitx_keyboard_fallback_allowed", True):
+                        return await self._handoff_unsent_fcitx(
+                            error, text, can_continue, deadline, on_first_sent
+                        )
                     bridge = self._selected
                     await bridge.aclose()
                     self._selected, self._kind = self.keyboard, "keyboard"
@@ -540,6 +548,14 @@ class OutputRouter:
                 f"{self._kind}_" + error.code, acknowledged_attempts=error.accepted
             ) from None
         except IBusBridgeError as error:
+            if getattr(self, "_owned_handoff_scope", False):
+                self._failed = True
+                raise OutputRouterError(
+                    self._owned_failure_code(error),
+                    acknowledged_attempts=max(
+                        self._ibus_acknowledged_attempts, error.acknowledged_attempts
+                    ),
+                ) from None
             if (
                 (not self._auto_task or getattr(self, "_owned_auto_scope", False))
                 and self._kind == "ibus"

@@ -86,6 +86,7 @@ class OwnedAutoOutputRouter(OutputRouter):
         **kwargs,
     ):
         super().__init__(keyboard, ibus_factory=legacy_factory, **kwargs)
+        self._owned_probe = owned_probe
         self._owned_factory = owned_factory
         self._owned_auto_candidate = True
 

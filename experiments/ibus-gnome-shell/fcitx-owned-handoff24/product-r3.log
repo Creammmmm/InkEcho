@@ -1,0 +1,9 @@
+INSTALLER_OK
+{"fcitx_pid": 4618, "fcitx_owner": ":1.148", "ibus_owner": ":1.59", "distinct": true}
+{"case": "product-normal", "code": "ibus_delivery_unknown", "state": {"focused": {"native": true, "ibus": false, "simple": false, "button": false}, "active": true, "text": {"native": "\u7532\u4e59", "ibus": "", "simple": ""}}}
+{"case": "preedit", "code": "ibus_delivery_unknown", "state": {"focused": {"native": true, "ibus": false, "simple": false, "button": false}, "active": true, "text": {"native": "\u7532\u4e59", "ibus": "", "simple": ""}}}
+{"case": "cancel", "code": "ibus_cancelled", "state": {"focused": {"native": true, "ibus": false, "simple": false, "button": false}, "active": true, "text": {"native": "\u7532\u4e59\u4f60\u4e19", "ibus": "", "simple": ""}}}
+{"case": "no-text-target", "code": "input_capability_unknown", "state": {"focused": {"native": false, "ibus": false, "simple": false, "button": true}, "active": true, "text": {"native": "\u7532\u4e59\u4f60\u4e19", "ibus": "", "simple": ""}}}
+PRODUCT_CASES_PASSED
+ACTOR_EXIT 0
+FCITX_EXIT 0

@@ -1,0 +1,9 @@
+INSTALLER_OK
+{"fcitx_pid": 4102, "fcitx_owner": ":1.123", "ibus_owner": ":1.59", "distinct": true}
+{"case": "preedit", "code": "no_target", "accepted": 0, "uncertain": false, "offset": 0, "proof_before": ["ibus", ":1.24"], "preedit": [true, true]}
+{"case": "preedit-owned", "code": "delivery_unknown", "state": {"focused": {"native": true, "ibus": false, "simple": false, "button": false}, "active": true, "text": {"native": "", "ibus": "", "simple": ""}}}
+{"case": "cancel", "code": "no_target", "accepted": 0, "uncertain": false, "offset": 0, "proof_before": ["ibus", ":1.24"], "preedit": [true, false]}
+{"case": "cancel-owned", "code": "cancelled", "state": {"focused": {"native": true, "ibus": false, "simple": false, "button": false}, "active": true, "text": {"native": "\u4f60\u4e19", "ibus": "", "simple": ""}}}
+PREEDIT_CANCEL_PASSED
+ACTOR_EXIT 0
+FCITX_EXIT 0
