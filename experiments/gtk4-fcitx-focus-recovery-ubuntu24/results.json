@@ -1,0 +1,40 @@
+{
+  "source": "d1f4f73694577984defb23c656a13bc98927f7cd",
+  "version": "0.10.6",
+  "system": "Ubuntu24.04.5 GNOME46 native Wayland",
+  "gtk4_frontend": "5.1.1-1build2 cached official Ubuntu package",
+  "editor": "GNOME Text Editor46.3",
+  "editor_native": true,
+  "before_context_focused_count": 0,
+  "after_key_context_focused_count": 1,
+  "after_key_character_counts": [
+    1,
+    1
+  ],
+  "route": {
+    "count": 4,
+    "selected": "fcitx",
+    "handoff": false
+  },
+  "after_route_character_counts": [
+    5,
+    5
+  ],
+  "minimal_initial_focused_count": 1,
+  "first_minimal_pointer_sample_invalid": "VNC click lost actual focus; no key received; no compatibility conclusion",
+  "cleanup": {
+    "enabled-extensions": "@as []",
+    "disabled-extensions": "['inkecho-ibus-candidate@local.invalid', 'inkecho-ibus-focus-probe@local.invalid', 'inkecho-ibus-v2-prototype@local.invalid']",
+    "disable-user-extensions": "false",
+    "settings_restored": true,
+    "gdm_restored": true,
+    "hints_restored": true,
+    "addon_already_deactivated": true,
+    "extensions_removed": true,
+    "gtk4_remove_exit": 0,
+    "owned_processes": [],
+    "first_cleanup_error": "redundant disable found already-deactivated addon; remaining cleanup then verified"
+  },
+  "archive_sha256": "bd4c2052487b3b3eb12948e512b861b684600197ea59fa5c6364da5769e1f245",
+  "archive_regular_files": 35
+}
