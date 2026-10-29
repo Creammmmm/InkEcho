@@ -27,6 +27,97 @@ QT_PLUGINS = {
     "wayland-shell-integration",
 }
 
+# These exact source and binary hashes are bound to the documented standalone
+# plugin experiments, not to AppImage acceptance or a general support claim.
+FCITX5_PLUGIN_SHA256 = (
+    "3a3c80fb464bbfce465b52cb73e998a00705998a768c45400416daf29e89a497"
+)
+FCITX5_CONF_SHA256 = "44a1386046f2b4df4ea9ba73a43d7caf353e1039f7c14a316cc73e4c928bcb57"
+FCITX5_SOURCE_SHA256 = {
+    "CMakeLists.txt": (
+        "30cf333e2a67288c76b2d5b9dbf9095c8b68cde61c108653c277d8ef46faa850"
+    ),
+    "focused_context.h": (
+        "9fbfd4008a8b3f8ec8880b722b9fbe37198877da65c6168c60a7df5070fe0525"
+    ),
+    "inkecho.conf.in": (
+        "4911bd724fbd1035fb3d24dbe6e872ceb3e20fc38976a1db8af244ca0c689b0e"
+    ),
+    "inkecho.cpp": "7963ede79326c0f3ef87ea5daf51a515632214def0dabc8553d6ff2120363934",
+    "task_gate.h": "88f2a9dc762d5d135818531621b85fa1873b132ecb2926a04e68456355df9a80",
+    "utf8_scalar.h": "685754ac1701df448902bcc57adee099925b6dc80ecac06cbea7e669c6913da9",
+}
+
+
+def verified_fcitx5_candidate(root):
+    """Freeze the experimentally verified candidate; never read compatibility claims."""
+    source = root / "native/fcitx5"
+    assets = root / "assets/native/fcitx5/x86_64"
+    try:
+        for name, expected in FCITX5_SOURCE_SHA256.items():
+            path = source / name
+            if (
+                path.is_symlink()
+                or hashlib.sha256(path.read_bytes()).hexdigest() != expected
+            ):
+                raise ValueError("source mismatch")
+        library = assets / "libinkecho.so"
+        config = assets / "inkecho.conf"
+        if library.is_symlink() or config.is_symlink():
+            raise ValueError("candidate symlink")
+        library_bytes, config_bytes = library.read_bytes(), config.read_bytes()
+        if (
+            hashlib.sha256(library_bytes).hexdigest() != FCITX5_PLUGIN_SHA256
+            or hashlib.sha256(config_bytes).hexdigest() != FCITX5_CONF_SHA256
+            or len(library_bytes) < 64
+            or library_bytes[:6] != b"\x7fELF\x02\x01"
+            or int.from_bytes(library_bytes[16:18], "little") != 3
+            or int.from_bytes(library_bytes[18:20], "little") != 62
+        ):
+            raise ValueError("candidate mismatch")
+    except (OSError, ValueError):
+        raise SystemExit(
+            "Fcitx5 candidate or pinned source mismatch; rebuild and revalidate."
+        ) from None
+    return library_bytes, config_bytes
+
+
+def install_fcitx5_candidate(appdir, candidate):
+    """Copy the verified data to AppDir; this does not install or activate Fcitx."""
+    library, config = candidate
+    if (
+        hashlib.sha256(library).hexdigest() != FCITX5_PLUGIN_SHA256
+        or hashlib.sha256(config).hexdigest() != FCITX5_CONF_SHA256
+    ):
+        raise ValueError("Fcitx5 candidate changed after verification")
+    base = appdir / "usr/share/inkecho/fcitx5/x86_64"
+    payload = base / "candidate"
+    payload.mkdir(parents=True)
+    # Staging rejects group-writable inputs. Do not inherit a permissive umask.
+    base.chmod(0o755)
+    payload.chmod(0o755)
+    (payload / "libinkecho.so").write_bytes(library)
+    (payload / "inkecho.conf").write_bytes(config)
+    (payload / "libinkecho.so").chmod(0o644)
+    (payload / "inkecho.conf").chmod(0o644)
+    metadata = {
+        "status": "uninstalled-candidate",
+        "architecture": "x86_64",
+        "os_id": "ubuntu",
+        "os_version": "24.04",
+        "fcitx5_core_version": "5.1.7",
+        "focus_protocol_version": 2,
+        "legacy_begin_supported": True,
+        "files_sha256": {
+            "libinkecho.so": FCITX5_PLUGIN_SHA256,
+            "inkecho.conf": FCITX5_CONF_SHA256,
+        },
+        "source_sha256": FCITX5_SOURCE_SHA256,
+    }
+    (base / "manifest.json").write_text(json.dumps(metadata, indent=2) + "\n")
+    (base / "manifest.json").chmod(0o644)
+    return metadata
+
 
 def runtime_distributions():
     pending = [Requirement(item) for item in metadata.requires("inkecho") or []]

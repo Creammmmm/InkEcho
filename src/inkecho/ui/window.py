@@ -293,7 +293,14 @@ class MainWindow(QMainWindow):
         self.cancel_action.setVisible(
             state in {"recording", "transcribing", "polishing", "injecting"}
         )
-        if state in {"idle", "recording", "failed", "cancelled", "succeeded"}:
+        if state in {
+            "idle",
+            "recording",
+            "failed",
+            "cancelled",
+            "succeeded",
+            "unconfirmed",
+        }:
             self.overlay.set_text("")
         if state == "recording":
             self.recording_started = time.monotonic()

@@ -511,6 +511,49 @@ def test_cleanup_source_wait_then_held_release_retries_without_early_reset(remot
     run(scenario())
 
 
+def test_intentional_stop_does_not_emit_unexpected_session_closed():
+    from types import SimpleNamespace
+
+    from dbus_next import MessageType
+
+    from inkecho.platform.wayland_worker import INTERFACE, MutterSession
+
+    async def scenario():
+        remote = MutterSession()
+        remote.owner, remote.path = ":1.42", "/owned/session"
+        events = []
+        remote.on_closed = lambda: events.append("unexpected")
+
+        class Bus:
+            def disconnect(self):
+                events.append("disconnected")
+
+        remote.bus = Bus()
+        signal = SimpleNamespace(
+            message_type=MessageType.SIGNAL,
+            sender=remote.owner,
+            path=remote.path,
+            interface=INTERFACE,
+            member="Closed",
+        )
+
+        async def call(_path, _interface, member, *_args):
+            assert member == "Stop"
+            remote._message(signal)
+
+        remote._call = call
+        await remote.close()
+        assert events == ["disconnected"]
+        assert not remote.closed_signal
+
+        remote._closing = False
+        remote.owner, remote.path = signal.sender, signal.path
+        remote._message(signal)
+        assert events[-1] == "unexpected" and remote.closed_signal
+
+    asyncio.run(scenario())
+
+
 def test_mutter_snapshot_rechecks_modifiers_when_revision_changes_with_same_map():
     from inkecho.platform.eis import ObserverError
     from inkecho.platform.wayland_worker import MutterSession

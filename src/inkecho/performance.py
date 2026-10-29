@@ -39,7 +39,7 @@ def validate_snapshot(snapshot: dict) -> dict:
         and type(snapshot["schema_version"]) is int
         and snapshot["schema_version"] == 1
         and type(snapshot["outcome"]) is str
-        and snapshot["outcome"] in {"succeeded", "failed", "cancelled"}
+        and snapshot["outcome"] in {"succeeded", "unconfirmed", "failed", "cancelled"}
     )
     if not valid:
         raise ValueError("Invalid performance metadata.")
@@ -87,7 +87,7 @@ class TaskTiming:
             self._events[event] = observed - self._started
 
     def finish(self, outcome: str) -> dict:
-        if outcome not in {"succeeded", "failed", "cancelled"}:
+        if outcome not in {"succeeded", "unconfirmed", "failed", "cancelled"}:
             raise ValueError("Unknown task outcome.")
         if self._outcome is None:
             self.mark("task_finished")

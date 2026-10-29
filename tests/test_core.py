@@ -270,3 +270,19 @@ def test_observer_exception_does_not_strand_lifecycle(setup, raising_state):
     assert core.outcome == State.CANCELLED
     core.on_state = None
     assert core.begin() is not None
+
+
+def test_unconfirmed_releases_task_and_allows_new_task_without_reviving_old(setup):
+    core, inputs, states, _clock = setup
+    inputs.defer = True
+    task_id = transcribing(core)
+    core.transcribed(task_id, "合成")
+    core.injection_unconfirmed(task_id)
+    assert states[-2:] == [State.UNCONFIRMED, State.IDLE]
+    assert core.task is None and core.outcome == State.UNCONFIRMED
+    next_id = core.begin()
+    assert next_id and next_id != task_id
+    core.injection_unconfirmed(task_id)
+    assert core.task.id == next_id and core.state == State.RECORDING
+    core.cancel()
+    assert core.outcome == State.CANCELLED and core.task is None

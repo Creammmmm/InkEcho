@@ -70,6 +70,24 @@ def test_corrupt_data_preserved_until_explicit_clear(tmp_path, body):
     assert stats.today()["recordings"] == 0
 
 
+def test_unrepresentable_statistics_value_is_rejected_without_overwriting(tmp_path):
+    path = tmp_path / "stats.json"
+    values = statistics.empty_day()
+    values["characters"] = 10**400
+    body = json.dumps({"schema_version": 1, "days": {"2026-10-28": values}})
+    path.write_text(body)
+    with pytest.raises(StatisticsError):
+        Statistics(path).today()
+    assert path.read_text() == body
+
+
+def test_unrepresentable_new_statistics_value_is_rejected(tmp_path):
+    path = tmp_path / "stats.json"
+    with pytest.raises(ValueError):
+        Statistics(path).record("succeeded", characters=10**400)
+    assert not path.exists()
+
+
 @pytest.mark.parametrize(
     "values",
     [{"audio_seconds": float("nan")}, {"characters": -1}, {"transcription_calls": 0.5}],
@@ -79,3 +97,21 @@ def test_invalid_numbers_do_not_write(tmp_path, values):
     with pytest.raises(ValueError):
         stats.record("succeeded", **values)
     assert not stats.path.exists()
+
+
+def test_unconfirmed_preserves_legacy_statistics_schema(tmp_path):
+    import json
+
+    from inkecho.statistics import Statistics, empty_day
+
+    path = tmp_path / "statistics.json"
+    stats = Statistics(path)
+    stats.record("unconfirmed", characters=3)
+    day = stats.today()
+    assert set(day) == set(empty_day())
+    assert day["succeeded"] == 1  # fully attempted, not confirmed delivery
+    assert day["failed"] == 0
+    assert day["characters"] == 3
+    raw = json.loads(path.read_text())
+    assert raw["schema_version"] == 1
+    assert set(next(iter(raw["days"].values()))) == set(empty_day())

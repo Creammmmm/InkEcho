@@ -8,6 +8,10 @@ def test_only_safe_codes_and_levels_are_written(tmp_path):
     try:
         log.record("startup")
         log.record("error", "authentication")
+        log.record("error", "input_cleanup_failed")
+        log.record("error", "input_capability_unknown")
+        assert "ERROR error input_capability_unknown" in log.recent()
+        assert "ERROR error input_cleanup_failed" in log.recent()
         assert "INFO startup" in log.recent()
         assert "ERROR error authentication" in log.recent()
         with pytest.raises(ValueError):
@@ -96,5 +100,19 @@ def test_performance_rejects_non_numeric_or_unsafe_values(tmp_path, value):
         with pytest.raises(ValueError, match="Invalid performance metadata"):
             log.record_performance(snapshot)
         assert log.recent() == ""
+    finally:
+        log.close()
+
+
+def test_all_input_diagnostic_labels_are_loggable_without_private_text(tmp_path):
+    from inkecho.app import KEYBOARD_LABELS
+
+    log = DiagnosticLog(tmp_path)
+    try:
+        for code in KEYBOARD_LABELS:
+            log.record("error", code)
+        with pytest.raises(ValueError):
+            log.record("error", "private text")
+        assert "private text" not in log.recent()
     finally:
         log.close()

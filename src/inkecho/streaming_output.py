@@ -7,6 +7,7 @@ from dataclasses import dataclass, field
 
 from inkecho.platform.keyboard import KeyboardError
 from inkecho.providers import ProviderError
+from inkecho.text_normalization import normalize_newlines
 
 CHUNK_CHARACTERS = 128
 QUEUE_CHUNKS = 32
@@ -122,7 +123,7 @@ class StreamingOutput:
         self._pending_cr = raw.endswith("\r")
         if self._pending_cr:
             raw = raw[:-1]
-        normalized = raw.replace("\r\n", "\n").replace("\r", "\n")
+        normalized = normalize_newlines(raw)
         if not self._has_nonblank:
             self._leading += normalized
             if not self._leading.strip():

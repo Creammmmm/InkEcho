@@ -81,6 +81,9 @@ class Settings:
     polishing_timeout_seconds: int = 30
     prompt: str = "builtin-faithful"
     recording_limit_seconds: int = 120
+    x11_mapping_wait_ms: int = 40
+    x11_feedback_timeout_ms: int = 40
+    output_method: str = "auto"
     overlay_style: str = "siri"
     overlay_position: str = "bottom-center"
     overlay_opacity: float = 0.9
@@ -96,6 +99,13 @@ class Settings:
             if value:
                 require_id(value)
         require_id(self.prompt)
+        if not isinstance(self.output_method, str) or self.output_method not in {
+            "auto",
+            "keyboard",
+            "fcitx",
+            "ibus",
+        }:
+            raise ConfigError("Choose a supported output method.")
         if type(self.sample_rate) is not int or self.sample_rate not in {
             16000,
             24000,
@@ -106,6 +116,14 @@ class Settings:
             1 <= self.recording_limit_seconds <= 300
         ):
             raise ConfigError("Recording limit must be between 1 and 300 seconds.")
+        if type(self.x11_mapping_wait_ms) is not int or not (
+            20 <= self.x11_mapping_wait_ms <= 250
+        ):
+            raise ConfigError("X11 mapping wait must be between 20 and 250 ms.")
+        if type(self.x11_feedback_timeout_ms) is not int or not (
+            20 <= self.x11_feedback_timeout_ms <= 250
+        ):
+            raise ConfigError("X11 feedback timeout must be between 20 and 250 ms.")
         for name in (
             "polishing_enabled",
             "polishing_fallback",
@@ -214,13 +232,17 @@ _POLISHING_RULES = """# 角色与任务边界
 # 结合上下文修正识别错误
 - 先通读整段，结合主题、固定搭配、句法、前后重复提及及明确自我修正，
   识别同音、近音、声调混淆、音节切分错误及近形字造成的错别字。
-- 原词明显不合语境、候选与原词发音或字形接近，且上下文足以排除歧义时，才作最小替换。
+- 按证据强弱处理：正确写法明确时直接改正；原词明显不合语境、候选与原词发音或字形
+  接近且整段内容强烈支持该候选时，作最小替换；存在多个合理解释时保留原词，不猜测。
   软件启动语境的“这个软见启动不了”可改为“这个软件启动不了”；
   配置文件语境的“保存在配制文件里”可改为“保存在配置文件里”；
   接口认证语境的“接口见权失败”可改为“接口鉴权失败”。
   示例只说明规则，不带入输出，不作机械词表替换。无法唯一判断的词保持原样，不列候选或追问。
-- 人名、地名、品牌、专业术语、缩写、多语言词及口述技术词尤其保守；
-  除非原文明示正确拼写或明确自我修正，不凭常识猜改、翻译或扩展缩写。
+- 在技术语境中，可根据本段明确的接口、配置或开发主题还原明显的常见术语音译：
+  例如接口认证中的“脱肯”可改为“Token”，接口调用中的“阿屁艾”可改为“API”。
+  这些仅是示例，不能脱离上下文机械替换；无法确定术语时保留原词。
+- 人名、地名、品牌、型号和不常见专有名词尤其保守：本段已出现明确写法或自我修正时
+  可统一其明显误识别，除此之外不凭常识猜测；不擅自翻译或扩展缩写。
 - 保留路径、网址、邮箱、命令、代码标识符、环境变量和配置键的大小写及内部符号；
   不得改写版本号、数值、金额、日期和单位，不把 true / false 改成自然语言或其他值。
   例如 v0.10.0 不简写为 v0.10；中英混输、原有 emoji 和技术格式保持完整。

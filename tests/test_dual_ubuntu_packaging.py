@@ -92,6 +92,46 @@ def test_duplicate_locked_application_version_is_rejected(builder, metadata):
         builder.project_version(metadata)
 
 
+def test_non_x86_64_build_rejects_before_candidate_or_appdir_changes(
+    builder, metadata, monkeypatch
+):
+    appdir = metadata / "build/InkEcho.AppDir"
+    appdir.mkdir(parents=True)
+    sentinel = appdir / "old-build-marker"
+    sentinel.write_bytes(b"preserve existing build")
+    monkeypatch.setattr(builder, "ROOT", metadata)
+    monkeypatch.setattr(builder, "APPDIR", appdir)
+    monkeypatch.setattr(builder.platform, "machine", lambda: "aarch64")
+    monkeypatch.setattr(
+        builder,
+        "verified_fcitx5_candidate",
+        lambda *_args: pytest.fail("architecture must reject before candidate lookup"),
+    )
+    with pytest.raises(SystemExit, match="Linux x86_64 only"):
+        builder.main()
+    assert sentinel.read_bytes() == b"preserve existing build"
+
+
+def test_missing_fcitx_candidate_rejects_before_downloading_or_replacing_appdir(
+    builder, metadata, monkeypatch
+):
+    appdir = metadata / "build/InkEcho.AppDir"
+    appdir.mkdir(parents=True)
+    sentinel = appdir / "old-build-marker"
+    sentinel.write_bytes(b"preserve existing build")
+    monkeypatch.setattr(builder, "ROOT", metadata)
+    monkeypatch.setattr(builder, "APPDIR", appdir)
+    monkeypatch.setattr(builder.platform, "machine", lambda: "x86_64")
+    monkeypatch.setattr(
+        builder.urllib.request,
+        "urlretrieve",
+        lambda *_args: pytest.fail("candidate rejection must precede downloads"),
+    )
+    with pytest.raises(SystemExit, match="Fcitx5 candidate or pinned source mismatch"):
+        builder.main()
+    assert sentinel.read_bytes() == b"preserve existing build"
+
+
 @pytest.fixture
 def userspace_check(tmp_path):
     # Copy only this shell entry into a disposable repository-shaped directory.

@@ -1,0 +1,497 @@
+"""Fcitx5 output; retry only an explicitly confirmed unsent character."""
+
+import asyncio
+import math
+import os
+import sys
+import time
+import xml.etree.ElementTree as ET
+from collections.abc import Callable
+
+from dbus_next import Message, MessageType
+from dbus_next.aio import MessageBus
+
+from .fcitx5_capability import Capability
+
+SERVICE = "org.fcitx.Fcitx5"
+PATH = "/inkecho"
+INTERFACE = "org.fcitx.Fcitx.InkEcho1"
+DBUS_SERVICE = "org.freedesktop.DBus"
+DBUS_PATH = "/org/freedesktop/DBus"
+OWNER_MATCH = (
+    "type='signal',sender='org.freedesktop.DBus',"
+    "interface='org.freedesktop.DBus',member='NameOwnerChanged',"
+    "arg0='org.fcitx.Fcitx5'"
+)
+# A short focus handover can temporarily have no Fcitx input context. This is a
+# bounded grace period before the first commit, not an acknowledgement that
+# an application consumed earlier commits. After any commit, wait for focus
+# until the task deadline instead of handing off to an unsafe keyboard path.
+FOCUS_WAIT_SECONDS = 0.50
+FOCUS_POLL_SECONDS = 0.01
+FOCUS_POLL_MAX_SECONDS = 0.10
+FOCUS_FIRST_POLL_MAX_SECONDS = 0.04
+FOCUS_CANCEL_POLL_SECONDS = 0.01
+
+
+class FcitxOutputError(RuntimeError):
+    """A sanitized failure; only definitely-unsent input can be retried."""
+
+    def __init__(
+        self,
+        code: str,
+        *,
+        accepted: int = 0,
+        uncertain: bool = False,
+        unsent_offset: int | None = None,
+    ):
+        self.code = code
+        self.accepted = accepted
+        self.uncertain = uncertain
+        self.unsent_offset = unsent_offset
+        self.safe_to_fallback = (
+            code == "unavailable" and accepted == 0 and not uncertain
+        )
+        super().__init__(code)
+
+
+class Fcitx5Bridge:
+    """Send one task's fragments to the focus held at each request."""
+
+    def __init__(
+        self, *, bus_factory=MessageBus, timeout=3.0, capability_factory=Capability
+    ):
+        self._bus_factory = bus_factory
+        self._capability_factory = capability_factory
+        self._capability = None
+        self._detailed_focus = False
+        self._sequence = 0
+        self._bus = None
+        self._owner = None
+        self._timeout = timeout
+        self._busy = False
+        self._closed = False
+        self._failed = False
+        self._accepted = 0
+        self._owner_changed = False
+        self._commit_attempted = False
+        self.preflight_cleanup_failed = False
+
+    def _observe_owner_change(self, message):
+        if (
+            message.message_type == MessageType.SIGNAL
+            and message.sender == DBUS_SERVICE
+            and message.path == DBUS_PATH
+            and message.interface == DBUS_SERVICE
+            and message.member == "NameOwnerChanged"
+            and len(message.body) == 3
+            and message.body[0] == SERVICE
+        ):
+            self._owner_changed = True
+
+    async def _current_owner(self, bus, timeout):
+        reply = await asyncio.wait_for(
+            bus.call(
+                Message(
+                    destination=DBUS_SERVICE,
+                    path=DBUS_PATH,
+                    interface=DBUS_SERVICE,
+                    member="GetNameOwner",
+                    signature="s",
+                    body=[SERVICE],
+                )
+            ),
+            timeout,
+        )
+        if reply.sender != DBUS_SERVICE:
+            raise ValueError("untrusted bus reply")
+        return reply
+
+    async def connect(self, *, expected_owner=None):
+        if self._closed:
+            raise FcitxOutputError("closed")
+        if self._bus is not None:
+            return
+        bus = None
+        try:
+            bus = await asyncio.wait_for(self._bus_factory().connect(), self._timeout)
+            bus.add_message_handler(self._observe_owner_change)
+            matched = await asyncio.wait_for(
+                bus.call(
+                    Message(
+                        destination=DBUS_SERVICE,
+                        path=DBUS_PATH,
+                        interface=DBUS_SERVICE,
+                        member="AddMatch",
+                        signature="s",
+                        body=[OWNER_MATCH],
+                    )
+                ),
+                self._timeout,
+            )
+            if (
+                matched.sender != DBUS_SERVICE
+                or matched.message_type != MessageType.METHOD_RETURN
+            ):
+                raise ValueError("owner monitoring unavailable")
+            owner = await self._current_owner(bus, self._timeout)
+            if owner.message_type != MessageType.METHOD_RETURN or len(owner.body) != 1:
+                raise ValueError("owner unavailable")
+            unique = owner.body[0]
+            if not isinstance(unique, str) or not unique.startswith(":"):
+                raise ValueError("invalid owner")
+            if expected_owner is not None and unique != expected_owner:
+                raise ValueError("owner changed")
+            info = await asyncio.wait_for(
+                bus.call(
+                    Message(
+                        destination=unique,
+                        path=PATH,
+                        interface="org.freedesktop.DBus.Introspectable",
+                        member="Introspect",
+                    )
+                ),
+                self._timeout,
+            )
+            if (
+                info.sender != unique
+                or info.message_type != MessageType.METHOD_RETURN
+                or len(info.body) != 1
+            ):
+                raise ValueError("bridge unavailable")
+            if self._owner_changed:
+                raise ValueError("owner changed")
+            root = ET.fromstring(info.body[0])
+            if any(
+                root.find(f"interface[@name='{INTERFACE}']/method[@name='{method}']")
+                is None
+                for method in ("Begin", "Commit", "Cancel")
+            ):
+                raise ValueError("bridge unavailable")
+        except asyncio.CancelledError:
+            if bus is not None:
+                bus.disconnect()
+            raise
+        except Exception:
+            if bus is not None:
+                bus.disconnect()
+            raise FcitxOutputError("unavailable") from None
+        # Begin remains the v1 protocol. Begin2 explicitly negotiates the
+        # additive ambiguity result; old bridges/clients retain results 0..3.
+        detailed_focus = (
+            root.find(f"interface[@name='{INTERFACE}']/method[@name='Begin2']")
+            is not None
+        )
+        cap = None
+        try:
+            cap = self._capability_factory(os.environ.get("XDG_RUNTIME_DIR", ""))
+            begin = await asyncio.wait_for(
+                bus.call(
+                    Message(
+                        destination=unique,
+                        path=PATH,
+                        interface=INTERFACE,
+                        member="Begin2" if detailed_focus else "Begin",
+                        signature="su" if detailed_focus else "s",
+                        body=[cap.token, 2] if detailed_focus else [cap.token],
+                    )
+                ),
+                self._timeout,
+            )
+            if (
+                begin.sender != unique
+                or begin.message_type != MessageType.METHOD_RETURN
+                or begin.body != [True]
+                or type(begin.body[0]) is not bool
+            ):
+                raise ValueError("task authorization failed")
+            if self._owner_changed:
+                raise ValueError("owner changed")
+        except BaseException as error:
+            try:
+                if cap is not None:
+                    cap.close()
+            except OSError:
+                self.preflight_cleanup_failed = True
+            finally:
+                bus.disconnect()
+            if isinstance(error, asyncio.CancelledError):
+                raise
+            if self.preflight_cleanup_failed:
+                raise FcitxOutputError("cleanup_failed") from None
+            if isinstance(error, Exception):
+                raise FcitxOutputError("authorization_failed") from None
+            raise
+        if self._closed:
+            try:
+                cap.close()
+            except OSError:
+                self.preflight_cleanup_failed = True
+            finally:
+                bus.disconnect()
+            if self.preflight_cleanup_failed:
+                raise FcitxOutputError("cleanup_failed") from None
+            raise FcitxOutputError("closed")
+        self._bus, self._owner, self._capability = bus, unique, cap
+        self._detailed_focus = detailed_focus
+
+    async def insert(
+        self,
+        text: str,
+        can_continue: Callable[[], bool],
+        *,
+        deadline: float | None = None,
+        on_first_sent: Callable[[float | None], None] | None = None,
+    ) -> int:
+        if self._busy:
+            raise FcitxOutputError("busy")
+        if self._closed:
+            raise FcitxOutputError("closed")
+        if self._bus is None:
+            raise FcitxOutputError("unavailable")
+        if self._failed:
+            raise FcitxOutputError("session_failed", uncertain=True)
+        if not isinstance(text, str) or any(
+            (ord(char) < 0x20 and char not in "\n\t")
+            or 0x7F <= ord(char) <= 0x9F
+            or 0xD800 <= ord(char) <= 0xDFFF
+            for char in text
+        ):
+            self._failed = True
+            raise FcitxOutputError("unsupported_text", accepted=self._accepted)
+        if deadline is None:
+            deadline = time.monotonic() + 60
+        try:
+            valid_deadline = type(deadline) in (int, float) and math.isfinite(deadline)
+        except OverflowError:
+            valid_deadline = False
+        if not valid_deadline:
+            self._failed = True
+            raise FcitxOutputError("cancelled", accepted=self._accepted)
+        self._busy = True
+        accepted = 0
+        try:
+            for char in text:
+                if self._closed:
+                    raise FcitxOutputError("cancelled", accepted=self._accepted)
+                if time.monotonic() >= deadline:
+                    raise FcitxOutputError("expired", accepted=self._accepted)
+                focus_error = "no_target"
+                focus_wait_until = None
+                focus_poll_delay = FOCUS_POLL_SECONDS
+                while True:
+                    if self._closed or not can_continue():
+                        raise FcitxOutputError("cancelled", accepted=self._accepted)
+                    remaining = deadline - time.monotonic()
+                    if remaining <= 0:
+                        raise FcitxOutputError("expired", accepted=self._accepted)
+                    if (
+                        focus_wait_until is not None
+                        and time.monotonic() >= focus_wait_until
+                    ):
+                        raise FcitxOutputError(
+                            focus_error, accepted=self._accepted, unsent_offset=accepted
+                        )
+                    request_timeout = min(self._timeout, remaining)
+                    # Monitoring and a query reduce, but cannot atomically remove,
+                    # the race between a name change and the following Commit.
+                    try:
+                        owner = await self._current_owner(self._bus, request_timeout)
+                    except asyncio.CancelledError:
+                        raise
+                    except Exception:
+                        raise FcitxOutputError(
+                            "owner_changed", accepted=self._accepted
+                        ) from None
+                    if (
+                        self._owner_changed
+                        or owner.message_type != MessageType.METHOD_RETURN
+                        or owner.body != [self._owner]
+                    ):
+                        raise FcitxOutputError("owner_changed", accepted=self._accepted)
+                    if self._closed or not can_continue():
+                        raise FcitxOutputError("cancelled", accepted=self._accepted)
+                    remaining = deadline - time.monotonic()
+                    if remaining <= 0:
+                        raise FcitxOutputError("expired", accepted=self._accepted)
+                    if (
+                        focus_wait_until is not None
+                        and time.monotonic() >= focus_wait_until
+                    ):
+                        raise FcitxOutputError(
+                            focus_error, accepted=self._accepted, unsent_offset=accepted
+                        )
+                    request_timeout = min(self._timeout, remaining)
+                    # The focus grace period limits when a new request may be
+                    # started, not the time allowed to confirm an in-flight
+                    # Commit. Truncating it at the grace boundary can turn a
+                    # safe no-target reply into an uncertain delivery.
+                    try:
+                        # From this point a delivery may be in flight, even if
+                        # the reply is later lost or the task is cancelled.
+                        self._commit_attempted = True
+                        reply = await asyncio.wait_for(
+                            self._bus.call(
+                                Message(
+                                    destination=self._owner,
+                                    path=PATH,
+                                    interface=INTERFACE,
+                                    member="Commit",
+                                    signature="sus",
+                                    body=[self._capability.token, self._sequence, char],
+                                )
+                            ),
+                            request_timeout,
+                        )
+                    except asyncio.CancelledError:
+                        # A request already queued on D-Bus cannot be recalled.
+                        raise
+                    except Exception:
+                        raise FcitxOutputError(
+                            "delivery_unknown", accepted=self._accepted, uncertain=True
+                        ) from None
+                    if (
+                        reply.sender != self._owner
+                        or reply.message_type != MessageType.METHOD_RETURN
+                        or reply.body
+                        not in (
+                            ([0], [1], [2], [3], [4])
+                            if self._detailed_focus
+                            else ([0], [1], [2], [3])
+                        )
+                        or type(reply.body[0]) is not int
+                    ):
+                        raise FcitxOutputError(
+                            "delivery_unknown", accepted=self._accepted, uncertain=True
+                        )
+                    if reply.body[0] == 2:
+                        raise FcitxOutputError(
+                            "delivery_unknown", accepted=self._accepted, uncertain=True
+                        )
+                    if reply.body[0] == 0:
+                        raise FcitxOutputError(
+                            "protocol_error", accepted=self._accepted
+                        )
+                    if reply.body[0] == 1:
+                        break
+                    if self._owner_changed:
+                        raise FcitxOutputError("owner_changed", accepted=self._accepted)
+                    focus_error = (
+                        "ambiguous_target" if reply.body[0] == 4 else "no_target"
+                    )
+                    # The native task gate guarantees that results 3/4 called no
+                    # commitString and preserves this exact sequence number.
+                    now = time.monotonic()
+                    if focus_wait_until is None and self._accepted == 0:
+                        focus_wait_until = now + FOCUS_WAIT_SECONDS
+                    wait_remaining = (
+                        min(focus_wait_until, deadline)
+                        if focus_wait_until
+                        else deadline
+                    ) - now
+                    if wait_remaining <= 0:
+                        if now >= deadline:
+                            raise FcitxOutputError("expired", accepted=self._accepted)
+                        raise FcitxOutputError(
+                            focus_error, accepted=self._accepted, unsent_offset=accepted
+                        )
+                    # Back off D-Bus retries during extended focus gaps while
+                    # still checking task cancellation independently of retries.
+                    next_retry = now + min(focus_poll_delay, wait_remaining)
+                    while True:
+                        if self._closed or not can_continue():
+                            raise FcitxOutputError("cancelled", accepted=self._accepted)
+                        remaining_sleep = next_retry - time.monotonic()
+                        if remaining_sleep <= 0:
+                            break
+                        await asyncio.sleep(
+                            min(FOCUS_CANCEL_POLL_SECONDS, remaining_sleep)
+                        )
+                    poll_cap = (
+                        FOCUS_POLL_MAX_SECONDS
+                        if self._accepted
+                        else FOCUS_FIRST_POLL_MAX_SECONDS
+                    )
+                    focus_poll_delay = min(
+                        focus_poll_delay * 2, max(FOCUS_POLL_SECONDS, poll_cap)
+                    )
+                self._sequence += 1
+                accepted += 1
+                self._accepted += 1
+                if accepted == 1 and on_first_sent is not None:
+                    try:
+                        on_first_sent(time.monotonic())
+                    except Exception:
+                        raise FcitxOutputError(
+                            "callback_failed", accepted=self._accepted
+                        ) from None
+                if self._owner_changed:
+                    raise FcitxOutputError("owner_changed", accepted=self._accepted)
+            return accepted
+        except BaseException:
+            # A failed output sequence is never resumed or replayed implicitly.
+            self._failed = True
+            raise
+        finally:
+            self._busy = False
+
+    async def abort_preflight(self):
+        """Drop an unsent task by disconnecting its uniquely owned session.
+
+        The server watches this connection and removes the task on owner loss.
+        Never use this path after a Commit has been attempted: its outcome may
+        be uncertain and the normal cancellation protocol must remain intact.
+        """
+        if self._busy or self._commit_attempted:
+            raise FcitxOutputError("session_failed", uncertain=self._commit_attempted)
+        self._closed = True
+        try:
+            if self._bus is not None:
+                self._bus.disconnect()
+        finally:
+            self._bus = None
+            self._owner = None
+            if self._capability is not None:
+                try:
+                    self._capability.close()
+                except OSError:
+                    raise FcitxOutputError("cleanup_failed") from None
+                finally:
+                    self._capability = None
+
+    async def aclose(self):
+        self._closed = True
+        try:
+            if self._bus is not None:
+                try:
+                    await asyncio.wait_for(
+                        self._bus.call(
+                            Message(
+                                destination=self._owner,
+                                path=PATH,
+                                interface=INTERFACE,
+                                member="Cancel",
+                                signature="s",
+                                body=[self._capability.token],
+                            )
+                        ),
+                        self._timeout,
+                    )
+                except Exception:
+                    pass
+        finally:
+            interrupted = isinstance(sys.exception(), asyncio.CancelledError)
+            try:
+                if self._bus is not None:
+                    self._bus.disconnect()
+            finally:
+                self._bus = None
+                self._owner = None
+                if self._capability is not None:
+                    try:
+                        self._capability.close()
+                    except OSError:
+                        if not interrupted:
+                            raise FcitxOutputError("cleanup_failed") from None
+                    finally:
+                        self._capability = None

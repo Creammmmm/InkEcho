@@ -28,6 +28,7 @@ STATES = {
     "polishing",
     "injecting",
     "succeeded",
+    "unconfirmed",
     "failed",
     "cancelled",
 }

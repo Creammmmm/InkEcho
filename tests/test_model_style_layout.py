@@ -73,6 +73,16 @@ def test_builtin_templates_explicitly_refuse_answering_transcript_requests():
     assert BUILTIN_PROMPT.id == "builtin-faithful"
 
 
+def test_builtin_templates_include_contextual_asr_correction_and_ambiguity_rules():
+    for prompt in BUILTIN_PROMPTS:
+        assert "同音、近音" in prompt.body
+        assert "存在多个合理解释时保留原词" in prompt.body
+        assert "接口认证中的“脱肯”可改为“Token”" in prompt.body
+        assert "无法确定术语时保留原词" in prompt.body
+        assert "不凭常识猜测" in prompt.body
+        assert "路径、网址、邮箱、命令、代码标识符" in prompt.body
+
+
 def test_saved_catalog_stays_with_service_and_filters_transcription(tmp_path, qt_app):
     owner = session(tmp_path)
     provider = replace(SYNTHETIC_PROVIDERS[0], model="qwen3-asr-flash")

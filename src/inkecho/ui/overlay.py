@@ -62,7 +62,8 @@ class Overlay(QWidget):
             "transcribing": "正在识别",
             "polishing": "正在润色",
             "injecting": "正在输入",
-            "succeeded": "已完成",
+            "succeeded": "已尝试发送文字",
+            "unconfirmed": "已尝试发送，接收未确认",
             "cancelled": "已取消",
             "failed": "未完成，请查看概览",
         }.get(self.state, "准备就绪")
@@ -100,7 +101,7 @@ class Overlay(QWidget):
         self.dismiss.stop()
         self.show()
         self._sync_animation()
-        if state in {"succeeded", "failed", "cancelled"}:
+        if state in {"succeeded", "unconfirmed", "failed", "cancelled"}:
             self.dismiss.start(round(settings.overlay_seconds * 1000))
 
     def preview(self):
@@ -119,6 +120,7 @@ class Overlay(QWidget):
             return
         colors = {
             "failed": "#fca5a5",
+            "unconfirmed": "#f6c56e",
             "cancelled": "#b9c5d9",
             "transcribing": "#8ed6f2",
             "polishing": "#93adff",

@@ -9,7 +9,7 @@ from pathlib import Path
 import pytest
 from PySide6.QtCore import Qt
 from PySide6.QtTest import QTest
-from PySide6.QtWidgets import QPushButton
+from PySide6.QtWidgets import QLabel, QPushButton
 from synthetic_providers import SYNTHETIC_PROVIDERS
 
 from inkecho.app import Session
@@ -306,10 +306,18 @@ def test_settings_autosave_and_separate_data_logs(window):
     page.streaming.setChecked(not page.streaming.isChecked())
     page.transcription_timeout.setValue(61)
     page.recording.limit.setValue(123)
+    page.compatibility.mapping_wait.setValue(75)
+    page.compatibility.feedback_timeout.setValue(60)
+    page.compatibility.output_method.setCurrentIndex(
+        page.compatibility.output_method.findData("ibus")
+    )
     settings = window.session.store.load_settings()
     assert settings.polishing_streaming == page.streaming.isChecked()
     assert settings.transcription_timeout_seconds == 61
     assert settings.recording_limit_seconds == 123
+    assert settings.x11_mapping_wait_ms == 75
+    assert settings.x11_feedback_timeout_ms == 60
+    assert settings.output_method == "ibus"
     assert not hasattr(page.statistics, "logs")
     assert page.logs.logs.isReadOnly()
     assert not any(
@@ -318,6 +326,33 @@ def test_settings_autosave_and_separate_data_logs(window):
         or "预览波形" in item.text()
         for item in page.recording.findChildren(QPushButton)
     )
+
+
+def test_keyboard_enable_displays_authorized_status_after_check(window):
+    class Keyboard:
+        connected = False
+        authorized = False
+
+        async def connect(self):
+            self.connected = True
+
+        async def authorize(self, parent_window=""):
+            self.authorized = True
+
+        async def aclose(self):
+            self.connected = False
+
+    page = window.settings_page.compatibility
+    keyboard = Keyboard()
+    window.session.inputs.keyboard = keyboard
+    page.output_method.setCurrentIndex(page.output_method.findData("keyboard"))
+    messages = []
+    window.session.status.connect(messages.append)
+    asyncio.run(page.enable())
+    assert keyboard.authorized
+    assert "键盘输入已启用" in page.availability.text()
+    assert "所选输入方式已准备" in page.message.text()
+    assert any("系统授权提示" in message for message in messages)
 
 
 def test_no_tray_processing_retains_cancel_entry(window):
@@ -1207,6 +1242,18 @@ def test_wayland_displays_every_configured_overlay_style(window, qt_app, style):
     assert not window.overlay.animation.isActive()
 
 
+def test_output_statistics_and_overlay_do_not_claim_target_receipt(window):
+    captions = {item.text() for item in window.home.findChildren(QLabel)}
+    assert "今日尝试发送字符" in captions
+    assert "最近七天 · 每日尝试发送字符" in captions
+    assert "不能确认目标收到" in window.home.metrics["characters"].toolTip()
+    assert "尝试发送" in window.home.chart.accessibleName()
+    window.home.chart.set_days([("2026-10-28", {"characters": 3})])
+    assert "尝试发送 3 字符" in window.home.chart.toolTip()
+    window.overlay.state = "succeeded"
+    assert window.overlay.caption() == "已尝试发送文字"
+
+
 def test_shortcut_config_failure_restores_previous_registration(window, monkeypatch):
     async def scenario():
         page = window.settings_page.recording
@@ -1309,3 +1356,405 @@ def test_copying_and_deleting_inactive_style_keeps_applied_style(window, qt_app)
     page.delete()
     assert window.session.store.load_settings().prompt == "builtin-agent"
     assert window.session.store.load_prompt("builtin-agent").id == "builtin-agent"
+
+
+def test_selected_style_card_is_visibly_distinct_after_selection(window, qt_app):
+    page = window.pages[2]
+    window.navigation.setCurrentRow(2)
+    qt_app.processEvents()
+
+    def background(identifier):
+        card = page.style_cards[identifier]
+        return card.grab().toImage().pixelColor(20, 10).name()
+
+    original = window.session.store.load_settings().prompt
+    other = next(key for key in page.style_cards if key != original)
+    assert background(original) == "#cfe1ff"
+    assert background(other) == "#ffffff"
+    page.open_template(other)
+    page.select()
+    qt_app.processEvents()
+    assert background(other) == "#cfe1ff"
+    assert background(original) == "#ffffff"
+
+
+def test_auto_check_does_not_claim_unverified_output_ready(window):
+    page = window.settings_page.compatibility
+    page.output_method.setCurrentIndex(page.output_method.findData("auto"))
+
+    async def deferred_check():
+        return True  # Auto selection can defer failure until output.
+
+    class Keyboard:
+        authorized = False
+        connected = False
+
+        async def aclose(self):
+            pass
+
+    window.session.authorize_input = deferred_check
+    window.session.inputs.keyboard = Keyboard()
+    asyncio.run(page.enable())
+    assert "尚未确认" in page.message.text()
+    assert "已准备" not in page.message.text()
+
+
+@pytest.mark.parametrize("backend", ["fcitx", "ibus", "owned"])
+def test_input_bridge_action_blocks_hotkey_during_background_change(window, backend):
+    import threading
+
+    page = window.settings_page.compatibility
+    session = window.session
+    started, release = threading.Event(), threading.Event()
+
+    class Manager:
+        def install(self):
+            started.set()
+            assert release.wait(5)
+
+        def status(self):
+            return "状态已检查"
+
+    setattr(
+        page,
+        {
+            "fcitx": "fcitx_installer",
+            "ibus": "ibus_extension",
+            "owned": "owned_extension",
+        }[backend],
+        Manager(),
+    )
+
+    async def scenario():
+        action = asyncio.create_task(getattr(page, f"{backend}_action")("install"))
+        try:
+            for _ in range(200):
+                if started.is_set():
+                    break
+                await asyncio.sleep(0.01)
+            assert started.is_set()
+            await session.toggle()
+            assert session.controller.task is None
+            assert not session.preparing
+        finally:
+            release.set()
+            await asyncio.wait_for(action, 2)
+
+    asyncio.run(scenario())
+
+
+def test_ibus_extension_upgrade_instructions_visible(window):
+    page = window.settings_page.compatibility
+    labels = [item.text() for item in page.findChildren(QLabel)]
+    assert any(
+        "停用并卸载旧版" in text
+        and "安装并启用新版" in text
+        and "不会自动覆盖旧扩展" in text
+        for text in labels
+    )
+
+
+def test_x11_wait_explanation_distinguishes_first_mapping_and_draw_hint(window):
+    page = window.settings_page.compatibility
+    labels = [item.text() for item in page.findChildren(QLabel)]
+    explanation = next(text for text in labels if "首次映射固定等待" in text)
+    assert "100 毫秒" in explanation
+    assert "后续实际映射变化" in explanation
+    assert "不能确认文字已显示" in explanation
+    assert "下一次任务生效" in explanation
+
+
+def test_gnome_wayland_scope_does_not_claim_unverified_native_support(window):
+    page = window.settings_page.compatibility
+    window.session.inputs.keyboard.backend = "gnome-wayland"
+    page.refresh()
+    text = page.scope.text()
+    assert "部分环境不支持原生 Wayland 输出" in text
+    assert "原生 Wayland 或 XWayland 路径" in text
+    assert "支持中文等基本多文种字符" not in text
+
+
+def test_fcitx_install_explains_service_restart_can_load_addon(window, monkeypatch):
+    page = window.settings_page.compatibility
+
+    class Manager:
+        def install(self):
+            pass
+
+        def status(self):
+            return "已安装输入桥；运行状态需通过输入服务检查确认。"
+
+    async def maintenance(operation):
+        operation()
+
+    async def immediate(function, *args):
+        return function(*args)
+
+    page.fcitx_installer = Manager()
+    monkeypatch.setattr(page.session, "run_input_maintenance", maintenance)
+    monkeypatch.setattr("inkecho.ui.information.asyncio.to_thread", immediate)
+    asyncio.run(page.fcitx_action("install"))
+    assert "重启后可能自动加载" in page.message.text()
+    assert "点击启用" in page.message.text()
+    labels = [item.text() for item in page.findChildren(QLabel)]
+    assert any(
+        "安装到当前用户目录并发布加载配置" in text and "重启后可能自动加载" in text
+        for text in labels
+    )
+
+
+@pytest.mark.parametrize("method", ["auto", "keyboard", "fcitx", "ibus"])
+def test_output_method_choice_saves_and_reloads(window, method):
+    page = window.settings_page.compatibility
+    page.output_method.setCurrentIndex(page.output_method.findData(method))
+    assert window.session.store.load_settings().output_method == method
+    assert page.output_method.currentData() == method
+
+
+def test_output_method_failed_save_restores_displayed_value(window, monkeypatch):
+    page = window.settings_page.compatibility
+    store = window.session.store
+    old = store.load_settings().output_method
+    calls = []
+
+    def fail_save(settings):
+        calls.append(settings.output_method)
+        raise OSError("synthetic filesystem failure")
+
+    monkeypatch.setattr(store, "save_settings", fail_save)
+    page.output_method.setCurrentIndex(page.output_method.findData("fcitx"))
+    assert store.load_settings().output_method == old
+    assert page.output_method.currentData() == old
+    assert page.message.text() == "输入设置无法保存。"
+    assert calls == ["fcitx"]
+
+
+def test_output_method_failed_after_write_displays_actual_value(window, monkeypatch):
+    page = window.settings_page.compatibility
+    store = window.session.store
+    save = store.save_settings
+
+    def save_then_fail(settings):
+        save(settings)
+        raise OSError("synthetic post-write failure")
+
+    monkeypatch.setattr(store, "save_settings", save_then_fail)
+    page.output_method.setCurrentIndex(page.output_method.findData("fcitx"))
+    assert store.load_settings().output_method == "fcitx"
+    assert page.output_method.currentData() == "fcitx"
+    assert page.message.text() == "输入设置无法保存。"
+
+
+@pytest.mark.parametrize(
+    ("widget_name", "field"),
+    [
+        ("mapping_wait", "x11_mapping_wait_ms"),
+        ("feedback_timeout", "x11_feedback_timeout_ms"),
+    ],
+)
+@pytest.mark.parametrize("failure", ["before_write", "after_write"])
+def test_input_timing_failed_save_displays_disk_value(
+    window, monkeypatch, widget_name, field, failure
+):
+    page = window.settings_page.compatibility
+    widget = getattr(page, widget_name)
+    store = window.session.store
+    initial = getattr(store.load_settings(), field)
+    desired = 75 if initial != 75 else 80
+    save = store.save_settings
+    calls = []
+
+    def broken(settings):
+        calls.append(getattr(settings, field))
+        if failure == "after_write":
+            save(settings)
+        raise OSError("synthetic write failure")
+
+    monkeypatch.setattr(store, "save_settings", broken)
+    widget.setValue(desired)
+    expected = initial if failure == "before_write" else desired
+    assert getattr(store.load_settings(), field) == expected
+    assert widget.value() == expected
+    assert page.message.text() == "输入设置无法保存。"
+    assert calls == [desired]
+
+
+@pytest.mark.parametrize("widget_name", ["mapping_wait", "feedback_timeout"])
+def test_input_timing_read_failure_restores_last_known_value(
+    window, monkeypatch, widget_name
+):
+    page = window.settings_page.compatibility
+    widget = getattr(page, widget_name)
+    initial = widget.value()
+    desired = 75 if initial != 75 else 80
+    writes = []
+
+    def fail_read():
+        raise OSError("synthetic read failure")
+
+    monkeypatch.setattr(window.session.store, "load_settings", fail_read)
+    monkeypatch.setattr(window.session.store, "save_settings", writes.append)
+    widget.setValue(desired)
+    assert widget.value() == initial
+    assert page.message.text() == "输入设置无法保存。"
+    assert writes == []
+
+
+def test_input_compatibility_refresh_handles_unreadable_settings(window, monkeypatch):
+    page = window.settings_page.compatibility
+    store = window.session.store
+    original = store.load_settings
+
+    def fail_read():
+        raise OSError("synthetic unreadable settings")
+
+    monkeypatch.setattr(store, "load_settings", fail_read)
+    page.refresh()
+    assert "无法读取" in page.availability.text()
+    monkeypatch.setattr(store, "load_settings", original)
+    page.refresh()
+    assert "无法读取" not in page.availability.text()
+
+
+def test_enable_input_handles_unreadable_settings(window, monkeypatch):
+    page = window.settings_page.compatibility
+
+    def cannot_load():
+        raise OSError("synthetic unreadable settings")
+
+    monkeypatch.setattr(window.session.store, "load_settings", cannot_load)
+    asyncio.run(page.enable())
+    assert "无法读取" in page.message.text()
+
+
+@pytest.mark.parametrize(
+    ("operation", "message"),
+    [
+        ("disable", "加载配置已移除"),
+        ("install", "输入桥已安装"),
+        ("enable", "已请求 Fcitx5"),
+    ],
+)
+def test_fcitx_action_reports_success_if_status_check_fails(
+    window, monkeypatch, operation, message
+):
+    from inkecho.platform.fcitx5_install import FcitxInstallError
+
+    page = window.settings_page.compatibility
+
+    class Installer:
+        def __init__(self):
+            self.completed = []
+
+        def disable(self):
+            self.completed.append("disable")
+
+        def install(self):
+            self.completed.append("install")
+
+        def enable(self):
+            self.completed.append("enable")
+
+        def status(self):
+            raise FcitxInstallError("Fcitx5 服务不可用。")
+
+    installer = Installer()
+    page.fcitx_installer = installer
+
+    async def maintenance(operation):
+        operation()
+
+    async def immediate(function, *args):
+        return function(*args)
+
+    monkeypatch.setattr(page.session, "run_input_maintenance", maintenance)
+    monkeypatch.setattr("inkecho.ui.information.asyncio.to_thread", immediate)
+    asyncio.run(page.fcitx_action(operation))
+    assert installer.completed == [operation]
+    assert message in page.message.text()
+    assert "Fcitx5 服务不可用" in page.fcitx_status.text()
+
+
+def test_fcitx_bridge_guides_uninstalled_and_auto_detection(window):
+    labels = [
+        item.text() for item in window.settings_page.compatibility.findChildren(QLabel)
+    ]
+    explanation = next(text for text in labels if "未安装 Fcitx5" in text)
+    assert "系统软件管理器安装" in explanation
+    assert "系统中选择 Fcitx5" in explanation
+    assert "自动方式仅在检测到" in explanation
+
+
+def test_known_ibus_error_is_written_to_diagnostics(window):
+    window.record_diagnostic("ibus_delivery_unknown")
+    assert "ibus_delivery_unknown" in window.log.recent()
+    assert "诊断日志写入失败" not in window.statusBar().currentMessage()
+
+
+def test_unconfirmed_state_updates_ui_log_and_legacy_statistics(window, qt_app):
+    window.update_state("unconfirmed")
+    qt_app.processEvents()
+    assert "接收结果无法确认" in window.statusBar().currentMessage()
+    assert window.overlay.caption() == "已尝试发送，接收未确认"
+    assert "unconfirmed" in window.log.recent()
+    window.record_statistics({"outcome": "unconfirmed", "characters": 3})
+    day = window.stats.today()
+    assert day["succeeded"] == 1 and day["failed"] == 0 and day["characters"] == 3
+    window.update_state("idle")
+    assert not window.overlay.isVisible()
+
+
+def test_unconfirmed_wayland_sends_explicit_uncertainty_notice(window):
+    window.wayland = True
+    notices = []
+    window.notify = lambda message, **flags: notices.append((message, flags))
+    window.update_state("unconfirmed")
+    assert len(notices) == 1
+    assert "接收结果无法确认" in notices[0][0]
+    assert "未自动重试" in notices[0][0]
+    assert not notices[0][1].get("processing")
+
+
+def test_owned_extension_buttons_call_owned_not_legacy_manager(window):
+    page = window.settings_page.compatibility
+    calls = []
+
+    class Owned:
+        def install(self):
+            calls.append("install")
+
+        def enable(self):
+            calls.append("enable")
+
+        def disable(self):
+            calls.append("disable")
+
+        def status(self):
+            return "测试文件已校验"
+
+    class Legacy:
+        def __getattr__(self, name):
+            raise AssertionError("legacy extension must not be touched")
+
+    page.owned_extension = Owned()
+    page.ibus_extension = Legacy()
+
+    async def scenario():
+        for operation in ("install", "enable", "disable", "status"):
+            await page.owned_action(operation)
+        assert calls == ["install", "enable", "disable"]
+        assert page.owned_status.text() == "测试文件已校验"
+
+    asyncio.run(scenario())
+
+
+def test_auto_input_explanation_distinguishes_optional_bridge_and_unknown(window):
+    labels = [
+        item.text() for item in window.settings_page.compatibility.findChildren(QLabel)
+    ]
+    explanation = next(text for text in labels if "自动模式优先" in text)
+    assert "Fcitx5" in explanation and "GNOME 自动输入扩展" in explanation
+    assert "未安装或合法停用" in explanation
+    assert "预编辑无法确认时会停止" in explanation
+    assert "已尝试但未确认的文字不会重放" in explanation
+    assert "否则使用键盘" not in explanation

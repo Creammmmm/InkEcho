@@ -19,12 +19,14 @@ class WeekChart(QWidget):
         super().__init__()
         self.days = []
         self.setMinimumSize(240, 230)
-        self.setAccessibleName("最近七天每日发送字符")
+        self.setAccessibleName("最近七天每日尝试发送字符")
 
     def set_days(self, days):
         self.days = days
         self.setToolTip(
-            "\n".join(f"{day}：{values['characters']:,} 字符" for day, values in days)
+            "\n".join(
+                f"{day}：尝试发送 {values['characters']:,} 字符" for day, values in days
+            )
         )
         self.update()
 
@@ -93,12 +95,16 @@ class HomePage(Page):
         metrics_row.setSpacing(16)
         self.metrics = {}
         for key, caption in (
-            ("characters", "今日发送字符"),
+            ("characters", "今日尝试发送字符"),
             ("audio_seconds", "今日录音时长"),
             ("recordings", "今日使用次数"),
         ):
             tile, body = card()
             value = label("0")
+            if key == "characters":
+                value.setToolTip(
+                    "按发送调用统计，不能确认目标收到；失败的部分可能未计入。"
+                )
             value.setStyleSheet("font-size:28px; font-weight:600; color:#245ab1")
             body.addWidget(label(caption, muted=True))
             body.addWidget(value)
@@ -108,7 +114,7 @@ class HomePage(Page):
         columns = QHBoxLayout()
         columns.setSpacing(16)
         chart_card, chart_body = card()
-        chart_body.addWidget(label("最近七天 · 每日字符"))
+        chart_body.addWidget(label("最近七天 · 每日尝试发送字符"))
         self.chart = WeekChart()
         chart_body.addWidget(self.chart, 1)
         self.outcomes = label("", muted=True)
@@ -249,7 +255,7 @@ class HomePage(Page):
         self.metrics["audio_seconds"].setText(f"{day['audio_seconds'] / 60:.1f} 分钟")
         self.metrics["recordings"].setText(f"{day['recordings']} 次")
         self.outcomes.setText(
-            f"今日成功 {day['succeeded']} · 失败 {day['failed']} · "
+            f"今日尝试发送 {day['succeeded']} · 失败 {day['failed']} · "
             f"取消 {day['cancelled']}"
         )
         self.chart.set_days(self.stats.recent())

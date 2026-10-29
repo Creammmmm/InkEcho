@@ -100,6 +100,46 @@ async def setup():
     return hybrid, driver, native, events
 
 
+def test_hybrid_feedback_timeout_snapshot_survives_backend_switch():
+    async def run():
+        hybrid, driver, native, _events = await setup()
+        timeout = [0.04]
+        hybrid.set_feedback_timeout_reader(lambda: timeout[0])
+        async with hybrid.output_session():
+            driver.is_x = False
+            assert await hybrid.insert("甲", lambda: True) == 1
+            timeout[0] = 0.12
+            driver.is_x = True
+            assert await hybrid.insert("乙", lambda: True) == 1
+            assert hybrid.x11._pacer.config.feedback_min == 0.04
+        async with hybrid.output_session():
+            assert await hybrid.insert("丙", lambda: True) == 1
+            assert hybrid.x11._pacer.config.feedback_min == 0.12
+        await hybrid.aclose()
+
+    asyncio.run(run())
+
+
+def test_hybrid_mapping_wait_snapshot_survives_backend_switch():
+    async def run():
+        hybrid, driver, native, _events = await setup()
+        wait = [0.04]
+        hybrid.set_mapping_wait_reader(lambda: wait[0])
+        async with hybrid.output_session():
+            driver.is_x = False
+            assert await hybrid.insert("甲", lambda: True) == 1
+            wait[0] = 0.08
+            driver.is_x = True
+            assert await hybrid.insert("乙", lambda: True) == 1
+            assert hybrid.x11._output_mapping_wait == 0.04
+        async with hybrid.output_session():
+            assert await hybrid.insert("丙", lambda: True) == 1
+            assert hybrid.x11._output_mapping_wait == 0.08
+        await hybrid.aclose()
+
+    asyncio.run(run())
+
+
 def test_x_map_wait_switches_before_press_without_replaying_prefix():
     async def run():
         hybrid, driver, native, events = await setup()
@@ -468,6 +508,99 @@ def test_scope_default_deadline_is_not_renewed_after_idle_expiry(monkeypatch):
                 assert [e for e in events if e[0] == "x" and e[2]] == [
                     ("x", "中", True)
                 ]
+        await hybrid.aclose()
+
+    asyncio.run(run())
+
+
+def test_xwayland_only_after_explicit_unsupported_native_and_stop_on_switch():
+    async def run():
+        hybrid, driver, native, events = await setup()
+
+        async def unsupported(_parent=""):
+            raise KeyboardError("unsupported_compositor")
+
+        native.authorize = unsupported
+        await hybrid.authorize()
+        assert hybrid.authorized
+        driver.after_map = lambda: setattr(driver, "is_x", False)
+        with pytest.raises(KeyboardError, match="unsupported_compositor"):
+            await hybrid.insert("甲乙", lambda: True)
+        assert not [event for event in events if event[0] in ("x", "native")]
+        await hybrid.aclose()
+
+    asyncio.run(run())
+
+
+def test_xwayland_only_preserves_prefix_and_never_replays_on_native_switch():
+    async def run():
+        hybrid, driver, native, events = await setup()
+
+        async def unsupported(_parent=""):
+            raise KeyboardError("unsupported_compositor")
+
+        native.authorize = unsupported
+        await hybrid.authorize()
+        original = driver.send
+
+        def switch(window, code, pressed):
+            original(window, code, pressed)
+            if not pressed:
+                driver.is_x = False
+
+        driver.send = switch
+        with pytest.raises(KeyboardError, match="unsupported_compositor"):
+            await hybrid.insert("甲乙", lambda: True)
+        assert [event for event in events if event[0] == "x" and event[2]] == [
+            ("x", "甲", True)
+        ]
+        assert not [event for event in events if event[0] == "native"]
+        await hybrid.aclose()
+
+    asyncio.run(run())
+
+
+def test_xwayland_only_never_bypasses_other_authorization_errors():
+    async def run():
+        hybrid, _driver, native, _events = await setup()
+
+        async def denied(_parent=""):
+            raise KeyboardError("permission_required")
+
+        native.authorize = denied
+        with pytest.raises(KeyboardError, match="permission_required"):
+            await hybrid.authorize()
+        assert not hybrid._xonly
+        await hybrid.aclose()
+
+    asyncio.run(run())
+
+
+def test_xwayland_only_cancellation_stops_after_first_character():
+    async def run():
+        hybrid, driver, native, events = await setup()
+
+        async def unsupported(_parent=""):
+            raise KeyboardError("unsupported_compositor")
+
+        native.authorize = unsupported
+        await hybrid.authorize()
+        active = True
+        original = driver.send
+
+        def cancel(window, code, pressed):
+            nonlocal active
+            original(window, code, pressed)
+            if not pressed:
+                active = False
+
+        driver.send = cancel
+        with pytest.raises(KeyboardError, match="input_cancelled"):
+            await hybrid.insert("甲乙", lambda: active)
+        assert [event for event in events if event[0] == "x" and event[2]] == [
+            ("x", "甲", True)
+        ]
+        assert not [event for event in events if event[0] == "native"]
         await hybrid.aclose()
 
     asyncio.run(run())

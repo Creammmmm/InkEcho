@@ -89,6 +89,53 @@ class Driver:
         self.closed = True
 
 
+def test_feedback_timeout_is_snapshotted_per_output_session():
+    async def scenario():
+        driver = Driver()
+        inputs = KeyboardInput(driver_factory=lambda: driver)
+        await inputs.connect()
+        timeout = [0.04]
+        inputs.set_feedback_timeout_reader(lambda: timeout[0])
+        async with inputs.output_session():
+            assert inputs._pacer.config.feedback_min == 0.04
+            timeout[0] = 0.12
+            assert inputs._pacer.config.feedback_min == 0.04
+        async with inputs.output_session():
+            assert inputs._pacer.config.feedback_min == 0.12
+        await inputs.aclose()
+
+    asyncio.run(scenario())
+
+
+def test_mapping_wait_is_snapshotted_per_output_session(monkeypatch):
+    async def scenario():
+        driver = Driver()
+        inputs = KeyboardInput(driver_factory=lambda: driver, pacer=ImmediatePacer())
+        await inputs.connect()
+        wait = [0.04]
+        inputs.set_mapping_wait_reader(lambda: wait[0])
+        delays = []
+        original_sleep = asyncio.sleep
+
+        async def record_sleep(delay):
+            delays.append(delay)
+            await original_sleep(0)
+
+        monkeypatch.setattr(asyncio, "sleep", record_sleep)
+        async with inputs.output_session():
+            await inputs.insert("甲乙", lambda: True)
+            wait[0] = 0.08
+            await inputs.insert("丙", lambda: True)
+        assert delays == [0.1, 0.01, 0.01, 0.04, 0.01, 0.01, 0.04, 0.01, 0.01]
+        delays.clear()
+        async with inputs.output_session():
+            await inputs.insert("甲乙", lambda: True)
+        assert delays == [0.1, 0.01, 0.01, 0.08, 0.01, 0.01]
+        await inputs.aclose()
+
+    asyncio.run(scenario())
+
+
 def fast_sleep(monkeypatch, action=lambda _count: None):
     original = asyncio.sleep
     count = 0
@@ -1024,7 +1071,7 @@ def test_first_real_mapping_grace_survives_newline_and_stream_fragments(monkeypa
             await inputs.insert("中", lambda: True)
             await inputs.insert("文", lambda: True)
         # Return does not change the map; only its press/release floors apply.
-        assert delays == [0.01, 0.01] + [0.1, 0.01, 0.01] + [0.02, 0.01, 0.01]
+        assert delays == [0.01, 0.01] + [0.1, 0.01, 0.01] + [0.04, 0.01, 0.01]
         assert driver.applied is None
         delays.clear()
         await inputs.insert("a", lambda: True)
@@ -1112,7 +1159,7 @@ def test_pacing_precedes_mapping_and_cached_characters_have_no_map_sleep(monkeyp
             ("before", True),
             ("map-write", "丙"),
         ]
-        assert delays == [0.1, 0.01, 0.01] + [0.01, 0.01] * 2 + [0.02, 0.01, 0.01]
+        assert delays == [0.1, 0.01, 0.01] + [0.01, 0.01] * 2 + [0.04, 0.01, 0.01]
         assert driver._map_revision == 2
         assert [event[2] for event in driver.events] == [True, False] * 4
 

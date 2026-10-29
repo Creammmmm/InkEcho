@@ -36,6 +36,12 @@ def empty_day() -> dict:
 
 
 class Statistics:
+    """Counts completed sending calls, not confirmed delivery to a target.
+
+    A failed or interrupted call may already have sent part of its text; that
+    unconfirmed part cannot reliably be included in the character count.
+    """
+
     def __init__(self, path: Path | None = None) -> None:
         self.path = path if path is not None else state_directory() / "statistics.json"
 
@@ -67,7 +73,7 @@ class Statistics:
                     if name in COUNTS + TOKENS and type(value) is not int:
                         raise ValueError
             return data
-        except (OSError, ValueError, TypeError, KeyError):
+        except (OSError, ValueError, TypeError, KeyError, OverflowError):
             raise StatisticsError(
                 "Usage data is invalid; clear statistics to reset it."
             ) from None
@@ -100,7 +106,7 @@ class Statistics:
         polishing_seconds: float = 0,
         usage: Usage | None = None,
     ) -> None:
-        if outcome not in {"succeeded", "failed", "cancelled"}:
+        if outcome not in {"succeeded", "unconfirmed", "failed", "cancelled"}:
             raise ValueError("Unknown task outcome.")
         additions = {
             "characters": characters,
@@ -111,14 +117,21 @@ class Statistics:
             "polishing_seconds": polishing_seconds,
         }
         for name, value in additions.items():
-            if type(value) not in (int, float) or not math.isfinite(value) or value < 0:
+            try:
+                valid = type(value) in (int, float) and math.isfinite(value)
+            except OverflowError:
+                valid = False
+            if not valid or value < 0:
                 raise ValueError("Statistics require nonnegative finite numbers.")
             if name in COUNTS and type(value) is not int:
                 raise ValueError("Statistics counts must be integers.")
         data = self._load()
         today = data["days"].setdefault(date.today().isoformat(), empty_day())
         today["recordings"] += 1
-        today[outcome] += 1
+        # The existing counter means all text dispatches were attempted; it
+        # never asserts that the target received or displayed the text. Keep
+        # the schema readable by previous releases for uncertain outcomes.
+        today["succeeded" if outcome == "unconfirmed" else outcome] += 1
         for name, value in additions.items():
             today[name] += value
         if polishing_calls:

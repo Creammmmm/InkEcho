@@ -49,7 +49,7 @@ class PacingConfig:
     mapping_initial: float = 0.060
     mapping_max: float = 0.120
     reuse_fallback: float = 0.020
-    feedback_min: float = 0.080
+    feedback_min: float = 0.040
     feedback_max: float = 0.250
     coalesce: float = 0.016
     max_inflight: int = 4

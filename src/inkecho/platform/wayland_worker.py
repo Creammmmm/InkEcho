@@ -44,6 +44,7 @@ class MutterSession:
         self.observer = None
         self.on_closed = None
         self.closed_signal = False
+        self._closing = False
 
     def _message(self, message):
         if (
@@ -52,6 +53,7 @@ class MutterSession:
             and message.path == self.path
             and message.interface == INTERFACE
             and message.member == "Closed"
+            and not self._closing
         ):
             self.closed_signal = True
             if self.on_closed:
@@ -93,6 +95,7 @@ class MutterSession:
     async def connect(self):
         if self.bus:
             return
+        self._closing = False
         try:
             self.bus = await asyncio.wait_for(
                 MessageBus(negotiate_unix_fd=True).connect(), 3
@@ -343,6 +346,9 @@ class MutterSession:
         )
 
     async def close(self):
+        # Stop emits Closed for our own provisional session. Do not report it
+        # as an unexpected compositor loss before the original error is sent.
+        self._closing = True
         if self.observer:
             self.observer.close()
             self.observer = None

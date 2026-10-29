@@ -556,3 +556,420 @@ def test_real_output_session_idle_owner_is_cleaned_on_task_invalidation(
             await session.close()
 
     asyncio.run(scenario())
+
+
+def test_ibus_stream_dispatches_all_chunks_then_reports_unconfirmed(sessions):
+    from test_output_router import Bridge, Keyboard
+
+    from inkecho.platform.output_router import OutputRouter
+
+    async def scenario():
+        release = asyncio.Event()
+
+        class StreamClient(Client):
+            async def polish_stream(self, _provider, _key, _text, _prompt, on_delta):
+                await on_delta("甲")
+                await release.wait()
+                await on_delta("乙")
+                return Result("甲乙", Usage(), 0)
+
+        session = sessions(StreamClient())
+        session.store.save_settings(
+            replace(session.store.load_settings(), output_method="ibus")
+        )
+        keyboard, bridge = Keyboard(), Bridge()
+        session.inputs = OutputRouter(keyboard, ibus_factory=lambda: bridge)
+        outcomes, problems, diagnostics = [], [], []
+        session.finished.connect(outcomes.append)
+        session.problem.connect(problems.append)
+        session.diagnostic.connect(diagnostics.append)
+        await session.toggle()
+        session.stop_recording()
+        await until(lambda: bridge.sent == ["甲"])
+        assert not outcomes
+        release.set()
+        await until(lambda: not session.pending)
+        assert bridge.sent == ["甲", "乙"] and keyboard.sent == []
+        assert outcomes[0]["outcome"] == "unconfirmed"
+        assert outcomes[0]["characters"] == 2  # attempted dispatches, not receipt
+        assert diagnostics == ["ibus_delivery_unknown"]
+        assert problems == []
+        await session.close()
+
+    asyncio.run(scenario())
+
+
+def test_ibus_stream_cancel_stops_unsent_chunks_without_replay(sessions):
+    from test_output_router import Bridge, Keyboard
+
+    from inkecho.platform.output_router import OutputRouter
+
+    async def scenario():
+        release = asyncio.Event()
+
+        class StreamClient(Client):
+            async def polish_stream(self, _provider, _key, _text, _prompt, on_delta):
+                await on_delta("甲")
+                await release.wait()
+                await on_delta("乙")
+                return Result("甲乙", Usage(), 0)
+
+        session = sessions(StreamClient())
+        session.store.save_settings(
+            replace(session.store.load_settings(), output_method="ibus")
+        )
+        keyboard, bridge = Keyboard(), Bridge()
+        session.inputs = OutputRouter(keyboard, ibus_factory=lambda: bridge)
+        outcomes = []
+        session.finished.connect(outcomes.append)
+        await session.toggle()
+        session.stop_recording()
+        await until(lambda: bridge.sent == ["甲"])
+        session.cancel()
+        release.set()
+        await until(lambda: not session.pending)
+        assert bridge.sent == ["甲"] and keyboard.sent == []
+        assert outcomes[0]["outcome"] == "cancelled"
+        await session.close()
+
+    asyncio.run(scenario())
+
+
+def test_fcitx_partial_stream_counts_acknowledged_attempts_without_double_count(
+    sessions,
+):
+    from test_output_router import Bridge, Keyboard
+
+    from inkecho.platform.fcitx5 import FcitxOutputError
+    from inkecho.platform.output_router import OutputRouter
+
+    async def scenario():
+        release = asyncio.Event()
+
+        class StreamClient(Client):
+            async def polish_stream(self, _provider, _key, _text, _prompt, on_delta):
+                await on_delta("甲乙")
+                await release.wait()
+                await on_delta("丙丁")
+                return Result("甲乙丙丁", Usage(), 0)
+
+        class Partial(Bridge):
+            async def insert(self, text, can_continue, **kwargs):
+                self.sent.append(text)
+                if len(self.sent) == 1:
+                    return len(text)
+                raise FcitxOutputError("delivery_unknown", accepted=3, uncertain=True)
+
+        session = sessions(StreamClient())
+        session.store.save_settings(
+            replace(session.store.load_settings(), output_method="auto")
+        )
+        keyboard, bridge = Keyboard(), Partial()
+        router = OutputRouter(keyboard, bridge_factory=lambda: bridge)
+
+        async def detect():
+            return ("fcitx", ":1.42")
+
+        router._system_detector = detect
+        session.inputs = router
+        outcomes = []
+        session.finished.connect(outcomes.append)
+        await session.toggle()
+        session.stop_recording()
+        await until(lambda: bridge.sent == ["甲乙"])
+        release.set()
+        await until(lambda: not session.pending)
+        assert bridge.sent == ["甲乙", "丙丁"] and keyboard.sent == []
+        assert outcomes[0]["outcome"] == "failed"
+        assert outcomes[0]["characters"] == 3
+        await session.close()
+
+    asyncio.run(scenario())
+
+
+def test_ibus_stream_partial_acknowledgement_is_not_double_counted(sessions, tmp_path):
+    from test_ibus import Bus, trusted_owner
+    from test_output_router import Keyboard
+
+    from inkecho.platform.ibus import Client, IBusBridge
+    from inkecho.platform.output_router import OutputRouter
+
+    async def scenario():
+        release = asyncio.Event()
+
+        class StreamClient(ClientBase):
+            async def polish_stream(self, _provider, _key, _text, _prompt, on_delta):
+                await on_delta("甲乙")
+                await release.wait()
+                await on_delta("丙丁")
+                return Result("甲乙丙丁", Usage(), 0)
+
+        runtime = tmp_path / "ibus-runtime"
+        runtime.mkdir(mode=0o700)
+        bus = Bus()
+        bus.outcomes = [
+            "attempted",
+            "attempted",
+            "attempted",
+            TimeoutError("synthetic unknown"),
+        ]
+        keyboard = Keyboard()
+        session = sessions(StreamClient())
+        session.store.save_settings(
+            replace(session.store.load_settings(), output_method="ibus")
+        )
+        session.inputs = OutputRouter(
+            keyboard,
+            ibus_factory=lambda: IBusBridge(
+                runtime_dir=str(runtime),
+                client_factory=lambda cap: Client(
+                    cap, bus_factory=lambda: bus, owner_verifier=trusted_owner
+                ),
+            ),
+        )
+        outcomes, diagnostics = [], []
+        session.finished.connect(outcomes.append)
+        session.diagnostic.connect(diagnostics.append)
+        await session.toggle()
+        session.stop_recording()
+        await until(lambda: len([m for m in bus.calls if m.member == "Commit"]) == 2)
+        release.set()
+        await until(lambda: not session.pending)
+        assert outcomes[0]["outcome"] == "failed"
+        assert outcomes[0]["characters"] == 3
+        assert diagnostics == ["ibus_delivery_unknown"]
+        assert keyboard.sent == []
+        assert [m.body[1] for m in bus.calls if m.member == "Commit"] == [
+            "甲",
+            "乙",
+            "丙",
+            "丁",
+        ]
+        await session.close()
+
+    ClientBase = globals()["Client"]
+    asyncio.run(scenario())
+
+
+@pytest.mark.parametrize("stop_reason", ["cancel", "timeout"])
+def test_cancel_preserves_only_acknowledged_fcitx_attempts_without_waiting(
+    sessions, stop_reason
+):
+    from test_fcitx5 import FakeBus, FakeCapability, reply
+    from test_output_router import Keyboard
+
+    from inkecho.platform.fcitx5 import Fcitx5Bridge
+    from inkecho.platform.output_router import OutputRouter
+
+    async def scenario():
+        started = asyncio.Event()
+        blocked = asyncio.Event()
+
+        class BlockingBus(FakeBus):
+            async def call(self, message):
+                if (
+                    message.member == "Commit"
+                    and len([x for x in self.calls if x.member == "Commit"]) == 1
+                ):
+                    self.calls.append(message)
+                    started.set()
+                    await blocked.wait()
+                    return reply([1])
+                return await super().call(message)
+
+        class StreamClient(Client):
+            async def polish_stream(self, _provider, _key, _text, _prompt, on_delta):
+                await on_delta("甲乙丙")
+                return Result("甲乙丙", Usage(), 0)
+
+        bus = BlockingBus([reply([1])])
+        session = sessions(StreamClient())
+        session.store.save_settings(
+            replace(session.store.load_settings(), output_method="auto")
+        )
+        keyboard = Keyboard()
+        router = OutputRouter(
+            keyboard,
+            bridge_factory=lambda: Fcitx5Bridge(
+                bus_factory=lambda: bus, capability_factory=FakeCapability
+            ),
+        )
+
+        async def detect():
+            return ("fcitx", ":1.42")
+
+        router._system_detector = detect
+        session.inputs = router
+        outcomes = []
+        session.finished.connect(outcomes.append)
+        await session.toggle()
+        session.stop_recording()
+        await asyncio.wait_for(started.wait(), 1)
+        if stop_reason == "cancel":
+            session.cancel()
+        else:
+            session.controller.task.deadline = time.monotonic() - 1
+            session.controller.tick()
+        assert outcomes[0]["outcome"] == (
+            "cancelled" if stop_reason == "cancel" else "failed"
+        )
+        assert outcomes[0]["characters"] == 1
+        assert not blocked.is_set()
+        await until(lambda: not session.pending)
+        assert len([x for x in bus.calls if x.member == "Commit"]) == 2
+        assert keyboard.sent == []
+        await session.close()
+
+    asyncio.run(scenario())
+
+
+@pytest.mark.parametrize("stop_reason", ["cancel", "timeout"])
+def test_ibus_cancel_snapshot_is_task_scoped_and_excludes_pending(
+    sessions, tmp_path, stop_reason
+):
+    from test_ibus import Bus, trusted_owner
+    from test_output_router import Keyboard
+
+    from inkecho.platform.ibus import Client as IBusClient
+    from inkecho.platform.ibus import IBusBridge
+    from inkecho.platform.output_router import OutputRouter
+
+    async def scenario():
+        signals = [asyncio.Event(), asyncio.Event()]
+        blocked = asyncio.Event()
+        buses = []
+
+        class BlockingBus(Bus):
+            def __init__(self, task_index):
+                super().__init__()
+                self.task_index = task_index
+                self.outcomes = ["attempted"]
+
+            async def call(self, message):
+                commits = [m for m in self.calls if m.member == "Commit"]
+                if message.member == "Commit" and len(commits) == (
+                    1 if self.task_index == 0 else 0
+                ):
+                    self.calls.append(message)
+                    signals[self.task_index].set()
+                    await blocked.wait()
+                    raise AssertionError("blocked request must not finish")
+                return await super().call(message)
+
+        class StreamClient(Client):
+            async def polish_stream(self, _provider, _key, _text, _prompt, on_delta):
+                await on_delta("甲乙丙")
+                return Result("甲乙丙", Usage(), 0)
+
+        runtime = tmp_path / "ibus-runtime"
+        runtime.mkdir(mode=0o700)
+
+        def make_bridge():
+            bus = BlockingBus(len(buses))
+            buses.append(bus)
+            return IBusBridge(
+                runtime_dir=str(runtime),
+                client_factory=lambda cap: IBusClient(
+                    cap, bus_factory=lambda: bus, owner_verifier=trusted_owner
+                ),
+            )
+
+        session = sessions(StreamClient())
+        session.store.save_settings(
+            replace(session.store.load_settings(), output_method="ibus")
+        )
+        keyboard = Keyboard()
+        session.inputs = OutputRouter(keyboard, ibus_factory=make_bridge)
+        outcomes = []
+        session.finished.connect(outcomes.append)
+
+        for task_index in range(2):
+            session.last_toggle = 0
+            await session.toggle()
+            session.stop_recording()
+            await asyncio.wait_for(signals[task_index].wait(), 1)
+            if stop_reason == "cancel":
+                session.cancel()
+            else:
+                session.controller.task.deadline = time.monotonic() - 1
+                session.controller.tick()
+            assert outcomes[task_index]["outcome"] == (
+                "cancelled" if stop_reason == "cancel" else "failed"
+            )
+            assert outcomes[task_index]["characters"] == (1 if task_index == 0 else 0)
+            assert not blocked.is_set()
+            await until(lambda: not session.pending)
+
+        assert [
+            [m.body[1] for m in bus.calls if m.member == "Commit"] for bus in buses
+        ] == [["甲", "乙"], ["甲"]]
+        assert keyboard.sent == []
+        assert all(bus.disconnected for bus in buses)
+        assert not list(runtime.iterdir())
+        await session.close()
+
+    asyncio.run(scenario())
+
+
+def test_polishing_failure_during_partial_ibus_preserves_acknowledged_count(
+    sessions, tmp_path
+):
+    from test_ibus import Bus, trusted_owner
+    from test_output_router import Keyboard
+
+    from inkecho.platform.ibus import Client as IBusClient
+    from inkecho.platform.ibus import IBusBridge
+    from inkecho.platform.output_router import OutputRouter
+
+    async def scenario():
+        waiting = asyncio.Event()
+        blocked = asyncio.Event()
+
+        class BlockingBus(Bus):
+            async def call(self, message):
+                if (
+                    message.member == "Commit"
+                    and len([m for m in self.calls if m.member == "Commit"]) == 1
+                ):
+                    self.calls.append(message)
+                    waiting.set()
+                    await blocked.wait()
+                    raise AssertionError("not released")
+                return await super().call(message)
+
+        class BrokenClient(Client):
+            async def polish_stream(self, _provider, _key, _text, _prompt, on_delta):
+                await on_delta("甲乙")
+                await waiting.wait()
+                raise ProviderError("response")
+
+        runtime = tmp_path / "runtime"
+        runtime.mkdir(mode=0o700)
+        bus = BlockingBus()
+        bus.outcomes = ["attempted"]
+        keyboard = Keyboard()
+        session = sessions(BrokenClient())
+        session.store.save_settings(
+            replace(session.store.load_settings(), output_method="ibus")
+        )
+        session.inputs = OutputRouter(
+            keyboard,
+            ibus_factory=lambda: IBusBridge(
+                runtime_dir=str(runtime),
+                client_factory=lambda cap: IBusClient(
+                    cap, bus_factory=lambda: bus, owner_verifier=trusted_owner
+                ),
+            ),
+        )
+        outcomes = []
+        session.finished.connect(outcomes.append)
+        await session.toggle()
+        session.stop_recording()
+        await until(lambda: bool(outcomes))
+        assert outcomes[0]["outcome"] == "failed"
+        assert outcomes[0]["characters"] == 1
+        assert [m.body[1] for m in bus.calls if m.member == "Commit"] == ["甲", "乙"]
+        assert keyboard.sent == []
+        await session.close()
+
+    asyncio.run(scenario())

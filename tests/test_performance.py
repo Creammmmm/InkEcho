@@ -104,3 +104,10 @@ def test_invalid_transport_timestamp_is_rejected(at):
     with pytest.raises(ValueError, match="observation time"):
         timing.mark("first_character_sent", at=at)
     assert timing.snapshot()["events_ms"]["first_character_sent"] is None
+
+
+def test_unconfirmed_performance_snapshot_is_valid():
+    from inkecho.performance import TaskTiming, validate_snapshot
+
+    snapshot = TaskTiming().finish("unconfirmed")
+    assert validate_snapshot(snapshot)["outcome"] == "unconfirmed"

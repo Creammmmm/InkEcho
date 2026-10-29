@@ -12,7 +12,14 @@ import tomllib
 import urllib.request
 from pathlib import Path
 
-from bundle import collect_python, system_assets, trim_qt, write_inventory
+from bundle import (
+    collect_python,
+    install_fcitx5_candidate,
+    system_assets,
+    trim_qt,
+    verified_fcitx5_candidate,
+    write_inventory,
+)
 
 ROOT = Path(__file__).resolve().parents[2]
 BUILD = ROOT / "build"
@@ -103,6 +110,7 @@ def main() -> None:
     version = project_version(ROOT)
     if platform.machine() != "x86_64" or sys.platform != "linux":
         raise SystemExit("This build recipe currently supports Linux x86_64 only.")
+    fcitx5_candidate = verified_fcitx5_candidate(ROOT)
     if not shutil.which("mksquashfs"):
         raise SystemExit("Install squashfs-tools before building.")
     python_home = Path(sys.base_prefix).resolve()
@@ -127,10 +135,14 @@ def main() -> None:
     versions = collect_python(packages)
     libraries = trim_qt(packages)
     assets = system_assets(ROOT, APPDIR)
+    fcitx5_metadata = install_fcitx5_candidate(APPDIR, fcitx5_candidate)
     notices = APPDIR / "usr/share/doc/inkecho"
     shutil.copytree(ROOT / "assets/licenses", notices / "licenses")
     for name in ("LICENSE", "THIRD_PARTY_NOTICES.md"):
         shutil.copy2(ROOT / name, notices / name)
+    shutil.copy2(
+        ROOT / "docs/fcitx5-candidate-build.md", notices / "fcitx5-candidate-build.md"
+    )
     shutil.copytree(ROOT / "src/inkecho", packages / "inkecho")
     for path in APPDIR.rglob("__pycache__"):
         shutil.rmtree(path)
@@ -166,6 +178,7 @@ def main() -> None:
             "python_distributions": versions,
             "qt_libraries": libraries,
             "system_assets": assets,
+            "fcitx5_candidate": fcitx5_metadata,
             "appimage_runtime_sha256": RUNTIME_SHA256,
         },
     )

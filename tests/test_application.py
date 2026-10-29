@@ -112,6 +112,45 @@ async def complete(session):
     raise AssertionError("Workflow did not finish")
 
 
+def test_feedback_timeout_uses_recording_task_settings_snapshot(factory):
+    class SnapshotInputs(Inputs):
+        def set_feedback_timeout_reader(self, reader):
+            self.read_timeout = reader
+
+        def set_mapping_wait_reader(self, reader):
+            self.read_mapping_wait = reader
+
+    async def scenario():
+        template = factory()
+        inputs = SnapshotInputs()
+        session = Session(
+            template.store, inputs=inputs, recorder=Recorder(), client=Client()
+        )
+        session.key = template.key
+        await session.toggle()
+        assert inputs.read_timeout() == 0.04
+        assert inputs.read_mapping_wait() == 0.04
+        session.store.save_settings(
+            replace(
+                session.store.load_settings(),
+                x11_feedback_timeout_ms=120,
+                x11_mapping_wait_ms=80,
+            )
+        )
+        assert inputs.read_timeout() == 0.04
+        assert inputs.read_mapping_wait() == 0.04
+        session.cancel()
+        await asyncio.sleep(0)
+        session.last_toggle = 0
+        await session.toggle()
+        assert inputs.read_timeout() == 0.12
+        assert inputs.read_mapping_wait() == 0.08
+        session.cancel()
+        await session.close()
+
+    asyncio.run(scenario())
+
+
 def test_successful_transcription_and_polishing(factory):
     async def scenario():
         session = factory()
@@ -665,7 +704,7 @@ def test_cancelled_pending_delivery_cannot_type_or_finish_a_new_task(factory):
     ("code", "message"),
     [
         ("session_closed", "键盘输入连接已断开"),
-        ("unsupported_target", "原生 Wayland 应用暂不支持"),
+        ("unsupported_target", "当前窗口或桌面环境暂不支持"),
         ("mapping_changed", "键盘布局发生变化"),
     ],
 )
@@ -701,8 +740,8 @@ def test_default_keyboard_lifecycle_does_not_inspect_focus(factory):
         template = factory()
         await template.close()
         session = Session(template.store, recorder=Recorder(), client=Client())
-        assert type(session.inputs) is KeyboardInput
-        assert not session.inputs.connected
+        assert type(session.inputs.keyboard) is KeyboardInput
+        assert not session.inputs.keyboard.connected
         calls = []
 
         class DisplayOnly:
@@ -713,16 +752,57 @@ def test_default_keyboard_lifecycle_does_not_inspect_focus(factory):
             def close(self):
                 calls.append("close")
 
-        session.inputs._factory = DisplayOnly
+        session.inputs.keyboard._factory = DisplayOnly
         session.key = template.key
         await session.initialize()
-        assert session.inputs.authorized and calls == ["connect"]
+        assert not session.inputs.authorized and calls == []
         await session.toggle()
         assert session.recorder.recording
         assert session.controller.state == State.RECORDING
+        await asyncio.sleep(0)
+        assert calls == []
         await session.close()
-        assert calls == ["connect", "close"]
+        assert calls == []
         assert not session.inputs.connected
+
+    asyncio.run(scenario())
+
+
+def test_output_method_is_snapshotted_and_cancel_releases_bridge(factory):
+    from inkecho.platform.output_router import OutputRouter
+
+    class Bridge:
+        def __init__(self):
+            self.closed = False
+            self.owner = None
+
+        async def connect(self, *, expected_owner):
+            self.owner = expected_owner
+
+        async def aclose(self):
+            self.closed = True
+
+    async def scenario():
+        session = factory()
+        keyboard, bridge = session.inputs, Bridge()
+        session.inputs = OutputRouter(keyboard, bridge_factory=lambda: bridge)
+
+        async def verified_owner():
+            return ":1.42"
+
+        session.inputs._explicit_fcitx_detector = verified_owner
+        session.store.save_settings(replace(session.settings, output_method="fcitx"))
+        await session.toggle()
+        await asyncio.wait_for(session.task_context["input_authorization"], 1)
+        assert session.inputs.selected == "fcitx"
+        assert bridge.owner == ":1.42"
+        session.store.save_settings(replace(session.settings, output_method="keyboard"))
+        assert session.inputs.selected == "fcitx"
+        assert keyboard.authorizations == 0
+        session.cancel()
+        await asyncio.gather(*tuple(session.cleanup_tasks))
+        assert bridge.closed and session.inputs.selected is None
+        await session.close()
 
     asyncio.run(scenario())
 
@@ -807,7 +887,7 @@ def test_sent_character_metrics_use_keyboard_normalized_count(factory):
         await complete(session)
         assert outcomes[0]["outcome"] == "succeeded"
         assert outcomes[0]["characters"] == 3
-        assert "按键已发送" in statuses
+        assert "已尝试发送文字" in statuses
         assert all("已输入到目标" not in text for text in statuses)
         await session.close()
 
@@ -1107,6 +1187,427 @@ def test_no_pcm_recording_ends_quietly_and_releases_task(factory):
         assert not diagnostics
         assert "failed" not in states
         assert not session.inputs.inserted
+        await session.close()
+
+    asyncio.run(scenario())
+
+
+def test_input_maintenance_blocks_recording_until_cancelled_worker_finishes(factory):
+    import threading
+
+    async def scenario():
+        session = factory()
+        started, release = threading.Event(), threading.Event()
+
+        def operation():
+            started.set()
+            assert release.wait(5)
+
+        action = asyncio.create_task(session.run_input_maintenance(operation))
+        try:
+            for _ in range(200):
+                if started.is_set():
+                    break
+                await asyncio.sleep(0.01)
+            assert started.is_set()
+            action.cancel()
+            with pytest.raises(asyncio.CancelledError):
+                await action
+            assert session.input_maintenance_active
+            await session.toggle()
+            assert not session.recorder.recording
+            assert session.controller.task is None
+        finally:
+            release.set()
+            await asyncio.gather(*tuple(session.input_maintenance_tasks))
+            await session.close()
+        assert not session.input_maintenance_active
+
+    asyncio.run(scenario())
+
+
+def test_queued_input_maintenance_rechecks_recording_and_cancel(factory):
+    import threading
+
+    from inkecho.app import InputMaintenanceBusy
+
+    async def scenario():
+        session = factory()
+        started, release = threading.Event(), threading.Event()
+        calls = []
+
+        def first():
+            started.set()
+            assert release.wait(5)
+
+        action = asyncio.create_task(session.run_input_maintenance(first))
+        try:
+            for _ in range(200):
+                if started.is_set():
+                    break
+                await asyncio.sleep(0.01)
+            assert started.is_set()
+            queued = asyncio.create_task(
+                session.run_input_maintenance(lambda: calls.append("late"))
+            )
+            cancelled = asyncio.create_task(
+                session.run_input_maintenance(lambda: calls.append("cancelled"))
+            )
+            await asyncio.sleep(0)
+            cancelled.cancel()
+            with pytest.raises(asyncio.CancelledError):
+                await cancelled
+            session.preparing = True
+            release.set()
+            await action
+            with pytest.raises(InputMaintenanceBusy):
+                await queued
+            assert calls == []
+        finally:
+            release.set()
+            session.preparing = False
+            await asyncio.gather(
+                *tuple(session.input_maintenance_tasks), return_exceptions=True
+            )
+            await session.close()
+
+    asyncio.run(scenario())
+
+
+def test_session_close_waits_for_cancelled_maintenance_worker(factory):
+    import threading
+
+    async def scenario():
+        session = factory()
+        started, release = threading.Event(), threading.Event()
+
+        def operation():
+            started.set()
+            assert release.wait(5)
+
+        action = asyncio.create_task(session.run_input_maintenance(operation))
+        try:
+            for _ in range(200):
+                if started.is_set():
+                    break
+                await asyncio.sleep(0.01)
+            assert started.is_set()
+            action.cancel()
+            with pytest.raises(asyncio.CancelledError):
+                await action
+            closing = asyncio.create_task(session.close())
+            await asyncio.sleep(0.02)
+            assert not closing.done()
+            assert session.input_maintenance_active
+            release.set()
+            await asyncio.wait_for(closing, 2)
+            assert not session.input_maintenance_active
+        finally:
+            release.set()
+            await asyncio.gather(
+                *tuple(session.input_maintenance_tasks), return_exceptions=True
+            )
+            session.timer.stop()
+
+    asyncio.run(scenario())
+
+
+def test_auto_explicit_enable_authorizes_fallback_but_recording_does_not(factory):
+    from inkecho.platform.output_router import OutputRouter
+
+    async def scenario():
+        session = factory()
+        keyboard = session.inputs
+        authorize = keyboard.authorize
+
+        async def authorize_with_parent(_parent=""):
+            await authorize()
+
+        keyboard.authorize = authorize_with_parent
+        session.inputs = OutputRouter(keyboard)
+        session.store.save_settings(replace(session.settings, output_method="auto"))
+        assert await session.authorize_input("auto")
+        assert keyboard.authorizations == 0
+        await session.inputs.discard_task()
+        assert await session.authorize_input()
+        assert keyboard.authorizations == 1
+        assert session.inputs.selected is None
+        await session.close()
+
+    asyncio.run(scenario())
+
+
+def test_ibus_normal_output_reports_unconfirmed_without_replay_or_success(factory):
+    from test_output_router import Bridge, Keyboard
+
+    from inkecho.platform.output_router import OutputRouter
+
+    async def scenario():
+        session = factory()
+        session.store.save_settings(
+            replace(session.settings, polishing_enabled=False, output_method="ibus")
+        )
+        keyboard, bridge = Keyboard(), Bridge()
+        session.inputs = OutputRouter(keyboard, ibus_factory=lambda: bridge)
+        outcomes, problems, diagnostics = [], [], []
+        session.finished.connect(outcomes.append)
+        session.problem.connect(problems.append)
+        session.diagnostic.connect(diagnostics.append)
+        await session.toggle()
+        session.recorder.stop()
+        await complete(session)
+        assert bridge.sent == ["你好 InkEcho"]
+        assert keyboard.sent == []
+        assert outcomes[0]["outcome"] == "unconfirmed"
+        assert outcomes[0]["characters"] == len("你好 InkEcho")
+        assert diagnostics == ["ibus_delivery_unknown"]
+        assert problems == []
+        await session.close()
+
+    asyncio.run(scenario())
+
+
+@pytest.mark.parametrize("reason", ["unsupported_compositor", "unsupported_target"])
+@pytest.mark.parametrize("phase", ["connect", "send"])
+def test_auto_fcitx_zero_prefix_keyboard_failure_reports_failure_and_closes(
+    factory, reason, phase
+):
+    from test_output_router import Bridge, Keyboard
+
+    from inkecho.platform.fcitx5 import FcitxOutputError
+    from inkecho.platform.keyboard import KeyboardError
+    from inkecho.platform.output_router import OutputRouter
+
+    class NoTarget(Bridge):
+        async def insert(self, text, can_continue, **kwargs):
+            assert can_continue()
+            raise FcitxOutputError("no_target", accepted=0, unsent_offset=0)
+
+    class BrokenKeyboard(Keyboard):
+        async def connect(self):
+            self.connects += 1
+            if phase == "connect":
+                raise KeyboardError(reason)
+
+        async def insert(self, text, can_continue, **kwargs):
+            assert can_continue()
+            raise KeyboardError(reason)
+
+    async def scenario():
+        session = factory()
+        session.store.save_settings(
+            replace(session.settings, polishing_enabled=False, output_method="auto")
+        )
+        bridge, keyboard = NoTarget(), BrokenKeyboard()
+        session.inputs = OutputRouter(keyboard, bridge_factory=lambda: bridge)
+
+        async def detect():
+            return ("fcitx", ":1.42")
+
+        session.inputs._system_detector = detect
+        outcomes, problems, diagnostics = [], [], []
+        session.finished.connect(outcomes.append)
+        session.problem.connect(problems.append)
+        session.diagnostic.connect(diagnostics.append)
+        await session.toggle()
+        session.recorder.stop()
+        await complete(session)
+        assert [item["outcome"] for item in outcomes] == ["failed"]
+        assert outcomes[0]["characters"] == 0
+        assert diagnostics == [reason] and len(problems) == 1
+        assert bridge.closed and keyboard.connects == 1 and not keyboard.sent
+        assert session.inputs.selected is None
+        if reason == "unsupported_compositor":
+            assert "Ubuntu 24.04" in problems[0] and "Ubuntu on Xorg" in problems[0]
+        else:
+            assert "当前窗口或桌面环境暂不支持" in problems[0]
+            assert "原生 Wayland 应用暂不支持" not in problems[0]
+        await session.close()
+
+    asyncio.run(scenario())
+
+
+def test_router_cleanup_failure_is_forwarded_to_session_diagnostics(factory):
+    class DiagnosticsInputs(Inputs):
+        def set_diagnostic_handler(self, handler):
+            self.handler = handler
+
+    async def scenario():
+        template = factory()
+        inputs = DiagnosticsInputs()
+        session = Session(
+            template.store, inputs=inputs, recorder=Recorder(), client=Client()
+        )
+        reports = []
+        session.diagnostic.connect(reports.append)
+        inputs.handler("input_cleanup_failed")
+        assert reports == ["input_cleanup_failed"]
+        await session.close()
+        await template.close()
+
+    asyncio.run(scenario())
+
+
+@pytest.mark.parametrize("mode", ["auto", "keyboard", "fcitx", "ibus"])
+def test_recording_snapshots_each_output_mode_before_async_authorization(factory, mode):
+    class SnapshotInputs(Inputs):
+        def __init__(self):
+            super().__init__()
+            self.modes = []
+
+        async def prepare_task(self, selected, **kwargs):
+            self.modes.append(selected)
+
+        async def discard_task(self):
+            pass
+
+    async def scenario():
+        session = factory()
+        inputs = SnapshotInputs()
+        session.inputs = inputs
+        session.store.save_settings(replace(session.settings, output_method=mode))
+        await session.toggle()
+        session.store.save_settings(
+            replace(session.store.load_settings(), output_method="keyboard")
+        )
+        await asyncio.wait_for(session.task_context["input_authorization"], 1)
+        assert inputs.modes == [mode]
+        session.cancel()
+        await session.close()
+
+    asyncio.run(scenario())
+
+
+def test_unknown_input_error_is_sanitized_before_diagnostics(factory):
+    from inkecho.platform.output_router import OutputRouterError
+
+    session = factory()
+    diagnostics = []
+    session.diagnostic.connect(diagnostics.append)
+    session.input_problem(OutputRouterError("private input details"))
+    assert diagnostics == ["injection_failed"]
+    asyncio.run(session.close())
+
+
+@pytest.mark.parametrize("accepted,uncertain", [(2, False), (2, True), (0, True)])
+def test_fcitx_failed_output_records_only_acknowledged_attempts(
+    factory, accepted, uncertain
+):
+    from test_output_router import Bridge, Keyboard
+
+    from inkecho.platform.fcitx5 import FcitxOutputError
+    from inkecho.platform.output_router import OutputRouter
+
+    class Partial(Bridge):
+        async def insert(self, text, can_continue, **kwargs):
+            raise FcitxOutputError(
+                "delivery_unknown" if uncertain else "owner_changed",
+                accepted=accepted,
+                uncertain=uncertain,
+            )
+
+    async def scenario():
+        session = factory()
+        session.store.save_settings(
+            replace(session.settings, polishing_enabled=False, output_method="auto")
+        )
+        keyboard, bridge = Keyboard(), Partial()
+        router = OutputRouter(keyboard, bridge_factory=lambda: bridge)
+
+        async def detect():
+            return ("fcitx", ":1.42")
+
+        router._system_detector = detect
+        session.inputs = router
+        outcomes = []
+        session.finished.connect(outcomes.append)
+        await session.toggle()
+        session.recorder.stop()
+        await complete(session)
+        assert outcomes[0]["outcome"] == "failed"
+        assert outcomes[0]["characters"] == accepted
+        assert keyboard.sent == []
+        await session.close()
+
+    asyncio.run(scenario())
+
+
+def test_ibus_partial_acknowledgement_is_counted_without_replay(factory, tmp_path):
+    from test_ibus import Bus, trusted_owner
+    from test_output_router import Keyboard
+
+    from inkecho.platform.ibus import Client, IBusBridge
+    from inkecho.platform.output_router import OutputRouter
+
+    async def scenario():
+        runtime = tmp_path / "ibus-runtime"
+        runtime.mkdir(mode=0o700)
+        bus = Bus()
+        bus.outcomes = ["attempted", TimeoutError("synthetic unknown")]
+        keyboard = Keyboard()
+        session = factory()
+        session.store.save_settings(
+            replace(session.settings, polishing_enabled=False, output_method="ibus")
+        )
+        session.inputs = OutputRouter(
+            keyboard,
+            ibus_factory=lambda: IBusBridge(
+                runtime_dir=str(runtime),
+                client_factory=lambda cap: Client(
+                    cap, bus_factory=lambda: bus, owner_verifier=trusted_owner
+                ),
+            ),
+        )
+        outcomes, diagnostics = [], []
+        session.finished.connect(outcomes.append)
+        session.diagnostic.connect(diagnostics.append)
+        await session.toggle()
+        session.recorder.stop()
+        await complete(session)
+        assert outcomes[0]["outcome"] == "failed"
+        assert outcomes[0]["characters"] == 1
+        assert diagnostics == ["ibus_delivery_unknown"]
+        assert keyboard.sent == []
+        assert [m.body[1] for m in bus.calls if m.member == "Commit"] == ["你", "好"]
+        await session.close()
+
+    asyncio.run(scenario())
+
+
+def test_unconfirmed_task_cleans_up_and_new_task_can_be_cancelled(factory):
+    from test_output_router import Bridge, Keyboard
+
+    from inkecho.platform.output_router import OutputRouter
+
+    async def scenario():
+        session = factory()
+        session.store.save_settings(
+            replace(session.settings, polishing_enabled=False, output_method="ibus")
+        )
+        bridges = []
+
+        def bridge_factory():
+            bridge = Bridge()
+            bridges.append(bridge)
+            return bridge
+
+        session.inputs = OutputRouter(Keyboard(), ibus_factory=bridge_factory)
+        outcomes = []
+        session.finished.connect(outcomes.append)
+        await session.toggle()
+        session.recorder.stop()
+        await complete(session)
+        assert [x["outcome"] for x in outcomes] == ["unconfirmed"]
+        assert session.controller.state == State.IDLE
+        assert session.controller.task is None and bridges[0].closed
+        assert session.inputs.selected is None
+        session.last_toggle = 0  # Do not test the independent shortcut debounce.
+        await session.toggle()
+        assert session.controller.state == State.RECORDING
+        session.cancel()
+        await complete(session)
+        assert [x["outcome"] for x in outcomes] == ["unconfirmed", "cancelled"]
+        assert len(bridges) == 2 and bridges[1].closed
         await session.close()
 
     asyncio.run(scenario())

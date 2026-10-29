@@ -15,6 +15,7 @@ class State(StrEnum):
     POLISHING = "polishing"
     INJECTING = "injecting"
     SUCCEEDED = "succeeded"
+    UNCONFIRMED = "unconfirmed"
     FAILED = "failed"
     CANCELLED = "cancelled"
 
@@ -177,6 +178,11 @@ class TaskController:
     def injection_finished(self, task_id: str) -> None:
         if self._valid(task_id, State.INJECTING):
             self._finish(State.SUCCEEDED)
+
+    def injection_unconfirmed(self, task_id: str) -> None:
+        """All dispatches completed, but target receipt cannot be confirmed."""
+        if self._valid(task_id, State.INJECTING):
+            self._finish(State.UNCONFIRMED)
 
     def begin_streaming_output(self, task_id: str) -> bool:
         """Enter output once; streamed text never has an original-text replay path."""

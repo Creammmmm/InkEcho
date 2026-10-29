@@ -121,6 +121,33 @@ def test_connect_is_non_authorizing_and_output_is_sequential_normalized():
     asyncio.run(run())
 
 
+def test_unsupported_authorization_is_reported_after_clean_cancellation():
+    async def run():
+        def handle(process, request):
+            if request["op"] == "authorize":
+                process.stdout.feed_data(
+                    json.dumps(
+                        {
+                            "id": request["id"],
+                            "ok": False,
+                            "error": "unsupported_compositor",
+                        }
+                    ).encode()
+                    + b"\n"
+                )
+                return True
+            return False
+
+        inputs, process = await connected(handle)
+        with pytest.raises(KeyboardError, match="unsupported_compositor"):
+            await inputs.authorize()
+        assert process.requests[-1]["op"] == "cancel"
+        assert not inputs.authorized
+        await inputs.aclose()
+
+    asyncio.run(run())
+
+
 @pytest.mark.parametrize("text", ["safe😀", "safe\t", "safe\ud800", "safe\x85"])
 def test_non_bmp_or_control_preflight_never_starts_map_transaction(text):
     async def run():

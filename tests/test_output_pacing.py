@@ -164,6 +164,35 @@ def test_feedback_timeout_retires_only_scheduling_debt_and_backs_off():
     asyncio.run(run())
 
 
+@pytest.mark.parametrize("feedback_min", [0.04, 0.08])
+def test_draw_feedback_timeout_is_a_floor_only_for_draw(feedback_min, monkeypatch):
+    async def run():
+        clock = Clock()
+        config = replace(PacingConfig(), feedback_min=feedback_min)
+        pacer = OutputPacer(config, clock=clock)
+
+        async def advance_timeout(awaitable, timeout):
+            awaitable.close()
+            clock.now += timeout
+            raise TimeoutError
+
+        monkeypatch.setattr(asyncio, "wait_for", advance_timeout)
+        for level in (FeedbackLevel.NONE, FeedbackLevel.INPUT, FeedbackLevel.DRAW):
+            token = pacer.bind(level)
+            pacer.sent(token)
+            started = clock.now
+            await ready(pacer, token, mapping=False, deadline=20)
+            elapsed = clock.now - started
+            expected = {
+                FeedbackLevel.NONE: config.reuse_fallback,
+                FeedbackLevel.INPUT: 0.0,
+                FeedbackLevel.DRAW: feedback_min,
+            }
+            assert elapsed == pytest.approx(expected[level])
+
+    asyncio.run(run())
+
+
 def test_old_feedback_cannot_wake_new_target_even_when_xid_returns():
     async def run():
         pacer = OutputPacer()

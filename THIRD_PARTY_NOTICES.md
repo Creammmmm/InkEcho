@@ -27,6 +27,7 @@ the earlier stage-zero probe included a larger, untrimmed Qt distribution.
 | typing_extensions | 4.16.0 | PSF-2.0 |
 | Noto Sans CJK font, if bundled | installed Noto CJK regular collection | Original upstream copyright and SIL Open Font License in `assets/licenses/Noto-CJK-copyright.txt` |
 | libei client library | Ubuntu libei1 1.5.0-3, added 2026-10-15 | Expat (MIT); package copyright retained at `usr/share/doc/inkecho/system/libei1/copyright` |
+| Fcitx5 bridge candidate | InkEcho original module, built against Ubuntu 24.04 Fcitx 5.1.7 | InkEcho's MIT license. The bridge dynamically depends on the user's separately installed Fcitx5 Core/Config/Utils libraries, whose upstream source is LGPL-2.1-or-later; those Fcitx libraries are not bundled with this candidate. |
 
 Python wheel distribution metadata and license directories must be copied with
 their runtime modules. The installed PySide wheels in this environment did not
@@ -57,6 +58,10 @@ files, links, dependency versions and downloaded asset hashes.
   library and Expat-license copyright notices. The exact Ubuntu package is pinned
   by URL and SHA-256 in `scripts/packaging/system-deps.json`; its copyright file
   was inspected directly from that verified package.
+- [Fcitx5 source](https://github.com/fcitx/fcitx5/tree/5.1.7) provides the
+  independently distributed host input framework and its LGPL-2.1-or-later
+  notices. The experimental InkEcho bridge source and reproducible build
+  procedure are in `native/fcitx5` and `docs/fcitx5-candidate-build.md`.
 
 Qt remains dynamically loaded, and the build does not deliberately prevent
 replacement of its shared libraries in an extracted AppImage. Source/build

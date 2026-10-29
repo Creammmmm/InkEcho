@@ -70,6 +70,7 @@ class PromptsPage(Page):
             self.style_cards[prompt.id] = panel
             heading = QHBoxLayout()
             title = label(prompt.name)
+            title.setObjectName("styleTitle")
             title.setMinimumHeight(32)
             heading.addWidget(title, 1)
             if active:

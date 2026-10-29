@@ -424,3 +424,8 @@ def test_capture_ready_is_display_only_and_clears_at_terminal(proxy):
     assert decode_frame(proxy.pending)["capture_ready"] is False
     proxy.set_capture_ready(True)
     assert decode_frame(proxy.pending)["capture_ready"] is False
+
+
+def test_unconfirmed_display_state_is_accepted():
+    value = frame(state="unconfirmed", text="")
+    assert decode_frame(json.dumps(value).encode()) == value

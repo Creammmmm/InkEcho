@@ -6,6 +6,7 @@ import math
 import time
 from collections.abc import AsyncIterator, Callable
 from contextlib import asynccontextmanager, contextmanager
+from dataclasses import replace
 
 from inkecho.platform.output_pacing import (
     FeedbackLevel,
@@ -13,11 +14,11 @@ from inkecho.platform.output_pacing import (
     PacingScopeChanged,
 )
 
-# Keep the first mapping stable for fresh X clients and retain 20 ms for later
-# map changes. The 10 ms press/release profile has bounded fresh-window evidence
+# Keep the first mapping stable for fresh X clients; later map changes use the
+# configured wait. The 10 ms press/release profile has bounded fresh-window evidence
 # in input-speed-optimization.md; it does not acknowledge application consumption.
 INITIAL_MAP_SETTLE_SECONDS = 0.1
-MAP_SETTLE_SECONDS = 0.02
+MAP_SETTLE_SECONDS = 0.04
 PRESS_SETTLE_SECONDS = 0.01
 RELEASE_SETTLE_SECONDS = 0.01
 
@@ -661,6 +662,17 @@ class KeyboardInput:
         self._pacing_level = FeedbackLevel.NONE
         self._focus_revision = None
         self._output_deadline = None
+        self._mapping_wait_reader = lambda: MAP_SETTLE_SECONDS
+        self._feedback_timeout_reader = None
+        self._output_mapping_wait = MAP_SETTLE_SECONDS
+
+    def set_mapping_wait_reader(self, reader):
+        """Read the X11 mapping wait once at the next output session."""
+        self._mapping_wait_reader = reader
+
+    def set_feedback_timeout_reader(self, reader):
+        """Read the task's X11 draw-feedback timeout at output setup."""
+        self._feedback_timeout_reader = reader
 
     @property
     def connected(self) -> bool:
@@ -804,7 +816,20 @@ class KeyboardInput:
         if owner is None or self._task is not None or self._output_owner is not None:
             raise KeyboardError("busy")
         driver = self._driver
+        mapping_wait = self._mapping_wait_reader()
+        if type(mapping_wait) not in (int, float) or not 0.020 <= mapping_wait <= 0.250:
+            raise ValueError("Invalid X11 mapping wait")
+        if self._feedback_timeout_reader is not None:
+            feedback_timeout = self._feedback_timeout_reader()
+            if type(feedback_timeout) not in (int, float) or not (
+                0.020 <= feedback_timeout <= 0.250
+            ):
+                raise ValueError("Invalid X11 feedback timeout")
+            self._pacer.config = replace(
+                self._pacer.config, feedback_min=feedback_timeout
+            )
         self._output_owner, self._output_failed = owner, False
+        self._output_mapping_wait = mapping_wait
         self._output_deadline = None
         self._feedback_disabled = False
         try:
@@ -975,7 +1000,7 @@ class KeyboardInput:
                             await asyncio.sleep(
                                 INITIAL_MAP_SETTLE_SECONDS
                                 if first_mapping
-                                else MAP_SETTLE_SECONDS
+                                else self._output_mapping_wait
                             )
                         check()
                         if selected is not None and not selected():

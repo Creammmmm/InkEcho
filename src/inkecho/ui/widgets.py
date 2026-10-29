@@ -1,6 +1,7 @@
 """Small presentation helpers shared by the settings pages."""
 
 import asyncio
+import inspect
 
 from PySide6.QtWidgets import (
     QFrame,
@@ -24,7 +25,9 @@ QLabel#brand { font-size: 24px; font-weight: 700; color: #173e78; }
 QFrame#card { background: white; border: 1px solid #dbe4f1; border-radius: 14px; }
 QFrame#card QLabel { background: transparent; }
 QFrame#card[activeStyle="true"] {
- background: #e6efff; border: 2px solid #245ab1; }
+ background: #cfe1ff; border: 2px solid #245ab1; }
+QFrame#card[activeStyle="true"] QLabel#styleTitle {
+ color: #173e78; font-weight: 700; }
 QFrame#card[activeStyle="true"] QLabel#muted { color: #344f75; }
 QFrame#card QLabel#activeStyleBadge {
  background: #245ab1; color: white; border-radius: 8px;
@@ -105,8 +108,21 @@ class Page(QWidget):
 
     def run(self, operation):
         revision = getattr(self, "revision", None)
+        started = False
+
+        def release_unstarted():
+            if inspect.iscoroutine(operation):
+                if inspect.getcoroutinestate(operation) == inspect.CORO_CREATED:
+                    operation.close()
+            elif asyncio.isfuture(operation):
+                if not operation.done():
+                    operation.cancel()
+                elif not operation.cancelled():
+                    operation.exception()
 
         async def perform():
+            nonlocal started
+            started = True
             try:
                 await operation
             except asyncio.CancelledError:
@@ -131,9 +147,23 @@ class Page(QWidget):
                 else:
                     self.message.setText("操作未完成，请检查设置与系统服务。")
 
-        if hasattr(self, "session"):
-            return self.session.spawn_ui(perform())
-        return asyncio.create_task(perform())
+        wrapper = perform()
+        try:
+            if hasattr(self, "session"):
+                task = self.session.spawn_ui(wrapper)
+            else:
+                task = asyncio.create_task(wrapper)
+        except BaseException:
+            wrapper.close()
+            release_unstarted()
+            raise
+
+        def completed(_task):
+            if not started:
+                release_unstarted()
+
+        task.add_done_callback(completed)
+        return task
 
     def safe(self, operation):
         try:

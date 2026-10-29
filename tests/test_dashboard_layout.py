@@ -45,7 +45,7 @@ def test_daily_metric_row_and_character_histogram(home):
     assert home.metrics["characters"].text() == "213"
     assert home.chart.days[-1][1]["characters"] == 213
     assert "213 字符" in home.chart.toolTip()
-    assert "每日发送字符" in home.chart.accessibleName()
+    assert "每日尝试发送字符" in home.chart.accessibleName()
     assert not home.findChildren(QPushButton)
 
 

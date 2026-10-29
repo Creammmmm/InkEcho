@@ -106,7 +106,14 @@ class OverlayProxy(QObject):
         self.state = state
         if state != "recording":
             self.capture_ready = False
-        if state in {"idle", "recording", "succeeded", "failed", "cancelled"}:
+        if state in {
+            "idle",
+            "recording",
+            "succeeded",
+            "unconfirmed",
+            "failed",
+            "cancelled",
+        }:
             self.text = ""
         self.snapshot()
         self.state_revision = self.revision

@@ -49,6 +49,36 @@ def test_existing_settings_default_to_streaming_without_rewriting_user_file(tmp_
     assert not list(tmp_path.glob("*.bak"))
 
 
+def test_existing_settings_default_x11_mapping_wait_without_rewriting(tmp_path):
+    original = b'{"schema_version":1,"shortcut":"Ctrl+F4"}'
+    path = tmp_path / "config.json"
+    path.write_bytes(original)
+    store = ConfigStore(tmp_path)
+    assert store.load_settings().x11_mapping_wait_ms == 40
+    assert store.load_settings().x11_feedback_timeout_ms == 40
+    assert path.read_bytes() == original
+    store.save_settings(replace(store.load_settings(), x11_mapping_wait_ms=75))
+    assert store.load_settings().x11_mapping_wait_ms == 75
+
+
+@pytest.mark.parametrize("value", [True, 19, 251, 40.0, "40", None])
+def test_x11_mapping_wait_requires_bounded_integer(value):
+    with pytest.raises(ConfigError, match="mapping wait"):
+        Settings(x11_mapping_wait_ms=value)
+
+
+@pytest.mark.parametrize("value", [True, 19, 251, 40.0, "40", None])
+def test_x11_feedback_timeout_requires_bounded_integer(value):
+    with pytest.raises(ConfigError, match="feedback timeout"):
+        Settings(x11_feedback_timeout_ms=value)
+
+
+@pytest.mark.parametrize("value", ["missing", "", None, [], 5])
+def test_output_method_rejects_unknown_values(value):
+    with pytest.raises(ConfigError):
+        Settings(output_method=value)
+
+
 def test_streaming_can_be_explicitly_disabled_and_roundtripped(tmp_path):
     store = ConfigStore(tmp_path)
     store.save_settings(replace(Settings(), polishing_streaming=False))

@@ -4,11 +4,21 @@ import asyncio
 from datetime import date
 
 from PySide6.QtCore import QTimer
-from PySide6.QtWidgets import QCheckBox, QFormLayout, QPlainTextEdit
+from PySide6.QtWidgets import (
+    QCheckBox,
+    QComboBox,
+    QFormLayout,
+    QPlainTextEdit,
+    QSpinBox,
+)
 
 from inkecho import __version__
+from inkecho.app import InputMaintenanceBusy
 from inkecho.integration import IntegrationError
 from inkecho.platform.capabilities import detect_desktop
+from inkecho.platform.fcitx5_install import FcitxInstaller, FcitxInstallError
+from inkecho.platform.ibus_extension import ExtensionError, ExtensionManager
+from inkecho.platform.owned_extension import OwnedExtensionManager
 from inkecho.statistics import StatisticsError
 from inkecho.ui.widgets import Page, actions, button, card, label
 
@@ -17,6 +27,11 @@ class CompatibilityPage(Page):
     def __init__(self, session):
         super().__init__("输入与兼容性", "识别完成后，像键盘一样向当时的光标位置输入。")
         self.session = session
+        self.fcitx_installer = FcitxInstaller()
+        self.fcitx_action_lock = asyncio.Lock()
+        self.ibus_extension = ExtensionManager()
+        self.owned_extension = OwnedExtensionManager()
+        self.ibus_action_lock = asyncio.Lock()
         frame, layout = card()
         self.environment = label("")
         self.availability = label("")
@@ -31,11 +46,148 @@ class CompatibilityPage(Page):
         )
         self.scope = label("", muted=True)
         layout.addWidget(self.scope)
-        layout.addWidget(label("不使用剪贴板，也不依赖系统输入法。", muted=True))
+        layout.addWidget(label("不使用剪贴板；输入方式可在下方选择。", muted=True))
+        form = QFormLayout()
+        self.output_method = QComboBox()
+        for title, value in (
+            ("自动选择", "auto"),
+            ("模拟键盘", "keyboard"),
+            ("Fcitx5（需要 InkEcho 输入桥）", "fcitx"),
+            ("IBus（实验性，需要手动启用扩展）", "ibus"),
+        ):
+            self.output_method.addItem(title, value)
+        selected = self.output_method.findData(
+            session.store.load_settings().output_method
+        )
+        self.output_method.setCurrentIndex(selected)
+        self._saved_output_method = self.output_method.currentData()
+        self.output_method.currentIndexChanged.connect(self.save_output_method)
+        form.addRow("文字输出方式", self.output_method)
+        self.mapping_wait = QSpinBox()
+        self.mapping_wait.setRange(20, 250)
+        self.mapping_wait.setSuffix(" 毫秒")
+        self.mapping_wait.setValue(session.store.load_settings().x11_mapping_wait_ms)
+        self._saved_mapping_wait = self.mapping_wait.value()
+        self.mapping_wait.valueChanged.connect(self.save_mapping_wait)
+        form.addRow("X11 键盘映射稳定等待", self.mapping_wait)
+        self.feedback_timeout = QSpinBox()
+        self.feedback_timeout.setRange(20, 250)
+        self.feedback_timeout.setSuffix(" 毫秒")
+        self.feedback_timeout.setValue(
+            session.store.load_settings().x11_feedback_timeout_ms
+        )
+        self._saved_feedback_timeout = self.feedback_timeout.value()
+        self.feedback_timeout.valueChanged.connect(self.save_feedback_timeout)
+        form.addRow("X11 绘制反馈超时下限", self.feedback_timeout)
+        layout.addLayout(form)
+        layout.addWidget(
+            label(
+                "X11 首次映射固定等待 100 毫秒；设置的映射等待用于后续实际映射变化。"
+                "绘制反馈仅用于原生 X11；Wayland（包括 XWayland）"
+                "以及 Fcitx5、IBus 直接输出不使用。"
+                "回退到原生 X11 键盘时可能使用；"
+                "反馈仅供调度参考，不能确认文字已显示。新设置从下一次任务生效。",
+                muted=True,
+            )
+        )
+        layout.addWidget(
+            label(
+                "Fcitx5 需要额外安装输入桥；IBus 需要手动启用实验性 GNOME 扩展。"
+                "自动模式优先使用检测与握手通过的 Fcitx5；也可使用下方单独安装、"
+                "启用的 GNOME 自动输入扩展。扩展未安装或合法停用时保留原有自动策略。"
+                "目标、扩展状态或预编辑无法确认时会停止，不盲目切换键盘；"
+                "已尝试但未确认的文字不会重放。应用可能使用不同的输入方式。"
+                "设置从下一次任务生效。",
+                muted=True,
+            )
+        )
         self.body.addWidget(frame)
+        extension_frame, extension_layout = card()
+        extension_layout.addWidget(label("IBus 实验扩展"))
+        extension_layout.addWidget(
+            label(
+                "仅在 GNOME 46 和 50 的隔离测试中验证；扩展使用 GNOME 私有接口，"
+                "可能不兼容其他版本或应用。它不会切换输入法；只尝试提交，"
+                "无法确认目标收到文字，目标未接入 IBus 时可能没有文字。"
+                "安装、启用和停用均由下方按钮单独执行；安装后可能需要重新登录。"
+                "如已安装旧版 InkEcho 实验扩展，请先在 GNOME 扩展管理器中"
+                "停用并卸载旧版，"
+                "再安装并启用新版；安装不会自动覆盖旧扩展。"
+                "异常退出可能留下临时凭证文件。",
+                muted=True,
+            )
+        )
+        self.ibus_status = label("尚未检查扩展状态。")
+        extension_layout.addWidget(self.ibus_status)
+        extension_layout.addWidget(
+            actions(
+                button("安装实验扩展", lambda: self.run(self.ibus_action("install"))),
+                button("启用实验扩展", lambda: self.run(self.ibus_action("enable"))),
+                button("停用实验扩展", lambda: self.run(self.ibus_action("disable"))),
+                button("检查扩展状态", lambda: self.run(self.ibus_action("status"))),
+            )
+        )
+        self.body.addWidget(extension_frame)
+        owned_frame, owned_layout = card()
+        owned_layout.addWidget(label("自动方式的可选 GNOME 输入扩展"))
+        owned_layout.addWidget(
+            label(
+                "与上方 IBus 实验扩展分别管理。安装和启用后，自动方式可尝试使用此扩展；"
+                "它不会切换输入法，也无法确认目标是否收到文字。"
+                "如不可用，请检查扩展状态或停用扩展后重新检查输入方式。",
+                muted=True,
+            )
+        )
+        self.owned_status = label("尚未检查扩展状态。")
+        owned_layout.addWidget(self.owned_status)
+        owned_layout.addWidget(
+            actions(
+                button(
+                    "安装自动输入扩展", lambda: self.run(self.owned_action("install"))
+                ),
+                button(
+                    "启用自动输入扩展", lambda: self.run(self.owned_action("enable"))
+                ),
+                button(
+                    "停用自动输入扩展", lambda: self.run(self.owned_action("disable"))
+                ),
+                button(
+                    "检查自动输入扩展", lambda: self.run(self.owned_action("status"))
+                ),
+            )
+        )
+        self.body.addWidget(owned_frame)
+        fcitx_frame, fcitx_layout = card()
+        fcitx_layout.addWidget(label("Fcitx5 实验输入桥"))
+        fcitx_layout.addWidget(
+            label(
+                "仅限已验证的 Ubuntu 与 Fcitx5 版本。未安装 Fcitx5 时，"
+                "请先通过系统软件管理器安装；如需使用，"
+                "请在系统中选择 Fcitx5 并重新登录。"
+                "安装到当前用户目录并发布加载配置；Fcitx5 重启后可能自动加载。"
+                "启用会要求正在运行的 Fcitx5 重新检查插件。"
+                "自动方式仅在检测到 Fcitx5 和已启用输入桥时尝试使用。"
+                "停用只移除加载配置，"
+                "已加载的插件会保留到 Fcitx5 退出，不会立即卸载。"
+                "同一用户下的其他进程不构成安全隔离。",
+                muted=True,
+            )
+        )
+        self.fcitx_status = label("尚未检查输入桥状态。")
+        fcitx_layout.addWidget(self.fcitx_status)
+        fcitx_layout.addWidget(
+            actions(
+                button("安装输入桥", lambda: self.run(self.fcitx_action("install"))),
+                button("启用输入桥", lambda: self.run(self.fcitx_action("enable"))),
+                button("停用输入桥", lambda: self.run(self.fcitx_action("disable"))),
+                button("检查输入桥", lambda: self.run(self.fcitx_action("status"))),
+            )
+        )
+        self.body.addWidget(fcitx_frame)
+
         self.body.addWidget(
             actions(
-                button("启用键盘输入", lambda: self.run(self.enable())),
+                button("检查并启用所选方式", lambda: self.run(self.enable())),
                 button("重新检查输入服务", lambda: self.run(self.recheck())),
             )
         )
@@ -46,6 +198,145 @@ class CompatibilityPage(Page):
         self.refresh_timer.timeout.connect(self.refresh)
         self.refresh_timer.start()
 
+    def save_mapping_wait(self):
+        self._save_input_timing(
+            self.mapping_wait, "x11_mapping_wait_ms", "_saved_mapping_wait"
+        )
+
+    def save_feedback_timeout(self):
+        self._save_input_timing(
+            self.feedback_timeout, "x11_feedback_timeout_ms", "_saved_feedback_timeout"
+        )
+
+    def _save_input_timing(self, widget, field, saved_attribute):
+        from dataclasses import replace
+
+        try:
+            settings = self.session.store.load_settings()
+            setattr(self, saved_attribute, getattr(settings, field))
+            self.session.store.save_settings(
+                replace(settings, **{field: widget.value()})
+            )
+            setattr(self, saved_attribute, widget.value())
+            self.message.setText("输入设置已自动保存，将从下一次任务生效。")
+        except (ValueError, OSError):
+            # A write can fail after replacing the file; prefer the actual
+            # readable value and otherwise retain the last known value.
+            try:
+                actual = getattr(self.session.store.load_settings(), field)
+                setattr(self, saved_attribute, actual)
+            except (ValueError, OSError):
+                pass
+            previous = widget.blockSignals(True)
+            try:
+                widget.setValue(getattr(self, saved_attribute))
+            finally:
+                widget.blockSignals(previous)
+            self.message.setText("输入设置无法保存。")
+
+    async def fcitx_action(self, operation):
+        if (
+            self.session.controller.task
+            or self.session.preparing
+            or self.session.testing
+        ):
+            self.message.setText("请先结束当前任务，再调整输入桥。")
+            return
+        try:
+            async with self.fcitx_action_lock:
+                if operation != "status":
+                    await self.session.run_input_maintenance(
+                        getattr(self.fcitx_installer, operation)
+                    )
+                try:
+                    self.fcitx_status.setText(
+                        await asyncio.to_thread(self.fcitx_installer.status)
+                    )
+                except FcitxInstallError as error:
+                    if operation == "status":
+                        raise
+                    # The requested change has already succeeded. Report a
+                    # failed follow-up check separately rather than implying
+                    # that the installation or deactivation was rolled back.
+                    self.fcitx_status.setText(f"状态检查失败：{error}")
+            if operation == "disable":
+                self.message.setText(
+                    "加载配置已移除；已加载的插件会保留到 Fcitx5 退出。"
+                )
+            elif operation == "enable":
+                self.message.setText("已请求 Fcitx5 检查插件，请检查输入服务状态。")
+            elif operation == "install":
+                self.message.setText(
+                    "输入桥已安装；Fcitx5 重启后可能自动加载，"
+                    "也可点击启用以请求立即检查。"
+                )
+            else:
+                self.message.setText("输入桥状态已更新。")
+        except InputMaintenanceBusy:
+            self.message.setText("请先结束当前任务，再调整输入桥。")
+        except FcitxInstallError as error:
+            self.message.setText(str(error))
+
+    async def ibus_action(self, operation):
+        await self._run_ibus_action(self.ibus_extension, self.ibus_status, operation)
+
+    async def owned_action(self, operation):
+        await self._run_ibus_action(self.owned_extension, self.owned_status, operation)
+
+    async def _run_ibus_action(self, manager, status, operation):
+        if (
+            self.session.controller.task
+            or self.session.preparing
+            or self.session.testing
+        ):
+            self.message.setText("请先结束当前任务，再调整扩展。")
+            return
+        try:
+            async with self.ibus_action_lock:
+                if operation != "status":
+                    await self.session.run_input_maintenance(
+                        getattr(manager, operation)
+                    )
+                status.setText(await asyncio.to_thread(manager.status))
+            self.message.setText(
+                "扩展操作已提交；请以扩展运行状态为准。"
+                if operation != "status"
+                else "扩展状态已更新。"
+            )
+        except InputMaintenanceBusy:
+            self.message.setText("请先结束当前任务，再调整扩展。")
+        except ExtensionError as error:
+            self.message.setText(str(error))
+
+    def save_output_method(self):
+        from dataclasses import replace
+
+        try:
+            settings = self.session.store.load_settings()
+            self._saved_output_method = settings.output_method
+            self.session.store.save_settings(
+                replace(settings, output_method=self.output_method.currentData())
+            )
+            self._saved_output_method = self.output_method.currentData()
+            self.message.setText("输入方式已保存，将从下一次任务生效。")
+        except (ValueError, OSError):
+            # A failing write can have replaced the file already; prefer the
+            # readable on-disk value and otherwise keep the last known value.
+            try:
+                self._saved_output_method = (
+                    self.session.store.load_settings().output_method
+                )
+            except (ValueError, OSError):
+                pass
+            previous = self.output_method.blockSignals(True)
+            try:
+                self.output_method.setCurrentIndex(
+                    self.output_method.findData(self._saved_output_method)
+                )
+            finally:
+                self.output_method.blockSignals(previous)
+            self.message.setText("输入设置无法保存。")
+
     def refresh(self):
         environment = detect_desktop()
         self.environment.setText(
@@ -54,24 +345,39 @@ class CompatibilityPage(Page):
         )
         native = getattr(self.session.inputs, "backend", None) == "gnome-wayland"
         self.scope.setText(
-            "GNOME Wayland 实验性键盘输入：同一路径用于原生与 XWayland 窗口。"
-            "支持中文等基本多文种字符；emoji 等扩展字符暂不支持，"
+            "GNOME Wayland 实验性键盘输入：按输出时的焦点选择原生 Wayland "
+            "或 XWayland 路径。可用性取决于桌面版本和目标应用；部分环境"
+            "不支持原生 Wayland 输出。原生路径不支持 emoji 等扩展字符，"
             "含这些字符的结果会整段停止发送。输入前请松开按键并关闭大写锁定。"
             "未经实测的应用不保证兼容。"
             if native
             else "当前键盘输入方式面向 X11 / XWayland 应用，无需远程控制授权。"
             "此方式不支持原生 Wayland 应用；未经实测的应用不保证兼容。"
         )
-        if not self.session.connected:
+        try:
+            method = self.session.store.load_settings().output_method
+        except (ValueError, OSError):
+            self.availability.setText("输入设置无法读取，请检查配置文件。")
+            return
+        keyboard = getattr(self.session.inputs, "keyboard", self.session.inputs)
+        keyboard_connected = getattr(keyboard, "connected", self.session.connected)
+        keyboard_authorized = getattr(keyboard, "authorized", False)
+        if method == "ibus":
+            text = "IBus 仅尝试提交；目标未接入时可能没有文字，无法自动确认接收。"
+        elif method == "fcitx":
+            text = "Fcitx5 输入桥将在任务开始时检查；未安装或未运行时无法输出。"
+        elif method == "auto":
+            text = "自动模式按系统状态选择 Fcitx5 或键盘；应用可能使用不同输入方式。"
+        elif not keyboard_connected:
             text = "键盘输入服务尚未连接。"
-        elif getattr(self.session.inputs, "authorized", False):
+        elif keyboard_authorized:
             text = (
                 "GNOME 键盘输入已启用；文字将发送到输出当时的光标位置。"
                 if native
                 else "键盘输入已启用；输出时请使用兼容的 X11 / XWayland 应用。"
             )
         else:
-            text = "输入服务已连接，请点击「启用键盘输入」完成准备。"
+            text = "输入服务已连接，请点击「检查并启用所选方式」完成准备。"
         self.availability.setText(text)
 
     async def enable(self):
@@ -82,13 +388,30 @@ class CompatibilityPage(Page):
         ):
             self.message.setText("请先结束当前任务，再调整键盘输入连接。")
             return
-        enabled = await self.session.authorize_input()
+        try:
+            enabled = await self.session.authorize_input()
+            method = self.session.store.load_settings().output_method
+        except (ValueError, OSError):
+            self.availability.setText("输入设置无法读取，请检查配置文件。")
+            self.message.setText("输入设置无法读取，请检查配置文件。")
+            return
         self.refresh()
-        self.message.setText(
-            "键盘输入已启用；此操作不会输入文字。"
-            if enabled
-            else "键盘输入尚未启用，请查看错误提示。"
-        )
+        if method == "auto":
+            keyboard = getattr(self.session.inputs, "keyboard", self.session.inputs)
+            if enabled and getattr(keyboard, "authorized", False):
+                self.message.setText(
+                    "键盘已授权；自动方式将在输出时检测，目标兼容性尚未确认。"
+                )
+            else:
+                self.message.setText(
+                    "键盘未确认可用；自动方式将在输出时检测，当前尚未确认可用。"
+                )
+        else:
+            self.message.setText(
+                "所选输入方式已准备；此操作不会输入文字。"
+                if enabled
+                else "所选输入方式不可用，请查看错误提示。"
+            )
 
     async def recheck(self):
         if not self.session.connected:
@@ -107,10 +430,10 @@ class StatisticsPage(Page):
         form = QFormLayout()
         names = {
             "recordings": "今日任务数",
-            "succeeded": "已发送任务数",
+            "succeeded": "已尝试发送任务数",
             "failed": "失败",
             "cancelled": "取消",
-            "characters": "已发送字符数（Unicode 码点）",
+            "characters": "尝试发送字符数（Unicode 码点）",
             "audio_seconds": "累计录音",
             "transcription_calls": "转写调用次数",
             "transcription_seconds": "转写耗时",

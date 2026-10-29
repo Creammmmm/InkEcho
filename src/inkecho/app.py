@@ -10,6 +10,7 @@ from inkecho.audio import Recorder
 from inkecho.config import ConfigStore
 from inkecho.core import Failure, State, TaskController
 from inkecho.performance import TaskTiming
+from inkecho.platform.ibus_owned_default import DefaultAutoOutputRouter as OutputRouter
 from inkecho.platform.keyboard import KeyboardError
 from inkecho.platform.wayland_keyboard import keyboard_for_desktop
 from inkecho.providers import ProviderClient, ProviderError, validate_provider_protocol
@@ -26,7 +27,10 @@ STATE_LABELS = {
     State.TRANSCRIBING: "正在转写",
     State.POLISHING: "正在润色",
     State.INJECTING: "正在输入",
-    State.SUCCEEDED: "按键已发送",
+    State.SUCCEEDED: "已尝试发送文字",
+    State.UNCONFIRMED: (
+        "已尝试发送全部文字，接收结果无法确认；请检查光标位置，未自动重试。"
+    ),
     State.FAILED: "本次任务失败",
     State.CANCELLED: "已取消",
 }
@@ -63,8 +67,8 @@ KEYBOARD_LABELS = {
     ),
     "display_unavailable": "无法连接桌面的键盘输入服务。请检查桌面会话。",
     "unsupported_target": (
-        "当前窗口暂不支持此键盘输入方式。请使用兼容的 X11 / XWayland 应用；"
-        "原生 Wayland 应用暂不支持。"
+        "当前窗口或桌面环境暂不支持此键盘输入方式。"
+        "请尝试兼容的 X11 / XWayland 应用，或检查输入方式设置。"
     ),
     "mapping_changed": "输入期间键盘布局发生变化，已停止剩余输入；未自动重试。",
     "permission_required": "请先在「输入与兼容性」中启用键盘输入。",
@@ -72,6 +76,10 @@ KEYBOARD_LABELS = {
     "portal_unavailable": "当前桌面没有可用的键盘输入服务。请检查桌面环境支持。",
     "session_closed": "键盘输入连接已断开。请重新启用键盘输入。",
     "injection_failed": "键盘输入未完成，未使用剪贴板回退。",
+    "partial_input_failed": "部分文字已尝试输入，剩余内容未能完成，请检查目标位置。",
+    "input_capability_unknown": (
+        "无法确认当前输入目标或输入法状态，已停止输入，未自动切换或重试。"
+    ),
     "input_cancelled": "输入已停止，不会继续发送剩余文字。",
     "unsupported_text": "结果含有当前键盘输入方式不支持的字符。",
     "busy": "键盘输入服务正在处理其他操作，请稍后重试。",
@@ -79,6 +87,25 @@ KEYBOARD_LABELS = {
     "caps_lock": "请关闭大写锁定，再重新尝试输入。",
     "cleanup_pending": "键盘布局尚未恢复，输入已暂停。请先松开所有按键并稍候。",
     "unsupported_layout": "当前键盘布局没有可用的兼容键位，暂时无法使用此输入方式。",
+    "fcitx_unavailable": "Fcitx5 输入桥未安装或未运行，无法使用所选输入方式。",
+    "ibus_unavailable": "IBus 实验性扩展未启用或不可用，请选择键盘输入。",
+    "ibus_authorization_failed": "IBus 扩展未接受本次输入任务，请检查扩展状态后重试。",
+    "ibus_permission_denied": "IBus 无法创建任务凭证，请检查用户运行目录权限。",
+    "ibus_untrusted_owner": "IBus 扩展服务的身份无法确认，已停止输入。",
+    "fcitx_authorization_failed": "Fcitx5 输入桥未接受任务，请检查状态和权限。",
+    "fcitx_permission_denied": "Fcitx5 输入桥缺少当前任务所需权限。",
+    "fcitx_untrusted_owner": "Fcitx5 输入桥服务的身份无法确认，已停止输入。",
+    "fcitx_owner_changed": "Fcitx5 服务发生变化，已停止输入，未自动重试。",
+    "ibus_delivery_unknown": (
+        "IBus 已尝试输入，但无法确认目标是否收到；请检查光标位置，未自动重试。"
+    ),
+    "ibus_cancelled": "输入已停止，不会继续发送剩余文字。",
+    "ibus_unsupported_text": "IBus 实验性输入暂不支持结果中的控制字符。",
+    "fcitx_ambiguous_target": "输入法报告了多个焦点，无法确定接收位置；已停止输入。",
+    "fcitx_no_target": "当前没有可确定的输入目标，已停止输入，未自动重试。",
+    "fcitx_delivery_unknown": "输入结果无法确认，已停止输入，未自动重试。",
+    "fcitx_cancelled": "输入已停止，不会继续发送剩余文字。",
+    "fcitx_expired": "输入任务已超时，剩余文字不会继续发送。",
 }
 
 AUDIO_LABELS = {
@@ -111,6 +138,10 @@ def current_task():
         return None
 
 
+class InputMaintenanceBusy(RuntimeError):
+    """An input integration change cannot run during another task."""
+
+
 class Session(QObject):
     status = Signal(str)
     state_changed = Signal(str)
@@ -134,7 +165,25 @@ class Session(QObject):
     ):
         super().__init__()
         self.store = store or ConfigStore()
-        self.inputs = inputs or keyboard_for_desktop()
+        self.inputs = (
+            inputs if inputs is not None else OutputRouter(keyboard_for_desktop())
+        )
+        configure_diagnostics = getattr(self.inputs, "set_diagnostic_handler", None)
+        if callable(configure_diagnostics):
+            configure_diagnostics(self.diagnostic.emit)
+        configure_mapping_wait = getattr(self.inputs, "set_mapping_wait_reader", None)
+        if callable(configure_mapping_wait):
+            configure_mapping_wait(lambda: self.settings.x11_mapping_wait_ms / 1000)
+        configure_feedback_timeout = getattr(
+            self.inputs, "set_feedback_timeout_reader", None
+        )
+        if callable(configure_feedback_timeout):
+            configure_feedback_timeout(
+                lambda: self.settings.x11_feedback_timeout_ms / 1000
+            )
+        self.input_maintenance_lock = asyncio.Lock()
+        self.input_maintenance_active = False
+        self.input_maintenance_tasks: set[asyncio.Task] = set()
         self.authorization_lock = asyncio.Lock()
         self.authorization_task = None
         self.recorder = recorder or Recorder(self)
@@ -153,6 +202,7 @@ class Session(QObject):
         self.connected = False
         self.last_toggle = 0.0
         self.metrics = {}
+        self.output_metrics_task_id = None
         self.task_timing = None
         self.timing_task_id = None
         self.last_performance = None
@@ -192,6 +242,42 @@ class Session(QObject):
         self.ui_tasks.add(task)
         task.add_done_callback(self.ui_tasks.discard)
         return task
+
+    async def run_input_maintenance(self, operation):
+        """Serialize changes; a worker survives caller cancellation."""
+        state = {"started": False}
+
+        async def run():
+            async with self.input_maintenance_lock:
+                if (
+                    self.controller.task
+                    or self.preparing
+                    or self.testing
+                    or self.authorization_lock.locked()
+                ):
+                    raise InputMaintenanceBusy()
+                state["started"] = True
+                self.input_maintenance_active = True
+                try:
+                    return await asyncio.to_thread(operation)
+                finally:
+                    self.input_maintenance_active = False
+
+        task = asyncio.create_task(run())
+        self.input_maintenance_tasks.add(task)
+
+        def completed(done):
+            self.input_maintenance_tasks.discard(done)
+            if not done.cancelled():
+                done.exception()
+
+        task.add_done_callback(completed)
+        try:
+            return await asyncio.shield(task)
+        except asyncio.CancelledError:
+            if not state["started"]:
+                task.cancel()
+            raise
 
     def _close_realtime(self, context) -> None:
         if not context or context.get("realtime_closing"):
@@ -249,19 +335,56 @@ class Session(QObject):
         await asyncio.to_thread(save)
 
     def input_problem(self, error: KeyboardError) -> None:
-        self.diagnostic.emit(error.code)
-        self.report_problem(
-            KEYBOARD_LABELS.get(error.code, KEYBOARD_LABELS["injection_failed"])
-        )
+        code = error.code if error.code in KEYBOARD_LABELS else "injection_failed"
+        self.diagnostic.emit(code)
+        self.report_problem(KEYBOARD_LABELS[code])
 
-    async def authorize_input(self) -> bool:
+    async def authorize_input(self, output_method=None) -> bool:
         """Only explicit recording or the enable action may request OS consent."""
+        if self.input_maintenance_active:
+            return False
         epoch = self.epoch
         async with self.authorization_lock:
             if epoch != self.epoch:
                 return False
             self.authorization_task = current_task()
             try:
+                prepare = getattr(self.inputs, "prepare_task", None)
+                if callable(prepare):
+                    if self.cleanup_tasks:
+                        await asyncio.gather(
+                            *tuple(self.cleanup_tasks), return_exceptions=True
+                        )
+                    if epoch != self.epoch:
+                        return False
+
+                    def notify_keyboard_authorization():
+                        self.status.emit(
+                            "录音已开始，正在启用键盘输入；请允许系统授权提示。"
+                            if self.controller.state == State.RECORDING
+                            else "正在启用键盘输入；如出现系统授权提示，请允许。"
+                        )
+
+                    selected_mode = (
+                        output_method or self.store.load_settings().output_method
+                    )
+                    # The explicit enable action prepares the keyboard fallback.
+                    # Recording tasks still defer auto selection until output.
+                    prepare_mode = (
+                        "keyboard"
+                        if output_method is None and selected_mode == "auto"
+                        else selected_mode
+                    )
+                    await prepare(
+                        prepare_mode,
+                        on_keyboard_authorization=notify_keyboard_authorization,
+                    )
+                    if epoch != self.epoch:
+                        await self.inputs.discard_task()
+                        return False
+                    if output_method is None:
+                        await self.inputs.discard_task()
+                    return True
                 if not self.connected:
                     await self.initialize()
                 if not self.connected or epoch != self.epoch:
@@ -298,6 +421,24 @@ class Session(QObject):
                 # Invalid observer metadata must not change delivery or its result.
                 return
 
+    def _record_acknowledged_attempts(self, error):
+        # The input bridge acknowledges an attempt; this does not prove the
+        # target received or displayed the characters. An uncertain
+        # in-flight character is deliberately excluded.
+        count = getattr(error, "acknowledged_attempts", 0)
+        if type(count) is int and count >= 0:
+            self.metrics["characters"] = max(self.metrics.get("characters", 0), count)
+
+    def _snapshot_acknowledged_attempts(self):
+        if (
+            self.output_metrics_task_id != self.timing_task_id
+            or not self.timing_task_id
+        ):
+            return
+        count = getattr(self.inputs, "acknowledged_attempts", 0)
+        if type(count) is int and count >= 0:
+            self.metrics["characters"] = max(self.metrics.get("characters", 0), count)
+
     def inject(self, task_id, text, can_continue) -> None:
         async def deliver():
             try:
@@ -309,6 +450,7 @@ class Session(QObject):
                     options["on_first_sent"] = lambda sent_at=None: self.mark_timing(
                         task_id, "first_character_sent", at=sent_at
                     )
+                self.output_metrics_task_id = task_id
                 sent_characters = await self.inputs.insert(
                     text, can_continue, **options
                 )
@@ -320,8 +462,15 @@ class Session(QObject):
                 raise
             except KeyboardError as error:
                 if self.active(task_id):
+                    self._record_acknowledged_attempts(error)
                     self.input_failure = error
-                    self.controller.injection_failed(task_id)
+                    if error.code == "ibus_delivery_unknown" and getattr(
+                        error, "dispatch_complete", False
+                    ):
+                        self.mark_timing(task_id, "output_completed")
+                        self.controller.injection_unconfirmed(task_id)
+                    else:
+                        self.controller.injection_failed(task_id)
             except Exception:
                 self.controller.injection_failed(task_id)
 
@@ -332,6 +481,7 @@ class Session(QObject):
             State.IDLE,
             State.RECORDING,
             State.SUCCEEDED,
+            State.UNCONFIRMED,
             State.FAILED,
             State.CANCELLED,
         }:
@@ -346,6 +496,9 @@ class Session(QObject):
             message = "麦克风正在启动，请稍候。"
         if empty:
             self.status.emit("未识别到内容，本次已结束。")
+        elif state == State.UNCONFIRMED:
+            self.diagnostic.emit("ibus_delivery_unknown")
+            self.status.emit(STATE_LABELS[state])
         elif state == State.FAILED:
             code = self.controller.failure.value
             credential_error = (self.task_context or {}).get("credential_error")
@@ -354,14 +507,20 @@ class Session(QObject):
             elif self.controller.failure == Failure.AUDIO and self.audio_failure:
                 code, message = self.audio_failure.code, str(self.audio_failure)
             elif self.controller.failure == Failure.INJECTION and self.input_failure:
-                code = self.input_failure.code
-                message = KEYBOARD_LABELS.get(code, KEYBOARD_LABELS["injection_failed"])
+                code = (
+                    self.input_failure.code
+                    if self.input_failure.code in KEYBOARD_LABELS
+                    else "injection_failed"
+                )
+                message = KEYBOARD_LABELS[code]
             self.diagnostic.emit(code)
             self.report_problem(message)
         else:
             self.status.emit(message)
-        if state in {State.SUCCEEDED, State.FAILED, State.CANCELLED}:
+        if state in {State.SUCCEEDED, State.UNCONFIRMED, State.FAILED, State.CANCELLED}:
             self.capture_ready.emit(False)
+            self._snapshot_acknowledged_attempts()
+            self.output_metrics_task_id = None
             if self.task_context and "asr_started" in self.task_context:
                 self.metrics.setdefault(
                     "transcription_seconds",
@@ -379,6 +538,16 @@ class Session(QObject):
             for task in list(self.pending):
                 if task is not current and task not in self.cleanup_tasks:
                     task.cancel()
+            abort = getattr(self.inputs, "abort_task", None)
+            if callable(abort):
+                try:
+                    asyncio.get_running_loop()
+                except RuntimeError:
+                    pass
+                else:
+                    task = self.spawn(abort())
+                    self.cleanup_tasks.add(task)
+                    task.add_done_callback(self.cleanup_tasks.discard)
             self._close_realtime(self.task_context)
             self.keys.clear()
             self.task_context = None
@@ -419,6 +588,9 @@ class Session(QObject):
         self.last_toggle = now
         if self.controller.state == State.RECORDING:
             self.stop_recording()
+            return
+        if self.input_maintenance_active or self.authorization_lock.locked():
+            self.status.emit("输入服务正在调整，请完成后再开始录音。")
             return
         if self.controller.task or self.preparing or self.testing:
             self.status.emit("当前任务正在处理，请等待或取消。")
@@ -501,7 +673,9 @@ class Session(QObject):
                     options["streaming"] = True
                 # Input consent must not delay capturing the beginning of speech.
                 # The same owned task is a hard gate before any text delivery.
-                context["input_authorization"] = self.spawn(self.authorize_input())
+                context["input_authorization"] = self.spawn(
+                    self.authorize_input(self.settings.output_method)
+                )
                 if not self.recorder.start(device, **options):
                     self.controller.fail(task_id, Failure.AUDIO)
                     return
@@ -870,6 +1044,7 @@ class Session(QObject):
                 options["on_first_sent"] = lambda sent_at=None: self.mark_timing(
                     task_id, "first_character_sent", at=sent_at
                 )
+            self.output_metrics_task_id = task_id
             count = await self.inputs.insert(text, active, **options)
             if not active():
                 raise asyncio.CancelledError
@@ -959,6 +1134,8 @@ class Session(QObject):
             fallback_possible = not output.attempted and not isinstance(
                 error, KeyboardError
             )
+            if self.active(task_id):
+                self._snapshot_acknowledged_attempts()
             await stop_operations(keep_confirmation=fallback_possible)
             if fallback_possible and confirmation is not None:
                 try:
@@ -970,11 +1147,20 @@ class Session(QObject):
                     return
             if not active():
                 return
-            self.metrics["characters"] = output.sent_characters
+            self.metrics["characters"] = max(
+                self.metrics.get("characters", 0), output.sent_characters
+            )
             self.metrics["polishing_seconds"] = time.monotonic() - started
             if isinstance(error, KeyboardError):
+                self._record_acknowledged_attempts(error)
                 self.input_failure = error
-                self.controller.fail(task_id, Failure.INJECTION)
+                if error.code == "ibus_delivery_unknown" and getattr(
+                    error, "dispatch_complete", False
+                ):
+                    self.mark_timing(task_id, "output_completed")
+                    self.controller.injection_unconfirmed(task_id)
+                else:
+                    self.controller.fail(task_id, Failure.INJECTION)
             elif output.attempted:
                 self.controller.fail(task_id, Failure.POLISHING)
             else:
@@ -989,7 +1175,12 @@ class Session(QObject):
             await stop_operations()
 
     async def sample_audio(self, seconds: float = 3) -> bytes:
-        if self.testing or self.preparing or self.controller.task:
+        if (
+            self.input_maintenance_active
+            or self.testing
+            or self.preparing
+            or self.controller.task
+        ):
             raise RuntimeError("请先结束当前录音任务。")
         self.testing = True
         recorder = Recorder(self)
@@ -1035,6 +1226,10 @@ class Session(QObject):
             *(t for t in self.pending | self.ui_tasks if t is not current),
             return_exceptions=True,
         )
+        if self.input_maintenance_tasks:
+            await asyncio.gather(
+                *tuple(self.input_maintenance_tasks), return_exceptions=True
+            )
         self.timer.stop()
         try:
             await self.inputs.aclose()

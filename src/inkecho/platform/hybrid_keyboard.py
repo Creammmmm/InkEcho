@@ -14,7 +14,8 @@ class HybridKeyboardInput:
     """Keep each mapping loan exclusive; select again at character boundaries.
 
     Selection reads the current X receiver only during output, never during
-    recording. Native authorization remains required for either transport.
+    recording. If native authorization reports an unsupported compositor,
+    only a currently selected XWayland receiver is allowed.
     """
 
     backend = "gnome-wayland"
@@ -32,14 +33,25 @@ class HybridKeyboardInput:
         self._scope = None
         self._backend = None
         self._output_check = None
+        self._mapping_wait_reader = None
+        self._feedback_timeout_reader = None
+        self._xonly = False
+
+    def set_mapping_wait_reader(self, reader):
+        self._mapping_wait_reader = reader
+
+    def set_feedback_timeout_reader(self, reader):
+        self._feedback_timeout_reader = reader
 
     @property
     def connected(self) -> bool:
-        return not self._closing and self.native.connected
+        return not self._closing and (
+            self.x11.connected if self._xonly else self.native.connected
+        )
 
     @property
     def authorized(self) -> bool:
-        return self.connected and self.native.authorized
+        return self.connected and (self._xonly or self.native.authorized)
 
     async def connect(self) -> None:
         await self.native.connect()
@@ -50,7 +62,13 @@ class HybridKeyboardInput:
                 raise
 
     async def authorize(self, parent_window: str = "") -> None:
-        await self.native.authorize(parent_window)
+        try:
+            await self.native.authorize(parent_window)
+        except KeyboardError as error:
+            if error.code != "unsupported_compositor" or not self.x11.connected:
+                raise
+            # Select only at output time, never at recording start.
+            self._xonly = True
 
     def _x_selected(self):
         if not self.x11.connected:
@@ -80,6 +98,16 @@ class HybridKeyboardInput:
             raise KeyboardError("busy")
         if not self.authorized:
             raise KeyboardError("permission_required")
+        if self._mapping_wait_reader is not None:
+            mapping_wait = self._mapping_wait_reader()
+            configure = getattr(self.x11, "set_mapping_wait_reader", None)
+            if callable(configure):
+                configure(lambda: mapping_wait)
+        if self._feedback_timeout_reader is not None:
+            feedback_timeout = self._feedback_timeout_reader()
+            configure = getattr(self.x11, "set_feedback_timeout_reader", None)
+            if callable(configure):
+                configure(lambda: feedback_timeout)
         self._output_owner = owner
         self._output_failed = False
         self._output_deadline = None
@@ -170,6 +198,8 @@ class HybridKeyboardInput:
             while offset < len(normalized):
                 check()
                 use_x11 = self._x_selected()
+                if self._xonly and not use_x11:
+                    raise KeyboardError("unsupported_compositor")
                 backend = self.x11 if use_x11 else self.native
                 options = dict(
                     deadline=deadline,
