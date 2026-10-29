@@ -1,0 +1,7 @@
+{
+  "stage": "24-wayland",
+  "command": "/usr/bin/python3 /mnt/input/context.py && /usr/bin/python3 /mnt/input/guest.py protocol && /usr/bin/python3 /mnt/input/gap.py enable && /usr/bin/python3 /mnt/input/gap.py suite-ibus && /usr/bin/python3 /mnt/input/gap.py disable",
+  "returncode": 1,
+  "stdout": "",
+  "stderr": "Traceback (most recent call last):\n  File \"/mnt/input/context.py\", line 7, in <module>\n    p=subprocess.run(args,env=env,capture_output=True,text=True);text=p.stdout\n      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 1026, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.12/subprocess.py\", line 1955, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nFileNotFoundError: [Errno 2] No such file or directory: 'xfce4-session'\n"
+}

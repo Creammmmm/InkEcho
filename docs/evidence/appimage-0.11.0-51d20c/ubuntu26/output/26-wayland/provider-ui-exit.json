@@ -1,0 +1,24 @@
+{
+  "returncode": 0,
+  "argv": [
+    "/run/user/1000/inkecho-package-gate-0.11.0/.mount_InkEchhdJkGn/usr/bin/python3",
+    "/mnt/input/frozen/scripts/validation/ui_protocol_acceptance.py",
+    "--artifact",
+    "/mnt/input/InkEcho.AppImage",
+    "--package-root",
+    "/run/user/1000/inkecho-package-gate-0.11.0/.mount_InkEchhdJkGn/packages",
+    "--frozen-source-root",
+    "/mnt/input/frozen/src",
+    "--output",
+    "/mnt/output/26-wayland/provider-ui.json",
+    "--work-root",
+    "/run/user/1000/inkecho-package-gate-0.11.0/provider-ui-26-wayland",
+    "--expected-sha",
+    "51d20c74a31beb7f01008378a76876a491fd8a3cdc6b61bda440a79bf11c966f",
+    "--expected-version",
+    "0.11.0",
+    "--expected-platform",
+    "wayland",
+    "--run-ui"
+  ]
+}

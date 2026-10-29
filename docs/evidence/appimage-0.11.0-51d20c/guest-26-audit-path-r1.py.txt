@@ -1,0 +1,47 @@
+from pathlib import Path
+import subprocess,os,json,sys,hashlib,time,signal
+O=Path('/mnt/output')/os.environ.get('INKECHO_OUTPUT_STAGE','');O.mkdir(mode=0o700,exist_ok=True);F=Path('/mnt/input/frozen');A=Path('/mnt/input/InkEcho.AppImage');W=Path('/run/user/1000/inkecho-package-gate-0.11.0');SHA='51d20c74a31beb7f01008378a76876a491fd8a3cdc6b61bda440a79bf11c966f'
+os.environ.update(DBUS_SESSION_BUS_ADDRESS='unix:path=/run/user/1000/bus',XDG_RUNTIME_DIR='/run/user/1000')
+for line in subprocess.check_output(['systemctl','--user','show-environment'],text=True).splitlines():
+ k,_,v=line.partition('=')
+ if k in {'DISPLAY','XAUTHORITY','WAYLAND_DISPLAY','XDG_SESSION_TYPE','XDG_CURRENT_DESKTOP'}:os.environ[k]=v
+os.environ.update(PYTHONDONTWRITEBYTECODE='1',LIBGL_ALWAYS_SOFTWARE='1',QT_QUICK_BACKEND='software');W.mkdir(mode=0o700,exist_ok=True);os.environ['TMPDIR']=str(W)
+def run(label,args,env=None,timeout=120):
+ with(O/(label+'.log')).open('w')as f:r=subprocess.run(args,env=env,stdout=f,stderr=subprocess.STDOUT,timeout=timeout)
+ (O/(label+'-exit.json')).write_text(json.dumps({'returncode':r.returncode,'argv':args},indent=2));r.check_returncode()
+def package_env():
+ mount=json.loads((O/'mount.json').read_text());app=Path(mount['appdir']);env=dict(os.environ);env.update(APPDIR=str(app),PYTHONHOME=str(app/'usr'),PYTHONPATH=str(app/'packages')+':/mnt/input/frozen/scripts/validation',PYTHONNOUSERSITE='1',LD_LIBRARY_PATH=str(app/'usr/lib/inkecho'),QT_PLUGIN_PATH=str(app/'packages/PySide6/Qt/plugins'));return app,env
+act=sys.argv[1]
+if act=='prepare':
+ assert hashlib.sha256(A.read_bytes()).hexdigest()==SHA
+ p=subprocess.Popen([str(A),'--appimage-mount'],stdout=(O/'fuse-mount.log').open('w'),stderr=(O/'fuse-mount.err').open('w'),stdin=subprocess.DEVNULL,start_new_session=True)
+ app=None
+ for _ in range(100):
+  text=(O/'fuse-mount.log').read_text().strip()
+  if text and Path(text).is_dir():app=Path(text);break
+  assert p.poll()is None,'FUSE process exited';time.sleep(.1)
+ assert app and (app/'packages/inkecho').is_dir()
+ (O/'mount.json').write_text(json.dumps({'pid':p.pid,'appdir':str(app),'artifact_sha256':SHA,'session':os.environ.get('XDG_SESSION_TYPE')},indent=2))
+ app,env=package_env();run('package-audit',[str(app/'usr/bin/python3'),'-c',"import json,os;from pathlib import Path;from artifact_scope import audit_package,selected_artifact;r={'artifact':selected_artifact(Path('/mnt/input/InkEcho.AppImage'),'"+SHA+"'),'audit':audit_package(Path(os.environ['APPDIR'])/'packages',Path('/mnt/input/frozen/src'),'0.11.0')};Path('/mnt/output/package-audit.json').write_text(json.dumps(r,indent=2))"],env)
+elif act=='gui':
+ run('desktop-lifecycle',['/usr/bin/python3',str(F/'scripts/validation/desktop_app_probe.py'),'--appimage',str(A),'--output',str(O/'ui')],timeout=150)
+elif act=='protocol':
+ app,env=package_env();py=str(app/'usr/bin/python3');run('http-asr',[py,'/mnt/input/http_asr.py',str(O/'http-asr.json')],env)
+ run('qwen-vad',[py,str(F/'scripts/validation/qwen_vad_package_probe.py'),'--package-root',str(app/'packages'),'--output',str(O/'qwen-vad.json')],env)
+ platform='xcb'if os.environ.get('XDG_SESSION_TYPE')=='x11'else'wayland'
+ run('provider-ui',[py,str(F/'scripts/validation/ui_protocol_acceptance.py'),'--artifact',str(A),'--package-root',str(app/'packages'),'--frozen-source-root',str(F/'src'),'--output',str(O/'provider-ui.json'),'--work-root',str(W/'provider-ui'),'--expected-sha',SHA,'--expected-version','0.11.0','--expected-platform',platform,'--run-ui'],env)
+elif act=='provider-tests':
+ app,env=package_env();run('provider-tests',[str(app/'usr/bin/python3'),'-I',str(F/'scripts/validation/provider_package_probe.py'),'--artifact',str(A),'--package-root',str(app/'packages'),'--frozen-source-root',str(F/'src'),'--framework-root','/mnt/input/framework','--framework-manifest','/mnt/input/framework-manifest.json','--tests-manifest','/mnt/input/tests-manifest.json','--work-dir',str(W/'provider-tests'),'--output',str(O/'provider-tests.json'),'--expected-sha',SHA,'--expected-version','0.11.0','--framework-sha','b01175767169904824c36199b10e07b21c4f417ce0ee39783b744be199084792','--tests-sha','f7942311852a1c31ea4e92e24d68a976aace8cc9fc17d1af361d5f4261a118ab'],env,timeout=150)
+elif act=='fcitx':
+ app,env=package_env();run('fcitx-package',[str(app/'usr/bin/python3'),'/mnt/input/fcitx-package.py'],env,timeout=180)
+elif act=='resource-check':
+ run('resource-check',['/usr/bin/python3','/mnt/input/resource-check.py'])
+elif act=='cleanup':
+ m=json.loads((O/'mount.json').read_text());pid=m['pid'];cmd=Path('/proc',str(pid),'cmdline').read_bytes();assert b'--appimage-mount'in cmd and str(A).encode()in cmd;os.kill(pid,signal.SIGINT)
+ for _ in range(100):
+  if not Path(m['appdir']).exists():break
+  time.sleep(.1)
+ assert not Path(m['appdir']).exists(),'FUSE mount remained'
+ (O/'fuse-cleanup.json').write_text(json.dumps({'original_pid':pid,'signal':'SIGINT','mount_gone':True}))
+else:raise ValueError(act)
+print('guest action PASS',act,flush=True)

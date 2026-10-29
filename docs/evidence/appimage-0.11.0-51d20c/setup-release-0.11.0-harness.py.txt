@@ -1,0 +1,37 @@
+from pathlib import Path
+import json,shutil,os,subprocess
+root=Path('/home/lth/github/InkEcho/dist/candidate-0.11.0-7203ba1-20261030');old=Path('/home/lth/github/InkEcho/dist/acceptance-ad355d62-20261030');artifact=json.loads((root/'artifact-verification.json').read_text());sha=artifact['sha256'];oldsha='ad355d622d6888b8092381988327f589f71669791cb32465c0b5e825573bcf23'
+for osnum in ['24','26']:
+ b=root/('vm'+osnum);(b/'input').mkdir(parents=True,mode=0o700);(b/'output').mkdir(mode=0o700)
+ for p in(old/'gap26/input').iterdir():
+  if p.is_file()and p.suffix in ('.py','.sh','.json')and p.name not in {'wrapper.py','qemu.json'}:
+   content=p.read_text().replace('0.10.10','0.11.0').replace(oldsha,sha);(b/'input'/p.name).write_text(content)
+ shutil.copytree(old/'gap26/input/framework',b/'input/framework',copy_function=os.link)
+ shutil.copytree(root/'validation-source',b/'input/frozen',copy_function=os.link)
+ os.link(artifact['artifact'],b/'input/InkEcho.AppImage')
+ origin=Path('/run/user/1000/inkecho-candidate-0.10.10-7h_6ed20')/('gate'+osnum)
+ for name in ['qemu.json','wrapper.py']:shutil.copyfile(origin/'input'/name,b/'input'/name)
+ # Stage names keep mount/audit/lifecycle receipts separate across real sessions.
+ p=b/'input/guest.py';s=p.read_text().replace("O=Path('/mnt/output');", "O=Path('/mnt/output')/os.environ.get('INKECHO_OUTPUT_STAGE','');O.mkdir(mode=0o700,exist_ok=True);");p.write_text(s)
+ p=b/'input/gap.py';s=p.read_text().replace("O=Path('/mnt/output');", "O=Path('/mnt/output')/os.environ.get('INKECHO_OUTPUT_STAGE','');O.mkdir(mode=0o700,exist_ok=True);")
+ s=s.replace("targetenv=dict(env)","targetenv=dict(env)\n if backend=='keyboard':pe['INKECHO_MAP_AUDIT']='native' if env.get('XDG_SESSION_TYPE')=='wayland' and '26' in os.environ.get('INKECHO_OUTPUT_STAGE','') else 'x11'")
+ p.write_text(s)
+ p=b/'input/pipeline_receiver_cancel.py';s=p.read_text().replace('if args.backend == "keyboard":\n            if os.environ.get("XDG_SESSION_TYPE") == "wayland":','if args.backend == "keyboard" or os.environ.get("INKECHO_MAP_AUDIT"):\n            if os.environ.get("INKECHO_MAP_AUDIT") == "native" or (args.backend == "keyboard" and os.environ.get("XDG_SESSION_TYPE") == "wayland"):');p.write_text(s)
+ # Use the actual product desktop factory, stage-local work and raw output.
+ p=b/'input/fcitx-package.py';s=p.read_text().replace('from inkecho.platform.hybrid_keyboard import HybridKeyboardInput','from inkecho.platform.wayland_keyboard import keyboard_for_desktop').replace('DefaultAutoOutputRouter(HybridKeyboardInput())','DefaultAutoOutputRouter(keyboard_for_desktop())')
+ s=s.replace("work=Path('/run/user/1000/inkecho-package-gate-0.11.0/fcitx-r4');", "label=os.environ.get('INKECHO_OUTPUT_STAGE','default');work=Path('/run/user/1000/inkecho-package-gate-0.11.0')/('fcitx-'+label);")
+ s=s.replace("Path('/mnt/output/fcitx-raw-r4')","Path('/mnt/output')/('fcitx-raw-'+label)")
+ p.write_text(s)
+ p=b/'input/pipeline_suite.py';s=p.read_text().replace("folder=Path('/mnt/output')/('pipeline-'+case)","folder=Path('/mnt/output')/os.environ.get('INKECHO_OUTPUT_STAGE','default')/('fcitx-pipeline-'+case)");p.write_text(s)
+ p=b/'input/fcitx-zero.py';s=p.read_text().replace("work=Path('/run/user/1000/inkecho-package-gate-0.11.0/fcitx-zero-xorg-r3');", "label=os.environ.get('INKECHO_OUTPUT_STAGE','default');work=Path('/run/user/1000/inkecho-package-gate-0.11.0')/('fcitx-zero-'+label);")
+ s=s.replace("Path('/mnt/output/fcitx-zero-raw-xorg-r3')","Path('/mnt/output')/('fcitx-zero-raw-'+label)");p.write_text(s)
+ p=b/'input/resource-check.py';s=p.read_text().replace("O=Path('/mnt/output');", "O=Path('/mnt/output')/os.environ.get('INKECHO_OUTPUT_STAGE','');");p.write_text(s)
+ # Old boot pins read-only original snapshots and the correct unmodified backing chain.
+ a=json.loads((origin/'boot.json').read_text())['argv']
+ for i,v in enumerate(a):
+  if v==f'inkecho-package-0.10.10-{osnum}-20261030':a[i]=f'inkecho-package-0.11.0-{osnum}-20261030'
+  elif v.startswith('type=bind,src='+str(origin)):a[i]=v.replace(str(origin),str(b))
+  elif ',dst=/frozen,readonly'in v:a[i]=f'type=bind,src={root}/validation-source,dst=/frozen,readonly'
+ (b/'launch.json').write_text(json.dumps(a,indent=2)+'\n')
+ compile((b/'input/guest.py').read_text(),str(b/'input/guest.py'),'exec');compile((b/'input/gap.py').read_text(),str(b/'input/gap.py'),'exec');compile((b/'input/fcitx-package.py').read_text(),str(b/'input/fcitx-package.py'),'exec');compile((b/'input/fcitx-zero.py').read_text(),str(b/'input/fcitx-zero.py'),'exec')
+print(root)

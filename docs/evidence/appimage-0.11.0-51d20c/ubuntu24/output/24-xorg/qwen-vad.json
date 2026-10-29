@@ -1,0 +1,36 @@
+{
+  "status": "passed",
+  "synthetic_only": true,
+  "real_cloud": false,
+  "real_microphone": false,
+  "real_keyboard": false,
+  "connections": 2,
+  "manual_commits": 0,
+  "cases": [
+    {
+      "cancel": false,
+      "preview_before_stop": true,
+      "zero_input_before_consent_and_finish": true,
+      "final_exact_once": true,
+      "cancel_zero_output": false,
+      "resources_cleared": true
+    },
+    {
+      "cancel": true,
+      "preview_before_stop": true,
+      "zero_input_before_consent_and_finish": true,
+      "final_exact_once": false,
+      "cancel_zero_output": true,
+      "resources_cleared": true
+    }
+  ],
+  "version": "0.11.0",
+  "scope": "package",
+  "origins": {
+    "inkecho": "/run/user/1000/inkecho-package-gate-0.11.0/.mount_InkEchNCphLd/packages/inkecho/__init__.py",
+    "inkecho.app": "/run/user/1000/inkecho-package-gate-0.11.0/.mount_InkEchNCphLd/packages/inkecho/app.py",
+    "inkecho.realtime": "/run/user/1000/inkecho-package-gate-0.11.0/.mount_InkEchNCphLd/packages/inkecho/realtime.py",
+    "inkecho.qwen_vad": "/run/user/1000/inkecho-package-gate-0.11.0/.mount_InkEchNCphLd/packages/inkecho/qwen_vad.py",
+    "inkecho.asr_streaming": "/run/user/1000/inkecho-package-gate-0.11.0/.mount_InkEchNCphLd/packages/inkecho/asr_streaming.py"
+  }
+}

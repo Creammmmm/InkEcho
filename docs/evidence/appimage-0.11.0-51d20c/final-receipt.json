@@ -1,0 +1,1326 @@
+{
+  "artifact": {
+    "artifact": "/home/lth/github/InkEcho/dist/candidate-0.11.0-7203ba1-20261030/source/dist/InkEcho-0.11.0-x86_64.AppImage",
+    "version": "0.11.0",
+    "source_commit": "7203ba160d9975b620c06e1378b2c6f77dffb815",
+    "bytes": 104409592,
+    "sha256": "51d20c74a31beb7f01008378a76876a491fd8a3cdc6b61bda440a79bf11c966f",
+    "runtime_prefix_and_sha_sidecar_match": true,
+    "full_actual_payload_inventory_verified": 3706,
+    "symlinks_verified": 1048,
+    "source_assets_exact_match": 93,
+    "fcitx_candidate_sha256": "acd896aae8ab38ecca2685c0dd8639f2910e841176eadccf59ee4943b158c4de",
+    "libei_license_paths": [
+      "usr/share/doc/inkecho/system/libei1/copyright"
+    ],
+    "actual_extraction": "/home/lth/github/InkEcho/dist/candidate-0.11.0-7203ba1-20261030/extracted",
+    "candidate_only": true,
+    "dual_system_acceptance": "pending"
+  },
+  "scoped_mandatory_dual_ubuntu_checks": "passed_pending_root_review",
+  "published": false,
+  "stable_entry_modified": false,
+  "stages": {
+    "24-xorg": {
+      "protocols": {
+        "http-asr": 0,
+        "qwen-vad": 0,
+        "provider-ui": 0,
+        "provider-tests": 0
+      },
+      "pipelines": [
+        {
+          "sample": "fcitx-pipeline-cancel-after-first",
+          "receiver": {
+            "mode": "cancel-after-first",
+            "pipeline_exit": 0,
+            "text_exact_or_partial_prefix": true,
+            "no_late_text": true,
+            "old_target_untouched": true,
+            "received_codepoints": [
+              20320,
+              22909,
+              32
+            ]
+          },
+          "selected_backend": "fcitx",
+          "task_result": {
+            "audio_seconds": 1.256875,
+            "characters": 3,
+            "outcome": "cancelled",
+            "polishing_calls": 1,
+            "transcription_calls": 1,
+            "transcription_seconds": 0.990412455000012
+          },
+          "diagnostics": [],
+          "mapping_restored": null,
+          "native_map_restored": null,
+          "independent_key_events": {
+            "presses": 0,
+            "releases": 0,
+            "held": []
+          }
+        },
+        {
+          "sample": "fcitx-pipeline-normal",
+          "receiver": {
+            "mode": "normal",
+            "pipeline_exit": 0,
+            "text_exact_or_partial_prefix": true,
+            "no_late_text": true,
+            "old_target_untouched": true,
+            "received_codepoints": [
+              20320,
+              22909,
+              32,
+              73,
+              110,
+              107,
+              69,
+              99,
+              104,
+              111,
+              65292,
+              99,
+              97,
+              102,
+              233,
+              32,
+              937,
+              10,
+              31532,
+              20108,
+              34892,
+              12290
+            ]
+          },
+          "selected_backend": "fcitx",
+          "task_result": {
+            "audio_seconds": 1.2995,
+            "characters": 22,
+            "outcome": "succeeded",
+            "polishing_calls": 1,
+            "polishing_seconds": 0.5569024009999453,
+            "transcription_calls": 1,
+            "transcription_seconds": 1.0464709809999704
+          },
+          "diagnostics": [],
+          "mapping_restored": null,
+          "native_map_restored": null,
+          "independent_key_events": {
+            "presses": 0,
+            "releases": 0,
+            "held": []
+          }
+        },
+        {
+          "sample": "suite-keyboard-cancel-after-first",
+          "receiver": {
+            "pipeline_exit": 0,
+            "expected_backend": "keyboard",
+            "session": "x11",
+            "target_backend": "x11",
+            "text_exact_or_partial_prefix": true,
+            "no_late_text": true,
+            "old_target_untouched": true,
+            "received_codepoints": [
+              20320
+            ],
+            "passed": true
+          },
+          "selected_backend": "keyboard",
+          "task_result": {
+            "audio_seconds": 1.3421875,
+            "characters": 0,
+            "outcome": "cancelled",
+            "polishing_calls": 1,
+            "transcription_calls": 1,
+            "transcription_seconds": 1.0513713889999963
+          },
+          "diagnostics": [],
+          "mapping_restored": true,
+          "native_map_restored": null,
+          "independent_key_events": {
+            "presses": 1,
+            "releases": 1,
+            "held": []
+          }
+        },
+        {
+          "sample": "suite-keyboard-normal",
+          "receiver": {
+            "pipeline_exit": 0,
+            "expected_backend": "keyboard",
+            "session": "x11",
+            "target_backend": "x11",
+            "text_exact_or_partial_prefix": true,
+            "no_late_text": true,
+            "old_target_untouched": true,
+            "received_codepoints": [
+              20320,
+              22909,
+              32,
+              73,
+              110,
+              107,
+              69,
+              99,
+              104,
+              111,
+              65292,
+              99,
+              97,
+              102,
+              233,
+              32,
+              937,
+              10,
+              31532,
+              20108,
+              34892,
+              12290
+            ],
+            "passed": true
+          },
+          "selected_backend": "keyboard",
+          "task_result": {
+            "audio_seconds": 1.3421875,
+            "characters": 22,
+            "outcome": "succeeded",
+            "polishing_calls": 1,
+            "polishing_seconds": 0.5682148860000211,
+            "transcription_calls": 1,
+            "transcription_seconds": 1.0543859170000474
+          },
+          "diagnostics": [],
+          "mapping_restored": true,
+          "native_map_restored": null,
+          "independent_key_events": {
+            "presses": 22,
+            "releases": 22,
+            "held": []
+          }
+        }
+      ],
+      "audit": "vm24/output/24-xorg/package-audit.json",
+      "ui": {
+        "kind": "appimage",
+        "session": "x11",
+        "qt_platform": "default",
+        "voice_end_to_end": false,
+        "clipboard_accessed": false,
+        "artifact_sha256": "51d20c74a31beb7f01008378a76876a491fd8a3cdc6b61bda440a79bf11c966f",
+        "pages": [
+          {
+            "file": "page-01.png",
+            "width": 1120,
+            "height": 731
+          },
+          {
+            "file": "page-02.png",
+            "width": 1120,
+            "height": 731
+          },
+          {
+            "file": "page-03.png",
+            "width": 1120,
+            "height": 731
+          },
+          {
+            "file": "page-04.png",
+            "width": 1120,
+            "height": 731
+          },
+          {
+            "file": "page-05.png",
+            "width": 1120,
+            "height": 731
+          }
+        ],
+        "primary_exit_code": 0,
+        "ipc_show_quit": true,
+        "cold_controls_exit_0_config_unchanged": true,
+        "damaged_config_exit_1_preserved": true,
+        "passed": true
+      },
+      "resource_check": {
+        "candidate_processes_after_tests": [],
+        "capabilities_remaining": [],
+        "lock_states": [
+          {
+            "name": "inkecho-fcitx-candidate.lock",
+            "lock_free": true
+          }
+        ],
+        "owned_virtual_audio_remaining": [],
+        "fcitx_service_owner": "(false,)",
+        "generated_keys_or_modifiers_held": [],
+        "mount_gone": true,
+        "passed": true
+      },
+      "actual_fcitx_pinyin_guard_passed": true,
+      "fcitx_confirmed_zero_fallback_passed": true
+    },
+    "24-wayland": {
+      "protocols": {
+        "http-asr": 0,
+        "qwen-vad": 0,
+        "provider-ui": 0
+      },
+      "pipelines": [
+        {
+          "sample": "fcitx-pipeline-cancel-after-first",
+          "receiver": {
+            "mode": "cancel-after-first",
+            "pipeline_exit": 0,
+            "text_exact_or_partial_prefix": true,
+            "no_late_text": true,
+            "old_target_untouched": true,
+            "received_codepoints": [
+              20320,
+              22909,
+              32
+            ]
+          },
+          "selected_backend": "fcitx",
+          "task_result": {
+            "audio_seconds": 1.320875,
+            "characters": 3,
+            "outcome": "cancelled",
+            "polishing_calls": 1,
+            "transcription_calls": 1,
+            "transcription_seconds": 1.035427229999982
+          },
+          "diagnostics": [],
+          "mapping_restored": null,
+          "native_map_restored": null,
+          "independent_key_events": {
+            "presses": 0,
+            "releases": 0,
+            "held": []
+          }
+        },
+        {
+          "sample": "fcitx-pipeline-normal",
+          "receiver": {
+            "mode": "normal",
+            "pipeline_exit": 0,
+            "text_exact_or_partial_prefix": true,
+            "no_late_text": true,
+            "old_target_untouched": true,
+            "received_codepoints": [
+              20320,
+              22909,
+              32,
+              73,
+              110,
+              107,
+              69,
+              99,
+              104,
+              111,
+              65292,
+              99,
+              97,
+              102,
+              233,
+              32,
+              937,
+              10,
+              31532,
+              20108,
+              34892,
+              12290
+            ]
+          },
+          "selected_backend": "fcitx",
+          "task_result": {
+            "audio_seconds": 1.320875,
+            "characters": 22,
+            "outcome": "succeeded",
+            "polishing_calls": 1,
+            "polishing_seconds": 0.5857184600000664,
+            "transcription_calls": 1,
+            "transcription_seconds": 1.0316806299999826
+          },
+          "diagnostics": [],
+          "mapping_restored": null,
+          "native_map_restored": null,
+          "independent_key_events": {
+            "presses": 0,
+            "releases": 0,
+            "held": []
+          }
+        },
+        {
+          "sample": "suite-ibus-cancel-after-first",
+          "receiver": {
+            "pipeline_exit": 0,
+            "expected_backend": "ibus",
+            "session": "wayland",
+            "target_backend": "wayland",
+            "text_exact_or_partial_prefix": true,
+            "no_late_text": true,
+            "old_target_untouched": true,
+            "received_codepoints": [
+              20320,
+              22909,
+              32
+            ],
+            "passed": true
+          },
+          "selected_backend": "ibus",
+          "task_result": {
+            "audio_seconds": 1.3635,
+            "characters": 3,
+            "outcome": "cancelled",
+            "polishing_calls": 1,
+            "transcription_calls": 1,
+            "transcription_seconds": 1.0584172760000001
+          },
+          "diagnostics": [],
+          "mapping_restored": null,
+          "native_map_restored": null,
+          "independent_key_events": {
+            "presses": 0,
+            "releases": 0,
+            "held": []
+          }
+        },
+        {
+          "sample": "suite-ibus-normal",
+          "receiver": {
+            "pipeline_exit": 0,
+            "expected_backend": "ibus",
+            "session": "wayland",
+            "target_backend": "wayland",
+            "text_exact_or_partial_prefix": true,
+            "no_late_text": true,
+            "old_target_untouched": true,
+            "received_codepoints": [
+              20320,
+              22909,
+              32,
+              73,
+              110,
+              107,
+              69,
+              99,
+              104,
+              111,
+              65292,
+              99,
+              97,
+              102,
+              233,
+              32,
+              937,
+              10,
+              31532,
+              20108,
+              34892,
+              12290
+            ],
+            "passed": true
+          },
+          "selected_backend": "ibus",
+          "task_result": {
+            "audio_seconds": 1.2995,
+            "characters": 22,
+            "outcome": "unconfirmed",
+            "polishing_calls": 1,
+            "polishing_seconds": 0.5482928929999389,
+            "transcription_calls": 1,
+            "transcription_seconds": 1.0327453799999375
+          },
+          "diagnostics": [
+            "ibus_delivery_unknown"
+          ],
+          "mapping_restored": null,
+          "native_map_restored": null,
+          "independent_key_events": {
+            "presses": 0,
+            "releases": 0,
+            "held": []
+          }
+        },
+        {
+          "sample": "suite-keyboard-cancel-after-first",
+          "receiver": {
+            "pipeline_exit": 0,
+            "expected_backend": "keyboard",
+            "session": "wayland",
+            "target_backend": "x11",
+            "text_exact_or_partial_prefix": true,
+            "no_late_text": true,
+            "old_target_untouched": true,
+            "received_codepoints": [
+              20320
+            ],
+            "passed": true
+          },
+          "selected_backend": "keyboard",
+          "task_result": {
+            "audio_seconds": 1.2995,
+            "characters": 0,
+            "outcome": "cancelled",
+            "polishing_calls": 1,
+            "transcription_calls": 1,
+            "transcription_seconds": 1.0344248080000398
+          },
+          "diagnostics": [],
+          "mapping_restored": true,
+          "native_map_restored": null,
+          "independent_key_events": {
+            "presses": 1,
+            "releases": 1,
+            "held": []
+          }
+        },
+        {
+          "sample": "suite-keyboard-normal",
+          "receiver": {
+            "pipeline_exit": 0,
+            "expected_backend": "keyboard",
+            "session": "wayland",
+            "target_backend": "x11",
+            "text_exact_or_partial_prefix": true,
+            "no_late_text": true,
+            "old_target_untouched": true,
+            "received_codepoints": [
+              20320,
+              22909,
+              32,
+              73,
+              110,
+              107,
+              69,
+              99,
+              104,
+              111,
+              65292,
+              99,
+              97,
+              102,
+              233,
+              32,
+              937,
+              10,
+              31532,
+              20108,
+              34892,
+              12290
+            ],
+            "passed": true
+          },
+          "selected_backend": "keyboard",
+          "task_result": {
+            "audio_seconds": 1.384875,
+            "characters": 22,
+            "outcome": "succeeded",
+            "polishing_calls": 1,
+            "polishing_seconds": 0.5805206630000157,
+            "transcription_calls": 1,
+            "transcription_seconds": 1.0812622040000406
+          },
+          "diagnostics": [],
+          "mapping_restored": true,
+          "native_map_restored": null,
+          "independent_key_events": {
+            "presses": 22,
+            "releases": 22,
+            "held": []
+          }
+        }
+      ],
+      "audit": "vm24/output/24-wayland/package-audit.json",
+      "ui": {
+        "kind": "appimage",
+        "session": "wayland",
+        "qt_platform": "default",
+        "voice_end_to_end": false,
+        "clipboard_accessed": false,
+        "artifact_sha256": "51d20c74a31beb7f01008378a76876a491fd8a3cdc6b61bda440a79bf11c966f",
+        "pages": [
+          {
+            "file": "page-01.png",
+            "width": 1214,
+            "height": 730
+          },
+          {
+            "file": "page-02.png",
+            "width": 1214,
+            "height": 730
+          },
+          {
+            "file": "page-03.png",
+            "width": 1214,
+            "height": 730
+          },
+          {
+            "file": "page-04.png",
+            "width": 1214,
+            "height": 730
+          },
+          {
+            "file": "page-05.png",
+            "width": 1214,
+            "height": 730
+          }
+        ],
+        "primary_exit_code": 0,
+        "ipc_show_quit": true,
+        "cold_controls_exit_0_config_unchanged": true,
+        "damaged_config_exit_1_preserved": true,
+        "passed": true
+      },
+      "resource_check": {
+        "candidate_processes_after_tests": [],
+        "capabilities_remaining": [],
+        "lock_states": [
+          {
+            "name": "inkecho-fcitx-candidate.lock",
+            "lock_free": true
+          }
+        ],
+        "owned_virtual_audio_remaining": [],
+        "fcitx_service_owner": "(false,)",
+        "generated_keys_or_modifiers_held": [],
+        "mount_gone": true,
+        "passed": true
+      },
+      "actual_fcitx_pinyin_guard_passed": true,
+      "fcitx_confirmed_zero_fallback_passed": true
+    },
+    "26-wayland": {
+      "protocols": {
+        "http-asr": 0,
+        "qwen-vad": 0,
+        "provider-ui": 0,
+        "provider-tests": 0
+      },
+      "pipelines": [
+        {
+          "sample": "fcitx-pipeline-cancel-after-first",
+          "receiver": {
+            "mode": "cancel-after-first",
+            "pipeline_exit": 0,
+            "text_exact_or_partial_prefix": true,
+            "no_late_text": true,
+            "old_target_untouched": true,
+            "received_codepoints": [
+              20320,
+              22909,
+              32
+            ]
+          },
+          "selected_backend": "fcitx",
+          "task_result": {
+            "audio_seconds": 1.3849375,
+            "characters": 3,
+            "outcome": "cancelled",
+            "polishing_calls": 1,
+            "transcription_calls": 1,
+            "transcription_seconds": 1.0843577760000187
+          },
+          "diagnostics": [],
+          "mapping_restored": null,
+          "native_map_restored": null,
+          "independent_key_events": {
+            "presses": 0,
+            "releases": 0,
+            "held": []
+          }
+        },
+        {
+          "sample": "fcitx-pipeline-normal",
+          "receiver": {
+            "mode": "normal",
+            "pipeline_exit": 0,
+            "text_exact_or_partial_prefix": true,
+            "no_late_text": true,
+            "old_target_untouched": true,
+            "received_codepoints": [
+              20320,
+              22909,
+              32,
+              73,
+              110,
+              107,
+              69,
+              99,
+              104,
+              111,
+              65292,
+              99,
+              97,
+              102,
+              233,
+              32,
+              937,
+              10,
+              31532,
+              20108,
+              34892,
+              12290
+            ]
+          },
+          "selected_backend": "fcitx",
+          "task_result": {
+            "audio_seconds": 1.3209375,
+            "characters": 22,
+            "outcome": "succeeded",
+            "polishing_calls": 1,
+            "polishing_seconds": 0.595325760999998,
+            "transcription_calls": 1,
+            "transcription_seconds": 1.0266794830000094
+          },
+          "diagnostics": [],
+          "mapping_restored": null,
+          "native_map_restored": null,
+          "independent_key_events": {
+            "presses": 0,
+            "releases": 0,
+            "held": []
+          }
+        }
+      ],
+      "audit": "vm26/output/26-wayland/package-audit.json",
+      "ui": {
+        "kind": "appimage",
+        "session": "wayland",
+        "qt_platform": "default",
+        "voice_end_to_end": false,
+        "clipboard_accessed": false,
+        "artifact_sha256": "51d20c74a31beb7f01008378a76876a491fd8a3cdc6b61bda440a79bf11c966f",
+        "pages": [
+          {
+            "file": "page-01.png",
+            "width": 1213,
+            "height": 733
+          },
+          {
+            "file": "page-02.png",
+            "width": 1213,
+            "height": 733
+          },
+          {
+            "file": "page-03.png",
+            "width": 1213,
+            "height": 733
+          },
+          {
+            "file": "page-04.png",
+            "width": 1213,
+            "height": 733
+          },
+          {
+            "file": "page-05.png",
+            "width": 1213,
+            "height": 733
+          }
+        ],
+        "primary_exit_code": 0,
+        "ipc_show_quit": true,
+        "cold_controls_exit_0_config_unchanged": true,
+        "damaged_config_exit_1_preserved": true,
+        "passed": true
+      },
+      "resource_check": {
+        "candidate_processes_after_tests": [],
+        "capabilities_remaining": [],
+        "lock_states": [
+          {
+            "name": "inkecho-fcitx-candidate.lock",
+            "lock_free": true
+          }
+        ],
+        "owned_virtual_audio_remaining": [],
+        "fcitx_service_owner": "(false,)",
+        "generated_keys_or_modifiers_held": [],
+        "mount_gone": true,
+        "passed": true
+      },
+      "actual_fcitx_pinyin_guard_passed": true
+    },
+    "26-wayland-owned": {
+      "protocols": {},
+      "pipelines": [
+        {
+          "sample": "suite-ibus-cancel-after-first",
+          "receiver": {
+            "pipeline_exit": 0,
+            "expected_backend": "ibus",
+            "session": "wayland",
+            "target_backend": "wayland",
+            "text_exact_or_partial_prefix": true,
+            "no_late_text": true,
+            "old_target_untouched": true,
+            "received_codepoints": [
+              20320,
+              22909,
+              32
+            ],
+            "passed": true
+          },
+          "selected_backend": "ibus",
+          "task_result": {
+            "audio_seconds": 1.2783125,
+            "characters": 3,
+            "outcome": "cancelled",
+            "polishing_calls": 1,
+            "transcription_calls": 1,
+            "transcription_seconds": 1.0031851980000113
+          },
+          "diagnostics": [],
+          "mapping_restored": null,
+          "native_map_restored": null,
+          "independent_key_events": {
+            "presses": 0,
+            "releases": 0,
+            "held": []
+          }
+        },
+        {
+          "sample": "suite-ibus-normal",
+          "receiver": {
+            "pipeline_exit": 0,
+            "expected_backend": "ibus",
+            "session": "wayland",
+            "target_backend": "wayland",
+            "text_exact_or_partial_prefix": true,
+            "no_late_text": true,
+            "old_target_untouched": true,
+            "received_codepoints": [
+              20320,
+              22909,
+              32,
+              73,
+              110,
+              107,
+              69,
+              99,
+              104,
+              111,
+              65292,
+              99,
+              97,
+              102,
+              233,
+              32,
+              937,
+              10,
+              31532,
+              20108,
+              34892,
+              12290
+            ],
+            "passed": true
+          },
+          "selected_backend": "ibus",
+          "task_result": {
+            "audio_seconds": 1.299625,
+            "characters": 22,
+            "outcome": "unconfirmed",
+            "polishing_calls": 1,
+            "polishing_seconds": 0.5834915899999942,
+            "transcription_calls": 1,
+            "transcription_seconds": 1.0064723010000023
+          },
+          "diagnostics": [
+            "ibus_delivery_unknown"
+          ],
+          "mapping_restored": null,
+          "native_map_restored": null,
+          "independent_key_events": {
+            "presses": 0,
+            "releases": 0,
+            "held": []
+          }
+        },
+        {
+          "sample": "suite-keyboard-cancel-after-first",
+          "receiver": {
+            "pipeline_exit": 0,
+            "expected_backend": "keyboard",
+            "session": "wayland",
+            "target_backend": "x11",
+            "text_exact_or_partial_prefix": true,
+            "no_late_text": true,
+            "old_target_untouched": true,
+            "received_codepoints": [
+              20320
+            ],
+            "passed": true
+          },
+          "selected_backend": "keyboard",
+          "task_result": {
+            "audio_seconds": 1.3423125,
+            "characters": 0,
+            "outcome": "cancelled",
+            "polishing_calls": 1,
+            "transcription_calls": 1,
+            "transcription_seconds": 1.0591981439999927
+          },
+          "diagnostics": [],
+          "mapping_restored": null,
+          "native_map_restored": true,
+          "independent_key_events": {
+            "presses": 1,
+            "releases": 1,
+            "held": []
+          }
+        },
+        {
+          "sample": "suite-keyboard-native-cancel-after-first",
+          "receiver": {
+            "pipeline_exit": 0,
+            "expected_backend": "keyboard",
+            "session": "wayland",
+            "target_backend": "wayland",
+            "text_exact_or_partial_prefix": true,
+            "no_late_text": true,
+            "old_target_untouched": true,
+            "received_codepoints": [
+              20320
+            ],
+            "passed": true
+          },
+          "selected_backend": "keyboard",
+          "task_result": {
+            "audio_seconds": 1.2783125,
+            "characters": 0,
+            "outcome": "cancelled",
+            "polishing_calls": 1,
+            "transcription_calls": 1,
+            "transcription_seconds": 0.9980633280000006
+          },
+          "diagnostics": [],
+          "mapping_restored": null,
+          "native_map_restored": true,
+          "independent_key_events": {
+            "presses": 1,
+            "releases": 1,
+            "held": []
+          }
+        },
+        {
+          "sample": "suite-keyboard-native-normal",
+          "receiver": {
+            "pipeline_exit": 0,
+            "expected_backend": "keyboard",
+            "session": "wayland",
+            "target_backend": "wayland",
+            "text_exact_or_partial_prefix": true,
+            "no_late_text": true,
+            "old_target_untouched": true,
+            "received_codepoints": [
+              20320,
+              22909,
+              32,
+              73,
+              110,
+              107,
+              69,
+              99,
+              104,
+              111,
+              65292,
+              99,
+              97,
+              102,
+              233,
+              32,
+              937,
+              10,
+              31532,
+              20108,
+              34892,
+              12290
+            ],
+            "passed": true
+          },
+          "selected_backend": "keyboard",
+          "task_result": {
+            "audio_seconds": 1.3209375,
+            "characters": 22,
+            "outcome": "succeeded",
+            "polishing_calls": 1,
+            "polishing_seconds": 0.5659263769999825,
+            "transcription_calls": 1,
+            "transcription_seconds": 1.0343913789999988
+          },
+          "diagnostics": [],
+          "mapping_restored": null,
+          "native_map_restored": true,
+          "independent_key_events": {
+            "presses": 22,
+            "releases": 22,
+            "held": []
+          }
+        },
+        {
+          "sample": "suite-keyboard-normal",
+          "receiver": {
+            "pipeline_exit": 0,
+            "expected_backend": "keyboard",
+            "session": "wayland",
+            "target_backend": "x11",
+            "text_exact_or_partial_prefix": true,
+            "no_late_text": true,
+            "old_target_untouched": true,
+            "received_codepoints": [
+              20320,
+              22909,
+              32,
+              73,
+              110,
+              107,
+              69,
+              99,
+              104,
+              111,
+              65292,
+              99,
+              97,
+              102,
+              233,
+              32,
+              937,
+              10,
+              31532,
+              20108,
+              34892,
+              12290
+            ],
+            "passed": true
+          },
+          "selected_backend": "keyboard",
+          "task_result": {
+            "audio_seconds": 1.299625,
+            "characters": 22,
+            "outcome": "succeeded",
+            "polishing_calls": 1,
+            "polishing_seconds": 0.5241740790000051,
+            "transcription_calls": 1,
+            "transcription_seconds": 1.0308677879999948
+          },
+          "diagnostics": [],
+          "mapping_restored": null,
+          "native_map_restored": true,
+          "independent_key_events": {
+            "presses": 22,
+            "releases": 22,
+            "held": []
+          }
+        }
+      ],
+      "audit": "vm26/output/26-wayland-owned/package-audit.json",
+      "resource_check": {
+        "candidate_processes_after_tests": [],
+        "capabilities_remaining": [],
+        "lock_states": [
+          {
+            "name": "inkecho-fcitx-candidate.lock",
+            "lock_free": true
+          }
+        ],
+        "owned_virtual_audio_remaining": [],
+        "fcitx_service_owner": "(false,)",
+        "generated_keys_or_modifiers_held": [],
+        "mount_gone": true,
+        "passed": true
+      },
+      "fcitx_confirmed_zero_fallback_passed": true
+    },
+    "26-xorg": {
+      "protocols": {
+        "http-asr": 0,
+        "qwen-vad": 0,
+        "provider-ui": 0
+      },
+      "pipelines": [
+        {
+          "sample": "fcitx-pipeline-cancel-after-first",
+          "receiver": {
+            "mode": "cancel-after-first",
+            "pipeline_exit": 0,
+            "text_exact_or_partial_prefix": true,
+            "no_late_text": true,
+            "old_target_untouched": true,
+            "received_codepoints": [
+              20320,
+              22909,
+              32
+            ]
+          },
+          "selected_backend": "fcitx",
+          "task_result": {
+            "audio_seconds": 1.3209375,
+            "characters": 3,
+            "outcome": "cancelled",
+            "polishing_calls": 1,
+            "transcription_calls": 1,
+            "transcription_seconds": 1.0298783110000045
+          },
+          "diagnostics": [],
+          "mapping_restored": null,
+          "native_map_restored": null,
+          "independent_key_events": {
+            "presses": 0,
+            "releases": 0,
+            "held": []
+          }
+        },
+        {
+          "sample": "fcitx-pipeline-normal",
+          "receiver": {
+            "mode": "normal",
+            "pipeline_exit": 0,
+            "text_exact_or_partial_prefix": true,
+            "no_late_text": true,
+            "old_target_untouched": true,
+            "received_codepoints": [
+              20320,
+              22909,
+              32,
+              73,
+              110,
+              107,
+              69,
+              99,
+              104,
+              111,
+              65292,
+              99,
+              97,
+              102,
+              233,
+              32,
+              937,
+              10,
+              31532,
+              20108,
+              34892,
+              12290
+            ]
+          },
+          "selected_backend": "fcitx",
+          "task_result": {
+            "audio_seconds": 1.299625,
+            "characters": 22,
+            "outcome": "succeeded",
+            "polishing_calls": 1,
+            "polishing_seconds": 0.5579398590000437,
+            "transcription_calls": 1,
+            "transcription_seconds": 1.032532075000006
+          },
+          "diagnostics": [],
+          "mapping_restored": null,
+          "native_map_restored": null,
+          "independent_key_events": {
+            "presses": 0,
+            "releases": 0,
+            "held": []
+          }
+        },
+        {
+          "sample": "suite-keyboard-cancel-after-first",
+          "receiver": {
+            "pipeline_exit": 0,
+            "expected_backend": "keyboard",
+            "session": "x11",
+            "target_backend": "x11",
+            "text_exact_or_partial_prefix": true,
+            "no_late_text": true,
+            "old_target_untouched": true,
+            "received_codepoints": [
+              20320
+            ],
+            "passed": true
+          },
+          "selected_backend": "keyboard",
+          "task_result": {
+            "audio_seconds": 1.3209375,
+            "characters": 0,
+            "outcome": "cancelled",
+            "polishing_calls": 1,
+            "transcription_calls": 1,
+            "transcription_seconds": 1.039218386000016
+          },
+          "diagnostics": [],
+          "mapping_restored": true,
+          "native_map_restored": null,
+          "independent_key_events": {
+            "presses": 1,
+            "releases": 1,
+            "held": []
+          }
+        },
+        {
+          "sample": "suite-keyboard-normal",
+          "receiver": {
+            "pipeline_exit": 0,
+            "expected_backend": "keyboard",
+            "session": "x11",
+            "target_backend": "x11",
+            "text_exact_or_partial_prefix": true,
+            "no_late_text": true,
+            "old_target_untouched": true,
+            "received_codepoints": [
+              20320,
+              22909,
+              32,
+              73,
+              110,
+              107,
+              69,
+              99,
+              104,
+              111,
+              65292,
+              99,
+              97,
+              102,
+              233,
+              32,
+              937,
+              10,
+              31532,
+              20108,
+              34892,
+              12290
+            ],
+            "passed": true
+          },
+          "selected_backend": "keyboard",
+          "task_result": {
+            "audio_seconds": 1.2783125,
+            "characters": 22,
+            "outcome": "succeeded",
+            "polishing_calls": 1,
+            "polishing_seconds": 0.5914738660000012,
+            "transcription_calls": 1,
+            "transcription_seconds": 1.0020281820000037
+          },
+          "diagnostics": [],
+          "mapping_restored": true,
+          "native_map_restored": null,
+          "independent_key_events": {
+            "presses": 22,
+            "releases": 22,
+            "held": []
+          }
+        }
+      ],
+      "audit": "vm26/output/26-xorg/package-audit.json",
+      "ui": {
+        "kind": "appimage",
+        "session": "x11",
+        "qt_platform": "default",
+        "voice_end_to_end": false,
+        "clipboard_accessed": false,
+        "artifact_sha256": "51d20c74a31beb7f01008378a76876a491fd8a3cdc6b61bda440a79bf11c966f",
+        "pages": [
+          {
+            "file": "page-01.png",
+            "width": 1120,
+            "height": 850
+          },
+          {
+            "file": "page-02.png",
+            "width": 1120,
+            "height": 850
+          },
+          {
+            "file": "page-03.png",
+            "width": 1120,
+            "height": 850
+          },
+          {
+            "file": "page-04.png",
+            "width": 1120,
+            "height": 850
+          },
+          {
+            "file": "page-05.png",
+            "width": 1120,
+            "height": 850
+          }
+        ],
+        "primary_exit_code": 0,
+        "ipc_show_quit": true,
+        "cold_controls_exit_0_config_unchanged": true,
+        "damaged_config_exit_1_preserved": true,
+        "passed": true
+      },
+      "resource_check": {
+        "candidate_processes_after_tests": [],
+        "capabilities_remaining": [],
+        "lock_states": [
+          {
+            "name": "inkecho-fcitx-candidate.lock",
+            "lock_free": true
+          }
+        ],
+        "owned_virtual_audio_remaining": [],
+        "fcitx_service_owner": "(false,)",
+        "generated_keys_or_modifiers_held": [],
+        "mount_gone": true,
+        "passed": true
+      },
+      "actual_fcitx_pinyin_guard_passed": true,
+      "fcitx_confirmed_zero_fallback_passed": true
+    }
+  },
+  "guests": {
+    "24": {
+      "container_state": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-29T19:55:16.687644782Z",
+        "FinishedAt": "2026-10-29T20:08:02.751347005Z"
+      },
+      "archive": {
+        "original_bytes": 157941760,
+        "original_sha256": "8f13f24a0ccdd614ff1bebb2f3559a0dcb0cca07a92dbc421f6715fe02d4531a",
+        "archive_bytes": 49123945,
+        "archive_sha256": "c456d6c849c1e1e404bcd44e232b3eeaba5fdff89705ac216d3f1b5c1dd1ef0d",
+        "full_stream_verified": true,
+        "qemu_exit": 0
+      }
+    },
+    "26": {
+      "container_state": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-10-29T20:08:23.306721902Z",
+        "FinishedAt": "2026-10-29T20:15:27.373971732Z"
+      },
+      "archive": {
+        "original_bytes": 179437568,
+        "original_sha256": "00b1d59eb3475ece0105bd0cbcc68db100ff72f80f584a7aa39b71ccce6fed64",
+        "archive_bytes": 64268324,
+        "archive_sha256": "e6a8ec7ed85c60cee8e83a085ad6053f695ac9443a28c282ae1d7cd3f2807dee",
+        "full_stream_verified": true,
+        "qemu_exit": 0
+      }
+    }
+  },
+  "git_head_after": "7203ba160d9975b620c06e1378b2c6f77dffb815",
+  "working_tree_clean": true
+}

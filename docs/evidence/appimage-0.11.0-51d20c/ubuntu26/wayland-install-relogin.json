@@ -1,0 +1,7 @@
+{
+  "stage": "26-wayland",
+  "command": "/usr/bin/python3 /mnt/input/gap.py install && /usr/bin/python3 /mnt/input/guest.py cleanup && /usr/bin/python3 /mnt/input/guest.py resource-check && sudo -n systemctl restart gdm3",
+  "returncode": 0,
+  "stdout": "guest action PASS cleanup\nguest action PASS resource-check\n",
+  "stderr": ""
+}

@@ -1,0 +1,11 @@
+qt.multimedia.symbolsresolver: Couldn't load va-x11 library
+qt.multimedia.symbolsresolver: Couldn't resolve va-x11 symbols
+qt.multimedia.symbolsresolver: Couldn't load va-drm library
+qt.multimedia.symbolsresolver: Couldn't resolve va-drm symbols
+qt.multimedia.symbolsresolver: Couldn't load va library
+qt.multimedia.symbolsresolver: Couldn't resolve va symbols
+qt.multimedia.symbolsresolver: Couldn't load va(in plugin) library
+qt.multimedia.symbolsresolver: Couldn't resolve va(in plugin) symbols
+qt.multimedia.ffmpeg: Using Qt multimedia with FFmpeg version 9.0.1 LGPL version 2.1 or later
+qt.multimedia.pipewire.devicemonitor: Ignoring dummy output: std::map(std::pair("client.id", "32"), std::pair("factory.id", "18"), std::pair("media.class", "Audio/Sink"), std::pair("node.description", "Dummy Output"), std::pair("node.name", "auto_null"), std::pair("object.serial", "298"))
+{"status": "passed", "synthetic_only": true, "input_transport": "auto_owned_target", "events_ms": {"toggle_requested": 0.0, "credential_wait_started": 424.222, "first_capture": 5.439, "play_requested": 83.351, "credential_wait_finished": 831.94, "first_audio_on_wire": 442.409, "stop_requested": 1359.087, "final_asr": 1481.221, "polishing_request": 1550.812, "polishing_first_delta": 1627.478, "first_received": 1689.125, "cancel_requested": 1689.126, "cancel_observation_started": 1689.901, "polishing_full_text": 2032.487, "cancel_observation_finished": 2832.259}, "marker_samples": 1601, "wire_bytes": 43632, "performance": {"schema_version": 1, "outcome": "cancelled", "events_ms": {"recording_started": 0.005, "recording_stop_requested": 1357.845, "recording_stopped": 1358.563, "asr_started": 422.817, "asr_completed": 1481.225, "polishing_started": 1481.289, "polishing_first_segment": 1628.707, "polishing_completed": null, "first_character_sent": 1683.003, "output_completed": null, "task_finished": 1687.917}, "durations_ms": {"stop_to_audio_ready_ms": 0.718, "asr_ms": 1058.408, "polishing_to_first_segment_ms": 147.418, "polishing_ms": null, "stop_to_first_character_ms": 325.159, "audio_ready_to_first_character_ms": 324.44, "output_ms": null, "stop_to_output_completed_ms": null, "stop_to_task_finished_ms": 330.073}}}

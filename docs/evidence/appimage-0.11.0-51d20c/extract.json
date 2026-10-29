@@ -1,0 +1,15 @@
+{
+  "command": [
+    "unsquashfs",
+    "-processors",
+    "2",
+    "-offset",
+    "944632",
+    "-dest",
+    "/home/lth/github/InkEcho/dist/candidate-0.11.0-7203ba1-20261030/extracted",
+    "/home/lth/github/InkEcho/dist/candidate-0.11.0-7203ba1-20261030/source/dist/InkEcho-0.11.0-x86_64.AppImage"
+  ],
+  "returncode": 0,
+  "stdout": "Parallel unsquashfs: Using 2 processors\n4755 inodes (5598 blocks) to write\n\n\n[===========================================================|] 10353/10353 100%\n\ncreated 3707 files\ncreated 230 directories\ncreated 1048 symlinks\ncreated 0 devices\ncreated 0 fifos\ncreated 0 sockets\ncreated 0 hardlinks\n",
+  "stderr": ""
+}

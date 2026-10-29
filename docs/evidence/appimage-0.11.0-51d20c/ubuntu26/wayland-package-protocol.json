@@ -1,0 +1,7 @@
+{
+  "stage": "26-wayland",
+  "command": "sudo -n mkdir -p /mnt/input /mnt/output && (mountpoint -q /mnt/input || sudo -n mount -t 9p -o trans=virtio,version=9p2000.L,ro inkecho_input /mnt/input) && (mountpoint -q /mnt/output || sudo -n mount -t 9p -o trans=virtio,version=9p2000.L inkecho_output /mnt/output) && /usr/bin/python3 /mnt/input/guest.py prepare && /usr/bin/python3 /mnt/input/context.py && /usr/bin/python3 /mnt/input/guest.py gui && /usr/bin/python3 /mnt/input/guest.py protocol && /usr/bin/python3 /mnt/input/guest.py provider-tests",
+  "returncode": 255,
+  "stdout": "",
+  "stderr": "ssh: connect to host 127.0.0.1 port 2222: Connection refused\n"
+}

@@ -1,0 +1,18 @@
+from pathlib import Path
+import subprocess,tarfile,hashlib,json,os,shutil,time
+repo=Path('/home/lth/github/InkEcho');head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=repo,text=True).strip();assert head=='7203ba160d9975b620c06e1378b2c6f77dffb815';assert not subprocess.check_output(['git','status','--porcelain'],cwd=repo)
+root=repo/'dist/candidate-0.11.0-7203ba1-20261030';root.mkdir(mode=0o700,exist_ok=False)
+archive=root/'frozen-source.tar';subprocess.run(['git','archive','--format=tar','--output',str(archive),head],cwd=repo,check=True)
+for name in ['source','validation-source']:
+ p=root/name;p.mkdir(mode=0o700)
+ with tarfile.open(archive)as t:t.extractall(p,filter='data')
+source=root/'source';cache=source/'build/system-deps';cache.mkdir(parents=True);runtime=source/'build/tools';runtime.mkdir(parents=True)
+old=Path('/run/user/1000/inkecho-candidate-0.10.10-7h_6ed20/source/build');shutil.copyfile(old/'tools/runtime-x86_64',runtime/'runtime-x86_64')
+assets=json.loads((source/'scripts/packaging/system-deps.json').read_text());verified=[]
+for item in assets:
+ p=old/'system-deps'/item['filename'];sha=hashlib.sha256(p.read_bytes()).hexdigest();assert sha==item['sha256'];shutil.copyfile(p,cache/item['filename']);verified.append({'filename':item['filename'],'bytes':p.stat().st_size,'sha256':sha})
+(tmp:=root/'scratch').mkdir(mode=0o700);env=dict(os.environ);env.pop('SOURCE_DATE_EPOCH',None);env.update(TMPDIR=str(tmp),PYTHONDONTWRITEBYTECODE='1')
+cmd=[str(repo/'.venv/bin/python'),str(source/'scripts/packaging/build_appimage.py')]
+meta={'source_commit':head,'version':'0.11.0','root':str(root),'frozen_source':str(source),'validation_source':str(root/'validation-source'),'source_archive_sha256':hashlib.sha256(archive.read_bytes()).hexdigest(),'command':cmd,'verified_cached_assets':verified,'stable_entry_modified':False,'started':time.time()};(root/'build-run.json').write_text(json.dumps(meta,indent=2)+'\n')
+with(root/'build.log').open('w')as log:r=subprocess.run(cmd,cwd=source,env=env,stdout=log,stderr=subprocess.STDOUT)
+meta.update(returncode=r.returncode,finished=time.time());(root/'build-run.json').write_text(json.dumps(meta,indent=2)+'\n');print(json.dumps({'root':str(root),'returncode':r.returncode}));r.check_returncode()

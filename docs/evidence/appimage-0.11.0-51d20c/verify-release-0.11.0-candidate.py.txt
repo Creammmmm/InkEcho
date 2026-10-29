@@ -1,0 +1,17 @@
+from pathlib import Path
+import json,hashlib,subprocess,os
+root=Path('/home/lth/github/InkEcho/dist/candidate-0.11.0-7203ba1-20261030');source=root/'source';artifact=source/'dist/InkEcho-0.11.0-x86_64.AppImage';runtime=source/'build/tools/runtime-x86_64';rt=runtime.read_bytes();assert hashlib.sha256(rt).hexdigest()=='156f4bdbde9c52d01814600013e0a273f0118dc2de98975f3c8c63427ec79074'
+with artifact.open('rb')as f:assert f.read(len(rt))==rt
+sha=hashlib.sha256(artifact.read_bytes()).hexdigest();assert (artifact.with_name(artifact.name+'.sha256')).read_text().strip()==sha+'  '+artifact.name
+cmd=['unsquashfs','-processors','2','-offset',str(len(rt)),'-dest',str(root/'extracted'),str(artifact)];r=subprocess.run(cmd,capture_output=True,text=True);(root/'extract.json').write_text(json.dumps({'command':cmd,'returncode':r.returncode,'stdout':r.stdout,'stderr':r.stderr},indent=2)+'\n');r.check_returncode()
+a=root/'extracted';inv=json.loads((a/'usr/share/doc/inkecho/inventory.json').read_text());assert inv['application']=='0.11.0'
+for rel,expected in inv['files'].items():assert hashlib.sha256((a/rel).read_bytes()).hexdigest()==expected,rel
+for rel,target in inv['symlinks'].items():
+ p=a/rel;assert p.is_symlink()and str(p.readlink())==target and p.resolve().is_relative_to(a)and p.resolve().exists(),rel
+actual_files={str(p.relative_to(a))for p in a.rglob('*')if p.is_file()and not p.is_symlink()};assert actual_files==set(inv['files'])|{'usr/share/doc/inkecho/inventory.json'}
+actual_symlinks={str(p.relative_to(a))for p in a.rglob('*')if p.is_symlink()};assert actual_symlinks==set(inv['symlinks'])
+frozen={str(p.relative_to(source/'src')):p for p in(source/'src/inkecho').rglob('*')if p.is_file()and'__pycache__'not in p.parts};bundled={str(p.relative_to(a/'packages')):p for p in(a/'packages/inkecho').rglob('*')if p.is_file()and'__pycache__'not in p.parts};assert frozen.keys()==bundled.keys()
+for rel,p in frozen.items():assert p.read_bytes()==bundled[rel].read_bytes(),rel
+plugin=a/'usr/share/inkecho/fcitx5/x86_64/candidate/libinkecho.so';psha=hashlib.sha256(plugin.read_bytes()).hexdigest();assert psha=='acd896aae8ab38ecca2685c0dd8639f2910e841176eadccf59ee4943b158c4de'
+licenses=[str(p.relative_to(a))for p in(a/'usr/share/doc/inkecho').rglob('*')if p.is_file()and'libei'in str(p).lower()];assert licenses
+result={'artifact':str(artifact),'version':'0.11.0','source_commit':'7203ba160d9975b620c06e1378b2c6f77dffb815','bytes':artifact.stat().st_size,'sha256':sha,'runtime_prefix_and_sha_sidecar_match':True,'full_actual_payload_inventory_verified':len(inv['files']),'symlinks_verified':len(inv['symlinks']),'source_assets_exact_match':len(frozen),'fcitx_candidate_sha256':psha,'libei_license_paths':licenses,'actual_extraction':str(a),'candidate_only':True,'dual_system_acceptance':'pending'};(root/'artifact-verification.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result))
