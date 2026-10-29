@@ -306,6 +306,7 @@ def test_settings_autosave_and_separate_data_logs(window):
     page.streaming.setChecked(not page.streaming.isChecked())
     page.transcription_timeout.setValue(61)
     page.recording.limit.setValue(123)
+    page.compatibility.receiver_wait.setValue(80)
     page.compatibility.mapping_wait.setValue(75)
     page.compatibility.feedback_timeout.setValue(60)
     page.compatibility.output_method.setCurrentIndex(
@@ -315,6 +316,7 @@ def test_settings_autosave_and_separate_data_logs(window):
     assert settings.polishing_streaming == page.streaming.isChecked()
     assert settings.transcription_timeout_seconds == 61
     assert settings.recording_limit_seconds == 123
+    assert settings.receiver_feedback_wait_ms == 80
     assert settings.x11_mapping_wait_ms == 75
     assert settings.x11_feedback_timeout_ms == 60
     assert settings.output_method == "ibus"
@@ -1548,6 +1550,7 @@ def test_output_method_failed_after_write_displays_actual_value(window, monkeypa
 @pytest.mark.parametrize(
     ("widget_name", "field"),
     [
+        ("receiver_wait", "receiver_feedback_wait_ms"),
         ("mapping_wait", "x11_mapping_wait_ms"),
         ("feedback_timeout", "x11_feedback_timeout_ms"),
     ],
@@ -1579,7 +1582,9 @@ def test_input_timing_failed_save_displays_disk_value(
     assert calls == [desired]
 
 
-@pytest.mark.parametrize("widget_name", ["mapping_wait", "feedback_timeout"])
+@pytest.mark.parametrize(
+    "widget_name", ["receiver_wait", "mapping_wait", "feedback_timeout"]
+)
 def test_input_timing_read_failure_restores_last_known_value(
     window, monkeypatch, widget_name
 ):
@@ -1758,3 +1763,27 @@ def test_auto_input_explanation_distinguishes_optional_bridge_and_unknown(window
     assert "预编辑无法确认时会停止" in explanation
     assert "已尝试但未确认的文字不会重放" in explanation
     assert "否则使用键盘" not in explanation
+
+
+@pytest.mark.parametrize(
+    "status,expected",
+    [
+        ("available", "不确认文字"),
+        ("unsupported", "不生效"),
+        ("unavailable", "不生效"),
+        ("not_checked", "输出时检测"),
+    ],
+)
+def test_receiver_feedback_ui_reports_capability_without_ack(
+    window, monkeypatch, status, expected
+):
+    monkeypatch.setattr(
+        type(window.session.inputs),
+        "receiver_feedback_status",
+        property(lambda _: status),
+        raising=False,
+    )
+    page = window.settings_page.compatibility
+    page.refresh()
+    assert expected in page.receiver_feedback.text()
+    assert page.receiver_wait.value() == 40

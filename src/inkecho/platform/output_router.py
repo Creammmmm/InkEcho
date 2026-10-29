@@ -138,6 +138,19 @@ class OutputRouter:
         if callable(configure):
             configure(reader)
 
+    def set_receiver_feedback_wait_reader(self, reader):
+        configure = getattr(self.keyboard, "set_receiver_feedback_wait_reader", None)
+        if callable(configure):
+            configure(reader)
+
+    @property
+    def receiver_feedback_status(self):
+        if self._owner is None:
+            return "not_checked"
+        if self._kind in {"fcitx", "ibus"}:
+            return "unsupported"
+        return getattr(self.keyboard, "receiver_feedback_status", "unavailable")
+
     def set_feedback_timeout_reader(self, reader):
         configure = getattr(self.keyboard, "set_feedback_timeout_reader", None)
         if callable(configure):

@@ -114,6 +114,9 @@ async def complete(session):
 
 def test_feedback_timeout_uses_recording_task_settings_snapshot(factory):
     class SnapshotInputs(Inputs):
+        def set_receiver_feedback_wait_reader(self, reader):
+            self.read_receiver_wait = reader
+
         def set_feedback_timeout_reader(self, reader):
             self.read_timeout = reader
 
@@ -128,21 +131,25 @@ def test_feedback_timeout_uses_recording_task_settings_snapshot(factory):
         )
         session.key = template.key
         await session.toggle()
+        assert inputs.read_receiver_wait() == 0.04
         assert inputs.read_timeout() == 0.04
         assert inputs.read_mapping_wait() == 0.04
         session.store.save_settings(
             replace(
                 session.store.load_settings(),
+                receiver_feedback_wait_ms=80,
                 x11_feedback_timeout_ms=120,
                 x11_mapping_wait_ms=80,
             )
         )
+        assert inputs.read_receiver_wait() == 0.04
         assert inputs.read_timeout() == 0.04
         assert inputs.read_mapping_wait() == 0.04
         session.cancel()
         await asyncio.sleep(0)
         session.last_toggle = 0
         await session.toggle()
+        assert inputs.read_receiver_wait() == 0.08
         assert inputs.read_timeout() == 0.12
         assert inputs.read_mapping_wait() == 0.08
         session.cancel()

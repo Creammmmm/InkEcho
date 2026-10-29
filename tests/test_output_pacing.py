@@ -473,3 +473,97 @@ def test_invalid_advisory_numbers_are_discarded_without_raising(value):
 def test_invalid_bounds_are_rejected(changes):
     with pytest.raises(ValueError):
         replace(PacingConfig(), **changes)
+
+
+@pytest.mark.parametrize("limit", [0.04, 0.08])
+def test_receiver_wait_caps_draw_budget_even_when_estimate_is_slow(limit, monkeypatch):
+    async def run():
+        clock = Clock()
+        pacer = OutputPacer(
+            replace(PacingConfig(), feedback_min=0.12, receiver_wait_max=limit),
+            clock=clock,
+        )
+
+        async def timeout(awaitable, duration):
+            awaitable.close()
+            clock.now += duration
+            raise TimeoutError
+
+        monkeypatch.setattr(asyncio, "wait_for", timeout)
+        token = pacer.bind(FeedbackLevel.DRAW)
+        pacer.sent(token)
+        pacer._scope.latency = 0.10
+        pacer._scope.jitter = 0.02
+        started = clock.now
+        await ready(pacer, token, deadline=20)
+        assert clock.now - started == pytest.approx(limit)
+        assert pacer.snapshot(token).pending == 0
+
+    asyncio.run(run())
+
+
+def test_receiver_wait_can_finish_early_on_advisory_hint(monkeypatch):
+    async def run():
+        clock = Clock()
+        pacer = OutputPacer(
+            replace(PacingConfig(), receiver_wait_max=0.04), clock=clock
+        )
+        token = pacer.bind(FeedbackLevel.DRAW)
+        pacer.sent(token)
+
+        async def hint(awaitable, duration):
+            awaitable.close()
+            clock.now += 0.003
+            assert pacer.observe(token)
+
+        monkeypatch.setattr(asyncio, "wait_for", hint)
+        started = clock.now
+        await ready(pacer, token, deadline=20)
+        assert clock.now - started == pytest.approx(0.003)
+
+    asyncio.run(run())
+
+
+@pytest.mark.parametrize("level", [FeedbackLevel.NONE, FeedbackLevel.INPUT])
+def test_receiver_wait_does_not_manufacture_feedback_for_other_levels(level):
+    async def run():
+        clock = Clock()
+        pacer = AdvancingPacer(clock)
+        pacer.config = replace(pacer.config, receiver_wait_max=0.04)
+        token = pacer.bind(level)
+        pacer.sent(token)
+        assert not pacer.observe(token)
+        await ready(pacer, token, deadline=20)
+        assert pacer.waits == (
+            [pytest.approx(0.02)] if level == FeedbackLevel.NONE else []
+        )
+
+    asyncio.run(run())
+
+
+@pytest.mark.parametrize("stop", ["cancel", "expire", "replace"])
+def test_receiver_wait_rechecks_task_and_generation_while_waiting(stop):
+    async def run():
+        pacer = OutputPacer(replace(PacingConfig(), receiver_wait_max=0.08))
+        token = pacer.bind(FeedbackLevel.DRAW)
+        pacer.sent(token)
+        active = True
+        deadline = time.monotonic() + (0.001 if stop == "expire" else 1)
+        waiter = asyncio.create_task(
+            ready(pacer, token, deadline=deadline, active=lambda: active)
+        )
+        await asyncio.sleep(0)
+        if stop == "cancel":
+            active = False
+            pacer._scope.changed.set()
+        elif stop == "replace":
+            new = pacer.bind(FeedbackLevel.DRAW)
+            assert not pacer.observe(token)
+        with pytest.raises(
+            PacingScopeChanged if stop == "replace" else asyncio.CancelledError
+        ):
+            await waiter
+        if stop == "replace":
+            assert pacer.snapshot(new).pending == 0
+
+    asyncio.run(run())

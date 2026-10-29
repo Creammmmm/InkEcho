@@ -664,11 +664,23 @@ class KeyboardInput:
         self._output_deadline = None
         self._mapping_wait_reader = lambda: MAP_SETTLE_SECONDS
         self._feedback_timeout_reader = None
+        self._receiver_wait_reader = None
         self._output_mapping_wait = MAP_SETTLE_SECONDS
 
     def set_mapping_wait_reader(self, reader):
         """Read the X11 mapping wait once at the next output session."""
         self._mapping_wait_reader = reader
+
+    def set_receiver_feedback_wait_reader(self, reader):
+        self._receiver_wait_reader = reader
+
+    @property
+    def receiver_feedback_status(self):
+        if self._output_owner is None or self._pacing_token is None:
+            return "not_checked"
+        return (
+            "available" if self._pacing_level == FeedbackLevel.DRAW else "unavailable"
+        )
 
     def set_feedback_timeout_reader(self, reader):
         """Read the task's X11 draw-feedback timeout at output setup."""
@@ -827,6 +839,15 @@ class KeyboardInput:
                 raise ValueError("Invalid X11 feedback timeout")
             self._pacer.config = replace(
                 self._pacer.config, feedback_min=feedback_timeout
+            )
+        if self._receiver_wait_reader is not None:
+            receiver_wait = self._receiver_wait_reader()
+            if type(receiver_wait) not in (int, float) or not (
+                0.020 <= receiver_wait <= 0.250
+            ):
+                raise ValueError("Invalid receiver feedback wait")
+            self._pacer.config = replace(
+                self._pacer.config, receiver_wait_max=receiver_wait
             )
         self._output_owner, self._output_failed = owner, False
         self._output_mapping_wait = mapping_wait

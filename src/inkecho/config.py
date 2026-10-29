@@ -83,6 +83,7 @@ class Settings:
     recording_limit_seconds: int = 120
     x11_mapping_wait_ms: int = 40
     x11_feedback_timeout_ms: int = 40
+    receiver_feedback_wait_ms: int = 40
     output_method: str = "auto"
     overlay_style: str = "siri"
     overlay_position: str = "bottom-center"
@@ -124,6 +125,10 @@ class Settings:
             20 <= self.x11_feedback_timeout_ms <= 250
         ):
             raise ConfigError("X11 feedback timeout must be between 20 and 250 ms.")
+        if type(self.receiver_feedback_wait_ms) is not int or not (
+            20 <= self.receiver_feedback_wait_ms <= 250
+        ):
+            raise ConfigError("Receiver feedback wait must be between 20 and 250 ms.")
         for name in (
             "polishing_enabled",
             "polishing_fallback",

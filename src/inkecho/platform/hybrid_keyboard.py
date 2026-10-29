@@ -35,10 +35,22 @@ class HybridKeyboardInput:
         self._output_check = None
         self._mapping_wait_reader = None
         self._feedback_timeout_reader = None
+        self._receiver_wait_reader = None
         self._xonly = False
 
     def set_mapping_wait_reader(self, reader):
         self._mapping_wait_reader = reader
+
+    def set_receiver_feedback_wait_reader(self, reader):
+        self._receiver_wait_reader = reader
+
+    @property
+    def receiver_feedback_status(self):
+        if self._output_owner is None or self._backend is None:
+            return "not_checked"
+        if self._backend is self.native:
+            return "unsupported"
+        return getattr(self.x11, "receiver_feedback_status", "unavailable")
 
     def set_feedback_timeout_reader(self, reader):
         self._feedback_timeout_reader = reader
@@ -108,6 +120,11 @@ class HybridKeyboardInput:
             configure = getattr(self.x11, "set_feedback_timeout_reader", None)
             if callable(configure):
                 configure(lambda: feedback_timeout)
+        if self._receiver_wait_reader is not None:
+            receiver_wait = self._receiver_wait_reader()
+            configure = getattr(self.x11, "set_receiver_feedback_wait_reader", None)
+            if callable(configure):
+                configure(lambda: receiver_wait)
         self._output_owner = owner
         self._output_failed = False
         self._output_deadline = None

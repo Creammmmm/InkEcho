@@ -63,6 +63,26 @@ class CompatibilityPage(Page):
         self._saved_output_method = self.output_method.currentData()
         self.output_method.currentIndexChanged.connect(self.save_output_method)
         form.addRow("文字输出方式", self.output_method)
+        self.receiver_wait = QSpinBox()
+        self.receiver_wait.setRange(20, 250)
+        self.receiver_wait.setSuffix(" 毫秒")
+        self.receiver_wait.setValue(
+            session.store.load_settings().receiver_feedback_wait_ms
+        )
+        self._saved_receiver_wait = self.receiver_wait.value()
+        self.receiver_wait.valueChanged.connect(self.save_receiver_wait)
+        form.addRow("接收窗口绘制提示等待上限", self.receiver_wait)
+        self.receiver_feedback = label("", muted=True)
+        layout.addWidget(self.receiver_feedback)
+        layout.addWidget(
+            label(
+                "默认最多等待 40 毫秒的窗口绘制提示；有提示可提前继续。"
+                "仅已检测到绘制反馈的原生 X11 目标生效，不代表文字已显示。"
+                "没有反馈时不会伪造帧确认；Wayland、XWayland及输入法输出暂不可用。"
+                "新设置从下一次任务生效；键盘映射安全等待仍独立保留。",
+                muted=True,
+            )
+        )
         self.mapping_wait = QSpinBox()
         self.mapping_wait.setRange(20, 250)
         self.mapping_wait.setSuffix(" 毫秒")
@@ -78,7 +98,7 @@ class CompatibilityPage(Page):
         )
         self._saved_feedback_timeout = self.feedback_timeout.value()
         self.feedback_timeout.valueChanged.connect(self.save_feedback_timeout)
-        form.addRow("X11 绘制反馈超时下限", self.feedback_timeout)
+        form.addRow("X11 自适应反馈基准", self.feedback_timeout)
         layout.addLayout(form)
         layout.addWidget(
             label(
@@ -86,7 +106,7 @@ class CompatibilityPage(Page):
                 "绘制反馈仅用于原生 X11；Wayland（包括 XWayland）"
                 "以及 Fcitx5、IBus 直接输出不使用。"
                 "回退到原生 X11 键盘时可能使用；"
-                "反馈仅供调度参考，不能确认文字已显示。新设置从下一次任务生效。",
+                "反馈基准受上方等待上限约束；仅供调度参考，不能确认文字已显示。新设置从下一次任务生效。",
                 muted=True,
             )
         )
@@ -197,6 +217,11 @@ class CompatibilityPage(Page):
         self.refresh_timer.setInterval(1000)
         self.refresh_timer.timeout.connect(self.refresh)
         self.refresh_timer.start()
+
+    def save_receiver_wait(self):
+        self._save_input_timing(
+            self.receiver_wait, "receiver_feedback_wait_ms", "_saved_receiver_wait"
+        )
 
     def save_mapping_wait(self):
         self._save_input_timing(
@@ -338,6 +363,15 @@ class CompatibilityPage(Page):
             self.message.setText("输入设置无法保存。")
 
     def refresh(self):
+        status = getattr(self.session.inputs, "receiver_feedback_status", "not_checked")
+        self.receiver_feedback.setText(
+            {
+                "not_checked": "绘制反馈：输出时检测当前接收窗口。",
+                "available": "本次输出：可观察窗口绘制提示，不确认文字接收或显示。",
+                "unsupported": "本次输出：此输入方式无绘制反馈，等待设置不生效。",
+                "unavailable": "本次输出：当前窗口无可用绘制反馈，等待设置不生效。",
+            }.get(status, "绘制反馈：当前能力未知，等待设置不生效。")
+        )
         environment = detect_desktop()
         self.environment.setText(
             f"{environment.distribution} · {environment.desktop} "

@@ -181,6 +181,13 @@ class Session(QObject):
             configure_feedback_timeout(
                 lambda: self.settings.x11_feedback_timeout_ms / 1000
             )
+        configure_receiver_wait = getattr(
+            self.inputs, "set_receiver_feedback_wait_reader", None
+        )
+        if callable(configure_receiver_wait):
+            configure_receiver_wait(
+                lambda: self.settings.receiver_feedback_wait_ms / 1000
+            )
         self.input_maintenance_lock = asyncio.Lock()
         self.input_maintenance_active = False
         self.input_maintenance_tasks: set[asyncio.Task] = set()

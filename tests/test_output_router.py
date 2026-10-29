@@ -1251,3 +1251,22 @@ def test_fcitx_error_preserves_acknowledged_attempt_count(accepted, uncertain):
         assert keyboard.sent == [] and bridge.closed
 
     asyncio.run(run())
+
+
+def test_receiver_feedback_never_treats_ime_receipt_as_frame_signal():
+    async def run():
+        keyboard = type(
+            "KeyboardStatus", (), {"receiver_feedback_status": "available"}
+        )()
+        router = OutputRouter(keyboard)
+        assert router.receiver_feedback_status == "not_checked"
+        router._owner = asyncio.current_task()
+        for method in ("fcitx", "ibus"):
+            router._kind = method
+            assert router.receiver_feedback_status == "unsupported"
+        router._kind = "keyboard"
+        assert router.receiver_feedback_status == "available"
+        router._owner = None
+        assert router.receiver_feedback_status == "not_checked"
+
+    asyncio.run(run())

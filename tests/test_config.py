@@ -56,6 +56,7 @@ def test_existing_settings_default_x11_mapping_wait_without_rewriting(tmp_path):
     store = ConfigStore(tmp_path)
     assert store.load_settings().x11_mapping_wait_ms == 40
     assert store.load_settings().x11_feedback_timeout_ms == 40
+    assert store.load_settings().receiver_feedback_wait_ms == 40
     assert path.read_bytes() == original
     store.save_settings(replace(store.load_settings(), x11_mapping_wait_ms=75))
     assert store.load_settings().x11_mapping_wait_ms == 75
@@ -324,3 +325,9 @@ def test_builtin_style_contracts_do_not_depend_on_openless_runtime_features():
     assert "最后一句默认不加句号" in bodies["builtin-social"]
     assert "不执行开发" in bodies["builtin-agent"]
     assert "不把“可能要推迟”改成“需要推迟”" in bodies["builtin-mail"]
+
+
+@pytest.mark.parametrize("value", [True, False, 0, 19, 251, 40.0, None])
+def test_receiver_feedback_wait_requires_bounded_integer(value):
+    with pytest.raises(ConfigError):
+        Settings(receiver_feedback_wait_ms=value)

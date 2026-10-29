@@ -1421,3 +1421,30 @@ def test_observer_failure_continues_once_with_bounded_none_fallback(
         assert inputs._feedback_poll is None
 
     asyncio.run(run())
+
+
+@pytest.mark.parametrize("level", [FeedbackLevel.DRAW, FeedbackLevel.NONE])
+def test_receiver_wait_is_snapshotted_and_capability_is_honest(level):
+    async def run():
+        driver, feedback = Driver(), Feedback(level=level)
+        inputs = KeyboardInput(
+            driver_factory=lambda: driver, feedback_factory=lambda _: feedback
+        )
+        await inputs.connect()
+        value = [0.04]
+        inputs.set_receiver_feedback_wait_reader(lambda: value[0])
+        assert inputs.receiver_feedback_status == "not_checked"
+        async with inputs.output_session():
+            inputs._select_feedback(driver.window)
+            assert inputs.receiver_feedback_status == (
+                "available" if level == FeedbackLevel.DRAW else "unavailable"
+            )
+            assert inputs._pacer.config.receiver_wait_max == 0.04
+            value[0] = 0.08
+            assert inputs._pacer.config.receiver_wait_max == 0.04
+        assert inputs.receiver_feedback_status == "not_checked"
+        async with inputs.output_session():
+            assert inputs._pacer.config.receiver_wait_max == 0.08
+        await inputs.aclose()
+
+    asyncio.run(run())

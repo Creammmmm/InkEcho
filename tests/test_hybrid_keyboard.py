@@ -604,3 +604,29 @@ def test_xwayland_only_cancellation_stops_after_first_character():
         await hybrid.aclose()
 
     asyncio.run(run())
+
+
+def test_receiver_wait_keeps_hybrid_snapshot_and_reports_native_unavailable():
+    async def run():
+        events = []
+        driver = Driver(events)
+        native = Native(driver, events)
+        x11 = KeyboardInput(driver_factory=lambda: driver)
+        inputs = HybridKeyboardInput(native=native, x11=x11)
+        value = [0.04]
+        inputs.set_receiver_feedback_wait_reader(lambda: value[0])
+        await inputs.connect()
+        assert inputs.receiver_feedback_status == "not_checked"
+        async with inputs.output_session():
+            value[0] = 0.08
+            async with x11.output_session():
+                assert x11._pacer.config.receiver_wait_max == 0.04
+            inputs._backend = native
+            assert inputs.receiver_feedback_status == "unsupported"
+            inputs._backend = None
+        async with inputs.output_session():
+            async with x11.output_session():
+                assert x11._pacer.config.receiver_wait_max == 0.08
+        await inputs.aclose()
+
+    asyncio.run(run())

@@ -51,6 +51,7 @@ class PacingConfig:
     reuse_fallback: float = 0.020
     feedback_min: float = 0.040
     feedback_max: float = 0.250
+    receiver_wait_max: float | None = None
     coalesce: float = 0.016
     max_inflight: int = 4
 
@@ -70,6 +71,11 @@ class PacingConfig:
             raise ValueError("Invalid mapping bounds")
         if not 0 < self.feedback_min <= self.feedback_max or self.coalesce <= 0:
             raise ValueError("Invalid feedback bounds")
+        if self.receiver_wait_max is not None and (
+            not _finite_number(self.receiver_wait_max)
+            or not 0 < self.receiver_wait_max <= self.feedback_max
+        ):
+            raise ValueError("Invalid receiver feedback wait")
         if type(self.max_inflight) is not int or not 1 <= self.max_inflight <= 4:
             raise ValueError("Invalid in-flight bound")
 
@@ -330,6 +336,10 @@ class OutputPacer:
             timeout = min(
                 self.config.feedback_max, max(self.config.feedback_min, estimate)
             )
+            # This bounds only advisory DRAW waiting, never protocol safety
+            # floors or total latency. A timeout does not acknowledge delivery.
+            if self.config.receiver_wait_max is not None:
+                timeout = min(timeout, self.config.receiver_wait_max)
             until = self.clock() + timeout
             while not scope.hint and self.clock() < until:
                 scope.changed.clear()
