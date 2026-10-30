@@ -1,0 +1,10 @@
+Get:1 http://archive.ubuntu.com/ubuntu resolute/main amd64 libwayland-bin amd64 1.24.0-2 [22.0 kB]
+Fetched 22.0 kB in 1s (17.1 kB/s)
+Get:1 http://archive.ubuntu.com/ubuntu resolute/main amd64 libwayland-dev amd64 1.24.0-2 [75.8 kB]
+Fetched 75.8 kB in 2s (48.3 kB/s)
+Get:1 http://archive.ubuntu.com/ubuntu resolute/main amd64 wayland-protocols all 1.47-1 [131 kB]
+Fetched 131 kB in 2s (80.5 kB/s)
+libwayland-bin_1.24.0-2_amd64.deb: OK
+libwayland-dev_1.24.0-2_amd64.deb: OK
+wayland-protocols_1.47-1_all.deb: OK
+Verified dependencies extracted to /var/tmp/inkecho-wayland-repro-2/root

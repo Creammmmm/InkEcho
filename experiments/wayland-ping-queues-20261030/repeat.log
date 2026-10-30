@@ -1,0 +1,25 @@
+run=1
+server_sent_commit_done_then_ping
+server_received_pong=42
+after_server_pong commit=0 done=0
+after_text_queue commit=1 done=1
+run=2
+server_sent_commit_done_then_ping
+server_received_pong=42
+after_server_pong commit=0 done=0
+after_text_queue commit=1 done=1
+run=3
+server_sent_commit_done_then_ping
+server_received_pong=42
+after_server_pong commit=0 done=0
+after_text_queue commit=1 done=1
+run=4
+server_sent_commit_done_then_ping
+server_received_pong=42
+after_server_pong commit=0 done=0
+after_text_queue commit=1 done=1
+run=5
+server_sent_commit_done_then_ping
+server_received_pong=42
+after_server_pong commit=0 done=0
+after_text_queue commit=1 done=1
