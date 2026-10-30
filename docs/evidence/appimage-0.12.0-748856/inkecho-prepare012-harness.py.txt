@@ -1,0 +1,52 @@
+from pathlib import Path
+import json,shutil,tarfile,hashlib,os
+repo=Path('/home/lth/github/InkEcho');root=repo/'dist/candidate-0.12.0-895d03b-20261030';old=repo/'dist/candidate-0.11.0-7203ba1-20261030';browser=repo/'dist/release-0.11.0-browser-focus-20261030/vm24';sha=json.loads((root/'artifact-verification.json').read_text())['sha256'];version='0.12.0';oldsha='51d20c74a31beb7f01008378a76876a491fd8a3cdc6b61bda440a79bf11c966f';elf='f67c6b5f2cb7ecd7c915c8062efd3b70284c74b97ced4a597d942c4b39594e44';oldelf='acd896aae8ab38ecca2685c0dd8639f2910e841176eadccf59ee4943b158c4de'
+for osnum in ['24','26']:
+ b=root/('vm'+osnum);b.mkdir(mode=0o700);i=b/'input';i.mkdir(mode=0o700);(b/'output').mkdir(mode=0o700)
+ for p in (old/('vm'+osnum)/'input').iterdir():
+  if p.is_file() and p.name!='InkEcho.AppImage':
+   if p.suffix in {'.py','.sh'}:
+    txt=p.read_text().replace('0.11.0',version).replace(oldsha,sha).replace(oldelf,elf);(i/p.name).write_text(txt)
+   else:shutil.copy2(p,i/p.name)
+ shutil.copytree(old/('vm'+osnum)/'input/framework',i/'framework')
+ f=i/'frozen';f.mkdir(mode=0o700)
+ with tarfile.open(root/'frozen-source.tar')as t:t.extractall(f,filter='data')
+ man=json.loads((i/'tests-manifest.json').read_text());man['files']={p.relative_to(f).as_posix():hashlib.sha256(p.read_bytes()).hexdigest()for p in (f/'tests').rglob('*.py')};(i/'tests-manifest.json').write_text(json.dumps(man,indent=2)+'\n');testsha=hashlib.sha256((i/'tests-manifest.json').read_bytes()).hexdigest()
+ p=i/'guest.py';p.write_text(p.read_text().replace('f7942311852a1c31ea4e92e24d68a976aace8cc9fc17d1af361d5f4261a118ab',testsha))
+ os.link(root/'source/dist/InkEcho-0.12.0-x86_64.AppImage',i/'InkEcho.AppImage')
+ # Launch from a fully verified stopped parent, not the failed RAM child.
+ if osnum=='24':
+  launch=json.loads((browser/'launch.json').read_text());parent=browser/'output';rawsha='e03ac57c469898f0e6d2ed535df6ef0179c50b726f3c578eb1a1f1fc0742565e';oldparent=repo/'dist/release-0.11.0-browser-20261030/vm24/output';wrapper=(browser/'input/wrapper.py').read_text().replace('4def23001742b1cf1de3766c4c67e9fe9bff95e0ed50b9d5329b53bf75b0da50',rawsha)
+ else:
+  launch=json.loads((old/'vm26/launch.json').read_text());parent=old/'vm26/output';rawsha='00b1d59eb3475ece0105bd0cbcc68db100ff72f80f584a7aa39b71ccce6fed64';oldparent=Path('/tmp/inkecho-fcitx-preedit-guard-20261030/pinyin26-followup/output');wrapper=(old/'vm26/input/wrapper.py').read_text().replace('af9c0e97a32182fb908d598593186f21c9ce889056daa7b4bac261557793be5b',rawsha)
+ archive=parent/'stopped-followup-child.qcow2.gz';receipt=json.loads((parent/'ram-overlay-archive.json').read_text());assert hashlib.file_digest(archive.open('rb'),'sha256').hexdigest()==receipt['archive_sha256'];assert receipt['original_sha256']==rawsha
+ for n,v in enumerate(launch):
+  if v=='--name':launch[n+1]='inkecho-package-0.12.0-'+osnum+'-20261030'
+  elif v.startswith('type=bind,'):
+   if ',dst=/snapshot,'in v:launch[n]='type=bind,src='+str(parent)+',dst=/snapshot,readonly'
+   elif ',dst=/input,'in v:launch[n]='type=bind,src='+str(i)+',dst=/input,readonly'
+   elif ',dst=/output'in v:launch[n]='type=bind,src='+str(b/'output')+',dst=/output'
+   elif ',dst=/frozen,'in v:launch[n]='type=bind,src='+str(f)+',dst=/frozen,readonly'
+ # All archive output is on persistent project disk, never quota-limited /tmp.
+ (i/'wrapper.py').write_text(wrapper);(b/'launch.json').write_text(json.dumps(launch,indent=2)+'\n');(b/'parent.json').write_text(json.dumps({'parent':str(parent),'archive_sha256':receipt['archive_sha256'],'raw_sha256':rawsha,'readonly':True},indent=2)+'\n')
+# Chrome extra uses package modules/native asset without the earlier source/pin override.
+i=root/'vm24/input'
+for name in ['focus-cli.py','focus_proof.py','screenshot-owned.py','desktop-state.py','chrome-software-manifest.json']:
+ shutil.copy2(browser/'input'/name,i/name)
+script=(repo/'experiments/fcitx-stream-product-r2-20261030/source-final/browser-product-r2.py').read_text();script=script[script.index('"""Actual published-package'):];script=script.replace(oldsha,sha).replace('browser-product-r2','browser-package-012')
+script=script.replace('full pinned candidate product source overlay on released AppImage runtime; actual Session/default Router/negotiated bridge, no consumer or bridge-class monkeypatch; local synthetic provider only','actual unmodified 0.12.0 AppImage modules and staged addon; actual Session/default Router; synthetic Recorder/provider only')
+script=script.replace("  fcitx5_staging.TESTED_CANDIDATE_SHA256='"+elf+"'","  assert fcitx5_staging.TESTED_CANDIDATE_SHA256=='"+elf+"'")
+script=script.replace("report['native_candidate_test_only_override']=fcitx5_staging.TESTED_CANDIDATE_SHA256","report['native_candidate_test_only_override']=False")
+script=script.replace("source=Path('/mnt/input/batch-candidate')","source=A/'usr/share/inkecho/fcitx5/x86_64'")
+script=script.replace("Path(v).is_relative_to(_SR)","Path(v).is_relative_to(A/'packages')")
+assert '_SR'not in script and 'TESTED_CANDIDATE_SHA256='not in script
+(i/'browser-package-012.py').write_text(script)
+shutil.copy2(repo/'experiments/fcitx-stream-product-r2-20261030/source-final/session_product_r2.py',i/'session_product_r2.py')
+launcher=(repo/'experiments/fcitx-stream-product-r2-20261030/source-final/launcher-product-r2.py').read_text().replace('browser-product-r2','browser-package-012').replace("(O/'mount.json').write_bytes(Path('/mnt/output/browser-xorg/mount.json').read_bytes())","(O/'mount.json').write_bytes((Path('/mnt/output')/os.environ['INKECHO_OUTPUT_STAGE']/'mount.json').read_bytes())")
+(i/'launch-browser-012.py').write_text(launcher)
+# Host command/guard/controller, adapted only to candidate identities and fresh own controls.
+controller=(old/'harness/control.py.txt').read_text().replace(str(old),str(root)).replace('0.11.0',version)
+needle="assert row['owned_active']and row['owned_focus'];q=subprocess.run"
+replacement="assert row['owned_active']and row['owned_focus'];guard='import pathlib,json,os,subprocess; os.environ.update(DBUS_SESSION_BUS_ADDRESS=\"unix:path=/run/user/1000/bus\",XDG_RUNTIME_DIR=\"/run/user/1000\");os.environ.update(dict(l.split(\"=\",1)for l in subprocess.check_output([\"systemctl\",\"--user\",\"show-environment\"],text=True).splitlines()if l.startswith((\"DISPLAY=\",\"XAUTHORITY=\"))));d=json.loads(pathlib.Path(\"/run/user/1000/inkecho-package-gate-0.12.0/fcitx-'+stage+'/actor.json\").read_text());assert d[\"pid\"]=='+str(row['owned_pid'])+' and d[\"active\"] and d[\"focus\"];assert b\"actor.py\"in pathlib.Path(\"/proc/\"+str(d[\"pid\"])+\"/cmdline\").read_bytes();assert int(subprocess.check_output([\"xdotool\",\"getactivewindow\",\"getwindowpid\"]))==d[\"pid\"]';check=subprocess.run(ssh('/usr/bin/python3 -c '+shlex.quote(guard)),capture_output=True,text=True,timeout=10);rows.append({'fresh_guard':True,'request':row,'returncode':check.returncode,'stdout':check.stdout,'stderr':check.stderr});save(label+'-keys',rows);assert check.returncode==0;q=subprocess.run"
+assert needle in controller;controller=controller.replace(needle,replacement);(root/'control.py').write_text(controller)
+print('Prepared harness',root,'SHA',sha)

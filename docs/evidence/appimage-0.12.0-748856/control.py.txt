@@ -1,0 +1,33 @@
+from pathlib import Path
+import subprocess,json,sys,time,shlex,re,os
+root=Path('/home/lth/github/InkEcho/dist/candidate-0.12.0-895d03b-20261030');action=sys.argv[1];osnum=sys.argv[2];assert osnum in ('24','26');b=root/('vm'+osnum);name=f'inkecho-package-0.12.0-{osnum}-20261030'
+def save(label,value):(b/(label+'.json')).write_text(json.dumps(value,indent=2)+'\n')
+def ssh(command):return ['docker','exec','-i',name,'ssh','-T','-i','/secrets/testkey','-p2222','-o','BatchMode=yes','-o','ConnectTimeout=30','-o','StrictHostKeyChecking=yes','-o','UserKnownHostsFile=/prior/known_hosts','inkecho@127.0.0.1',command]
+if action=='launch':
+ mem={l.split(':')[0]:int(l.split()[1])*1024 for l in Path('/proc/meminfo').read_text().splitlines()if l.startswith(('MemAvailable:','MemFree:'))};assert mem['MemAvailable']>6*1024**3,mem
+ other=f'inkecho-package-0.12.0-{26 if osnum=="24"else 24}-20261030';active=subprocess.run(['docker','inspect','--format','{{.State.Running}}',other],capture_output=True,text=True);assert active.returncode!=0 or active.stdout.strip()=='false'
+ a=json.loads((b/'launch.json').read_text());r=subprocess.run(a,capture_output=True,text=True);save('boot',{'argv':a,'returncode':r.returncode,'stdout':r.stdout,'stderr':r.stderr,'memory_before':mem});print(r.returncode,r.stdout,r.stderr);r.check_returncode()
+elif action=='ssh':
+ stage,command,label=sys.argv[3:6];assert re.fullmatch('[A-Za-z0-9_-]+',stage);r=subprocess.run(ssh('env INKECHO_OUTPUT_STAGE='+shlex.quote(stage)+' /bin/bash -c '+shlex.quote('set -eu\n'+command)),capture_output=True,text=True);save(label,{'stage':stage,'command':command,'returncode':r.returncode,'stdout':r.stdout,'stderr':r.stderr});print(r.returncode,r.stdout,r.stderr);r.check_returncode()
+elif action=='hardware':
+ stage,label=sys.argv[3:5];assert re.fullmatch('[A-Za-z0-9_-]+',stage)
+ for f in ['key-request.json','key-ack.json']:
+  q=b/'output'/f
+  if q.exists():q.unlink()
+ rows=[]
+ with(b/(label+'.log')).open('w')as log:
+  p=subprocess.Popen(ssh('env INKECHO_OUTPUT_STAGE='+shlex.quote(stage)+' /usr/bin/python3 /mnt/input/guest.py fcitx'),stdout=log,stderr=subprocess.STDOUT);last=0
+  while p.poll()is None:
+   f=b/'output/key-request.json'
+   if f.exists():
+    row=json.loads(f.read_text())
+    if row['sequence']>last:
+     assert row['owned_active']and row['owned_focus'];guard='import pathlib,json,os,subprocess; os.environ.update(DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/1000/bus",XDG_RUNTIME_DIR="/run/user/1000");os.environ.update(dict(l.split("=",1)for l in subprocess.check_output(["systemctl","--user","show-environment"],text=True).splitlines()if l.startswith(("DISPLAY=","XAUTHORITY="))));d=json.loads(pathlib.Path("/run/user/1000/inkecho-package-gate-0.12.0/fcitx-'+stage+'/actor.json").read_text());assert d["pid"]=='+str(row['owned_pid'])+' and d["active"] and d["focus"];assert b"actor.py"in pathlib.Path("/proc/"+str(d["pid"])+"/cmdline").read_bytes();assert int(subprocess.check_output(["xdotool","getactivewindow","getwindowpid"]))==d["pid"]';check=subprocess.run(ssh('/usr/bin/python3 -c '+shlex.quote(guard)),capture_output=True,text=True,timeout=10);rows.append({'fresh_guard':True,'request':row,'returncode':check.returncode,'stdout':check.stdout,'stderr':check.stderr});save(label+'-keys',rows);assert check.returncode==0;q=subprocess.run(['docker','exec',name,'python3','/input/qmp-key.py',str(row['keyval'])],capture_output=True,text=True);rows.append({'request':row,'returncode':q.returncode,'stdout':q.stdout,'stderr':q.stderr});save(label+'-keys',rows);ack=b/'output/key-ack.tmp';ack.write_text(json.dumps({'sequence':row['sequence'],'qmp_ok':q.returncode==0}));ack.replace(b/'output/key-ack.json');last=row['sequence']
+   time.sleep(.05)
+  rc=p.wait()
+ save(label+'-exit',{'returncode':rc});print('hardware guest',rc);print((b/(label+'.log')).read_text());assert rc==0
+elif action=='qmp':
+ r=subprocess.run(['docker','exec',name,'python3','/input/qmp-key.py',sys.argv[3]],capture_output=True,text=True);save('qmp-'+sys.argv[3],{'returncode':r.returncode,'stdout':r.stdout,'stderr':r.stderr});print(r.stdout,r.stderr);r.check_returncode()
+elif action=='wait':
+ r=subprocess.run(['docker','wait',name],capture_output=True,text=True);r.check_returncode();state=json.loads(subprocess.check_output(['docker','inspect','--format','{{json .State}}',name],text=True));save('container-final-state',state);assert not state['Running']and state['ExitCode']==0 and not state['OOMKilled'];print(json.dumps(state))
+else:raise ValueError(action)

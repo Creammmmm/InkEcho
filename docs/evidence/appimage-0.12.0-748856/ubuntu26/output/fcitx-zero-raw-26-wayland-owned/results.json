@@ -1,0 +1,404 @@
+[
+  {
+    "case": "staged",
+    "sha": "f67c6b5f2cb7ecd7c915c8062efd3b70284c74b97ced4a597d942c4b39594e44",
+    "test_only_override": false,
+    "session": "wayland"
+  },
+  {
+    "case": "owned_activation",
+    "pid": 7095,
+    "xid": 12582915,
+    "fixture_only": true
+  },
+  {
+    "case": "ready",
+    "receiver": {
+      "pid": 7095,
+      "active": true,
+      "focus": true,
+      "text": "",
+      "preedit_length": 0,
+      "key_results": [],
+      "module": null,
+      "owned_events": []
+    }
+  },
+  {
+    "case": "fcitx_frontend_absent",
+    "paths": []
+  },
+  {
+    "case": "actual_fcitx_result",
+    "code": "no_target",
+    "accepted": 0,
+    "uncertain": false,
+    "unsent_offset": 0
+  },
+  {
+    "case": "confirmed_zero_fallback",
+    "sent": 15,
+    "route": "keyboard",
+    "receiver": {
+      "pid": 7095,
+      "active": true,
+      "focus": true,
+      "text": "\u65e0\u76ee\u6807 fallback \u03a9\u3002",
+      "preedit_length": 0,
+      "key_results": [],
+      "module": null,
+      "owned_events": [
+        {
+          "type": "8",
+          "keyval": 16803296,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "9",
+          "keyval": 16803296,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "8",
+          "keyval": 16807662,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "9",
+          "keyval": 16807662,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "8",
+          "keyval": 16803847,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "9",
+          "keyval": 16803847,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "8",
+          "keyval": 16777248,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "9",
+          "keyval": 16777248,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "8",
+          "keyval": 16777318,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "9",
+          "keyval": 16777318,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "8",
+          "keyval": 16777313,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "9",
+          "keyval": 16777313,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "8",
+          "keyval": 16777324,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "9",
+          "keyval": 16777324,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "8",
+          "keyval": 16777324,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "9",
+          "keyval": 16777324,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "8",
+          "keyval": 16777314,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "9",
+          "keyval": 16777314,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "8",
+          "keyval": 16777313,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "9",
+          "keyval": 16777313,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "8",
+          "keyval": 16777315,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "9",
+          "keyval": 16777315,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "8",
+          "keyval": 16777323,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "9",
+          "keyval": 16777323,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "8",
+          "keyval": 16777248,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "9",
+          "keyval": 16777248,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "8",
+          "keyval": 16778153,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "9",
+          "keyval": 16778153,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "8",
+          "keyval": 16789506,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "9",
+          "keyval": 16789506,
+          "hardware_keycode": 248
+        }
+      ]
+    }
+  },
+  {
+    "case": "actual_fcitx_result",
+    "code": "no_target",
+    "accepted": 0,
+    "uncertain": false,
+    "unsent_offset": 0
+  },
+  {
+    "case": "cancel_after_fallback_prefix",
+    "code": "input_cancelled",
+    "attempts": 0,
+    "route": null,
+    "receiver": {
+      "pid": 7095,
+      "active": true,
+      "focus": true,
+      "text": "\u65e0\u76ee\u6807 fallback \u03a9\u3002\u7532",
+      "preedit_length": 0,
+      "key_results": [],
+      "module": null,
+      "owned_events": [
+        {
+          "type": "8",
+          "keyval": 16803296,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "9",
+          "keyval": 16803296,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "8",
+          "keyval": 16807662,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "9",
+          "keyval": 16807662,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "8",
+          "keyval": 16803847,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "9",
+          "keyval": 16803847,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "8",
+          "keyval": 16777248,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "9",
+          "keyval": 16777248,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "8",
+          "keyval": 16777318,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "9",
+          "keyval": 16777318,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "8",
+          "keyval": 16777313,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "9",
+          "keyval": 16777313,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "8",
+          "keyval": 16777324,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "9",
+          "keyval": 16777324,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "8",
+          "keyval": 16777324,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "9",
+          "keyval": 16777324,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "8",
+          "keyval": 16777314,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "9",
+          "keyval": 16777314,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "8",
+          "keyval": 16777313,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "9",
+          "keyval": 16777313,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "8",
+          "keyval": 16777315,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "9",
+          "keyval": 16777315,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "8",
+          "keyval": 16777323,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "9",
+          "keyval": 16777323,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "8",
+          "keyval": 16777248,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "9",
+          "keyval": 16777248,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "8",
+          "keyval": 16778153,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "9",
+          "keyval": 16778153,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "8",
+          "keyval": 16789506,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "9",
+          "keyval": 16789506,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "8",
+          "keyval": 16807218,
+          "hardware_keycode": 248
+        },
+        {
+          "type": "9",
+          "keyval": 16807218,
+          "hardware_keycode": 248
+        }
+      ]
+    }
+  },
+  {
+    "case": "actual_zero_fallback_passed",
+    "value": true
+  },
+  {
+    "case": "actor_exit",
+    "exit": 0
+  },
+  {
+    "case": "daemon_exit",
+    "exit": 0
+  },
+  {
+    "case": "hints_restored",
+    "value": true
+  }
+]

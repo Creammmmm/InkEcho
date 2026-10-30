@@ -1,0 +1,1956 @@
+{
+  "passed": true,
+  "execution_kind": "protocol_tests",
+  "artifact": {
+    "path": "/mnt/input/InkEcho.AppImage",
+    "sha256": "7488566c708d3fc12de665d35dfc7c26a1902908c9fec63e3c905b1446757a78",
+    "bytes": 104417784
+  },
+  "interpreter": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/usr/bin/python3.13",
+  "pytest_exit_code": 0,
+  "selected_nodeids": [
+    "tests/test_http_asr.py::test_explicit_http_wire_format_and_single_post[multipart]",
+    "tests/test_http_asr.py::test_explicit_http_wire_format_and_single_post[elevenlabs]",
+    "tests/test_http_asr.py::test_explicit_http_wire_format_and_single_post[mimo-asr]",
+    "tests/test_http_asr.py::test_explicit_http_wire_format_and_single_post[openrouter-asr]",
+    "tests/test_http_asr.py::test_billable_error_is_not_retried[429-rate_limit]",
+    "tests/test_http_asr.py::test_billable_error_is_not_retried[503-unavailable]",
+    "tests/test_http_asr.py::test_billable_error_is_not_retried[401-authentication]",
+    "tests/test_http_asr.py::test_known_text_model_or_invalid_audio_is_rejected_before_network",
+    "tests/test_http_asr.py::test_timeout_and_cancel_stop_without_retry_or_closing_borrowed_http",
+    "tests/test_http_asr.py::test_actual_local_tls_upload_and_final_parse[multipart]",
+    "tests/test_http_asr.py::test_actual_local_tls_upload_and_final_parse[elevenlabs]",
+    "tests/test_http_asr.py::test_actual_local_tls_upload_and_final_parse[mimo-asr]",
+    "tests/test_http_asr.py::test_actual_local_tls_upload_and_final_parse[openrouter-asr]",
+    "tests/test_http_asr.py::test_actual_local_tls_upload_and_final_parse[stepfun-http]",
+    "tests/test_http_asr.py::test_actual_local_tls_upload_and_final_parse[zhipu-asr]",
+    "tests/test_http_asr.py::test_actual_local_tls_upload_and_final_parse[minimax-asr]",
+    "tests/test_http_asr.py::test_actual_local_tls_upload_and_final_parse[zenmux-asr]",
+    "tests/test_http_asr.py::test_actual_local_tls_upload_and_final_parse[orca-audio]",
+    "tests/test_http_asr.py::test_audio_chat_requires_complete_stop_and_well_formed_message[None-mimo-asr]",
+    "tests/test_http_asr.py::test_audio_chat_requires_complete_stop_and_well_formed_message[None-orca-audio]",
+    "tests/test_http_asr.py::test_audio_chat_requires_complete_stop_and_well_formed_message[choice1-mimo-asr]",
+    "tests/test_http_asr.py::test_audio_chat_requires_complete_stop_and_well_formed_message[choice1-orca-audio]",
+    "tests/test_http_asr.py::test_audio_chat_requires_complete_stop_and_well_formed_message[choice2-mimo-asr]",
+    "tests/test_http_asr.py::test_audio_chat_requires_complete_stop_and_well_formed_message[choice2-orca-audio]",
+    "tests/test_http_asr.py::test_audio_chat_requires_complete_stop_and_well_formed_message[choice3-mimo-asr]",
+    "tests/test_http_asr.py::test_audio_chat_requires_complete_stop_and_well_formed_message[choice3-orca-audio]",
+    "tests/test_http_asr.py::test_audio_chat_requires_complete_stop_and_well_formed_message[choice4-mimo-asr]",
+    "tests/test_http_asr.py::test_audio_chat_requires_complete_stop_and_well_formed_message[choice4-orca-audio]",
+    "tests/test_http_asr.py::test_audio_chat_requires_complete_stop_and_well_formed_message[choice5-mimo-asr]",
+    "tests/test_http_asr.py::test_audio_chat_requires_complete_stop_and_well_formed_message[choice5-orca-audio]",
+    "tests/test_http_asr.py::test_audio_chat_requires_complete_stop_and_well_formed_message[choice6-mimo-asr]",
+    "tests/test_http_asr.py::test_audio_chat_requires_complete_stop_and_well_formed_message[choice6-orca-audio]",
+    "tests/test_http_asr.py::test_audio_chat_requires_complete_stop_and_well_formed_message[choice7-mimo-asr]",
+    "tests/test_http_asr.py::test_audio_chat_requires_complete_stop_and_well_formed_message[choice7-orca-audio]",
+    "tests/test_http_asr.py::test_zhipu_duration_limit_prevents_request",
+    "tests/test_http_asr.py::test_actual_local_tls_vendor_form_controls[zhipu-asr-parameters0]",
+    "tests/test_http_asr.py::test_actual_local_tls_vendor_form_controls[stepfun-http-parameters1]",
+    "tests/test_http_asr.py::test_actual_local_tls_vendor_form_controls[minimax-asr-parameters2]",
+    "tests/test_http_asr.py::test_zenmux_json_boolean_option_is_not_stringified",
+    "tests/test_step_realtime.py::test_actual_wss_manual_commit_returns_only_matched_final[normal]",
+    "tests/test_step_realtime.py::test_actual_wss_manual_commit_returns_only_matched_final[optional_metadata]",
+    "tests/test_step_realtime.py::test_failures_do_not_promote_partial_or_reconnect[start_timeout-timeout]",
+    "tests/test_step_realtime.py::test_failures_do_not_promote_partial_or_reconnect[finish_timeout-timeout]",
+    "tests/test_step_realtime.py::test_failures_do_not_promote_partial_or_reconnect[vad-response]",
+    "tests/test_step_realtime.py::test_failures_do_not_promote_partial_or_reconnect[missing_ack-response]",
+    "tests/test_step_realtime.py::test_failures_do_not_promote_partial_or_reconnect[wrong_item-response]",
+    "tests/test_step_realtime.py::test_failures_do_not_promote_partial_or_reconnect[bool_index-response]",
+    "tests/test_step_realtime.py::test_failures_do_not_promote_partial_or_reconnect[early_completed-response]",
+    "tests/test_step_realtime.py::test_failures_do_not_promote_partial_or_reconnect[empty-empty]",
+    "tests/test_step_realtime.py::test_cancel_before_finish_sends_no_commit",
+    "tests/test_step_realtime.py::test_queue_is_bounded_and_config_rejects_wrong_sample_rate_or_language",
+    "tests/test_step_realtime.py::test_config_requires_explicit_step_asr_protocol",
+    "tests/test_step_realtime.py::test_waiting_for_commit_result_respects_cancel_epoch_and_absolute_deadline[cancel]",
+    "tests/test_step_realtime.py::test_waiting_for_commit_result_respects_cancel_epoch_and_absolute_deadline[inactive]",
+    "tests/test_step_realtime.py::test_waiting_for_commit_result_respects_cancel_epoch_and_absolute_deadline[deadline]",
+    "tests/test_dashscope_realtime.py::test_out_of_order_finals_are_aggregated_once_after_task_finished[normal]",
+    "tests/test_dashscope_realtime.py::test_out_of_order_finals_are_aggregated_once_after_task_finished[duplicate]",
+    "tests/test_dashscope_realtime.py::test_out_of_order_finals_are_aggregated_once_after_task_finished[heartbeat]",
+    "tests/test_dashscope_realtime.py::test_protocol_failures_never_return_partial_or_reconnect[wrong_task-response]",
+    "tests/test_dashscope_realtime.py::test_protocol_failures_never_return_partial_or_reconnect[start_timeout-timeout]",
+    "tests/test_dashscope_realtime.py::test_protocol_failures_never_return_partial_or_reconnect[finish_timeout-timeout]",
+    "tests/test_dashscope_realtime.py::test_protocol_failures_never_return_partial_or_reconnect[early_finished-response]",
+    "tests/test_dashscope_realtime.py::test_protocol_failures_never_return_partial_or_reconnect[remote_error-unavailable]",
+    "tests/test_dashscope_realtime.py::test_protocol_failures_never_return_partial_or_reconnect[close-network]",
+    "tests/test_dashscope_realtime.py::test_protocol_failures_never_return_partial_or_reconnect[conflict-response]",
+    "tests/test_dashscope_realtime.py::test_protocol_failures_never_return_partial_or_reconnect[overlap-response]",
+    "tests/test_dashscope_realtime.py::test_protocol_failures_never_return_partial_or_reconnect[unfinished-response]",
+    "tests/test_dashscope_realtime.py::test_protocol_failures_never_return_partial_or_reconnect[empty-empty]",
+    "tests/test_dashscope_realtime.py::test_pending_task_cancels_and_expires_without_result[cancel]",
+    "tests/test_dashscope_realtime.py::test_pending_task_cancels_and_expires_without_result[inactive]",
+    "tests/test_dashscope_realtime.py::test_pending_task_cancels_and_expires_without_result[deadline]",
+    "tests/test_dashscope_realtime.py::test_explicit_registry_config_and_no_8k_in_16k_adapter",
+    "tests/test_signed_asr.py::test_xfyun_revisions_do_not_resurrect_superseded_text",
+    "tests/test_signed_asr.py::test_xfyun_missing_or_out_of_order_revision_fails[2]",
+    "tests/test_signed_asr.py::test_xfyun_missing_or_out_of_order_revision_fails[3]",
+    "tests/test_signed_asr.py::test_xfyun_sid_is_optional_after_first_response",
+    "tests/test_signed_asr.py::test_volc_final_flag_not_sequence_sign[2-0]",
+    "tests/test_signed_asr.py::test_volc_final_flag_not_sequence_sign[3-3]",
+    "tests/test_signed_asr.py::test_volc_final_flag_not_sequence_sign[3--3]",
+    "tests/test_signed_asr.py::test_volc_client_final_has_no_sequence",
+    "tests/test_signed_asr.py::test_volc_decoder_rejects_malformed_and_expansion[truncated]",
+    "tests/test_signed_asr.py::test_volc_decoder_rejects_malformed_and_expansion[extra]",
+    "tests/test_signed_asr.py::test_volc_decoder_rejects_malformed_and_expansion[bomb]",
+    "tests/test_signed_asr.py::test_volc_decoder_rejects_malformed_and_expansion[text]",
+    "tests/test_signed_asr.py::test_volc_decoder_rejects_malformed_and_expansion[flags]",
+    "tests/test_signed_asr.py::test_xfyun_sequence_base_is_locked[0]",
+    "tests/test_signed_asr.py::test_xfyun_sequence_base_is_locked[1]",
+    "tests/test_signed_asr.py::test_signed_protocol_real_wss_frames_and_exact_pcm[xfyun]",
+    "tests/test_signed_asr.py::test_signed_protocol_real_wss_frames_and_exact_pcm[tencent]",
+    "tests/test_signed_asr.py::test_signed_protocol_real_wss_frames_and_exact_pcm[volc]",
+    "tests/test_signed_asr.py::test_signed_protocol_timeout_never_promotes_partial[xfyun]",
+    "tests/test_signed_asr.py::test_signed_protocol_timeout_never_promotes_partial[tencent]",
+    "tests/test_signed_asr.py::test_signed_protocol_timeout_never_promotes_partial[volc]",
+    "tests/test_signed_asr.py::test_signed_protocol_cancel_expiry_deadline_no_late_success[cancel-xfyun]",
+    "tests/test_signed_asr.py::test_signed_protocol_cancel_expiry_deadline_no_late_success[cancel-tencent]",
+    "tests/test_signed_asr.py::test_signed_protocol_cancel_expiry_deadline_no_late_success[cancel-volc]",
+    "tests/test_signed_asr.py::test_signed_protocol_cancel_expiry_deadline_no_late_success[inactive-xfyun]",
+    "tests/test_signed_asr.py::test_signed_protocol_cancel_expiry_deadline_no_late_success[inactive-tencent]",
+    "tests/test_signed_asr.py::test_signed_protocol_cancel_expiry_deadline_no_late_success[inactive-volc]",
+    "tests/test_signed_asr.py::test_signed_protocol_cancel_expiry_deadline_no_late_success[deadline-xfyun]",
+    "tests/test_signed_asr.py::test_signed_protocol_cancel_expiry_deadline_no_late_success[deadline-tencent]",
+    "tests/test_signed_asr.py::test_signed_protocol_cancel_expiry_deadline_no_late_success[deadline-volc]",
+    "tests/test_signed_asr.py::test_volc_app_access_headers_over_real_wss",
+    "tests/test_signed_asr.py::test_signed_remote_error_or_close_never_returns_final[close-xfyun]",
+    "tests/test_signed_asr.py::test_signed_remote_error_or_close_never_returns_final[close-tencent]",
+    "tests/test_signed_asr.py::test_signed_remote_error_or_close_never_returns_final[close-volc]",
+    "tests/test_signed_asr.py::test_signed_remote_error_or_close_never_returns_final[error-xfyun]",
+    "tests/test_signed_asr.py::test_signed_remote_error_or_close_never_returns_final[error-tencent]",
+    "tests/test_signed_asr.py::test_signed_remote_error_or_close_never_returns_final[error-volc]",
+    "tests/test_signed_asr.py::test_signed_mismatched_identity_is_rejected[xfyun]",
+    "tests/test_signed_asr.py::test_signed_mismatched_identity_is_rejected[tencent]",
+    "tests/test_signed_asr.py::test_xfyun_sixty_second_limit_rejects_before_queue_write",
+    "tests/test_signed_asr.py::test_fixed_signatures_cover_path_date_sorting_and_tampering",
+    "tests/test_signed_asr.py::test_signature_configs_reject_malformed_json_types[value0]",
+    "tests/test_signed_asr.py::test_signature_configs_reject_malformed_json_types[value1]",
+    "tests/test_signed_asr.py::test_signature_configs_reject_malformed_json_types[True]",
+    "tests/test_signed_asr.py::test_signature_configs_reject_malformed_json_types[None]",
+    "tests/test_polish_protocols.py::test_native_request_and_finality_over_actual_tls[False-responses]",
+    "tests/test_polish_protocols.py::test_native_request_and_finality_over_actual_tls[False-messages]",
+    "tests/test_polish_protocols.py::test_native_request_and_finality_over_actual_tls[False-gemini]",
+    "tests/test_polish_protocols.py::test_native_request_and_finality_over_actual_tls[True-responses]",
+    "tests/test_polish_protocols.py::test_native_request_and_finality_over_actual_tls[True-messages]",
+    "tests/test_polish_protocols.py::test_native_request_and_finality_over_actual_tls[True-gemini]",
+    "tests/test_polish_protocols.py::test_native_partial_failure_never_replays[eof-responses]",
+    "tests/test_polish_protocols.py::test_native_partial_failure_never_replays[eof-messages]",
+    "tests/test_polish_protocols.py::test_native_partial_failure_never_replays[eof-gemini]",
+    "tests/test_polish_protocols.py::test_native_partial_failure_never_replays[error-responses]",
+    "tests/test_polish_protocols.py::test_native_partial_failure_never_replays[error-messages]",
+    "tests/test_polish_protocols.py::test_native_partial_failure_never_replays[error-gemini]",
+    "tests/test_polish_protocols.py::test_native_partial_failure_never_replays[truncated-responses]",
+    "tests/test_polish_protocols.py::test_native_partial_failure_never_replays[truncated-messages]",
+    "tests/test_polish_protocols.py::test_native_partial_failure_never_replays[truncated-gemini]",
+    "tests/test_polish_protocols.py::test_gemini_model_cannot_escape_selected_origin[../escape]",
+    "tests/test_polish_protocols.py::test_gemini_model_cannot_escape_selected_origin[models/../escape]",
+    "tests/test_polish_protocols.py::test_gemini_model_cannot_escape_selected_origin[model?key=bad]",
+    "tests/test_polish_protocols.py::test_gemini_model_cannot_escape_selected_origin[models/models/gemini]",
+    "tests/test_polish_protocols.py::test_gemini_model_cannot_escape_selected_origin[x#fragment]",
+    "tests/test_polish_protocols.py::test_gemini_model_cannot_escape_selected_origin[https://host/x]",
+    "tests/test_polish_protocols.py::test_responses_binds_output_before_delivery[unregistered]",
+    "tests/test_polish_protocols.py::test_responses_binds_output_before_delivery[reasoning]",
+    "tests/test_polish_protocols.py::test_responses_binds_output_before_delivery[function_call]",
+    "tests/test_polish_protocols.py::test_responses_binds_output_before_delivery[refusal]",
+    "tests/test_polish_protocols.py::test_responses_binds_output_before_delivery[wrong_id]",
+    "tests/test_polish_protocols.py::test_responses_binds_output_before_delivery[wrong_part]",
+    "tests/test_polish_protocols.py::test_native_discovery_headers_and_protocol_models[responses]",
+    "tests/test_polish_protocols.py::test_native_discovery_headers_and_protocol_models[messages]",
+    "tests/test_polish_protocols.py::test_native_discovery_headers_and_protocol_models[gemini]",
+    "tests/test_polish_protocols.py::test_native_bad_event_type_is_sanitized[responses-value0]",
+    "tests/test_polish_protocols.py::test_native_bad_event_type_is_sanitized[responses-value1]",
+    "tests/test_polish_protocols.py::test_native_bad_event_type_is_sanitized[responses-None]",
+    "tests/test_polish_protocols.py::test_native_bad_event_type_is_sanitized[responses-True]",
+    "tests/test_polish_protocols.py::test_native_bad_event_type_is_sanitized[responses-7]",
+    "tests/test_polish_protocols.py::test_native_bad_event_type_is_sanitized[messages-value0]",
+    "tests/test_polish_protocols.py::test_native_bad_event_type_is_sanitized[messages-value1]",
+    "tests/test_polish_protocols.py::test_native_bad_event_type_is_sanitized[messages-None]",
+    "tests/test_polish_protocols.py::test_native_bad_event_type_is_sanitized[messages-True]",
+    "tests/test_polish_protocols.py::test_native_bad_event_type_is_sanitized[messages-7]",
+    "tests/test_polish_protocols.py::test_messages_block_order_and_cumulative_usage_over_tls[index_gap]",
+    "tests/test_polish_protocols.py::test_messages_block_order_and_cumulative_usage_over_tls[overlap]",
+    "tests/test_polish_protocols.py::test_messages_block_order_and_cumulative_usage_over_tls[after_end]",
+    "tests/test_polish_protocols.py::test_messages_block_order_and_cumulative_usage_over_tls[usage_type]",
+    "tests/test_polish_protocols.py::test_messages_block_order_and_cumulative_usage_over_tls[multiple_delta]",
+    "tests/test_polish_protocols.py::test_native_callback_cancel_keeps_prefix_without_retry[responses]",
+    "tests/test_polish_protocols.py::test_native_callback_cancel_keeps_prefix_without_retry[messages]",
+    "tests/test_polish_protocols.py::test_native_callback_cancel_keeps_prefix_without_retry[gemini]",
+    "tests/test_polish_protocols.py::test_native_numeric_controls_reject_bad_types_before_network[True-responses]",
+    "tests/test_polish_protocols.py::test_native_numeric_controls_reject_bad_types_before_network[True-messages]",
+    "tests/test_polish_protocols.py::test_native_numeric_controls_reject_bad_types_before_network[True-gemini]",
+    "tests/test_polish_protocols.py::test_native_numeric_controls_reject_bad_types_before_network[1-responses]",
+    "tests/test_polish_protocols.py::test_native_numeric_controls_reject_bad_types_before_network[1-messages]",
+    "tests/test_polish_protocols.py::test_native_numeric_controls_reject_bad_types_before_network[1-gemini]",
+    "tests/test_polish_protocols.py::test_native_numeric_controls_reject_bad_types_before_network[None-responses]",
+    "tests/test_polish_protocols.py::test_native_numeric_controls_reject_bad_types_before_network[None-messages]",
+    "tests/test_polish_protocols.py::test_native_numeric_controls_reject_bad_types_before_network[None-gemini]",
+    "tests/test_polish_protocols.py::test_native_numeric_controls_reject_bad_types_before_network[nan-responses]",
+    "tests/test_polish_protocols.py::test_native_numeric_controls_reject_bad_types_before_network[nan-messages]",
+    "tests/test_polish_protocols.py::test_native_numeric_controls_reject_bad_types_before_network[nan-gemini]",
+    "tests/test_polish_protocols.py::test_native_numeric_controls_reject_bad_types_before_network[inf-responses]",
+    "tests/test_polish_protocols.py::test_native_numeric_controls_reject_bad_types_before_network[inf-messages]",
+    "tests/test_polish_protocols.py::test_native_numeric_controls_reject_bad_types_before_network[inf-gemini]",
+    "tests/test_polish_protocols.py::test_native_first_text_precedes_final_response_and_timeout_keeps_prefix[responses]",
+    "tests/test_polish_protocols.py::test_native_first_text_precedes_final_response_and_timeout_keeps_prefix[messages]",
+    "tests/test_polish_protocols.py::test_native_first_text_precedes_final_response_and_timeout_keeps_prefix[gemini]",
+    "tests/test_polish_protocols.py::test_native_nonstream_text_limit[responses]",
+    "tests/test_polish_protocols.py::test_native_nonstream_text_limit[messages]",
+    "tests/test_polish_protocols.py::test_native_nonstream_text_limit[gemini]",
+    "tests/test_polish_protocols.py::test_messages_bad_start_fields_are_sanitized[type-value0]",
+    "tests/test_polish_protocols.py::test_messages_bad_start_fields_are_sanitized[type-value1]",
+    "tests/test_polish_protocols.py::test_messages_bad_start_fields_are_sanitized[usage-bad]",
+    "tests/test_polish_protocols.py::test_messages_bad_start_fields_are_sanitized[usage-value3]",
+    "tests/test_polish_protocols.py::test_messages_bad_block_type_is_sanitized[kind0]",
+    "tests/test_polish_protocols.py::test_messages_bad_block_type_is_sanitized[kind1]",
+    "tests/test_polish_protocols.py::test_messages_bad_block_type_is_sanitized[None]",
+    "tests/test_polish_protocols.py::test_messages_bad_block_type_is_sanitized[7]",
+    "tests/test_polish_protocols.py::test_gemini_discovery_invalid_capability_type_is_sanitized[None]",
+    "tests/test_polish_protocols.py::test_gemini_discovery_invalid_capability_type_is_sanitized[generateContent]",
+    "tests/test_polish_protocols.py::test_gemini_discovery_invalid_capability_type_is_sanitized[methods2]",
+    "tests/test_polish_protocols.py::test_gemini_discovery_invalid_capability_type_is_sanitized[methods3]",
+    "tests/test_polish_protocols.py::test_native_model_pagination_does_not_expose_keys[messages]",
+    "tests/test_polish_protocols.py::test_native_model_pagination_does_not_expose_keys[gemini]",
+    "tests/test_polish_protocols.py::test_chat_vendor_presets_use_explicit_chat_wire[custom-chat]",
+    "tests/test_polish_protocols.py::test_chat_vendor_presets_use_explicit_chat_wire[openai-chat]",
+    "tests/test_polish_protocols.py::test_chat_vendor_presets_use_explicit_chat_wire[deepseek-chat]",
+    "tests/test_polish_protocols.py::test_chat_vendor_presets_use_explicit_chat_wire[ark-chat]",
+    "tests/test_polish_protocols.py::test_chat_vendor_presets_use_explicit_chat_wire[siliconflow-chat]",
+    "tests/test_polish_protocols.py::test_chat_vendor_presets_use_explicit_chat_wire[atlascloud-chat]",
+    "tests/test_polish_protocols.py::test_chat_vendor_presets_use_explicit_chat_wire[mimo-chat]",
+    "tests/test_polish_protocols.py::test_chat_vendor_presets_use_explicit_chat_wire[cometapi-chat]",
+    "tests/test_polish_protocols.py::test_chat_vendor_presets_use_explicit_chat_wire[openrouter-chat]",
+    "tests/test_polish_protocols.py::test_chat_vendor_presets_use_explicit_chat_wire[requesty-chat]",
+    "tests/test_polish_protocols.py::test_chat_vendor_presets_use_explicit_chat_wire[api-route-chat]",
+    "tests/test_polish_protocols.py::test_chat_vendor_presets_use_explicit_chat_wire[orca-chat]",
+    "tests/test_polish_protocols.py::test_chat_vendor_presets_use_explicit_chat_wire[bailian-chat]",
+    "tests/test_polish_protocols.py::test_chat_vendor_presets_use_explicit_chat_wire[codingplanx-chat]",
+    "tests/test_polish_protocols.py::test_chat_vendor_presets_use_explicit_chat_wire[minimax-chat]",
+    "tests/test_polish_protocols.py::test_chat_vendor_presets_use_explicit_chat_wire[stepfun-chat]",
+    "tests/test_polish_protocols.py::test_chat_vendor_presets_use_explicit_chat_wire[opencode-chat]",
+    "tests/test_polish_protocols.py::test_chat_vendor_presets_use_explicit_chat_wire[tencent-tokenhub]",
+    "tests/test_polish_protocols.py::test_responses_interleaved_output_items_fail_before_second_delivery",
+    "tests/test_polish_protocols.py::test_messages_missing_required_pagination_token_is_not_success[None]",
+    "tests/test_polish_protocols.py::test_messages_missing_required_pagination_token_is_not_success[]",
+    "tests/test_polish_protocols.py::test_messages_missing_required_pagination_token_is_not_success[token2]",
+    "tests/test_polish_protocols.py::test_messages_missing_required_pagination_token_is_not_success[7]",
+    "tests/test_polish_protocols.py::test_responses_bad_binding_over_tls_never_calls_delivery[unregistered]",
+    "tests/test_polish_protocols.py::test_responses_bad_binding_over_tls_never_calls_delivery[wrong_item]",
+    "tests/test_polish_protocols.py::test_responses_bad_binding_over_tls_never_calls_delivery[part_gap]"
+  ],
+  "counts": {
+    "passed": 226,
+    "skipped": 0,
+    "failed": 0
+  },
+  "before_audit": {
+    "runtime_kind": "package",
+    "version": "0.12.0",
+    "inventory": {
+      "inventory_application": "0.12.0",
+      "inventory_files_verified": 3707,
+      "inventory_links_verified": 1048,
+      "application_files_match_source": 94,
+      "websockets_license_copies_verified": 2
+    },
+    "origins": {
+      "inkecho": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/__init__.py",
+        "sha256": "c1cdbcdcb6245b9211445ab956187fa1d59a2c7bbfb6b84b0034832b41c8615c"
+      },
+      "inkecho.app": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/app.py",
+        "sha256": "5c65916904480e81e1d0e26e5671c9031ce35fa10a9e9c098664fe99b9c72f49"
+      },
+      "inkecho.audio": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/audio.py",
+        "sha256": "7a7c52be4465858476f0b85e12832fa6846aed0f1355ab1bb98efbe1febfdd53"
+      },
+      "inkecho.config": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/config.py",
+        "sha256": "1134540f4b469dd828aa8006f64ac1800f7a4e3806c4d1b626e7f52437f8baeb"
+      },
+      "inkecho.providers": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/providers.py",
+        "sha256": "0e4015a5e5b3a7793e47e48f0f14399933c5fdd352411cc9b3d2aa87f6419867"
+      },
+      "inkecho.provider_capability": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/provider_capability.py",
+        "sha256": "6c8b5627c0bc56e1339bf63f8ea2cb12ea2c20b72d3a0e7ae6e5cf9feb9079c0"
+      },
+      "inkecho.realtime": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/realtime.py",
+        "sha256": "c9a997a59e250e1938e4478e9a125cca25d68665d3607b7d54dd8c31f78e31da"
+      },
+      "inkecho.polish_stream": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/polish_stream.py",
+        "sha256": "47588cd3b4e546e6a8f6eef1057208d32c49ce6cee564919e1f42660b10582dd"
+      },
+      "inkecho.streaming_output": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/streaming_output.py",
+        "sha256": "845b44fc09633ed4aeaafb1fe47a894ee77508e559d13f02f0be9090937f919f"
+      },
+      "inkecho.ui.providers": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/ui/providers.py",
+        "sha256": "29b8538d86cbfcc07fc64327f23e067f8fcf56dea14a81ab290da7365ab20420"
+      },
+      "inkecho.runtime": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/runtime.py",
+        "sha256": "28508099d1811f27562b548c71403c85601bab2e961a68db77ca72692ea798bf"
+      },
+      "inkecho.security": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/security.py",
+        "sha256": "be28a62da5ae8c38456b60bfb62a3ea8692bddbbcf07ce8584edd43b07141219"
+      },
+      "inkecho.platform.keyboard": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/platform/keyboard.py",
+        "sha256": "67000fe0de6592017796ebd07cb47dc0e187a1d24457ade68cfe4243cde5920e"
+      },
+      "inkecho.platform.eis": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/platform/eis.py",
+        "sha256": "a9343b0e4fd84c3ba8adda37e7fc5f9d7554eb7b78aab5179851587bfb0cfd19"
+      },
+      "inkecho.platform.wayland_keyboard": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/platform/wayland_keyboard.py",
+        "sha256": "bd76f5d8bb972fce9a7c3bd0dcbfc44fc61f128ab3e6b27bbe7415da4eff29bf"
+      },
+      "inkecho.platform.wayland_keymap": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/platform/wayland_keymap.py",
+        "sha256": "884d12541b48e434f3eb087f339aa71e87b1d506fd8978484b969b342dc3260a"
+      },
+      "inkecho.platform.wayland_worker": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/platform/wayland_worker.py",
+        "sha256": "45330a05e596c9b280d579457cc37bf7af7b4180762a7a1c3a78ef3ecb68c6eb"
+      },
+      "websockets": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/websockets/__init__.py",
+        "sha256": "002d87abddae49cfd63a8f7fc6f213a46b2127b0f2d0c7799b6ff2c2c752b7f6"
+      },
+      "inkecho.provider_catalog": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/provider_catalog.py",
+        "sha256": "79ff7b639c9b91df6697edef433bdfa40eb16fe2d1207722325a231759038dc6"
+      },
+      "inkecho.provider_credentials": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/provider_credentials.py",
+        "sha256": "5169894c590fee0b19230fce2be2f0ebb293c3a87d3bdaae42eeef94d1cc4949"
+      },
+      "inkecho.http_asr": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/http_asr.py",
+        "sha256": "af1f08169b572a44022151835ee0b83176248984bbcdb7db382499abc4a6574b"
+      },
+      "inkecho.asr_streaming": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/asr_streaming.py",
+        "sha256": "a6426173cadd5a159679cf4032989190c11a33c98d57ab7bb59712fc8324a3f4"
+      },
+      "inkecho.qwen_vad": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/qwen_vad.py",
+        "sha256": "6e05a8215585fec7a66fbb3bdfc31a0afc32bf4ded4878f67b38eb0a59cc6ed5"
+      },
+      "inkecho.asr_wire": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/asr_wire.py",
+        "sha256": "a64a604d47249206cdd66fa964a48085701782fbebf9b65b2627f2eeaf2f4414"
+      },
+      "inkecho.step_realtime": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/step_realtime.py",
+        "sha256": "ceef9f800d279d582e6f71c257ebf04bdb32ac4cc55bf4c09c7712afa85c9267"
+      },
+      "inkecho.dashscope_realtime": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/dashscope_realtime.py",
+        "sha256": "c0544296c53747777e0963942c56c894038c0c4ce404283ca15059ca549482f2"
+      },
+      "inkecho.xfyun_realtime": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/xfyun_realtime.py",
+        "sha256": "5a7b11a16a921b1febcb0be6fd9ffe6af526ca79e18f000983fdd05d9acb6552"
+      },
+      "inkecho.tencent_realtime": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/tencent_realtime.py",
+        "sha256": "86411b1803d003509773dd99b01fa344a6cdde492fecea61d4df7e0769c1dd56"
+      },
+      "inkecho.volc_realtime": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/volc_realtime.py",
+        "sha256": "f6b05b87639636db0b6ca26525eda6e8b1c9dce6e4dfe1e326df541675ab7012"
+      },
+      "inkecho.polish_protocols": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/polish_protocols.py",
+        "sha256": "c1fb15a9e1f42496e597f5c6f8b470650d7f36bdaffb7074970097986df713dc"
+      },
+      "inkecho.platform.hybrid_keyboard": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/platform/hybrid_keyboard.py",
+        "sha256": "038c50fdd70f1c6636a913a196b03442944a150cc2c5986d15ad7a0ab58348c6"
+      }
+    },
+    "application_source_files": {
+      "inkecho/__init__.py": "c1cdbcdcb6245b9211445ab956187fa1d59a2c7bbfb6b84b0034832b41c8615c",
+      "inkecho/__main__.py": "44670f4abc2676f95caae33639e3ef26005f388bfbb3a801757a54e29cac6d8d",
+      "inkecho/app.py": "5c65916904480e81e1d0e26e5671c9031ce35fa10a9e9c098664fe99b9c72f49",
+      "inkecho/asr_streaming.py": "a6426173cadd5a159679cf4032989190c11a33c98d57ab7bb59712fc8324a3f4",
+      "inkecho/asr_wire.py": "a64a604d47249206cdd66fa964a48085701782fbebf9b65b2627f2eeaf2f4414",
+      "inkecho/audio.py": "7a7c52be4465858476f0b85e12832fa6846aed0f1355ab1bb98efbe1febfdd53",
+      "inkecho/billing.py": "e84564487afa285eae151d24a0fc5827a1a6609ca6e6865d75a6afa241c6ba31",
+      "inkecho/config.py": "1134540f4b469dd828aa8006f64ac1800f7a4e3806c4d1b626e7f52437f8baeb",
+      "inkecho/core.py": "c3fbaccb189a8d43eaaaff88c824968538a29456c43ab750db4d113333964f4b",
+      "inkecho/dashscope_realtime.py": "c0544296c53747777e0963942c56c894038c0c4ce404283ca15059ca549482f2",
+      "inkecho/http_asr.py": "af1f08169b572a44022151835ee0b83176248984bbcdb7db382499abc4a6574b",
+      "inkecho/integration.py": "306110cc262a73793f4b7f487409cbdb11d90409fdee60b4d2e5eabc470c848b",
+      "inkecho/logging.py": "b89082aa532ee7b03732e738be61098694ca22f1e58c154c9324cdd63541dcc3",
+      "inkecho/performance.py": "223a6dcef338533562c35fb916ef6e4a5e95d9d336c8c15e1bdb3e983306c3d4",
+      "inkecho/polish_protocols.py": "c1fb15a9e1f42496e597f5c6f8b470650d7f36bdaffb7074970097986df713dc",
+      "inkecho/polish_stream.py": "47588cd3b4e546e6a8f6eef1057208d32c49ce6cee564919e1f42660b10582dd",
+      "inkecho/provider_capability.py": "6c8b5627c0bc56e1339bf63f8ea2cb12ea2c20b72d3a0e7ae6e5cf9feb9079c0",
+      "inkecho/provider_catalog.py": "79ff7b639c9b91df6697edef433bdfa40eb16fe2d1207722325a231759038dc6",
+      "inkecho/provider_credentials.py": "5169894c590fee0b19230fce2be2f0ebb293c3a87d3bdaae42eeef94d1cc4949",
+      "inkecho/provider_guidance.py": "af65fbe1aa0763046f4e68f5b71777d8fbe6a6d3b6395411171fdd1dc4aad18f",
+      "inkecho/providers.py": "0e4015a5e5b3a7793e47e48f0f14399933c5fdd352411cc9b3d2aa87f6419867",
+      "inkecho/qwen_vad.py": "6e05a8215585fec7a66fbb3bdfc31a0afc32bf4ded4878f67b38eb0a59cc6ed5",
+      "inkecho/realtime.py": "c9a997a59e250e1938e4478e9a125cca25d68665d3607b7d54dd8c31f78e31da",
+      "inkecho/runtime.py": "28508099d1811f27562b548c71403c85601bab2e961a68db77ca72692ea798bf",
+      "inkecho/security.py": "be28a62da5ae8c38456b60bfb62a3ea8692bddbbcf07ce8584edd43b07141219",
+      "inkecho/statistics.py": "b2e9f5a28e363c8fd021344190d484be86d11cfea274f0c5c300be1d25893771",
+      "inkecho/step_realtime.py": "ceef9f800d279d582e6f71c257ebf04bdb32ac4cc55bf4c09c7712afa85c9267",
+      "inkecho/streaming_output.py": "845b44fc09633ed4aeaafb1fe47a894ee77508e559d13f02f0be9090937f919f",
+      "inkecho/tencent_realtime.py": "86411b1803d003509773dd99b01fa344a6cdde492fecea61d4df7e0769c1dd56",
+      "inkecho/text_normalization.py": "81812f2c6157f310ddf4f14bbccb9afa165e7e001fa08497a74053551ff27c32",
+      "inkecho/text_units.py": "bd47edb0885ab4a8622bda70cca025458f4f2a68254b41065a6b1e62a1f06567",
+      "inkecho/updates.py": "b960196cc9cda2e36ffbe5125b5f1a25d5a1885724ac46f14f48ce1d3529e3e7",
+      "inkecho/volc_realtime.py": "f6b05b87639636db0b6ca26525eda6e8b1c9dce6e4dfe1e326df541675ab7012",
+      "inkecho/xfyun_realtime.py": "5a7b11a16a921b1febcb0be6fd9ffe6af526ca79e18f000983fdd05d9acb6552",
+      "inkecho/assets/inkecho-128.png": "e9f783e05fe0af7fa3c979adb72ac23fd1e08d3636e12bbb137dd28f7c4f9cde",
+      "inkecho/assets/inkecho-16.png": "0a8f26b907192e620403a6c9907d660f9014341016ad26d1cebbc156312ac499",
+      "inkecho/assets/inkecho-24.png": "f50bf2f9d3434c8a89fea5b2dcec0d8e72141e27d11df9f20f7fda73dd387932",
+      "inkecho/assets/inkecho-256.png": "f694df1872697f875d6e4c226e4f9dd39e20c2243dc3a10570330807600b7d2f",
+      "inkecho/assets/inkecho-32.png": "62ed206914638da5b256fdaffb7c999d81c79e474755b6e2146778fd133bd7ee",
+      "inkecho/assets/inkecho-48.png": "06f7f4e1cf6bf3f9aedbe71f5140ce0f91b1157ac3f81a91bc014a13d06d6e85",
+      "inkecho/assets/inkecho-512.png": "c9753f525db34349c34134e116cef9871126d267c5250844552aba1da3c05aa0",
+      "inkecho/assets/inkecho-64.png": "60e6a040d2e81574cdbd5315997e06b25a9a4cdb24502e3debae231cae0181d6",
+      "inkecho/assets/inkecho.png": "42449d99f4fb0f87bc14aaa89e68f118ef8568bdb53be8a1fc5bc177a45947a5",
+      "inkecho/platform/capabilities.py": "e50e1dd66420bad9072fff4da11e2063d71cba29be386431446cde0718cfdf8c",
+      "inkecho/platform/eis.py": "a9343b0e4fd84c3ba8adda37e7fc5f9d7554eb7b78aab5179851587bfb0cfd19",
+      "inkecho/platform/escape.py": "c111ee8666ee0c1a76b6383bd6c4f0ea4af5bec72a95b06e84571aa1740b7cc1",
+      "inkecho/platform/fcitx5.py": "cd75ab99acf78797fafe8d6711127349d2da8795fa3724c5ce898676083dd275",
+      "inkecho/platform/fcitx5_capability.py": "a8aa702a1339ee8c5a3909563ffcf5d4be6aa52c8d292c3f4b01fcac378895cf",
+      "inkecho/platform/fcitx5_install.py": "ecd9b0af0234d3c7cc3f10576b9014a10ea356d50f7dabba256ea5b54087d51a",
+      "inkecho/platform/fcitx5_staging.py": "1c71dcc660a808a0812bac8338e877bb577075d9147fdba421a9b1ab849d7f07",
+      "inkecho/platform/framework_detection.py": "119ebfaee65ce6a8b04e3652f9712c7916e57e73c64a37e3b59ac5844555033d",
+      "inkecho/platform/hotkeys.py": "b7987d18288b6eef925a32283e91fb03b77a1cced0f8ea5760a63f526ae024aa",
+      "inkecho/platform/hybrid_keyboard.py": "038c50fdd70f1c6636a913a196b03442944a150cc2c5986d15ad7a0ab58348c6",
+      "inkecho/platform/ibus.py": "02fdefd9b0ffeee15fe7da8c32e05f3d321eadcc73545e6e3cf400b687cc9dcf",
+      "inkecho/platform/ibus_extension.py": "52fbb8568b1f34231641632df68bea4c3e07b4216a4e936afb2aa8bbca2cc325",
+      "inkecho/platform/ibus_lifecycle.py": "f2345bef05a6a030076252456dc159120973660a8e0b172ef6582933454c1355",
+      "inkecho/platform/ibus_owned.py": "9bb43cd20929ddb5b67dce411b82403886fa8b9f95edc16f591a8c654286ae0b",
+      "inkecho/platform/ibus_owned_auto.py": "a1544f915d1606b05686640e8cdfaaa72d9ce547f9378aa63ea1cb8f0344af18",
+      "inkecho/platform/ibus_owned_default.py": "dcb5cf552776f3acc17a106ce74fcdb962621c95698eaf82c738985eba2957d2",
+      "inkecho/platform/keyboard.py": "67000fe0de6592017796ebd07cb47dc0e187a1d24457ade68cfe4243cde5920e",
+      "inkecho/platform/output_pacing.py": "024b3df0a8da6b79b8a13febbdfde7c84af02a3af9e1270ddb81a69e56f60d92",
+      "inkecho/platform/output_router.py": "056f534cc55e8f93d17c4bb87d2c4768dd50fe27e5d65eb93febeec561c36b7d",
+      "inkecho/platform/owned_asset_manifest.json": "bb31e48faed75bb30e4975864fceec3b70a05f64fc328a1a1ab2360bc07603df",
+      "inkecho/platform/owned_extension.py": "f4088b7c99bdf79cccc3b76ba73dfb24d2763485418a77e3407d0fc3c64b9761",
+      "inkecho/platform/owned_installation.py": "d784d8f4d47a29ecf4ed1457fd1c1f55fae03070db442bf30ffccf6960a08175",
+      "inkecho/platform/portal_escape.py": "80927f8ccd01dc6f596d388bd7224c0e93b6f52b36a018e420c72b23d1b295ce",
+      "inkecho/platform/wayland_keyboard.py": "bd76f5d8bb972fce9a7c3bd0dcbfc44fc61f128ab3e6b27bbe7415da4eff29bf",
+      "inkecho/platform/wayland_keymap.py": "884d12541b48e434f3eb087f339aa71e87b1d506fd8978484b969b342dc3260a",
+      "inkecho/platform/wayland_worker.py": "45330a05e596c9b280d579457cc37bf7af7b4180762a7a1c3a78ef3ecb68c6eb",
+      "inkecho/platform/x11_feedback.py": "cb4e58f12b9409a72f0b7ec9a0c39aeb6b49f53e5915f4e30e3e8d830df471ac",
+      "inkecho/ui/__init__.py": "0543b7f5a2e36d0dc827428d25d540e31b3aee74c5e32e3ee0f24e1493a6f078",
+      "inkecho/ui/dashboard.py": "a26fe54a05ee80623d348b5289b597976bcb903f51c40e3291ebb4e2f8dd93ce",
+      "inkecho/ui/information.py": "f187c262ba24134d11df38475930f44fa5e30534f6a2df6208f41f416c70eec8",
+      "inkecho/ui/notifications.py": "447110164fbca7cd735d59f8bb23254e55bcacd0fe66f0b929ce767affaec09f",
+      "inkecho/ui/overlay.py": "233d7ffc30a7383246592412eb890f82f8e42d289b5c4427fdae7b816f2a0c41",
+      "inkecho/ui/overlay_host.py": "3668000b648a9e18a35cb61737ab199d693519da296b6c43970ea475b53b03b8",
+      "inkecho/ui/overlay_proxy.py": "862c56b0d4fce32de6cdae36341bddf8dc533592624080ef21787f1fcb903501",
+      "inkecho/ui/prompts.py": "0ba01ac6adc99efa655e992407869f374edda349f6687edb96fe942985f22494",
+      "inkecho/ui/providers.py": "29b8538d86cbfcc07fc64327f23e067f8fcf56dea14a81ab290da7365ab20420",
+      "inkecho/ui/settings.py": "bf1c6b978e2aa3be3840d4ca7d7a97d74909dabc1bb6ea714dcb692012f4277a",
+      "inkecho/ui/widgets.py": "ff7bbaf57cd447d6589bad2bc2aea1890fa03ce0d66ec40804459654c3a74559",
+      "inkecho/ui/window.py": "7e640803ff59854057710042d75f140479e4660ff137280fd7f4e6ecbecb785c",
+      "inkecho/ui/workspace.py": "10074e238da0d628f37aacd8865ad28b39170289f1ad9ca1fbaaa0a0ec703b13",
+      "inkecho/platform/ibus_candidate/capability.js": "fcbaf3e7fd0184ca3141f3c4d811f7496ef753fd6282714ec128a26151a1c881",
+      "inkecho/platform/ibus_candidate/delivery_gate.js": "6900065ef4996dced1e451b7a0f14d744862e1da089e8474caf8d1789b9b9e6d",
+      "inkecho/platform/ibus_candidate/extension.js": "b9b762262dd38d3086f029747750a21cb8b62a46d73b05bf70c7fdc307a911b2",
+      "inkecho/platform/ibus_candidate/metadata.json": "c53d67c6b8d2e9769e7dcf0a3b6545dbc57673e8ea29a7e487bf55761c214317",
+      "inkecho/platform/ibus_owned_candidate/capability.js": "fcbaf3e7fd0184ca3141f3c4d811f7496ef753fd6282714ec128a26151a1c881",
+      "inkecho/platform/ibus_owned_candidate/delivery_gate.js": "6900065ef4996dced1e451b7a0f14d744862e1da089e8474caf8d1789b9b9e6d",
+      "inkecho/platform/ibus_owned_candidate/extension.js": "132e1b6d414863bc93191c649b7cac587709fc7dd83fd8551c59b5833ff3accd",
+      "inkecho/platform/ibus_owned_candidate/identity.js": "5a50a88cc6f08619b4742e2f1c269a2dce7a517ece32176270ad69f3ffc8e9ac",
+      "inkecho/platform/ibus_owned_candidate/metadata.json": "3affc5dde73c67f8e6638d8dd115b3f7b9504b86ac29af147365675d28824549",
+      "inkecho/platform/ibus_owned_candidate/owned_gate.js": "55980b3f06324b79dcfd58d1a69f9ee8e08466e6bf68b1a1916c0afa012561bd",
+      "inkecho/platform/ibus_owned_candidate/probe.js": "39adc6ccc1109bf7d9cae419314781164dccbf0a2f6d6a778888a15755a12dc4"
+    },
+    "frozen_source_root": "/mnt/input/frozen/src",
+    "production_behavior_modified": false
+  },
+  "after_audit": {
+    "runtime_kind": "package",
+    "version": "0.12.0",
+    "inventory": {
+      "inventory_application": "0.12.0",
+      "inventory_files_verified": 3707,
+      "inventory_links_verified": 1048,
+      "application_files_match_source": 94,
+      "websockets_license_copies_verified": 2
+    },
+    "origins": {
+      "inkecho": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/__init__.py",
+        "sha256": "c1cdbcdcb6245b9211445ab956187fa1d59a2c7bbfb6b84b0034832b41c8615c"
+      },
+      "inkecho.app": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/app.py",
+        "sha256": "5c65916904480e81e1d0e26e5671c9031ce35fa10a9e9c098664fe99b9c72f49"
+      },
+      "inkecho.audio": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/audio.py",
+        "sha256": "7a7c52be4465858476f0b85e12832fa6846aed0f1355ab1bb98efbe1febfdd53"
+      },
+      "inkecho.config": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/config.py",
+        "sha256": "1134540f4b469dd828aa8006f64ac1800f7a4e3806c4d1b626e7f52437f8baeb"
+      },
+      "inkecho.providers": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/providers.py",
+        "sha256": "0e4015a5e5b3a7793e47e48f0f14399933c5fdd352411cc9b3d2aa87f6419867"
+      },
+      "inkecho.provider_capability": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/provider_capability.py",
+        "sha256": "6c8b5627c0bc56e1339bf63f8ea2cb12ea2c20b72d3a0e7ae6e5cf9feb9079c0"
+      },
+      "inkecho.realtime": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/realtime.py",
+        "sha256": "c9a997a59e250e1938e4478e9a125cca25d68665d3607b7d54dd8c31f78e31da"
+      },
+      "inkecho.polish_stream": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/polish_stream.py",
+        "sha256": "47588cd3b4e546e6a8f6eef1057208d32c49ce6cee564919e1f42660b10582dd"
+      },
+      "inkecho.streaming_output": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/streaming_output.py",
+        "sha256": "845b44fc09633ed4aeaafb1fe47a894ee77508e559d13f02f0be9090937f919f"
+      },
+      "inkecho.ui.providers": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/ui/providers.py",
+        "sha256": "29b8538d86cbfcc07fc64327f23e067f8fcf56dea14a81ab290da7365ab20420"
+      },
+      "inkecho.runtime": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/runtime.py",
+        "sha256": "28508099d1811f27562b548c71403c85601bab2e961a68db77ca72692ea798bf"
+      },
+      "inkecho.security": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/security.py",
+        "sha256": "be28a62da5ae8c38456b60bfb62a3ea8692bddbbcf07ce8584edd43b07141219"
+      },
+      "inkecho.platform.keyboard": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/platform/keyboard.py",
+        "sha256": "67000fe0de6592017796ebd07cb47dc0e187a1d24457ade68cfe4243cde5920e"
+      },
+      "inkecho.platform.eis": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/platform/eis.py",
+        "sha256": "a9343b0e4fd84c3ba8adda37e7fc5f9d7554eb7b78aab5179851587bfb0cfd19"
+      },
+      "inkecho.platform.wayland_keyboard": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/platform/wayland_keyboard.py",
+        "sha256": "bd76f5d8bb972fce9a7c3bd0dcbfc44fc61f128ab3e6b27bbe7415da4eff29bf"
+      },
+      "inkecho.platform.wayland_keymap": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/platform/wayland_keymap.py",
+        "sha256": "884d12541b48e434f3eb087f339aa71e87b1d506fd8978484b969b342dc3260a"
+      },
+      "inkecho.platform.wayland_worker": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/platform/wayland_worker.py",
+        "sha256": "45330a05e596c9b280d579457cc37bf7af7b4180762a7a1c3a78ef3ecb68c6eb"
+      },
+      "websockets": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/websockets/__init__.py",
+        "sha256": "002d87abddae49cfd63a8f7fc6f213a46b2127b0f2d0c7799b6ff2c2c752b7f6"
+      },
+      "inkecho.provider_catalog": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/provider_catalog.py",
+        "sha256": "79ff7b639c9b91df6697edef433bdfa40eb16fe2d1207722325a231759038dc6"
+      },
+      "inkecho.provider_credentials": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/provider_credentials.py",
+        "sha256": "5169894c590fee0b19230fce2be2f0ebb293c3a87d3bdaae42eeef94d1cc4949"
+      },
+      "inkecho.http_asr": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/http_asr.py",
+        "sha256": "af1f08169b572a44022151835ee0b83176248984bbcdb7db382499abc4a6574b"
+      },
+      "inkecho.asr_streaming": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/asr_streaming.py",
+        "sha256": "a6426173cadd5a159679cf4032989190c11a33c98d57ab7bb59712fc8324a3f4"
+      },
+      "inkecho.qwen_vad": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/qwen_vad.py",
+        "sha256": "6e05a8215585fec7a66fbb3bdfc31a0afc32bf4ded4878f67b38eb0a59cc6ed5"
+      },
+      "inkecho.asr_wire": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/asr_wire.py",
+        "sha256": "a64a604d47249206cdd66fa964a48085701782fbebf9b65b2627f2eeaf2f4414"
+      },
+      "inkecho.step_realtime": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/step_realtime.py",
+        "sha256": "ceef9f800d279d582e6f71c257ebf04bdb32ac4cc55bf4c09c7712afa85c9267"
+      },
+      "inkecho.dashscope_realtime": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/dashscope_realtime.py",
+        "sha256": "c0544296c53747777e0963942c56c894038c0c4ce404283ca15059ca549482f2"
+      },
+      "inkecho.xfyun_realtime": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/xfyun_realtime.py",
+        "sha256": "5a7b11a16a921b1febcb0be6fd9ffe6af526ca79e18f000983fdd05d9acb6552"
+      },
+      "inkecho.tencent_realtime": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/tencent_realtime.py",
+        "sha256": "86411b1803d003509773dd99b01fa344a6cdde492fecea61d4df7e0769c1dd56"
+      },
+      "inkecho.volc_realtime": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/volc_realtime.py",
+        "sha256": "f6b05b87639636db0b6ca26525eda6e8b1c9dce6e4dfe1e326df541675ab7012"
+      },
+      "inkecho.polish_protocols": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/polish_protocols.py",
+        "sha256": "c1fb15a9e1f42496e597f5c6f8b470650d7f36bdaffb7074970097986df713dc"
+      },
+      "inkecho.platform.hybrid_keyboard": {
+        "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/platform/hybrid_keyboard.py",
+        "sha256": "038c50fdd70f1c6636a913a196b03442944a150cc2c5986d15ad7a0ab58348c6"
+      }
+    },
+    "application_source_files": {
+      "inkecho/__init__.py": "c1cdbcdcb6245b9211445ab956187fa1d59a2c7bbfb6b84b0034832b41c8615c",
+      "inkecho/__main__.py": "44670f4abc2676f95caae33639e3ef26005f388bfbb3a801757a54e29cac6d8d",
+      "inkecho/app.py": "5c65916904480e81e1d0e26e5671c9031ce35fa10a9e9c098664fe99b9c72f49",
+      "inkecho/asr_streaming.py": "a6426173cadd5a159679cf4032989190c11a33c98d57ab7bb59712fc8324a3f4",
+      "inkecho/asr_wire.py": "a64a604d47249206cdd66fa964a48085701782fbebf9b65b2627f2eeaf2f4414",
+      "inkecho/audio.py": "7a7c52be4465858476f0b85e12832fa6846aed0f1355ab1bb98efbe1febfdd53",
+      "inkecho/billing.py": "e84564487afa285eae151d24a0fc5827a1a6609ca6e6865d75a6afa241c6ba31",
+      "inkecho/config.py": "1134540f4b469dd828aa8006f64ac1800f7a4e3806c4d1b626e7f52437f8baeb",
+      "inkecho/core.py": "c3fbaccb189a8d43eaaaff88c824968538a29456c43ab750db4d113333964f4b",
+      "inkecho/dashscope_realtime.py": "c0544296c53747777e0963942c56c894038c0c4ce404283ca15059ca549482f2",
+      "inkecho/http_asr.py": "af1f08169b572a44022151835ee0b83176248984bbcdb7db382499abc4a6574b",
+      "inkecho/integration.py": "306110cc262a73793f4b7f487409cbdb11d90409fdee60b4d2e5eabc470c848b",
+      "inkecho/logging.py": "b89082aa532ee7b03732e738be61098694ca22f1e58c154c9324cdd63541dcc3",
+      "inkecho/performance.py": "223a6dcef338533562c35fb916ef6e4a5e95d9d336c8c15e1bdb3e983306c3d4",
+      "inkecho/polish_protocols.py": "c1fb15a9e1f42496e597f5c6f8b470650d7f36bdaffb7074970097986df713dc",
+      "inkecho/polish_stream.py": "47588cd3b4e546e6a8f6eef1057208d32c49ce6cee564919e1f42660b10582dd",
+      "inkecho/provider_capability.py": "6c8b5627c0bc56e1339bf63f8ea2cb12ea2c20b72d3a0e7ae6e5cf9feb9079c0",
+      "inkecho/provider_catalog.py": "79ff7b639c9b91df6697edef433bdfa40eb16fe2d1207722325a231759038dc6",
+      "inkecho/provider_credentials.py": "5169894c590fee0b19230fce2be2f0ebb293c3a87d3bdaae42eeef94d1cc4949",
+      "inkecho/provider_guidance.py": "af65fbe1aa0763046f4e68f5b71777d8fbe6a6d3b6395411171fdd1dc4aad18f",
+      "inkecho/providers.py": "0e4015a5e5b3a7793e47e48f0f14399933c5fdd352411cc9b3d2aa87f6419867",
+      "inkecho/qwen_vad.py": "6e05a8215585fec7a66fbb3bdfc31a0afc32bf4ded4878f67b38eb0a59cc6ed5",
+      "inkecho/realtime.py": "c9a997a59e250e1938e4478e9a125cca25d68665d3607b7d54dd8c31f78e31da",
+      "inkecho/runtime.py": "28508099d1811f27562b548c71403c85601bab2e961a68db77ca72692ea798bf",
+      "inkecho/security.py": "be28a62da5ae8c38456b60bfb62a3ea8692bddbbcf07ce8584edd43b07141219",
+      "inkecho/statistics.py": "b2e9f5a28e363c8fd021344190d484be86d11cfea274f0c5c300be1d25893771",
+      "inkecho/step_realtime.py": "ceef9f800d279d582e6f71c257ebf04bdb32ac4cc55bf4c09c7712afa85c9267",
+      "inkecho/streaming_output.py": "845b44fc09633ed4aeaafb1fe47a894ee77508e559d13f02f0be9090937f919f",
+      "inkecho/tencent_realtime.py": "86411b1803d003509773dd99b01fa344a6cdde492fecea61d4df7e0769c1dd56",
+      "inkecho/text_normalization.py": "81812f2c6157f310ddf4f14bbccb9afa165e7e001fa08497a74053551ff27c32",
+      "inkecho/text_units.py": "bd47edb0885ab4a8622bda70cca025458f4f2a68254b41065a6b1e62a1f06567",
+      "inkecho/updates.py": "b960196cc9cda2e36ffbe5125b5f1a25d5a1885724ac46f14f48ce1d3529e3e7",
+      "inkecho/volc_realtime.py": "f6b05b87639636db0b6ca26525eda6e8b1c9dce6e4dfe1e326df541675ab7012",
+      "inkecho/xfyun_realtime.py": "5a7b11a16a921b1febcb0be6fd9ffe6af526ca79e18f000983fdd05d9acb6552",
+      "inkecho/assets/inkecho-128.png": "e9f783e05fe0af7fa3c979adb72ac23fd1e08d3636e12bbb137dd28f7c4f9cde",
+      "inkecho/assets/inkecho-16.png": "0a8f26b907192e620403a6c9907d660f9014341016ad26d1cebbc156312ac499",
+      "inkecho/assets/inkecho-24.png": "f50bf2f9d3434c8a89fea5b2dcec0d8e72141e27d11df9f20f7fda73dd387932",
+      "inkecho/assets/inkecho-256.png": "f694df1872697f875d6e4c226e4f9dd39e20c2243dc3a10570330807600b7d2f",
+      "inkecho/assets/inkecho-32.png": "62ed206914638da5b256fdaffb7c999d81c79e474755b6e2146778fd133bd7ee",
+      "inkecho/assets/inkecho-48.png": "06f7f4e1cf6bf3f9aedbe71f5140ce0f91b1157ac3f81a91bc014a13d06d6e85",
+      "inkecho/assets/inkecho-512.png": "c9753f525db34349c34134e116cef9871126d267c5250844552aba1da3c05aa0",
+      "inkecho/assets/inkecho-64.png": "60e6a040d2e81574cdbd5315997e06b25a9a4cdb24502e3debae231cae0181d6",
+      "inkecho/assets/inkecho.png": "42449d99f4fb0f87bc14aaa89e68f118ef8568bdb53be8a1fc5bc177a45947a5",
+      "inkecho/platform/capabilities.py": "e50e1dd66420bad9072fff4da11e2063d71cba29be386431446cde0718cfdf8c",
+      "inkecho/platform/eis.py": "a9343b0e4fd84c3ba8adda37e7fc5f9d7554eb7b78aab5179851587bfb0cfd19",
+      "inkecho/platform/escape.py": "c111ee8666ee0c1a76b6383bd6c4f0ea4af5bec72a95b06e84571aa1740b7cc1",
+      "inkecho/platform/fcitx5.py": "cd75ab99acf78797fafe8d6711127349d2da8795fa3724c5ce898676083dd275",
+      "inkecho/platform/fcitx5_capability.py": "a8aa702a1339ee8c5a3909563ffcf5d4be6aa52c8d292c3f4b01fcac378895cf",
+      "inkecho/platform/fcitx5_install.py": "ecd9b0af0234d3c7cc3f10576b9014a10ea356d50f7dabba256ea5b54087d51a",
+      "inkecho/platform/fcitx5_staging.py": "1c71dcc660a808a0812bac8338e877bb577075d9147fdba421a9b1ab849d7f07",
+      "inkecho/platform/framework_detection.py": "119ebfaee65ce6a8b04e3652f9712c7916e57e73c64a37e3b59ac5844555033d",
+      "inkecho/platform/hotkeys.py": "b7987d18288b6eef925a32283e91fb03b77a1cced0f8ea5760a63f526ae024aa",
+      "inkecho/platform/hybrid_keyboard.py": "038c50fdd70f1c6636a913a196b03442944a150cc2c5986d15ad7a0ab58348c6",
+      "inkecho/platform/ibus.py": "02fdefd9b0ffeee15fe7da8c32e05f3d321eadcc73545e6e3cf400b687cc9dcf",
+      "inkecho/platform/ibus_extension.py": "52fbb8568b1f34231641632df68bea4c3e07b4216a4e936afb2aa8bbca2cc325",
+      "inkecho/platform/ibus_lifecycle.py": "f2345bef05a6a030076252456dc159120973660a8e0b172ef6582933454c1355",
+      "inkecho/platform/ibus_owned.py": "9bb43cd20929ddb5b67dce411b82403886fa8b9f95edc16f591a8c654286ae0b",
+      "inkecho/platform/ibus_owned_auto.py": "a1544f915d1606b05686640e8cdfaaa72d9ce547f9378aa63ea1cb8f0344af18",
+      "inkecho/platform/ibus_owned_default.py": "dcb5cf552776f3acc17a106ce74fcdb962621c95698eaf82c738985eba2957d2",
+      "inkecho/platform/keyboard.py": "67000fe0de6592017796ebd07cb47dc0e187a1d24457ade68cfe4243cde5920e",
+      "inkecho/platform/output_pacing.py": "024b3df0a8da6b79b8a13febbdfde7c84af02a3af9e1270ddb81a69e56f60d92",
+      "inkecho/platform/output_router.py": "056f534cc55e8f93d17c4bb87d2c4768dd50fe27e5d65eb93febeec561c36b7d",
+      "inkecho/platform/owned_asset_manifest.json": "bb31e48faed75bb30e4975864fceec3b70a05f64fc328a1a1ab2360bc07603df",
+      "inkecho/platform/owned_extension.py": "f4088b7c99bdf79cccc3b76ba73dfb24d2763485418a77e3407d0fc3c64b9761",
+      "inkecho/platform/owned_installation.py": "d784d8f4d47a29ecf4ed1457fd1c1f55fae03070db442bf30ffccf6960a08175",
+      "inkecho/platform/portal_escape.py": "80927f8ccd01dc6f596d388bd7224c0e93b6f52b36a018e420c72b23d1b295ce",
+      "inkecho/platform/wayland_keyboard.py": "bd76f5d8bb972fce9a7c3bd0dcbfc44fc61f128ab3e6b27bbe7415da4eff29bf",
+      "inkecho/platform/wayland_keymap.py": "884d12541b48e434f3eb087f339aa71e87b1d506fd8978484b969b342dc3260a",
+      "inkecho/platform/wayland_worker.py": "45330a05e596c9b280d579457cc37bf7af7b4180762a7a1c3a78ef3ecb68c6eb",
+      "inkecho/platform/x11_feedback.py": "cb4e58f12b9409a72f0b7ec9a0c39aeb6b49f53e5915f4e30e3e8d830df471ac",
+      "inkecho/ui/__init__.py": "0543b7f5a2e36d0dc827428d25d540e31b3aee74c5e32e3ee0f24e1493a6f078",
+      "inkecho/ui/dashboard.py": "a26fe54a05ee80623d348b5289b597976bcb903f51c40e3291ebb4e2f8dd93ce",
+      "inkecho/ui/information.py": "f187c262ba24134d11df38475930f44fa5e30534f6a2df6208f41f416c70eec8",
+      "inkecho/ui/notifications.py": "447110164fbca7cd735d59f8bb23254e55bcacd0fe66f0b929ce767affaec09f",
+      "inkecho/ui/overlay.py": "233d7ffc30a7383246592412eb890f82f8e42d289b5c4427fdae7b816f2a0c41",
+      "inkecho/ui/overlay_host.py": "3668000b648a9e18a35cb61737ab199d693519da296b6c43970ea475b53b03b8",
+      "inkecho/ui/overlay_proxy.py": "862c56b0d4fce32de6cdae36341bddf8dc533592624080ef21787f1fcb903501",
+      "inkecho/ui/prompts.py": "0ba01ac6adc99efa655e992407869f374edda349f6687edb96fe942985f22494",
+      "inkecho/ui/providers.py": "29b8538d86cbfcc07fc64327f23e067f8fcf56dea14a81ab290da7365ab20420",
+      "inkecho/ui/settings.py": "bf1c6b978e2aa3be3840d4ca7d7a97d74909dabc1bb6ea714dcb692012f4277a",
+      "inkecho/ui/widgets.py": "ff7bbaf57cd447d6589bad2bc2aea1890fa03ce0d66ec40804459654c3a74559",
+      "inkecho/ui/window.py": "7e640803ff59854057710042d75f140479e4660ff137280fd7f4e6ecbecb785c",
+      "inkecho/ui/workspace.py": "10074e238da0d628f37aacd8865ad28b39170289f1ad9ca1fbaaa0a0ec703b13",
+      "inkecho/platform/ibus_candidate/capability.js": "fcbaf3e7fd0184ca3141f3c4d811f7496ef753fd6282714ec128a26151a1c881",
+      "inkecho/platform/ibus_candidate/delivery_gate.js": "6900065ef4996dced1e451b7a0f14d744862e1da089e8474caf8d1789b9b9e6d",
+      "inkecho/platform/ibus_candidate/extension.js": "b9b762262dd38d3086f029747750a21cb8b62a46d73b05bf70c7fdc307a911b2",
+      "inkecho/platform/ibus_candidate/metadata.json": "c53d67c6b8d2e9769e7dcf0a3b6545dbc57673e8ea29a7e487bf55761c214317",
+      "inkecho/platform/ibus_owned_candidate/capability.js": "fcbaf3e7fd0184ca3141f3c4d811f7496ef753fd6282714ec128a26151a1c881",
+      "inkecho/platform/ibus_owned_candidate/delivery_gate.js": "6900065ef4996dced1e451b7a0f14d744862e1da089e8474caf8d1789b9b9e6d",
+      "inkecho/platform/ibus_owned_candidate/extension.js": "132e1b6d414863bc93191c649b7cac587709fc7dd83fd8551c59b5833ff3accd",
+      "inkecho/platform/ibus_owned_candidate/identity.js": "5a50a88cc6f08619b4742e2f1c269a2dce7a517ece32176270ad69f3ffc8e9ac",
+      "inkecho/platform/ibus_owned_candidate/metadata.json": "3affc5dde73c67f8e6638d8dd115b3f7b9504b86ac29af147365675d28824549",
+      "inkecho/platform/ibus_owned_candidate/owned_gate.js": "55980b3f06324b79dcfd58d1a69f9ee8e08466e6bf68b1a1916c0afa012561bd",
+      "inkecho/platform/ibus_owned_candidate/probe.js": "39adc6ccc1109bf7d9cae419314781164dccbf0a2f6d6a778888a15755a12dc4"
+    },
+    "frozen_source_root": "/mnt/input/frozen/src",
+    "production_behavior_modified": false
+  },
+  "dependency_origins": {
+    "inkecho": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/__init__.py",
+      "sha256": "c1cdbcdcb6245b9211445ab956187fa1d59a2c7bbfb6b84b0034832b41c8615c"
+    },
+    "PySide6.support": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/PySide6/support/__init__.py",
+      "sha256": "544cd819bb55076c22ad952087d0dcef414dc64f6f09a4ac65ad1ee0216b5695"
+    },
+    "PySide6.support.deprecated": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/PySide6/support/deprecated.py",
+      "sha256": "95431e9fc9d51387f56f2b1a75f38be22794a4addcd7c416f09b515ac0c35506"
+    },
+    "PySide6.support.feature": {
+      "logical_origin": "shibokensupport/feature.py",
+      "embedded_member_sha256": "1224398b2741f395830737e9a71f84a5d42e7e898afcf920a89c946e95601aed",
+      "embedded_archive_sha256": "366442b9b65c9f6d1af0109aaedd553429e93183e4a5e3b5a6c290d36798f428",
+      "carrier": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/shiboken6/libshiboken6.abi3.so.6.12",
+      "carrier_sha256": "2b3d9767d69da0afabe4a383dc241a110fac4c0bb63cdeb3d01314e9c702241e"
+    },
+    "PySide6.support.signature": {
+      "logical_origin": "shibokensupport/signature/__init__.py",
+      "embedded_member_sha256": "7b464ae11ae2f78744a1715120302bf8d0c5b241779e6bf3a13ddacacb96954e",
+      "embedded_archive_sha256": "366442b9b65c9f6d1af0109aaedd553429e93183e4a5e3b5a6c290d36798f428",
+      "carrier": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/shiboken6/libshiboken6.abi3.so.6.12",
+      "carrier_sha256": "2b3d9767d69da0afabe4a383dc241a110fac4c0bb63cdeb3d01314e9c702241e"
+    },
+    "PySide6.support.signature.mapping": {
+      "logical_origin": "shibokensupport/signature/mapping.py",
+      "embedded_member_sha256": "ccde09ce28af582a98df3fdd472492fae325ec98d11a1516d3add06c6608f67f",
+      "embedded_archive_sha256": "366442b9b65c9f6d1af0109aaedd553429e93183e4a5e3b5a6c290d36798f428",
+      "carrier": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/shiboken6/libshiboken6.abi3.so.6.12",
+      "carrier_sha256": "2b3d9767d69da0afabe4a383dc241a110fac4c0bb63cdeb3d01314e9c702241e"
+    },
+    "PySide6.support.signature.errorhandler": {
+      "logical_origin": "shibokensupport/signature/errorhandler.py",
+      "embedded_member_sha256": "1ef7e39fa45989bac9128cbf076cddaa17c10193fdebe9be307d0d1b415d180e",
+      "embedded_archive_sha256": "366442b9b65c9f6d1af0109aaedd553429e93183e4a5e3b5a6c290d36798f428",
+      "carrier": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/shiboken6/libshiboken6.abi3.so.6.12",
+      "carrier_sha256": "2b3d9767d69da0afabe4a383dc241a110fac4c0bb63cdeb3d01314e9c702241e"
+    },
+    "PySide6.support.signature.layout": {
+      "logical_origin": "shibokensupport/signature/layout.py",
+      "embedded_member_sha256": "af463187ceab40409cbdaa52e7855e8133997e81cdd5bd0600f76a5ab3e30d63",
+      "embedded_archive_sha256": "366442b9b65c9f6d1af0109aaedd553429e93183e4a5e3b5a6c290d36798f428",
+      "carrier": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/shiboken6/libshiboken6.abi3.so.6.12",
+      "carrier_sha256": "2b3d9767d69da0afabe4a383dc241a110fac4c0bb63cdeb3d01314e9c702241e"
+    },
+    "PySide6.support.signature.lib": {
+      "logical_origin": "shibokensupport/signature/lib/__init__.py",
+      "embedded_member_sha256": "c9f7b67fca9c5aa50eeb0946ae525af5258a2ac75346df67d8e6feca45709f28",
+      "embedded_archive_sha256": "366442b9b65c9f6d1af0109aaedd553429e93183e4a5e3b5a6c290d36798f428",
+      "carrier": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/shiboken6/libshiboken6.abi3.so.6.12",
+      "carrier_sha256": "2b3d9767d69da0afabe4a383dc241a110fac4c0bb63cdeb3d01314e9c702241e"
+    },
+    "PySide6.support.signature.parser": {
+      "logical_origin": "shibokensupport/signature/parser.py",
+      "embedded_member_sha256": "16e436c1d75f112949d7ea3c7c177bb7d87a24f408d8a265d8973d9d8ae6f230",
+      "embedded_archive_sha256": "366442b9b65c9f6d1af0109aaedd553429e93183e4a5e3b5a6c290d36798f428",
+      "carrier": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/shiboken6/libshiboken6.abi3.so.6.12",
+      "carrier_sha256": "2b3d9767d69da0afabe4a383dc241a110fac4c0bb63cdeb3d01314e9c702241e"
+    },
+    "PySide6.support.signature.importhandler": {
+      "logical_origin": "shibokensupport/signature/importhandler.py",
+      "embedded_member_sha256": "c14ed6fe2a2d36ebe664f65bc0f827ef2033ac3d3f90b25dfcb3745573e71b8c",
+      "embedded_archive_sha256": "366442b9b65c9f6d1af0109aaedd553429e93183e4a5e3b5a6c290d36798f428",
+      "carrier": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/shiboken6/libshiboken6.abi3.so.6.12",
+      "carrier_sha256": "2b3d9767d69da0afabe4a383dc241a110fac4c0bb63cdeb3d01314e9c702241e"
+    },
+    "PySide6.support.signature.lib.enum_sig": {
+      "logical_origin": "shibokensupport/signature/lib/enum_sig.py",
+      "embedded_member_sha256": "0bbf4290db6d20450280a5aff4e2687285c1088761da78d50a3cf796f47403df",
+      "embedded_archive_sha256": "366442b9b65c9f6d1af0109aaedd553429e93183e4a5e3b5a6c290d36798f428",
+      "carrier": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/shiboken6/libshiboken6.abi3.so.6.12",
+      "carrier_sha256": "2b3d9767d69da0afabe4a383dc241a110fac4c0bb63cdeb3d01314e9c702241e"
+    },
+    "PySide6.support.signature.lib.pyi_generator": {
+      "logical_origin": "shibokensupport/signature/lib/pyi_generator.py",
+      "embedded_member_sha256": "554ba919188000cc37c46c9f2f2f9ded35be85f3ddd9ea9f66373d144d6211a4",
+      "embedded_archive_sha256": "366442b9b65c9f6d1af0109aaedd553429e93183e4a5e3b5a6c290d36798f428",
+      "carrier": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/shiboken6/libshiboken6.abi3.so.6.12",
+      "carrier_sha256": "2b3d9767d69da0afabe4a383dc241a110fac4c0bb63cdeb3d01314e9c702241e"
+    },
+    "PySide6.support.signature.lib.tool": {
+      "logical_origin": "shibokensupport/signature/lib/tool.py",
+      "embedded_member_sha256": "da2b488406b3f45024f3bb06fc3243a486e44c578bafec8aa60a2a227a587c18",
+      "embedded_archive_sha256": "366442b9b65c9f6d1af0109aaedd553429e93183e4a5e3b5a6c290d36798f428",
+      "carrier": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/shiboken6/libshiboken6.abi3.so.6.12",
+      "carrier_sha256": "2b3d9767d69da0afabe4a383dc241a110fac4c0bb63cdeb3d01314e9c702241e"
+    },
+    "shiboken6.Shiboken": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/shiboken6/Shiboken.abi3.so",
+      "sha256": "6195b9fac615bd9e5d9c3527819b844216b0f876dbfaafa5b3b314327b292d0c"
+    },
+    "shiboken6": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/shiboken6/__init__.py",
+      "sha256": "a81c702972bc1bb26d09573487069d060f3cf29657529163bc0dc1fa1f3dda68"
+    },
+    "PySide6": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/PySide6/__init__.py",
+      "sha256": "581a260e70fa7ec43638a96b26432ce1e2443ec9b9bfa65c076133d550986808"
+    },
+    "PySide6.QtCore": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/PySide6/QtCore.abi3.so",
+      "sha256": "c69ab7ddf99eaf37df6c9ed9498bba9f3678d8544de3921c13d046c31f0d484b"
+    },
+    "PySide6.QtGui": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/PySide6/QtGui.abi3.so",
+      "sha256": "a4ebd89caef6afa4944f73436b47203fcbf5923d7fe2a8a90f1da00aeb4a4f27"
+    },
+    "PySide6.QtNetwork": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/PySide6/QtNetwork.abi3.so",
+      "sha256": "37e1c2cd174d8f5bce1115df7b205a9f488f731b99a1b22f2fcb54efe3469424"
+    },
+    "PySide6.QtMultimedia": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/PySide6/QtMultimedia.abi3.so",
+      "sha256": "9b0c836bc97847a2cba0aad77df3061dab2453a98ba76b57146bdd37eaa910c2"
+    },
+    "inkecho.audio": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/audio.py",
+      "sha256": "7a7c52be4465858476f0b85e12832fa6846aed0f1355ab1bb98efbe1febfdd53"
+    },
+    "inkecho.config": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/config.py",
+      "sha256": "1134540f4b469dd828aa8006f64ac1800f7a4e3806c4d1b626e7f52437f8baeb"
+    },
+    "inkecho.core": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/core.py",
+      "sha256": "c3fbaccb189a8d43eaaaff88c824968538a29456c43ab750db4d113333964f4b"
+    },
+    "inkecho.performance": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/performance.py",
+      "sha256": "223a6dcef338533562c35fb916ef6e4a5e95d9d336c8c15e1bdb3e983306c3d4"
+    },
+    "inkecho.platform": {
+      "namespace_paths": [
+        "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/platform"
+      ]
+    },
+    "inkecho.platform.framework_detection": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/platform/framework_detection.py",
+      "sha256": "119ebfaee65ce6a8b04e3652f9712c7916e57e73c64a37e3b59ac5844555033d"
+    },
+    "inkecho.platform.ibus_lifecycle": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/platform/ibus_lifecycle.py",
+      "sha256": "f2345bef05a6a030076252456dc159120973660a8e0b172ef6582933454c1355"
+    },
+    "inkecho.platform.ibus": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/platform/ibus.py",
+      "sha256": "02fdefd9b0ffeee15fe7da8c32e05f3d321eadcc73545e6e3cf400b687cc9dcf"
+    },
+    "inkecho.platform.ibus_owned": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/platform/ibus_owned.py",
+      "sha256": "9bb43cd20929ddb5b67dce411b82403886fa8b9f95edc16f591a8c654286ae0b"
+    },
+    "inkecho.text_units": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/text_units.py",
+      "sha256": "bd47edb0885ab4a8622bda70cca025458f4f2a68254b41065a6b1e62a1f06567"
+    },
+    "inkecho.platform.fcitx5_capability": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/platform/fcitx5_capability.py",
+      "sha256": "a8aa702a1339ee8c5a3909563ffcf5d4be6aa52c8d292c3f4b01fcac378895cf"
+    },
+    "inkecho.platform.fcitx5": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/platform/fcitx5.py",
+      "sha256": "cd75ab99acf78797fafe8d6711127349d2da8795fa3724c5ce898676083dd275"
+    },
+    "inkecho.platform.output_pacing": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/platform/output_pacing.py",
+      "sha256": "024b3df0a8da6b79b8a13febbdfde7c84af02a3af9e1270ddb81a69e56f60d92"
+    },
+    "inkecho.platform.keyboard": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/platform/keyboard.py",
+      "sha256": "67000fe0de6592017796ebd07cb47dc0e187a1d24457ade68cfe4243cde5920e"
+    },
+    "inkecho.text_normalization": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/text_normalization.py",
+      "sha256": "81812f2c6157f310ddf4f14bbccb9afa165e7e001fa08497a74053551ff27c32"
+    },
+    "inkecho.platform.output_router": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/platform/output_router.py",
+      "sha256": "056f534cc55e8f93d17c4bb87d2c4768dd50fe27e5d65eb93febeec561c36b7d"
+    },
+    "inkecho.platform.ibus_owned_auto": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/platform/ibus_owned_auto.py",
+      "sha256": "a1544f915d1606b05686640e8cdfaaa72d9ce547f9378aa63ea1cb8f0344af18"
+    },
+    "inkecho.platform.owned_installation": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/platform/owned_installation.py",
+      "sha256": "d784d8f4d47a29ecf4ed1457fd1c1f55fae03070db442bf30ffccf6960a08175"
+    },
+    "inkecho.platform.ibus_owned_default": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/platform/ibus_owned_default.py",
+      "sha256": "dcb5cf552776f3acc17a106ce74fcdb962621c95698eaf82c738985eba2957d2"
+    },
+    "inkecho.platform.wayland_keyboard": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/platform/wayland_keyboard.py",
+      "sha256": "bd76f5d8bb972fce9a7c3bd0dcbfc44fc61f128ab3e6b27bbe7415da4eff29bf"
+    },
+    "httpx.__version__": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/httpx/__version__.py",
+      "sha256": "2e853261e3974e2786cee3ffeb850bd30c5db718eebbf41b3af13b34e83e22a5"
+    },
+    "httpx._exceptions": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/httpx/_exceptions.py",
+      "sha256": "6f15bb7f1ce054c01d3536f04f4567ab4e202435b5fe023f1858903ee3328cbd"
+    },
+    "httpx._types": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/httpx/_types.py",
+      "sha256": "272878d4642aec039ebfc20e58a0c083bcc26ef1c07ee7e65b983f3e24ed12b6"
+    },
+    "httpx._utils": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/httpx/_utils.py",
+      "sha256": "fd355ea802afc4990a1ddcfb74579be2cd0b66a41781e1645d281f88704aff5a"
+    },
+    "httpx._multipart": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/httpx/_multipart.py",
+      "sha256": "28e1c465997aa28860f663da2b2caedf8e6aab5ac92e0df94d41b7600cd70776"
+    },
+    "httpx._content": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/httpx/_content.py",
+      "sha256": "2c61b3ac94d1dcebcde0c6f519554d2d7917247fbaa0a97002db4ef69e70ff28"
+    },
+    "httpx._decoders": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/httpx/_decoders.py",
+      "sha256": "a74757f08d0d1077b1b37506a784ac66eb62321b17aeb5a5ebe1a7a956f488a3"
+    },
+    "httpx._status_codes": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/httpx/_status_codes.py",
+      "sha256": "0d89fedae7c180c797cb9b3cc77fd307bc2302e00031ec136a43eb9b9ad712c7"
+    },
+    "idna.idnadata": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/idna/idnadata.py",
+      "sha256": "23a9a8c1d15de9c634d0bf213d779810f485083fe1b0f7e09044ad04a69cc7eb"
+    },
+    "idna.intranges": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/idna/intranges.py",
+      "sha256": "838f6c70b4a4a89b4084b98e3836bb8551eb8928e66fad2d893b04a287097412"
+    },
+    "idna.core": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/idna/core.py",
+      "sha256": "3dd4c3ffee4ff223207fac65f3812a1e6895ae8ad1e7a6ed60115768f3551520"
+    },
+    "idna.package_data": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/idna/package_data.py",
+      "sha256": "ae759534a3c582a00ac856cfca464a39ee8251d393208d8af06b605bc20e02a9"
+    },
+    "idna": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/idna/__init__.py",
+      "sha256": "8514c3ed53136a3596ebdf512fa487bbdd7da5a99adcaed82e0363d2c306d3af"
+    },
+    "httpx._urlparse": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/httpx/_urlparse.py",
+      "sha256": "640987e3b38d7e4c6bae3f8f3d88467a21e36fa0232824be00d58837838bfca6"
+    },
+    "httpx._urls": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/httpx/_urls.py",
+      "sha256": "757f7d551d4348e1e9828f40abb3f360ee0529dc6a2a3c32369f20adff1d1cdd"
+    },
+    "httpx._models": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/httpx/_models.py",
+      "sha256": "e3ffc6bb2bf580bc6e6428708a6f247d036220e709f5a72b785392babbd97e6b"
+    },
+    "httpx._auth": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/httpx/_auth.py",
+      "sha256": "62bdd0c1a5122b5eeb198c7eee3f85762705233cf863d14557ed45e3eed15d7e"
+    },
+    "httpx._config": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/httpx/_config.py",
+      "sha256": "a4fa7653ec2271f70ab05f8a6111352d876dddee84446788a1767c1a3a372d67"
+    },
+    "httpx._transports.base": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/httpx/_transports/base.py",
+      "sha256": "9194bf54c6d58987c5e7bd29a205022756ee973fb26df2f9d4faacf7292d79b5"
+    },
+    "httpx._transports.asgi": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/httpx/_transports/asgi.py",
+      "sha256": "1d17e20d830fb78c101f6805807660e1cfa2dec6e5a3a6cbe464ea7044fec73f"
+    },
+    "httpx._transports.default": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/httpx/_transports/default.py",
+      "sha256": "03379a454c95c0271c4f2c8d25ec437f49f57457f3cf2769748420bf0ecf2e79"
+    },
+    "httpx._transports.mock": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/httpx/_transports/mock.py",
+      "sha256": "3d3a34779ebb4484d7c46ae48ba90deffebbc300317f088c0dcb972626428c4a"
+    },
+    "httpx._transports.wsgi": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/httpx/_transports/wsgi.py",
+      "sha256": "35c3d7dd76a9fc4c0215958efce692c9036e227098c7540c35b3bc1807a2ea36"
+    },
+    "httpx._transports": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/httpx/_transports/__init__.py",
+      "sha256": "19b52805200ea7bcfe97ef63e5884c851dc3308727e8554b863d3bd8edcd9e7a"
+    },
+    "httpx._client": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/httpx/_client.py",
+      "sha256": "c43f941baefe58c91e96d00039e1868fe719d91453026d7db1647194563bff8d"
+    },
+    "httpx._api": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/httpx/_api.py",
+      "sha256": "aff660b388c8a5c3c92ea2b975b6d26b2aa8fe254c2856b164277ea0e1f12c4b"
+    },
+    "httpx": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/httpx/__init__.py",
+      "sha256": "0ac6997bac998f4ac783adf6d8058a587193315afdb718047c3e4fdff46bcfad"
+    },
+    "inkecho.provider_catalog": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/provider_catalog.py",
+      "sha256": "79ff7b639c9b91df6697edef433bdfa40eb16fe2d1207722325a231759038dc6"
+    },
+    "inkecho.providers": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/providers.py",
+      "sha256": "0e4015a5e5b3a7793e47e48f0f14399933c5fdd352411cc9b3d2aa87f6419867"
+    },
+    "websockets.imports": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/websockets/imports.py",
+      "sha256": "4ff07d4d4987a1c78a310f8f36985d410007d97771031c1240d790120a882e41"
+    },
+    "websockets.version": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/websockets/version.py",
+      "sha256": "3ce864661d56d11715a2a5d9996507051fbee21afcf81c7fdfe5c39f25e8b6e8"
+    },
+    "websockets": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/websockets/__init__.py",
+      "sha256": "002d87abddae49cfd63a8f7fc6f213a46b2127b0f2d0c7799b6ff2c2c752b7f6"
+    },
+    "websockets.asyncio": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/websockets/asyncio/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "websockets.datastructures": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/websockets/datastructures.py",
+      "sha256": "ce3d1e98c37ca4bb56caa83697d6989e52616adffc2333e122e2c2be11a4123d"
+    },
+    "websockets.speedups": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/websockets/speedups.cpython-313-x86_64-linux-gnu.so",
+      "sha256": "173f5d86ffd22a4eb76e98db4b877180e837a7d607d4ffd52a4d20f2c59e6357"
+    },
+    "websockets.typing": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/websockets/typing.py",
+      "sha256": "d59b763fe9574c2dca2613a1cd6d882f2128d48e5947d8c754fedbfeb9c9c90b"
+    },
+    "websockets.extensions.base": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/websockets/extensions/base.py",
+      "sha256": "24d7f2939e370bb56e3c7d103a86e2a8aa06af38c920b8deeaccf920bbce3e5e"
+    },
+    "websockets.extensions": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/websockets/extensions/__init__.py",
+      "sha256": "42466cc5a255965552a75ba1743e6e3c689b75bc7fd3dd46ad555f4b92d7729c"
+    },
+    "websockets.frames": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/websockets/frames.py",
+      "sha256": "a7a7b7474e7e48ab4c0dc1e1f121d8b2914e1c6d5e8b9c89bd35abe4b79bc71b"
+    },
+    "websockets.http11": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/websockets/http11.py",
+      "sha256": "6b6204bd353a13952da33a9db56a1a9b7d6b2a7d4f395285c2095a7930528ee6"
+    },
+    "websockets.exceptions": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/websockets/exceptions.py",
+      "sha256": "05ccf02a5a3ea318228ca08bb2e3e9f8f1bbeed0c358fcbcbc216301ae56ca51"
+    },
+    "websockets.headers": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/websockets/headers.py",
+      "sha256": "c909cf963559c15d7f57ea4e49128d2c6feef36ef0142d61ef671c8a88dc43c3"
+    },
+    "websockets.streams": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/websockets/streams.py",
+      "sha256": "91c234257351a953e854484bebbfaeac80b08b4b202cdc8fc9675c705cc1b955"
+    },
+    "websockets.protocol": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/websockets/protocol.py",
+      "sha256": "172a20d44b15f31b619c9757dcc1fdf9b1db10680f442d2dab019608f2b826b8"
+    },
+    "websockets.uri": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/websockets/uri.py",
+      "sha256": "3297488a064823b469c3bffeeb50e2b19c03b55fbaf2fe187b1ccf9913fc2e19"
+    },
+    "websockets.utils": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/websockets/utils.py",
+      "sha256": "6691f75892ec412dbd25fe51ea54da7317ff84f77c138cd2d89986c8da60e1b0"
+    },
+    "websockets.client": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/websockets/client.py",
+      "sha256": "8706a8387b9986e971c94a84894dbb0b1e68512bc9b8725137ae5a8a9edb4ef5"
+    },
+    "websockets.extensions.permessage_deflate": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/websockets/extensions/permessage_deflate.py",
+      "sha256": "fedbb8f8de15ebe518f668418414c4d34f53483aaf635cba3e461a9c862984e3"
+    },
+    "websockets.asyncio.compatibility": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/websockets/asyncio/compatibility.py",
+      "sha256": "8247a70c387335b9bafe25d5e4476f6efa7ab8765876b4ef18d8edf0ffc9b724"
+    },
+    "websockets.asyncio.messages": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/websockets/asyncio/messages.py",
+      "sha256": "11f63a6ba596ea025d9c4345aaf55bcf09bc9e8149a2f280419c281467f4a78b"
+    },
+    "websockets.asyncio.connection": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/websockets/asyncio/connection.py",
+      "sha256": "ea1a0fa5a9e9f93ba2ac42223a2e8ed8fcaae70250984da8b02a8829bdb65e9a"
+    },
+    "websockets.asyncio.client": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/websockets/asyncio/client.py",
+      "sha256": "947d3cdc61ae9c57c41733a92f59cf729ee89787e9f67de59e1c27044eca14bd"
+    },
+    "inkecho.realtime": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/realtime.py",
+      "sha256": "c9a997a59e250e1938e4478e9a125cca25d68665d3607b7d54dd8c31f78e31da"
+    },
+    "inkecho.security": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/security.py",
+      "sha256": "be28a62da5ae8c38456b60bfb62a3ea8692bddbbcf07ce8584edd43b07141219"
+    },
+    "inkecho.streaming_output": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/streaming_output.py",
+      "sha256": "845b44fc09633ed4aeaafb1fe47a894ee77508e559d13f02f0be9090937f919f"
+    },
+    "inkecho.app": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/app.py",
+      "sha256": "5c65916904480e81e1d0e26e5671c9031ce35fa10a9e9c098664fe99b9c72f49"
+    },
+    "inkecho.provider_capability": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/provider_capability.py",
+      "sha256": "6c8b5627c0bc56e1339bf63f8ea2cb12ea2c20b72d3a0e7ae6e5cf9feb9079c0"
+    },
+    "inkecho.polish_stream": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/polish_stream.py",
+      "sha256": "47588cd3b4e546e6a8f6eef1057208d32c49ce6cee564919e1f42660b10582dd"
+    },
+    "inkecho.ui": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/ui/__init__.py",
+      "sha256": "0543b7f5a2e36d0dc827428d25d540e31b3aee74c5e32e3ee0f24e1493a6f078"
+    },
+    "PySide6.QtWidgets": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/PySide6/QtWidgets.abi3.so",
+      "sha256": "4543cab2c4a8edee5bc4c818dc0ba2f8552ffa6b10a4b4ab02d8536f10400115"
+    },
+    "inkecho.provider_credentials": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/provider_credentials.py",
+      "sha256": "5169894c590fee0b19230fce2be2f0ebb293c3a87d3bdaae42eeef94d1cc4949"
+    },
+    "inkecho.provider_guidance": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/provider_guidance.py",
+      "sha256": "af65fbe1aa0763046f4e68f5b71777d8fbe6a6d3b6395411171fdd1dc4aad18f"
+    },
+    "inkecho.ui.widgets": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/ui/widgets.py",
+      "sha256": "ff7bbaf57cd447d6589bad2bc2aea1890fa03ce0d66ec40804459654c3a74559"
+    },
+    "inkecho.ui.providers": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/ui/providers.py",
+      "sha256": "29b8538d86cbfcc07fc64327f23e067f8fcf56dea14a81ab290da7365ab20420"
+    },
+    "inkecho.runtime": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/runtime.py",
+      "sha256": "28508099d1811f27562b548c71403c85601bab2e961a68db77ca72692ea798bf"
+    },
+    "inkecho.platform.eis": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/platform/eis.py",
+      "sha256": "a9343b0e4fd84c3ba8adda37e7fc5f9d7554eb7b78aab5179851587bfb0cfd19"
+    },
+    "inkecho.platform.wayland_keymap": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/platform/wayland_keymap.py",
+      "sha256": "884d12541b48e434f3eb087f339aa71e87b1d506fd8978484b969b342dc3260a"
+    },
+    "inkecho.platform.wayland_worker": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/platform/wayland_worker.py",
+      "sha256": "45330a05e596c9b280d579457cc37bf7af7b4180762a7a1c3a78ef3ecb68c6eb"
+    },
+    "inkecho.http_asr": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/http_asr.py",
+      "sha256": "af1f08169b572a44022151835ee0b83176248984bbcdb7db382499abc4a6574b"
+    },
+    "inkecho.asr_streaming": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/asr_streaming.py",
+      "sha256": "a6426173cadd5a159679cf4032989190c11a33c98d57ab7bb59712fc8324a3f4"
+    },
+    "inkecho.qwen_vad": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/qwen_vad.py",
+      "sha256": "6e05a8215585fec7a66fbb3bdfc31a0afc32bf4ded4878f67b38eb0a59cc6ed5"
+    },
+    "inkecho.asr_wire": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/asr_wire.py",
+      "sha256": "a64a604d47249206cdd66fa964a48085701782fbebf9b65b2627f2eeaf2f4414"
+    },
+    "inkecho.step_realtime": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/step_realtime.py",
+      "sha256": "ceef9f800d279d582e6f71c257ebf04bdb32ac4cc55bf4c09c7712afa85c9267"
+    },
+    "inkecho.dashscope_realtime": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/dashscope_realtime.py",
+      "sha256": "c0544296c53747777e0963942c56c894038c0c4ce404283ca15059ca549482f2"
+    },
+    "inkecho.xfyun_realtime": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/xfyun_realtime.py",
+      "sha256": "5a7b11a16a921b1febcb0be6fd9ffe6af526ca79e18f000983fdd05d9acb6552"
+    },
+    "inkecho.tencent_realtime": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/tencent_realtime.py",
+      "sha256": "86411b1803d003509773dd99b01fa344a6cdde492fecea61d4df7e0769c1dd56"
+    },
+    "inkecho.volc_realtime": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/volc_realtime.py",
+      "sha256": "f6b05b87639636db0b6ca26525eda6e8b1c9dce6e4dfe1e326df541675ab7012"
+    },
+    "inkecho.polish_protocols": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/polish_protocols.py",
+      "sha256": "c1fb15a9e1f42496e597f5c6f8b470650d7f36bdaffb7074970097986df713dc"
+    },
+    "inkecho.platform.hybrid_keyboard": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/inkecho/platform/hybrid_keyboard.py",
+      "sha256": "038c50fdd70f1c6636a913a196b03442944a150cc2c5986d15ad7a0ab58348c6"
+    },
+    "_pytest._version": {
+      "path": "/mnt/input/framework/_pytest/_version.py",
+      "sha256": "a92165fd7b0e147d0e1b873f42ebe87f108f1f3d56b1b53fe4ad352a27adec4a"
+    },
+    "_pytest": {
+      "path": "/mnt/input/framework/_pytest/__init__.py",
+      "sha256": "e087512619d6e571b62a568990ec67e7f4c2f56790e6d5c3485eed6dbe2f12ca"
+    },
+    "pluggy._result": {
+      "path": "/mnt/input/framework/pluggy/_result.py",
+      "sha256": "dd77f2ec3ae35db61bee9b91aaec98d956e274858daba3e9ed09ee12531d8fc4"
+    },
+    "pluggy._hooks": {
+      "path": "/mnt/input/framework/pluggy/_hooks.py",
+      "sha256": "13a7f79d8708e9d6c4b8ed069b2eb5a3380653fe7dfdeebd902d3c6b4e8406ea"
+    },
+    "pluggy._tracing": {
+      "path": "/mnt/input/framework/pluggy/_tracing.py",
+      "sha256": "9d777604298381ff2327157e1cedcfab147e595e777969c5f01e001759c91a0a"
+    },
+    "pluggy._warnings": {
+      "path": "/mnt/input/framework/pluggy/_warnings.py",
+      "sha256": "b5dd00bd90697da9ab8820b73aab0bc31321f92cc03237e399ce7c4f9bcfde5c"
+    },
+    "pluggy._callers": {
+      "path": "/mnt/input/framework/pluggy/_callers.py",
+      "sha256": "804665946692615b2c676526a4d7e6602d1b755821da361b0057982afb913236"
+    },
+    "pluggy._manager": {
+      "path": "/mnt/input/framework/pluggy/_manager.py",
+      "sha256": "2b8229fe99048ef4f6a0e21f40fa7c0b0016a1756710d81045ccbdb651a28b4a"
+    },
+    "pluggy._version": {
+      "path": "/mnt/input/framework/pluggy/_version.py",
+      "sha256": "e45189369f4b924f6e3b17828d7a68086045efd02be8b18f391efe6ad06a6ffe"
+    },
+    "pluggy": {
+      "path": "/mnt/input/framework/pluggy/__init__.py",
+      "sha256": "0fa769d609840e3b43a7c840c1073eaab81aba59cbe2296daea90b0ddfa0f6d8"
+    },
+    "_pytest._code.source": {
+      "path": "/mnt/input/framework/_pytest/_code/source.py",
+      "sha256": "46f3d07f3144e3e05da5aa6c51cb1d2f89ac81e1e737e5a7a863e4032acf6c01"
+    },
+    "pygments": {
+      "path": "/mnt/input/framework/pygments/__init__.py",
+      "sha256": "83fe99688e06ed80d7d44d325f79027de83a434c60f249bceffd67fda3e7d2b1"
+    },
+    "pygments.formatters._mapping": {
+      "path": "/mnt/input/framework/pygments/formatters/_mapping.py",
+      "sha256": "d42c37ec5b9094d69c9f144a9ad94f5f89f22e85fdfedb64a39670b1c354659e"
+    },
+    "pygments.plugin": {
+      "path": "/mnt/input/framework/pygments/plugin.py",
+      "sha256": "f4d2931f3bbd495ee17d8dfe4d50b863bc10c7cdc2f22e4b82cdfe0014c131b4"
+    },
+    "pygments.util": {
+      "path": "/mnt/input/framework/pygments/util.py",
+      "sha256": "37432e828279a6e031c557865aa1daa2b242f4770792f45489a8536dc592e3c5"
+    },
+    "pygments.formatters": {
+      "path": "/mnt/input/framework/pygments/formatters/__init__.py",
+      "sha256": "a8f1b8ab972e69944606096610954b3f8483bf8dd0237b4052c923df433e98e6"
+    },
+    "pygments.styles._mapping": {
+      "path": "/mnt/input/framework/pygments/styles/_mapping.py",
+      "sha256": "300df2a81cbee4921cf706b0c4ff32ff4198bfb216451e8e2e8fadd285061134"
+    },
+    "pygments.styles": {
+      "path": "/mnt/input/framework/pygments/styles/__init__.py",
+      "sha256": "daf8062a76f2b749dffc248312d3211f1a693d200faf68da7f39791625c5b86b"
+    },
+    "pygments.formatter": {
+      "path": "/mnt/input/framework/pygments/formatter.py",
+      "sha256": "3d30674d6d041e47b6bf39402aebc72648f7fbf08c8fc76e231fb7c955227bea"
+    },
+    "pygments.token": {
+      "path": "/mnt/input/framework/pygments/token.py",
+      "sha256": "0d58a5e53da5b479138104d4632d5d32d8328a08dabc2b35ca913841fd82ac6a"
+    },
+    "pygments.console": {
+      "path": "/mnt/input/framework/pygments/console.py",
+      "sha256": "0b5f3d240c210b5421d002a0b21cdbd70543cc5a819efd55678e644c40c83b7d"
+    },
+    "pygments.formatters.terminal": {
+      "path": "/mnt/input/framework/pygments/formatters/terminal.py",
+      "sha256": "abb8cb2da9e57b7dde099903af80a81c037e7470457f50c1862e0570143cff51"
+    },
+    "pygments.filter": {
+      "path": "/mnt/input/framework/pygments/filter.py",
+      "sha256": "d5d9db92ad80742dc0907b770da5f09ce91304b0a1975911ea76922f09ebfed7"
+    },
+    "pygments.filters": {
+      "path": "/mnt/input/framework/pygments/filters/__init__.py",
+      "sha256": "d37658748626c6758287b80d5c3ee5110f3af437f89331e7386338e222716a7f"
+    },
+    "pygments.regexopt": {
+      "path": "/mnt/input/framework/pygments/regexopt.py",
+      "sha256": "2a8f57b570e22c429ead6683e78f7692b08159da6666982f924994fce911992a"
+    },
+    "pygments.lexer": {
+      "path": "/mnt/input/framework/pygments/lexer.py",
+      "sha256": "2037632e5c3bbf18c6c12a14dc38815e0584b16b2e81e7b765c04af1b3e1b738"
+    },
+    "pygments.lexers._mapping": {
+      "path": "/mnt/input/framework/pygments/lexers/_mapping.py",
+      "sha256": "fd7e1ac14a895e47591c7a911460ebbe2a47caed81159ea292776c08a122b4fa"
+    },
+    "pygments.modeline": {
+      "path": "/mnt/input/framework/pygments/modeline.py",
+      "sha256": "99ef20e6bc9289dbcfb4c04eac3cb63b5b0ca99774da5047318e4a0d979f530b"
+    },
+    "pygments.lexers": {
+      "path": "/mnt/input/framework/pygments/lexers/__init__.py",
+      "sha256": "1b876da84e5030402aa1a683d6bc126597aea8a84cc92e2eb65333d6cce4ad38"
+    },
+    "pygments.lexers.diff": {
+      "path": "/mnt/input/framework/pygments/lexers/diff.py",
+      "sha256": "fbadbb966b98a49dae51550cfe8ad51a05c91972011925476e696a7e508479a3"
+    },
+    "pygments.unistring": {
+      "path": "/mnt/input/framework/pygments/unistring.py",
+      "sha256": "678c381df395521b9e09445191f840a90d9bfbaf54ce4858e31b877af604cb98"
+    },
+    "pygments.lexers.python": {
+      "path": "/mnt/input/framework/pygments/lexers/python.py",
+      "sha256": "e7a326fd60673e33dab44397c99abe3f108224d619a34e5b20af5ed62eb603a5"
+    },
+    "_pytest._py": {
+      "path": "/mnt/input/framework/_pytest/_py/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "_pytest._py.error": {
+      "path": "/mnt/input/framework/_pytest/_py/error.py",
+      "sha256": "90643b17cfdf67a615061031faef669134014f1d2a231c6754c0b40a088e77bd"
+    },
+    "_pytest._py.path": {
+      "path": "/mnt/input/framework/_pytest/_py/path.py",
+      "sha256": "72a0a7d1a9b32a1a92aa25b55b3b782aabc52369dc281cc69f011152c5a90bfd"
+    },
+    "py.error": {
+      "path": "/mnt/input/framework/_pytest/_py/error.py",
+      "sha256": "90643b17cfdf67a615061031faef669134014f1d2a231c6754c0b40a088e77bd"
+    },
+    "py.path": {
+      "path": "/mnt/input/framework/_pytest/_py/path.py",
+      "sha256": "72a0a7d1a9b32a1a92aa25b55b3b782aabc52369dc281cc69f011152c5a90bfd"
+    },
+    "py": {
+      "path": "/mnt/input/framework/py.py",
+      "sha256": "b71675b5d9845ba0814e9e88767f88dac3b3cc0d3128da028bd45edbb523e871"
+    },
+    "_pytest.compat": {
+      "path": "/mnt/input/framework/_pytest/compat.py",
+      "sha256": "41f703ee4606232e1fc6eaa2136f360700c90824503491221a435861c3f2161e"
+    },
+    "_pytest._io.wcwidth": {
+      "path": "/mnt/input/framework/_pytest/_io/wcwidth.py",
+      "sha256": "714109ef8521c1e202c1b2af536aba9e865c3600f442504407d09f6a41986aa0"
+    },
+    "_pytest._io.terminalwriter": {
+      "path": "/mnt/input/framework/_pytest/_io/terminalwriter.py",
+      "sha256": "2b4a41d697c0beb281585011292a1b438c168b4a5d9a205a19bddafeffc00234"
+    },
+    "_pytest._io": {
+      "path": "/mnt/input/framework/_pytest/_io/__init__.py",
+      "sha256": "a642c5dbd54416be8396bdde3ad24bf2c7f8ed12c5b7525fe17d436413e56267"
+    },
+    "_pytest._io.saferepr": {
+      "path": "/mnt/input/framework/_pytest/_io/saferepr.py",
+      "sha256": "c4634e463e01eb613fc52d909f6f44e4aa682e0c3ad2ad3d6fe0286d6f1c7aa8"
+    },
+    "_pytest.warning_types": {
+      "path": "/mnt/input/framework/_pytest/warning_types.py",
+      "sha256": "8e27be526f030b2798164fd8511132a2f447b6f5ef6958363228bf978998edb5"
+    },
+    "_pytest.deprecated": {
+      "path": "/mnt/input/framework/_pytest/deprecated.py",
+      "sha256": "7f24f0a94f9fb68a09f0fbbc8b2db84cba965d5894a59415d6a4ab2490ea4e2a"
+    },
+    "_pytest.outcomes": {
+      "path": "/mnt/input/framework/_pytest/outcomes.py",
+      "sha256": "aa02dbf351cd1101a795e3fef683ab2fd7a2c04eb96188689663f51ece80c081"
+    },
+    "_pytest.pathlib": {
+      "path": "/mnt/input/framework/_pytest/pathlib.py",
+      "sha256": "c9fe77dccbf52afa1196ff92870ed919e09f254c082710a86ed417fd3ca90329"
+    },
+    "_pytest._code.code": {
+      "path": "/mnt/input/framework/_pytest/_code/code.py",
+      "sha256": "63ec03d20e61d3ac2a0e9954be71a619dd742d009c2409b1e3168e2a6fad9096"
+    },
+    "_pytest._code": {
+      "path": "/mnt/input/framework/_pytest/_code/__init__.py",
+      "sha256": "04a6e8c286100032a300999359d43c49240b6c106c874f9d663dd31a3b67eb23"
+    },
+    "_pytest.assertion._typing": {
+      "path": "/mnt/input/framework/_pytest/assertion/_typing.py",
+      "sha256": "f62ce7a05b0aa7ce3b818d62aad74bfd3848519ad80403daf0def63b774da568"
+    },
+    "_pytest.assertion._compare_mapping": {
+      "path": "/mnt/input/framework/_pytest/assertion/_compare_mapping.py",
+      "sha256": "74a33986faa3645f96334887c04ee51e3ea689568b4edeeed1e429ae9d86f690"
+    },
+    "_pytest._io.pprint": {
+      "path": "/mnt/input/framework/_pytest/_io/pprint.py",
+      "sha256": "87fcb9cd098dda72f3d5458f868242bea60d53f1c8d88e2ab499827da80bf4e4"
+    },
+    "_pytest.assertion._compare_sequence": {
+      "path": "/mnt/input/framework/_pytest/assertion/_compare_sequence.py",
+      "sha256": "6a7c68748e05632a8c9a784a4a099cfc0b4afe86eb1d4a0e0c16c13723a58681"
+    },
+    "_pytest.assertion._compare_set": {
+      "path": "/mnt/input/framework/_pytest/assertion/_compare_set.py",
+      "sha256": "251a73d7d113fdb8ba784f59fee5b14bf073ac423222d1b68725d096ce889c94"
+    },
+    "_pytest.assertion._guards": {
+      "path": "/mnt/input/framework/_pytest/assertion/_guards.py",
+      "sha256": "1fa6a11bfe490b06614e0e65224f03eaf82151074a7e8399194c2c4f7390085e"
+    },
+    "_pytest.assertion.highlight": {
+      "path": "/mnt/input/framework/_pytest/assertion/highlight.py",
+      "sha256": "015a92e17eb83e0d5a7a45e73984687898a02000d6c0075b76d1bff5b93fdfe7"
+    },
+    "_pytest.assertion.compare_text": {
+      "path": "/mnt/input/framework/_pytest/assertion/compare_text.py",
+      "sha256": "e10edb296d8df5dd2eee4480e68bda9ae1ba2ccbc55faf22c4cc8e453a4808c7"
+    },
+    "_pytest.assertion._compare_any": {
+      "path": "/mnt/input/framework/_pytest/assertion/_compare_any.py",
+      "sha256": "96db744e2023ecb555cf3f03d7e9a6eafc8cfe250f28eff55cd8239793d894c2"
+    },
+    "_pytest.config.exceptions": {
+      "path": "/mnt/input/framework/_pytest/config/exceptions.py",
+      "sha256": "e959bdcb3c143b12469b5ed93066f0ebdbff8b4ee64f52a607010d336b1c2a19"
+    },
+    "iniconfig.exceptions": {
+      "path": "/mnt/input/framework/iniconfig/exceptions.py",
+      "sha256": "9a2a50fda3310fd0af4af156375a135d8e10b919ca00c6757f7b027668c34d4d"
+    },
+    "iniconfig._parse": {
+      "path": "/mnt/input/framework/iniconfig/_parse.py",
+      "sha256": "15824a78105b52aa9ed414ce6ad073967c73be7ea5ae9d991a0df97a6e0cc2e1"
+    },
+    "iniconfig": {
+      "path": "/mnt/input/framework/iniconfig/__init__.py",
+      "sha256": "bb1c9017eea0053a104bd0703f3d8d13e7b9a854e4a364ee765ad64da7220819"
+    },
+    "_pytest.config.findpaths": {
+      "path": "/mnt/input/framework/_pytest/config/findpaths.py",
+      "sha256": "535d149e6f3962e44260b6645bb354976e19531f5dd248e14ee7d7fff61c8848"
+    },
+    "_pytest.config.argparsing": {
+      "path": "/mnt/input/framework/_pytest/config/argparsing.py",
+      "sha256": "a30373a110ac568e752b5cc5c4eb66cfa8595f2c1eaa1bf950b1fc5070a0d098"
+    },
+    "_pytest.hookspec": {
+      "path": "/mnt/input/framework/_pytest/hookspec.py",
+      "sha256": "12098571044671c24ed0011e2bb7d94976380265e5734c30f856479482e6f88d"
+    },
+    "_pytest.stash": {
+      "path": "/mnt/input/framework/_pytest/stash.py",
+      "sha256": "e69137903c78abce794d6f5a56f61376b9242a530353afb1897e25b8aa491202"
+    },
+    "_pytest.config": {
+      "path": "/mnt/input/framework/_pytest/config/__init__.py",
+      "sha256": "98b05c2c37d09e1d5c05975efc2d9af98d4aff6ea47de410a8e93956420873c1"
+    },
+    "_pytest.assertion.util": {
+      "path": "/mnt/input/framework/_pytest/assertion/util.py",
+      "sha256": "f2ede44368c40674cc9943833a56342539747e9242094191cfe24b7eeaf13d33"
+    },
+    "_pytest.mark.expression": {
+      "path": "/mnt/input/framework/_pytest/mark/expression.py",
+      "sha256": "edae43a0bfb44f6ae09747551f6c139cdbd985b8a66e2af33352c4c57ac1f27d"
+    },
+    "_pytest.raises": {
+      "path": "/mnt/input/framework/_pytest/raises.py",
+      "sha256": "dc28805f1e1c2db835f1a5290218efee5d510d190ad333d61663d59bd6d1362c"
+    },
+    "_pytest.scope": {
+      "path": "/mnt/input/framework/_pytest/scope.py",
+      "sha256": "78499126f474ba3787fd1ca9524dcf8583b2b505f5632af491ea1c458a72ae2a"
+    },
+    "_pytest.mark.structures": {
+      "path": "/mnt/input/framework/_pytest/mark/structures.py",
+      "sha256": "598ff2b44193f1e98868257ff55f4fff39276fc5d5ae8427fe4de7176ea1bc96"
+    },
+    "_pytest.mark": {
+      "path": "/mnt/input/framework/_pytest/mark/__init__.py",
+      "sha256": "1a649c9ecb24f1e7092d62c86b6d5b38648dc4bf43dac992f061f6876acde051"
+    },
+    "_pytest.nodes": {
+      "path": "/mnt/input/framework/_pytest/nodes.py",
+      "sha256": "4701f2fa74e292b2551ae790d26fe421bb25e5e459022026107bd024177cd129"
+    },
+    "_pytest.reports": {
+      "path": "/mnt/input/framework/_pytest/reports.py",
+      "sha256": "2e9272a67cde38b925eba24a288b2ef77f741c0daa22da6fbce53ee6e58fa41d"
+    },
+    "_pytest.timing": {
+      "path": "/mnt/input/framework/_pytest/timing.py",
+      "sha256": "62de28571e5296350624bc18fe2096f2feb064a55f33e1cc8d1e223c047db9d4"
+    },
+    "_pytest.runner": {
+      "path": "/mnt/input/framework/_pytest/runner.py",
+      "sha256": "c8d7fd553c0516f7884502ee0e7954eb5a5b1542f21fcb5c4357500ed2fe1570"
+    },
+    "_pytest.main": {
+      "path": "/mnt/input/framework/_pytest/main.py",
+      "sha256": "8ee2725057ff1811e2ae9ebdf1befb7518195f8f333f9f8ca024d76a4b80780e"
+    },
+    "_pytest.fixtures": {
+      "path": "/mnt/input/framework/_pytest/fixtures.py",
+      "sha256": "f5d4d3f848d97411e456d50400d3aaecc19a9b0c90def9151e395ee8952042b7"
+    },
+    "_pytest.assertion.rewrite": {
+      "path": "/mnt/input/framework/_pytest/assertion/rewrite.py",
+      "sha256": "17f1eefbd1c2fe5326cb7592ff3af92a773582cf9d01727b09d3ab864906ee50"
+    },
+    "_pytest.assertion.truncate": {
+      "path": "/mnt/input/framework/_pytest/assertion/truncate.py",
+      "sha256": "ee48bcb41d2bc23ed9efe6020000d046e077468d7d3bcdf2ed75777938de2f5c"
+    },
+    "_pytest.assertion": {
+      "path": "/mnt/input/framework/_pytest/assertion/__init__.py",
+      "sha256": "2a69087174fab92dd88352b60b546d879fb93411a6c0996384a0f84a07071ac7"
+    },
+    "_pytest.cacheprovider": {
+      "path": "/mnt/input/framework/_pytest/cacheprovider.py",
+      "sha256": "bd9bfb0437645da5d042792f30ba379d28ff4c1fffac6806f5543305a3073579"
+    },
+    "_pytest.capture": {
+      "path": "/mnt/input/framework/_pytest/capture.py",
+      "sha256": "12004dbff0ab7b34141ff53e33e616db2e857c695f64e640631f5abe30619145"
+    },
+    "_pytest.debugging": {
+      "path": "/mnt/input/framework/_pytest/debugging.py",
+      "sha256": "fde26a89f0ca1311423afe098601610680d7627b30b301c6d5d7192026538e0f"
+    },
+    "_pytest.python": {
+      "path": "/mnt/input/framework/_pytest/python.py",
+      "sha256": "b04488f5e46bf1ffe2e8344f81756e10b970dbfaf2f7f2f4d312becd6404df76"
+    },
+    "_pytest.python_api": {
+      "path": "/mnt/input/framework/_pytest/python_api.py",
+      "sha256": "cba22d17b5dedccb39be71ca946b765b998c4c3055ae1adad453fefbd843497d"
+    },
+    "_pytest.doctest": {
+      "path": "/mnt/input/framework/_pytest/doctest.py",
+      "sha256": "04261f5b3ddce0c36584f2be42e2938d5a0dbe914414502533a93e8c142dacf9"
+    },
+    "_pytest.freeze_support": {
+      "path": "/mnt/input/framework/_pytest/freeze_support.py",
+      "sha256": "5fde08c62a6a79b780fc7833261f1d6e3a869ebb44405b8c202e612bb486597c"
+    },
+    "_pytest.monkeypatch": {
+      "path": "/mnt/input/framework/_pytest/monkeypatch.py",
+      "sha256": "b5c405ed57dbd58adfb7f0fae44f84d62402993c50058e07f03387285c03df33"
+    },
+    "_pytest.tmpdir": {
+      "path": "/mnt/input/framework/_pytest/tmpdir.py",
+      "sha256": "5099f71d89413191c9e7515c9d4fe9fc7083bb73306f2cf1f73a9f89c862ed90"
+    },
+    "_pytest.pytester": {
+      "path": "/mnt/input/framework/_pytest/pytester.py",
+      "sha256": "9e791d0a3446b04324e70bb939712f8d490005ad13eb46ab3249592baa08ff17"
+    },
+    "_pytest.terminal": {
+      "path": "/mnt/input/framework/_pytest/terminal.py",
+      "sha256": "28c4a9ebca0243385b154f47ecb83b18a1df415e0b912ebd97079c5ea0036459"
+    },
+    "_pytest.legacypath": {
+      "path": "/mnt/input/framework/_pytest/legacypath.py",
+      "sha256": "fe5eaff1a90d31f4dce53023bdb73a33efedd79ee9f5013afb5d7c58cd0346df"
+    },
+    "_pytest.logging": {
+      "path": "/mnt/input/framework/_pytest/logging.py",
+      "sha256": "9ad4c3e583c205a97c37264bf479503e74e027cf68ba818996e923062380cac2"
+    },
+    "_pytest.recwarn": {
+      "path": "/mnt/input/framework/_pytest/recwarn.py",
+      "sha256": "0e3ab27f6b7313d89eff1136c4cd60913e591fe5b32961c87e7711778f2dc906"
+    },
+    "_pytest.subtests": {
+      "path": "/mnt/input/framework/_pytest/subtests.py",
+      "sha256": "f514883bad06a84cec0d7ddc1dd8ce8c16e5680597f9fc5a9bd8836b878f92a4"
+    },
+    "pytest": {
+      "path": "/mnt/input/framework/pytest/__init__.py",
+      "sha256": "ee37885c9583f843390684dfb496907f87a0905128e7a3cf4ad227f49ff34c2d"
+    },
+    "_pytest._argcomplete": {
+      "path": "/mnt/input/framework/_pytest/_argcomplete.py",
+      "sha256": "821d299daebaa782d56f60fc493e39ebc586c6f7489c64f8de6eac95886a36a5"
+    },
+    "_pytest.helpconfig": {
+      "path": "/mnt/input/framework/_pytest/helpconfig.py",
+      "sha256": "64a4ccef9da2e8f1af28afc42f605aa1d9c4c1255089adc6e4a136fbc81a5074"
+    },
+    "_pytest.unittest": {
+      "path": "/mnt/input/framework/_pytest/unittest.py",
+      "sha256": "24657b6c497eacbf50a978713598b3baed4c05c29f1c01891563cfefed119224"
+    },
+    "_pytest.skipping": {
+      "path": "/mnt/input/framework/_pytest/skipping.py",
+      "sha256": "cc2102f5f8d19478f91ce77117c109348b8766ae04ebc4b8c33e5f9923e50aee"
+    },
+    "_pytest.pastebin": {
+      "path": "/mnt/input/framework/_pytest/pastebin.py",
+      "sha256": "26d0f943451bdc4a48290144ca8ab6ed2535f0a09348c4cee9a2ad11c7f467d4"
+    },
+    "_pytest.junitxml": {
+      "path": "/mnt/input/framework/_pytest/junitxml.py",
+      "sha256": "557b8978c66b8010fafc50ada4bf56333f9927f31b2b5909fe4c1a9df1a3c0f0"
+    },
+    "_pytest.setuponly": {
+      "path": "/mnt/input/framework/_pytest/setuponly.py",
+      "sha256": "06c46b0b81110d5af8dbed86fcbd00c61354e175706ccb32e52d253af2abf300"
+    },
+    "_pytest.setupplan": {
+      "path": "/mnt/input/framework/_pytest/setupplan.py",
+      "sha256": "97ec9c14dc4364fc98e76c21e1fef26aa87367b496d628d22a740b9aacc36560"
+    },
+    "_pytest.stepwise": {
+      "path": "/mnt/input/framework/_pytest/stepwise.py",
+      "sha256": "903f350eb9e19dc94a06631f6aec1099b78c6d852fbb0d3bc395a73649887444"
+    },
+    "_pytest.tracemalloc": {
+      "path": "/mnt/input/framework/_pytest/tracemalloc.py",
+      "sha256": "942501fd85006fa475beaabf6fe2d26125f2f9389d6e7da6eed7f3996014ae39"
+    },
+    "_pytest.unraisableexception": {
+      "path": "/mnt/input/framework/_pytest/unraisableexception.py",
+      "sha256": "e89f17e58cb4d1c9ec4c32dcadb4e3377166b9aafd7f8f0c5d19410a27987b32"
+    },
+    "_pytest.threadexception": {
+      "path": "/mnt/input/framework/_pytest/threadexception.py",
+      "sha256": "85371ca73654aeb4240d1395140a87817c00538f3571ae0cab8080e1807b9b2e"
+    },
+    "_pytest.warnings": {
+      "path": "/mnt/input/framework/_pytest/warnings.py",
+      "sha256": "824a6f9f0f4233c5e4741bc37ef36660c63bb4ef207aa91064c080b69a4dae9f"
+    },
+    "_pytest.faulthandler": {
+      "path": "/mnt/input/framework/_pytest/faulthandler.py",
+      "sha256": "d5cec3a51b4fd3f0b7ce91544b0d41391a401bc1ac883b49f730ae59d1222dcd"
+    },
+    "websockets.server": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/websockets/server.py",
+      "sha256": "a3694f42063bb201daaacb7ec0c703b6c8b1684b2c6a95bf03bc991c60732e21"
+    },
+    "websockets.asyncio.server": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/websockets/asyncio/server.py",
+      "sha256": "a16ae1f59679cb0deff7d8e967c72cd9a8c2c3dca07428ef1fb10b87f57172be"
+    },
+    "httpcore._models": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/httpcore/_models.py",
+      "sha256": "20ed8271771da68bd170b4dd185181e91c8165d126da1fd33a6a02738ac42a1a"
+    },
+    "httpcore._backends": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/httpcore/_backends/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "httpcore._exceptions": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/httpcore/_exceptions.py",
+      "sha256": "968a022a06b7fd8558bb7b3e7772fd44c3d127286c63b7e2bae1b1be4383d1cd"
+    },
+    "httpcore._utils": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/httpcore/_utils.py",
+      "sha256": "fd12e05d8380602df9d229002d5e7d199ebc209adda1c459c4fb3d3e39b37456"
+    },
+    "httpcore._backends.base": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/httpcore/_backends/base.py",
+      "sha256": "69286045d6673264611561deb63ba694cef77fc2b3d58380c8250fff8907b250"
+    },
+    "httpcore._backends.sync": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/httpcore/_backends/sync.py",
+      "sha256": "6e113877d88af549b176c76c826d847ca9d76819acd9682019853eee3994ba35"
+    },
+    "certifi.core": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/certifi/core.py",
+      "sha256": "5c55f2727746e697f7edac9e17c377d8752e0da7ecca191531b3b80403d61dad"
+    },
+    "certifi": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/certifi/__init__.py",
+      "sha256": "7a52e5f4205f9b3d12a31898ceaa7e3f6837d19cc230700bcae1a9d91d1486c1"
+    },
+    "httpcore._ssl": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/httpcore/_ssl.py",
+      "sha256": "b2baa648d53888e52f585f92ac9bdbf06fd811b1c510b39740ec1d0c80534bd7"
+    },
+    "anyio._lazyimport": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/anyio/_lazyimport.py",
+      "sha256": "2c28e761a9c87d813d1be0effc4b2a34b0ee551a693627166630937d2f7eb095"
+    },
+    "anyio": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/anyio/__init__.py",
+      "sha256": "39fae86118c8530fc9163d19c21d4901a6a331083856ab6802dd17a0e1c34701"
+    },
+    "httpcore._synchronization": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/httpcore/_synchronization.py",
+      "sha256": "cd28b5de6002a250679278d90649d40ba84a343413e02ea28e77b367eaf44f6b"
+    },
+    "httpcore._trace": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/httpcore/_trace.py",
+      "sha256": "724e99a08cd84e474d0087eae4c19e2aa0570edaa3397faa7d8c266456eb19ca"
+    },
+    "h11._abnf": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/h11/_abnf.py",
+      "sha256": "c9b8b1af4c6cba99e403a18503232e6ee5c5e9373595bfe117cf743600ac7cd7"
+    },
+    "h11._util": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/h11/_util.py",
+      "sha256": "2d69248d7c89685940cba2eddfdc3bdd44ad925153e68bdcbe8d13918ed162e9"
+    },
+    "h11._headers": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/h11/_headers.py",
+      "sha256": "3fb0fe9413711f074b64f2e29a6630acf1bef59923125bef25925d6408123fee"
+    },
+    "h11._events": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/h11/_events.py",
+      "sha256": "23deda5e86a5d56bbb7642f9e3c04034150290e21b7bec790a2a1803d201635e"
+    },
+    "h11._receivebuffer": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/h11/_receivebuffer.py",
+      "sha256": "c6bb29b1db0d81617145f41c4d7c51f11add8d15d74cad08a39710616a49d56b"
+    },
+    "h11._state": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/h11/_state.py",
+      "sha256": "ff92c6fc1191f0509c1507813c7f93307826ffe07e1147160a74287fff578c51"
+    },
+    "h11._readers": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/h11/_readers.py",
+      "sha256": "6b8472a4e454082dddd2afe4c4fb8120cee34c3f222ede57f754c7d05b1db8de"
+    },
+    "h11._writers": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/h11/_writers.py",
+      "sha256": "a052a6e8fb637877db8f844b5fb541eca0dcd60218e778171b7fc747d96d9930"
+    },
+    "h11._connection": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/h11/_connection.py",
+      "sha256": "93d61155fea4a19a9bb6d056dfac5259a26959d6706bec50554f401c4a3d0ee2"
+    },
+    "h11._version": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/h11/_version.py",
+      "sha256": "1954ac6cf48f0dc3ae17aa6d7c88979d52686849b7ca05db327aa5aff1a26a1c"
+    },
+    "h11": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/h11/__init__.py",
+      "sha256": "88ed4ace448ee36c99e9f7e0f953206f1fd9553586518d349d16045a7facde46"
+    },
+    "httpcore._sync.interfaces": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/httpcore/_sync/interfaces.py",
+      "sha256": "b275ce378daf5031cee49049be8f03e155a4d966ade38cf63975c70eb8db97de"
+    },
+    "httpcore._sync.http11": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/httpcore/_sync/http11.py",
+      "sha256": "205a1b0f531de491652462969e1d7f4377a98a452bc88f2aa34f6ff0c8892040"
+    },
+    "httpcore._sync.connection": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/httpcore/_sync/connection.py",
+      "sha256": "f5ec4639bdcf07e329d93d7eb1c91278bdadfad27ff7e357a2657c8a19960a05"
+    },
+    "httpcore._sync.connection_pool": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/httpcore/_sync/connection_pool.py",
+      "sha256": "6be4fc2d3b14c5ceebd16c356ad7c7483a163e34347c0f1497b4b7f85d0c8fbd"
+    },
+    "httpcore._sync.http_proxy": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/httpcore/_sync/http_proxy.py",
+      "sha256": "fda97fe9cacab8466edb0cafbb8f7745922625d0499e3e6818a3632ce24bd99a"
+    },
+    "httpcore._sync": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/httpcore/_sync/__init__.py",
+      "sha256": "2410c8817b7995ad4b089d6c2d078a863285a4b9e936bf12beceb3da78b77e08"
+    },
+    "httpcore._api": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/httpcore/_api.py",
+      "sha256": "ba7666783b1c8415821823c2c244b75a8b7d7ae2ba6e0fe42b12ed193c70db5e"
+    },
+    "httpcore._backends.auto": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/httpcore/_backends/auto.py",
+      "sha256": "cced77e8f2999ac6930caf87464f38780f8c520f3fdb025fe0dbe62b8df6022a"
+    },
+    "httpcore._async.interfaces": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/httpcore/_async/interfaces.py",
+      "sha256": "8d389a58bf37a60a460bdce2bfdd197f068a34c987c2639a97368a8ae4f1013a"
+    },
+    "httpcore._async.http11": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/httpcore/_async/http11.py",
+      "sha256": "faa33d6d5ecf8d2405e6fc6cdfbf9e5173881706c88cf7196cd962b97f53b41c"
+    },
+    "httpcore._async.connection": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/httpcore/_async/connection.py",
+      "sha256": "e8e70f5ea3047dcd01537f3ffa21d4343775bca4937365154f4f57a8d6ff04e9"
+    },
+    "httpcore._async.connection_pool": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/httpcore/_async/connection_pool.py",
+      "sha256": "0ce210dacd9909ff6a7f0c61ccca6b4cf2ea08bf0ec465e2285eaa447c6f5726"
+    },
+    "httpcore._async.http_proxy": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/httpcore/_async/http_proxy.py",
+      "sha256": "db3564ae5bfe0ecfab5866aa69796b84426201014fa36dc14f71aafec5a80575"
+    },
+    "httpcore._async": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/httpcore/_async/__init__.py",
+      "sha256": "116765dafe2d867007cc9a6a8d4e21d9af03522180bcd896ae48a2f697e14dfd"
+    },
+    "httpcore._backends.mock": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/httpcore/_backends/mock.py",
+      "sha256": "7abf53e37eae49eecd2eb7e22dae31e8dbaa8398af43af770b1598096b206c7e"
+    },
+    "httpcore._backends.anyio": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/httpcore/_backends/anyio.py",
+      "sha256": "c7c3e01215d10bc6d5aac77393f609c7c63a77d4ee6f4e82b944b09db9adaa86"
+    },
+    "httpcore": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/httpcore/__init__.py",
+      "sha256": "f644ff92a0a10822544c7c30db866647f7b371d6e94585a4b03fa060dce464ff"
+    },
+    "anyio._core": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/anyio/_core/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "anyio._core._exceptions": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/anyio/_core/_exceptions.py",
+      "sha256": "0786612e40504f8b48eaf4a1bf8f8626e8b8f76209b282034f0d454091249802"
+    },
+    "anyio._core._eventloop": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/anyio/_core/_eventloop.py",
+      "sha256": "0726547890fd6a531f7324ec791a392334ced0896d12e97f1b2abd8aa4a3a839"
+    },
+    "anyio.lowlevel": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/anyio/lowlevel.py",
+      "sha256": "4325a4bdf7ad6c21f498792abf5cb11b039a899edfcb18696641d63973d5e495"
+    },
+    "anyio.abc": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/anyio/abc/__init__.py",
+      "sha256": "5c856f088d9cea8c9a39ca977bde24dabcd4e7fb3bf99367971193937e07e13d"
+    },
+    "anyio.abc._tasks": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/anyio/abc/_tasks.py",
+      "sha256": "1c13e94fbd9a3b2d1bc0c0310422a69d7b11df6f30098463626de2695c367d0a"
+    },
+    "anyio._core._tasks": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/anyio/_core/_tasks.py",
+      "sha256": "27676133f26adc6aec7e0fde9cd5a9473d92c5f335e6e2edfa911fbe842adee0"
+    },
+    "anyio._core._testing": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/anyio/_core/_testing.py",
+      "sha256": "651b9c2e1e64aa188558024c31b77cc99eae22fcf4aeadd6c0bef695da2cc405"
+    },
+    "anyio._core._synchronization": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/anyio/_core/_synchronization.py",
+      "sha256": "820b1def840f77ce3a7da0361d0793d3b38d4391d0d52efc832f26bc1dea0abc"
+    },
+    "anyio._backends": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/anyio/_backends/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "anyio.to_thread": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/anyio/to_thread.py",
+      "sha256": "f0c3d5aeb42af2db46bd5db571277af2b32da396e1c49d3e8bd0aea576a0e46b"
+    },
+    "anyio._core._typedattr": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/anyio/_core/_typedattr.py",
+      "sha256": "82df43ce7f882f4416d786873c30fc3c0b6af7915828d36ea47c9fdfbc5918f4"
+    },
+    "anyio.abc._resources": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/anyio/abc/_resources.py",
+      "sha256": "86b6f42d75201d2a778bc1ba5bc249721773297820d66d13f8beee7579afdb2d"
+    },
+    "anyio.abc._streams": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/anyio/abc/_streams.py",
+      "sha256": "20c78e3cfbad15745bc9e02eb715751c97bb154419629daa2ab249a4fd430afd"
+    },
+    "anyio.abc._sockets": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/anyio/abc/_sockets.py",
+      "sha256": "8d05a73d7ee20c80f2bf2bd591bb858637b3c38a08d96820cdb5ba565dbe7aab"
+    },
+    "anyio.streams": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/anyio/streams/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "anyio.streams.stapled": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/anyio/streams/stapled.py",
+      "sha256": "509d9182dd0d526335568bd134ea19a2273deb495c6c38dbdef85f660ddbfd9d"
+    },
+    "anyio._core._resources": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/anyio/_core/_resources.py",
+      "sha256": "2dde5db827bd37080f7c8ec420e87708c201610eebaba65011aec2152d2ef447"
+    },
+    "anyio.streams.tls": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/anyio/streams/tls.py",
+      "sha256": "7ea2e6c6f50b14ef6bbf11b2277dd53eb38837b1377a2535abdd019262a2810f"
+    },
+    "anyio._core._sockets": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/anyio/_core/_sockets.py",
+      "sha256": "0bc6fedf0e47f67d05a3883b5fc589be4d26e821a1e8d540005b627811872b78"
+    },
+    "anyio.streams.memory": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/anyio/streams/memory.py",
+      "sha256": "ae9c4dcc331a83d3c23b29c1a8deb82b2b807c03c1e35bc5c913fe369a3e944d"
+    },
+    "anyio._core._streams": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/anyio/_core/_streams.py",
+      "sha256": "15ccc5c08803a6790ad1b3835895cca6c50961dbc00f4e24694686cc953c0cad"
+    },
+    "anyio.abc._eventloop": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/anyio/abc/_eventloop.py",
+      "sha256": "d3e530801df9d6b928702b7c9b77e34e670dc761719f9da7528ba31b90f332f5"
+    },
+    "anyio.abc._subprocesses": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/anyio/abc/_subprocesses.py",
+      "sha256": "083a94d69d07b814b4a57533056fe16df86285325133aee7fffeea666a0f53ce"
+    },
+    "anyio.abc._testing": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/anyio/abc/_testing.py",
+      "sha256": "03d63c4400a520f9f503468d1c137c628691cbf30a3a96c51846d31c05e007a5"
+    },
+    "anyio._backends._asyncio": {
+      "path": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages/anyio/_backends/_asyncio.py",
+      "sha256": "56acbb3b5ca6984a714e23f37a14ae042553ce21802cd57e05bb0845a297b20e"
+    }
+  },
+  "framework_manifest_sha256": "b01175767169904824c36199b10e07b21c4f417ce0ee39783b744be199084792",
+  "tests_manifest_sha256": "0389984ed0842aa72cc787d850f44517ad85345f167d4674ee274878a3566e43"
+}

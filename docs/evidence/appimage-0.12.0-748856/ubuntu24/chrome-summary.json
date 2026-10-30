@@ -1,0 +1,179 @@
+{
+  "version": "0.12.0",
+  "sha256": "7488566c708d3fc12de665d35dfc7c26a1902908c9fec63e3c905b1446757a78",
+  "actual_package_modules_only": true,
+  "runtime_override": false,
+  "browser_version": "Google Chrome 154.0.8037.97",
+  "session": "x11",
+  "cases": [
+    {
+      "case": "leading-lf",
+      "passed": true,
+      "routes_during_dispatch": [
+        "fcitx"
+      ],
+      "protocols": [
+        "4"
+      ],
+      "received_lengths": [
+        2,
+        0
+      ]
+    },
+    {
+      "case": "trailing-lf",
+      "passed": true,
+      "routes_during_dispatch": [
+        "fcitx"
+      ],
+      "protocols": [
+        "4"
+      ],
+      "received_lengths": [
+        2,
+        0
+      ]
+    },
+    {
+      "case": "pure-three-tail",
+      "passed": true,
+      "routes_during_dispatch": [
+        "fcitx"
+      ],
+      "protocols": [
+        "4"
+      ],
+      "received_lengths": [
+        4,
+        0
+      ]
+    },
+    {
+      "case": "synchronous",
+      "passed": true,
+      "routes_during_dispatch": [
+        "None",
+        "fcitx"
+      ],
+      "protocols": [
+        "4",
+        "None"
+      ],
+      "received_lengths": [
+        7,
+        0
+      ]
+    },
+    {
+      "case": "original-fallback",
+      "passed": true,
+      "routes_during_dispatch": [
+        "None",
+        "fcitx"
+      ],
+      "protocols": [
+        "4",
+        "None"
+      ],
+      "received_lengths": [
+        7,
+        0
+      ]
+    },
+    {
+      "case": "mixed",
+      "passed": true,
+      "routes_during_dispatch": [
+        "fcitx"
+      ],
+      "protocols": [
+        "4"
+      ],
+      "received_lengths": [
+        22,
+        0
+      ]
+    },
+    {
+      "case": "cancel",
+      "passed": true,
+      "routes_during_dispatch": [
+        "fcitx"
+      ],
+      "protocols": [
+        "4"
+      ],
+      "received_lengths": [
+        1,
+        0
+      ]
+    },
+    {
+      "case": "pending-cancel",
+      "passed": true,
+      "routes_during_dispatch": [],
+      "protocols": [],
+      "received_lengths": [
+        0,
+        0
+      ]
+    },
+    {
+      "case": "prepare-switch",
+      "passed": true,
+      "routes_during_dispatch": [
+        "fcitx"
+      ],
+      "protocols": [
+        "4"
+      ],
+      "received_lengths": [
+        0,
+        22
+      ]
+    },
+    {
+      "case": "switch",
+      "passed": true,
+      "routes_during_dispatch": [
+        "fcitx"
+      ],
+      "protocols": [
+        "4"
+      ],
+      "received_lengths": [
+        1,
+        21
+      ]
+    },
+    {
+      "case": "keyboard-first",
+      "passed": true,
+      "routes_during_dispatch": [
+        "keyboard"
+      ],
+      "protocols": [
+        "None"
+      ],
+      "received_lengths": [
+        3,
+        0
+      ]
+    }
+  ],
+  "desktop_viewed_pages": [
+    "24-xorg/ui/page-01.png",
+    "24-xorg/ui/page-02.png",
+    "24-xorg/ui/page-03.png",
+    "24-xorg/ui/page-04.png",
+    "24-xorg/ui/page-05.png"
+  ],
+  "visible_GUI_observation": "Chinese glyphs readable; page5 reports InkEcho0.12.0 Ubuntu24.04.5 GNOME X11; scrollable pages only viewed visible region.",
+  "retained_warning": "One dbus_next Future exception was never retrieved / BrokenPipeError after pending-cancel; no-late and all target assertions passed; retained original suite.log.",
+  "not_verified": [
+    "physical microphone",
+    "real cloud end-to-end",
+    "DeepSeek or Codex actual webpages",
+    "normal sandbox Chrome"
+  ]
+}

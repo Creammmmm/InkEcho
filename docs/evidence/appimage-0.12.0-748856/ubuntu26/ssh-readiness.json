@@ -1,0 +1,14 @@
+[
+  {
+    "attempt": 1,
+    "returncode": 255,
+    "stdout": "",
+    "stderr": "Connection timed out during banner exchange\nConnection to 127.0.0.1 port 2222 timed out\n"
+  },
+  {
+    "attempt": 2,
+    "returncode": 0,
+    "stdout": "",
+    "stderr": ""
+  }
+]

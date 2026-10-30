@@ -1,0 +1,57 @@
+{
+  "user_environment": {
+    "command": [
+      "systemctl",
+      "--user",
+      "show-environment"
+    ],
+    "returncode": 0,
+    "stdout": "DESKTOP_SESSION=ubuntu-wayland\nDISPLAY=:0\nQT_IM_MODULE=ibus\nWAYLAND_DISPLAY=wayland-0\nXDG_CURRENT_DESKTOP=ubuntu:GNOME\nXDG_SESSION_TYPE=wayland\nXMODIFIERS=@im=ibus",
+    "stderr": ""
+  },
+  "sessions": {
+    "command": [
+      "loginctl",
+      "list-sessions",
+      "--no-legend"
+    ],
+    "returncode": 0,
+    "stdout": "13 1000 inkecho seat0 tty2 active no -\n14 1000 inkecho -     -    active no -\n",
+    "stderr": ""
+  },
+  "gnome_version": {
+    "command": [
+      "gnome-shell",
+      "--version"
+    ],
+    "returncode": 0,
+    "stdout": "GNOME Shell 46.0\n",
+    "stderr": ""
+  },
+  "xfce_version": {
+    "command": [
+      "xfce4-session",
+      "--version"
+    ],
+    "available": false
+  },
+  "fcitx_version": {
+    "command": [
+      "fcitx5",
+      "--version"
+    ],
+    "returncode": 0,
+    "stdout": "5.1.7\n",
+    "stderr": ""
+  },
+  "xorg_version": {
+    "command": [
+      "Xorg",
+      "-version"
+    ],
+    "returncode": 1,
+    "stdout": "",
+    "stderr": "/usr/lib/xorg/Xorg.wrap: Only console users are allowed to run the X server\n"
+  },
+  "os_release": "PRETTY_NAME=\"Ubuntu 24.04.5 LTS\"\nNAME=\"Ubuntu\"\nVERSION_ID=\"24.04\"\nVERSION=\"24.04.5 LTS (Noble Numbat)\"\nVERSION_CODENAME=noble\nID=ubuntu\nID_LIKE=debian\nHOME_URL=\"https://www.ubuntu.com/\"\nSUPPORT_URL=\"https://help.ubuntu.com/\"\nBUG_REPORT_URL=\"https://bugs.launchpad.net/ubuntu/\"\nPRIVACY_POLICY_URL=\"https://www.ubuntu.com/legal/terms-and-policies/privacy-policy\"\nUBUNTU_CODENAME=noble\nLOGO=ubuntu-logo\n"
+}

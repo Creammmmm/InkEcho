@@ -1,0 +1,7 @@
+{
+  "stage": "before guest launch",
+  "product_affected": false,
+  "failure": "First setup script stopped because a static assignment substring assertion also matched the intended SHA equality assertion; all VM core inputs were already prepared.",
+  "resolution": "Resumed only tail preparation with the exact forbidden assignment pattern; assertions retain package-only module origin and no staging override.",
+  "scripts_syntax_checked": 48
+}

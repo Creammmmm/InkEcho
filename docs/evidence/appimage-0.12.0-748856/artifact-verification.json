@@ -1,0 +1,18 @@
+{
+  "artifact": "/home/lth/github/InkEcho/dist/candidate-0.12.0-895d03b-20261030/source/dist/InkEcho-0.12.0-x86_64.AppImage",
+  "version": "0.12.0",
+  "source_commit": "895d03bed245aebb21c7124fabbf7df96d6a4aec",
+  "bytes": 104417784,
+  "sha256": "7488566c708d3fc12de665d35dfc7c26a1902908c9fec63e3c905b1446757a78",
+  "runtime_prefix_and_sha_sidecar_match": true,
+  "full_actual_payload_inventory_verified": 3708,
+  "symlinks_verified": 1048,
+  "source_assets_exact_match": 94,
+  "fcitx_candidate_sha256": "f67c6b5f2cb7ecd7c915c8062efd3b70284c74b97ced4a597d942c4b39594e44",
+  "neighbor_batch_protocol_version": 4,
+  "libei_license_paths": [
+    "usr/share/doc/inkecho/system/libei1/copyright"
+  ],
+  "candidate_only": true,
+  "dual_system_acceptance": "required checks completed with explicit session/backend limitations; pending main-agent review"
+}

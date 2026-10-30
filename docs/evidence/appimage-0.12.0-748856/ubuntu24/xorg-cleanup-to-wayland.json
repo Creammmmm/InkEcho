@@ -1,0 +1,7 @@
+{
+  "stage": "24-xorg",
+  "command": "/usr/bin/python3 /mnt/input/guest.py cleanup; /usr/bin/python3 /mnt/input/guest.py resource-check; /bin/sh /mnt/input/select-wayland.sh",
+  "returncode": 0,
+  "stdout": "guest action PASS cleanup\nguest action PASS resource-check\n()\n()\n",
+  "stderr": ""
+}

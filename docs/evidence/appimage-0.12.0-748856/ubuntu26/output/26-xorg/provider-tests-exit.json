@@ -1,0 +1,32 @@
+{
+  "returncode": 0,
+  "argv": [
+    "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/usr/bin/python3",
+    "-I",
+    "/mnt/input/frozen/scripts/validation/provider_package_probe.py",
+    "--artifact",
+    "/mnt/input/InkEcho.AppImage",
+    "--package-root",
+    "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchOGOlDO/packages",
+    "--frozen-source-root",
+    "/mnt/input/frozen/src",
+    "--framework-root",
+    "/mnt/input/framework",
+    "--framework-manifest",
+    "/mnt/input/framework-manifest.json",
+    "--tests-manifest",
+    "/mnt/input/tests-manifest.json",
+    "--work-dir",
+    "/run/user/1000/inkecho-package-gate-0.12.0/provider-tests-26-xorg",
+    "--output",
+    "/mnt/output/26-xorg/provider-tests.json",
+    "--expected-sha",
+    "7488566c708d3fc12de665d35dfc7c26a1902908c9fec63e3c905b1446757a78",
+    "--expected-version",
+    "0.12.0",
+    "--framework-sha",
+    "b01175767169904824c36199b10e07b21c4f417ce0ee39783b744be199084792",
+    "--tests-sha",
+    "0389984ed0842aa72cc787d850f44517ad85345f167d4674ee274878a3566e43"
+  ]
+}

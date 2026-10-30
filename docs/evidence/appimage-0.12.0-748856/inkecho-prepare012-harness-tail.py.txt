@@ -1,0 +1,24 @@
+from pathlib import Path
+import json,shutil,tarfile,hashlib,os
+repo=Path('/home/lth/github/InkEcho');root=repo/'dist/candidate-0.12.0-895d03b-20261030';old=repo/'dist/candidate-0.11.0-7203ba1-20261030';browser=repo/'dist/release-0.11.0-browser-focus-20261030/vm24';sha=json.loads((root/'artifact-verification.json').read_text())['sha256'];version='0.12.0';oldsha='51d20c74a31beb7f01008378a76876a491fd8a3cdc6b61bda440a79bf11c966f';elf='f67c6b5f2cb7ecd7c915c8062efd3b70284c74b97ced4a597d942c4b39594e44';oldelf='acd896aae8ab38ecca2685c0dd8639f2910e841176eadccf59ee4943b158c4de'
+# Chrome extra uses package modules/native asset without the earlier source/pin override.
+i=root/'vm24/input'
+for name in ['focus-cli.py','focus_proof.py','screenshot-owned.py','desktop-state.py','chrome-software-manifest.json']:
+ shutil.copy2(browser/'input'/name,i/name)
+script=(repo/'experiments/fcitx-stream-product-r2-20261030/source-final/browser-product-r2.py').read_text();script=script[script.index('"""Actual published-package'):];script=script.replace(oldsha,sha).replace('browser-product-r2','browser-package-012')
+script=script.replace('full pinned candidate product source overlay on released AppImage runtime; actual Session/default Router/negotiated bridge, no consumer or bridge-class monkeypatch; local synthetic provider only','actual unmodified 0.12.0 AppImage modules and staged addon; actual Session/default Router; synthetic Recorder/provider only')
+script=script.replace("  fcitx5_staging.TESTED_CANDIDATE_SHA256='"+elf+"'","  assert fcitx5_staging.TESTED_CANDIDATE_SHA256=='"+elf+"'")
+script=script.replace("report['native_candidate_test_only_override']=fcitx5_staging.TESTED_CANDIDATE_SHA256","report['native_candidate_test_only_override']=False")
+script=script.replace("source=Path('/mnt/input/batch-candidate')","source=A/'usr/share/inkecho/fcitx5/x86_64'")
+script=script.replace("Path(v).is_relative_to(_SR)","Path(v).is_relative_to(A/'packages')")
+assert '_SR'not in script and "fcitx5_staging.TESTED_CANDIDATE_SHA256='"not in script
+(i/'browser-package-012.py').write_text(script)
+shutil.copy2(repo/'experiments/fcitx-stream-product-r2-20261030/source-final/session_product_r2.py',i/'session_product_r2.py')
+launcher=(repo/'experiments/fcitx-stream-product-r2-20261030/source-final/launcher-product-r2.py').read_text().replace('browser-product-r2','browser-package-012').replace("(O/'mount.json').write_bytes(Path('/mnt/output/browser-xorg/mount.json').read_bytes())","(O/'mount.json').write_bytes((Path('/mnt/output')/os.environ['INKECHO_OUTPUT_STAGE']/'mount.json').read_bytes())")
+(i/'launch-browser-012.py').write_text(launcher)
+# Host command/guard/controller, adapted only to candidate identities and fresh own controls.
+controller=(old/'harness/control.py.txt').read_text().replace(str(old),str(root)).replace('0.11.0',version)
+needle="assert row['owned_active']and row['owned_focus'];q=subprocess.run"
+replacement="assert row['owned_active']and row['owned_focus'];guard='import pathlib,json,os,subprocess; os.environ.update(DBUS_SESSION_BUS_ADDRESS=\"unix:path=/run/user/1000/bus\",XDG_RUNTIME_DIR=\"/run/user/1000\");os.environ.update(dict(l.split(\"=\",1)for l in subprocess.check_output([\"systemctl\",\"--user\",\"show-environment\"],text=True).splitlines()if l.startswith((\"DISPLAY=\",\"XAUTHORITY=\"))));d=json.loads(pathlib.Path(\"/run/user/1000/inkecho-package-gate-0.12.0/fcitx-'+stage+'/actor.json\").read_text());assert d[\"pid\"]=='+str(row['owned_pid'])+' and d[\"active\"] and d[\"focus\"];assert b\"actor.py\"in pathlib.Path(\"/proc/\"+str(d[\"pid\"])+\"/cmdline\").read_bytes();assert int(subprocess.check_output([\"xdotool\",\"getactivewindow\",\"getwindowpid\"]))==d[\"pid\"]';check=subprocess.run(ssh('/usr/bin/python3 -c '+shlex.quote(guard)),capture_output=True,text=True,timeout=10);rows.append({'fresh_guard':True,'request':row,'returncode':check.returncode,'stdout':check.stdout,'stderr':check.stderr});save(label+'-keys',rows);assert check.returncode==0;q=subprocess.run"
+assert needle in controller;controller=controller.replace(needle,replacement);(root/'control.py').write_text(controller)
+print('Prepared harness',root,'SHA',sha)

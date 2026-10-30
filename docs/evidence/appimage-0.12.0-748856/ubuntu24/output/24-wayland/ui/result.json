@@ -1,0 +1,40 @@
+{
+  "kind": "appimage",
+  "session": "wayland",
+  "qt_platform": "default",
+  "voice_end_to_end": false,
+  "clipboard_accessed": false,
+  "artifact_sha256": "7488566c708d3fc12de665d35dfc7c26a1902908c9fec63e3c905b1446757a78",
+  "pages": [
+    {
+      "file": "page-01.png",
+      "width": 1214,
+      "height": 730
+    },
+    {
+      "file": "page-02.png",
+      "width": 1214,
+      "height": 730
+    },
+    {
+      "file": "page-03.png",
+      "width": 1214,
+      "height": 730
+    },
+    {
+      "file": "page-04.png",
+      "width": 1214,
+      "height": 730
+    },
+    {
+      "file": "page-05.png",
+      "width": 1214,
+      "height": 730
+    }
+  ],
+  "primary_exit_code": 0,
+  "ipc_show_quit": true,
+  "cold_controls_exit_0_config_unchanged": true,
+  "damaged_config_exit_1_preserved": true,
+  "passed": true
+}

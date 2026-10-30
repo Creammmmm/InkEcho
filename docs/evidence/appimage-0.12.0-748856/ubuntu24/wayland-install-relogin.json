@@ -1,0 +1,7 @@
+{
+  "stage": "24-wayland",
+  "command": "/usr/bin/python3 /mnt/input/guest.py cleanup; /bin/sh /mnt/input/select-wayland.sh",
+  "returncode": 0,
+  "stdout": "guest action PASS cleanup\n()\n()\n",
+  "stderr": ""
+}

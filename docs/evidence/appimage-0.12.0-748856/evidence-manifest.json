@@ -1,0 +1,2307 @@
+[
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/artifact-verification.json",
+    "bytes": 849,
+    "sha256": "2bda58a835a63edfaad868548c342b909a5ba8ccd016ab4cbc8db4f0ee9cedc5"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/build-run.json",
+    "bytes": 2973,
+    "sha256": "db30786079bab5317b12a6f9b871b43ada95014331c5747eab975e8cc28522da"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/build.log",
+    "bytes": 1151,
+    "sha256": "6cbd45f44dae4e44b59e3b19e2566ddb2dbe6b0716800324ae56f73bc1f36282"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/control.py.txt",
+    "bytes": 4524,
+    "sha256": "3433d745b2197bbc6e62f352dc99d0b8ab76b85149c321ce030af2c3ef479043"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/extract.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/final-receipt.json",
+    "bytes": 4997,
+    "sha256": "7901fadd3cdd7c3efa6d3739f12e4ba3dc75528af1b8604c32ea74b272947987"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/harness-setup-failure.json",
+    "bytes": 445,
+    "sha256": "e2b23ff01189ad0a05d313b732c3a7d2b9ad28b792e114d97215273bc8802df4"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/inkecho-prepare012-harness-tail.py.txt",
+    "bytes": 4174,
+    "sha256": "75aa2163d14d75011ae1d9dbb1d2a5ed7a9ee62faef4a7c2bfae0da38588a154"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/inkecho-prepare012-harness.py.txt",
+    "bytes": 7179,
+    "sha256": "c342e30ce9f388eadfb227fde36ce9fa6a953f2d45e8e93c05a58f6de31b4dd2"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/boot.json",
+    "bytes": 2086,
+    "sha256": "a4b1f9f0a49bc093800f372b8945484bd1dd8aa10363b617ba95ef9ced299d3e"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/chrome-summary.json",
+    "bytes": 3412,
+    "sha256": "f5834f795c0007d336160c1f6e0741723d809bb59fb908ac26b5337926d2d657"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/container-final-state.json",
+    "bytes": 269,
+    "sha256": "1d977a2f4641559992ba61310b833c61f371e965568c03c2cafa8b17d44894c1"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/input/actor.py.txt",
+    "bytes": 4504,
+    "sha256": "adb1f6a4256c215abe1b32d2e5344d1ad9891093e7f418ebd610b53a84f611bb"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/input/browser-package-012.py.txt",
+    "bytes": 14013,
+    "sha256": "f3d5747ca463bfaccd452d0c3112c49a6d500f6166393803464c983e66d32653"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/input/chrome-software-manifest.json",
+    "bytes": 23860,
+    "sha256": "208eb4c91aed99ca97bbf68b8d5e7190190ca36d745d10dfdb9130d8de1b4ee4"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/input/context.py.txt",
+    "bytes": 1370,
+    "sha256": "f5acbab2b30eba235dc0d302ea2a16d8362a13cebba1e7824dab1d5f55b640b3"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/input/desktop-state.py.txt",
+    "bytes": 731,
+    "sha256": "24709537c5b4b705ac3813ca4e4a8e3006ee1439ffd3672988e7645d48667012"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/input/fcitx-package.py.txt",
+    "bytes": 9017,
+    "sha256": "3c20d2866a917e85a5d44b523ced518a4be2da6975dce35056a0b9b1feaaf067"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/input/fcitx-zero.py.txt",
+    "bytes": 7796,
+    "sha256": "5e448382b484ac3699b4a5d15f5e6ce5d29a2fb156dcc95191e01bc9f81498f3"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/input/focus-cli.py.txt",
+    "bytes": 175,
+    "sha256": "c0b762dd2eb4f51d23b616205824be04448c32e50a8f38f00a514e9ace9df1a1"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/input/focus_proof.py.txt",
+    "bytes": 2814,
+    "sha256": "db8918f915edac55d1717ee6d872be0ac85532b8f3bf3a684edbdc9abae4d390"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/input/framework-manifest.json",
+    "bytes": 50769,
+    "sha256": "b01175767169904824c36199b10e07b21c4f417ce0ee39783b744be199084792"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/input/gap.py.txt",
+    "bytes": 5169,
+    "sha256": "8e5ecfccb27d51aefdce8ee3c59a2694582c16d998d9f57ffea840e545a05635"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/input/guest.py.txt",
+    "bytes": 5145,
+    "sha256": "fe8077f2b77d88f79e0d98b53203c027dfe384e2323c21e8be58abeb13fb7d94"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/input/http_asr.py.txt",
+    "bytes": 2987,
+    "sha256": "2cd394b56c70ab0956bd84f536ec4ab83262807c57db215b94db4da2f54a55a2"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/input/launch-browser-012.py.txt",
+    "bytes": 1138,
+    "sha256": "84395873117a4c21acfde7c3233db3e55846230cde94925e9aebcddd992d6f91"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/input/pipeline.py.txt",
+    "bytes": 27559,
+    "sha256": "8126d6d4b7b77b3e44e5f078e69f4c3f01171d6711594fc4aa69c5084e64855b"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/input/pipeline_receiver_cancel.py.txt",
+    "bytes": 27682,
+    "sha256": "f9f8d809e9e08e1229fc349dee9a11cbc7ce84cd8b9c853ed557c2e4c562b871"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/input/pipeline_suite.py.txt",
+    "bytes": 2424,
+    "sha256": "3932816f990c6a479c0d01d5184b5ffd42dd6697b1495757ad5ade042ba3939e"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/input/qemu.json",
+    "bytes": 882,
+    "sha256": "fa91db4461c63f3c0f1f01c021cfbc1663272746055d0d68cd5a9f82328f2e79"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/input/qmp-key.py.txt",
+    "bytes": 687,
+    "sha256": "4e041cde0db4e002497c3d6afdf42a6154588da2c4443775f9741009b411b6a1"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/input/resource-check.py.txt",
+    "bytes": 2214,
+    "sha256": "0d23c36b5d3d1992caf79d9f589e6b75593034a5ddddee46f76f84fffaf4d306"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/input/screenshot-owned.py.txt",
+    "bytes": 395,
+    "sha256": "15019f620ca8264a19014210bbf58d38c329c26bfea7f81753a8cb8562c10d7d"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/input/select-wayland.sh.txt",
+    "bytes": 770,
+    "sha256": "b6382da79a03ba2a743c76256a3e7d45f6f4bb4bc09448e8d67b7a6f928470fc"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/input/select-xfce.sh.txt",
+    "bytes": 506,
+    "sha256": "d165211b23d310c1989331f7758fac876a922fdcee051f8eef84a91ab2e91143"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/input/session_product_r2.py.txt",
+    "bytes": 3584,
+    "sha256": "fe9c54ea63e5ba4ce37d5115712160b702a6ae00ea2d5e3480de8656f0887095"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/input/target.py.txt",
+    "bytes": 1554,
+    "sha256": "a0a7ec56aeec7091a1545cc110dcaef47dd9cd0e11e1272671fd316787a76c24"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/input/tests-manifest.json",
+    "bytes": 33169,
+    "sha256": "0389984ed0842aa72cc787d850f44517ad85345f167d4674ee274878a3566e43"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/input/wrapper.py.txt",
+    "bytes": 1292,
+    "sha256": "0474281c4ddbdfd2aa08327d5d217c957059a8ba0ca03578fedb7a981ae610be"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/launch.json",
+    "bytes": 1762,
+    "sha256": "50b2322fda91c2bb9d85a67c160658f592f24bba274faa4027296a51f6b175a8"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland/desktop-context.json",
+    "bytes": 1668,
+    "sha256": "71205f71f4c820775e463a9258a7a0db28cc816760eadde2900fe873c74798fc"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland/desktop-lifecycle-exit.json",
+    "bytes": 228,
+    "sha256": "646df95dcfd464635b6366e314b4647e9c89970659769a533b11f42f0d75cc5c"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland/desktop-lifecycle.log",
+    "bytes": 819,
+    "sha256": "f6de7f58e796051d83179c038bf3858865ee5727f4ba8c91dee681929d82ad5e"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland/fuse-cleanup.json",
+    "bytes": 62,
+    "sha256": "295735bf4481d4c4adc2fa359c9baab92e466493f8a49bb80495e0e483700fe8"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland/fuse-mount.err",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland/fuse-mount.log",
+    "bytes": 63,
+    "sha256": "ca8ad3391b1e44686b60b9e337aff611b342000088b4645243cff965daeb45fb"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland/http-asr-exit.json",
+    "bytes": 197,
+    "sha256": "239acfa723ce54945450355d3505a35167410289177c0e9d0918a545940b7fa5"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland/http-asr.json",
+    "bytes": 523,
+    "sha256": "3006f27998f482fdd324b5ac62c77e1a3aea7874e837b0ab741ff36ac1e21dad"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland/http-asr.log",
+    "bytes": 452,
+    "sha256": "f8bb997fccaa981d5c452f5a1d1f5b748dfc2c0ef686a311fdd47720884aefd3"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland/mount.json",
+    "bytes": 208,
+    "sha256": "ddfe08ffc19a7779e35eb5a819b7b8ced9a18fac00c3a85e3f6e9ce0c38247ce"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland/owned-install-exit.json",
+    "bytes": 17,
+    "sha256": "c365161d39236fe0f1d32937fbc549796b8487d8faf65ed3879b96897c78ea5d"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland/owned-install.log",
+    "bytes": 105,
+    "sha256": "85663fcc4ee93f9487cb908fce6354602c8e3aa4a667192400e4ff2b0f5a63d2"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland/package-audit-exit.json",
+    "bytes": 596,
+    "sha256": "3967acff7ae645fcfb4750a249ca290d4810202304d9b6a780fe98e2df0b6d42"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland/package-audit.json",
+    "bytes": 18234,
+    "sha256": "6b36f90669a20040bf1ec89fde5bc5ac4112b014f9c2b9dff20db2a93044b23e"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland/package-audit.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland/provider-ui-exit.json",
+    "bytes": 751,
+    "sha256": "f6dbcec88d829d76b0bc13cd656a5943da625bf6f175628c80bf2e6cc3fbdddb"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland/provider-ui.json",
+    "bytes": 18795,
+    "sha256": "ab0ffec5a342b9ce0b69429f889f57159c0c7ef9ee91f0ea794ab98c8481ff95"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland/provider-ui.log",
+    "bytes": 17146,
+    "sha256": "7417e84369db4fd76e000a820552ff4c3fec555e1bf3767986c63bbb6be0265b"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland/qwen-vad-exit.json",
+    "bytes": 354,
+    "sha256": "792fb9dbce00f58a6331e9d714ea753ecc5acaf612a781e9ed76b04d40c146eb"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland/qwen-vad.json",
+    "bytes": 1281,
+    "sha256": "c31d7afb976b15579053b9b1cdb67616c3d57e4aa3388e2de039946d88eee6ba"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland/qwen-vad.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland/ui/page-01.png",
+    "bytes": 81737,
+    "sha256": "7c6d9fbaeef83c698e845c2ead8cd7b72e7e1b8f2818b2958557023ca6efc161"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland/ui/page-02.png",
+    "bytes": 95560,
+    "sha256": "74239c7ba1440ee62885bf65d88a6627ecdb049393290beff59256e2fd9fa9db"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland/ui/page-03.png",
+    "bytes": 116819,
+    "sha256": "aebdd77c3b2ba9ad9139000ee110e311ddce86cfb32e3145e91788ba369b633c"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland/ui/page-04.png",
+    "bytes": 69318,
+    "sha256": "4fc1bf03a1dcb3005767ced4743584842aa6429c21e9fd3b192c233b3e90f3e4"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland/ui/page-05.png",
+    "bytes": 44770,
+    "sha256": "2efd335be90de369ae6c69de2f7922f4ec2ce70d9c2f5769d7d7f8047534398f"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland/ui/process.log",
+    "bytes": 1402,
+    "sha256": "5a31d5a32fd70dd9913d08d61db0ffefa0d859122230138e17d38a2df6eefc59"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland/ui/result.json",
+    "bytes": 819,
+    "sha256": "f6de7f58e796051d83179c038bf3858865ee5727f4ba8c91dee681929d82ad5e"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland/ui/terminal.json",
+    "bytes": 59,
+    "sha256": "260c1a5fb5b9e93a0ef6ab6db6afc45ca51ebe40355c5103574ee061a765c69c"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/desktop-context.json",
+    "bytes": 1668,
+    "sha256": "efccdf971c2ec72f0eb4237cda7a3b144fe6a9f83bc91be9427e200778b5c0af"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/fcitx-package-exit.json",
+    "bytes": 158,
+    "sha256": "a3ec3cfb3d4fae9ffbbd9a6b9da31dddb8d36605cd523df46ca8e33a215d4b91"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/fcitx-package.log",
+    "bytes": 5082,
+    "sha256": "97e181be7c53e1f127053de67c316537e2ee5aec80b929a00e818c0ca93d5eee"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/fcitx-pipeline-cancel-after-first/pipeline.log",
+    "bytes": 2212,
+    "sha256": "72f3842fdec2bea95394e63ce49475dd7bbb49468fbdcf2e404f9ffc14c84e54"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/fcitx-pipeline-cancel-after-first/receiver.json",
+    "bytes": 205,
+    "sha256": "9888703887f2ab547fd60e9a6aa69427495c5e87d8aa0bdb5115a2b5269c30aa"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/fcitx-pipeline-cancel-after-first/report.json",
+    "bytes": 16675,
+    "sha256": "65ec4aa2f73db05307ec6929bbea17972102866be18c6536ab4a031a4caf4145"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/fcitx-pipeline-cancel-after-first/target.json",
+    "bytes": 156,
+    "sha256": "9a85bff9f4cbdd28db5ef170179625cbaa76573c2c9d92211d5292d539256348"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/fcitx-pipeline-cancel-after-first/target.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/fcitx-pipeline-normal/pipeline.log",
+    "bytes": 2093,
+    "sha256": "308afd8899d2a7fb0a97c42e65278b779c75d5b11eadcdf4ae4ac21dfccf83eb"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/fcitx-pipeline-normal/receiver.json",
+    "bytes": 375,
+    "sha256": "82629457d21b11a3030ee16006340ab55006e27115260eaaf2745b008ef58f96"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/fcitx-pipeline-normal/report.json",
+    "bytes": 16257,
+    "sha256": "a9c4ba6e7a240633d80105eb9cba9353d6663106b1b743016f05de2bf687fd6e"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/fcitx-pipeline-normal/target.json",
+    "bytes": 189,
+    "sha256": "12e56fcdd7b2dce41a8af59f9277214d5e49d21f084a6fd79b2e2a1e99c53b11"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/fcitx-pipeline-normal/target.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/final-resource-check.json",
+    "bytes": 339,
+    "sha256": "7ba2179640406d29404b91d0cf35066390587d402f756496f0eb9c2ab9d10ac2"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/fuse-cleanup.json",
+    "bytes": 62,
+    "sha256": "6f83e950efa7f52b0ffd06bce4ee3bef5e2a9964e238424fe5978fbef7877b53"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/fuse-mount.err",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/fuse-mount.log",
+    "bytes": 63,
+    "sha256": "f95ee76216f04c42a0cb6ba7cc44f1c9d5244e580c821e84feaa95d767c2b9bf"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/mount.json",
+    "bytes": 208,
+    "sha256": "65e3042ba22c59265388546a927934e77d515a8506ed51b65d099630ee2c2722"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/owned-disable-exit.json",
+    "bytes": 17,
+    "sha256": "c365161d39236fe0f1d32937fbc549796b8487d8faf65ed3879b96897c78ea5d"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/owned-disable.log",
+    "bytes": 97,
+    "sha256": "1febc91c1c54df9bfa7db57b7792e4e4d5d9fb6e0af4988e3a799f411ef23027"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/owned-enable-exit.json",
+    "bytes": 17,
+    "sha256": "c365161d39236fe0f1d32937fbc549796b8487d8faf65ed3879b96897c78ea5d"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/owned-enable.log",
+    "bytes": 96,
+    "sha256": "be0307cf100ca0bd251f4adfb56932edfb1e496c6036bc78e35c3eaf11e23a70"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/package-audit-exit.json",
+    "bytes": 596,
+    "sha256": "8d4bd82bf3dd1e3a3c7dfc2af3c73b0e55524557304aac93d16b7dfa80e2dbb4"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/package-audit.json",
+    "bytes": 18234,
+    "sha256": "6d32ede67dd7c34990fc924f6acec7836285efda2094d06edacd72b073a8444e"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/package-audit.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/resource-check-exit.json",
+    "bytes": 97,
+    "sha256": "bc5248b2e8759ce8dc2aa9cf9353c360520236d7334912436600a437747de01c"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/resource-check.log",
+    "bytes": 296,
+    "sha256": "c27e224a3ca16c2bb221a68661f8cfb7939408d23037cf72ce22734cfdf1b653"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/suite-ibus-cancel-after-first/initial-target.json",
+    "bytes": 168,
+    "sha256": "32fa50b527df4a6c65bfd045f862be5a7008ac51f14f3b61fc278ce2b24aa5e8"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/suite-ibus-cancel-after-first/pipeline.log",
+    "bytes": 2214,
+    "sha256": "d04953d2fd0a90fc67aaf0dff01bd92abfa4ca4418a1b21fb3ae0562e23188dd"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/suite-ibus-cancel-after-first/receiver.json",
+    "bytes": 284,
+    "sha256": "996ca7edfa0bbddf1daaec27f2d726f9a171dcf58aad043105cc8971df9772cc"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/suite-ibus-cancel-after-first/report.json",
+    "bytes": 16152,
+    "sha256": "8e8bce13d7553c3c81bfc942d77d32cd9865b713e57b00c11280b63b96d536e0"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/suite-ibus-cancel-after-first/target-immodules.json",
+    "bytes": 400,
+    "sha256": "76cb7f9724d60d61af7d60fccb8844715c5ebcb81b95c2944e62bc28c372e9df"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/suite-ibus-cancel-after-first/target.json",
+    "bytes": 157,
+    "sha256": "0d200f215a6405ff0bd0e3e3f6dec5b4ffb4f3c567c970dd3f22fa9fab846f3f"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/suite-ibus-cancel-after-first/target.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/suite-ibus-normal/initial-target.json",
+    "bytes": 168,
+    "sha256": "cb8c01910576d674103fb22415f119fd29c4d4db34a1e9916ed2461c4cefc8be"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/suite-ibus-normal/pipeline.log",
+    "bytes": 2096,
+    "sha256": "4f099028c0c73b85c3831988000d493514c22a61beb517fde6b7466432a3a42c"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/suite-ibus-normal/receiver.json",
+    "bytes": 458,
+    "sha256": "1270f36e2cbaf4ed4b0baeb9e0ac3715e1e948df6ba28945fbe1f40ffcb68163"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/suite-ibus-normal/report.json",
+    "bytes": 15826,
+    "sha256": "ed2c6ece651e89e7f56e4788c5fba4077146093e6b632100c76e804128e9b13b"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/suite-ibus-normal/target-immodules.json",
+    "bytes": 400,
+    "sha256": "76cb7f9724d60d61af7d60fccb8844715c5ebcb81b95c2944e62bc28c372e9df"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/suite-ibus-normal/target.json",
+    "bytes": 189,
+    "sha256": "39faab925e39b73f356ddfa4a067da9d86e555a087554d6683de601af54f833f"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/suite-ibus-normal/target.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/suite-keyboard-cancel-after-first/initial-target.json",
+    "bytes": 168,
+    "sha256": "979628f46983143cd47e8fe9173e3f3e5733afa828f0935e046e1011ba889bf7"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/suite-keyboard-cancel-after-first/pipeline.log",
+    "bytes": 2212,
+    "sha256": "4cf17e4ae4817a3ee5af04173b121f0b5eea966652fb0cfac458209398cadabd"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/suite-keyboard-cancel-after-first/receiver.json",
+    "bytes": 265,
+    "sha256": "291f4ae063e7569af74f8933ea73e2996f0fa918db3b30a002602e0f40a1df48"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/suite-keyboard-cancel-after-first/report.json",
+    "bytes": 16188,
+    "sha256": "8b84b5bd2953c375b69bce8e30413f74180673aeb59dba9000d8b9903ece57a8"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/suite-keyboard-cancel-after-first/target-immodules.json",
+    "bytes": 62,
+    "sha256": "7cb5bb84c434b2910042a5afd252e7b8fc694f01367edbb82d81adaa8247216a"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/suite-keyboard-cancel-after-first/target.json",
+    "bytes": 254,
+    "sha256": "512207931f83872e09145cec4cf94858445165333f2783e40d8106af7d67505a"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/suite-keyboard-cancel-after-first/target.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/suite-keyboard-normal/initial-target.json",
+    "bytes": 168,
+    "sha256": "75c84bc3f7a17cab292998d737f855de789f84f5d740b31808efa1b3699a799c"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/suite-keyboard-normal/pipeline.log",
+    "bytes": 2096,
+    "sha256": "deb2fd332e69656b9e42851e9c6d258c5b4d898a5e69232f7c73f7d992f20404"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/suite-keyboard-normal/receiver.json",
+    "bytes": 458,
+    "sha256": "25c91820e98b8b2087008eb1f42c752cd35acb075e70cb6cd3c8051003e74c3c"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/suite-keyboard-normal/report.json",
+    "bytes": 15780,
+    "sha256": "40791ba362040ba30ed65ac24500ab03e538f25470e1dced89b52947f726ef38"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/suite-keyboard-normal/target-immodules.json",
+    "bytes": 62,
+    "sha256": "7cb5bb84c434b2910042a5afd252e7b8fc694f01367edbb82d81adaa8247216a"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/suite-keyboard-normal/target.json",
+    "bytes": 2489,
+    "sha256": "36d098e7f726fc699a17c7d827ce925bcf603b306b4f4461981445d408bed2eb"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-wayland-owned/suite-keyboard-normal/target.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/desktop-context.json",
+    "bytes": 1627,
+    "sha256": "6f8a1322ecfd5b4189d2b95c3b1289066174a828116171de249874e5c8b82723"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/desktop-lifecycle-exit.json",
+    "bytes": 225,
+    "sha256": "482a43a10f966a78b7a0f2861f2e331b13a6fade990c5496ee9a6e3008bb3a18"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/desktop-lifecycle.log",
+    "bytes": 815,
+    "sha256": "e24ec84cddf313294b5522b4a298dfb96691ebc17769afbe6c06ddfa17753acf"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/fcitx-package-exit.json",
+    "bytes": 158,
+    "sha256": "2e5a65f35a0d9a4460dd389357d7e376e3e706026953fa6cebaf3a8abf8d23ab"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/fcitx-package.log",
+    "bytes": 5078,
+    "sha256": "819c5a3d9da6817e69495a658b7765eece48722e0dd6f568e42543d2d3fe8239"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/fcitx-pipeline-cancel-after-first/pipeline.log",
+    "bytes": 2215,
+    "sha256": "4e70da9ef37877c5d30f93884f2f10cbe457f3defd1ca55f74884bc833bae120"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/fcitx-pipeline-cancel-after-first/receiver.json",
+    "bytes": 205,
+    "sha256": "9888703887f2ab547fd60e9a6aa69427495c5e87d8aa0bdb5115a2b5269c30aa"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/fcitx-pipeline-cancel-after-first/report.json",
+    "bytes": 16151,
+    "sha256": "51d8bb02946c57d3d86a7b98d523c0640f2e0a3223dd159bcb733f48233b2416"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/fcitx-pipeline-cancel-after-first/target.json",
+    "bytes": 156,
+    "sha256": "08976919d8ae5f3e13751b9ef83ab79da41aca4ef746dd8aa33b5f8ad0a209c7"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/fcitx-pipeline-cancel-after-first/target.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/fcitx-pipeline-normal/pipeline.log",
+    "bytes": 2091,
+    "sha256": "dff15ee61b005ec72c504dec03111c0bd614ab488e4b235d5f05c0987a0398d4"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/fcitx-pipeline-normal/receiver.json",
+    "bytes": 375,
+    "sha256": "82629457d21b11a3030ee16006340ab55006e27115260eaaf2745b008ef58f96"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/fcitx-pipeline-normal/report.json",
+    "bytes": 15805,
+    "sha256": "1bcff9aa2df717d573b62c6968ea1963d711d6d8d54bd3179bdb0ca38023ea6f"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/fcitx-pipeline-normal/target.json",
+    "bytes": 189,
+    "sha256": "371736e619a1cb1cba8625e0937bf9f95676802348f4c1c2a83c77687eea34a8"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/fcitx-pipeline-normal/target.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/final-resource-check.json",
+    "bytes": 339,
+    "sha256": "7ba2179640406d29404b91d0cf35066390587d402f756496f0eb9c2ab9d10ac2"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/fuse-cleanup.json",
+    "bytes": 62,
+    "sha256": "e3ed9074b3344c041ef107ea9c2b6fef65adbc69e68ea7d6c3593b8ec604878e"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/fuse-mount.err",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/fuse-mount.log",
+    "bytes": 63,
+    "sha256": "3b2ee5abc88374a8a2fbdf3a1c2c7a2e46233cc082bd94f53a0c74f0a55b4244"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/http-asr-exit.json",
+    "bytes": 194,
+    "sha256": "84ea0975b066bb540fa6eb1b5b98869ca7ec7f3974431e37e2700dc63c26f102"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/http-asr.json",
+    "bytes": 523,
+    "sha256": "d5679b54331ad693a2f75ea391be3f8b49ee9c9f21444a98ee955940c0a6e3ed"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/http-asr.log",
+    "bytes": 452,
+    "sha256": "9bfda757c3611e310db9d670675e265608a255b8070f390b9ae45fab20d93584"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/mount.json",
+    "bytes": 204,
+    "sha256": "92f4abca5afc1835735f0e786f1056db5611cd5cee53e112f1b03bf40fcc4d8c"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/package-audit-exit.json",
+    "bytes": 596,
+    "sha256": "a5056220f761ef715b4f899a7f3b1b3b5a8fe7f1dd94ae7f4b06ab42730cfba4"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/package-audit.json",
+    "bytes": 18234,
+    "sha256": "8cc05f4dc84f035543b1b22415a858eee1a6a27c5cd918e8b0ee0522485c69aa"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/package-audit.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/provider-tests-exit.json",
+    "bytes": 1072,
+    "sha256": "a371673e9ea1289b05de9d8763ede2b51fd1dffb86ffd9e19454cae7d099273f"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/provider-tests.json",
+    "bytes": 126822,
+    "sha256": "03d3a5ca4a2f103e8f928bb15c7e56bb4dc76cb8b3670a2a2122b8cdd67610c0"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/provider-tests.log",
+    "bytes": 341,
+    "sha256": "46dc526a9671c6a3520194094d1b531d2815b6ce02fef736b4db89134d41bacc"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/provider-ui-exit.json",
+    "bytes": 741,
+    "sha256": "753fdf4af9f042c54e68e8d14a298725538dc974011bf5f8a718b18f2b2b14c0"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/provider-ui.json",
+    "bytes": 18791,
+    "sha256": "7014babd10ed01285858d518a52cb3ba49fc62fdc008cc6cb7ff652fe9c79e1e"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/provider-ui.log",
+    "bytes": 17142,
+    "sha256": "b7cd5de2a02d1970aa6aa038117d650f49ce537221e26f06bc371d82678d0cf5"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/qwen-vad-exit.json",
+    "bytes": 351,
+    "sha256": "5c543bd0778be2371affef455339ce9b9c01d4fff3b3e62bb4066a2ceae662c0"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/qwen-vad.json",
+    "bytes": 1281,
+    "sha256": "d65d3e64b96471e188bae6065bb9bfa9a1141edf6f6ae64296825db5c3447e82"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/qwen-vad.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/resource-check-exit.json",
+    "bytes": 97,
+    "sha256": "bc5248b2e8759ce8dc2aa9cf9353c360520236d7334912436600a437747de01c"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/resource-check.log",
+    "bytes": 296,
+    "sha256": "c27e224a3ca16c2bb221a68661f8cfb7939408d23037cf72ce22734cfdf1b653"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/suite-keyboard-cancel-after-first/initial-target.json",
+    "bytes": 168,
+    "sha256": "aed26cbacf3da8354e30f20fe7995e011e42276a405a56ea0ff1ab57aba40009"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/suite-keyboard-cancel-after-first/pipeline.log",
+    "bytes": 2214,
+    "sha256": "8d963091f5c286ad20aa8a4b3f0b51d4ad32f3f2159055ba09c075a568a87e72"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/suite-keyboard-cancel-after-first/receiver.json",
+    "bytes": 261,
+    "sha256": "f234a7d4ceffe496e193e323dcb4d168e8b6fcf3c9f9ae02a7b0624c6ea9ff62"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/suite-keyboard-cancel-after-first/report.json",
+    "bytes": 15996,
+    "sha256": "350af61303d52523c7286152a22f288d02922be09dc852db2e9a988dadd62a98"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/suite-keyboard-cancel-after-first/target-immodules.json",
+    "bytes": 62,
+    "sha256": "7cb5bb84c434b2910042a5afd252e7b8fc694f01367edbb82d81adaa8247216a"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/suite-keyboard-cancel-after-first/target.json",
+    "bytes": 255,
+    "sha256": "40233b4a931861eca533afc8e43ad68a5226dcababcdf53aee0519cb296afafe"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/suite-keyboard-cancel-after-first/target.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/suite-keyboard-normal/initial-target.json",
+    "bytes": 167,
+    "sha256": "cd25537563ca3dfda5c3703a25890c6033da0c66e09fc898dbcf552ef8526b29"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/suite-keyboard-normal/pipeline.log",
+    "bytes": 2096,
+    "sha256": "c4622613e62d89820c1b6eaec476f5ea4c63e5186606402c6c015fce7c38d324"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/suite-keyboard-normal/receiver.json",
+    "bytes": 454,
+    "sha256": "e9b3cba095c43d0d78264acd465a1bcaa61a3359b17bbc5af9bef588221447df"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/suite-keyboard-normal/report.json",
+    "bytes": 15515,
+    "sha256": "79cad8f79cf83fdb8d13ae891688b5036e4053b860c17e69fe5d301675d9eb40"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/suite-keyboard-normal/target-immodules.json",
+    "bytes": 62,
+    "sha256": "7cb5bb84c434b2910042a5afd252e7b8fc694f01367edbb82d81adaa8247216a"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/suite-keyboard-normal/target.json",
+    "bytes": 2489,
+    "sha256": "e3c14edd9ade39cfdeac2ccf22797de4e786fb6dbf1675672d91aca78be8d6ef"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/suite-keyboard-normal/target.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/ui/page-01.png",
+    "bytes": 72506,
+    "sha256": "184aaeeef511e8ffc8231c68306539def69da0c7fc7db0c0ab6dbb8d9a8b599f"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/ui/page-02.png",
+    "bytes": 85532,
+    "sha256": "aa02765ad2acd8dfa67fc361b6d09b8d1ff0fb6af45a3fb6b9b1c1a4a4c79659"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/ui/page-03.png",
+    "bytes": 105440,
+    "sha256": "5532448335794758e4f3490351a3f7123874048b2721a96926311d94521ee93c"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/ui/page-04.png",
+    "bytes": 61480,
+    "sha256": "fb96d4d795783732517a9c5101acb9e1c5e84e9e42eda69e7054949570f249c7"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/ui/page-05.png",
+    "bytes": 38238,
+    "sha256": "da8635686517ba3c405b92d3d55a1eb34526c4b9f16f68d2ceb362826ee8535b"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/ui/process.log",
+    "bytes": 1088,
+    "sha256": "2ed95f049b8e7f2f098dbd2d216ed97152215aa95fdea9e25171c26d978f29a5"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/ui/result.json",
+    "bytes": 815,
+    "sha256": "e24ec84cddf313294b5522b4a298dfb96691ebc17769afbe6c06ddfa17753acf"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/24-xorg/ui/terminal.json",
+    "bytes": 59,
+    "sha256": "98e2030cf107d7f00aca922aa62f2d8a6507f290393ad6330cf047b5cb796f99"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/browser-package-012/after-activation.png",
+    "bytes": 32343,
+    "sha256": "3d971870fd869d6ac019e346421529e315f6fd180f92092dfed1b5ee5bce292a"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/browser-package-012/auto-cancel.png",
+    "bytes": 8735,
+    "sha256": "ddffde797335837d284abd29cd45ec509ba9a2a20f175d0a5a1287a7cc66d700"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/browser-package-012/auto-keyboard-first.png",
+    "bytes": 8699,
+    "sha256": "c15d0d9b10cd4d813ed747086c1c338a1d753e1434f6a06f99be6e095343a913"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/browser-package-012/auto-leading-lf.png",
+    "bytes": 8491,
+    "sha256": "91c590c0f4a2e732d1ae6b93666201ec0d3f31d8baeb2213ad59771754d39bdc"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/browser-package-012/auto-mixed.png",
+    "bytes": 11213,
+    "sha256": "be69c84def99ac8694b9a69a4debc7a45f5409c8456e4fd7128bfbb6d7e8d418"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/browser-package-012/auto-original-fallback.png",
+    "bytes": 8968,
+    "sha256": "7ae090c4940231158e4329aa2153c5f573e30d892607f1a9720cb9e4d3e9375a"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/browser-package-012/auto-pending-cancel.png",
+    "bytes": 8356,
+    "sha256": "2a1d0a55a2972f8fcd6fe434901adf87f1c3eb862751ed6c540cf276556dc53a"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/browser-package-012/auto-prepare-switch.png",
+    "bytes": 11209,
+    "sha256": "66566da3f6370f76bdbd56837277fa32a06148299c5919a846c4cd9c3cefe81f"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/browser-package-012/auto-pure-three-tail.png",
+    "bytes": 8833,
+    "sha256": "bb1086ec382bf0196468b42458950cb04f2d3b0e71c14aaea3d0cfb806dbfe2c"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/browser-package-012/auto-switch.png",
+    "bytes": 11265,
+    "sha256": "1ba5692f3c9db5ac0c8c86bc6b97977ea9a3df4fc9d5accf921e8bf0da5d3272"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/browser-package-012/auto-synchronous.png",
+    "bytes": 8968,
+    "sha256": "7ae090c4940231158e4329aa2153c5f573e30d892607f1a9720cb9e4d3e9375a"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/browser-package-012/auto-trailing-lf.png",
+    "bytes": 8491,
+    "sha256": "03d7fb517271048cc99228c5898a369b7910e02131528a355da23cbccb2936fd"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/browser-package-012/before-activation.png",
+    "bytes": 32362,
+    "sha256": "09b8457d340194c422d0b0c9d86ba88ba9bdd486585d3eb1a54492599835a935"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/browser-package-012/chrome.log",
+    "bytes": 233,
+    "sha256": "4941a2df0cbf22a17895b3f07c732c352d817b6d4d5511172aaa1a475f4d0720"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/browser-package-012/fcitx.log.gz",
+    "bytes": 1285,
+    "sha256": "aab3687eff5dae200d996fac985f85816fc080a4e1b3591d692ed4776c49e056"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/browser-package-012/mount.json",
+    "bytes": 204,
+    "sha256": "92f4abca5afc1835735f0e786f1056db5611cd5cee53e112f1b03bf40fcc4d8c"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/browser-package-012/results.json",
+    "bytes": 125537,
+    "sha256": "63ecdd266a68106f471742f270066dd6b510f78c350e1063c5ed9954639adfb9"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/browser-package-012/suite-exit.json",
+    "bytes": 17,
+    "sha256": "c365161d39236fe0f1d32937fbc549796b8487d8faf65ed3879b96897c78ea5d"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/browser-package-012/suite.log",
+    "bytes": 1853,
+    "sha256": "0fe34039f26c76529c45fddcba993a18be35b247a1d1ed77551a40e6236032a7"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/fcitx-raw-24-wayland-owned/actor.json",
+    "bytes": 635,
+    "sha256": "daecf66fc906eedc51011133895684d0b62ac798309b27af4773577097822a6e"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/fcitx-raw-24-wayland-owned/actor.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/fcitx-raw-24-wayland-owned/fcitx.log.gz",
+    "bytes": 1280,
+    "sha256": "ee980b252ecadddaa6471136ccc048be959563112841828974541d70734d7157"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/fcitx-raw-24-wayland-owned/hints-before.json",
+    "bytes": 44,
+    "sha256": "fbfda932806ff04cfbe550cc55e63617075efba1b518de2dea5982b4eb65ad1a"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/fcitx-raw-24-wayland-owned/results.json",
+    "bytes": 7236,
+    "sha256": "75ac9f4efc509fc46c2f857f811b29e1c4fdd72b1ddaf8105db855dea8a7e9b2"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/fcitx-raw-24-xorg/actor.json",
+    "bytes": 635,
+    "sha256": "8b2195ed5761b9b085a61be99c75305063adea6e53a2e5a83a8d3575fce05067"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/fcitx-raw-24-xorg/actor.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/fcitx-raw-24-xorg/fcitx.log.gz",
+    "bytes": 1261,
+    "sha256": "6129a9b19624657cc80df3b824ece3502e4ad665743c46f84d7e74212d70edb1"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/fcitx-raw-24-xorg/hints-before.json",
+    "bytes": 44,
+    "sha256": "fbfda932806ff04cfbe550cc55e63617075efba1b518de2dea5982b4eb65ad1a"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/fcitx-raw-24-xorg/results.json",
+    "bytes": 7232,
+    "sha256": "159c3b350de13abe5ff8af243f426cf4f5b48278153ea50664f805ce04a4bb98"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/fcitx-zero-raw-24-wayland-owned/actor.json",
+    "bytes": 3440,
+    "sha256": "fdf3417dae4b913af16876bad14969dcca7faaecf8d2c234ce1dda795a9a21a9"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/fcitx-zero-raw-24-wayland-owned/actor.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/fcitx-zero-raw-24-wayland-owned/fcitx.log.gz",
+    "bytes": 1248,
+    "sha256": "9d5232caeb9a7b791c41ee795a717acba82891d80692d19457513b7ae35fbe1a"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/fcitx-zero-raw-24-wayland-owned/hints-before.json",
+    "bytes": 44,
+    "sha256": "fbfda932806ff04cfbe550cc55e63617075efba1b518de2dea5982b4eb65ad1a"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/fcitx-zero-raw-24-wayland-owned/results.json",
+    "bytes": 11080,
+    "sha256": "24ffe811e519d57823c713d958dd5d265d25ccf46964d81c20c3569b7f7093c7"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/fcitx-zero-raw-24-xorg/actor.json",
+    "bytes": 3440,
+    "sha256": "d74e835af5e3e30fb44508ee332c7e56e55e527c001997353b0093461b32bb9c"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/fcitx-zero-raw-24-xorg/actor.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/fcitx-zero-raw-24-xorg/fcitx.log.gz",
+    "bytes": 1239,
+    "sha256": "80086a5311115356009f24bcab20f7654405ec2b56142a99461f9d3e0484c988"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/fcitx-zero-raw-24-xorg/hints-before.json",
+    "bytes": 44,
+    "sha256": "fbfda932806ff04cfbe550cc55e63617075efba1b518de2dea5982b4eb65ad1a"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/fcitx-zero-raw-24-xorg/results.json",
+    "bytes": 11076,
+    "sha256": "048cd4513c53eafea80785d93a361edfcf7baee57328222feba848845d089280"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/key-ack.json",
+    "bytes": 31,
+    "sha256": "7c8a29fccb39d2945d2e388b6649ae4e7459194be38cd103dce69bc66f33dd90"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/key-request.json",
+    "bytes": 91,
+    "sha256": "fbe0886ec85c9e384e758138d478dea0f5755868260574edaf1c620f2051b59b"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/qemu-exit.json",
+    "bytes": 17,
+    "sha256": "c365161d39236fe0f1d32937fbc549796b8487d8faf65ed3879b96897c78ea5d"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/ram-overlay-archive.json",
+    "bytes": 289,
+    "sha256": "a4d0b611e1cddaa43a110c067549813344af5bfeb8e9b3ee1a072569110ff256"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/output/serial.log.gz",
+    "bytes": 22412,
+    "sha256": "8ff81954e697a56d4a7150787899ebe087aa15c221a0ed494293a07fd486513c"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/parent.json",
+    "bytes": 290,
+    "sha256": "9977965b68ae871976283b256682eda11f2a7d62f383bbd38f9929646908474c"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/phase-summary.json",
+    "bytes": 1890,
+    "sha256": "2c31f2d117052c4d2d325a6ae26f44f1db40c46239086c2cd79b404337f280b4"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/ssh-readiness.json",
+    "bytes": 1838,
+    "sha256": "734200dd19f9e6dc7658251ab756389d9f5e60f7f2ec2a697d719fcf73713d16"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/wayland-core-install.json",
+    "bytes": 1985,
+    "sha256": "5a59586aa1e31d3551e41f0b75cdc3e3dbe9953aa081c1bcee77c67aeb9974fe"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/wayland-fcitx-pinyin-exit.json",
+    "bytes": 22,
+    "sha256": "1e3f6691f455051e8adb15d961e4bf3c7a17e83dd88b2afdd13315cc288250bb"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/wayland-fcitx-pinyin-keys.json",
+    "bytes": 1913,
+    "sha256": "1ad127e010b062eac3e5c62f9c9d792920cd1e4e072a54b80956b7b3c8777440"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/wayland-fcitx-pinyin.log",
+    "bytes": 24,
+    "sha256": "8ce71e4b8ff102e7a1968b5b9fffc2de8980dedf9638bc61119689b5722d76aa"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/wayland-final-cleanup-shutdown.json",
+    "bytes": 285,
+    "sha256": "bf2fd34b8046516f05816dfff9d375ad06152df9b38bf8f1bf7ce7586bc067f9"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/wayland-input-gates.json",
+    "bytes": 11759,
+    "sha256": "b379809996d00e2598166227cf262971d5ec48094e80a02a80133920f2f1adf7"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/wayland-install-relogin.json",
+    "bytes": 213,
+    "sha256": "3afe07a133843e40a6f21cec6517dabc5472ac02d201dfa704bf61c67d2a516f"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/xorg-cleanup-to-wayland.json",
+    "bytes": 297,
+    "sha256": "a1636fa7da3a7ef8e9690be92fa82a706a3a875eb053b3eaef1f2d1749c2e46a"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/xorg-core-gates.json",
+    "bytes": 318,
+    "sha256": "db4bbc8112448902e1444a5b69cd8327d75aa5255e56f8d6691c4dd4b5cac5f9"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/xorg-fcitx-pinyin-exit.json",
+    "bytes": 22,
+    "sha256": "1e3f6691f455051e8adb15d961e4bf3c7a17e83dd88b2afdd13315cc288250bb"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/xorg-fcitx-pinyin-keys.json",
+    "bytes": 1913,
+    "sha256": "9ee91ff14fac5f49fdf229f66dc2123b25d3a7e362025c6b9f01e00e4d7a3756"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/xorg-fcitx-pinyin.log",
+    "bytes": 24,
+    "sha256": "8ce71e4b8ff102e7a1968b5b9fffc2de8980dedf9638bc61119689b5722d76aa"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/xorg-keyboard-zero-chrome.json",
+    "bytes": 11320,
+    "sha256": "179b7e65be6edf1f4f640241787083de0cfdba39a40495418e3f3be9fc57afe0"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu24/xorg-prepare-context.json",
+    "bytes": 1999,
+    "sha256": "9186532c942362d6a23a12c2abd4c4139d7ccbbf8c9468411e149b75dc9a9ec7"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/boot.json",
+    "bytes": 1900,
+    "sha256": "bff693c81944664a34004aff6217e69c8f00593bb618d3e784b072ab490a05c7"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/container-final-state.json",
+    "bytes": 269,
+    "sha256": "c9edbd131b7ee23e3bbc75063911723001ce96d0630f6e6144aee9dec1b265c5"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/final-cleanup-poweroff.json",
+    "bytes": 285,
+    "sha256": "bb5efc2e0588b1e370e3e9416247ba4a10e83d0d2f5fc3d4906dde221632eab9"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/input/actor.py.txt",
+    "bytes": 4504,
+    "sha256": "adb1f6a4256c215abe1b32d2e5344d1ad9891093e7f418ebd610b53a84f611bb"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/input/context.py.txt",
+    "bytes": 1370,
+    "sha256": "f5acbab2b30eba235dc0d302ea2a16d8362a13cebba1e7824dab1d5f55b640b3"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/input/fcitx-package.py.txt",
+    "bytes": 9017,
+    "sha256": "3c20d2866a917e85a5d44b523ced518a4be2da6975dce35056a0b9b1feaaf067"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/input/fcitx-zero.py.txt",
+    "bytes": 7796,
+    "sha256": "5e448382b484ac3699b4a5d15f5e6ce5d29a2fb156dcc95191e01bc9f81498f3"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/input/framework-manifest.json",
+    "bytes": 50769,
+    "sha256": "b01175767169904824c36199b10e07b21c4f417ce0ee39783b744be199084792"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/input/gap.py.txt",
+    "bytes": 5169,
+    "sha256": "8e5ecfccb27d51aefdce8ee3c59a2694582c16d998d9f57ffea840e545a05635"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/input/guest.py.txt",
+    "bytes": 5145,
+    "sha256": "fe8077f2b77d88f79e0d98b53203c027dfe384e2323c21e8be58abeb13fb7d94"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/input/http_asr.py.txt",
+    "bytes": 2987,
+    "sha256": "2cd394b56c70ab0956bd84f536ec4ab83262807c57db215b94db4da2f54a55a2"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/input/pipeline.py.txt",
+    "bytes": 27559,
+    "sha256": "8126d6d4b7b77b3e44e5f078e69f4c3f01171d6711594fc4aa69c5084e64855b"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/input/pipeline_receiver_cancel.py.txt",
+    "bytes": 27682,
+    "sha256": "f9f8d809e9e08e1229fc349dee9a11cbc7ce84cd8b9c853ed557c2e4c562b871"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/input/pipeline_suite.py.txt",
+    "bytes": 2424,
+    "sha256": "3932816f990c6a479c0d01d5184b5ffd42dd6697b1495757ad5ade042ba3939e"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/input/qemu.json",
+    "bytes": 799,
+    "sha256": "b3f622f53ee03febd176c17ff78de547511fefc1440610f4a26dfc4ea5d1bba1"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/input/qmp-key.py.txt",
+    "bytes": 687,
+    "sha256": "4e041cde0db4e002497c3d6afdf42a6154588da2c4443775f9741009b411b6a1"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/input/resource-check.py.txt",
+    "bytes": 2214,
+    "sha256": "0d23c36b5d3d1992caf79d9f589e6b75593034a5ddddee46f76f84fffaf4d306"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/input/select-wayland.sh.txt",
+    "bytes": 770,
+    "sha256": "b6382da79a03ba2a743c76256a3e7d45f6f4bb4bc09448e8d67b7a6f928470fc"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/input/select-xfce.sh.txt",
+    "bytes": 506,
+    "sha256": "d165211b23d310c1989331f7758fac876a922fdcee051f8eef84a91ab2e91143"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/input/target.py.txt",
+    "bytes": 1554,
+    "sha256": "a0a7ec56aeec7091a1545cc110dcaef47dd9cd0e11e1272671fd316787a76c24"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/input/tests-manifest.json",
+    "bytes": 33169,
+    "sha256": "0389984ed0842aa72cc787d850f44517ad85345f167d4674ee274878a3566e43"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/input/wrapper.py.txt",
+    "bytes": 1292,
+    "sha256": "f06cfd12dd58791644b94142310a72bbb3b3127748f9c27ff9895879ae2b6e9c"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/launch.json",
+    "bytes": 1584,
+    "sha256": "b6ddc84f1240d26c47494f3ead39151711d1776ab90ab5c7ce77c92f38fd535c"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland/desktop-context.json",
+    "bytes": 2474,
+    "sha256": "ebdd33f7684fc9cfa3ad2fcb6c97b65f67dfa58dec84ed9b123d6b0712762a5b"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland/desktop-lifecycle-exit.json",
+    "bytes": 228,
+    "sha256": "2f38d52047a39e4cc875d544964fc8dbc9cd422ee665910bfc3b9ed47d1cbabb"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland/desktop-lifecycle.log",
+    "bytes": 819,
+    "sha256": "1fecb84c6c2433d684a4885d648ec9a964c8557abd58949a590fbae1115ba532"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland/fuse-cleanup.json",
+    "bytes": 62,
+    "sha256": "69153114bab05d32c7402c08c93dcb006ae045ae3c7e3be9b9f0530a93b55530"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland/fuse-mount.err",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland/fuse-mount.log",
+    "bytes": 63,
+    "sha256": "7ed89265e5f3866878fe7171df99ab7992992e4a4c9eb6c1039646faaf1d85b1"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland/http-asr-exit.json",
+    "bytes": 197,
+    "sha256": "e4916b358dfbf765065b6b18fc1f294445ab466cbc11616a77f10ca733503d84"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland/http-asr.json",
+    "bytes": 523,
+    "sha256": "21d8c185de60ec72ce61c81f489f00f4fb0fd30991367b5e7f9a58e8fea347d5"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland/http-asr.log",
+    "bytes": 452,
+    "sha256": "de84874a5589b40047a0a47029d2b42a38bfe6a85ad97908408547ab3e0561c7"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland/mount.json",
+    "bytes": 208,
+    "sha256": "baa4f2a695248405b7bf6b189929becf6a362a965e6a60434eb12ac865454049"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland/owned-install-exit.json",
+    "bytes": 17,
+    "sha256": "c365161d39236fe0f1d32937fbc549796b8487d8faf65ed3879b96897c78ea5d"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland/owned-install.log",
+    "bytes": 113,
+    "sha256": "3887dc1d7033e7a07c6e83c0e9fa78aaebf0c8cb580d1825eae788b12f0dab8a"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland/package-audit-exit.json",
+    "bytes": 596,
+    "sha256": "3e2103bf682dfdfc2134cc3a81cf524b32fb9d5560b3b0bbd8638fe7cc3e8e8d"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland/package-audit.json",
+    "bytes": 18234,
+    "sha256": "719d6f91140b67be4861041ffbd46b0a625b22b299e1fca32e26d45dc6e6f007"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland/package-audit.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland/provider-ui-exit.json",
+    "bytes": 751,
+    "sha256": "dc52c391f47730d2832452a22d72d128a2c7ef480a53eecfd81d799cce62694b"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland/provider-ui.json",
+    "bytes": 18795,
+    "sha256": "7f8288e1642741bf1fe990327c174788d260932ee62f2bfba5aa19c95e5ee447"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland/provider-ui.log",
+    "bytes": 17239,
+    "sha256": "4076f0a89b437d5814f7c8d9792182af751e0455e671bf91a9293d81a84efcf9"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland/qwen-vad-exit.json",
+    "bytes": 354,
+    "sha256": "17e9b0686f51b1dba4c404af84afd30ca9c99a3a4485c690f72e449aaac4cf70"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland/qwen-vad.json",
+    "bytes": 1281,
+    "sha256": "bebef5682c58ea43173845b4bf316cd77f0380d5b4475413fe27bb9928b9f252"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland/qwen-vad.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland/ui/page-01.png",
+    "bytes": 82051,
+    "sha256": "9a260c3b436962cfdded4e9ddcaca6a5c18d2fc711820f7a2c9d7e684cc45bd1"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland/ui/page-02.png",
+    "bytes": 97211,
+    "sha256": "2a9efe258926d3d2af15f6995c8045c38dace9b4ae2f9f817846172dde6af7a6"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland/ui/page-03.png",
+    "bytes": 119468,
+    "sha256": "c6921f1cbb56538c5edf3bc5e479036165b23be0ca81dbbabc9b34ff5999646b"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland/ui/page-04.png",
+    "bytes": 69404,
+    "sha256": "509a686e9280519dc4963cb3961c7f1177f53a336416cefdba15fc435ecd3fc0"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland/ui/page-05.png",
+    "bytes": 44754,
+    "sha256": "9f6560649641a419aefad2d53a4ce53f8a1356cabe863a793ecf7ab571d2e74f"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland/ui/process.log",
+    "bytes": 2426,
+    "sha256": "65993dc8a4bfed734f8954b8a4c68f988f8601c14547a6ae5415dab74eb245b5"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland/ui/result.json",
+    "bytes": 819,
+    "sha256": "1fecb84c6c2433d684a4885d648ec9a964c8557abd58949a590fbae1115ba532"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland/ui/terminal.json",
+    "bytes": 59,
+    "sha256": "efda442a2329bf949c25f9a41abbde5976635d9b12b963cdf61b8ca174a7deb0"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/desktop-context.json",
+    "bytes": 2474,
+    "sha256": "c883c5078ef293dce5f42c8ade3587b58c7f0393fa46b5d9423d943f34d38266"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/fcitx-package-exit.json",
+    "bytes": 158,
+    "sha256": "184a5ef5aaa288ed07ee523e004d9f56c74c970a604623f3e451c543588f1ce6"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/fcitx-package.log",
+    "bytes": 4105,
+    "sha256": "e771b8e81c9166ae791aba8339047fc0fd983090259333d8735d09e07cd9214d"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/fcitx-pipeline-cancel-after-first/pipeline.log",
+    "bytes": 1840,
+    "sha256": "4a811ec2083b499580c382a930cf2a6ed0e082a054c916d715223b3f28548d1e"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/fcitx-pipeline-cancel-after-first/receiver.json",
+    "bytes": 205,
+    "sha256": "9888703887f2ab547fd60e9a6aa69427495c5e87d8aa0bdb5115a2b5269c30aa"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/fcitx-pipeline-cancel-after-first/report.json",
+    "bytes": 16676,
+    "sha256": "4cb26b57c1fb6bce82b5abe8884bd453088ece3380adfcecf64cd41e760fd6bc"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/fcitx-pipeline-cancel-after-first/target.json",
+    "bytes": 156,
+    "sha256": "f5db8cf224ec54e66a0416e52d6f88da0c001d0d87ccbcce2fc3d1bb37e98fb0"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/fcitx-pipeline-cancel-after-first/target.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/fcitx-pipeline-normal/pipeline.log",
+    "bytes": 1719,
+    "sha256": "ed9c8d53276629996d3b8f26c45258a51314222d8102341bd9a9e5843096f14b"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/fcitx-pipeline-normal/receiver.json",
+    "bytes": 375,
+    "sha256": "82629457d21b11a3030ee16006340ab55006e27115260eaaf2745b008ef58f96"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/fcitx-pipeline-normal/report.json",
+    "bytes": 16259,
+    "sha256": "56fa7da401f7f1aebad3ebded7f1a845cd5dffa9945e25e763f1a6a33a232f1a"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/fcitx-pipeline-normal/target.json",
+    "bytes": 189,
+    "sha256": "6404ec0e1a681bfa3b0e7479714a951177c121a120d908e8604f57ccce147b2c"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/fcitx-pipeline-normal/target.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/final-resource-check.json",
+    "bytes": 339,
+    "sha256": "7ba2179640406d29404b91d0cf35066390587d402f756496f0eb9c2ab9d10ac2"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/fuse-cleanup.json",
+    "bytes": 62,
+    "sha256": "50e81bb03acb51dd0531a92a8e51207e9650ad48b72530d996f7935d02685989"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/fuse-mount.err",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/fuse-mount.log",
+    "bytes": 63,
+    "sha256": "e5ecfc93ad85d466ac7f2d2b28ec85d83d18eef6a67ad7faa6d36de1c7ca8ff3"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/mount.json",
+    "bytes": 208,
+    "sha256": "e9ddb06e2278b54444bce3cb6a6324f11685336bd76d1bb7802aae665d2b34a6"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/owned-disable-exit.json",
+    "bytes": 17,
+    "sha256": "c365161d39236fe0f1d32937fbc549796b8487d8faf65ed3879b96897c78ea5d"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/owned-disable.log",
+    "bytes": 97,
+    "sha256": "1febc91c1c54df9bfa7db57b7792e4e4d5d9fb6e0af4988e3a799f411ef23027"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/owned-enable-exit.json",
+    "bytes": 17,
+    "sha256": "c365161d39236fe0f1d32937fbc549796b8487d8faf65ed3879b96897c78ea5d"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/owned-enable.log",
+    "bytes": 96,
+    "sha256": "be0307cf100ca0bd251f4adfb56932edfb1e496c6036bc78e35c3eaf11e23a70"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/package-audit-exit.json",
+    "bytes": 596,
+    "sha256": "679fbcf53703b1dce729af704daad29b148c1762c1c960f25aae1a5ef9fc9e06"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/package-audit.json",
+    "bytes": 18234,
+    "sha256": "1c262dc9a2ce4ac545f80ba1111c899207af2fbe11ba19d2bc8f874fdfcc71d8"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/package-audit.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/resource-check-exit.json",
+    "bytes": 97,
+    "sha256": "bc5248b2e8759ce8dc2aa9cf9353c360520236d7334912436600a437747de01c"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/resource-check.log",
+    "bytes": 296,
+    "sha256": "c27e224a3ca16c2bb221a68661f8cfb7939408d23037cf72ce22734cfdf1b653"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/suite-ibus-cancel-after-first/initial-target.json",
+    "bytes": 168,
+    "sha256": "c4d9a251e2e81b846417b807833b1dca0ff865df803fc5000f53ff0190948243"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/suite-ibus-cancel-after-first/pipeline.log",
+    "bytes": 1839,
+    "sha256": "af66e20ad00bb97ca8e532b60bfa60d4bcfac551979af2276cb3f48fbb8525bc"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/suite-ibus-cancel-after-first/receiver.json",
+    "bytes": 284,
+    "sha256": "996ca7edfa0bbddf1daaec27f2d726f9a171dcf58aad043105cc8971df9772cc"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/suite-ibus-cancel-after-first/report.json",
+    "bytes": 16217,
+    "sha256": "58b8c5f4eaac43742d79f22c792ee2d04cda907703812b60a512afca3e5e893a"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/suite-ibus-cancel-after-first/target-immodules.json",
+    "bytes": 400,
+    "sha256": "76cb7f9724d60d61af7d60fccb8844715c5ebcb81b95c2944e62bc28c372e9df"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/suite-ibus-cancel-after-first/target.json",
+    "bytes": 157,
+    "sha256": "1c5c0a2c394a3c0001eaa09cffedac38f78d0d3c596ec25e5b28a8475158a210"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/suite-ibus-cancel-after-first/target.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/suite-ibus-normal/initial-target.json",
+    "bytes": 168,
+    "sha256": "73179fac4f6bf1bf66033d4b8d0b80120d938074f9898e3ed8e0e8c6aa3eb372"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/suite-ibus-normal/pipeline.log",
+    "bytes": 1716,
+    "sha256": "9b3a5e5eea325cc4fe9f1f51b29062afae206ceda7073cec51c7e10f5aeff3ac"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/suite-ibus-normal/receiver.json",
+    "bytes": 458,
+    "sha256": "1270f36e2cbaf4ed4b0baeb9e0ac3715e1e948df6ba28945fbe1f40ffcb68163"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/suite-ibus-normal/report.json",
+    "bytes": 15888,
+    "sha256": "1671ee9a600b9afa14ef7691172569ca11f19108f75762d9d2df3390ce4755fe"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/suite-ibus-normal/target-immodules.json",
+    "bytes": 400,
+    "sha256": "76cb7f9724d60d61af7d60fccb8844715c5ebcb81b95c2944e62bc28c372e9df"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/suite-ibus-normal/target.json",
+    "bytes": 189,
+    "sha256": "fcb656ee770f7de9830317dd16275c142171adaf35e87ea0287ec20edad2250a"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/suite-ibus-normal/target.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/suite-keyboard-cancel-after-first/initial-target.json",
+    "bytes": 168,
+    "sha256": "989726eff93b71f6c92971303f089abb0b3bdbb80c2357e6c42742b087501660"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/suite-keyboard-cancel-after-first/pipeline.log",
+    "bytes": 1841,
+    "sha256": "19da78ede46926dee411ace624c8ee3bd3edbbc9ff66ec77b5ffaed9c952129e"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/suite-keyboard-cancel-after-first/receiver.json",
+    "bytes": 265,
+    "sha256": "291f4ae063e7569af74f8933ea73e2996f0fa918db3b30a002602e0f40a1df48"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/suite-keyboard-cancel-after-first/report.json",
+    "bytes": 18041,
+    "sha256": "49be3099cfc7e5e6c8318530bc6754cd326274dfbb6c38dc8eb7cd952d23dad6"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/suite-keyboard-cancel-after-first/target-immodules.json",
+    "bytes": 62,
+    "sha256": "7cb5bb84c434b2910042a5afd252e7b8fc694f01367edbb82d81adaa8247216a"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/suite-keyboard-cancel-after-first/target.json",
+    "bytes": 256,
+    "sha256": "e07995cc5eadf6303223a306dab3b175316898f261a4d58c17efe7875475ff72"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/suite-keyboard-cancel-after-first/target.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/suite-keyboard-native-cancel-after-first/initial-target.json",
+    "bytes": 168,
+    "sha256": "0b26e9c72a22c58d5f550d585f69fb171903a7a640e186f2d8db0cbb8be03983"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/suite-keyboard-native-cancel-after-first/pipeline.log",
+    "bytes": 1828,
+    "sha256": "af57272bdb981565c211a4eeb59ed5e73511877729f980e69440dccb0d348665"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/suite-keyboard-native-cancel-after-first/receiver.json",
+    "bytes": 269,
+    "sha256": "f1edbcdb5d2b06b5b3ca4aa3b124a7f9cac8dc016b7a781475aef0eaaaa67d2b"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/suite-keyboard-native-cancel-after-first/report.json",
+    "bytes": 18039,
+    "sha256": "4b929faa18d5a8f8fc180023e749731047d5cb8d1de882da953603b629d61306"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/suite-keyboard-native-cancel-after-first/target-immodules.json",
+    "bytes": 62,
+    "sha256": "7cb5bb84c434b2910042a5afd252e7b8fc694f01367edbb82d81adaa8247216a"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/suite-keyboard-native-cancel-after-first/target.json",
+    "bytes": 256,
+    "sha256": "cb32de2666a6af7ed960bbaeca7b4353dd0940d20d7b30f74ec5ae54e2a66a04"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/suite-keyboard-native-cancel-after-first/target.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/suite-keyboard-native-normal/initial-target.json",
+    "bytes": 168,
+    "sha256": "6fef2e94f677efc568f870f6e3e39dac827a04e764aa6d645c3f7307a6dc227a"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/suite-keyboard-native-normal/pipeline.log",
+    "bytes": 1720,
+    "sha256": "b07a84c286924a6e4064f14b71c8148290a842277118a4289aeebadd7a589e63"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/suite-keyboard-native-normal/receiver.json",
+    "bytes": 462,
+    "sha256": "495317eff4b6969713773edb02ca8b4af101a5894f2fa3ac7aec862293a07bc1"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/suite-keyboard-native-normal/report.json",
+    "bytes": 17692,
+    "sha256": "c412d0abe79250b3c17cfafe2a684cf326c9c9826afb8eade29f9a1ef9b15d6e"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/suite-keyboard-native-normal/target-immodules.json",
+    "bytes": 62,
+    "sha256": "7cb5bb84c434b2910042a5afd252e7b8fc694f01367edbb82d81adaa8247216a"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/suite-keyboard-native-normal/target.json",
+    "bytes": 2478,
+    "sha256": "bd7efa119a8d8828c9f42777c1e514c8026441f33599b458ef5523e2a886da52"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/suite-keyboard-native-normal/target.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/suite-keyboard-normal/initial-target.json",
+    "bytes": 168,
+    "sha256": "1545e6da63a3f4523fc7316704492370a9175985d448156bdc4715b9c4396915"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/suite-keyboard-normal/pipeline.log",
+    "bytes": 1721,
+    "sha256": "7ecbb0f2289e3224cdb767aa61292ff8cef354ba691680132907daa00efaea4c"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/suite-keyboard-normal/receiver.json",
+    "bytes": 458,
+    "sha256": "25c91820e98b8b2087008eb1f42c752cd35acb075e70cb6cd3c8051003e74c3c"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/suite-keyboard-normal/report.json",
+    "bytes": 17629,
+    "sha256": "8e3b6b20c29aa0eab4ef1fa5564ec609de4a9fdbf17a82e040c3eaa57a518650"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/suite-keyboard-normal/target-immodules.json",
+    "bytes": 62,
+    "sha256": "7cb5bb84c434b2910042a5afd252e7b8fc694f01367edbb82d81adaa8247216a"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/suite-keyboard-normal/target.json",
+    "bytes": 2489,
+    "sha256": "8aa76940bcaeae42967bfedbc4fc008fa8e38963860a36f702c6d32f198e179a"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-wayland-owned/suite-keyboard-normal/target.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/desktop-context.json",
+    "bytes": 2240,
+    "sha256": "17456d2715bda4dd2814559f2115ea683f0b39045549f7eaba57d6d897690263"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/desktop-lifecycle-exit.json",
+    "bytes": 225,
+    "sha256": "f2c9c8ab02e972d5213b88b991a916badcbb6550a6d84e4f2abb19a0df0c22d0"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/desktop-lifecycle.log",
+    "bytes": 815,
+    "sha256": "cf869a570c63a88006fad2996887d8b0f75e73e26a998563c38e997b2e7d4dcf"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/fcitx-package-exit.json",
+    "bytes": 158,
+    "sha256": "5efde68fc5cbb496252f834e76eacae416571dcadfb0914f783ccd60d10981ef"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/fcitx-package.log",
+    "bytes": 4101,
+    "sha256": "0b3306cb873eef86d6a5a81e00dabd4e3ce2a0f0b79d62fb5d22002873cf5841"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/fcitx-pipeline-cancel-after-first/pipeline.log",
+    "bytes": 1839,
+    "sha256": "ef0444656dbc10d49da8a37f7d5389cfe02c5e12e21d23a11bbaf3a267ebaa0b"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/fcitx-pipeline-cancel-after-first/receiver.json",
+    "bytes": 205,
+    "sha256": "9888703887f2ab547fd60e9a6aa69427495c5e87d8aa0bdb5115a2b5269c30aa"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/fcitx-pipeline-cancel-after-first/report.json",
+    "bytes": 16155,
+    "sha256": "25c70411278bcc5670ec9c3988308118e9da350e3e255f2547e7a84b7925fd61"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/fcitx-pipeline-cancel-after-first/target.json",
+    "bytes": 156,
+    "sha256": "2fde5bead8187622a7b7be4f753b9ceeb4d4d99bdb8887a7d445f6eea27fe1c6"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/fcitx-pipeline-cancel-after-first/target.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/fcitx-pipeline-normal/pipeline.log",
+    "bytes": 1713,
+    "sha256": "a0f927760d16560a0cf590f3c63684d4dc8196b4eaff73f91bd53e8dcebc2849"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/fcitx-pipeline-normal/receiver.json",
+    "bytes": 375,
+    "sha256": "82629457d21b11a3030ee16006340ab55006e27115260eaaf2745b008ef58f96"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/fcitx-pipeline-normal/report.json",
+    "bytes": 15742,
+    "sha256": "8061f57134514641729dd8e1a3dc3717db0d47022a7b9e33c2ce090de6aaa10b"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/fcitx-pipeline-normal/target.json",
+    "bytes": 189,
+    "sha256": "b63b71634567b612834d6012dbddf141fb01fd09700ba07ef741b45bc1d043d5"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/fcitx-pipeline-normal/target.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/final-resource-check.json",
+    "bytes": 339,
+    "sha256": "7ba2179640406d29404b91d0cf35066390587d402f756496f0eb9c2ab9d10ac2"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/fuse-cleanup.json",
+    "bytes": 62,
+    "sha256": "1ea2e4dbbf76eb0e723385dc0cfa4f1840ba577b05b87b1891c0c993e259b1b7"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/fuse-mount.err",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/fuse-mount.log",
+    "bytes": 63,
+    "sha256": "cf74389f2bd44cbe3090858278648eeaccb2a2b8127607a0d6d3f87e0cc9d758"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/http-asr-exit.json",
+    "bytes": 194,
+    "sha256": "334b860a37cd574dc637c01c708d8c83c6dab188cd9fd18a5bc6523d451e1d35"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/http-asr.json",
+    "bytes": 523,
+    "sha256": "3b0b9ce07954074d53f6257e28325f7852104c1696cdef9c1d8ab99659bd8e5c"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/http-asr.log",
+    "bytes": 452,
+    "sha256": "c121a13921e34b2a289cb05cdab76c87b77fee798d29b93a913f2d08111815b3"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/mount.json",
+    "bytes": 204,
+    "sha256": "be06cd329fe29341f6179b3f13ba87c939c4c58e36192ad4677828fa8bf44ea1"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/package-audit-exit.json",
+    "bytes": 596,
+    "sha256": "db0b875adafa5e742a68338a4b20af56b6b478e50524e243c06c8299b2a04809"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/package-audit.json",
+    "bytes": 18234,
+    "sha256": "e4e37546c7637d984701740444708ce0d9fac5f3a0d1a7f74bc627edeebba50a"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/package-audit.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/provider-tests-exit.json",
+    "bytes": 1072,
+    "sha256": "29989d0f395c753aa425f473e0327a0a15eedf87d34780b27e9148a1b1ed6f47"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/provider-tests.json",
+    "bytes": 126822,
+    "sha256": "2a352b432d6f05ac1761d96a1ce05c378bddb09b8de7e0b479fa80a95355477d"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/provider-tests.log",
+    "bytes": 341,
+    "sha256": "763dee34c0a6b0b62454b523a0ed63010a85f567b5ac6faaf28dfabf51c203c7"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/provider-ui-exit.json",
+    "bytes": 741,
+    "sha256": "5ece3452ea0975630d0e198e37841b4129081469d9c5895bbabc244b4d0913d6"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/provider-ui.json",
+    "bytes": 18791,
+    "sha256": "f368472f55579594f306e6c43a0381ea9f62b1405d07be5881e98ea621911e00"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/provider-ui.log",
+    "bytes": 17142,
+    "sha256": "aa0eb8b924afde30e93508060eb589bb30c08877afd3d853341e980d1add824b"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/qwen-vad-exit.json",
+    "bytes": 351,
+    "sha256": "aedbf09854984d763cac51b7499523d9bebd58cc0472113f618af27f384f99d4"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/qwen-vad.json",
+    "bytes": 1281,
+    "sha256": "e378c6135aa9a644a81a3305b3d8cc46eb1efe5908d1184164a1c32a760fb9d6"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/qwen-vad.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/resource-check-exit.json",
+    "bytes": 97,
+    "sha256": "bc5248b2e8759ce8dc2aa9cf9353c360520236d7334912436600a437747de01c"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/resource-check.log",
+    "bytes": 296,
+    "sha256": "c27e224a3ca16c2bb221a68661f8cfb7939408d23037cf72ce22734cfdf1b653"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/suite-keyboard-cancel-after-first/initial-target.json",
+    "bytes": 168,
+    "sha256": "c9fe2595eecf8b355a9d755a0a99302954bc76269550e77213bcf8548e00e69b"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/suite-keyboard-cancel-after-first/pipeline.log",
+    "bytes": 1840,
+    "sha256": "729c9456a91b1214045f9acd99fe5028eb8879af8286e2d42425b0641b088f2a"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/suite-keyboard-cancel-after-first/receiver.json",
+    "bytes": 261,
+    "sha256": "f234a7d4ceffe496e193e323dcb4d168e8b6fcf3c9f9ae02a7b0624c6ea9ff62"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/suite-keyboard-cancel-after-first/report.json",
+    "bytes": 15933,
+    "sha256": "2be0fa3f892b6bcf583b043644af218a89fe55be4df2bf6797a9371ecb48e105"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/suite-keyboard-cancel-after-first/target-immodules.json",
+    "bytes": 62,
+    "sha256": "7cb5bb84c434b2910042a5afd252e7b8fc694f01367edbb82d81adaa8247216a"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/suite-keyboard-cancel-after-first/target.json",
+    "bytes": 256,
+    "sha256": "5a690440eeb3d1a08cf5841a6e4c81c649c93af881d389344d4d48eebbedb418"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/suite-keyboard-cancel-after-first/target.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/suite-keyboard-normal/initial-target.json",
+    "bytes": 168,
+    "sha256": "12abc57fe793ee2956b10926f7fdbd8e4d5a51ec14fe323893834b5a82369eca"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/suite-keyboard-normal/pipeline.log",
+    "bytes": 1721,
+    "sha256": "db6a8d66931a4fc7154786b627da305c62b003ea98eacee74bb480d57d852dbf"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/suite-keyboard-normal/receiver.json",
+    "bytes": 454,
+    "sha256": "e9b3cba095c43d0d78264acd465a1bcaa61a3359b17bbc5af9bef588221447df"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/suite-keyboard-normal/report.json",
+    "bytes": 15516,
+    "sha256": "5111364429e97a8eaee91ad277d847cf8d9c3c138c4ad16339c54e1b40dde0ed"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/suite-keyboard-normal/target-immodules.json",
+    "bytes": 62,
+    "sha256": "7cb5bb84c434b2910042a5afd252e7b8fc694f01367edbb82d81adaa8247216a"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/suite-keyboard-normal/target.json",
+    "bytes": 2489,
+    "sha256": "3a4e7245ea932ac15aa88f8c2ccf84eb2326c4a722faa8e74d6d9ca9d8fb397b"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/suite-keyboard-normal/target.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/ui/page-01.png",
+    "bytes": 70699,
+    "sha256": "e32990544ea9c648a58636dea9ba7d955afee955a85eb0a30d0996abd06ed684"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/ui/page-02.png",
+    "bytes": 96658,
+    "sha256": "cf128b51f72b20e5570f3ebe1bd52bf3001320ab89a95fc901cc7aff0066fa11"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/ui/page-03.png",
+    "bytes": 99260,
+    "sha256": "c49467146933d5717e0a3596935519c254bb87b697ffedbba85f92f4edd603ea"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/ui/page-04.png",
+    "bytes": 58577,
+    "sha256": "c4d54b26d6d29b3c1bd1834b761998c20238404331cb8b83f6c65b9ea8e758c5"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/ui/page-05.png",
+    "bytes": 36342,
+    "sha256": "baeaa3817a00db78ac4e08941f326088ece717a65b2f0198ae66a8328cf2566c"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/ui/process.log",
+    "bytes": 1085,
+    "sha256": "40417111663c150c43757cc2079bb1d3b5d8e575782fd28f4df06e13bf00a1c6"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/ui/result.json",
+    "bytes": 815,
+    "sha256": "cf869a570c63a88006fad2996887d8b0f75e73e26a998563c38e997b2e7d4dcf"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/26-xorg/ui/terminal.json",
+    "bytes": 59,
+    "sha256": "a3f4394975fbf1aef7f76225fcb9c3a375850dc609e49f504ff640362e734e11"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/fcitx-raw-26-wayland-owned/actor.json",
+    "bytes": 422,
+    "sha256": "d865c43a54bae334e40d1605c3ff35a9687ee8d6709709cab66d5ee7e8f4cf0d"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/fcitx-raw-26-wayland-owned/actor.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/fcitx-raw-26-wayland-owned/fcitx.log.gz",
+    "bytes": 1530,
+    "sha256": "b9cd7f6eefdc8372bdcc2aee7706c7330a69367a0c21a64de03707dd505265b4"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/fcitx-raw-26-wayland-owned/hints-before.json",
+    "bytes": 44,
+    "sha256": "fbfda932806ff04cfbe550cc55e63617075efba1b518de2dea5982b4eb65ad1a"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/fcitx-raw-26-wayland-owned/results.json",
+    "bytes": 6259,
+    "sha256": "df36bd8a42216b061455ad68d54ee5c7fd4605cfc3c750a246e8ffd9e84d6b59"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/fcitx-raw-26-xorg/actor.json",
+    "bytes": 422,
+    "sha256": "b06b9be4bffc4c4a4ff16f857270686e305f8fc58a42376b156bc9fcdea01a9f"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/fcitx-raw-26-xorg/actor.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/fcitx-raw-26-xorg/fcitx.log.gz",
+    "bytes": 1335,
+    "sha256": "36835e20393976e74906379e95d11aa696d3dc7445cba3715193a23c6db5d88b"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/fcitx-raw-26-xorg/hints-before.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/fcitx-raw-26-xorg/results.json",
+    "bytes": 6255,
+    "sha256": "b795ffb0c5dcce5204a93cc7a00b0c4446ebb12d71e4c89b8b403161ee094f9a"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/fcitx-zero-raw-26-wayland-owned/actor.json",
+    "bytes": 2096,
+    "sha256": "3b025728978373e75c72f15a4cd222b053d489ea7f3406d79d41c6f9e34aeb11"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/fcitx-zero-raw-26-wayland-owned/actor.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/fcitx-zero-raw-26-wayland-owned/fcitx.log.gz",
+    "bytes": 1506,
+    "sha256": "af1aafa5c5ff173637de5e93aa531fb15419a3151879c8ed579e78b7e13bc2fe"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/fcitx-zero-raw-26-wayland-owned/hints-before.json",
+    "bytes": 44,
+    "sha256": "fbfda932806ff04cfbe550cc55e63617075efba1b518de2dea5982b4eb65ad1a"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/fcitx-zero-raw-26-wayland-owned/results.json",
+    "bytes": 8476,
+    "sha256": "ec1f9c2641da11314a63c0b89eeb5d338e52c554a928e939bcd778b168d18fb9"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/fcitx-zero-raw-26-xorg/actor.json",
+    "bytes": 2096,
+    "sha256": "ae07c9dc92ebde5c0f00887b882c1837b215bb02f38160a1f073493973eccf30"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/fcitx-zero-raw-26-xorg/actor.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/fcitx-zero-raw-26-xorg/fcitx.log.gz",
+    "bytes": 1303,
+    "sha256": "81a2f15fed75bcd09d545db10cb87f59006ac3828cfc7f3ce0aea4673bd9b493"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/fcitx-zero-raw-26-xorg/hints-before.json",
+    "bytes": 2,
+    "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/fcitx-zero-raw-26-xorg/results.json",
+    "bytes": 8472,
+    "sha256": "0c4c3ad6fdb53d9a627fa5269cc81a631e2cd68306f8b6dc8a9884e0aab54708"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/key-ack.json",
+    "bytes": 31,
+    "sha256": "7c8a29fccb39d2945d2e388b6649ae4e7459194be38cd103dce69bc66f33dd90"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/key-request.json",
+    "bytes": 91,
+    "sha256": "a184b285f81c00391919eeceea3bf4e7fbf849d11ac78452dd1c1644ad01a295"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/qemu-exit.json",
+    "bytes": 17,
+    "sha256": "c365161d39236fe0f1d32937fbc549796b8487d8faf65ed3879b96897c78ea5d"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/ram-overlay-archive.json",
+    "bytes": 290,
+    "sha256": "4a1d2ec7fe9b519a43c9f8d53d53471fa19d029b0d71dbc9970877d38446efaa"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/output/serial.log.gz",
+    "bytes": 20114,
+    "sha256": "759c86a5d55494bf570581e233f21cfe53324c34631c5e3f83da822bee982200"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/parent.json",
+    "bytes": 286,
+    "sha256": "821285b51800d8315fea2a8de2db6a52f562f6546381815e9bd8bdce67cfe2c8"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/ssh-readiness.json",
+    "bytes": 261,
+    "sha256": "e15f46020e7433fbd99cde8bb0dbca0ab6f202ed1679e8d42571671e64ca3f7e"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/wayland-core-install-relogin.json",
+    "bytes": 2920,
+    "sha256": "91a4deac289ab57dbbbbb878393de6afee4465b03c5f725350cd6c925dd28b40"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/wayland-fcitx-pinyin-exit.json",
+    "bytes": 22,
+    "sha256": "1e3f6691f455051e8adb15d961e4bf3c7a17e83dd88b2afdd13315cc288250bb"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/wayland-fcitx-pinyin-keys.json",
+    "bytes": 1913,
+    "sha256": "a60ec7a109ce767c141274e322387d3c474a1595749846694b0d9fedb5e1143d"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/wayland-fcitx-pinyin.log",
+    "bytes": 24,
+    "sha256": "8ce71e4b8ff102e7a1968b5b9fffc2de8980dedf9638bc61119689b5722d76aa"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/wayland-owned-input.json",
+    "bytes": 10706,
+    "sha256": "75afbf2d44cfee63759d9c8b59a8183d5447c47d43766097cf1eaf2393db7118"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/xorg-core-gates.json",
+    "bytes": 2850,
+    "sha256": "6b302e2d3b65c1b8822b14ba4a0541a1dd7dd01eb9d72539e3149151d6d4b361"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/xorg-fcitx-pinyin-exit.json",
+    "bytes": 22,
+    "sha256": "1e3f6691f455051e8adb15d961e4bf3c7a17e83dd88b2afdd13315cc288250bb"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/xorg-fcitx-pinyin-keys.json",
+    "bytes": 1913,
+    "sha256": "2b4ff130c43afb5bbbc5dc3bbe7d12e357506d8d6dceefc25c33efbbcd83e826"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/xorg-fcitx-pinyin.log",
+    "bytes": 24,
+    "sha256": "8ce71e4b8ff102e7a1968b5b9fffc2de8980dedf9638bc61119689b5722d76aa"
+  },
+  {
+    "path": "docs/evidence/appimage-0.12.0-748856/ubuntu26/xorg-input-cleanup-to-wayland.json",
+    "bytes": 6819,
+    "sha256": "87a94d22e96847fc19b759f9710920e4459a0fa28d8d5e0e54f876d784db70d9"
+  }
+]

@@ -1,0 +1,42 @@
+qt.multimedia.symbolsresolver: Couldn't load va-x11 library
+qt.multimedia.symbolsresolver: Couldn't resolve va-x11 symbols
+qt.multimedia.ffmpeg: Using Qt multimedia with FFmpeg version 9.0.1 LGPL version 2.1 or later
+qt.multimedia.pipewire.devicemonitor: Ignoring dummy output: std::map(std::pair("client.id", "39"), std::pair("factory.id", "19"), std::pair("media.class", "Audio/Sink"), std::pair("node.description", "Dummy Output"), std::pair("node.name", "auto_null"), std::pair("object.serial", "206"))
+qt.qpa.services: Failed to register with host portal QDBusError("org.freedesktop.portal.Error.Failed", "Could not register app ID: Connection already associated with an application ID")
+
+** (python3:4083): WARNING **: 00:00:16.769: AT-SPI: Could not obtain desktop path or name
+
+qt.qpa.wayland.textinput: virtual void QtWaylandClient::QWaylandTextInputv3::disableSurface(wl_surface*) Trying to disable 0x5558450 but 0x0 is focused
+qt.qpa.wayland.textinput: virtual void QtWaylandClient::QWaylandTextInputv3::disableSurface(wl_surface*) Trying to disable 0x5558450 but 0x0 is focused
+
+** (python3:4083): WARNING **: 00:00:16.795: atk-bridge: get_device_events_reply: unknown signature
+
+** (python3:4083): WARNING **: 00:00:16.795: atk-bridge: GetRegisteredEvents returned message with unknown signature
+
+** (python3:4083): WARNING **: 00:00:16.795: AT-SPI: Could not obtain desktop path or name
+
+
+** (python3:4083): WARNING **: 00:00:16.799: AT-SPI: Could not obtain desktop path or name
+
+
+** (python3:4083): WARNING **: 00:00:16.799: atk-bridge: get_device_events_reply: unknown signature
+
+** (python3:4083): WARNING **: 00:00:16.799: atk-bridge: GetRegisteredEvents returned message with unknown signature
+
+** (python3:4083): WARNING **: 00:00:16.799: AT-SPI: Could not obtain desktop path or name
+
+
+** (python3:4083): WARNING **: 00:00:16.802: AT-SPI: Could not obtain desktop path or name
+
+
+** (python3:4083): WARNING **: 00:00:16.803: atk-bridge: get_device_events_reply: unknown signature
+
+** (python3:4083): WARNING **: 00:00:16.803: atk-bridge: GetRegisteredEvents returned message with unknown signature
+
+** (python3:4083): WARNING **: 00:00:16.803: AT-SPI: Could not obtain desktop path or name
+
+{"screenshots": 5, "platform": "wayland", "visible": true}
+启动未完成，原始配置保留。
+配置目录：/mnt/output/26-wayland/ui/private/config/inkecho
+
+Cannot load config.json; original file preserved.

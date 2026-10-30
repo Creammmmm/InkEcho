@@ -1,0 +1,11 @@
+qt.multimedia.symbolsresolver: Couldn't load va-x11 library
+qt.multimedia.symbolsresolver: Couldn't resolve va-x11 symbols
+qt.multimedia.symbolsresolver: Couldn't load va-drm library
+qt.multimedia.symbolsresolver: Couldn't resolve va-drm symbols
+qt.multimedia.symbolsresolver: Couldn't load va library
+qt.multimedia.symbolsresolver: Couldn't resolve va symbols
+qt.multimedia.symbolsresolver: Couldn't load va(in plugin) library
+qt.multimedia.symbolsresolver: Couldn't resolve va(in plugin) symbols
+qt.multimedia.ffmpeg: Using Qt multimedia with FFmpeg version 9.0.1 LGPL version 2.1 or later
+qt.multimedia.pipewire.devicemonitor: Ignoring dummy output: std::map(std::pair("client.id", "32"), std::pair("factory.id", "18"), std::pair("media.class", "Audio/Sink"), std::pair("node.description", "Dummy Output"), std::pair("node.name", "auto_null"), std::pair("object.serial", "361"))
+{"status": "passed", "synthetic_only": true, "input_transport": "auto_owned_target", "events_ms": {"toggle_requested": 0.0, "credential_wait_started": 410.911, "first_capture": 5.451, "play_requested": 86.074, "credential_wait_finished": 810.017, "first_audio_on_wire": 430.848, "stop_requested": 1338.149, "final_asr": 1464.573, "polishing_request": 1538.87, "polishing_first_delta": 1618.586, "polishing_full_text": 2013.898}, "marker_samples": 1601, "wire_bytes": 42950, "performance": {"schema_version": 1, "outcome": "succeeded", "events_ms": {"recording_started": 0.007, "recording_stop_requested": 1337.086, "recording_stopped": 1339.676, "asr_started": 409.416, "asr_completed": 1465.73, "polishing_started": 1465.848, "polishing_first_segment": 1619.952, "polishing_completed": 2019.494, "first_character_sent": 1987.142, "output_completed": 4114.679, "task_finished": 4114.784}, "durations_ms": {"stop_to_audio_ready_ms": 2.59, "asr_ms": 1056.314, "polishing_to_first_segment_ms": 154.105, "polishing_ms": 553.646, "stop_to_first_character_ms": 650.056, "audio_ready_to_first_character_ms": 647.466, "output_ms": 2127.537, "stop_to_output_completed_ms": 2777.593, "stop_to_task_finished_ms": 2777.698}}}
