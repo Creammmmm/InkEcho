@@ -1,0 +1,153 @@
+{
+  "label": "wait40-quiet-baseline250-cancel",
+  "receiver_wait_ms": 40,
+  "feedback_baseline_ms": 250,
+  "quiet_freeze": true,
+  "action": "cancel",
+  "sample": "aaaaaaaa",
+  "actual_texts": [
+    "a"
+  ],
+  "draw_hints": 0,
+  "presses": 1,
+  "releases": 1,
+  "no_late_text": true,
+  "passed": true,
+  "rows": [
+    {
+      "event": "settings_snapshot",
+      "time_ns": 335846145238,
+      "receiver_max": 0.04,
+      "feedback_min": 0.25,
+      "saved_ms": 40
+    },
+    {
+      "event": "before_send_enter",
+      "time_ns": 335847734425,
+      "token": 1,
+      "level": "draw",
+      "sent": 0,
+      "budget": 1,
+      "hint": false,
+      "draw_wait_eligible": false,
+      "receiver_max": 0.04,
+      "baseline": 0.25
+    },
+    {
+      "event": "before_send_exit",
+      "time_ns": 335847749185,
+      "token": 1,
+      "elapsed_ms": 0.016693
+    },
+    {
+      "event": "send",
+      "time_ns": 335955546270,
+      "window": 10485764,
+      "code": 183,
+      "pressed": true
+    },
+    {
+      "event": "send",
+      "time_ns": 335965891670,
+      "window": 10485764,
+      "code": 183,
+      "pressed": false
+    },
+    {
+      "event": "before_send_enter",
+      "time_ns": 335976447448,
+      "token": 1,
+      "level": "draw",
+      "sent": 1,
+      "budget": 1,
+      "hint": false,
+      "draw_wait_eligible": true,
+      "receiver_max": 0.04,
+      "baseline": 0.25
+    },
+    {
+      "event": "trigger",
+      "time_ns": 335981575017,
+      "action": "cancel"
+    },
+    {
+      "event": "before_send_exit",
+      "time_ns": 335981617942,
+      "token": 1,
+      "elapsed_ms": 5.172603
+    },
+    {
+      "event": "insert_stopped",
+      "time_ns": 335988511250,
+      "kind": "CancelledError",
+      "code": null
+    },
+    {
+      "event": "feedback_status",
+      "time_ns": 335988518498,
+      "status": "not_checked",
+      "level": "draw",
+      "capability": null
+    },
+    {
+      "event": "session_stopped",
+      "time_ns": 335988553718,
+      "code": "injection_failed"
+    }
+  ],
+  "target_final": {
+    "pid": 2767,
+    "time_ns": 336436869475,
+    "windows": [
+      {
+        "text": "a",
+        "active": true,
+        "focus": true,
+        "xid": 10485763
+      }
+    ],
+    "events": [
+      {
+        "event": "create",
+        "time_ns": 335463767864
+      },
+      {
+        "event": "command",
+        "time_ns": 335734566993,
+        "command": {
+          "seq": 1,
+          "action": "freeze"
+        }
+      },
+      {
+        "event": "key",
+        "time_ns": 335956924391,
+        "pressed": true,
+        "keyval": 16777313,
+        "code": 183
+      },
+      {
+        "event": "buffer",
+        "time_ns": 335957956639,
+        "index": 0,
+        "texts": [
+          "a"
+        ]
+      },
+      {
+        "event": "key",
+        "time_ns": 335965864055,
+        "pressed": false,
+        "keyval": 16777313,
+        "code": 183
+      }
+    ],
+    "frozen_count": 1
+  },
+  "package_origins": {
+    "inkecho.app": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchAPAcKd/packages/inkecho/app.py",
+    "inkecho.platform.keyboard": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchAPAcKd/packages/inkecho/platform/keyboard.py",
+    "inkecho.platform.output_pacing": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchAPAcKd/packages/inkecho/platform/output_pacing.py",
+    "inkecho.platform.x11_feedback": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchAPAcKd/packages/inkecho/platform/x11_feedback.py"
+  }
+}

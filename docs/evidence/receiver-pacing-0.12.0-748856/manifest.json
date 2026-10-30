@@ -1,0 +1,647 @@
+[
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/boot.json",
+    "bytes": 2096,
+    "sha256": "b96b228410ad132ca6e81426f56092d694218b9f3dda022e97a30b8b77241046"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/container-final-state.json",
+    "bytes": 269,
+    "sha256": "0c0cbe60381e035452d2921061f66ecf67fa2edc410a2b0cc04c7693bed1d0c6"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/control.py.txt",
+    "bytes": 4524,
+    "sha256": "3e393e65a96fa0686907bc3e7f31ad67512ad5e8bf0c36f35d17499750025bf7"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/final-cleanup-poweroff.json",
+    "bytes": 280,
+    "sha256": "d7d2a7e482778c87ce1ae0a3c9c850e03e7bb49746c9571418a127bda6b603a4"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/inkecho-setup-pacing012.py.txt",
+    "bytes": 963,
+    "sha256": "d59fbe0e0d65ea169eff7e8e457d413579543fa15e2ec9416863da37b8e9038f"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/input/context.py.txt",
+    "bytes": 1370,
+    "sha256": "f5acbab2b30eba235dc0d302ea2a16d8362a13cebba1e7824dab1d5f55b640b3"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/input/guest.py.txt",
+    "bytes": 5145,
+    "sha256": "fe8077f2b77d88f79e0d98b53203c027dfe384e2323c21e8be58abeb13fb7d94"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/input/pacing-launch012-r2.py.txt",
+    "bytes": 1000,
+    "sha256": "9d1732de01e987152187faf1d0374a73a9cf6b844e6097517fbe841c41d44183"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/input/pacing-launch012.py.txt",
+    "bytes": 988,
+    "sha256": "39dbfc89aec7a41f333a4f30e0810fd86b797898219358934aad9b835b78e0e1"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/input/pacing-run012-r2.py.txt",
+    "bytes": 6951,
+    "sha256": "0cc12493e133a4bf9aa53d18cf0509d429c4efcd5a3285f7c1224e02a403c73e"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/input/pacing-run012.py.txt",
+    "bytes": 6815,
+    "sha256": "1fe5c3822816a08215fbfb48316a4b48e1c71b88941db4770f9c27a123c17933"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/input/pacing-target012.py.txt",
+    "bytes": 1941,
+    "sha256": "325a0c490c10071826a001f7b689bdff9c1a9b3ff21684531c637ee10b2f631c"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/input/qemu.json",
+    "bytes": 882,
+    "sha256": "fa91db4461c63f3c0f1f01c021cfbc1663272746055d0d68cd5a9f82328f2e79"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/input/resource-check.py.txt",
+    "bytes": 2214,
+    "sha256": "0d23c36b5d3d1992caf79d9f589e6b75593034a5ddddee46f76f84fffaf4d306"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/input/wrapper.py.txt",
+    "bytes": 1292,
+    "sha256": "0474281c4ddbdfd2aa08327d5d217c957059a8ba0ca03578fedb7a981ae610be"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/launch.json",
+    "bytes": 1772,
+    "sha256": "0b65cea2dc29b2d597f62496edc4be3faa2798b6584efa0ac991a67e3ff0e6af"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-r2/results.json",
+    "bytes": 2692,
+    "sha256": "e1029fa8723e8d045afd6fa376f969087ca9a115d383724b310fad55659f749f"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-r2/wait20-quiet-baseline250-cancel/command.json",
+    "bytes": 28,
+    "sha256": "0262af7dec833d617c661be6d568849b74bbad323a2e09e31e293023e27d7abb"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-r2/wait20-quiet-baseline250-cancel/resource.json",
+    "bytes": 82,
+    "sha256": "cbec78c6c8eeab4f72d9720d6b02dab2b67d3ee854314336266b78cebd5f601f"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-r2/wait20-quiet-baseline250-cancel/result.json",
+    "bytes": 3496,
+    "sha256": "ae0d65a7c9ca065646c7a4974da1bfc7301ee3331e488b77c9ecac828bf767b8"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-r2/wait20-quiet-baseline250-cancel/target.json",
+    "bytes": 630,
+    "sha256": "2ec8b0bb29cf4d9b7b54b8b0daaaedf2250d5ea3832b74fea276082abc31cfd8"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-r2/wait20-quiet-baseline250-cancel/target.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-r2/wait20-quiet-baseline250-switch/command.json",
+    "bytes": 28,
+    "sha256": "9cfd150fe47affa245ca1699629dd54966756ac74f4cef720b05233c32a5c1fc"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-r2/wait20-quiet-baseline250-switch/resource.json",
+    "bytes": 82,
+    "sha256": "cbec78c6c8eeab4f72d9720d6b02dab2b67d3ee854314336266b78cebd5f601f"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-r2/wait20-quiet-baseline250-switch/result.json",
+    "bytes": 12002,
+    "sha256": "eaef6eb97e466905787fb49145f842a2c3771b5e60d4811076b817f269932943"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-r2/wait20-quiet-baseline250-switch/target.json",
+    "bytes": 2720,
+    "sha256": "8ad46b063c90b78f6a46599015a306807c1feee07748a4053aa17b8f474858a5"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-r2/wait20-quiet-baseline250-switch/target.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-r2/wait40-quiet-baseline250-cancel/command.json",
+    "bytes": 28,
+    "sha256": "0262af7dec833d617c661be6d568849b74bbad323a2e09e31e293023e27d7abb"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-r2/wait40-quiet-baseline250-cancel/resource.json",
+    "bytes": 82,
+    "sha256": "cbec78c6c8eeab4f72d9720d6b02dab2b67d3ee854314336266b78cebd5f601f"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-r2/wait40-quiet-baseline250-cancel/result.json",
+    "bytes": 3496,
+    "sha256": "c84ccfbdfb965db3c4618bfda7b40b20570b7ccbe6c719572450e50d1d433984"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-r2/wait40-quiet-baseline250-cancel/target.json",
+    "bytes": 630,
+    "sha256": "94ee12e9350ba79fd44ef79bd09266bef78690f44275f51386862907aed6b1b3"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-r2/wait40-quiet-baseline250-cancel/target.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-r2/wait40-quiet-baseline250-switch/command.json",
+    "bytes": 28,
+    "sha256": "9cfd150fe47affa245ca1699629dd54966756ac74f4cef720b05233c32a5c1fc"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-r2/wait40-quiet-baseline250-switch/resource.json",
+    "bytes": 82,
+    "sha256": "cbec78c6c8eeab4f72d9720d6b02dab2b67d3ee854314336266b78cebd5f601f"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-r2/wait40-quiet-baseline250-switch/result.json",
+    "bytes": 12912,
+    "sha256": "8607ffbc6d899a087f5b89ab98d950be95df76c8cd85abb8ed90b24f7696214b"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-r2/wait40-quiet-baseline250-switch/target.json",
+    "bytes": 2720,
+    "sha256": "8dacc1abc10ed98de74af33eafd5f72394e138b0cbd4072d9c0455372568c227"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-r2/wait40-quiet-baseline250-switch/target.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-r2/wait80-quiet-baseline250-cancel/command.json",
+    "bytes": 28,
+    "sha256": "0262af7dec833d617c661be6d568849b74bbad323a2e09e31e293023e27d7abb"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-r2/wait80-quiet-baseline250-cancel/resource.json",
+    "bytes": 82,
+    "sha256": "cbec78c6c8eeab4f72d9720d6b02dab2b67d3ee854314336266b78cebd5f601f"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-r2/wait80-quiet-baseline250-cancel/result.json",
+    "bytes": 3496,
+    "sha256": "5456674a56d691fed5b88155383c3385e4a13b63a7e9aa956b518824c1b2812e"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-r2/wait80-quiet-baseline250-cancel/target.json",
+    "bytes": 630,
+    "sha256": "a7b9eb225bd86efb085bb0ff69005c8037289a41534e94ccb7cf86e86d789cee"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-r2/wait80-quiet-baseline250-cancel/target.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-r2/wait80-quiet-baseline250-switch/command.json",
+    "bytes": 28,
+    "sha256": "9cfd150fe47affa245ca1699629dd54966756ac74f4cef720b05233c32a5c1fc"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-r2/wait80-quiet-baseline250-switch/resource.json",
+    "bytes": 84,
+    "sha256": "3dbeade5f25bf3723540ff0517d655660a7471c0e3df0d50efa4036f31f70e2f"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-r2/wait80-quiet-baseline250-switch/result.json",
+    "bytes": 12523,
+    "sha256": "67baf2870d45a57a09f009cc703edb901845583afb1792a6130d76a4ed5e32db"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-r2/wait80-quiet-baseline250-switch/target.json",
+    "bytes": 2632,
+    "sha256": "68cdd48c5f45c090f0e5124024a37d7ce4914e37588cd66fc0b39fb702d5cc50"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-r2/wait80-quiet-baseline250-switch/target.log",
+    "bytes": 712,
+    "sha256": "7e15bcacfff9d1968d1bae21acef3ed81cd51a4dba41239517945ece20a7e615"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/desktop-context.json",
+    "bytes": 1627,
+    "sha256": "dd21abf21bd819176ae319ea2d3a9d498493e6156a1ffa8f91d8c009ac0bb81b"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/final-resource-check.json",
+    "bytes": 254,
+    "sha256": "181d1c7610ca515158248d711a1cbf0de79221c0312301e92a5df875878f20cb"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/fuse-cleanup.json",
+    "bytes": 62,
+    "sha256": "73d5c68c66421a97dd79ae25c1335955a4045e7f33db7a50f17b32d940af6fe0"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/fuse-mount.err",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/fuse-mount.log",
+    "bytes": 63,
+    "sha256": "80ef13adfce956f4b3bac639bab1ea30cbe00ca06600bf85df7a38faf60f4ba5"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/mount.json",
+    "bytes": 204,
+    "sha256": "b4eb43696f3ea5908306403b5159057d4432f7d4b22eea9b0e1fe854dc9162fe"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/package-audit-exit.json",
+    "bytes": 596,
+    "sha256": "f5bca30a1e0f9f744be716f72a7d53735036de37e299668cbc018d058aab6be6"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/package-audit.json",
+    "bytes": 18234,
+    "sha256": "16125c2cfb90e2eacec759e8c16587da64ab3197e964046c35b9162c8cfcb5a8"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/package-audit.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/resource-check-exit.json",
+    "bytes": 97,
+    "sha256": "bc5248b2e8759ce8dc2aa9cf9353c360520236d7334912436600a437747de01c"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/resource-check.log",
+    "bytes": 237,
+    "sha256": "ed9e11d39ba1f9727b9885335d6bbdc690a6d1b7977b0ae04e88af1b0b07a7b1"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/results.json",
+    "bytes": 4140,
+    "sha256": "f6d6cb2a9a3d3ed1e8d13ee33a43c3234ef48d2fdc04020b843823abed60786a"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/suite-exit.json",
+    "bytes": 17,
+    "sha256": "64a1526b099d75eed9d9da41a5562dcc164b6ffddeb729dd371c4496bbcded05"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/suite-r2-exit.json",
+    "bytes": 17,
+    "sha256": "c365161d39236fe0f1d32937fbc549796b8487d8faf65ed3879b96897c78ea5d"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/suite-r2.log",
+    "bytes": 309,
+    "sha256": "18706c885cc65daca28623dcb21fadce219141f9c74eff67ce77aab481ed924f"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/suite.log",
+    "bytes": 2614,
+    "sha256": "9f5a5c27136a58cfe617da692938ecdec6c1b6746620e133860e47b10c49358a"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait20-draw-baseline40-normal/command.json",
+    "bytes": 28,
+    "sha256": "44d26f0e1a20e68c12c1101af828d4ff92aa59c4f516b3cdedf6a09a8d5a8d9b"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait20-draw-baseline40-normal/resource.json",
+    "bytes": 82,
+    "sha256": "cbec78c6c8eeab4f72d9720d6b02dab2b67d3ee854314336266b78cebd5f601f"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait20-draw-baseline40-normal/result.json",
+    "bytes": 11428,
+    "sha256": "c75dbbbd53d947cb0e4bec22ac68ab39a6cf7f907ee4bdcc9b141fe5bc51d6cc"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait20-draw-baseline40-normal/target.json",
+    "bytes": 2402,
+    "sha256": "04d592eaabf00eeab70c0823d28ca5af3c2e45cdee19fa0342d46f91535c1a69"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait20-draw-baseline40-normal/target.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait20-quiet-baseline250-normal/command.json",
+    "bytes": 28,
+    "sha256": "0262af7dec833d617c661be6d568849b74bbad323a2e09e31e293023e27d7abb"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait20-quiet-baseline250-normal/resource.json",
+    "bytes": 82,
+    "sha256": "cbec78c6c8eeab4f72d9720d6b02dab2b67d3ee854314336266b78cebd5f601f"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait20-quiet-baseline250-normal/result.json",
+    "bytes": 10674,
+    "sha256": "828db60f08a1baaac69f85808c04ed76860a56448931cbc9c8e62a393b7176cc"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait20-quiet-baseline250-normal/target.json",
+    "bytes": 2492,
+    "sha256": "6b09e4d58c7851ee50a2c9e63f34b4ed50ba4ea105c44c4345c967968743674f"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait20-quiet-baseline250-normal/target.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait20-quiet-baseline40-normal/command.json",
+    "bytes": 28,
+    "sha256": "0262af7dec833d617c661be6d568849b74bbad323a2e09e31e293023e27d7abb"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait20-quiet-baseline40-normal/resource.json",
+    "bytes": 82,
+    "sha256": "cbec78c6c8eeab4f72d9720d6b02dab2b67d3ee854314336266b78cebd5f601f"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait20-quiet-baseline40-normal/result.json",
+    "bytes": 10672,
+    "sha256": "b58b0fe07553b46f789c1f475113b87c215e267168bc3d205d2c01852a2e2850"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait20-quiet-baseline40-normal/target.json",
+    "bytes": 2492,
+    "sha256": "e98a9076a9dd791a7cac9d463a20ba5e96ce56aa4777659c18f66a0ce99bf1e0"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait20-quiet-baseline40-normal/target.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait40-draw-baseline40-normal/command.json",
+    "bytes": 28,
+    "sha256": "44d26f0e1a20e68c12c1101af828d4ff92aa59c4f516b3cdedf6a09a8d5a8d9b"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait40-draw-baseline40-normal/resource.json",
+    "bytes": 82,
+    "sha256": "cbec78c6c8eeab4f72d9720d6b02dab2b67d3ee854314336266b78cebd5f601f"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait40-draw-baseline40-normal/result.json",
+    "bytes": 11558,
+    "sha256": "a57e104a3b193e2b2976e336ca9fccb723d446cae8d2141bc05c5b9b07fe4c75"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait40-draw-baseline40-normal/target.json",
+    "bytes": 2402,
+    "sha256": "4497214547f78f8d8d11f64fef565cc19aec95e75c3ae85ca260001f8c9a86cf"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait40-draw-baseline40-normal/target.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait40-quiet-baseline250-normal/command.json",
+    "bytes": 28,
+    "sha256": "0262af7dec833d617c661be6d568849b74bbad323a2e09e31e293023e27d7abb"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait40-quiet-baseline250-normal/resource.json",
+    "bytes": 82,
+    "sha256": "cbec78c6c8eeab4f72d9720d6b02dab2b67d3ee854314336266b78cebd5f601f"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait40-quiet-baseline250-normal/result.json",
+    "bytes": 10672,
+    "sha256": "30d4256c352a09cce96bf9e7de3c627d20aa2cf8262c4a986139dc4b0d343892"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait40-quiet-baseline250-normal/target.json",
+    "bytes": 2492,
+    "sha256": "6cc280f85ed77af59fbf3c52f51904eb3f662ccf9911974964e6d51cd8d94988"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait40-quiet-baseline250-normal/target.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait40-quiet-baseline40-normal/command.json",
+    "bytes": 28,
+    "sha256": "0262af7dec833d617c661be6d568849b74bbad323a2e09e31e293023e27d7abb"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait40-quiet-baseline40-normal/resource.json",
+    "bytes": 84,
+    "sha256": "3dbeade5f25bf3723540ff0517d655660a7471c0e3df0d50efa4036f31f70e2f"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait40-quiet-baseline40-normal/result.json",
+    "bytes": 10670,
+    "sha256": "18a96d4e5021ed4723db0fb81aaa1ce197278623b6d217e42a3855ceab446786"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait40-quiet-baseline40-normal/target.json",
+    "bytes": 2404,
+    "sha256": "b8479e241d6877ac79e004953e911aa037704f7f85f73f438537c18462144bf3"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait40-quiet-baseline40-normal/target.log",
+    "bytes": 712,
+    "sha256": "7e15bcacfff9d1968d1bae21acef3ed81cd51a4dba41239517945ece20a7e615"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait80-draw-baseline40-normal/command.json",
+    "bytes": 28,
+    "sha256": "44d26f0e1a20e68c12c1101af828d4ff92aa59c4f516b3cdedf6a09a8d5a8d9b"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait80-draw-baseline40-normal/resource.json",
+    "bytes": 82,
+    "sha256": "cbec78c6c8eeab4f72d9720d6b02dab2b67d3ee854314336266b78cebd5f601f"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait80-draw-baseline40-normal/result.json",
+    "bytes": 11556,
+    "sha256": "b6f93e7a92e57aeba64215af444bd841e0fe00ee2b2fd6558d1c3cea60b90be5"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait80-draw-baseline40-normal/target.json",
+    "bytes": 2402,
+    "sha256": "210ace1d9775d262cfbe8ad9b25c47b205b9bb82d0d457045b87fa9a01add367"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait80-draw-baseline40-normal/target.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait80-quiet-baseline250-cancel/command.json",
+    "bytes": 28,
+    "sha256": "0262af7dec833d617c661be6d568849b74bbad323a2e09e31e293023e27d7abb"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait80-quiet-baseline250-cancel/resource.json",
+    "bytes": 82,
+    "sha256": "cbec78c6c8eeab4f72d9720d6b02dab2b67d3ee854314336266b78cebd5f601f"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait80-quiet-baseline250-cancel/result.json",
+    "bytes": 3495,
+    "sha256": "205aac33cc377e8f59b12652ec7c9a0c91fafe06060654decf2d19a40560dfd6"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait80-quiet-baseline250-cancel/target.json",
+    "bytes": 630,
+    "sha256": "7a57ff910ce66319ec48acf175edd0b1952ec21ce1d493a7170369f7f545f611"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait80-quiet-baseline250-cancel/target.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait80-quiet-baseline250-normal/command.json",
+    "bytes": 28,
+    "sha256": "0262af7dec833d617c661be6d568849b74bbad323a2e09e31e293023e27d7abb"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait80-quiet-baseline250-normal/resource.json",
+    "bytes": 82,
+    "sha256": "cbec78c6c8eeab4f72d9720d6b02dab2b67d3ee854314336266b78cebd5f601f"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait80-quiet-baseline250-normal/result.json",
+    "bytes": 10673,
+    "sha256": "669339745641e4ec7c2378890dc956a3abc03d06bc77922ab24fdbbddde1274d"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait80-quiet-baseline250-normal/target.json",
+    "bytes": 2492,
+    "sha256": "bae1e9f110db3d3195414a3043774bd973bf162cfebc168dfd6132d5e0660b85"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait80-quiet-baseline250-normal/target.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait80-quiet-baseline250-switch/command.json",
+    "bytes": 28,
+    "sha256": "9cfd150fe47affa245ca1699629dd54966756ac74f4cef720b05233c32a5c1fc"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait80-quiet-baseline250-switch/resource.json",
+    "bytes": 82,
+    "sha256": "cbec78c6c8eeab4f72d9720d6b02dab2b67d3ee854314336266b78cebd5f601f"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait80-quiet-baseline250-switch/target.json",
+    "bytes": 2720,
+    "sha256": "3554ac6f36c1755231c5e4d29e318cebb68735e9ab64c0d4b37d58008b528182"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait80-quiet-baseline250-switch/target.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait80-quiet-baseline40-normal/command.json",
+    "bytes": 28,
+    "sha256": "0262af7dec833d617c661be6d568849b74bbad323a2e09e31e293023e27d7abb"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait80-quiet-baseline40-normal/resource.json",
+    "bytes": 82,
+    "sha256": "cbec78c6c8eeab4f72d9720d6b02dab2b67d3ee854314336266b78cebd5f601f"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait80-quiet-baseline40-normal/result.json",
+    "bytes": 10671,
+    "sha256": "43d8eaa02b69013002bae75f3f3f88e0e417cc7b53e046a429458958a25f6075"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait80-quiet-baseline40-normal/target.json",
+    "bytes": 2492,
+    "sha256": "b4daf71c45dfa3978c8dd347109bb2ace884004b31d007041b911465cc0d24d4"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/pacing-xorg/wait80-quiet-baseline40-normal/target.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/qemu-exit.json",
+    "bytes": 17,
+    "sha256": "c365161d39236fe0f1d32937fbc549796b8487d8faf65ed3879b96897c78ea5d"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/ram-overlay-archive.json",
+    "bytes": 289,
+    "sha256": "590084c53fc91aff962fc42abddd5eeebfa046eb47e72fbe2d3766bd5da627de"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/output/serial.log.gz",
+    "bytes": 24445,
+    "sha256": "e7ba2ea73714d0bc408751c205a4cfc67ed9cc43cd229f4ff77c7c21bfd27319"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/pacing-mounted-run.json",
+    "bytes": 4626,
+    "sha256": "371a7a1f566f4996db99a0981a1433d16e7a46fc9a99992f364320ea098cae6f"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/pacing-r2-run.json",
+    "bytes": 464,
+    "sha256": "94ba50e0306046c14ba4b88e5bb3af25ab6b2e169cf3f155997185a1474906b8"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/pacing-run.json",
+    "bytes": 324,
+    "sha256": "458c2e44bac10fc1a0862c1df998f4dcbbe3ee205cc42792fbf5852925b87524"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/pacing012-r2-setup.py.txt",
+    "bytes": 1270,
+    "sha256": "0b93de5ef86243e7b7df4dc5e116d2cec70f87640c34436c2f8e113041b2ba9c"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/pacing012-ready.py.txt",
+    "bytes": 736,
+    "sha256": "b1d7d8e559389365cac5f8cf1a595d574eac3d9f9d4a974a275d84accd6d02c0"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/parent.json",
+    "bytes": 290,
+    "sha256": "9977965b68ae871976283b256682eda11f2a7d62f383bbd38f9929646908474c"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/share-diagnostic.json",
+    "bytes": 355,
+    "sha256": "c5d066576879c6578d02b61c529eb1a5361985fab906838d157c11fc115066cc"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/ssh-readiness.json",
+    "bytes": 4168,
+    "sha256": "e89d2bbf40b6c7054111104cb34228b0a1489d55d8a3df51c24cf5f596fc0b23"
+  },
+  {
+    "path": "docs/evidence/receiver-pacing-0.12.0-748856/summary.json",
+    "bytes": 10911,
+    "sha256": "33d36481f9c1a5493b8453846e01f03efb352c3c4bd40b9730c2c49566a1b93e"
+  }
+]

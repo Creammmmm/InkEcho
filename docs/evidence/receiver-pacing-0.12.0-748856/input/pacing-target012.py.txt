@@ -1,0 +1,30 @@
+import os,json,time
+from pathlib import Path
+import gi
+gi.require_version('Gtk','3.0')
+from gi.repository import Gtk,GLib
+R=Path(os.environ['PACING_ROOT']);quiet=os.environ['PACING_QUIET']=='1';wins=[];events=[];frozen=[];seq=0
+def t():return time.monotonic_ns()
+def text(v):
+ b=v.get_buffer();return b.get_text(b.get_start_iter(),b.get_end_iter(),True)
+def save():
+ row={'pid':os.getpid(),'time_ns':t(),'windows':[{'text':text(v),'active':w.is_active(),'focus':v.has_focus(),'xid':w.get_window().get_xid()}for w,v in wins],'events':events,'frozen_count':len(frozen)};p=R/'target.tmp';p.write_text(json.dumps(row));p.replace(R/'target.json');return True
+def key(_v,e,pressed):events.append({'event':'key','time_ns':t(),'pressed':pressed,'keyval':int(e.keyval),'code':int(e.hardware_keycode)});save();return False
+def create():
+ w=Gtk.Window(title='InkEcho 0.12.0 pacing owned '+str(len(wins)));v=Gtk.TextView();w.add(v);w.set_default_size(640,200);w.connect('focus-in-event',lambda *_:(v.grab_focus(),False)[1]);v.connect('key-press-event',lambda v,e:key(v,e,True));v.connect('key-release-event',lambda v,e:key(v,e,False));v.get_buffer().connect('changed',lambda *_:(events.append({'event':'buffer','time_ns':t(),'index':len(wins)-1,'texts':[text(v)for w,v in wins]}),save()));wins.append((w,v));w.show_all();w.present();v.grab_focus();events.append({'event':'create','time_ns':t()});return False
+def command():
+ global seq
+ p=R/'command.json'
+ if p.exists():
+  c=json.loads(p.read_text())
+  if c['seq']>seq:
+   seq=c['seq'];events.append({'event':'command','time_ns':t(),'command':c})
+   if c['action']=='freeze':
+    for w,v in wins:
+     g=w.get_window();g.freeze_updates();frozen.append(g)
+   elif c['action']=='switch':create()
+   elif c['action']=='quit':Gtk.main_quit();return False
+ save();return True
+create();GLib.timeout_add(5,command);GLib.timeout_add_seconds(90,Gtk.main_quit);Gtk.main()
+for g in frozen:g.thaw_updates()
+save()

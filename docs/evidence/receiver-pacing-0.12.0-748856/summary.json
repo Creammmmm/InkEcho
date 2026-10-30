@@ -1,0 +1,410 @@
+{
+  "source_commit": "895d03bed245aebb21c7124fabbf7df96d6a4aec",
+  "version": "0.12.0",
+  "artifact_sha256": "7488566c708d3fc12de665d35dfc7c26a1902908c9fec63e3c905b1446757a78",
+  "cases": [
+    {
+      "label": "wait20-quiet-baseline250-cancel",
+      "receiver_wait_ms": 20,
+      "feedback_baseline_ms": 250,
+      "quiet_freeze": true,
+      "action": "cancel",
+      "sample": "aaaaaaaa",
+      "actual_texts": [
+        "a"
+      ],
+      "draw_hints": 0,
+      "presses": 1,
+      "releases": 1,
+      "no_late_text": true,
+      "passed": true,
+      "path": "vm24/output/pacing-r2/wait20-quiet-baseline250-cancel/result.json",
+      "eligible_unhinted_waits_ms": [
+        5.185574
+      ],
+      "median_ms": 5.185574,
+      "cancel_to_wait_exit_ms": 0.048231,
+      "presses_after_cancel": 0
+    },
+    {
+      "label": "wait20-quiet-baseline250-switch",
+      "receiver_wait_ms": 20,
+      "feedback_baseline_ms": 250,
+      "quiet_freeze": true,
+      "action": "switch",
+      "sample": "aaaaaaaa",
+      "actual_texts": [
+        "aa",
+        "aaaaaa"
+      ],
+      "draw_hints": 6,
+      "presses": 8,
+      "releases": 8,
+      "no_late_text": true,
+      "passed": true,
+      "path": "vm24/output/pacing-r2/wait20-quiet-baseline250-switch/result.json",
+      "eligible_unhinted_waits_ms": [
+        21.035975
+      ],
+      "median_ms": 21.035975
+    },
+    {
+      "label": "wait40-quiet-baseline250-cancel",
+      "receiver_wait_ms": 40,
+      "feedback_baseline_ms": 250,
+      "quiet_freeze": true,
+      "action": "cancel",
+      "sample": "aaaaaaaa",
+      "actual_texts": [
+        "a"
+      ],
+      "draw_hints": 0,
+      "presses": 1,
+      "releases": 1,
+      "no_late_text": true,
+      "passed": true,
+      "path": "vm24/output/pacing-r2/wait40-quiet-baseline250-cancel/result.json",
+      "eligible_unhinted_waits_ms": [
+        5.172603
+      ],
+      "median_ms": 5.172603,
+      "cancel_to_wait_exit_ms": 0.042925,
+      "presses_after_cancel": 0
+    },
+    {
+      "label": "wait40-quiet-baseline250-switch",
+      "receiver_wait_ms": 40,
+      "feedback_baseline_ms": 250,
+      "quiet_freeze": true,
+      "action": "switch",
+      "sample": "aaaaaaaa",
+      "actual_texts": [
+        "a",
+        "aaaaaaa"
+      ],
+      "draw_hints": 7,
+      "presses": 8,
+      "releases": 8,
+      "no_late_text": true,
+      "passed": true,
+      "path": "vm24/output/pacing-r2/wait40-quiet-baseline250-switch/result.json",
+      "eligible_unhinted_waits_ms": [
+        17.036549
+      ],
+      "median_ms": 17.036549
+    },
+    {
+      "label": "wait80-quiet-baseline250-cancel",
+      "receiver_wait_ms": 80,
+      "feedback_baseline_ms": 250,
+      "quiet_freeze": true,
+      "action": "cancel",
+      "sample": "aaaaaaaa",
+      "actual_texts": [
+        "a"
+      ],
+      "draw_hints": 0,
+      "presses": 1,
+      "releases": 1,
+      "no_late_text": true,
+      "passed": true,
+      "path": "vm24/output/pacing-r2/wait80-quiet-baseline250-cancel/result.json",
+      "eligible_unhinted_waits_ms": [
+        5.179571
+      ],
+      "median_ms": 5.179571,
+      "cancel_to_wait_exit_ms": 0.031693,
+      "presses_after_cancel": 0
+    },
+    {
+      "label": "wait80-quiet-baseline250-switch",
+      "receiver_wait_ms": 80,
+      "feedback_baseline_ms": 250,
+      "quiet_freeze": true,
+      "action": "switch",
+      "sample": "aaaaaaaa",
+      "actual_texts": [
+        "a",
+        "aaaaaaa"
+      ],
+      "draw_hints": 7,
+      "presses": 8,
+      "releases": 8,
+      "no_late_text": true,
+      "passed": true,
+      "path": "vm24/output/pacing-r2/wait80-quiet-baseline250-switch/result.json",
+      "eligible_unhinted_waits_ms": [
+        26.468399
+      ],
+      "median_ms": 26.468399
+    },
+    {
+      "label": "wait20-draw-baseline40-normal",
+      "receiver_wait_ms": 20,
+      "feedback_baseline_ms": 40,
+      "quiet_freeze": false,
+      "action": "normal",
+      "sample": "aaaaaaaa",
+      "actual_texts": [
+        "aaaaaaaa"
+      ],
+      "draw_hints": 7,
+      "presses": 8,
+      "releases": 8,
+      "no_late_text": true,
+      "passed": true,
+      "path": "vm24/output/pacing-xorg/wait20-draw-baseline40-normal/result.json",
+      "eligible_unhinted_waits_ms": [
+        20.530646
+      ],
+      "median_ms": 20.530646
+    },
+    {
+      "label": "wait20-quiet-baseline250-normal",
+      "receiver_wait_ms": 20,
+      "feedback_baseline_ms": 250,
+      "quiet_freeze": true,
+      "action": "normal",
+      "sample": "aaaaaaaa",
+      "actual_texts": [
+        "aaaaaaaa"
+      ],
+      "draw_hints": 0,
+      "presses": 8,
+      "releases": 8,
+      "no_late_text": true,
+      "passed": true,
+      "path": "vm24/output/pacing-xorg/wait20-quiet-baseline250-normal/result.json",
+      "eligible_unhinted_waits_ms": [
+        20.509239,
+        20.511474,
+        20.466032,
+        20.606209,
+        20.358333,
+        20.648374,
+        20.691495
+      ],
+      "median_ms": 20.511474
+    },
+    {
+      "label": "wait20-quiet-baseline40-normal",
+      "receiver_wait_ms": 20,
+      "feedback_baseline_ms": 40,
+      "quiet_freeze": true,
+      "action": "normal",
+      "sample": "aaaaaaaa",
+      "actual_texts": [
+        "aaaaaaaa"
+      ],
+      "draw_hints": 0,
+      "presses": 8,
+      "releases": 8,
+      "no_late_text": true,
+      "passed": true,
+      "path": "vm24/output/pacing-xorg/wait20-quiet-baseline40-normal/result.json",
+      "eligible_unhinted_waits_ms": [
+        20.495139,
+        20.540692,
+        20.462014,
+        20.558806,
+        20.686346,
+        20.812927,
+        20.704344
+      ],
+      "median_ms": 20.558806
+    },
+    {
+      "label": "wait40-draw-baseline40-normal",
+      "receiver_wait_ms": 40,
+      "feedback_baseline_ms": 40,
+      "quiet_freeze": false,
+      "action": "normal",
+      "sample": "aaaaaaaa",
+      "actual_texts": [
+        "aaaaaaaa"
+      ],
+      "draw_hints": 8,
+      "presses": 8,
+      "releases": 8,
+      "no_late_text": true,
+      "passed": true,
+      "path": "vm24/output/pacing-xorg/wait40-draw-baseline40-normal/result.json",
+      "eligible_unhinted_waits_ms": [],
+      "median_ms": null
+    },
+    {
+      "label": "wait40-quiet-baseline250-normal",
+      "receiver_wait_ms": 40,
+      "feedback_baseline_ms": 250,
+      "quiet_freeze": true,
+      "action": "normal",
+      "sample": "aaaaaaaa",
+      "actual_texts": [
+        "aaaaaaaa"
+      ],
+      "draw_hints": 0,
+      "presses": 8,
+      "releases": 8,
+      "no_late_text": true,
+      "passed": true,
+      "path": "vm24/output/pacing-xorg/wait40-quiet-baseline250-normal/result.json",
+      "eligible_unhinted_waits_ms": [
+        40.93476,
+        40.984555,
+        41.18607,
+        40.159821,
+        40.924165,
+        40.901344,
+        40.964411
+      ],
+      "median_ms": 40.93476
+    },
+    {
+      "label": "wait40-quiet-baseline40-normal",
+      "receiver_wait_ms": 40,
+      "feedback_baseline_ms": 40,
+      "quiet_freeze": true,
+      "action": "normal",
+      "sample": "aaaaaaaa",
+      "actual_texts": [
+        "aaaaaaaa"
+      ],
+      "draw_hints": 0,
+      "presses": 8,
+      "releases": 8,
+      "no_late_text": true,
+      "passed": true,
+      "path": "vm24/output/pacing-xorg/wait40-quiet-baseline40-normal/result.json",
+      "eligible_unhinted_waits_ms": [
+        41.083275,
+        40.32457,
+        40.870835,
+        40.746229,
+        40.218819,
+        41.061499,
+        41.099338
+      ],
+      "median_ms": 40.870835
+    },
+    {
+      "label": "wait80-draw-baseline40-normal",
+      "receiver_wait_ms": 80,
+      "feedback_baseline_ms": 40,
+      "quiet_freeze": false,
+      "action": "normal",
+      "sample": "aaaaaaaa",
+      "actual_texts": [
+        "aaaaaaaa"
+      ],
+      "draw_hints": 8,
+      "presses": 8,
+      "releases": 8,
+      "no_late_text": true,
+      "passed": true,
+      "path": "vm24/output/pacing-xorg/wait80-draw-baseline40-normal/result.json",
+      "eligible_unhinted_waits_ms": [],
+      "median_ms": null
+    },
+    {
+      "label": "wait80-quiet-baseline250-cancel",
+      "receiver_wait_ms": 80,
+      "feedback_baseline_ms": 250,
+      "quiet_freeze": true,
+      "action": "cancel",
+      "sample": "aaaaaaaa",
+      "actual_texts": [
+        "a"
+      ],
+      "draw_hints": 0,
+      "presses": 1,
+      "releases": 1,
+      "no_late_text": true,
+      "passed": true,
+      "path": "vm24/output/pacing-xorg/wait80-quiet-baseline250-cancel/result.json",
+      "eligible_unhinted_waits_ms": [
+        5.180206
+      ],
+      "median_ms": 5.180206,
+      "cancel_to_wait_exit_ms": 0.039583,
+      "presses_after_cancel": 0
+    },
+    {
+      "label": "wait80-quiet-baseline250-normal",
+      "receiver_wait_ms": 80,
+      "feedback_baseline_ms": 250,
+      "quiet_freeze": true,
+      "action": "normal",
+      "sample": "aaaaaaaa",
+      "actual_texts": [
+        "aaaaaaaa"
+      ],
+      "draw_hints": 0,
+      "presses": 8,
+      "releases": 8,
+      "no_late_text": true,
+      "passed": true,
+      "path": "vm24/output/pacing-xorg/wait80-quiet-baseline250-normal/result.json",
+      "eligible_unhinted_waits_ms": [
+        80.940399,
+        80.810699,
+        80.316143,
+        81.046348,
+        80.853646,
+        80.73154,
+        80.923752
+      ],
+      "median_ms": 80.853646
+    },
+    {
+      "label": "wait80-quiet-baseline40-normal",
+      "receiver_wait_ms": 80,
+      "feedback_baseline_ms": 40,
+      "quiet_freeze": true,
+      "action": "normal",
+      "sample": "aaaaaaaa",
+      "actual_texts": [
+        "aaaaaaaa"
+      ],
+      "draw_hints": 0,
+      "presses": 8,
+      "releases": 8,
+      "no_late_text": true,
+      "passed": true,
+      "path": "vm24/output/pacing-xorg/wait80-quiet-baseline40-normal/result.json",
+      "eligible_unhinted_waits_ms": [
+        40.984776,
+        40.320489,
+        40.994706,
+        40.272669,
+        40.96503,
+        40.950044,
+        40.779451
+      ],
+      "median_ms": 40.950044
+    }
+  ],
+  "r1_switch": "retained fixture assertion failure: expected no hints globally although new window draws; corrected with separate old/new target assertions in r2",
+  "r1_qt_warning": "Session harness initially lacked QCoreApplication; retained. r2 creates one; no timer warning in r2 log.",
+  "archive": {
+    "original_bytes": 194510848,
+    "original_sha256": "ad3e6f3453276c7a2861b6d052cc28f6ed0ccec62a91dc048ddbb2b5775fc5da",
+    "archive_bytes": 51956329,
+    "archive_sha256": "7e31977c833f13c4a21ef9a1b61e08d49501620225e9b2696f8937772c21fb97",
+    "full_stream_verified": true,
+    "qemu_exit": 0
+  },
+  "container": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-10-30T00:18:57.969543005Z",
+    "FinishedAt": "2026-10-30T00:25:49.044935121Z"
+  },
+  "source_tree_untouched": true
+}

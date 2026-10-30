@@ -1,0 +1,536 @@
+{
+  "label": "wait20-draw-baseline40-normal",
+  "receiver_wait_ms": 20,
+  "feedback_baseline_ms": 40,
+  "quiet_freeze": false,
+  "action": "normal",
+  "sample": "aaaaaaaa",
+  "actual_texts": [
+    "aaaaaaaa"
+  ],
+  "draw_hints": 7,
+  "presses": 8,
+  "releases": 8,
+  "no_late_text": true,
+  "passed": true,
+  "rows": [
+    {
+      "event": "settings_snapshot",
+      "time_ns": 282932146977,
+      "receiver_max": 0.02,
+      "feedback_min": 0.04,
+      "saved_ms": 20
+    },
+    {
+      "event": "before_send_enter",
+      "time_ns": 282937256794,
+      "token": 1,
+      "level": "draw",
+      "sent": 0,
+      "budget": 1,
+      "hint": false,
+      "draw_wait_eligible": false,
+      "receiver_max": 0.02,
+      "baseline": 0.04
+    },
+    {
+      "event": "before_send_exit",
+      "time_ns": 282937291600,
+      "token": 1,
+      "elapsed_ms": 0.039658
+    },
+    {
+      "event": "send",
+      "time_ns": 283049624282,
+      "window": 10485764,
+      "code": 183,
+      "pressed": true
+    },
+    {
+      "event": "send",
+      "time_ns": 283061357789,
+      "window": 10485764,
+      "code": 183,
+      "pressed": false
+    },
+    {
+      "event": "draw_hint",
+      "time_ns": 283062062966,
+      "hint_clock": 283.062059904,
+      "target": 10485763
+    },
+    {
+      "event": "before_send_enter",
+      "time_ns": 283074324739,
+      "token": 1,
+      "level": "draw",
+      "sent": 1,
+      "budget": 1,
+      "hint": true,
+      "draw_wait_eligible": true,
+      "receiver_max": 0.02,
+      "baseline": 0.04
+    },
+    {
+      "event": "before_send_exit",
+      "time_ns": 283074336183,
+      "token": 1,
+      "elapsed_ms": 0.013333
+    },
+    {
+      "event": "send",
+      "time_ns": 283078932519,
+      "window": 10485764,
+      "code": 183,
+      "pressed": true
+    },
+    {
+      "event": "send",
+      "time_ns": 283089147868,
+      "window": 10485764,
+      "code": 183,
+      "pressed": false
+    },
+    {
+      "event": "before_send_enter",
+      "time_ns": 283100529543,
+      "token": 1,
+      "level": "draw",
+      "sent": 1,
+      "budget": 1,
+      "hint": false,
+      "draw_wait_eligible": true,
+      "receiver_max": 0.02,
+      "baseline": 0.04
+    },
+    {
+      "event": "before_send_exit",
+      "time_ns": 283121059910,
+      "token": 1,
+      "elapsed_ms": 20.530646
+    },
+    {
+      "event": "send",
+      "time_ns": 283123055668,
+      "window": 10485764,
+      "code": 183,
+      "pressed": true
+    },
+    {
+      "event": "draw_hint",
+      "time_ns": 283128224718,
+      "hint_clock": 283.128221532,
+      "target": 10485763
+    },
+    {
+      "event": "send",
+      "time_ns": 283133468283,
+      "window": 10485764,
+      "code": 183,
+      "pressed": false
+    },
+    {
+      "event": "before_send_enter",
+      "time_ns": 283143811131,
+      "token": 1,
+      "level": "draw",
+      "sent": 1,
+      "budget": 1,
+      "hint": true,
+      "draw_wait_eligible": true,
+      "receiver_max": 0.02,
+      "baseline": 0.04
+    },
+    {
+      "event": "before_send_exit",
+      "time_ns": 283143821857,
+      "token": 1,
+      "elapsed_ms": 0.011604
+    },
+    {
+      "event": "send",
+      "time_ns": 283144439599,
+      "window": 10485764,
+      "code": 183,
+      "pressed": true
+    },
+    {
+      "event": "draw_hint",
+      "time_ns": 283153729008,
+      "hint_clock": 283.153726161,
+      "target": 10485763
+    },
+    {
+      "event": "send",
+      "time_ns": 283154899319,
+      "window": 10485764,
+      "code": 183,
+      "pressed": false
+    },
+    {
+      "event": "before_send_enter",
+      "time_ns": 283165356100,
+      "token": 1,
+      "level": "draw",
+      "sent": 1,
+      "budget": 1,
+      "hint": true,
+      "draw_wait_eligible": true,
+      "receiver_max": 0.02,
+      "baseline": 0.04
+    },
+    {
+      "event": "before_send_exit",
+      "time_ns": 283165371623,
+      "token": 1,
+      "elapsed_ms": 0.017771
+    },
+    {
+      "event": "send",
+      "time_ns": 283166647551,
+      "window": 10485764,
+      "code": 183,
+      "pressed": true
+    },
+    {
+      "event": "draw_hint",
+      "time_ns": 283171646445,
+      "hint_clock": 283.171644149,
+      "target": 10485763
+    },
+    {
+      "event": "send",
+      "time_ns": 283176833698,
+      "window": 10485764,
+      "code": 183,
+      "pressed": false
+    },
+    {
+      "event": "before_send_enter",
+      "time_ns": 283187454086,
+      "token": 1,
+      "level": "draw",
+      "sent": 1,
+      "budget": 1,
+      "hint": true,
+      "draw_wait_eligible": true,
+      "receiver_max": 0.02,
+      "baseline": 0.04
+    },
+    {
+      "event": "before_send_exit",
+      "time_ns": 283187473676,
+      "token": 1,
+      "elapsed_ms": 0.021513
+    },
+    {
+      "event": "send",
+      "time_ns": 283188956343,
+      "window": 10485764,
+      "code": 183,
+      "pressed": true
+    },
+    {
+      "event": "draw_hint",
+      "time_ns": 283197258440,
+      "hint_clock": 283.197255789,
+      "target": 10485763
+    },
+    {
+      "event": "send",
+      "time_ns": 283199450956,
+      "window": 10485764,
+      "code": 183,
+      "pressed": false
+    },
+    {
+      "event": "before_send_enter",
+      "time_ns": 283210148991,
+      "token": 1,
+      "level": "draw",
+      "sent": 1,
+      "budget": 1,
+      "hint": true,
+      "draw_wait_eligible": true,
+      "receiver_max": 0.02,
+      "baseline": 0.04
+    },
+    {
+      "event": "before_send_exit",
+      "time_ns": 283210173815,
+      "token": 1,
+      "elapsed_ms": 0.027381
+    },
+    {
+      "event": "send",
+      "time_ns": 283211629128,
+      "window": 10485764,
+      "code": 183,
+      "pressed": true
+    },
+    {
+      "event": "send",
+      "time_ns": 283221985847,
+      "window": 10485764,
+      "code": 183,
+      "pressed": false
+    },
+    {
+      "event": "draw_hint",
+      "time_ns": 283222075951,
+      "hint_clock": 283.222074464,
+      "target": 10485763
+    },
+    {
+      "event": "before_send_enter",
+      "time_ns": 283232864043,
+      "token": 1,
+      "level": "draw",
+      "sent": 1,
+      "budget": 2,
+      "hint": false,
+      "draw_wait_eligible": false,
+      "receiver_max": 0.02,
+      "baseline": 0.04
+    },
+    {
+      "event": "before_send_exit",
+      "time_ns": 283232873937,
+      "token": 1,
+      "elapsed_ms": 0.011015
+    },
+    {
+      "event": "send",
+      "time_ns": 283233534631,
+      "window": 10485764,
+      "code": 183,
+      "pressed": true
+    },
+    {
+      "event": "draw_hint",
+      "time_ns": 283238722345,
+      "hint_clock": 283.238720104,
+      "target": 10485763
+    },
+    {
+      "event": "send",
+      "time_ns": 283243935954,
+      "window": 10485764,
+      "code": 183,
+      "pressed": false
+    },
+    {
+      "event": "insert_complete",
+      "time_ns": 283254174307,
+      "count": 8
+    },
+    {
+      "event": "feedback_status",
+      "time_ns": 283254193197,
+      "status": "available",
+      "level": "draw",
+      "capability": "FeedbackCapability(level=<FeedbackLevel.DRAW: 'draw'>, counter=True, damage=True, reason='counter_and_damage')"
+    }
+  ],
+  "target_final": {
+    "pid": 2520,
+    "time_ns": 283702735427,
+    "windows": [
+      {
+        "text": "aaaaaaaa",
+        "active": true,
+        "focus": true,
+        "xid": 10485763
+      }
+    ],
+    "events": [
+      {
+        "event": "create",
+        "time_ns": 282643298191
+      },
+      {
+        "event": "key",
+        "time_ns": 283052484167,
+        "pressed": true,
+        "keyval": 16777313,
+        "code": 183
+      },
+      {
+        "event": "buffer",
+        "time_ns": 283054887030,
+        "index": 0,
+        "texts": [
+          "a"
+        ]
+      },
+      {
+        "event": "key",
+        "time_ns": 283060697166,
+        "pressed": false,
+        "keyval": 16777313,
+        "code": 183
+      },
+      {
+        "event": "key",
+        "time_ns": 283078809646,
+        "pressed": true,
+        "keyval": 16777313,
+        "code": 183
+      },
+      {
+        "event": "buffer",
+        "time_ns": 283079632527,
+        "index": 0,
+        "texts": [
+          "aa"
+        ]
+      },
+      {
+        "event": "key",
+        "time_ns": 283089158158,
+        "pressed": false,
+        "keyval": 16777313,
+        "code": 183
+      },
+      {
+        "event": "key",
+        "time_ns": 283123086651,
+        "pressed": true,
+        "keyval": 16777313,
+        "code": 183
+      },
+      {
+        "event": "buffer",
+        "time_ns": 283123878719,
+        "index": 0,
+        "texts": [
+          "aaa"
+        ]
+      },
+      {
+        "event": "key",
+        "time_ns": 283133394336,
+        "pressed": false,
+        "keyval": 16777313,
+        "code": 183
+      },
+      {
+        "event": "key",
+        "time_ns": 283144419892,
+        "pressed": true,
+        "keyval": 16777313,
+        "code": 183
+      },
+      {
+        "event": "buffer",
+        "time_ns": 283145163755,
+        "index": 0,
+        "texts": [
+          "aaaa"
+        ]
+      },
+      {
+        "event": "key",
+        "time_ns": 283155329825,
+        "pressed": false,
+        "keyval": 16777313,
+        "code": 183
+      },
+      {
+        "event": "key",
+        "time_ns": 283167094687,
+        "pressed": true,
+        "keyval": 16777313,
+        "code": 183
+      },
+      {
+        "event": "buffer",
+        "time_ns": 283168465100,
+        "index": 0,
+        "texts": [
+          "aaaaa"
+        ]
+      },
+      {
+        "event": "key",
+        "time_ns": 283177595085,
+        "pressed": false,
+        "keyval": 16777313,
+        "code": 183
+      },
+      {
+        "event": "key",
+        "time_ns": 283188915570,
+        "pressed": true,
+        "keyval": 16777313,
+        "code": 183
+      },
+      {
+        "event": "buffer",
+        "time_ns": 283190281882,
+        "index": 0,
+        "texts": [
+          "aaaaaa"
+        ]
+      },
+      {
+        "event": "key",
+        "time_ns": 283199843597,
+        "pressed": false,
+        "keyval": 16777313,
+        "code": 183
+      },
+      {
+        "event": "key",
+        "time_ns": 283212164435,
+        "pressed": true,
+        "keyval": 16777313,
+        "code": 183
+      },
+      {
+        "event": "buffer",
+        "time_ns": 283214339387,
+        "index": 0,
+        "texts": [
+          "aaaaaaa"
+        ]
+      },
+      {
+        "event": "key",
+        "time_ns": 283224069288,
+        "pressed": false,
+        "keyval": 16777313,
+        "code": 183
+      },
+      {
+        "event": "key",
+        "time_ns": 283233597558,
+        "pressed": true,
+        "keyval": 16777313,
+        "code": 183
+      },
+      {
+        "event": "buffer",
+        "time_ns": 283234787819,
+        "index": 0,
+        "texts": [
+          "aaaaaaaa"
+        ]
+      },
+      {
+        "event": "key",
+        "time_ns": 283244940813,
+        "pressed": false,
+        "keyval": 16777313,
+        "code": 183
+      }
+    ],
+    "frozen_count": 0
+  },
+  "package_origins": {
+    "inkecho.app": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchAPAcKd/packages/inkecho/app.py",
+    "inkecho.platform.keyboard": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchAPAcKd/packages/inkecho/platform/keyboard.py",
+    "inkecho.platform.output_pacing": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchAPAcKd/packages/inkecho/platform/output_pacing.py",
+    "inkecho.platform.x11_feedback": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchAPAcKd/packages/inkecho/platform/x11_feedback.py"
+  }
+}

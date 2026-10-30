@@ -1,0 +1,9 @@
+from pathlib import Path
+import os,json,subprocess
+O=Path('/mnt/output/pacing-xorg');A=Path(json.loads((O/'mount.json').read_text())['appdir']);env=dict(os.environ,DBUS_SESSION_BUS_ADDRESS='unix:path=/run/user/1000/bus',XDG_RUNTIME_DIR='/run/user/1000')
+for l in subprocess.check_output(['systemctl','--user','show-environment'],env=env,text=True).splitlines():
+ k,_,v=l.partition('=')
+ if k in {'DISPLAY','XAUTHORITY','WAYLAND_DISPLAY','XDG_SESSION_TYPE','XDG_CURRENT_DESKTOP'}:env[k]=v
+env.update(APPDIR=str(A),PYTHONHOME=str(A/'usr'),PYTHONPATH=str(A/'packages'),PYTHONNOUSERSITE='1',LD_LIBRARY_PATH=str(A/'usr/lib/inkecho'),QT_QPA_PLATFORM='offscreen',PYTHONDONTWRITEBYTECODE='1')
+with(O/'suite-r2.log').open('w')as f:r=subprocess.run([str(A/'usr/bin/python3'),'/mnt/input/pacing-run012-r2.py'],env=env,stdout=f,stderr=subprocess.STDOUT,timeout=120)
+(O/'suite-r2-exit.json').write_text(json.dumps({'returncode':r.returncode}));print((O/'suite-r2.log').read_text());raise SystemExit(r.returncode)

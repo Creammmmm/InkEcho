@@ -1,0 +1,7 @@
+{
+  "stage": "pacing-xorg",
+  "command": "/usr/bin/python3 /mnt/input/guest.py prepare; /usr/bin/python3 /mnt/input/context.py; /usr/bin/python3 /mnt/input/pacing-launch012.py",
+  "returncode": 2,
+  "stdout": "",
+  "stderr": "/usr/bin/python3: can't open file '/mnt/input/guest.py': [Errno 2] No such file or directory\n"
+}

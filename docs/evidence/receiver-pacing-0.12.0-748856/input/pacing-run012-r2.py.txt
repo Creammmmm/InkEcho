@@ -1,0 +1,96 @@
+from pathlib import Path
+import os,json,subprocess,time,asyncio,hashlib,inspect
+from dataclasses import replace
+from PySide6.QtCore import QCoreApplication
+qt_app=QCoreApplication([])
+from inkecho.app import Session
+from inkecho.config import ConfigStore
+from inkecho.platform.keyboard import KeyboardInput,KeyboardError
+from inkecho.platform.x11_feedback import X11Feedback
+from inkecho.platform.output_pacing import FeedbackLevel
+R=Path('/mnt/output/pacing-r2');R.mkdir(mode=0o700);A=Path(os.environ['APPDIR']);meta={'package_root':str(A),'version':__import__('inkecho').__version__,'artifact_sha256':'7488566c708d3fc12de665d35dfc7c26a1902908c9fec63e3c905b1446757a78','clock':'CLOCK_MONOTONIC ns, shared guest kernel','instrumentation':'observer-only wrappers on actual before_send, _send, real X11Feedback callback; no injected hints or sleep changes','cases':[]};assert meta['version']=='0.12.0';env=dict(os.environ)
+for k in ['APPDIR','PYTHONHOME','PYTHONPATH','LD_LIBRARY_PATH','QT_PLUGIN_PATH','PYTHONNOUSERSITE']:env.pop(k,None)
+env.update(GDK_BACKEND='x11',GTK_IM_MODULE='gtk-im-context-simple')
+def dump(p,x):p.write_text(json.dumps(x,indent=2)+'\n')
+def now():return time.monotonic_ns()
+async def case(ms,quiet,baseline,action='normal'):
+ label=f'wait{ms}-'+('quiet'if quiet else'draw')+f'-baseline{baseline}-'+action;d=R/label;d.mkdir(mode=0o700);te=dict(env,PACING_ROOT=str(d),PACING_QUIET=str(int(quiet)));log=(d/'target.log').open('w');target=subprocess.Popen(['/usr/bin/python3','/mnt/input/pacing-target012.py'],env=te,stdout=log,stderr=subprocess.STDOUT);rows=[];seq=0;fired=False;active=True;task=None
+ def read():return json.loads((d/'target.json').read_text())
+ def cmd(action):
+  nonlocal seq
+  seq+=1;q=d/'command.tmp';q.write_text(json.dumps({'seq':seq,'action':action}));q.replace(d/'command.json')
+ def note(what,**kw):rows.append(dict(event=what,time_ns=now(),**kw))
+ store=ConfigStore(d/'private-config');store.initialize();store.save_settings(replace(store.load_settings(),receiver_feedback_wait_ms=ms,x11_feedback_timeout_ms=baseline));session=Session(store=store);inputs=getattr(session.inputs,'keyboard',session.inputs);assert type(inputs)is KeyboardInput
+ try:
+  for _ in range(200):
+   if (d/'target.json').exists() and read()['windows'][-1]['focus']and read()['windows'][-1]['active']:break
+   await asyncio.sleep(.01)
+  else:raise AssertionError('target not ready')
+  await asyncio.sleep(.25)
+  if quiet:
+   cmd('freeze')
+   for _ in range(100):
+    if read()['frozen_count']:break
+    await asyncio.sleep(.01)
+   await asyncio.sleep(.1)
+  await inputs.connect();driver=inputs._driver;send=inputs._send
+  def observed_send(window,code,pressed):send(window,code,pressed);note('send',window=int(window),code=int(code),pressed=pressed)
+  inputs._send=observed_send
+  def factory(driver):
+   fb=X11Feedback(driver);original=fb.set_callback
+   def setcb(callback):
+    def hint(at):note('draw_hint',hint_clock=at,target=fb.window);callback(at)
+    original(hint)
+   fb.set_callback=setcb;return fb
+  inputs._feedback_factory=factory
+  original=inputs._pacer.before_send
+  async def observed_wait(token,**kw):
+   nonlocal fired
+   scope=inputs._pacer._scope;must=scope.level==FeedbackLevel.DRAW and scope.sent>=scope.budget
+   start=now();note('before_send_enter',token=token,level=str(scope.level),sent=scope.sent,budget=scope.budget,hint=scope.hint,draw_wait_eligible=must,receiver_max=inputs._pacer.config.receiver_wait_max,baseline=inputs._pacer.config.feedback_min)
+   if must and not fired and action!='normal':
+    fired=True
+    def trigger():
+     nonlocal active
+     note('trigger',action=action)
+     if action=='cancel':active=False;task.cancel()
+     else:cmd('switch')
+    asyncio.get_running_loop().call_later(.005,trigger)
+   try:await original(token,**kw)
+   finally:note('before_send_exit',token=token,elapsed_ms=(now()-start)/1e6)
+  inputs._pacer.before_send=observed_wait
+  sample='aaaaaaaa'
+  async def output():
+   async with inputs.output_session():
+    note('settings_snapshot',receiver_max=inputs._pacer.config.receiver_wait_max,feedback_min=inputs._pacer.config.feedback_min,saved_ms=store.load_settings().receiver_feedback_wait_ms)
+    try:
+     n=await inputs.insert(sample,lambda:active);note('insert_complete',count=n)
+    except (asyncio.CancelledError,KeyboardError)as e:note('insert_stopped',kind=type(e).__name__,code=getattr(e,'code',None))
+    note('feedback_status',status=inputs.receiver_feedback_status,level=str(inputs._pacing_level),capability=repr(inputs._feedback.capability)if inputs._feedback else None)
+  task=asyncio.create_task(output())
+  try:await task
+  except KeyboardError as e:
+   if action!='cancel':raise
+   note('session_stopped',code=e.code)
+  await asyncio.sleep(.15);first=read();await asyncio.sleep(.3);last=read();keys=[x for x in rows if x['event']=='send'];presses=[x for x in keys if x['pressed']];releases=[x for x in keys if not x['pressed']];texts=[w['text']for w in last['windows']];total=''.join(texts)
+  hints=sum(x['event']=='draw_hint'for x in rows)
+  assert hints==0 if quiet and action!='switch' else hints>0,(label,hints)
+  if action=='switch':assert not any(x['event']=='draw_hint'and x['target']==last['windows'][0]['xid']for x in rows),rows
+  assert total==sample if action!='cancel' else 0<len(total)<len(sample),(label,texts)
+  assert [w['text']for w in first['windows']]==texts
+  assert len(presses)==len(releases)==len(total)
+  assert [x['code']for x in presses]==[x['code']for x in releases]
+  if action=='switch':assert len(texts)==2 and texts[0]and texts[1],texts
+  if action=='cancel':
+   trigger=next(x['time_ns']for x in rows if x['event']=='trigger');assert not any(x['time_ns']>trigger for x in presses)
+  result={'label':label,'receiver_wait_ms':ms,'feedback_baseline_ms':baseline,'quiet_freeze':quiet,'action':action,'sample':sample,'actual_texts':texts,'draw_hints':sum(x['event']=='draw_hint'for x in rows),'presses':len(presses),'releases':len(releases),'no_late_text':True,'passed':True,'rows':rows,'target_final':last,'package_origins':{m:inspect.getfile(__import__(m,fromlist=['']))for m in ['inkecho.app','inkecho.platform.keyboard','inkecho.platform.output_pacing','inkecho.platform.x11_feedback']}}
+  dump(d/'result.json',result);meta['cases'].append({k:v for k,v in result.items()if k not in {'rows','target_final','package_origins'}});dump(R/'results.json',meta);print(label,texts,'hints',result['draw_hints'],flush=True)
+ finally:
+  await inputs.aclose();cmd('quit')
+  try:target.wait(timeout=5)
+  except subprocess.TimeoutExpired:target.terminate();target.wait(timeout=5)
+  log.close();dump(d/'resource.json',{'target_exit':target.returncode,'driver_closed':inputs._driver is None,'feedback_poller_closed':inputs._feedback_poll is None})
+async def main():
+ for ms in [20,40,80]:
+  for action in ['cancel','switch']:await case(ms,True,250,action)
+asyncio.run(main());meta['passed']=True;dump(R/'results.json',meta)

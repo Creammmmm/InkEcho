@@ -1,0 +1,6 @@
+from pathlib import Path
+import shutil
+b=Path('/home/lth/github/InkEcho/dist/receiver-pacing-0.12.0-748856-20261030/vm24/input');src=(b/'pacing-run012.py').read_text();src=src.replace("from inkecho.app import Session", "from PySide6.QtCore import QCoreApplication\nqt_app=QCoreApplication([])\nfrom inkecho.app import Session").replace("R=Path('/mnt/output/pacing-xorg');", "R=Path('/mnt/output/pacing-r2');R.mkdir(mode=0o700);")
+src=src.replace("assert hints==0 if quiet else hints>0,(label,hints)", "assert hints==0 if quiet and action!='switch' else hints>0,(label,hints)\n  if action=='switch':assert not any(x['event']=='draw_hint'and x['target']==last['windows'][0]['xid']for x in rows),rows")
+a=src.index('async def main():');z=src.index('asyncio.run(main())',a);src=src[:a]+"async def main():\n for ms in [20,40,80]:\n  for action in ['cancel','switch']:await case(ms,True,250,action)\n"+src[z:];compile(src,'r2','exec');(b/'pacing-run012-r2.py').write_text(src)
+launch=(b/'pacing-launch012.py').read_text().replace("with(O/'suite.log')", "with(O/'suite-r2.log')").replace("pacing-run012.py", "pacing-run012-r2.py").replace("suite-exit.json", "suite-r2-exit.json").replace("(O/'suite.log')", "(O/'suite-r2.log')");(b/'pacing-launch012-r2.py').write_text(launch)

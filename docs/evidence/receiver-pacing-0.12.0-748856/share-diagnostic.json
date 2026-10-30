@@ -1,0 +1,7 @@
+{
+  "stage": "pacing-xorg",
+  "command": "findmnt -t 9p; ls -ld /mnt/input /mnt/output /mnt/frozen; systemctl --user show-environment",
+  "returncode": 2,
+  "stdout": "drwxr-xr-x 2 root root 4096 Oct 15 17:04 /mnt/input\ndrwxr-xr-x 2 root root 4096 Oct 15 17:04 /mnt/output\n",
+  "stderr": "ls: cannot access '/mnt/frozen': No such file or directory\n"
+}

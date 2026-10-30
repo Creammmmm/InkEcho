@@ -1,0 +1,7 @@
+{
+  "stage": "pacing-xorg",
+  "command": "/usr/bin/python3 /mnt/input/pacing-launch012-r2.py",
+  "returncode": 0,
+  "stdout": "wait20-quiet-baseline250-cancel ['a'] hints 0\nwait20-quiet-baseline250-switch ['aa', 'aaaaaa'] hints 6\nwait40-quiet-baseline250-cancel ['a'] hints 0\nwait40-quiet-baseline250-switch ['a', 'aaaaaaa'] hints 7\nwait80-quiet-baseline250-cancel ['a'] hints 0\nwait80-quiet-baseline250-switch ['a', 'aaaaaaa'] hints 7\n\n",
+  "stderr": ""
+}

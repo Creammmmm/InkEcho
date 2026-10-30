@@ -1,0 +1,6 @@
+wait20-quiet-baseline250-cancel ['a'] hints 0
+wait20-quiet-baseline250-switch ['aa', 'aaaaaa'] hints 6
+wait40-quiet-baseline250-cancel ['a'] hints 0
+wait40-quiet-baseline250-switch ['a', 'aaaaaaa'] hints 7
+wait80-quiet-baseline250-cancel ['a'] hints 0
+wait80-quiet-baseline250-switch ['a', 'aaaaaaa'] hints 7

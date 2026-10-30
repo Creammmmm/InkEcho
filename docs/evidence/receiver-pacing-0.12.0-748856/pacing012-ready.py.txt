@@ -1,0 +1,9 @@
+from pathlib import Path
+import subprocess,json,time
+b=Path('/home/lth/github/InkEcho/dist/receiver-pacing-0.12.0-748856-20261030/vm24');rows=[]
+cmd=['docker','exec','-i','inkecho-pacing012-24-20261030','ssh','-T','-i','/secrets/testkey','-p2222','-o','BatchMode=yes','-o','ConnectTimeout=5','-o','StrictHostKeyChecking=yes','-o','UserKnownHostsFile=/prior/known_hosts','inkecho@127.0.0.1','true']
+for i in range(35):
+ r=subprocess.run(cmd,capture_output=True,text=True,timeout=9);rows.append({'attempt':i+1,'returncode':r.returncode,'stderr':r.stderr});(b/'ssh-readiness.json').write_text(json.dumps(rows,indent=2)+'\n')
+ if r.returncode==0:print('SSH ready',i+1);break
+ time.sleep(4)
+else:raise RuntimeError('guest readiness failed')
