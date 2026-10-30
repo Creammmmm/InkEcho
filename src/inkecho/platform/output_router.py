@@ -366,9 +366,9 @@ class OutputRouter:
             raise OutputRouterError("busy")
         if self._selected is None or self._failed:
             raise OutputRouterError("output_not_prepared")
-        self._check_task(can_continue, deadline)
         self._busy = True
         try:
+            self._check_task(can_continue, deadline)
             if self._auto_pending:
                 await self._choose_auto(can_continue, deadline)
             self._check_task(can_continue, deadline)
@@ -377,6 +377,11 @@ class OutputRouter:
                 self._kind == "fcitx" and not self.neighbor_batches_enabled
             )
             return self.neighbor_batches_enabled
+        except BaseException:
+            # A failed or cancelled selection cannot be retried in this scope:
+            # the pending flag may already have been consumed by _choose_auto.
+            self._failed = True
+            raise
         finally:
             self._busy = False
 

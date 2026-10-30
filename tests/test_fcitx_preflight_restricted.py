@@ -155,3 +155,137 @@ def test_restricted_preflight_rechecks_and_cleans_without_keyboard(reason):
         )
 
     asyncio.run(run())
+
+
+def test_failed_stream_preflight_cannot_resume_with_keyboard():
+    async def run():
+        keyboard = Keyboard()
+        keyboard.authorized = True  # Previously authorized session remains live.
+        bridge = Bridge("unavailable")
+
+        async def state_probe():
+            return "unknown"
+
+        async def detector():
+            return ("fcitx", ":1.8")
+
+        router = DefaultAutoOutputRouter(
+            keyboard,
+            state_probe=state_probe,
+            system_detector=detector,
+            bridge_factory=lambda: bridge,
+        )
+        await router.prepare_task("auto")
+        with pytest.raises(OutputRouterError, match="output_failed"):
+            async with router.output_session():
+                with pytest.raises(OutputRouterError, match="input_capability_unknown"):
+                    await router.prepare_stream(lambda: True)
+                with pytest.raises(OutputRouterError, match="output_failed"):
+                    await router.insert("甲", lambda: True)
+        assert bridge.closed and bridge.sent == []
+        assert keyboard.connects == keyboard.authorizations == 0
+        assert keyboard.sent == []
+
+    asyncio.run(run())
+
+
+@pytest.mark.parametrize("stop", ["predicate", "async_cancel"])
+def test_cancelled_stream_preflight_cannot_resume_but_next_task_can(stop):
+    async def run():
+        keyboard = Keyboard()
+        keyboard.authorized = True
+        active = [stop != "predicate"]
+
+        async def state_probe():
+            raise asyncio.CancelledError
+
+        router = DefaultAutoOutputRouter(keyboard, state_probe=state_probe)
+        await router.prepare_task("auto")
+        with pytest.raises(OutputRouterError, match="output_failed"):
+            async with router.output_session():
+                expected = (
+                    OutputRouterError if stop == "predicate" else asyncio.CancelledError
+                )
+                with pytest.raises(expected):
+                    await router.prepare_stream(lambda: active[0])
+                active[0] = True
+                with pytest.raises(OutputRouterError, match="output_failed"):
+                    await router.insert("甲", lambda: active[0])
+        assert keyboard.sent == []
+        await router.prepare_task("keyboard")
+        async with router.output_session():
+            assert await router.insert("乙", lambda: True) == 1
+        assert keyboard.sent == ["乙"]
+
+    asyncio.run(run())
+
+
+@pytest.mark.parametrize("stop", ["task_cancel", "deadline", "cancel_cleanup"])
+def test_stream_preflight_real_async_stop_poison_scope(stop):
+    import time
+
+    async def run():
+        keyboard = Keyboard()
+        keyboard.authorized = True
+        started = asyncio.Event()
+        release = asyncio.Event()
+
+        class Tracked(Bridge):
+            async def connect(self, **kwargs):
+                if stop == "cancel_cleanup":
+                    raise RuntimeError("unavailable")
+
+            async def abort_preflight(self):
+                self.closed = True
+                if stop == "cancel_cleanup":
+                    started.set()
+                    await release.wait()
+
+        bridge = Tracked()
+
+        async def state_probe():
+            return "unknown"
+
+        async def detector():
+            if stop != "cancel_cleanup":
+                started.set()
+                await release.wait()
+            return ("fcitx", ":1.8")
+
+        router = DefaultAutoOutputRouter(
+            keyboard,
+            state_probe=state_probe,
+            system_detector=detector,
+            bridge_factory=lambda: bridge,
+        )
+        await router.prepare_task("auto")
+
+        async def output():
+            with pytest.raises(OutputRouterError, match="output_failed"):
+                async with router.output_session():
+                    deadline = time.monotonic() + 0.1 if stop == "deadline" else None
+                    expected = (
+                        OutputRouterError
+                        if stop == "deadline"
+                        else asyncio.CancelledError
+                    )
+                    with pytest.raises(expected) as caught:
+                        await router.prepare_stream(lambda: True, deadline=deadline)
+                    if stop == "deadline":
+                        assert caught.value.code == "expired"
+                    with pytest.raises(OutputRouterError, match="output_failed"):
+                        await router.insert("甲", lambda: True)
+
+        task = asyncio.create_task(output())
+        await asyncio.wait_for(started.wait(), 1)
+        if stop != "deadline":
+            task.cancel()
+        await asyncio.wait_for(task, 1)
+        assert bridge.sent == keyboard.sent == []
+        assert keyboard.connects == keyboard.authorizations == 0
+        await router.prepare_task("keyboard")
+        async with router.output_session():
+            assert await router.insert("乙", lambda: True) == 1
+        assert keyboard.sent == ["乙"]
+
+    asyncio.run(run())
