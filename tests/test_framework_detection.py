@@ -279,3 +279,87 @@ def test_live_fcitx_addon_requires_unique_enabled_verified_reply(monkeypatch, st
     assert calls == (
         ["GetAddonsV2", "RuntimeVersion"] if state == "enabled" else ["GetAddonsV2"]
     )
+
+
+@pytest.mark.parametrize(
+    "desktop, session, xmodifiers, gtk, qt, expected",
+    [
+        ("XFCE", "x11", "@im=fcitx", "fcitx", "fcitx", ("fcitx", ":1.55")),
+        ("ubuntu:GNOME", "x11", "@im=fcitx", "fcitx", "fcitx", None),
+        ("XFCE", "wayland", "@im=fcitx", "fcitx", "fcitx", None),
+        ("", "x11", "@im=fcitx", "fcitx", "fcitx", None),
+        ("XFCE", "x11", "@im=ibus", "ibus", "ibus", None),
+        ("XFCE", "x11", "@im=fcitx", "simple", "fcitx", None),
+        ("XFCE", "x11", "@im=fcitx", "", "", None),
+    ],
+)
+def test_xfce_xorg_fcitx_does_not_require_gnome_schema(
+    monkeypatch, desktop, session, xmodifiers, gtk, qt, expected
+):
+    import asyncio
+
+    from inkecho.platform import framework_detection as module
+
+    class Bus:
+        async def connect(self):
+            return self
+
+        def disconnect(self):
+            pass
+
+    async def command(*arguments):
+        if arguments[0].endswith("systemctl"):
+            return (
+                f"XDG_CURRENT_DESKTOP={desktop}\nXDG_SESSION_TYPE={session}\n"
+                f"XMODIFIERS={xmodifiers}\nGTK_IM_MODULE={gtk}\nQT_IM_MODULE={qt}\n"
+            )
+        if arguments[1] == "list-schemas":
+            return "org.example.other\n"
+        raise ValueError("gsettings schema unavailable")
+
+    async def identity(_bus, name, **_kwargs):
+        return ("fcitx", ":1.55") if name == "org.fcitx.Fcitx5" else None
+
+    monkeypatch.setattr(module, "_command", command)
+    monkeypatch.setattr(module, "MessageBus", Bus)
+    monkeypatch.setattr(module, "owner_identity", identity)
+    assert asyncio.run(module.collect_system_framework()) == expected
+
+
+@pytest.mark.parametrize("failure", [TimeoutError(), OSError(), ValueError()])
+def test_xfce_xorg_never_assumes_missing_schema_when_inventory_fails(
+    monkeypatch, failure
+):
+    import asyncio
+
+    from inkecho.platform import framework_detection as module
+
+    async def command(*arguments):
+        if arguments[0].endswith("systemctl"):
+            return (
+                "XDG_CURRENT_DESKTOP=XFCE\nXDG_SESSION_TYPE=x11\n"
+                "XMODIFIERS=@im=fcitx\nGTK_IM_MODULE=fcitx\n"
+            )
+        raise failure
+
+    monkeypatch.setattr(module, "_command", command)
+    assert asyncio.run(module.collect_system_framework()) is None
+
+
+def test_xfce_xorg_does_not_hide_broken_installed_schema(monkeypatch):
+    import asyncio
+
+    from inkecho.platform import framework_detection as module
+
+    async def command(*arguments):
+        if arguments[0].endswith("systemctl"):
+            return (
+                "XDG_CURRENT_DESKTOP=XFCE\nXDG_SESSION_TYPE=x11\n"
+                "XMODIFIERS=@im=fcitx\nGTK_IM_MODULE=fcitx\n"
+            )
+        if arguments[1] == "list-schemas":
+            return "org.gnome.desktop.input-sources\n"
+        raise ValueError("unreadable installed schema")
+
+    monkeypatch.setattr(module, "_command", command)
+    assert asyncio.run(module.collect_system_framework()) is None

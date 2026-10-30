@@ -168,11 +168,44 @@ async def collect_system_framework():
         values = {}
         for line in environment.splitlines():
             key, separator, value = line.partition("=")
-            if separator and key in {"XMODIFIERS", "GTK_IM_MODULE", "QT_IM_MODULE"}:
+            if separator and key in {
+                "XMODIFIERS",
+                "GTK_IM_MODULE",
+                "QT_IM_MODULE",
+                "XDG_CURRENT_DESKTOP",
+                "XDG_SESSION_TYPE",
+            }:
                 values[key] = value
-        sources = await _command(
-            "/usr/bin/gsettings", "get", "org.gnome.desktop.input-sources", "sources"
-        )
+        try:
+            sources = await _command(
+                "/usr/bin/gsettings",
+                "get",
+                "org.gnome.desktop.input-sources",
+                "sources",
+            )
+        except ValueError:
+            # XFCE Xorg need not install GNOME settings schemas. This exception
+            # applies only to a coherent Fcitx session; live add-on identity,
+            # focused-context and composition guards are still required later.
+            if (
+                values.get("XDG_CURRENT_DESKTOP", "").lower() != "xfce"
+                or values.get("XDG_SESSION_TYPE", "").lower() != "x11"
+                or values.get("XMODIFIERS", "").lower() != "@im=fcitx"
+            ):
+                return None
+            # Only a successful schema inventory proving absence permits this
+            # exception. Timeout, missing tools and a broken installed schema
+            # remain unknown and never authorize this detection route.
+            schemas = (
+                await _command("/usr/bin/gsettings", "list-schemas")
+            ).splitlines()
+            if (
+                not schemas
+                or any(not line or " " in line for line in schemas)
+                or "org.gnome.desktop.input-sources" in schemas
+            ):
+                return None
+            sources = "[]"
         # GNOME emits a typed empty list when Fcitx owns the session.
         source_text = sources.strip()
         if source_text == "@a(ss) []":
