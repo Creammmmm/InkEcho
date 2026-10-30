@@ -1,0 +1,18 @@
+[1030/004732.845738:WARNING:chrome/app/chrome_main_linux.cc:84] Read channel stable from /opt/inkecho-qa-chrome/CHROME_VERSION_EXTRA
+Traceback (most recent call last):
+  File "/mnt/input/browser-native012.py", line 137, in <module>
+    asyncio.run(run())
+    ~~~~~~~~~~~^^^^^^^
+  File "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/usr/lib/python3.13/asyncio/runners.py", line 196, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/usr/lib/python3.13/asyncio/runners.py", line 119, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/usr/lib/python3.13/asyncio/base_events.py", line 726, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/mnt/input/browser-native012.py", line 90, in run
+    report['sandbox_renderers']=sandbox;assert sandbox and all(x['seccomp']=='2'and x['no_new_privs']=='1'and len(x['namespace_pids'])>=2 for x in sandbox),'real sandbox not established'
+                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: real sandbox not established

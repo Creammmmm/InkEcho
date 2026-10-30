@@ -1,0 +1,136 @@
+"""Actual published-package output router to own offline Chrome fields only."""
+from pathlib import Path
+import asyncio,base64,hashlib,http.server,json,os,subprocess,sys,tempfile,threading,time,urllib.request
+from websockets.sync.client import connect
+from inkecho.platform.fcitx5_install import FcitxInstaller
+from inkecho.platform.ibus_owned_default import DefaultAutoOutputRouter
+from inkecho.platform.wayland_keyboard import keyboard_for_desktop
+from session_product_r2 import probe
+FIELD=os.environ.get('OWNED_FIELD','textarea');assert FIELD in {'textarea','contenteditable'};O=Path('/mnt/output/browser-native012-r2-'+FIELD);O.mkdir(mode=0o700,exist_ok=True);A=Path(os.environ['APPDIR']);W=Path(tempfile.mkdtemp(prefix='inkecho-browser-',dir='/run/user/1000'));events=[];lock=threading.Lock();rows=[]
+SAMPLE='你好 InkEcho，café Ω\n第二行。'
+PAGE='''<!doctype html><meta charset=utf-8><title>InkEcho owned Chrome acceptance</title><h1>InkEcho owned offline input</h1><textarea id=a rows=4 cols=60 autofocus></textarea><textarea id=b rows=4 cols=60></textarea><script>window.mode='normal';window.events=[];for(const t of document.querySelectorAll('textarea')){t.addEventListener('input',()=>{events.push({id:t.id,len:t.value.length,type:'input',time:performance.now()});if(mode==='switch'&&t.id==='a')document.getElementById('b').focus();fetch('/event',{method:'POST',body:JSON.stringify({id:t.id,a:a.value,b:b.value,focus:document.hasFocus(),active:document.activeElement.id})});});t.addEventListener('beforeinput',e=>events.push({id:t.id,type:'beforeinput',data:e.data,inputType:e.inputType,time:performance.now()}));for(const k of ['keydown','keyup'])t.addEventListener(k,e=>events.push({id:t.id,type:k,key:e.key,code:e.code,time:performance.now()}));t.addEventListener('focus',()=>events.push({id:t.id,type:'focus',time:performance.now()}));}</script>'''
+if FIELD=='contenteditable':
+ PAGE=PAGE.replace('<textarea id=a rows=4 cols=60 autofocus></textarea><textarea id=b rows=4 cols=60></textarea>', '<div id=a contenteditable=true tabindex=0 style="white-space:pre-wrap;border:1px solid;min-height:100px"></div><div id=b contenteditable=true tabindex=0 style="white-space:pre-wrap;border:1px solid;min-height:100px"></div>').replace("window.mode='normal';", "for(const x of [a,b])Object.defineProperty(x,'value',{get(){return this.innerText},set(v){this.textContent=v}});window.mode='normal';").replace("querySelectorAll('textarea')","querySelectorAll('[contenteditable]')")
+class Handler(http.server.BaseHTTPRequestHandler):
+ def log_message(self,*a):pass
+ def do_GET(self):self.send_response(200);self.send_header('Content-Type','text/html; charset=utf-8');self.end_headers();self.wfile.write(PAGE.encode())
+ def do_POST(self):
+  v=json.loads(self.rfile.read(int(self.headers['Content-Length'])));v['observed_monotonic']=time.monotonic()
+  with lock:events.append(v)
+  self.send_response(204);self.end_headers()
+server=http.server.ThreadingHTTPServer(('127.0.0.1',0),Handler);threading.Thread(target=server.serve_forever,daemon=True).start();port=server.server_address[1]
+ce=dict(os.environ)
+for k in ['APPDIR','PYTHONHOME','PYTHONPATH','LD_LIBRARY_PATH','QT_PLUGIN_PATH','QT_QPA_PLATFORM','PYTHONNOUSERSITE']:ce.pop(k,None)
+ce.update(XDG_CONFIG_HOME=str(W/'config'),XDG_DATA_HOME=str(W/'data'),XDG_CACHE_HOME=str(W/'cache'),GTK_IM_MODULE='fcitx',QT_IM_MODULE='fcitx',XMODIFIERS='@im=fcitx')
+ce.pop('DISPLAY',None);ce['WAYLAND_DEBUG']='client'
+native={'surface':False,'toplevel':False,'keyboard_enter':False};stderr_lines=[]
+def drain(stream):
+ for line in iter(stream.readline,b''):
+  native['surface']|=b'wl_compositor'in line and b'create_surface'in line
+  native['toplevel']|=b'xdg_toplevel'in line
+  native['keyboard_enter']|=b'wl_keyboard'in line and b'.enter('in line
+  if (b'ERROR:'in line or b'FATAL:'in line or not line.lstrip().startswith(b'['))and len(stderr_lines)<30:stderr_lines.append(line[:300].decode(errors='replace'))
+ stream.close()
+page=W/'owned.html';page.write_text(PAGE);target_url=page.as_uri();profile=W/'chrome-profile';profile.mkdir(mode=0o700);chrome=None;daemon=None;hints=[];install=None
+async def run():
+ global chrome,daemon,hints,install
+ hints=[s for s in subprocess.check_output(['systemctl','--user','show-environment'],text=True).splitlines()if s.split('=',1)[0]in {'GTK_IM_MODULE','QT_IM_MODULE','XMODIFIERS'}]
+ report={'artifact_sha256':hashlib.sha256(Path('/mnt/input/InkEcho.AppImage').read_bytes()).hexdigest(),'appdir':str(A),'test_scope':'actual unmodified 0.12.0 AppImage modules and staged addon; actual Session/default Router; synthetic Recorder/provider only','browser_profile_new':str(profile),'sandbox_disabled_in_isolated_vm':False,'field':FIELD,'system':subprocess.check_output(['lsb_release','-ds'],text=True).strip(),'session':os.environ.get('XDG_SESSION_TYPE'),'desktop':os.environ.get('XDG_CURRENT_DESKTOP'),'cases':rows,'failures':[]}
+ try:
+  assert report['artifact_sha256']=='7488566c708d3fc12de665d35dfc7c26a1902908c9fec63e3c905b1446757a78'
+  subprocess.run(['systemctl','--user','set-environment','GTK_IM_MODULE=fcitx','QT_IM_MODULE=fcitx','XMODIFIERS=@im=fcitx'],check=True)
+  ce['XDG_DATA_HOME']=str(W/'data');Path(ce['XDG_DATA_HOME']).mkdir(mode=0o700);os.environ.update({k:ce[k] for k in ['XDG_DATA_HOME','XDG_CONFIG_HOME','XDG_CACHE_HOME','GTK_IM_MODULE','QT_IM_MODULE','XMODIFIERS']})
+  from inkecho.platform import fcitx5_staging
+  assert fcitx5_staging.TESTED_CANDIDATE_SHA256=='f67c6b5f2cb7ecd7c915c8062efd3b70284c74b97ced4a597d942c4b39594e44'
+  report['native_candidate_test_only_override']=False
+  install=FcitxInstaller(source=A/'usr/share/inkecho/fcitx5/x86_64',data_home=Path(ce['XDG_DATA_HOME']));install.install()
+  daemon=subprocess.Popen(['/usr/bin/fcitx5','-D','--disable','clipboard'],env=ce,stdout=(O/'fcitx.log').open('w'),stderr=subprocess.STDOUT)
+  await asyncio.sleep(2);assert daemon.poll()is None;install.enable()
+  from chrome_program import audit_program,assert_owned_executable
+  report['browser_resource_audit']=audit_program();browser='/opt/inkecho-qa-chrome/chrome';report['browser_version']=subprocess.check_output([browser,'--version'],env=ce,text=True).strip()
+  argv=[browser,'--password-store=basic','--no-first-run','--no-default-browser-check','--disable-background-networking','--disable-sync','--ozone-platform=wayland','--enable-wayland-ime','--gtk-version=3','--remote-debugging-port=0','--remote-allow-origins=*','--user-data-dir='+str(profile),target_url]
+  assert '--no-sandbox'not in argv and '--disable-setuid-sandbox'not in argv
+  report['browser_argv']=argv;chrome=subprocess.Popen(argv,env=ce,stdout=subprocess.DEVNULL,stderr=subprocess.PIPE);reader=threading.Thread(target=drain,args=(chrome.stderr,));reader.start()
+  for _ in range(100):
+   if (profile/'DevToolsActivePort').exists():break
+   assert chrome.poll()is None,'chrome exited';await asyncio.sleep(.1)
+  dp=int((profile/'DevToolsActivePort').read_text().splitlines()[0]);target=None
+  for _ in range(100):
+   targets=json.load(urllib.request.urlopen(f'http://127.0.0.1:{dp}/json/list',timeout=2));target=next((t for t in targets if t.get('url')==target_url),None)
+   if target:break
+   await asyncio.sleep(.1)
+  assert target;ws=connect(target['webSocketDebuggerUrl'],open_timeout=3,close_timeout=3);seq=0
+  def cdp(method,params):
+   nonlocal seq
+   seq+=1;ws.send(json.dumps({'id':seq,'method':method,'params':params}))
+   while True:
+    r=json.loads(ws.recv(timeout=5))
+    if r.get('id')==seq:
+     assert 'error'not in r,r;return r['result']
+  def js(expr):
+   r=cdp('Runtime.evaluate',{'expression':expr,'returnByValue':True});assert 'exceptionDetails'not in r,r;return r.get('result',{}).get('value')
+  cdp('Page.bringToFront',{});js('a.focus();true');await asyncio.sleep(.5)
+  report['focus_proofs']=[]
+  def proof(label):
+   assert_owned_executable(chrome.pid);assert chrome.poll()is None
+   cmd=Path('/proc',str(chrome.pid),'cmdline').read_bytes().split(b'\0');assert b'--ozone-platform=wayland'in cmd and not any(b'no-sandbox'in c for c in cmd)
+   dom=json.loads(js("JSON.stringify({focus:document.hasFocus(),active:document.activeElement.id,url:location.href,visible:document.visibilityState})"));row={'label':label,'pid':chrome.pid,'native':dict(native),'display_unset':'DISPLAY'not in ce,'dom':dom,'sampled_monotonic':time.monotonic()};report['focus_proofs'].append(row);return row
+  def good(row):return row['display_unset']and all(row['native'].values())and row['dom']['focus']and row['dom']['url']==target_url
+  ready=proof('native-before-output');assert good(ready)and ready['dom']['active']=='a','real native focused owned field unavailable'
+  version=json.load(urllib.request.urlopen(f'http://127.0.0.1:{dp}/json/version',timeout=2))
+  with connect(version['webSocketDebuggerUrl'],open_timeout=3,close_timeout=3)as bw:
+   bw.send(json.dumps({'id':999,'method':'SystemInfo.getProcessInfo'}))
+   while True:
+    reply=json.loads(bw.recv(timeout=5))
+    if reply.get('id')==999:break
+  assert 'error'not in reply;renderer_ids=[int(p['id'])for p in reply['result']['processInfo']if p['type']=='renderer']
+  checked=subprocess.run(['sudo','-n','/usr/bin/python3','/mnt/input/sandbox-proc.py',str(chrome.pid),json.dumps(renderer_ids)],capture_output=True,text=True,timeout=5)
+  report['sandbox_metadata_probe']={'returncode':checked.returncode,'stdout':checked.stdout,'stderr':checked.stderr,'guest_root_readonly':True};assert checked.returncode==0
+  sandbox=json.loads(checked.stdout);report['sandbox_renderers']=sandbox;assert sandbox and all(x['seccomp']=='2'and x['no_new_privs']=='1'and len(x['namespace_pids'])>=2 for x in sandbox),'real sandbox not established'
+  report['browser_fcitx_module_maps']=sorted(set(l.split()[-1]for l in Path('/proc',str(chrome.pid),'maps').read_text().splitlines()if 'fcitx'in l.lower()))
+  for method in ['auto']:
+   for case in ['mixed','cancel','pending-cancel','prepare-switch','switch']:
+    sample={'solo-lf':'\n','leading-lf':'\n甲','trailing-lf':'甲\n','two-lf':'\n\n','consecutive-tail':'甲\n\n','pure-three-tail':'甲\n\n\n','synchronous':'甲乙\n\n\n丙\n','original-fallback':'甲乙\n\n\n丙\n','keyboard-first':'甲乙\n','pending-cancel':'甲\n乙'}.get(case,SAMPLE)
+    js("window.mode="+json.dumps('switch'if case=='switch'else'normal')+";a.value='';b.value='';events.length=0;a.focus();true")
+    await asyncio.sleep(.2);ready=proof(method+'-'+case+'-before-prepare');assert good(ready)and ready['dom']['active']=='a'
+    r=DefaultAutoOutputRouter(keyboard_for_desktop());active=True;row={'method':method,'case':case,'sample':sample,'initial_focus':'a'};rows.append(row)
+    try:
+     def before_produce():
+      if case=='prepare-switch':js("b.focus();true")
+     result=await probe(r,sample,W/('session-'+case),case=case,before_produce=before_produce,output_method='keyboard'if case=='keyboard-first'else'auto')
+     row['session']=result;row['sent']=result['reported_characters'];row['route']=result['route'];row['cancel_requested']=case in {'cancel','pending-cancel'}
+     if result['input_failure']:row['error']={'code':result['input_failure']}
+    except Exception as e:
+     row['error']={'type':type(e).__name__,**{k:getattr(e,k,None)for k in ['code','accepted','acknowledged_attempts','unsent_offset','uncertain']}};row['route']=r.selected
+    finally:await r.aclose()
+    await asyncio.sleep(.3)
+    expr="JSON.stringify({a:a.value,b:b.value,active:document.activeElement.id,focus:document.hasFocus(),events:events})"
+    row['first_dom']=json.loads(js(expr));await asyncio.sleep(1.3);row['last_dom']=json.loads(js(expr));d=row['last_dom'];combined=d['a']+d['b'];row['no_late']=row['first_dom']==d
+    if case in {'solo-lf','two-lf'}:ok=combined=='' and row.get('sent',0)==0
+    elif case=='pending-cancel':ok=combined==''
+    elif case in {'leading-lf','trailing-lf','consecutive-tail','pure-three-tail','synchronous','original-fallback','mixed','keyboard-first'}:ok=d['a']==sample and d['b']==''
+    elif case=='cancel':ok=bool(combined)and sample.startswith(combined)and len(combined)<len(sample)and row.get('cancel_requested',False)
+    elif case=='prepare-switch':ok=d['a']==''and d['b']==sample
+    else:ok=bool(d['a'])and bool(d['b'])and combined==sample and d['active']=='b'
+    row['passed']=ok and row['no_late']and ('error'not in row if case not in {'cancel','pending-cancel'}else row.get('error',{}).get('code') in {None,'input_cancelled','cancelled','fcitx_cancelled'})
+    row['received_lengths']=[len(d['a']),len(d['b'])];(O/'results.json').write_text(json.dumps(report,ensure_ascii=False,indent=2));print(json.dumps({'method':method,'case':case,'passed':row['passed'],'route':row['route'],'received_lengths':row['received_lengths'],'error':row.get('error')},ensure_ascii=False),flush=True)
+    screen=cdp('Page.captureScreenshot',{'format':'png'});(O/(method+'-'+case+'.png')).write_bytes(base64.b64decode(screen['data']))
+  ws.send(json.dumps({'id':seq+1,'method':'Browser.close'}));ws.close();chrome.wait(timeout=10);report['browser_normal_close']=True;report['passed']=all(r['passed']for r in rows)
+ except Exception as e:
+  report['failures'].append({'type':type(e).__name__,'message':str(e)});report['passed']=False;raise
+ finally:
+  if install and daemon and daemon.poll() is None:
+   try:install.disable();report['addon_disabled_before_daemon_stop']=True
+   except Exception as e:report['cleanup_install_error']=type(e).__name__
+  for p,name in [(chrome,'browser'),(daemon,'fcitx')]:
+   if p is not None:
+    if p.poll()is None:p.terminate()
+    report[name+'_exit']=p.wait(timeout=10)
+  subprocess.run(['systemctl','--user','unset-environment','GTK_IM_MODULE','QT_IM_MODULE','XMODIFIERS'],check=True)
+  if hints:subprocess.run(['systemctl','--user','set-environment',*hints],check=True)
+  report['hints_restored']=[s for s in subprocess.check_output(['systemctl','--user','show-environment'],text=True).splitlines()if s.split('=',1)[0]in {'GTK_IM_MODULE','QT_IM_MODULE','XMODIFIERS'}]==hints
+  report['native_protocol_proof']=dict(native);report['startup_diagnostics']=stderr_lines
+  report['package_module_origins']={k:str(Path(v.__file__).resolve())for k,v in list(sys.modules.items())if k.startswith('inkecho.')and getattr(v,'__file__',None)}
+  assert all(Path(v).is_relative_to(A/'packages')for v in report['package_module_origins'].values())
+  (O/'results.json').write_text(json.dumps(report,ensure_ascii=False,indent=2));server.shutdown()
+asyncio.run(run())

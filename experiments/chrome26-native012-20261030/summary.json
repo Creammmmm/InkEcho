@@ -1,0 +1,322 @@
+[
+  {
+    "name": "browser-native012-r2-textarea",
+    "native_and_sandbox_passed": true,
+    "fcitx_module_maps": [],
+    "fcitx_attempts": null,
+    "cases": [
+      {
+        "case": "mixed",
+        "passed": true,
+        "lengths": [
+          22,
+          0
+        ],
+        "no_late": true,
+        "routes_before": [
+          "fcitx",
+          "keyboard"
+        ],
+        "routes_after": [
+          "keyboard"
+        ]
+      },
+      {
+        "case": "cancel",
+        "passed": true,
+        "lengths": [
+          1,
+          0
+        ],
+        "no_late": true,
+        "routes_before": [
+          "fcitx"
+        ],
+        "routes_after": [
+          "keyboard"
+        ]
+      },
+      {
+        "case": "pending-cancel",
+        "passed": true,
+        "lengths": [
+          0,
+          0
+        ],
+        "no_late": true,
+        "routes_before": [],
+        "routes_after": []
+      },
+      {
+        "case": "prepare-switch",
+        "passed": true,
+        "lengths": [
+          0,
+          22
+        ],
+        "no_late": true,
+        "routes_before": [
+          "fcitx",
+          "keyboard"
+        ],
+        "routes_after": [
+          "keyboard"
+        ]
+      },
+      {
+        "case": "switch",
+        "passed": true,
+        "lengths": [
+          1,
+          21
+        ],
+        "no_late": true,
+        "routes_before": [
+          "fcitx",
+          "keyboard"
+        ],
+        "routes_after": [
+          "keyboard"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "browser-native012-r3-defaultime-textarea",
+    "native_and_sandbox_passed": true,
+    "fcitx_module_maps": [],
+    "fcitx_attempts": [
+      {
+        "length": 1,
+        "protocol": 4,
+        "outcome": "FcitxOutputError",
+        "code": "no_target",
+        "accepted": 0,
+        "uncertain": false,
+        "unsent_offset": 0
+      },
+      {
+        "length": 1,
+        "protocol": 4,
+        "outcome": "FcitxOutputError",
+        "code": "no_target",
+        "accepted": 0,
+        "uncertain": false,
+        "unsent_offset": 0
+      },
+      {
+        "length": 1,
+        "protocol": 4,
+        "outcome": "FcitxOutputError",
+        "code": "no_target",
+        "accepted": 0,
+        "uncertain": false,
+        "unsent_offset": 0
+      },
+      {
+        "length": 1,
+        "protocol": 4,
+        "outcome": "FcitxOutputError",
+        "code": "no_target",
+        "accepted": 0,
+        "uncertain": false,
+        "unsent_offset": 0
+      }
+    ],
+    "cases": [
+      {
+        "case": "mixed",
+        "passed": true,
+        "lengths": [
+          22,
+          0
+        ],
+        "no_late": true,
+        "routes_before": [
+          "fcitx",
+          "keyboard"
+        ],
+        "routes_after": [
+          "keyboard"
+        ]
+      },
+      {
+        "case": "cancel",
+        "passed": true,
+        "lengths": [
+          1,
+          0
+        ],
+        "no_late": true,
+        "routes_before": [
+          "fcitx"
+        ],
+        "routes_after": [
+          "keyboard"
+        ]
+      },
+      {
+        "case": "pending-cancel",
+        "passed": true,
+        "lengths": [
+          0,
+          0
+        ],
+        "no_late": true,
+        "routes_before": [],
+        "routes_after": []
+      },
+      {
+        "case": "prepare-switch",
+        "passed": true,
+        "lengths": [
+          0,
+          22
+        ],
+        "no_late": true,
+        "routes_before": [
+          "fcitx",
+          "keyboard"
+        ],
+        "routes_after": [
+          "keyboard"
+        ]
+      },
+      {
+        "case": "switch",
+        "passed": true,
+        "lengths": [
+          1,
+          21
+        ],
+        "no_late": true,
+        "routes_before": [
+          "fcitx",
+          "keyboard"
+        ],
+        "routes_after": [
+          "keyboard"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "browser-native012-r3-defaultime-contenteditable",
+    "native_and_sandbox_passed": true,
+    "fcitx_module_maps": [],
+    "fcitx_attempts": [
+      {
+        "length": 1,
+        "protocol": 4,
+        "outcome": "FcitxOutputError",
+        "code": "no_target",
+        "accepted": 0,
+        "uncertain": false,
+        "unsent_offset": 0
+      },
+      {
+        "length": 1,
+        "protocol": 4,
+        "outcome": "FcitxOutputError",
+        "code": "no_target",
+        "accepted": 0,
+        "uncertain": false,
+        "unsent_offset": 0
+      },
+      {
+        "length": 1,
+        "protocol": 4,
+        "outcome": "FcitxOutputError",
+        "code": "no_target",
+        "accepted": 0,
+        "uncertain": false,
+        "unsent_offset": 0
+      },
+      {
+        "length": 1,
+        "protocol": 4,
+        "outcome": "FcitxOutputError",
+        "code": "no_target",
+        "accepted": 0,
+        "uncertain": false,
+        "unsent_offset": 0
+      }
+    ],
+    "cases": [
+      {
+        "case": "mixed",
+        "passed": true,
+        "lengths": [
+          22,
+          0
+        ],
+        "no_late": true,
+        "routes_before": [
+          "fcitx",
+          "keyboard"
+        ],
+        "routes_after": [
+          "keyboard"
+        ]
+      },
+      {
+        "case": "cancel",
+        "passed": true,
+        "lengths": [
+          1,
+          0
+        ],
+        "no_late": true,
+        "routes_before": [
+          "fcitx"
+        ],
+        "routes_after": [
+          "keyboard"
+        ]
+      },
+      {
+        "case": "pending-cancel",
+        "passed": true,
+        "lengths": [
+          0,
+          0
+        ],
+        "no_late": true,
+        "routes_before": [],
+        "routes_after": []
+      },
+      {
+        "case": "prepare-switch",
+        "passed": true,
+        "lengths": [
+          0,
+          22
+        ],
+        "no_late": true,
+        "routes_before": [
+          "fcitx",
+          "keyboard"
+        ],
+        "routes_after": [
+          "keyboard"
+        ]
+      },
+      {
+        "case": "switch",
+        "passed": true,
+        "lengths": [
+          1,
+          21
+        ],
+        "no_late": true,
+        "routes_before": [
+          "fcitx",
+          "keyboard"
+        ],
+        "routes_after": [
+          "keyboard"
+        ]
+      }
+    ]
+  }
+]

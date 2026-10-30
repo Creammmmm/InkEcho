@@ -1,0 +1,214 @@
+{
+  "REPORT.md": {
+    "bytes": 5029,
+    "sha256": "52620da643ed5db50d96cca62457a5f751c9b85baf9736426c404bb2fc03d20f"
+  },
+  "summary.json": {
+    "bytes": 6213,
+    "sha256": "4433207083fbfa6387e076e65b5a13471eea4b0008a78b6eb3b6a6cc85609aa7"
+  },
+  "launch.json": {
+    "bytes": 1570,
+    "sha256": "e3d2c922dfd85cefb1111fd337404785c65c565c0b5ac0694b375d5d50057476"
+  },
+  "boot.json": {
+    "bytes": 111,
+    "sha256": "7bd428cfe7c36fe88d7bd7a6aabf4eed5d6c8c1470518f3182890b72f19a70b2"
+  },
+  "container-final.json": {
+    "bytes": 269,
+    "sha256": "61348e7069d30394a1aed0263b07b4b7bdb69f7e7a1acfcb04b2e0392a1a60b7"
+  },
+  "preflight.json": {
+    "bytes": 302,
+    "sha256": "484c1060e80275062b193c7a6f3038a20d0802c5eb7062dcf50f4e75287076a4"
+  },
+  "prepare.json": {
+    "bytes": 80,
+    "sha256": "1dd944ea377b5b192403de514f5bde1fc34649d374b36ddb0db3332e163d22c2"
+  },
+  "final-cleanup-poweroff.json": {
+    "bytes": 114,
+    "sha256": "4cae7d6ea8aa760aa89f38e9d40d7c4acc7bdd62907d46e3b668c3ce7045e31d"
+  },
+  "qemu-exit.json": {
+    "bytes": 17,
+    "sha256": "c365161d39236fe0f1d32937fbc549796b8487d8faf65ed3879b96897c78ea5d"
+  },
+  "ram-overlay-archive.json": {
+    "bytes": 290,
+    "sha256": "b6689d56ebd80a002adc4c879ad5b098a02c0e44f0d038da9dbd32d51797d5c6"
+  },
+  "input/guest.py.txt": {
+    "bytes": 5145,
+    "sha256": "fe8077f2b77d88f79e0d98b53203c027dfe384e2323c21e8be58abeb13fb7d94"
+  },
+  "input/wrapper.py.txt": {
+    "bytes": 1292,
+    "sha256": "4d304b11d5362f496baa61a3f47f0397cde1c353b32bca76a037d1b104678c19"
+  },
+  "input/resource-check.py.txt": {
+    "bytes": 2214,
+    "sha256": "0d23c36b5d3d1992caf79d9f589e6b75593034a5ddddee46f76f84fffaf4d306"
+  },
+  "input/launch-native012.py.txt": {
+    "bytes": 1202,
+    "sha256": "707d60a057805d741f54d9369dedfe9625d8dbf4b443fc4d12a70c698e1aebff"
+  },
+  "input/chrome_program.py.txt": {
+    "bytes": 2875,
+    "sha256": "7ac4c00a1248eaf30595fea801774af07040e9b3900dab40aaf23ef872f50904"
+  },
+  "input/context.py.txt": {
+    "bytes": 1370,
+    "sha256": "f5acbab2b30eba235dc0d302ea2a16d8362a13cebba1e7824dab1d5f55b640b3"
+  },
+  "input/qemu.json.txt": {
+    "bytes": 799,
+    "sha256": "b3f622f53ee03febd176c17ff78de547511fefc1440610f4a26dfc4ea5d1bba1"
+  },
+  "input/session_product_r2.py.txt": {
+    "bytes": 3584,
+    "sha256": "fe9c54ea63e5ba4ce37d5115712160b702a6ae00ea2d5e3480de8656f0887095"
+  },
+  "input/browser-native012.py.txt": {
+    "bytes": 15172,
+    "sha256": "e21c855316341f36b114f44dbb1b743a187195f9c6e273da56a9510ba9ce833a"
+  },
+  "input/browser-native012-r2-preserved.py.txt": {
+    "bytes": 14468,
+    "sha256": "f302bbb552981c2ab9217d710f185f8f039b19e3fdaa97dc5ee4e10ea78fad81"
+  },
+  "input/sandbox-proc.py.txt": {
+    "bytes": 870,
+    "sha256": "dde3516f534ffee5d3cf4e67f67cbcab940f2bbb3fee53788519a5eb78b9f89b"
+  },
+  "output/browser-native012-textarea/suite-exit.json": {
+    "bytes": 17,
+    "sha256": "64a1526b099d75eed9d9da41a5562dcc164b6ffddeb729dd371c4496bbcded05"
+  },
+  "output/browser-native012-textarea/mount.json": {
+    "bytes": 208,
+    "sha256": "4076172c85d1eaa06eba5b6db94eead06b1a19a700a27b4848ad8351f3160c9c"
+  },
+  "output/browser-native012-textarea/suite.log": {
+    "bytes": 1331,
+    "sha256": "398ffb9f498dafd310a6a5f23aedc53f994b70d556a37bb1a50e3551ff711149"
+  },
+  "output/browser-native012-textarea/results.json": {
+    "bytes": 6870,
+    "sha256": "4aacda7ec475e303833a8d823ba5536003b2bcabce5046943f23fcaf4f228bec"
+  },
+  "output/browser-native012-textarea/fcitx.log.gz": {
+    "bytes": 2707,
+    "sha256": "6416d6c840e6105ea6801cda54f0ff8215f7b1ab433c2bab7e0d87edc6e2418d",
+    "original_bytes": 11767,
+    "original_sha256": "a4fc044db9217c163bf78ea6bc51f7e98ddffab4514f3fff473630179d575578"
+  },
+  "output/browser-native012-r2-textarea/suite-exit.json": {
+    "bytes": 17,
+    "sha256": "c365161d39236fe0f1d32937fbc549796b8487d8faf65ed3879b96897c78ea5d"
+  },
+  "output/browser-native012-r2-textarea/mount.json": {
+    "bytes": 208,
+    "sha256": "4076172c85d1eaa06eba5b6db94eead06b1a19a700a27b4848ad8351f3160c9c"
+  },
+  "output/browser-native012-r2-textarea/suite.log": {
+    "bytes": 706,
+    "sha256": "52a5cf512d15e11fc288a17cfef5b92e75b565897a709a48b331cd411d3a7307"
+  },
+  "output/browser-native012-r2-textarea/results.json": {
+    "bytes": 117202,
+    "sha256": "dcf469c8adca1f9c5bd75c5c3e8e81fc25622c0015d8e5576dac3df53e2cb675"
+  },
+  "output/browser-native012-r2-textarea/fcitx.log.gz": {
+    "bytes": 3241,
+    "sha256": "bc1777cd24c01aa0dec7383ba413b5dda6e9b76c1c253faa77fe562d77c896da",
+    "original_bytes": 14545,
+    "original_sha256": "cf054c656650eef5ce74660f6b19809dcb12ad0a88ebafcbf75fc2cc3cc9f4f9"
+  },
+  "output/browser-native012-r3-defaultime-textarea/suite-exit.json": {
+    "bytes": 17,
+    "sha256": "c365161d39236fe0f1d32937fbc549796b8487d8faf65ed3879b96897c78ea5d"
+  },
+  "output/browser-native012-r3-defaultime-textarea/mount.json": {
+    "bytes": 208,
+    "sha256": "4076172c85d1eaa06eba5b6db94eead06b1a19a700a27b4848ad8351f3160c9c"
+  },
+  "output/browser-native012-r3-defaultime-textarea/suite.log": {
+    "bytes": 706,
+    "sha256": "ad2acf755d2524af0ed23f5336fbf1f6314c9adb4af0b38fd15ba0c0f173b17b"
+  },
+  "output/browser-native012-r3-defaultime-textarea/results.json": {
+    "bytes": 117955,
+    "sha256": "f50e40fae186ec36672dbe60eaff6848282de2d5236a1b5f38338df0ad0d36e4"
+  },
+  "output/browser-native012-r3-defaultime-textarea/fcitx.log.gz": {
+    "bytes": 3103,
+    "sha256": "b9816eccb58d09859e48486107c25e12e34174676ed76d684b62adfe613fe702",
+    "original_bytes": 14199,
+    "original_sha256": "d745842e192a9cee7cfdd3c59568a54b346700f2fbcdfb10a45088e8392f2c5b"
+  },
+  "output/browser-native012-r3-defaultime-contenteditable/suite-exit.json": {
+    "bytes": 17,
+    "sha256": "c365161d39236fe0f1d32937fbc549796b8487d8faf65ed3879b96897c78ea5d"
+  },
+  "output/browser-native012-r3-defaultime-contenteditable/mount.json": {
+    "bytes": 208,
+    "sha256": "4076172c85d1eaa06eba5b6db94eead06b1a19a700a27b4848ad8351f3160c9c"
+  },
+  "output/browser-native012-r3-defaultime-contenteditable/suite.log": {
+    "bytes": 706,
+    "sha256": "8d325bb510be24c3400943963037eb77ab3226e3ba33ea3354e83890b5a606de"
+  },
+  "output/browser-native012-r3-defaultime-contenteditable/results.json": {
+    "bytes": 118028,
+    "sha256": "3cf65b2391d5e76ef4696d36594b71b4ec975d0340d30341e23f1a89637a2e05"
+  },
+  "output/browser-native012-r3-defaultime-contenteditable/fcitx.log.gz": {
+    "bytes": 3088,
+    "sha256": "c41fed522caffe391423e370a1edfe1c2037a00d4e1b5beaa2897afb2610b911",
+    "original_bytes": 14199,
+    "original_sha256": "1162bc2929d4bda5c99df770a465a65b28360810440d1f189a52c7d0501e508b"
+  },
+  "output/native-prepare/fuse-cleanup.json": {
+    "bytes": 62,
+    "sha256": "5f6d9b7cb791ec86423f1933f9f3e3c5f07f781ac9ac45fc01f1090a179cce61"
+  },
+  "output/native-prepare/final-resource-check.json": {
+    "bytes": 339,
+    "sha256": "7ba2179640406d29404b91d0cf35066390587d402f756496f0eb9c2ab9d10ac2"
+  },
+  "output/native-prepare/mount.json": {
+    "bytes": 208,
+    "sha256": "4076172c85d1eaa06eba5b6db94eead06b1a19a700a27b4848ad8351f3160c9c"
+  },
+  "output/native-prepare/package-audit.log": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "output/native-prepare/package-audit.json": {
+    "bytes": 18234,
+    "sha256": "b89ccdeb0187b964c3022ca7ecc53e2d7afebf0abaefa3c30e66712231a4f152"
+  },
+  "output/native-prepare/package-audit-exit.json": {
+    "bytes": 596,
+    "sha256": "d4c9eba7341ab89e431a8d61c84efd39660f49120df6b63b0c54421dc7bbe519"
+  },
+  "output/native-prepare/resource-check.log": {
+    "bytes": 296,
+    "sha256": "c27e224a3ca16c2bb221a68661f8cfb7939408d23037cf72ce22734cfdf1b653"
+  },
+  "output/native-prepare/resource-check-exit.json": {
+    "bytes": 97,
+    "sha256": "bc5248b2e8759ce8dc2aa9cf9353c360520236d7334912436600a437747de01c"
+  },
+  "output/native-prepare/fuse-mount.err": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "output/native-prepare/fuse-mount.log": {
+    "bytes": 63,
+    "sha256": "b2a6f1a72158f80f72c9eafb468c7e468c9800d780bc259ffa2fb2137ea1f606"
+  }
+}

@@ -1,0 +1,114 @@
+{
+  "artifact_sha256": "7488566c708d3fc12de665d35dfc7c26a1902908c9fec63e3c905b1446757a78",
+  "appdir": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl",
+  "test_scope": "actual unmodified 0.12.0 AppImage modules and staged addon; actual Session/default Router; synthetic Recorder/provider only",
+  "browser_profile_new": "/run/user/1000/inkecho-browser-jrmuy_dt/chrome-profile",
+  "sandbox_disabled_in_isolated_vm": false,
+  "field": "textarea",
+  "system": "Ubuntu 26.04.1 LTS",
+  "session": "wayland",
+  "desktop": "ubuntu:GNOME",
+  "cases": [],
+  "failures": [
+    {
+      "type": "AssertionError",
+      "message": "real sandbox not established"
+    }
+  ],
+  "native_candidate_test_only_override": false,
+  "browser_resource_audit": {
+    "root": "/opt/inkecho-qa-chrome",
+    "program_files": 255,
+    "payload_bytes": 456937066,
+    "manifest_sha256": "01c5c6683bdd5e143b456a5d44b54e56e2b5d5249d3789f80b085a08b626eec4",
+    "wrapper_sha256": "51c3c7ae61c640f573e15a33de080bc481693c6d04375259654d2e92a0621d76",
+    "binary_sha256": "6c792041b07547a662e1b17974d1dc34a3db630379b45d9d89ddd7e3e68cc587",
+    "sandbox_sha256": "24beb85e4149c65db5bf40fa307721143d0883ab8952e60dde1158606f644dee",
+    "sandbox_uid": 0,
+    "sandbox_gid": 0,
+    "sandbox_mode": "0o4755",
+    "sandbox_runtime_acceptance": "not inferred from resource audit"
+  },
+  "browser_version": "Google Chrome 154.0.8037.97",
+  "browser_argv": [
+    "/opt/inkecho-qa-chrome/chrome",
+    "--password-store=basic",
+    "--no-first-run",
+    "--no-default-browser-check",
+    "--disable-background-networking",
+    "--disable-sync",
+    "--ozone-platform=wayland",
+    "--enable-wayland-ime",
+    "--gtk-version=3",
+    "--remote-debugging-port=0",
+    "--remote-allow-origins=*",
+    "--user-data-dir=/run/user/1000/inkecho-browser-jrmuy_dt/chrome-profile",
+    "file:///run/user/1000/inkecho-browser-jrmuy_dt/owned.html"
+  ],
+  "focus_proofs": [
+    {
+      "label": "native-before-output",
+      "pid": 2446,
+      "native": {
+        "surface": true,
+        "toplevel": true,
+        "keyboard_enter": true
+      },
+      "display_unset": true,
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-jrmuy_dt/owned.html",
+        "visible": "visible"
+      },
+      "sampled_monotonic": 98.676078714
+    }
+  ],
+  "sandbox_renderers": [],
+  "passed": false,
+  "addon_disabled_before_daemon_stop": true,
+  "browser_exit": 0,
+  "fcitx_exit": 0,
+  "hints_restored": true,
+  "native_protocol_proof": {
+    "surface": true,
+    "toplevel": true,
+    "keyboard_enter": true
+  },
+  "startup_diagnostics": [
+    "\n",
+    "DevTools listening on ws://127.0.0.1:39851/devtools/browser/12bcf9bf-677c-425c-8c59-0548d8414a7a\n",
+    "libva error: /usr/lib/x86_64-linux-gnu/dri/virtio_gpu_drv_video.so init failed\n",
+    "[2489:2489:1030/004733.225936:ERROR:media/gpu/vaapi/vaapi_wrapper.cc:1801] vaInitialize failed: resource allocation failed\n",
+    "[2602:36:1030/004733.331219:ERROR:gpu/ipc/client/command_buffer_proxy_impl.cc:285] ContextResult::kTransientFailure: Failed to send GpuControl.CreateCommandBuffer.\n"
+  ],
+  "package_module_origins": {
+    "inkecho.platform.fcitx5_staging": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/platform/fcitx5_staging.py",
+    "inkecho.platform.fcitx5_install": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/platform/fcitx5_install.py",
+    "inkecho.platform.framework_detection": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/platform/framework_detection.py",
+    "inkecho.platform.ibus_lifecycle": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/platform/ibus_lifecycle.py",
+    "inkecho.platform.ibus": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/platform/ibus.py",
+    "inkecho.platform.ibus_owned": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/platform/ibus_owned.py",
+    "inkecho.text_units": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/text_units.py",
+    "inkecho.platform.fcitx5_capability": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/platform/fcitx5_capability.py",
+    "inkecho.platform.fcitx5": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/platform/fcitx5.py",
+    "inkecho.platform.output_pacing": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/platform/output_pacing.py",
+    "inkecho.platform.keyboard": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/platform/keyboard.py",
+    "inkecho.text_normalization": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/text_normalization.py",
+    "inkecho.platform.output_router": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/platform/output_router.py",
+    "inkecho.platform.ibus_owned_auto": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/platform/ibus_owned_auto.py",
+    "inkecho.platform.owned_installation": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/platform/owned_installation.py",
+    "inkecho.platform.ibus_owned_default": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/platform/ibus_owned_default.py",
+    "inkecho.platform.wayland_keyboard": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/platform/wayland_keyboard.py",
+    "inkecho.config": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/config.py",
+    "inkecho.provider_catalog": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/provider_catalog.py",
+    "inkecho.providers": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/providers.py",
+    "inkecho.audio": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/audio.py",
+    "inkecho.core": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/core.py",
+    "inkecho.performance": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/performance.py",
+    "inkecho.realtime": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/realtime.py",
+    "inkecho.security": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/security.py",
+    "inkecho.streaming_output": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/streaming_output.py",
+    "inkecho.app": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/app.py"
+  }
+}

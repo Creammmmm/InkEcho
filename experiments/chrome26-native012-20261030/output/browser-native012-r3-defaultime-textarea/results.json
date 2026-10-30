@@ -1,0 +1,4701 @@
+{
+  "artifact_sha256": "7488566c708d3fc12de665d35dfc7c26a1902908c9fec63e3c905b1446757a78",
+  "appdir": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl",
+  "test_scope": "actual unmodified 0.12.0 AppImage modules and staged addon; actual Session/default Router; synthetic Recorder/provider only",
+  "browser_profile_new": "/run/user/1000/inkecho-browser-v2n7soyu/chrome-profile",
+  "sandbox_disabled_in_isolated_vm": false,
+  "field": "textarea",
+  "system": "Ubuntu 26.04.1 LTS",
+  "session": "wayland",
+  "desktop": "ubuntu:GNOME",
+  "cases": [
+    {
+      "method": "auto",
+      "case": "mixed",
+      "sample": "你好 InkEcho，café Ω\n第二行。",
+      "initial_focus": "a",
+      "session": {
+        "route": null,
+        "outcome": "succeeded",
+        "metrics_characters": null,
+        "reported_characters": 22,
+        "outcomes": [
+          {
+            "characters": 22
+          }
+        ],
+        "deltas": [
+          {
+            "index": 0,
+            "monotonic": 299.556544377
+          },
+          {
+            "index": 1,
+            "monotonic": 299.581739156
+          },
+          {
+            "index": 2,
+            "monotonic": 299.607371874
+          },
+          {
+            "index": 3,
+            "monotonic": 299.63287594
+          },
+          {
+            "index": 4,
+            "monotonic": 299.658007171
+          },
+          {
+            "index": 5,
+            "monotonic": 299.683672551
+          },
+          {
+            "index": 6,
+            "monotonic": 299.709312925
+          },
+          {
+            "index": 7,
+            "monotonic": 299.735278552
+          },
+          {
+            "index": 8,
+            "monotonic": 299.760844736
+          },
+          {
+            "index": 9,
+            "monotonic": 299.786492762
+          },
+          {
+            "index": 10,
+            "monotonic": 299.811588303
+          },
+          {
+            "index": 11,
+            "monotonic": 299.837089158
+          },
+          {
+            "index": 12,
+            "monotonic": 299.863166075
+          },
+          {
+            "index": 13,
+            "monotonic": 299.888611219
+          },
+          {
+            "index": 14,
+            "monotonic": 299.91409481
+          },
+          {
+            "index": 15,
+            "monotonic": 299.939204708
+          },
+          {
+            "index": 16,
+            "monotonic": 299.964627899
+          },
+          {
+            "index": 17,
+            "monotonic": 299.989692899
+          },
+          {
+            "index": 18,
+            "monotonic": 300.015025233
+          },
+          {
+            "index": 19,
+            "monotonic": 300.040457009
+          },
+          {
+            "index": 20,
+            "monotonic": 300.066400911
+          },
+          {
+            "index": 21,
+            "monotonic": 300.092107173
+          }
+        ],
+        "dispatches": [
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 299.586414357,
+            "route_before": "fcitx",
+            "first_sent_at": 300.372105151,
+            "protocol": null,
+            "route_after": "keyboard",
+            "backend_type": "HybridKeyboardInput",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 300.383922031,
+            "route_before": "keyboard",
+            "first_sent_at": 300.429770928,
+            "protocol": null,
+            "route_after": "keyboard",
+            "backend_type": "HybridKeyboardInput",
+            "native_attempts": null
+          },
+          {
+            "length": 20,
+            "has_lf": true,
+            "at": 300.440377202,
+            "route_before": "keyboard",
+            "first_sent_at": 300.483022485,
+            "protocol": null,
+            "route_after": "keyboard",
+            "backend_type": "HybridKeyboardInput",
+            "native_attempts": null
+          }
+        ],
+        "input_failure": null,
+        "error_code": null
+      },
+      "sent": 22,
+      "route": null,
+      "cancel_requested": false,
+      "first_dom": {
+        "a": "你好 InkEcho，café Ω\n第二行。",
+        "b": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "你",
+            "code": "IntlYen",
+            "time": 1636
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "你",
+            "inputType": "insertText",
+            "time": 1636.3000000000466
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 1638.3000000000466
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": "你",
+            "code": "IntlYen",
+            "time": 1638.7000000000116
+          },
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "好",
+            "code": "IntlYen",
+            "time": 1691.5
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "好",
+            "inputType": "insertText",
+            "time": 1691.600000000035
+          },
+          {
+            "id": "a",
+            "len": 2,
+            "type": "input",
+            "time": 1691.9000000000233
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": "好",
+            "code": "IntlYen",
+            "time": 1692.100000000035
+          },
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": " ",
+            "code": "IntlYen",
+            "time": 1744.7000000000116
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": " ",
+            "inputType": "insertText",
+            "time": 1744.8000000000466
+          },
+          {
+            "id": "a",
+            "len": 3,
+            "type": "input",
+            "time": 1745.2000000000116
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": " ",
+            "code": "IntlYen",
+            "time": 1745.4000000000233
+          },
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "I",
+            "code": "IntlRo",
+            "time": 1756.5
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "I",
+            "inputType": "insertText",
+            "time": 1756.600000000035
+          },
+          {
+            "id": "a",
+            "len": 4,
+            "type": "input",
+            "time": 1756.9000000000233
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": "I",
+            "code": "IntlRo",
+            "time": 1757
+          },
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "n",
+            "code": "F19",
+            "time": 1768.100000000035
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "n",
+            "inputType": "insertText",
+            "time": 1768.100000000035
+          },
+          {
+            "id": "a",
+            "len": 5,
+            "type": "input",
+            "time": 1768.7000000000116
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": "n",
+            "code": "F19",
+            "time": 1769
+          },
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "k",
+            "code": "F24",
+            "time": 1779.8000000000466
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "k",
+            "inputType": "insertText",
+            "time": 1779.9000000000233
+          },
+          {
+            "id": "a",
+            "len": 6,
+            "type": "input",
+            "time": 1780.100000000035
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": "k",
+            "code": "F24",
+            "time": 1780.4000000000233
+          },
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "E",
+            "code": "IntlYen",
+            "time": 1832.5
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "E",
+            "inputType": "insertText",
+            "time": 1832.5
+          },
+          {
+            "id": "a",
+            "len": 7,
+            "type": "input",
+            "time": 1832.8000000000466
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": "E",
+            "code": "IntlYen",
+            "time": 1833.7000000000116
+          },
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "c",
+            "code": "IntlRo",
+            "time": 1843.7000000000116
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "c",
+            "inputType": "insertText",
+            "time": 1843.8000000000466
+          },
+          {
+            "id": "a",
+            "len": 8,
+            "type": "input",
+            "time": 1844
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": "c",
+            "code": "IntlRo",
+            "time": 1844.7000000000116
+          },
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "h",
+            "code": "F19",
+            "time": 1855.2000000000116
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "h",
+            "inputType": "insertText",
+            "time": 1855.2000000000116
+          },
+          {
+            "id": "a",
+            "len": 9,
+            "type": "input",
+            "time": 1855.3000000000466
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": "h",
+            "code": "F19",
+            "time": 1855.7000000000116
+          },
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "o",
+            "code": "F24",
+            "time": 1866.4000000000233
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "o",
+            "inputType": "insertText",
+            "time": 1866.4000000000233
+          },
+          {
+            "id": "a",
+            "len": 10,
+            "type": "input",
+            "time": 1866.600000000035
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": "o",
+            "code": "F24",
+            "time": 1866.9000000000233
+          },
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "，",
+            "code": "IntlYen",
+            "time": 1924.7000000000116
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "，",
+            "inputType": "insertText",
+            "time": 1924.9000000000233
+          },
+          {
+            "id": "a",
+            "len": 11,
+            "type": "input",
+            "time": 1926.100000000035
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": "，",
+            "code": "IntlYen",
+            "time": 1926.8000000000466
+          },
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "c",
+            "code": "IntlRo",
+            "time": 1937.600000000035
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "c",
+            "inputType": "insertText",
+            "time": 1937.7000000000116
+          },
+          {
+            "id": "a",
+            "len": 12,
+            "type": "input",
+            "time": 1938.4000000000233
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": "c",
+            "code": "IntlRo",
+            "time": 1939
+          },
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "a",
+            "code": "F19",
+            "time": 1952.100000000035
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "a",
+            "inputType": "insertText",
+            "time": 1952.2000000000116
+          },
+          {
+            "id": "a",
+            "len": 13,
+            "type": "input",
+            "time": 1952.7000000000116
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": "a",
+            "code": "F19",
+            "time": 1953.2000000000116
+          },
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "f",
+            "code": "F24",
+            "time": 1964.8000000000466
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "f",
+            "inputType": "insertText",
+            "time": 1964.9000000000233
+          },
+          {
+            "id": "a",
+            "len": 14,
+            "type": "input",
+            "time": 1965.2000000000116
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": "f",
+            "code": "F24",
+            "time": 1966.600000000035
+          },
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "é",
+            "code": "IntlYen",
+            "time": 2028.8000000000466
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "é",
+            "inputType": "insertText",
+            "time": 2028.9000000000233
+          },
+          {
+            "id": "a",
+            "len": 15,
+            "type": "input",
+            "time": 2029.4000000000233
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": "é",
+            "code": "IntlYen",
+            "time": 2029.9000000000233
+          },
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": " ",
+            "code": "IntlRo",
+            "time": 2042.8000000000466
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": " ",
+            "inputType": "insertText",
+            "time": 2042.9000000000233
+          },
+          {
+            "id": "a",
+            "len": 16,
+            "type": "input",
+            "time": 2043.4000000000233
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": " ",
+            "code": "IntlRo",
+            "time": 2044.2000000000116
+          },
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "Ω",
+            "code": "F19",
+            "time": 2056.4000000000233
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "Ω",
+            "inputType": "insertText",
+            "time": 2056.5
+          },
+          {
+            "id": "a",
+            "len": 17,
+            "type": "input",
+            "time": 2057
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": "Ω",
+            "code": "F19",
+            "time": 2057.3000000000466
+          },
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "Enter",
+            "code": "Enter",
+            "time": 2070.3000000000466
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": null,
+            "inputType": "insertLineBreak",
+            "time": 2070.3000000000466
+          },
+          {
+            "id": "a",
+            "len": 18,
+            "type": "input",
+            "time": 2071.5
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": "Enter",
+            "code": "Enter",
+            "time": 2072
+          },
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "第",
+            "code": "IntlYen",
+            "time": 2142.5
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "第",
+            "inputType": "insertText",
+            "time": 2143.100000000035
+          },
+          {
+            "id": "a",
+            "len": 19,
+            "type": "input",
+            "time": 2144.5
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": "第",
+            "code": "IntlYen",
+            "time": 2145.100000000035
+          },
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "二",
+            "code": "IntlRo",
+            "time": 2156.4000000000233
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "二",
+            "inputType": "insertText",
+            "time": 2156.7000000000116
+          },
+          {
+            "id": "a",
+            "len": 20,
+            "type": "input",
+            "time": 2157.4000000000233
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": "二",
+            "code": "IntlRo",
+            "time": 2157.9000000000233
+          },
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "行",
+            "code": "F19",
+            "time": 2170.2000000000116
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "行",
+            "inputType": "insertText",
+            "time": 2170.3000000000466
+          },
+          {
+            "id": "a",
+            "len": 21,
+            "type": "input",
+            "time": 2170.8000000000466
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": "行",
+            "code": "F19",
+            "time": 2171.5
+          },
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "。",
+            "code": "F24",
+            "time": 2184.2000000000116
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "。",
+            "inputType": "insertText",
+            "time": 2184.2000000000116
+          },
+          {
+            "id": "a",
+            "len": 22,
+            "type": "input",
+            "time": 2184.7000000000116
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": "。",
+            "code": "F24",
+            "time": 2185.2000000000116
+          }
+        ]
+      },
+      "last_dom": {
+        "a": "你好 InkEcho，café Ω\n第二行。",
+        "b": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "你",
+            "code": "IntlYen",
+            "time": 1636
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "你",
+            "inputType": "insertText",
+            "time": 1636.3000000000466
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 1638.3000000000466
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": "你",
+            "code": "IntlYen",
+            "time": 1638.7000000000116
+          },
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "好",
+            "code": "IntlYen",
+            "time": 1691.5
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "好",
+            "inputType": "insertText",
+            "time": 1691.600000000035
+          },
+          {
+            "id": "a",
+            "len": 2,
+            "type": "input",
+            "time": 1691.9000000000233
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": "好",
+            "code": "IntlYen",
+            "time": 1692.100000000035
+          },
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": " ",
+            "code": "IntlYen",
+            "time": 1744.7000000000116
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": " ",
+            "inputType": "insertText",
+            "time": 1744.8000000000466
+          },
+          {
+            "id": "a",
+            "len": 3,
+            "type": "input",
+            "time": 1745.2000000000116
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": " ",
+            "code": "IntlYen",
+            "time": 1745.4000000000233
+          },
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "I",
+            "code": "IntlRo",
+            "time": 1756.5
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "I",
+            "inputType": "insertText",
+            "time": 1756.600000000035
+          },
+          {
+            "id": "a",
+            "len": 4,
+            "type": "input",
+            "time": 1756.9000000000233
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": "I",
+            "code": "IntlRo",
+            "time": 1757
+          },
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "n",
+            "code": "F19",
+            "time": 1768.100000000035
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "n",
+            "inputType": "insertText",
+            "time": 1768.100000000035
+          },
+          {
+            "id": "a",
+            "len": 5,
+            "type": "input",
+            "time": 1768.7000000000116
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": "n",
+            "code": "F19",
+            "time": 1769
+          },
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "k",
+            "code": "F24",
+            "time": 1779.8000000000466
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "k",
+            "inputType": "insertText",
+            "time": 1779.9000000000233
+          },
+          {
+            "id": "a",
+            "len": 6,
+            "type": "input",
+            "time": 1780.100000000035
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": "k",
+            "code": "F24",
+            "time": 1780.4000000000233
+          },
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "E",
+            "code": "IntlYen",
+            "time": 1832.5
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "E",
+            "inputType": "insertText",
+            "time": 1832.5
+          },
+          {
+            "id": "a",
+            "len": 7,
+            "type": "input",
+            "time": 1832.8000000000466
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": "E",
+            "code": "IntlYen",
+            "time": 1833.7000000000116
+          },
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "c",
+            "code": "IntlRo",
+            "time": 1843.7000000000116
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "c",
+            "inputType": "insertText",
+            "time": 1843.8000000000466
+          },
+          {
+            "id": "a",
+            "len": 8,
+            "type": "input",
+            "time": 1844
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": "c",
+            "code": "IntlRo",
+            "time": 1844.7000000000116
+          },
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "h",
+            "code": "F19",
+            "time": 1855.2000000000116
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "h",
+            "inputType": "insertText",
+            "time": 1855.2000000000116
+          },
+          {
+            "id": "a",
+            "len": 9,
+            "type": "input",
+            "time": 1855.3000000000466
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": "h",
+            "code": "F19",
+            "time": 1855.7000000000116
+          },
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "o",
+            "code": "F24",
+            "time": 1866.4000000000233
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "o",
+            "inputType": "insertText",
+            "time": 1866.4000000000233
+          },
+          {
+            "id": "a",
+            "len": 10,
+            "type": "input",
+            "time": 1866.600000000035
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": "o",
+            "code": "F24",
+            "time": 1866.9000000000233
+          },
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "，",
+            "code": "IntlYen",
+            "time": 1924.7000000000116
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "，",
+            "inputType": "insertText",
+            "time": 1924.9000000000233
+          },
+          {
+            "id": "a",
+            "len": 11,
+            "type": "input",
+            "time": 1926.100000000035
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": "，",
+            "code": "IntlYen",
+            "time": 1926.8000000000466
+          },
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "c",
+            "code": "IntlRo",
+            "time": 1937.600000000035
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "c",
+            "inputType": "insertText",
+            "time": 1937.7000000000116
+          },
+          {
+            "id": "a",
+            "len": 12,
+            "type": "input",
+            "time": 1938.4000000000233
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": "c",
+            "code": "IntlRo",
+            "time": 1939
+          },
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "a",
+            "code": "F19",
+            "time": 1952.100000000035
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "a",
+            "inputType": "insertText",
+            "time": 1952.2000000000116
+          },
+          {
+            "id": "a",
+            "len": 13,
+            "type": "input",
+            "time": 1952.7000000000116
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": "a",
+            "code": "F19",
+            "time": 1953.2000000000116
+          },
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "f",
+            "code": "F24",
+            "time": 1964.8000000000466
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "f",
+            "inputType": "insertText",
+            "time": 1964.9000000000233
+          },
+          {
+            "id": "a",
+            "len": 14,
+            "type": "input",
+            "time": 1965.2000000000116
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": "f",
+            "code": "F24",
+            "time": 1966.600000000035
+          },
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "é",
+            "code": "IntlYen",
+            "time": 2028.8000000000466
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "é",
+            "inputType": "insertText",
+            "time": 2028.9000000000233
+          },
+          {
+            "id": "a",
+            "len": 15,
+            "type": "input",
+            "time": 2029.4000000000233
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": "é",
+            "code": "IntlYen",
+            "time": 2029.9000000000233
+          },
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": " ",
+            "code": "IntlRo",
+            "time": 2042.8000000000466
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": " ",
+            "inputType": "insertText",
+            "time": 2042.9000000000233
+          },
+          {
+            "id": "a",
+            "len": 16,
+            "type": "input",
+            "time": 2043.4000000000233
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": " ",
+            "code": "IntlRo",
+            "time": 2044.2000000000116
+          },
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "Ω",
+            "code": "F19",
+            "time": 2056.4000000000233
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "Ω",
+            "inputType": "insertText",
+            "time": 2056.5
+          },
+          {
+            "id": "a",
+            "len": 17,
+            "type": "input",
+            "time": 2057
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": "Ω",
+            "code": "F19",
+            "time": 2057.3000000000466
+          },
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "Enter",
+            "code": "Enter",
+            "time": 2070.3000000000466
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": null,
+            "inputType": "insertLineBreak",
+            "time": 2070.3000000000466
+          },
+          {
+            "id": "a",
+            "len": 18,
+            "type": "input",
+            "time": 2071.5
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": "Enter",
+            "code": "Enter",
+            "time": 2072
+          },
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "第",
+            "code": "IntlYen",
+            "time": 2142.5
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "第",
+            "inputType": "insertText",
+            "time": 2143.100000000035
+          },
+          {
+            "id": "a",
+            "len": 19,
+            "type": "input",
+            "time": 2144.5
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": "第",
+            "code": "IntlYen",
+            "time": 2145.100000000035
+          },
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "二",
+            "code": "IntlRo",
+            "time": 2156.4000000000233
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "二",
+            "inputType": "insertText",
+            "time": 2156.7000000000116
+          },
+          {
+            "id": "a",
+            "len": 20,
+            "type": "input",
+            "time": 2157.4000000000233
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": "二",
+            "code": "IntlRo",
+            "time": 2157.9000000000233
+          },
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "行",
+            "code": "F19",
+            "time": 2170.2000000000116
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "行",
+            "inputType": "insertText",
+            "time": 2170.3000000000466
+          },
+          {
+            "id": "a",
+            "len": 21,
+            "type": "input",
+            "time": 2170.8000000000466
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": "行",
+            "code": "F19",
+            "time": 2171.5
+          },
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "。",
+            "code": "F24",
+            "time": 2184.2000000000116
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "。",
+            "inputType": "insertText",
+            "time": 2184.2000000000116
+          },
+          {
+            "id": "a",
+            "len": 22,
+            "type": "input",
+            "time": 2184.7000000000116
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": "。",
+            "code": "F24",
+            "time": 2185.2000000000116
+          }
+        ]
+      },
+      "no_late": true,
+      "passed": true,
+      "received_lengths": [
+        22,
+        0
+      ]
+    },
+    {
+      "method": "auto",
+      "case": "cancel",
+      "sample": "你好 InkEcho，café Ω\n第二行。",
+      "initial_focus": "a",
+      "session": {
+        "route": null,
+        "outcome": "cancelled",
+        "metrics_characters": null,
+        "reported_characters": 0,
+        "outcomes": [
+          {
+            "characters": 0
+          }
+        ],
+        "deltas": [
+          {
+            "index": 0,
+            "monotonic": 302.821149236
+          },
+          {
+            "index": 1,
+            "monotonic": 302.846193252
+          },
+          {
+            "index": 2,
+            "monotonic": 302.871363488
+          },
+          {
+            "index": 3,
+            "monotonic": 302.89698249
+          },
+          {
+            "index": 4,
+            "monotonic": 302.922466211
+          },
+          {
+            "index": 5,
+            "monotonic": 302.94785376
+          },
+          {
+            "index": 6,
+            "monotonic": 302.973976104
+          },
+          {
+            "index": 7,
+            "monotonic": 303.000095191
+          },
+          {
+            "index": 8,
+            "monotonic": 303.026225726
+          },
+          {
+            "index": 9,
+            "monotonic": 303.052115193
+          },
+          {
+            "index": 10,
+            "monotonic": 303.077499082
+          },
+          {
+            "index": 11,
+            "monotonic": 303.10334989
+          },
+          {
+            "index": 12,
+            "monotonic": 303.128887531
+          },
+          {
+            "index": 13,
+            "monotonic": 303.154833948
+          },
+          {
+            "index": 14,
+            "monotonic": 303.180334119
+          },
+          {
+            "index": 15,
+            "monotonic": 303.205983883
+          },
+          {
+            "index": 16,
+            "monotonic": 303.231400698
+          },
+          {
+            "index": 17,
+            "monotonic": 303.256899526
+          },
+          {
+            "index": 18,
+            "monotonic": 303.282194516
+          },
+          {
+            "index": 19,
+            "monotonic": 303.308090087
+          },
+          {
+            "index": 20,
+            "monotonic": 303.33341738
+          },
+          {
+            "index": 21,
+            "monotonic": 303.358853298
+          }
+        ],
+        "dispatches": [
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 302.852468985,
+            "route_before": "fcitx",
+            "first_sent_at": 303.63857877,
+            "error_code": null,
+            "error_type": "CancelledError",
+            "protocol": null,
+            "route_after": "keyboard",
+            "backend_type": "HybridKeyboardInput",
+            "native_attempts": null
+          }
+        ],
+        "input_failure": null,
+        "error_code": null
+      },
+      "sent": 0,
+      "route": null,
+      "cancel_requested": true,
+      "first_dom": {
+        "a": "你",
+        "b": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "你",
+            "code": "IntlYen",
+            "time": 4901.600000000035
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "你",
+            "inputType": "insertText",
+            "time": 4901.800000000047
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 4902.600000000035
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": "你",
+            "code": "IntlYen",
+            "time": 4904.900000000023
+          }
+        ]
+      },
+      "last_dom": {
+        "a": "你",
+        "b": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "你",
+            "code": "IntlYen",
+            "time": 4901.600000000035
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "你",
+            "inputType": "insertText",
+            "time": 4901.800000000047
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 4902.600000000035
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": "你",
+            "code": "IntlYen",
+            "time": 4904.900000000023
+          }
+        ]
+      },
+      "no_late": true,
+      "passed": true,
+      "received_lengths": [
+        1,
+        0
+      ]
+    },
+    {
+      "method": "auto",
+      "case": "pending-cancel",
+      "sample": "甲\n乙",
+      "initial_focus": "a",
+      "session": {
+        "route": null,
+        "outcome": "cancelled",
+        "metrics_characters": null,
+        "reported_characters": 0,
+        "outcomes": [
+          {
+            "characters": 0
+          }
+        ],
+        "deltas": [
+          {
+            "index": 0,
+            "monotonic": 305.525158795
+          },
+          {
+            "index": 1,
+            "monotonic": 305.55075562
+          }
+        ],
+        "dispatches": [],
+        "input_failure": null,
+        "error_code": null
+      },
+      "sent": 0,
+      "route": null,
+      "cancel_requested": true,
+      "first_dom": {
+        "a": "",
+        "b": "",
+        "active": "a",
+        "focus": true,
+        "events": []
+      },
+      "last_dom": {
+        "a": "",
+        "b": "",
+        "active": "a",
+        "focus": true,
+        "events": []
+      },
+      "no_late": true,
+      "passed": true,
+      "received_lengths": [
+        0,
+        0
+      ]
+    },
+    {
+      "method": "auto",
+      "case": "prepare-switch",
+      "sample": "你好 InkEcho，café Ω\n第二行。",
+      "initial_focus": "a",
+      "session": {
+        "route": null,
+        "outcome": "succeeded",
+        "metrics_characters": null,
+        "reported_characters": 22,
+        "outcomes": [
+          {
+            "characters": 22
+          }
+        ],
+        "deltas": [
+          {
+            "index": 0,
+            "monotonic": 307.439889903
+          },
+          {
+            "index": 1,
+            "monotonic": 307.465042264
+          },
+          {
+            "index": 2,
+            "monotonic": 307.490839643
+          },
+          {
+            "index": 3,
+            "monotonic": 307.51686625
+          },
+          {
+            "index": 4,
+            "monotonic": 307.543099646
+          },
+          {
+            "index": 5,
+            "monotonic": 307.569271314
+          },
+          {
+            "index": 6,
+            "monotonic": 307.595151262
+          },
+          {
+            "index": 7,
+            "monotonic": 307.621298704
+          },
+          {
+            "index": 8,
+            "monotonic": 307.647174145
+          },
+          {
+            "index": 9,
+            "monotonic": 307.672668991
+          },
+          {
+            "index": 10,
+            "monotonic": 307.698842303
+          },
+          {
+            "index": 11,
+            "monotonic": 307.724350013
+          },
+          {
+            "index": 12,
+            "monotonic": 307.749546481
+          },
+          {
+            "index": 13,
+            "monotonic": 307.775526207
+          },
+          {
+            "index": 14,
+            "monotonic": 307.801411714
+          },
+          {
+            "index": 15,
+            "monotonic": 307.827544374
+          },
+          {
+            "index": 16,
+            "monotonic": 307.853621856
+          },
+          {
+            "index": 17,
+            "monotonic": 307.879687226
+          },
+          {
+            "index": 18,
+            "monotonic": 307.905822289
+          },
+          {
+            "index": 19,
+            "monotonic": 307.931064295
+          },
+          {
+            "index": 20,
+            "monotonic": 307.957115374
+          },
+          {
+            "index": 21,
+            "monotonic": 307.982874786
+          }
+        ],
+        "dispatches": [
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 307.469333802,
+            "route_before": "fcitx",
+            "first_sent_at": 308.272987847,
+            "protocol": null,
+            "route_after": "keyboard",
+            "backend_type": "HybridKeyboardInput",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 308.28507196,
+            "route_before": "keyboard",
+            "first_sent_at": 308.336692975,
+            "protocol": null,
+            "route_after": "keyboard",
+            "backend_type": "HybridKeyboardInput",
+            "native_attempts": null
+          },
+          {
+            "length": 20,
+            "has_lf": true,
+            "at": 308.348528043,
+            "route_before": "keyboard",
+            "first_sent_at": 308.40803193,
+            "protocol": null,
+            "route_after": "keyboard",
+            "backend_type": "HybridKeyboardInput",
+            "native_attempts": null
+          }
+        ],
+        "input_failure": null,
+        "error_code": null
+      },
+      "sent": 22,
+      "route": null,
+      "cancel_requested": false,
+      "first_dom": {
+        "a": "",
+        "b": "你好 InkEcho，café Ω\n第二行。",
+        "active": "b",
+        "focus": true,
+        "events": [
+          {
+            "id": "b",
+            "type": "focus",
+            "time": 8695.300000000047
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "你",
+            "code": "IntlYen",
+            "time": 9536.700000000012
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "你",
+            "inputType": "insertText",
+            "time": 9536.900000000023
+          },
+          {
+            "id": "b",
+            "len": 1,
+            "type": "input",
+            "time": 9537.600000000035
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "你",
+            "code": "IntlYen",
+            "time": 9538.300000000047
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "好",
+            "code": "IntlYen",
+            "time": 9600.200000000012
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "好",
+            "inputType": "insertText",
+            "time": 9600.300000000047
+          },
+          {
+            "id": "b",
+            "len": 2,
+            "type": "input",
+            "time": 9600.900000000023
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "好",
+            "code": "IntlYen",
+            "time": 9601.600000000035
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": " ",
+            "code": "IntlYen",
+            "time": 9671.300000000047
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": " ",
+            "inputType": "insertText",
+            "time": 9671.300000000047
+          },
+          {
+            "id": "b",
+            "len": 3,
+            "type": "input",
+            "time": 9672.100000000035
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": " ",
+            "code": "IntlYen",
+            "time": 9672.800000000047
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "I",
+            "code": "IntlRo",
+            "time": 9685.400000000023
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "I",
+            "inputType": "insertText",
+            "time": 9685.400000000023
+          },
+          {
+            "id": "b",
+            "len": 4,
+            "type": "input",
+            "time": 9685.600000000035
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "I",
+            "code": "IntlRo",
+            "time": 9685.800000000047
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "n",
+            "code": "F19",
+            "time": 9699.600000000035
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "n",
+            "inputType": "insertText",
+            "time": 9699.700000000012
+          },
+          {
+            "id": "b",
+            "len": 5,
+            "type": "input",
+            "time": 9700.5
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "n",
+            "code": "F19",
+            "time": 9701
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "k",
+            "code": "F24",
+            "time": 9714.200000000012
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "k",
+            "inputType": "insertText",
+            "time": 9714.300000000047
+          },
+          {
+            "id": "b",
+            "len": 6,
+            "type": "input",
+            "time": 9714.600000000035
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "k",
+            "code": "F24",
+            "time": 9715.800000000047
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "E",
+            "code": "IntlYen",
+            "time": 9795.800000000047
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "E",
+            "inputType": "insertText",
+            "time": 9796.200000000012
+          },
+          {
+            "id": "b",
+            "len": 7,
+            "type": "input",
+            "time": 9796.900000000023
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "E",
+            "code": "IntlYen",
+            "time": 9797.700000000012
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "c",
+            "code": "IntlRo",
+            "time": 9810
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "c",
+            "inputType": "insertText",
+            "time": 9810.100000000035
+          },
+          {
+            "id": "b",
+            "len": 8,
+            "type": "input",
+            "time": 9810.600000000035
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "c",
+            "code": "IntlRo",
+            "time": 9811.100000000035
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "h",
+            "code": "F19",
+            "time": 9825.100000000035
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "h",
+            "inputType": "insertText",
+            "time": 9825.200000000012
+          },
+          {
+            "id": "b",
+            "len": 9,
+            "type": "input",
+            "time": 9825.600000000035
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "h",
+            "code": "F19",
+            "time": 9826
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "o",
+            "code": "F24",
+            "time": 9838.300000000047
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "o",
+            "inputType": "insertText",
+            "time": 9838.300000000047
+          },
+          {
+            "id": "b",
+            "len": 10,
+            "type": "input",
+            "time": 9838.700000000012
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "o",
+            "code": "F24",
+            "time": 9839
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "，",
+            "code": "IntlYen",
+            "time": 9902
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "，",
+            "inputType": "insertText",
+            "time": 9902.200000000012
+          },
+          {
+            "id": "b",
+            "len": 11,
+            "type": "input",
+            "time": 9902.900000000023
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "，",
+            "code": "IntlYen",
+            "time": 9907
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "c",
+            "code": "IntlRo",
+            "time": 9918
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "c",
+            "inputType": "insertText",
+            "time": 9918.300000000047
+          },
+          {
+            "id": "b",
+            "len": 12,
+            "type": "input",
+            "time": 9919
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "c",
+            "code": "IntlRo",
+            "time": 9919.600000000035
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "a",
+            "code": "F19",
+            "time": 9931.900000000023
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "a",
+            "inputType": "insertText",
+            "time": 9932.100000000035
+          },
+          {
+            "id": "b",
+            "len": 13,
+            "type": "input",
+            "time": 9932.400000000023
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "a",
+            "code": "F19",
+            "time": 9933.200000000012
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "f",
+            "code": "F24",
+            "time": 9943.800000000047
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "f",
+            "inputType": "insertText",
+            "time": 9943.900000000023
+          },
+          {
+            "id": "b",
+            "len": 14,
+            "type": "input",
+            "time": 9944.100000000035
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "f",
+            "code": "F24",
+            "time": 9944.300000000047
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "é",
+            "code": "IntlYen",
+            "time": 10006.600000000035
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "é",
+            "inputType": "insertText",
+            "time": 10006.900000000023
+          },
+          {
+            "id": "b",
+            "len": 15,
+            "type": "input",
+            "time": 10007.5
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "é",
+            "code": "IntlYen",
+            "time": 10008.400000000023
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": " ",
+            "code": "IntlRo",
+            "time": 10020.900000000023
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": " ",
+            "inputType": "insertText",
+            "time": 10021
+          },
+          {
+            "id": "b",
+            "len": 16,
+            "type": "input",
+            "time": 10021.5
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": " ",
+            "code": "IntlRo",
+            "time": 10021.900000000023
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "Ω",
+            "code": "F19",
+            "time": 10035.100000000035
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "Ω",
+            "inputType": "insertText",
+            "time": 10035.300000000047
+          },
+          {
+            "id": "b",
+            "len": 17,
+            "type": "input",
+            "time": 10035.600000000035
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "Ω",
+            "code": "F19",
+            "time": 10036.100000000035
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "Enter",
+            "code": "Enter",
+            "time": 10048.600000000035
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": null,
+            "inputType": "insertLineBreak",
+            "time": 10048.800000000047
+          },
+          {
+            "id": "b",
+            "len": 18,
+            "type": "input",
+            "time": 10049.200000000012
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "Enter",
+            "code": "Enter",
+            "time": 10049.600000000035
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "第",
+            "code": "IntlYen",
+            "time": 10114
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "第",
+            "inputType": "insertText",
+            "time": 10114
+          },
+          {
+            "id": "b",
+            "len": 19,
+            "type": "input",
+            "time": 10114.800000000047
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "第",
+            "code": "IntlYen",
+            "time": 10115.600000000035
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "二",
+            "code": "IntlRo",
+            "time": 10128.100000000035
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "二",
+            "inputType": "insertText",
+            "time": 10128.200000000012
+          },
+          {
+            "id": "b",
+            "len": 20,
+            "type": "input",
+            "time": 10128.600000000035
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "二",
+            "code": "IntlRo",
+            "time": 10129.100000000035
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "行",
+            "code": "F19",
+            "time": 10141.900000000023
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "行",
+            "inputType": "insertText",
+            "time": 10142.100000000035
+          },
+          {
+            "id": "b",
+            "len": 21,
+            "type": "input",
+            "time": 10142.5
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "行",
+            "code": "F19",
+            "time": 10143
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "。",
+            "code": "F24",
+            "time": 10157.100000000035
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "。",
+            "inputType": "insertText",
+            "time": 10157.200000000012
+          },
+          {
+            "id": "b",
+            "len": 22,
+            "type": "input",
+            "time": 10157.700000000012
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "。",
+            "code": "F24",
+            "time": 10160
+          }
+        ]
+      },
+      "last_dom": {
+        "a": "",
+        "b": "你好 InkEcho，café Ω\n第二行。",
+        "active": "b",
+        "focus": true,
+        "events": [
+          {
+            "id": "b",
+            "type": "focus",
+            "time": 8695.300000000047
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "你",
+            "code": "IntlYen",
+            "time": 9536.700000000012
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "你",
+            "inputType": "insertText",
+            "time": 9536.900000000023
+          },
+          {
+            "id": "b",
+            "len": 1,
+            "type": "input",
+            "time": 9537.600000000035
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "你",
+            "code": "IntlYen",
+            "time": 9538.300000000047
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "好",
+            "code": "IntlYen",
+            "time": 9600.200000000012
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "好",
+            "inputType": "insertText",
+            "time": 9600.300000000047
+          },
+          {
+            "id": "b",
+            "len": 2,
+            "type": "input",
+            "time": 9600.900000000023
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "好",
+            "code": "IntlYen",
+            "time": 9601.600000000035
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": " ",
+            "code": "IntlYen",
+            "time": 9671.300000000047
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": " ",
+            "inputType": "insertText",
+            "time": 9671.300000000047
+          },
+          {
+            "id": "b",
+            "len": 3,
+            "type": "input",
+            "time": 9672.100000000035
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": " ",
+            "code": "IntlYen",
+            "time": 9672.800000000047
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "I",
+            "code": "IntlRo",
+            "time": 9685.400000000023
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "I",
+            "inputType": "insertText",
+            "time": 9685.400000000023
+          },
+          {
+            "id": "b",
+            "len": 4,
+            "type": "input",
+            "time": 9685.600000000035
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "I",
+            "code": "IntlRo",
+            "time": 9685.800000000047
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "n",
+            "code": "F19",
+            "time": 9699.600000000035
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "n",
+            "inputType": "insertText",
+            "time": 9699.700000000012
+          },
+          {
+            "id": "b",
+            "len": 5,
+            "type": "input",
+            "time": 9700.5
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "n",
+            "code": "F19",
+            "time": 9701
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "k",
+            "code": "F24",
+            "time": 9714.200000000012
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "k",
+            "inputType": "insertText",
+            "time": 9714.300000000047
+          },
+          {
+            "id": "b",
+            "len": 6,
+            "type": "input",
+            "time": 9714.600000000035
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "k",
+            "code": "F24",
+            "time": 9715.800000000047
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "E",
+            "code": "IntlYen",
+            "time": 9795.800000000047
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "E",
+            "inputType": "insertText",
+            "time": 9796.200000000012
+          },
+          {
+            "id": "b",
+            "len": 7,
+            "type": "input",
+            "time": 9796.900000000023
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "E",
+            "code": "IntlYen",
+            "time": 9797.700000000012
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "c",
+            "code": "IntlRo",
+            "time": 9810
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "c",
+            "inputType": "insertText",
+            "time": 9810.100000000035
+          },
+          {
+            "id": "b",
+            "len": 8,
+            "type": "input",
+            "time": 9810.600000000035
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "c",
+            "code": "IntlRo",
+            "time": 9811.100000000035
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "h",
+            "code": "F19",
+            "time": 9825.100000000035
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "h",
+            "inputType": "insertText",
+            "time": 9825.200000000012
+          },
+          {
+            "id": "b",
+            "len": 9,
+            "type": "input",
+            "time": 9825.600000000035
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "h",
+            "code": "F19",
+            "time": 9826
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "o",
+            "code": "F24",
+            "time": 9838.300000000047
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "o",
+            "inputType": "insertText",
+            "time": 9838.300000000047
+          },
+          {
+            "id": "b",
+            "len": 10,
+            "type": "input",
+            "time": 9838.700000000012
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "o",
+            "code": "F24",
+            "time": 9839
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "，",
+            "code": "IntlYen",
+            "time": 9902
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "，",
+            "inputType": "insertText",
+            "time": 9902.200000000012
+          },
+          {
+            "id": "b",
+            "len": 11,
+            "type": "input",
+            "time": 9902.900000000023
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "，",
+            "code": "IntlYen",
+            "time": 9907
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "c",
+            "code": "IntlRo",
+            "time": 9918
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "c",
+            "inputType": "insertText",
+            "time": 9918.300000000047
+          },
+          {
+            "id": "b",
+            "len": 12,
+            "type": "input",
+            "time": 9919
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "c",
+            "code": "IntlRo",
+            "time": 9919.600000000035
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "a",
+            "code": "F19",
+            "time": 9931.900000000023
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "a",
+            "inputType": "insertText",
+            "time": 9932.100000000035
+          },
+          {
+            "id": "b",
+            "len": 13,
+            "type": "input",
+            "time": 9932.400000000023
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "a",
+            "code": "F19",
+            "time": 9933.200000000012
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "f",
+            "code": "F24",
+            "time": 9943.800000000047
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "f",
+            "inputType": "insertText",
+            "time": 9943.900000000023
+          },
+          {
+            "id": "b",
+            "len": 14,
+            "type": "input",
+            "time": 9944.100000000035
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "f",
+            "code": "F24",
+            "time": 9944.300000000047
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "é",
+            "code": "IntlYen",
+            "time": 10006.600000000035
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "é",
+            "inputType": "insertText",
+            "time": 10006.900000000023
+          },
+          {
+            "id": "b",
+            "len": 15,
+            "type": "input",
+            "time": 10007.5
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "é",
+            "code": "IntlYen",
+            "time": 10008.400000000023
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": " ",
+            "code": "IntlRo",
+            "time": 10020.900000000023
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": " ",
+            "inputType": "insertText",
+            "time": 10021
+          },
+          {
+            "id": "b",
+            "len": 16,
+            "type": "input",
+            "time": 10021.5
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": " ",
+            "code": "IntlRo",
+            "time": 10021.900000000023
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "Ω",
+            "code": "F19",
+            "time": 10035.100000000035
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "Ω",
+            "inputType": "insertText",
+            "time": 10035.300000000047
+          },
+          {
+            "id": "b",
+            "len": 17,
+            "type": "input",
+            "time": 10035.600000000035
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "Ω",
+            "code": "F19",
+            "time": 10036.100000000035
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "Enter",
+            "code": "Enter",
+            "time": 10048.600000000035
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": null,
+            "inputType": "insertLineBreak",
+            "time": 10048.800000000047
+          },
+          {
+            "id": "b",
+            "len": 18,
+            "type": "input",
+            "time": 10049.200000000012
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "Enter",
+            "code": "Enter",
+            "time": 10049.600000000035
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "第",
+            "code": "IntlYen",
+            "time": 10114
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "第",
+            "inputType": "insertText",
+            "time": 10114
+          },
+          {
+            "id": "b",
+            "len": 19,
+            "type": "input",
+            "time": 10114.800000000047
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "第",
+            "code": "IntlYen",
+            "time": 10115.600000000035
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "二",
+            "code": "IntlRo",
+            "time": 10128.100000000035
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "二",
+            "inputType": "insertText",
+            "time": 10128.200000000012
+          },
+          {
+            "id": "b",
+            "len": 20,
+            "type": "input",
+            "time": 10128.600000000035
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "二",
+            "code": "IntlRo",
+            "time": 10129.100000000035
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "行",
+            "code": "F19",
+            "time": 10141.900000000023
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "行",
+            "inputType": "insertText",
+            "time": 10142.100000000035
+          },
+          {
+            "id": "b",
+            "len": 21,
+            "type": "input",
+            "time": 10142.5
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "行",
+            "code": "F19",
+            "time": 10143
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "。",
+            "code": "F24",
+            "time": 10157.100000000035
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "。",
+            "inputType": "insertText",
+            "time": 10157.200000000012
+          },
+          {
+            "id": "b",
+            "len": 22,
+            "type": "input",
+            "time": 10157.700000000012
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "。",
+            "code": "F24",
+            "time": 10160
+          }
+        ]
+      },
+      "no_late": true,
+      "passed": true,
+      "received_lengths": [
+        0,
+        22
+      ]
+    },
+    {
+      "method": "auto",
+      "case": "switch",
+      "sample": "你好 InkEcho，café Ω\n第二行。",
+      "initial_focus": "a",
+      "session": {
+        "route": null,
+        "outcome": "succeeded",
+        "metrics_characters": null,
+        "reported_characters": 22,
+        "outcomes": [
+          {
+            "characters": 22
+          }
+        ],
+        "deltas": [
+          {
+            "index": 0,
+            "monotonic": 310.824322246
+          },
+          {
+            "index": 1,
+            "monotonic": 310.849932841
+          },
+          {
+            "index": 2,
+            "monotonic": 310.875901694
+          },
+          {
+            "index": 3,
+            "monotonic": 310.901138252
+          },
+          {
+            "index": 4,
+            "monotonic": 310.926966692
+          },
+          {
+            "index": 5,
+            "monotonic": 310.952937103
+          },
+          {
+            "index": 6,
+            "monotonic": 310.978830948
+          },
+          {
+            "index": 7,
+            "monotonic": 311.004439626
+          },
+          {
+            "index": 8,
+            "monotonic": 311.030071457
+          },
+          {
+            "index": 9,
+            "monotonic": 311.056052374
+          },
+          {
+            "index": 10,
+            "monotonic": 311.081853691
+          },
+          {
+            "index": 11,
+            "monotonic": 311.107685712
+          },
+          {
+            "index": 12,
+            "monotonic": 311.133744386
+          },
+          {
+            "index": 13,
+            "monotonic": 311.159397482
+          },
+          {
+            "index": 14,
+            "monotonic": 311.18488442
+          },
+          {
+            "index": 15,
+            "monotonic": 311.210832482
+          },
+          {
+            "index": 16,
+            "monotonic": 311.236332372
+          },
+          {
+            "index": 17,
+            "monotonic": 311.261928368
+          },
+          {
+            "index": 18,
+            "monotonic": 311.28718661
+          },
+          {
+            "index": 19,
+            "monotonic": 311.313098681
+          },
+          {
+            "index": 20,
+            "monotonic": 311.338967522
+          },
+          {
+            "index": 21,
+            "monotonic": 311.364945787
+          }
+        ],
+        "dispatches": [
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 310.897472892,
+            "route_before": "fcitx",
+            "first_sent_at": 311.707258805,
+            "protocol": null,
+            "route_after": "keyboard",
+            "backend_type": "HybridKeyboardInput",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 311.719283577,
+            "route_before": "keyboard",
+            "first_sent_at": 311.76938281,
+            "protocol": null,
+            "route_after": "keyboard",
+            "backend_type": "HybridKeyboardInput",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 311.781759173,
+            "route_before": "keyboard",
+            "first_sent_at": 311.834085509,
+            "protocol": null,
+            "route_after": "keyboard",
+            "backend_type": "HybridKeyboardInput",
+            "native_attempts": null
+          },
+          {
+            "length": 19,
+            "has_lf": true,
+            "at": 311.845875673,
+            "route_before": "keyboard",
+            "first_sent_at": 311.922528874,
+            "protocol": null,
+            "route_after": "keyboard",
+            "backend_type": "HybridKeyboardInput",
+            "native_attempts": null
+          }
+        ],
+        "input_failure": null,
+        "error_code": null
+      },
+      "sent": 22,
+      "route": null,
+      "cancel_requested": false,
+      "first_dom": {
+        "a": "你",
+        "b": "好 InkEcho，café Ω\n第二行。",
+        "active": "b",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "focus",
+            "time": 11875.600000000035
+          },
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "你",
+            "code": "IntlYen",
+            "time": 12969.5
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "你",
+            "inputType": "insertText",
+            "time": 12970
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 12971
+          },
+          {
+            "id": "b",
+            "type": "focus",
+            "time": 12971.300000000047
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "你",
+            "code": "IntlYen",
+            "time": 12974.800000000047
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "好",
+            "code": "IntlYen",
+            "time": 13032.600000000035
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "好",
+            "inputType": "insertText",
+            "time": 13032.900000000023
+          },
+          {
+            "id": "b",
+            "len": 1,
+            "type": "input",
+            "time": 13034.100000000035
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "好",
+            "code": "IntlYen",
+            "time": 13034.700000000012
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": " ",
+            "code": "IntlYen",
+            "time": 13098.400000000023
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": " ",
+            "inputType": "insertText",
+            "time": 13098.800000000047
+          },
+          {
+            "id": "b",
+            "len": 2,
+            "type": "input",
+            "time": 13099.800000000047
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": " ",
+            "code": "IntlYen",
+            "time": 13100.900000000023
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "I",
+            "code": "IntlYen",
+            "time": 13186
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "I",
+            "inputType": "insertText",
+            "time": 13186.200000000012
+          },
+          {
+            "id": "b",
+            "len": 3,
+            "type": "input",
+            "time": 13187
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "I",
+            "code": "IntlYen",
+            "time": 13187.700000000012
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "n",
+            "code": "IntlRo",
+            "time": 13200.300000000047
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "n",
+            "inputType": "insertText",
+            "time": 13200.400000000023
+          },
+          {
+            "id": "b",
+            "len": 4,
+            "type": "input",
+            "time": 13201.100000000035
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "n",
+            "code": "IntlRo",
+            "time": 13201.600000000035
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "k",
+            "code": "F19",
+            "time": 13214.400000000023
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "k",
+            "inputType": "insertText",
+            "time": 13214.5
+          },
+          {
+            "id": "b",
+            "len": 5,
+            "type": "input",
+            "time": 13214.800000000047
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "k",
+            "code": "F19",
+            "time": 13215.200000000012
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "E",
+            "code": "F24",
+            "time": 13227.200000000012
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "E",
+            "inputType": "insertText",
+            "time": 13227.200000000012
+          },
+          {
+            "id": "b",
+            "len": 6,
+            "type": "input",
+            "time": 13227.5
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "E",
+            "code": "F24",
+            "time": 13227.900000000023
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "c",
+            "code": "IntlYen",
+            "time": 13293.700000000012
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "c",
+            "inputType": "insertText",
+            "time": 13293.800000000047
+          },
+          {
+            "id": "b",
+            "len": 7,
+            "type": "input",
+            "time": 13294.600000000035
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "c",
+            "code": "IntlYen",
+            "time": 13295.200000000012
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "h",
+            "code": "IntlRo",
+            "time": 13309.400000000023
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "h",
+            "inputType": "insertText",
+            "time": 13309.600000000035
+          },
+          {
+            "id": "b",
+            "len": 8,
+            "type": "input",
+            "time": 13310.100000000035
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "h",
+            "code": "IntlRo",
+            "time": 13310.600000000035
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "o",
+            "code": "F19",
+            "time": 13323.700000000012
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "o",
+            "inputType": "insertText",
+            "time": 13323.900000000023
+          },
+          {
+            "id": "b",
+            "len": 9,
+            "type": "input",
+            "time": 13324.300000000047
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "o",
+            "code": "F19",
+            "time": 13325
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "，",
+            "code": "F24",
+            "time": 13336.900000000023
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "，",
+            "inputType": "insertText",
+            "time": 13337
+          },
+          {
+            "id": "b",
+            "len": 10,
+            "type": "input",
+            "time": 13337.600000000035
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "，",
+            "code": "F24",
+            "time": 13338
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "c",
+            "code": "IntlYen",
+            "time": 13350.200000000012
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "c",
+            "inputType": "insertText",
+            "time": 13350.200000000012
+          },
+          {
+            "id": "b",
+            "len": 11,
+            "type": "input",
+            "time": 13350.700000000012
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "c",
+            "code": "IntlYen",
+            "time": 13351.100000000035
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "a",
+            "code": "IntlYen",
+            "time": 13415.700000000012
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "a",
+            "inputType": "insertText",
+            "time": 13416
+          },
+          {
+            "id": "b",
+            "len": 12,
+            "type": "input",
+            "time": 13416.700000000012
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "a",
+            "code": "IntlYen",
+            "time": 13417.700000000012
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "f",
+            "code": "IntlRo",
+            "time": 13429.300000000047
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "f",
+            "inputType": "insertText",
+            "time": 13429.5
+          },
+          {
+            "id": "b",
+            "len": 13,
+            "type": "input",
+            "time": 13430.100000000035
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "f",
+            "code": "IntlRo",
+            "time": 13430.600000000035
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "é",
+            "code": "F19",
+            "time": 13442.100000000035
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "é",
+            "inputType": "insertText",
+            "time": 13442.100000000035
+          },
+          {
+            "id": "b",
+            "len": 14,
+            "type": "input",
+            "time": 13442.5
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "é",
+            "code": "F19",
+            "time": 13442.700000000012
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": " ",
+            "code": "F24",
+            "time": 13455.600000000035
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": " ",
+            "inputType": "insertText",
+            "time": 13455.700000000012
+          },
+          {
+            "id": "b",
+            "len": 15,
+            "type": "input",
+            "time": 13456.100000000035
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": " ",
+            "code": "F24",
+            "time": 13456.5
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "Ω",
+            "code": "IntlYen",
+            "time": 13523
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "Ω",
+            "inputType": "insertText",
+            "time": 13523.100000000035
+          },
+          {
+            "id": "b",
+            "len": 16,
+            "type": "input",
+            "time": 13523.900000000023
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "Ω",
+            "code": "IntlYen",
+            "time": 13524.5
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "Enter",
+            "code": "Enter",
+            "time": 13537.300000000047
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": null,
+            "inputType": "insertLineBreak",
+            "time": 13537.5
+          },
+          {
+            "id": "b",
+            "len": 17,
+            "type": "input",
+            "time": 13537.900000000023
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "Enter",
+            "code": "Enter",
+            "time": 13538.300000000047
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "第",
+            "code": "IntlYen",
+            "time": 13612.600000000035
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "第",
+            "inputType": "insertText",
+            "time": 13613
+          },
+          {
+            "id": "b",
+            "len": 18,
+            "type": "input",
+            "time": 13614.5
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "第",
+            "code": "IntlYen",
+            "time": 13615.800000000047
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "二",
+            "code": "IntlRo",
+            "time": 13625.5
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "二",
+            "inputType": "insertText",
+            "time": 13625.700000000012
+          },
+          {
+            "id": "b",
+            "len": 19,
+            "type": "input",
+            "time": 13626.5
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "二",
+            "code": "IntlRo",
+            "time": 13627.100000000035
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "行",
+            "code": "F19",
+            "time": 13639.800000000047
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "行",
+            "inputType": "insertText",
+            "time": 13640
+          },
+          {
+            "id": "b",
+            "len": 20,
+            "type": "input",
+            "time": 13640.400000000023
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "行",
+            "code": "F19",
+            "time": 13640.900000000023
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "。",
+            "code": "F24",
+            "time": 13652.900000000023
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "。",
+            "inputType": "insertText",
+            "time": 13653
+          },
+          {
+            "id": "b",
+            "len": 21,
+            "type": "input",
+            "time": 13653.300000000047
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "。",
+            "code": "F24",
+            "time": 13654.200000000012
+          }
+        ]
+      },
+      "last_dom": {
+        "a": "你",
+        "b": "好 InkEcho，café Ω\n第二行。",
+        "active": "b",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "focus",
+            "time": 11875.600000000035
+          },
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "你",
+            "code": "IntlYen",
+            "time": 12969.5
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "你",
+            "inputType": "insertText",
+            "time": 12970
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 12971
+          },
+          {
+            "id": "b",
+            "type": "focus",
+            "time": 12971.300000000047
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "你",
+            "code": "IntlYen",
+            "time": 12974.800000000047
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "好",
+            "code": "IntlYen",
+            "time": 13032.600000000035
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "好",
+            "inputType": "insertText",
+            "time": 13032.900000000023
+          },
+          {
+            "id": "b",
+            "len": 1,
+            "type": "input",
+            "time": 13034.100000000035
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "好",
+            "code": "IntlYen",
+            "time": 13034.700000000012
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": " ",
+            "code": "IntlYen",
+            "time": 13098.400000000023
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": " ",
+            "inputType": "insertText",
+            "time": 13098.800000000047
+          },
+          {
+            "id": "b",
+            "len": 2,
+            "type": "input",
+            "time": 13099.800000000047
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": " ",
+            "code": "IntlYen",
+            "time": 13100.900000000023
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "I",
+            "code": "IntlYen",
+            "time": 13186
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "I",
+            "inputType": "insertText",
+            "time": 13186.200000000012
+          },
+          {
+            "id": "b",
+            "len": 3,
+            "type": "input",
+            "time": 13187
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "I",
+            "code": "IntlYen",
+            "time": 13187.700000000012
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "n",
+            "code": "IntlRo",
+            "time": 13200.300000000047
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "n",
+            "inputType": "insertText",
+            "time": 13200.400000000023
+          },
+          {
+            "id": "b",
+            "len": 4,
+            "type": "input",
+            "time": 13201.100000000035
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "n",
+            "code": "IntlRo",
+            "time": 13201.600000000035
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "k",
+            "code": "F19",
+            "time": 13214.400000000023
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "k",
+            "inputType": "insertText",
+            "time": 13214.5
+          },
+          {
+            "id": "b",
+            "len": 5,
+            "type": "input",
+            "time": 13214.800000000047
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "k",
+            "code": "F19",
+            "time": 13215.200000000012
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "E",
+            "code": "F24",
+            "time": 13227.200000000012
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "E",
+            "inputType": "insertText",
+            "time": 13227.200000000012
+          },
+          {
+            "id": "b",
+            "len": 6,
+            "type": "input",
+            "time": 13227.5
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "E",
+            "code": "F24",
+            "time": 13227.900000000023
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "c",
+            "code": "IntlYen",
+            "time": 13293.700000000012
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "c",
+            "inputType": "insertText",
+            "time": 13293.800000000047
+          },
+          {
+            "id": "b",
+            "len": 7,
+            "type": "input",
+            "time": 13294.600000000035
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "c",
+            "code": "IntlYen",
+            "time": 13295.200000000012
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "h",
+            "code": "IntlRo",
+            "time": 13309.400000000023
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "h",
+            "inputType": "insertText",
+            "time": 13309.600000000035
+          },
+          {
+            "id": "b",
+            "len": 8,
+            "type": "input",
+            "time": 13310.100000000035
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "h",
+            "code": "IntlRo",
+            "time": 13310.600000000035
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "o",
+            "code": "F19",
+            "time": 13323.700000000012
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "o",
+            "inputType": "insertText",
+            "time": 13323.900000000023
+          },
+          {
+            "id": "b",
+            "len": 9,
+            "type": "input",
+            "time": 13324.300000000047
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "o",
+            "code": "F19",
+            "time": 13325
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "，",
+            "code": "F24",
+            "time": 13336.900000000023
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "，",
+            "inputType": "insertText",
+            "time": 13337
+          },
+          {
+            "id": "b",
+            "len": 10,
+            "type": "input",
+            "time": 13337.600000000035
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "，",
+            "code": "F24",
+            "time": 13338
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "c",
+            "code": "IntlYen",
+            "time": 13350.200000000012
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "c",
+            "inputType": "insertText",
+            "time": 13350.200000000012
+          },
+          {
+            "id": "b",
+            "len": 11,
+            "type": "input",
+            "time": 13350.700000000012
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "c",
+            "code": "IntlYen",
+            "time": 13351.100000000035
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "a",
+            "code": "IntlYen",
+            "time": 13415.700000000012
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "a",
+            "inputType": "insertText",
+            "time": 13416
+          },
+          {
+            "id": "b",
+            "len": 12,
+            "type": "input",
+            "time": 13416.700000000012
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "a",
+            "code": "IntlYen",
+            "time": 13417.700000000012
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "f",
+            "code": "IntlRo",
+            "time": 13429.300000000047
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "f",
+            "inputType": "insertText",
+            "time": 13429.5
+          },
+          {
+            "id": "b",
+            "len": 13,
+            "type": "input",
+            "time": 13430.100000000035
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "f",
+            "code": "IntlRo",
+            "time": 13430.600000000035
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "é",
+            "code": "F19",
+            "time": 13442.100000000035
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "é",
+            "inputType": "insertText",
+            "time": 13442.100000000035
+          },
+          {
+            "id": "b",
+            "len": 14,
+            "type": "input",
+            "time": 13442.5
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "é",
+            "code": "F19",
+            "time": 13442.700000000012
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": " ",
+            "code": "F24",
+            "time": 13455.600000000035
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": " ",
+            "inputType": "insertText",
+            "time": 13455.700000000012
+          },
+          {
+            "id": "b",
+            "len": 15,
+            "type": "input",
+            "time": 13456.100000000035
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": " ",
+            "code": "F24",
+            "time": 13456.5
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "Ω",
+            "code": "IntlYen",
+            "time": 13523
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "Ω",
+            "inputType": "insertText",
+            "time": 13523.100000000035
+          },
+          {
+            "id": "b",
+            "len": 16,
+            "type": "input",
+            "time": 13523.900000000023
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "Ω",
+            "code": "IntlYen",
+            "time": 13524.5
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "Enter",
+            "code": "Enter",
+            "time": 13537.300000000047
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": null,
+            "inputType": "insertLineBreak",
+            "time": 13537.5
+          },
+          {
+            "id": "b",
+            "len": 17,
+            "type": "input",
+            "time": 13537.900000000023
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "Enter",
+            "code": "Enter",
+            "time": 13538.300000000047
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "第",
+            "code": "IntlYen",
+            "time": 13612.600000000035
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "第",
+            "inputType": "insertText",
+            "time": 13613
+          },
+          {
+            "id": "b",
+            "len": 18,
+            "type": "input",
+            "time": 13614.5
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "第",
+            "code": "IntlYen",
+            "time": 13615.800000000047
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "二",
+            "code": "IntlRo",
+            "time": 13625.5
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "二",
+            "inputType": "insertText",
+            "time": 13625.700000000012
+          },
+          {
+            "id": "b",
+            "len": 19,
+            "type": "input",
+            "time": 13626.5
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "二",
+            "code": "IntlRo",
+            "time": 13627.100000000035
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "行",
+            "code": "F19",
+            "time": 13639.800000000047
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "行",
+            "inputType": "insertText",
+            "time": 13640
+          },
+          {
+            "id": "b",
+            "len": 20,
+            "type": "input",
+            "time": 13640.400000000023
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "行",
+            "code": "F19",
+            "time": 13640.900000000023
+          },
+          {
+            "id": "b",
+            "type": "keydown",
+            "key": "。",
+            "code": "F24",
+            "time": 13652.900000000023
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "。",
+            "inputType": "insertText",
+            "time": 13653
+          },
+          {
+            "id": "b",
+            "len": 21,
+            "type": "input",
+            "time": 13653.300000000047
+          },
+          {
+            "id": "b",
+            "type": "keyup",
+            "key": "。",
+            "code": "F24",
+            "time": 13654.200000000012
+          }
+        ]
+      },
+      "no_late": true,
+      "passed": true,
+      "received_lengths": [
+        1,
+        21
+      ]
+    }
+  ],
+  "failures": [],
+  "fcitx_attempts": [
+    {
+      "length": 1,
+      "protocol": 4,
+      "outcome": "FcitxOutputError",
+      "code": "no_target",
+      "accepted": 0,
+      "uncertain": false,
+      "unsent_offset": 0
+    },
+    {
+      "length": 1,
+      "protocol": 4,
+      "outcome": "FcitxOutputError",
+      "code": "no_target",
+      "accepted": 0,
+      "uncertain": false,
+      "unsent_offset": 0
+    },
+    {
+      "length": 1,
+      "protocol": 4,
+      "outcome": "FcitxOutputError",
+      "code": "no_target",
+      "accepted": 0,
+      "uncertain": false,
+      "unsent_offset": 0
+    },
+    {
+      "length": 1,
+      "protocol": 4,
+      "outcome": "FcitxOutputError",
+      "code": "no_target",
+      "accepted": 0,
+      "uncertain": false,
+      "unsent_offset": 0
+    }
+  ],
+  "fcitx_observer_only": true,
+  "native_candidate_test_only_override": false,
+  "browser_resource_audit": {
+    "root": "/opt/inkecho-qa-chrome",
+    "program_files": 255,
+    "payload_bytes": 456937066,
+    "manifest_sha256": "01c5c6683bdd5e143b456a5d44b54e56e2b5d5249d3789f80b085a08b626eec4",
+    "wrapper_sha256": "51c3c7ae61c640f573e15a33de080bc481693c6d04375259654d2e92a0621d76",
+    "binary_sha256": "6c792041b07547a662e1b17974d1dc34a3db630379b45d9d89ddd7e3e68cc587",
+    "sandbox_sha256": "24beb85e4149c65db5bf40fa307721143d0883ab8952e60dde1158606f644dee",
+    "sandbox_uid": 0,
+    "sandbox_gid": 0,
+    "sandbox_mode": "0o4755",
+    "sandbox_runtime_acceptance": "not inferred from resource audit"
+  },
+  "browser_version": "Google Chrome 154.0.8037.97",
+  "browser_argv": [
+    "/opt/inkecho-qa-chrome/chrome",
+    "--password-store=basic",
+    "--no-first-run",
+    "--no-default-browser-check",
+    "--disable-background-networking",
+    "--disable-sync",
+    "--ozone-platform=wayland",
+    "--gtk-version=3",
+    "--remote-debugging-port=0",
+    "--remote-allow-origins=*",
+    "--user-data-dir=/run/user/1000/inkecho-browser-v2n7soyu/chrome-profile",
+    "file:///run/user/1000/inkecho-browser-v2n7soyu/owned.html"
+  ],
+  "focus_proofs": [
+    {
+      "label": "native-before-output",
+      "pid": 4097,
+      "native": {
+        "surface": true,
+        "toplevel": true,
+        "keyboard_enter": true
+      },
+      "display_unset": true,
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-v2n7soyu/owned.html",
+        "visible": "visible"
+      },
+      "sampled_monotonic": 299.313393451
+    },
+    {
+      "label": "auto-mixed-before-prepare",
+      "pid": 4097,
+      "native": {
+        "surface": true,
+        "toplevel": true,
+        "keyboard_enter": true
+      },
+      "display_unset": true,
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-v2n7soyu/owned.html",
+        "visible": "visible"
+      },
+      "sampled_monotonic": 299.553117908
+    },
+    {
+      "label": "auto-cancel-before-prepare",
+      "pid": 4097,
+      "native": {
+        "surface": true,
+        "toplevel": true,
+        "keyboard_enter": true
+      },
+      "display_unset": true,
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-v2n7soyu/owned.html",
+        "visible": "visible"
+      },
+      "sampled_monotonic": 302.813344894
+    },
+    {
+      "label": "auto-pending-cancel-before-prepare",
+      "pid": 4097,
+      "native": {
+        "surface": true,
+        "toplevel": true,
+        "keyboard_enter": true
+      },
+      "display_unset": true,
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-v2n7soyu/owned.html",
+        "visible": "visible"
+      },
+      "sampled_monotonic": 305.520223828
+    },
+    {
+      "label": "auto-prepare-switch-before-prepare",
+      "pid": 4097,
+      "native": {
+        "surface": true,
+        "toplevel": true,
+        "keyboard_enter": true
+      },
+      "display_unset": true,
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-v2n7soyu/owned.html",
+        "visible": "visible"
+      },
+      "sampled_monotonic": 307.428523035
+    },
+    {
+      "label": "auto-switch-before-prepare",
+      "pid": 4097,
+      "native": {
+        "surface": true,
+        "toplevel": true,
+        "keyboard_enter": true
+      },
+      "display_unset": true,
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-v2n7soyu/owned.html",
+        "visible": "visible"
+      },
+      "sampled_monotonic": 310.818269971
+    }
+  ],
+  "sandbox_metadata_probe": {
+    "returncode": 0,
+    "stdout": "[{\"pid\": 4274, \"owned_parent_chain\": [4274, 4112, 4110, 4109], \"seccomp\": \"2\", \"no_new_privs\": \"1\", \"namespace_pids\": [\"4274\", \"45\"]}, {\"pid\": 4267, \"owned_parent_chain\": [4267, 4112, 4110, 4109], \"seccomp\": \"2\", \"no_new_privs\": \"1\", \"namespace_pids\": [\"4267\", \"39\"]}, {\"pid\": 4253, \"owned_parent_chain\": [4253, 4112, 4110, 4109], \"seccomp\": \"2\", \"no_new_privs\": \"1\", \"namespace_pids\": [\"4253\", \"27\"]}, {\"pid\": 4314, \"owned_parent_chain\": [4314, 4112, 4110, 4109], \"seccomp\": \"2\", \"no_new_privs\": \"1\", \"namespace_pids\": [\"4314\", \"59\"]}, {\"pid\": 4178, \"owned_parent_chain\": [4178, 4112, 4110, 4109], \"seccomp\": \"2\", \"no_new_privs\": \"1\", \"namespace_pids\": [\"4178\", \"12\"]}]\n",
+    "stderr": "",
+    "guest_root_readonly": true
+  },
+  "sandbox_renderers": [
+    {
+      "pid": 4274,
+      "owned_parent_chain": [
+        4274,
+        4112,
+        4110,
+        4109
+      ],
+      "seccomp": "2",
+      "no_new_privs": "1",
+      "namespace_pids": [
+        "4274",
+        "45"
+      ]
+    },
+    {
+      "pid": 4267,
+      "owned_parent_chain": [
+        4267,
+        4112,
+        4110,
+        4109
+      ],
+      "seccomp": "2",
+      "no_new_privs": "1",
+      "namespace_pids": [
+        "4267",
+        "39"
+      ]
+    },
+    {
+      "pid": 4253,
+      "owned_parent_chain": [
+        4253,
+        4112,
+        4110,
+        4109
+      ],
+      "seccomp": "2",
+      "no_new_privs": "1",
+      "namespace_pids": [
+        "4253",
+        "27"
+      ]
+    },
+    {
+      "pid": 4314,
+      "owned_parent_chain": [
+        4314,
+        4112,
+        4110,
+        4109
+      ],
+      "seccomp": "2",
+      "no_new_privs": "1",
+      "namespace_pids": [
+        "4314",
+        "59"
+      ]
+    },
+    {
+      "pid": 4178,
+      "owned_parent_chain": [
+        4178,
+        4112,
+        4110,
+        4109
+      ],
+      "seccomp": "2",
+      "no_new_privs": "1",
+      "namespace_pids": [
+        "4178",
+        "12"
+      ]
+    }
+  ],
+  "browser_fcitx_module_maps": [],
+  "browser_normal_close": true,
+  "passed": true,
+  "addon_disabled_before_daemon_stop": true,
+  "browser_exit": 0,
+  "fcitx_exit": 0,
+  "hints_restored": true,
+  "native_protocol_proof": {
+    "surface": true,
+    "toplevel": true,
+    "keyboard_enter": true
+  },
+  "startup_diagnostics": [
+    "\n",
+    "DevTools listening on ws://127.0.0.1:43931/devtools/browser/30364a07-09a3-4222-8a07-b0e7190c2a1a\n",
+    "libva error: /usr/lib/x86_64-linux-gnu/dri/virtio_gpu_drv_video.so init failed\n",
+    "[4138:4138:1030/005053.907461:ERROR:media/gpu/vaapi/vaapi_wrapper.cc:1801] vaInitialize failed: resource allocation failed\n",
+    "[4253:36:1030/005053.983613:ERROR:gpu/ipc/client/command_buffer_proxy_impl.cc:285] ContextResult::kTransientFailure: Failed to send GpuControl.CreateCommandBuffer.\n",
+    "\", 26, 26)\n",
+    "第\", 29, 29)\n",
+    "第二\", 32, 32)\n",
+    "第二行\", 35, 35)\n",
+    "第二行。\", 38, 38)\n",
+    "\", 26, 26)\n",
+    "第\", 29, 29)\n",
+    "第二\", 32, 32)\n",
+    "第二行\", 35, 35)\n",
+    "第二行。\", 38, 38)\n",
+    "\", 23, 23)\n",
+    "第\", 26, 26)\n",
+    "第二\", 29, 29)\n",
+    "第二行\", 32, 32)\n",
+    "第二行。\", 35, 35)\n"
+  ],
+  "package_module_origins": {
+    "inkecho.platform.fcitx5_staging": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/platform/fcitx5_staging.py",
+    "inkecho.platform.fcitx5_install": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/platform/fcitx5_install.py",
+    "inkecho.platform.framework_detection": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/platform/framework_detection.py",
+    "inkecho.platform.ibus_lifecycle": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/platform/ibus_lifecycle.py",
+    "inkecho.platform.ibus": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/platform/ibus.py",
+    "inkecho.platform.ibus_owned": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/platform/ibus_owned.py",
+    "inkecho.text_units": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/text_units.py",
+    "inkecho.platform.fcitx5_capability": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/platform/fcitx5_capability.py",
+    "inkecho.platform.fcitx5": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/platform/fcitx5.py",
+    "inkecho.platform.output_pacing": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/platform/output_pacing.py",
+    "inkecho.platform.keyboard": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/platform/keyboard.py",
+    "inkecho.text_normalization": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/text_normalization.py",
+    "inkecho.platform.output_router": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/platform/output_router.py",
+    "inkecho.platform.ibus_owned_auto": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/platform/ibus_owned_auto.py",
+    "inkecho.platform.owned_installation": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/platform/owned_installation.py",
+    "inkecho.platform.ibus_owned_default": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/platform/ibus_owned_default.py",
+    "inkecho.platform.wayland_keyboard": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/platform/wayland_keyboard.py",
+    "inkecho.config": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/config.py",
+    "inkecho.provider_catalog": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/provider_catalog.py",
+    "inkecho.providers": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/providers.py",
+    "inkecho.audio": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/audio.py",
+    "inkecho.core": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/core.py",
+    "inkecho.performance": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/performance.py",
+    "inkecho.realtime": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/realtime.py",
+    "inkecho.security": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/security.py",
+    "inkecho.streaming_output": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/streaming_output.py",
+    "inkecho.app": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/app.py",
+    "inkecho.platform.hybrid_keyboard": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchjBnlnl/packages/inkecho/platform/hybrid_keyboard.py"
+  }
+}
