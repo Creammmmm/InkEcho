@@ -496,6 +496,12 @@ class OutputRouter:
                     # Missing/rejected protection is not permission to bypass
                     # composition through keyboard or the optional owned bridge.
                     raise OutputRouterError("fcitx_" + error.code) from None
+                if framework == "fcitx" and not getattr(
+                    self, "_fcitx_keyboard_fallback_allowed", True
+                ):
+                    # Installation uncertainty forbids keyboard fallback, so do
+                    # not connect or request authorization before refusing it.
+                    raise OutputRouterError("input_capability_unknown") from None
                 if framework == "ibus" and getattr(
                     self, "_owned_auto_candidate", False
                 ):
