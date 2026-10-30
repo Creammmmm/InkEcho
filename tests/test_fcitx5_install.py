@@ -76,6 +76,7 @@ def test_auto_version_discovers_installed_bridge_for_valid_xdg_paths(
 
     default_data = tmp_path / ".local/share"
     default_data.mkdir(parents=True, mode=0o700)
+    default_data.parent.chmod(0o700)
     FcitxInstaller(
         source=candidate_source, data_home=default_data, runner=runner
     ).install()
@@ -429,3 +430,94 @@ def test_reenable_reports_uncertain_post_publication_failure(
     assert triggered and description.exists()
     assert manager.available_for_auto()
     assert not any("Refresh" in " ".join(call) for call in calls)
+
+
+def test_install_creates_missing_default_xdg_directory(
+    tmp_path, monkeypatch, candidate_source
+):
+    monkeypatch.setenv("HOME", str(tmp_path))
+    monkeypatch.delenv("XDG_DATA_HOME", raising=False)
+    monkeypatch.setattr(
+        "platform.freedesktop_os_release",
+        lambda: {"ID": "ubuntu", "VERSION_ID": "26.04"},
+    )
+    monkeypatch.setattr("platform.machine", lambda: "x86_64")
+
+    def runner(*_args, **_kwargs):
+        return SimpleNamespace(returncode=0, stdout="5.1.19")
+
+    manager = FcitxInstaller(source=candidate_source, runner=runner)
+    assert not manager.data_home.exists()
+    manager.install()
+    assert manager.available_for_auto()
+    assert (manager.data_home / "fcitx5/addon/inkecho.conf").is_file()
+
+
+def test_install_creates_missing_absolute_xdg_directory(
+    tmp_path, monkeypatch, candidate_source
+):
+    target = tmp_path / "custom" / "nested" / "share"
+    monkeypatch.setenv("XDG_DATA_HOME", str(target))
+    monkeypatch.setattr(
+        "platform.freedesktop_os_release",
+        lambda: {"ID": "ubuntu", "VERSION_ID": "26.04"},
+    )
+    monkeypatch.setattr("platform.machine", lambda: "x86_64")
+    manager = FcitxInstaller(
+        source=candidate_source,
+        runner=lambda *_args, **_kwargs: SimpleNamespace(returncode=0, stdout="5.1.19"),
+    )
+    manager.install()
+    assert manager.available_for_auto()
+    for directory in (target, target.parent, target.parent.parent):
+        assert directory.stat().st_mode & 0o777 == 0o700
+
+
+@pytest.mark.parametrize("failure", ["unsafe_parent", "symlink", "candidate"])
+def test_install_missing_xdg_does_not_create_under_unsafe_inputs(
+    tmp_path, monkeypatch, candidate_source, failure
+):
+    parent = tmp_path / "custom"
+    outside = tmp_path / "outside"
+    outside.mkdir(mode=0o700)
+    if failure == "symlink":
+        parent.symlink_to(outside, target_is_directory=True)
+    elif failure == "unsafe_parent":
+        parent.mkdir(mode=0o700)
+        parent.chmod(0o777)
+    else:
+        (candidate_source / "candidate/libinkecho.so").write_bytes(b"modified")
+    target = parent / "share"
+    monkeypatch.setenv("XDG_DATA_HOME", str(target))
+    monkeypatch.setattr(
+        "platform.freedesktop_os_release",
+        lambda: {"ID": "ubuntu", "VERSION_ID": "26.04"},
+    )
+    monkeypatch.setattr("platform.machine", lambda: "x86_64")
+    manager = FcitxInstaller(
+        source=candidate_source,
+        runner=lambda *_args, **_kwargs: SimpleNamespace(returncode=0, stdout="5.1.19"),
+    )
+    with pytest.raises(FcitxInstallError):
+        manager.install()
+    assert not target.exists()
+    assert not (outside / "share").exists()
+    if failure == "candidate":
+        assert not parent.exists()
+
+
+def test_existing_install_with_writable_ancestor_can_be_detected_and_disabled(
+    tmp_path, monkeypatch, candidate_source
+):
+    ancestor = tmp_path / "writable"
+    data = ancestor / "data"
+    data.mkdir(parents=True, mode=0o700)
+    ancestor.chmod(0o775)
+    monkeypatch.setattr(
+        FcitxInstaller, "_system", lambda self: ("ubuntu", "26.04", "x86_64", "5.1.19")
+    )
+    manager = FcitxInstaller(source=candidate_source, data_home=data)
+    manager.install()
+    assert manager.auto_version() == "5.1.19"
+    manager.disable()
+    assert manager.auto_version() is None

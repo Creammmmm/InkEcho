@@ -17,15 +17,50 @@ class StagingError(RuntimeError):
     pass
 
 
-def _directory(path: Path, *, allow_root=False):
+def _directory(path: Path, *, allow_root=False, create_missing=False):
     if not path.is_absolute() or any(part in (".", "..") for part in path.parts):
         raise StagingError("absolute_directory_required")
     fd = os.open("/", os.O_RDONLY | os.O_DIRECTORY)
     try:
+        ancestors = [os.fstat(fd)]
+        creating = False
         for part in path.parts[1:]:
-            child = os.open(
-                part, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW, dir_fd=fd
-            )
+            try:
+                child = os.open(
+                    part, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW, dir_fd=fd
+                )
+            except FileNotFoundError:
+                if not create_missing:
+                    raise
+                # Existing installations retain their original semantics. For a
+                # newly created data path, all ancestors must resist replacement
+                # because Fcitx later resolves its library by absolute pathname.
+                if not creating:
+                    if any(
+                        info.st_uid not in {0, os.getuid()}
+                        or (info.st_mode & 0o022 and not info.st_mode & stat.S_ISVTX)
+                        for info in ancestors
+                    ):
+                        raise StagingError("unsafe_directory") from None
+                    creating = True
+                parent = os.fstat(fd)
+                if parent.st_uid != os.getuid() or parent.st_mode & 0o022:
+                    raise StagingError("unsafe_directory") from None
+                try:
+                    os.mkdir(part, 0o700, dir_fd=fd)
+                except FileExistsError:
+                    pass
+                child = os.open(
+                    part, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW, dir_fd=fd
+                )
+            try:
+                info = os.fstat(child)
+                if creating and (info.st_uid != os.getuid() or info.st_mode & 0o022):
+                    raise StagingError("unsafe_directory")
+                ancestors.append(info)
+            except BaseException:
+                os.close(child)
+                raise
             os.close(fd)
             fd = child
         info = os.fstat(fd)
@@ -139,8 +174,6 @@ def stage(
     with ExitStack() as stack:
         source = _directory(candidate_dir, allow_root=True)
         stack.callback(os.close, source)
-        data = _directory(data_home)
-        stack.callback(os.close, data)
         manifest = json.loads(_read(source, "manifest.json", 65536, allow_root=True))
         if not isinstance(manifest, dict):
             raise StagingError("invalid_manifest")
@@ -182,6 +215,9 @@ def stage(
             raise StagingError("unverified_candidate")
         if candidate_conf != _conf("libinkecho", BUILD_SYSTEM[3]):
             raise StagingError("invalid_candidate_description")
+        # Only a verified candidate may create a missing user data directory.
+        data = _directory(data_home, create_missing=True)
+        stack.callback(os.close, data)
         addon_parent = _child(data, "fcitx5")
         stack.callback(os.close, addon_parent)
         addon = _child(addon_parent, "addon")

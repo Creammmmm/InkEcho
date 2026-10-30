@@ -1,0 +1,7 @@
+# Fcitx missing data directory validation
+
+On 2026-10-31, targeted staging, installer and framework-detection tests passed (98 tests). The tests include missing default and custom data directories, untrusted ancestors, sticky directories, a competing symlink and existing installations under a group-writable ancestor. Existing-path automatic detection and deactivation retain their previous behavior.
+
+A private Fcitx 5.1.19 service was launched with a private home, runtime and configuration directories and a separate session bus; display variables were unset and the clipboard addon was disabled. Starting with no data directory, the candidate created it with mode 0700. The service owner PID matched the launched process, its addon list reported the bridge enabled, and the bridge returned runtime version 5.1.19. The staging source SHA-256 before, during and after the run was `425385efb0a04762200d00461aa6324dc3964bc1d1b3dac13d173049dc764276`.
+
+An earlier bubblewrap attempt failed because the host root directory appeared as unmapped UID 65534 in that user namespace; the successful run retained the host filesystem identity and used a private session bus but did not isolate the network. The fixture overrides the system-version check. This is not an AppImage, graphical desktop, or Ubuntu 24.04/26.04 acceptance test. The checks on trusted ancestors apply only when creating a missing data path; existing paths preserve the prior behavior and its absolute-path replacement risk.

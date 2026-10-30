@@ -311,3 +311,99 @@ staging.stage(Path(source), Path(data), os_id='ubuntu', os_version='24.04',
     # A crashed writer's private temp file is not trusted or overwritten.
     assert any(path.name.startswith(".inkecho-lib-") for path in directory.iterdir())
     assert publish(source, data) == digest
+
+
+def test_create_missing_directory_rejects_concurrent_symlink(tmp_path, monkeypatch):
+    import os
+
+    from inkecho.platform import fcitx5_staging
+
+    outside = tmp_path / "outside"
+    outside.mkdir(mode=0o700)
+    target = tmp_path / "new" / "share"
+    original_mkdir = os.mkdir
+
+    def race(name, mode=0o777, *, dir_fd=None):
+        if name == "new" and dir_fd is not None:
+            os.symlink(str(outside), name, dir_fd=dir_fd)
+            raise FileExistsError
+        return original_mkdir(name, mode, dir_fd=dir_fd)
+
+    monkeypatch.setattr(fcitx5_staging.os, "mkdir", race)
+    with pytest.raises(OSError):
+        fcitx5_staging._directory(target, create_missing=True)
+    assert not (outside / "share").exists()
+
+
+def test_untrusted_writable_ancestor_rejected_for_creation(tmp_path):
+    ancestor = tmp_path / "writable"
+    target = ancestor / "private" / "share"
+    target.parent.mkdir(parents=True, mode=0o700)
+    ancestor.chmod(0o777)
+    with pytest.raises(StagingError, match="unsafe_directory"):
+        fcitx5_staging._directory(target, create_missing=True)
+    assert not target.exists()
+
+
+def test_trusted_sticky_ancestor_allows_owned_child(tmp_path):
+    sticky = tmp_path / "sticky"
+    owned = sticky / "owned"
+    owned.mkdir(parents=True, mode=0o700)
+    sticky.chmod(0o1777)
+    target = owned / "share"
+    fd = fcitx5_staging._directory(target, create_missing=True)
+    os.close(fd)
+    assert target.stat().st_mode & 0o777 == 0o700
+
+
+def test_sticky_ancestor_does_not_authorize_creation_directly(tmp_path):
+    sticky = tmp_path / "sticky"
+    sticky.mkdir(mode=0o700)
+    sticky.chmod(0o1777)
+    with pytest.raises(StagingError, match="unsafe_directory"):
+        fcitx5_staging._directory(sticky / "share", create_missing=True)
+    assert not (sticky / "share").exists()
+
+
+@pytest.mark.parametrize("sticky", [False, True])
+def test_foreign_owned_ancestor_rejected(tmp_path, monkeypatch, sticky):
+    from types import SimpleNamespace
+
+    parent = tmp_path / "parent"
+    foreign = parent / "foreign"
+    target = foreign / "share"
+    foreign.mkdir(parents=True, mode=0o700)
+    if sticky:
+        parent.chmod(0o1777)
+    foreign_identity = foreign.stat().st_dev, foreign.stat().st_ino
+    original_fstat = os.fstat
+
+    def foreign_owner(fd):
+        info = original_fstat(fd)
+        if (info.st_dev, info.st_ino) == foreign_identity:
+            return SimpleNamespace(st_uid=os.getuid() + 1, st_mode=info.st_mode)
+        return info
+
+    monkeypatch.setattr(fcitx5_staging.os, "fstat", foreign_owner)
+    with pytest.raises(StagingError, match="unsafe_directory"):
+        fcitx5_staging._directory(target, create_missing=True)
+
+
+def test_candidate_source_allows_writable_ancestor_when_bytes_are_verified(tmp_path):
+    ancestor = tmp_path / "source_parent"
+    ancestor.mkdir(mode=0o700)
+    source, _ = candidate(ancestor)
+    ancestor.chmod(0o775)
+    data = tmp_path / "data"
+    data.mkdir(mode=0o700)
+    assert publish(source, data)
+
+
+def test_existing_data_path_with_writable_ancestor_retains_baseline(tmp_path):
+    source, _ = candidate(tmp_path)
+    ancestor = tmp_path / "group_writable"
+    data = ancestor / "data"
+    data.mkdir(parents=True, mode=0o700)
+    ancestor.chmod(0o775)
+    digest = publish(source, data)
+    assert deactivate(data, digest=digest) is None
