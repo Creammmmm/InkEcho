@@ -23,3 +23,12 @@ def test_explicit_bounded_choice_is_visible_saved_and_deferred(window):
         "IBus（GNOME 新版扩展）" in text and "无法确认目标是否收到" in text
         for text in labels
     )
+
+
+def test_auto_status_mentions_both_supported_bridges(window):
+    page = window.settings_page.compatibility
+    page.output_method.setCurrentIndex(page.output_method.findData("auto"))
+    page.refresh()
+    assert "Fcitx5" in page.availability.text()
+    assert "GNOME IBus" in page.availability.text()
+    assert "键盘" in page.availability.text()

@@ -413,7 +413,10 @@ class CompatibilityPage(Page):
         elif method == "fcitx":
             text = "Fcitx5 输入桥将在任务开始时检查；未安装或未运行时无法输出。"
         elif method == "auto":
-            text = "自动模式按系统状态选择 Fcitx5 或键盘；应用可能使用不同输入方式。"
+            text = (
+                "自动模式在输出时检测可用的 Fcitx5 或 GNOME IBus 输入桥，"
+                "不满足条件时可能使用键盘或停止；应用可能使用不同输入方式。"
+            )
         elif not keyboard_connected:
             text = "键盘输入服务尚未连接。"
         elif keyboard_authorized:
