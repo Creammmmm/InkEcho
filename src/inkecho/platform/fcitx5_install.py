@@ -102,6 +102,12 @@ class FcitxInstaller:
                 and str(exc) == "description_exists"
             ) and self._check_staged(system[3]):
                 return
+            if isinstance(exc, OSError):
+                # Publication may already have happened before fsync or
+                # temporary-file cleanup failed; never claim it was absent.
+                raise FcitxInstallError(
+                    "安装结果未确认：配置可能已发布或已有输入桥配置，请检查输入桥状态。"
+                ) from exc
             raise FcitxInstallError(
                 "安装未完成：文件校验失败或已有输入桥配置。"
             ) from exc
@@ -153,23 +159,74 @@ class FcitxInstaller:
             return None
         return system[3] if self._check_staged(system[3]) else None
 
+    def _can_restore_disabled(self):
+        """Recognize a retained verified library with no published description."""
+        digest = staging.TESTED_CANDIDATE_SHA256
+        if not digest:
+            return False
+        try:
+            with ExitStack() as stack:
+                data = staging._directory(self.data_home)
+                stack.callback(os.close, data)
+                addon_parent = staging._child(data, "fcitx5", create=False)
+                stack.callback(os.close, addon_parent)
+                addon = staging._child(addon_parent, "addon", create=False)
+                stack.callback(os.close, addon)
+                try:
+                    os.stat("inkecho.conf", dir_fd=addon, follow_symlinks=False)
+                except FileNotFoundError:
+                    pass
+                else:
+                    return False
+                owned = staging._child(data, "inkecho", create=False)
+                stack.callback(os.close, owned)
+                versions = staging._child(owned, "fcitx5", create=False)
+                stack.callback(os.close, versions)
+                candidate = staging._child(versions, digest, create=False)
+                stack.callback(os.close, candidate)
+                library = staging._read(candidate, "libinkecho.so", 16 * 1024 * 1024)
+                return hashlib.sha256(library).hexdigest() == digest
+        except (OSError, ValueError, staging.StagingError):
+            return False
+
     def enable(self):
         system = self._system()
         if not self._check_staged(system[3]):
-            raise FcitxInstallError("未找到经过校验的输入桥，请先安装。")
-        self._run(
-            [
-                "/usr/bin/gdbus",
-                "call",
-                "--session",
-                "--dest",
-                "org.fcitx.Fcitx5",
-                "--object-path",
-                "/controller",
-                "--method",
-                "org.fcitx.Fcitx.Controller1.Refresh",
-            ]
-        )
+            if not self._can_restore_disabled():
+                raise FcitxInstallError("未找到经过校验的输入桥，请先安装。")
+            # Reuse normal staging, which never replaces another description
+            # or a library already mapped by the running input service.
+            try:
+                self.install()
+            except FcitxInstallError:
+                raise FcitxInstallError(
+                    "输入桥恢复未确认，加载配置可能已发布或改变；请检查输入服务状态。"
+                ) from None
+            if not self._check_staged(system[3]):
+                raise FcitxInstallError(
+                    "输入桥恢复未确认，加载配置可能已发布或改变；请检查输入服务状态。"
+                )
+        try:
+            self._run(
+                [
+                    "/usr/bin/gdbus",
+                    "call",
+                    "--session",
+                    "--dest",
+                    "org.fcitx.Fcitx5",
+                    "--object-path",
+                    "/controller",
+                    "--method",
+                    "org.fcitx.Fcitx.Controller1.Refresh",
+                ]
+            )
+        except FcitxInstallError:
+            # A timeout does not prove the remote action did not run. Never
+            # remove a potentially concurrent publication by pathname here.
+            raise FcitxInstallError(
+                "Fcitx5 刷新未确认，加载配置可能已保留或改变，插件状态未知；"
+                "请检查输入服务状态，必要时手动停用。"
+            ) from None
 
     def disable(self):
         try:

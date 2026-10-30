@@ -238,3 +238,194 @@ def test_missing_dbus_tool_does_not_claim_fcitx_is_missing(tmp_path):
     with pytest.raises(FcitxInstallError, match="服务不可用") as error:
         manager._run(["/usr/bin/gdbus", "call"])
     assert "安装 Fcitx5" not in str(error.value)
+
+
+def test_enable_restores_verified_bridge_after_disable(
+    tmp_path, monkeypatch, candidate_source
+):
+    data = tmp_path / "data"
+    data.mkdir(mode=0o700)
+    calls = []
+
+    def runner(args, **_kwargs):
+        calls.append(args)
+        return SimpleNamespace(
+            returncode=0, stdout="5.1.19" if args[-1] == "--version" else "()"
+        )
+
+    monkeypatch.setattr(
+        "platform.freedesktop_os_release",
+        lambda: {"ID": "ubuntu", "VERSION_ID": "26.04"},
+    )
+    monkeypatch.setattr("platform.machine", lambda: "x86_64")
+    manager = FcitxInstaller(source=candidate_source, data_home=data, runner=runner)
+    manager.install()
+    digest = staging.TESTED_CANDIDATE_SHA256
+    library = data / "inkecho/fcitx5" / digest / "libinkecho.so"
+    original_inode = library.stat().st_ino
+    manager.disable()
+    assert not manager.available_for_auto()
+    manager.enable()
+    assert manager.available_for_auto()
+    assert library.stat().st_ino == original_inode
+    assert sum("Refresh" in " ".join(call) for call in calls) == 1
+
+
+@pytest.mark.parametrize("failure", ["foreign", "symlink", "library", "source"])
+def test_reenable_never_overwrites_or_refreshes_unverified_files(
+    tmp_path, monkeypatch, candidate_source, failure
+):
+    data = tmp_path / "data"
+    data.mkdir(mode=0o700)
+    calls = []
+
+    def runner(args, **_kwargs):
+        calls.append(args)
+        return SimpleNamespace(
+            returncode=0, stdout="5.1.19" if args[-1] == "--version" else "()"
+        )
+
+    monkeypatch.setattr(
+        "platform.freedesktop_os_release",
+        lambda: {"ID": "ubuntu", "VERSION_ID": "26.04"},
+    )
+    monkeypatch.setattr("platform.machine", lambda: "x86_64")
+    manager = FcitxInstaller(source=candidate_source, data_home=data, runner=runner)
+    manager.install()
+    manager.disable()
+    description = data / "fcitx5/addon/inkecho.conf"
+    library = (
+        data / "inkecho/fcitx5" / staging.TESTED_CANDIDATE_SHA256 / "libinkecho.so"
+    )
+    foreign = tmp_path / "foreign"
+    foreign.write_text("foreign")
+    if failure == "foreign":
+        description.write_text("foreign")
+    elif failure == "symlink":
+        description.symlink_to(foreign)
+    elif failure == "library":
+        library.write_bytes(b"modified")
+    else:
+        (candidate_source / "candidate/libinkecho.so").write_bytes(b"modified")
+    with pytest.raises(FcitxInstallError):
+        manager.enable()
+    assert not any("Refresh" in " ".join(call) for call in calls)
+    assert foreign.read_text() == "foreign"
+    if failure == "foreign":
+        assert description.read_text() == "foreign"
+    elif failure == "symlink":
+        assert description.is_symlink()
+    else:
+        assert not description.exists()
+
+
+@pytest.mark.parametrize(
+    "mode", ["failure", "timeout", "replaced", "unlink_recreate", "preexisting"]
+)
+def test_failed_refresh_preserves_description_and_reports_unknown_state(
+    tmp_path, monkeypatch, candidate_source, mode
+):
+    import os
+    import subprocess
+
+    data = tmp_path / "data"
+    data.mkdir(mode=0o700)
+    calls = []
+    description = data / "fcitx5/addon/inkecho.conf"
+    replacement_inode = []
+
+    def runner(args, **_kwargs):
+        calls.append(args)
+        if args[-1] == "--version":
+            return SimpleNamespace(returncode=0, stdout="5.1.19")
+        if mode == "timeout":
+            raise subprocess.TimeoutExpired(args, 10)
+        if mode == "replaced":
+            replacement = description.with_name("replacement.conf")
+            replacement.write_bytes(description.read_bytes())
+            replacement_inode.append(replacement.stat().st_ino)
+            os.replace(replacement, description)
+        elif mode == "unlink_recreate":
+            content = description.read_bytes()
+            description.unlink()
+            description.write_bytes(content)
+            replacement_inode.append(description.stat().st_ino)
+        return SimpleNamespace(returncode=1, stdout="")
+
+    monkeypatch.setattr(
+        "platform.freedesktop_os_release",
+        lambda: {"ID": "ubuntu", "VERSION_ID": "26.04"},
+    )
+    monkeypatch.setattr("platform.machine", lambda: "x86_64")
+    manager = FcitxInstaller(source=candidate_source, data_home=data, runner=runner)
+    manager.install()
+    if mode != "preexisting":
+        manager.disable()
+    with pytest.raises(FcitxInstallError) as caught:
+        manager.enable()
+    assert sum("Refresh" in " ".join(call) for call in calls) == 1
+    assert "刷新未确认" in str(caught.value)
+    assert "配置可能已保留或改变" in str(caught.value)
+    assert "插件状态未知" in str(caught.value)
+    assert description.exists()
+    if mode in {"replaced", "unlink_recreate"}:
+        assert description.stat().st_ino == replacement_inode[0]
+
+
+@pytest.mark.parametrize("fault", ["directory_fsync", "temporary_unlink"])
+def test_reenable_reports_uncertain_post_publication_failure(
+    tmp_path, monkeypatch, candidate_source, fault
+):
+    import os
+
+    data = tmp_path / "data"
+    data.mkdir(mode=0o700)
+    calls = []
+
+    def runner(args, **_kwargs):
+        calls.append(args)
+        return SimpleNamespace(
+            returncode=0, stdout="5.1.19" if args[-1] == "--version" else "()"
+        )
+
+    monkeypatch.setattr(
+        "platform.freedesktop_os_release",
+        lambda: {"ID": "ubuntu", "VERSION_ID": "26.04"},
+    )
+    monkeypatch.setattr("platform.machine", lambda: "x86_64")
+    manager = FcitxInstaller(source=candidate_source, data_home=data, runner=runner)
+    manager.install()
+    manager.disable()
+    addon = data / "fcitx5/addon"
+    description = addon / "inkecho.conf"
+    real_fsync, real_unlink = os.fsync, os.unlink
+    triggered = []
+
+    def at_addon(fd):
+        return os.path.realpath(f"/proc/self/fd/{fd}") == str(addon)
+
+    def fsync(fd):
+        if fault == "directory_fsync" and at_addon(fd) and description.exists():
+            triggered.append(True)
+            raise OSError("injected directory fsync failure")
+        return real_fsync(fd)
+
+    def unlink(path, *, dir_fd=None):
+        if (
+            fault == "temporary_unlink"
+            and dir_fd is not None
+            and at_addon(dir_fd)
+            and str(path).startswith(".inkecho-")
+            and description.exists()
+        ):
+            triggered.append(True)
+            raise OSError("injected temporary unlink failure")
+        return real_unlink(path, dir_fd=dir_fd)
+
+    monkeypatch.setattr(os, "fsync", fsync)
+    monkeypatch.setattr(os, "unlink", unlink)
+    with pytest.raises(FcitxInstallError, match="恢复未确认.*可能已发布或改变"):
+        manager.enable()
+    assert triggered and description.exists()
+    assert manager.available_for_auto()
+    assert not any("Refresh" in " ".join(call) for call in calls)
