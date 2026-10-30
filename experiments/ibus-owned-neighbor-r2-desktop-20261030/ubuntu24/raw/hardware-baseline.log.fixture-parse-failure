@@ -1,0 +1,12 @@
+  File "/mnt/input/browser-native012.py", line 166
+    elif case.startswith('direct-')or case=='hardware-control':ok=d['a']==sample and d['b']==''
+                                                                                               ^
+IndentationError: unindent does not match any outer indentation level
+
+Traceback (most recent call last):
+  File "/mnt/input/launch-native012.py", line 9, in <module>
+    (O/'suite-exit.json').write_text(json.dumps({'returncode':r.returncode}));print((O/'suite.log').read_text());r.check_returncode()
+                                                                                                                 ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/subprocess.py", line 502, in check_returncode
+    raise CalledProcessError(self.returncode, self.args, self.stdout,
+subprocess.CalledProcessError: Command '['/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchpMnnpN/usr/bin/python3', '/mnt/input/browser-native012.py']' returned non-zero exit status 1.

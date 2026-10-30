@@ -1,0 +1,6 @@
+{
+  "command": "env DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus XDG_RUNTIME_DIR=/run/user/1000 /bin/sh -c 'ibus list-engine | grep -i libpinyin; gnome-extensions info inkecho-ibus-owned-v5-prototype@local.invalid'",
+  "returncode": 0,
+  "stdout": "  libpinyin - Intelligent Pinyin\ninkecho-ibus-owned-v5-prototype@local.invalid\n  Name: InkEcho bounded owned context candidate\n  Description: Optional InkEcho owned-context bridge; requires explicit installation and activation\n  Path: /home/inkecho/.local/share/gnome-shell/extensions/inkecho-ibus-owned-v5-prototype@local.invalid\n  Enabled: Yes\n  State: ACTIVE\n",
+  "stderr": ""
+}

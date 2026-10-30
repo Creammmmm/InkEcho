@@ -1,0 +1,10 @@
+[1030/015225.233467:WARNING:chrome/app/chrome_main_linux.cc:84] Read channel stable from /opt/inkecho-test-chrome/CHROME_VERSION_EXTRA
+{"method": "auto", "case": "mixed", "passed": true, "route": null, "received_lengths": [22, 0], "error": null}
+{"method": "auto", "case": "trailing-lf", "passed": true, "route": null, "received_lengths": [2, 0], "error": null}
+{"method": "auto", "case": "consecutive-tail", "passed": true, "route": null, "received_lengths": [3, 0], "error": null}
+{"method": "auto", "case": "synchronous", "passed": true, "route": null, "received_lengths": [7, 0], "error": {"code": "ibus_delivery_unknown"}}
+{"method": "auto", "case": "original-fallback", "passed": true, "route": null, "received_lengths": [7, 0], "error": {"code": "ibus_delivery_unknown"}}
+{"method": "auto", "case": "cancel", "passed": true, "route": null, "received_lengths": [1, 0], "error": {"code": "input_cancelled"}}
+{"method": "auto", "case": "pending-cancel", "passed": true, "route": null, "received_lengths": [0, 0], "error": null}
+{"method": "auto", "case": "prepare-switch", "passed": true, "route": null, "received_lengths": [0, 22], "error": null}
+{"method": "auto", "case": "switch", "passed": false, "route": null, "received_lengths": [1, 20], "error": null}

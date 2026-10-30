@@ -1,0 +1,11 @@
+{
+  "sources_before": "[('xkb', 'us')]",
+  "engine_before": "xkb:us::eng",
+  "rows": [],
+  "select": {
+    "returncode": 1,
+    "stdout": "",
+    "stderr": ""
+  },
+  "sources_after": "[('xkb', 'us')]"
+}

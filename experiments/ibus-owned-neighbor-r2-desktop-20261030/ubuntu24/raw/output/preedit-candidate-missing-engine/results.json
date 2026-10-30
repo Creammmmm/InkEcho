@@ -1,0 +1,11 @@
+{
+  "sources_before": "[('xkb', 'us')]",
+  "engine_before": "xkb:us::eng",
+  "rows": [],
+  "select": {
+    "returncode": 1,
+    "stdout": "",
+    "stderr": "\n(process:9064): IBUS-WARNING **: 01:54:15.390: ibus_bus_call_sync: org.freedesktop.IBus.SetGlobalEngine: GDBus.Error:org.freedesktop.DBus.Error.Failed: Cannot find engine libpinyin.\nSet global engine failed.\n"
+  },
+  "sources_after": "[('xkb', 'us')]"
+}

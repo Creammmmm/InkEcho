@@ -1,0 +1,5 @@
+import subprocess,json,sys,shlex
+from pathlib import Path
+b=Path('/home/lth/github/InkEcho/dist/ibus-owned-neighbor-r2-desktop-20261030/vm26');name='inkecho-owned-neighbor-r2-26-20261030'
+cmd=sys.argv[2];a=['docker','exec','-i',name,'ssh','-T','-i','/secrets/testkey','-p2222','-o','BatchMode=yes','-o','ConnectTimeout=8','-o','StrictHostKeyChecking=yes','-o','UserKnownHostsFile=/prior/known_hosts','inkecho@127.0.0.1',cmd]
+r=subprocess.run(a,capture_output=True,text=True);(b/(sys.argv[1]+'.json')).write_text(json.dumps({'command':cmd,'returncode':r.returncode,'stdout':r.stdout,'stderr':r.stderr},indent=2));print(r.returncode,r.stdout,r.stderr);sys.exit(r.returncode)

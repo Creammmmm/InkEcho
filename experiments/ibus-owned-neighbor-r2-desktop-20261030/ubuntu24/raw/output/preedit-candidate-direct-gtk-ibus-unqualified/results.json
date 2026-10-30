@@ -1,0 +1,33 @@
+{
+  "sources_before": "[('xkb', 'us')]",
+  "engine_before": "xkb:us::eng",
+  "rows": [],
+  "select": {
+    "returncode": 1,
+    "stdout": "",
+    "stderr": ""
+  },
+  "engine_selected": "libpinyin",
+  "before_output": {
+    "pid": 11048,
+    "active": true,
+    "focus": true,
+    "text": "",
+    "preedit": "你"
+  },
+  "probe": null,
+  "output_error": {
+    "kind": "KeyboardError",
+    "code": "unsupported_compositor"
+  },
+  "after_output": {
+    "pid": 11048,
+    "active": true,
+    "focus": true,
+    "text": "",
+    "preedit": "你"
+  },
+  "passed": true,
+  "actor_exit": -15,
+  "sources_after": "[('xkb', 'us')]"
+}

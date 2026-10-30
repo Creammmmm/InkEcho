@@ -1,0 +1,6 @@
+{
+  "command": "env DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus XDG_RUNTIME_DIR=/run/user/1000 /bin/sh -c 'ibus list-engine | grep -i pinyin; gsettings get org.gnome.desktop.input-sources sources; find /home/inkecho -maxdepth 2 -iname \"*actor*\" -o -iname \"*fixture*\"'",
+  "returncode": 0,
+  "stdout": "language: Pinyin\n[('xkb', 'us')]\n/home/inkecho/fcitx-owned24/actor.py\n/home/inkecho/fcitx-owned24/actor.log\n/home/inkecho/fcitx-owned24/fixture\n/home/inkecho/inkecho-pulse-fixture-r2\n/home/inkecho/fcitx-pinyin24/actor.py\n",
+  "stderr": ""
+}

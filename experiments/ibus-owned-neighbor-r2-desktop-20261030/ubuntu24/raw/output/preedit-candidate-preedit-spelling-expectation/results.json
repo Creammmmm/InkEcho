@@ -1,0 +1,20 @@
+{
+  "sources_before": "[('xkb', 'us')]",
+  "engine_before": "xkb:us::eng",
+  "rows": [],
+  "select": {
+    "returncode": 1,
+    "stdout": "",
+    "stderr": ""
+  },
+  "engine_selected": "libpinyin",
+  "before_output": {
+    "pid": 10722,
+    "active": true,
+    "focus": true,
+    "text": "",
+    "preedit": "你"
+  },
+  "actor_exit": -15,
+  "sources_after": "[('xkb', 'us')]"
+}

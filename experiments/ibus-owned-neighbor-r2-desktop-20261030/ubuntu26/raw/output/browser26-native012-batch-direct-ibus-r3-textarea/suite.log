@@ -1,0 +1,15 @@
+[1030/020328.468556:WARNING:chrome/app/chrome_main_linux.cc:84] Read channel stable from /opt/inkecho-qa-chrome/CHROME_VERSION_EXTRA
+{"method": "auto", "case": "mixed", "passed": true, "route": null, "received_lengths": [22, 0], "error": null}
+{"method": "auto", "case": "leading-lf", "passed": true, "route": null, "received_lengths": [2, 0], "error": null}
+{"method": "auto", "case": "trailing-lf", "passed": true, "route": null, "received_lengths": [2, 0], "error": null}
+{"method": "auto", "case": "consecutive-tail", "passed": true, "route": null, "received_lengths": [3, 0], "error": null}
+{"method": "auto", "case": "pure-three-tail", "passed": true, "route": null, "received_lengths": [4, 0], "error": null}
+{"method": "auto", "case": "direct-two-lf", "passed": true, "route": null, "received_lengths": [2, 0], "error": {"code": "ibus_delivery_unknown"}}
+{"method": "auto", "case": "direct-three-lf", "passed": true, "route": null, "received_lengths": [3, 0], "error": {"code": "ibus_delivery_unknown"}}
+{"method": "auto", "case": "direct-solo-lf", "passed": true, "route": null, "received_lengths": [0, 0], "error": {"code": "ibus_unsupported_text"}}
+{"method": "auto", "case": "synchronous", "passed": true, "route": null, "received_lengths": [7, 0], "error": {"code": "ibus_delivery_unknown"}}
+{"method": "auto", "case": "original-fallback", "passed": true, "route": null, "received_lengths": [7, 0], "error": {"code": "ibus_delivery_unknown"}}
+{"method": "auto", "case": "cancel", "passed": true, "route": null, "received_lengths": [1, 0], "error": {"code": "ibus_cancelled"}}
+{"method": "auto", "case": "pending-cancel", "passed": true, "route": null, "received_lengths": [0, 0], "error": null}
+{"method": "auto", "case": "prepare-switch", "passed": true, "route": null, "received_lengths": [0, 22], "error": null}
+{"method": "auto", "case": "switch", "passed": true, "route": null, "received_lengths": [1, 21], "error": null}

@@ -1,0 +1,40 @@
+[
+  {
+    "request": {
+      "sequence": 1,
+      "keyval": 110,
+      "actor": {
+        "pid": 11892,
+        "active": true,
+        "focus": true,
+        "text": "",
+        "preedit": ""
+      },
+      "state": "/run/user/1000/inkecho-neighbor-preedit-g1epeqh4/actor.json",
+      "cmdline": "preedit-actor.py"
+    },
+    "guard_returncode": 0,
+    "qmp_returncode": 0,
+    "stdout": "{\"ok\": true, \"key\": \"110\"}\n",
+    "stderr": ""
+  },
+  {
+    "request": {
+      "sequence": 2,
+      "keyval": 105,
+      "actor": {
+        "pid": 11892,
+        "active": true,
+        "focus": true,
+        "text": "",
+        "preedit": "\u5e74"
+      },
+      "state": "/run/user/1000/inkecho-neighbor-preedit-g1epeqh4/actor.json",
+      "cmdline": "preedit-actor.py"
+    },
+    "guard_returncode": 0,
+    "qmp_returncode": 0,
+    "stdout": "{\"ok\": true, \"key\": \"105\"}\n",
+    "stderr": ""
+  }
+]

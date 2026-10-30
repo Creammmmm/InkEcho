@@ -1,0 +1,25 @@
+Traceback (most recent call last):
+  File "/mnt/input/preedit-candidate.py", line 38, in <module>
+    asyncio.run(main())
+    ~~~~~~~~~~~^^^^^^^^
+  File "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchpMnnpN/usr/lib/python3.13/asyncio/runners.py", line 196, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchpMnnpN/usr/lib/python3.13/asyncio/runners.py", line 119, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchpMnnpN/usr/lib/python3.13/asyncio/base_events.py", line 726, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/mnt/input/preedit-candidate.py", line 27, in main
+    before_state=json.loads(state.read_text());report['before_output']=before_state;assert before_state['preedit']=='ni'and before_state['text']==''
+                                                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+
+Traceback (most recent call last):
+  File "/mnt/input/launch-preedit.py", line 9, in <module>
+    (O/'suite-exit.json').write_text(json.dumps({'returncode':r.returncode}));print((O/'suite.log').read_text());r.check_returncode()
+                                                                                                                 ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/subprocess.py", line 502, in check_returncode
+    raise CalledProcessError(self.returncode, self.args, self.stdout,
+subprocess.CalledProcessError: Command '['/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchpMnnpN/usr/bin/python3', '/mnt/input/preedit-candidate.py']' returned non-zero exit status 1.

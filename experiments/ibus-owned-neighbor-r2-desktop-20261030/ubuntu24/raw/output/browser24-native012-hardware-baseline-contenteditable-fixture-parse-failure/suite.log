@@ -1,0 +1,4 @@
+  File "/mnt/input/browser-native012.py", line 166
+    elif case.startswith('direct-')or case=='hardware-control':ok=d['a']==sample and d['b']==''
+                                                                                               ^
+IndentationError: unindent does not match any outer indentation level

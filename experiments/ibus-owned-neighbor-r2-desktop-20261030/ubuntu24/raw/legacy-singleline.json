@@ -1,0 +1,6 @@
+{
+  "command": "env INKECHO_OUTPUT_STAGE=wayland RUN_LABEL=legacy-direct-ibus-singleline OWNED_IM=ibus ACTIVE_FCITX=0 NATIVE_IME=1 SINGLE_LINE=1 CASES=mixed /usr/bin/python3 /mnt/input/launch-native012.py",
+  "returncode": 0,
+  "stdout": "[1030/014734.990597:WARNING:chrome/app/chrome_main_linux.cc:84] Read channel stable from /opt/inkecho-test-chrome/CHROME_VERSION_EXTRA\n{\"method\": \"auto\", \"case\": \"mixed\", \"passed\": true, \"route\": null, \"received_lengths\": [21, 0], \"error\": null}\n\n",
+  "stderr": ""
+}

@@ -1,0 +1,20 @@
+from pathlib import Path
+import os,json,shutil,subprocess
+repo=Path('/home/lth/github/InkEcho');root=repo/'dist/ibus-owned-neighbor-r2-desktop-20261030';b=root/'vm26';b.mkdir();(b/'output').mkdir(mode=0o700);old=repo/'dist/chrome26-native-0.12.0-20261030';inp=b/'input';shutil.copytree(root/'vm24/input',inp,copy_function=os.link)
+def write(p,s):
+ t=p.with_suffix(p.suffix+'.new');t.write_text(s);t.replace(p)
+for n in ['chrome_program.py','sandbox-proc.py','qemu.json']:
+ write(inp/n,(old/'input'/n).read_text())
+write(inp/'wrapper.py',(old/'input/wrapper.py').read_text().replace('8d29dbc6ef562a2c281f9d6986f97383d3e22e81f79e7631e378ecd9f6f759cc','672f7d3bd9f6d1e05e400cbdc0edbbbae34afe225e254005f37c5c196dfe1281'))
+write(inp/'browser-native012.py',(inp/'browser-native012.py').read_text().replace('/opt/inkecho-test-chrome','/opt/inkecho-qa-chrome').replace('browser24-native012-','browser26-native012-'))
+write(inp/'launch-native012.py',(inp/'launch-native012.py').read_text().replace('browser24-native012-','browser26-native012-'))
+stage=(inp/'stage-candidate.py').read_text();stage=stage.replace("old={p.name:","old={p.name:") # stage separately handles an absent complete legacy installation.
+stage=stage.replace("for p in root.iterdir()if p.is_file()};assert old==LEGACY_FILES and verified_installation()", "for p in root.iterdir()if p.is_file()}if root.exists()else {};assert not old or (old==LEGACY_FILES and verified_installation())")
+stage=stage.replace("backup=out/'original-v5-assets';shutil.copytree(root,backup);subprocess.run(['/usr/bin/gnome-extensions','disable',root.name],check=True)","backup=out/'original-v5-assets'\nif old:shutil.copytree(root,backup);subprocess.run(['/usr/bin/gnome-extensions','disable',root.name],check=True)")
+stage=stage.replace("shutil.move(root,str(Path('/run/user/1000')/'original-v5-disabled'))", "if old:shutil.move(root,str(Path('/run/user/1000')/'original-v5-disabled'))")
+write(inp/'stage-candidate.py',stage)
+a=json.loads((old/'launch.json').read_text());a[a.index('--name')+1]='inkecho-owned-neighbor-r2-26-20261030'
+for i,x in enumerate(a):
+ if x=='type=bind,src='+str(repo/'dist/candidate-0.12.0-895d03b-20261030/vm26/output')+',dst=/snapshot,readonly':a[i]='type=bind,src='+str(old/'output')+',dst=/snapshot,readonly'
+ elif str(old)in x:a[i]=x.replace(str(old),str(b))
+(b/'launch.json').write_text(json.dumps(a,indent=2));print('26 prepared, not launched')

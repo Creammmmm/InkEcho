@@ -1,0 +1,6 @@
+{
+  "command": "systemctl --user show-environment | grep -E \"XDG_SESSION_TYPE|WAYLAND_DISPLAY\"",
+  "returncode": 255,
+  "stdout": "",
+  "stderr": "ssh: connect to host 127.0.0.1 port 2222: Connection refused\n"
+}

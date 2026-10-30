@@ -1,0 +1,421 @@
+{
+  "artifact_sha256": "7488566c708d3fc12de665d35dfc7c26a1902908c9fec63e3c905b1446757a78",
+  "appdir": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchnOoIKb",
+  "test_scope": "published 0.12.0 runtime and staged Fcitx addon, candidate R2 source overlay and JS; NOT unchanged package qualification; actual Session/default Router; synthetic Recorder/provider only",
+  "browser_profile_new": "/run/user/1000/inkecho-browser-32uhj5st/chrome-profile",
+  "sandbox_disabled_in_isolated_vm": false,
+  "field": "contenteditable",
+  "system": "Ubuntu 26.04.1 LTS",
+  "session": "wayland",
+  "desktop": "ubuntu:GNOME",
+  "cases": [
+    {
+      "method": "auto",
+      "case": "keyboard-first",
+      "sample": "a\n",
+      "initial_focus": "a",
+      "neighbor_batch_after_session_close": false,
+      "session": {
+        "route": null,
+        "outcome": "succeeded",
+        "metrics_characters": null,
+        "reported_characters": 2,
+        "outcomes": [
+          {
+            "characters": 2
+          }
+        ],
+        "deltas": [
+          {
+            "index": 0,
+            "monotonic": 355.595918515
+          },
+          {
+            "index": 1,
+            "monotonic": 355.621332412
+          }
+        ],
+        "dispatches": [
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 355.595971499,
+            "route_before": "keyboard",
+            "first_sent_at": 355.665615259,
+            "protocol": null,
+            "route_after": "keyboard",
+            "backend_type": "HybridKeyboardInput",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": true,
+            "at": 355.678471345,
+            "route_before": "keyboard",
+            "first_sent_at": 355.682747939,
+            "protocol": null,
+            "route_after": "keyboard",
+            "backend_type": "HybridKeyboardInput",
+            "native_attempts": null
+          }
+        ],
+        "input_failure": null,
+        "error_code": null
+      },
+      "sent": 2,
+      "route": null,
+      "cancel_requested": false,
+      "first_dom": {
+        "a": "a\n\n",
+        "b": "",
+        "a_html": "a<div><br></div>",
+        "a_text": "a",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "a",
+            "code": "IntlYen",
+            "time": 1836.5
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "a",
+            "inputType": "insertText",
+            "time": 1837
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 1838.5
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": "a",
+            "code": "IntlYen",
+            "time": 1840.2000000000116
+          },
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "Enter",
+            "code": "Enter",
+            "time": 1852.2000000000116
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": null,
+            "inputType": "insertParagraph",
+            "time": 1852.4000000000233
+          },
+          {
+            "id": "a",
+            "len": 3,
+            "type": "input",
+            "time": 1852.600000000035
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": "Enter",
+            "code": "Enter",
+            "time": 1852.7999999999884
+          }
+        ]
+      },
+      "last_dom": {
+        "a": "a\n\n",
+        "b": "",
+        "a_html": "a<div><br></div>",
+        "a_text": "a",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "a",
+            "code": "IntlYen",
+            "time": 1836.5
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "a",
+            "inputType": "insertText",
+            "time": 1837
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 1838.5
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": "a",
+            "code": "IntlYen",
+            "time": 1840.2000000000116
+          },
+          {
+            "id": "a",
+            "type": "keydown",
+            "key": "Enter",
+            "code": "Enter",
+            "time": 1852.2000000000116
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": null,
+            "inputType": "insertParagraph",
+            "time": 1852.4000000000233
+          },
+          {
+            "id": "a",
+            "len": 3,
+            "type": "input",
+            "time": 1852.600000000035
+          },
+          {
+            "id": "a",
+            "type": "keyup",
+            "key": "Enter",
+            "code": "Enter",
+            "time": 1852.7999999999884
+          }
+        ]
+      },
+      "no_late": true,
+      "passed": false,
+      "received_lengths": [
+        3,
+        0
+      ]
+    }
+  ],
+  "failures": [],
+  "requested_im_environment": "ibus",
+  "private_fcitx_daemon_requested": false,
+  "fcitx_attempts": [],
+  "owned_requests": [],
+  "fcitx_observer_only": true,
+  "native_candidate_test_only_override": false,
+  "browser_resource_audit": {
+    "root": "/opt/inkecho-qa-chrome",
+    "program_files": 255,
+    "payload_bytes": 456937066,
+    "manifest_sha256": "01c5c6683bdd5e143b456a5d44b54e56e2b5d5249d3789f80b085a08b626eec4",
+    "wrapper_sha256": "51c3c7ae61c640f573e15a33de080bc481693c6d04375259654d2e92a0621d76",
+    "binary_sha256": "6c792041b07547a662e1b17974d1dc34a3db630379b45d9d89ddd7e3e68cc587",
+    "sandbox_sha256": "24beb85e4149c65db5bf40fa307721143d0883ab8952e60dde1158606f644dee",
+    "sandbox_uid": 0,
+    "sandbox_gid": 0,
+    "sandbox_mode": "0o4755",
+    "sandbox_runtime_acceptance": "not inferred from resource audit"
+  },
+  "browser_version": "Google Chrome 154.0.8037.97",
+  "browser_argv": [
+    "/opt/inkecho-qa-chrome/chrome",
+    "--password-store=basic",
+    "--no-first-run",
+    "--no-default-browser-check",
+    "--disable-background-networking",
+    "--disable-sync",
+    "--ozone-platform=wayland",
+    "--gtk-version=3",
+    "--remote-debugging-port=0",
+    "--remote-allow-origins=*",
+    "--user-data-dir=/run/user/1000/inkecho-browser-32uhj5st/chrome-profile",
+    "file:///run/user/1000/inkecho-browser-32uhj5st/owned.html",
+    "--enable-wayland-ime",
+    "--wayland-text-input-version=3"
+  ],
+  "focus_proofs": [
+    {
+      "label": "native-before-output",
+      "pid": 7363,
+      "native": {
+        "surface": true,
+        "toplevel": true,
+        "keyboard_enter": true
+      },
+      "display_unset": true,
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-32uhj5st/owned.html",
+        "visible": "visible"
+      },
+      "sampled_monotonic": 354.499718297
+    },
+    {
+      "label": "auto-keyboard-first-before-prepare",
+      "pid": 7363,
+      "native": {
+        "surface": true,
+        "toplevel": true,
+        "keyboard_enter": true
+      },
+      "display_unset": true,
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-32uhj5st/owned.html",
+        "visible": "visible"
+      },
+      "sampled_monotonic": 355.307822386
+    }
+  ],
+  "sandbox_metadata_probe": {
+    "returncode": 0,
+    "stdout": "[{\"pid\": 7546, \"owned_parent_chain\": [7546, 7379, 7376, 7375], \"seccomp\": \"2\", \"no_new_privs\": \"1\", \"namespace_pids\": [\"7546\", \"37\"]}, {\"pid\": 7535, \"owned_parent_chain\": [7535, 7379, 7376, 7375], \"seccomp\": \"2\", \"no_new_privs\": \"1\", \"namespace_pids\": [\"7535\", \"35\"]}, {\"pid\": 7515, \"owned_parent_chain\": [7515, 7379, 7376, 7375], \"seccomp\": \"2\", \"no_new_privs\": \"1\", \"namespace_pids\": [\"7515\", \"22\"]}, {\"pid\": 7550, \"owned_parent_chain\": [7550, 7379, 7376, 7375], \"seccomp\": \"2\", \"no_new_privs\": \"1\", \"namespace_pids\": [\"7550\", \"38\"]}, {\"pid\": 7442, \"owned_parent_chain\": [7442, 7379, 7376, 7375], \"seccomp\": \"2\", \"no_new_privs\": \"1\", \"namespace_pids\": [\"7442\", \"12\"]}]\n",
+    "stderr": "",
+    "guest_root_readonly": true
+  },
+  "sandbox_renderers": [
+    {
+      "pid": 7546,
+      "owned_parent_chain": [
+        7546,
+        7379,
+        7376,
+        7375
+      ],
+      "seccomp": "2",
+      "no_new_privs": "1",
+      "namespace_pids": [
+        "7546",
+        "37"
+      ]
+    },
+    {
+      "pid": 7535,
+      "owned_parent_chain": [
+        7535,
+        7379,
+        7376,
+        7375
+      ],
+      "seccomp": "2",
+      "no_new_privs": "1",
+      "namespace_pids": [
+        "7535",
+        "35"
+      ]
+    },
+    {
+      "pid": 7515,
+      "owned_parent_chain": [
+        7515,
+        7379,
+        7376,
+        7375
+      ],
+      "seccomp": "2",
+      "no_new_privs": "1",
+      "namespace_pids": [
+        "7515",
+        "22"
+      ]
+    },
+    {
+      "pid": 7550,
+      "owned_parent_chain": [
+        7550,
+        7379,
+        7376,
+        7375
+      ],
+      "seccomp": "2",
+      "no_new_privs": "1",
+      "namespace_pids": [
+        "7550",
+        "38"
+      ]
+    },
+    {
+      "pid": 7442,
+      "owned_parent_chain": [
+        7442,
+        7379,
+        7376,
+        7375
+      ],
+      "seccomp": "2",
+      "no_new_privs": "1",
+      "namespace_pids": [
+        "7442",
+        "12"
+      ]
+    }
+  ],
+  "browser_fcitx_module_maps": [],
+  "loaded_api": "node /io/github/Creammmmm/InkEcho/IBusOwnedCandidateV5 {\n  interface org.freedesktop.DBus.Properties {\n    methods:\n      Get(in  s interface_name,\n          in  s property_name,\n          out v value);\n      GetAll(in  s interface_name,\n             out a{sv} properties);\n      Set(in  s interface_name,\n          in  s property_name,\n          in  v value);\n    signals:\n      PropertiesChanged(s interface_name,\n                        a{sv} changed_properties,\n                        as invalidated_properties);\n    properties:\n  };\n  interface org.freedesktop.DBus.Introspectable {\n    methods:\n      Introspect(out s xml_data);\n    signals:\n    properties:\n  };\n  interface org.freedesktop.DBus.Peer {\n    methods:\n      Ping();\n      GetMachineId(out s machine_uuid);\n    signals:\n    properties:\n  };\n  interface io.github.Creammmmm.InkEcho.IBusOwnedCandidateV51 {\n    methods:\n      Probe(out s arg_0);\n      Begin(in  s arg_0,\n            in  s arg_1,\n            out b arg_2);\n      Commit(in  u arg_0,\n             in  s arg_1,\n             out s arg_2);\n      BeginBatch(in  s arg_0,\n                 in  s arg_1,\n                 in  u arg_2,\n                 out b arg_3);\n      CommitBatch(in  u arg_0,\n                  in  s arg_1,\n                  out s arg_2);\n      Cancel(out b arg_0);\n    signals:\n    properties:\n  };\n};\n",
+  "app_xdg_data_home": null,
+  "app_home": "/home/inkecho",
+  "owned_installation_state": "enabled",
+  "owned_context_probe": [
+    "ibus",
+    ":1.8"
+  ],
+  "browser_normal_close": true,
+  "passed": false,
+  "browser_exit": 0,
+  "hints_restored": true,
+  "native_protocol_proof": {
+    "surface": true,
+    "toplevel": true,
+    "keyboard_enter": true
+  },
+  "startup_diagnostics": [
+    "\n",
+    "DevTools listening on ws://127.0.0.1:33659/devtools/browser/fca7c009-a52c-4388-8d52-94c542c0b6be\n",
+    "libva error: /usr/lib/x86_64-linux-gnu/dri/virtio_gpu_drv_video.so init failed\n",
+    "[7406:7406:1030/020705.019864:ERROR:media/gpu/vaapi/vaapi_wrapper.cc:1801] vaInitialize failed: resource allocation failed\n",
+    "\n",
+    "\", 2, 2)\n"
+  ],
+  "candidate_source_manifest_sha256": "78cd37b7944d78e48730617b56bfa53dd70edc22e45b695ec8218bdf9886d684",
+  "package_module_origins": {
+    "inkecho.platform.fcitx5_staging": "/mnt/input/candidate-src/inkecho/platform/fcitx5_staging.py",
+    "inkecho.platform.fcitx5_install": "/mnt/input/candidate-src/inkecho/platform/fcitx5_install.py",
+    "inkecho.platform.framework_detection": "/mnt/input/candidate-src/inkecho/platform/framework_detection.py",
+    "inkecho.platform.ibus_lifecycle": "/mnt/input/candidate-src/inkecho/platform/ibus_lifecycle.py",
+    "inkecho.platform.ibus": "/mnt/input/candidate-src/inkecho/platform/ibus.py",
+    "inkecho.text_units": "/mnt/input/candidate-src/inkecho/text_units.py",
+    "inkecho.platform.ibus_owned": "/mnt/input/candidate-src/inkecho/platform/ibus_owned.py",
+    "inkecho.platform.fcitx5_capability": "/mnt/input/candidate-src/inkecho/platform/fcitx5_capability.py",
+    "inkecho.platform.fcitx5": "/mnt/input/candidate-src/inkecho/platform/fcitx5.py",
+    "inkecho.platform.output_pacing": "/mnt/input/candidate-src/inkecho/platform/output_pacing.py",
+    "inkecho.platform.keyboard": "/mnt/input/candidate-src/inkecho/platform/keyboard.py",
+    "inkecho.text_normalization": "/mnt/input/candidate-src/inkecho/text_normalization.py",
+    "inkecho.platform.output_router": "/mnt/input/candidate-src/inkecho/platform/output_router.py",
+    "inkecho.platform.ibus_owned_auto": "/mnt/input/candidate-src/inkecho/platform/ibus_owned_auto.py",
+    "inkecho.platform.owned_installation": "/mnt/input/candidate-src/inkecho/platform/owned_installation.py",
+    "inkecho.platform.ibus_owned_default": "/mnt/input/candidate-src/inkecho/platform/ibus_owned_default.py",
+    "inkecho.platform.wayland_keyboard": "/mnt/input/candidate-src/inkecho/platform/wayland_keyboard.py",
+    "inkecho.config": "/mnt/input/candidate-src/inkecho/config.py",
+    "inkecho.provider_catalog": "/mnt/input/candidate-src/inkecho/provider_catalog.py",
+    "inkecho.providers": "/mnt/input/candidate-src/inkecho/providers.py",
+    "inkecho.audio": "/mnt/input/candidate-src/inkecho/audio.py",
+    "inkecho.core": "/mnt/input/candidate-src/inkecho/core.py",
+    "inkecho.performance": "/mnt/input/candidate-src/inkecho/performance.py",
+    "inkecho.realtime": "/mnt/input/candidate-src/inkecho/realtime.py",
+    "inkecho.security": "/mnt/input/candidate-src/inkecho/security.py",
+    "inkecho.streaming_output": "/mnt/input/candidate-src/inkecho/streaming_output.py",
+    "inkecho.app": "/mnt/input/candidate-src/inkecho/app.py",
+    "inkecho.platform.hybrid_keyboard": "/mnt/input/candidate-src/inkecho/platform/hybrid_keyboard.py"
+  }
+}

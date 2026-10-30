@@ -1,0 +1,54 @@
+{
+  "24": {
+    "candidate_source_manifest_sha256": "78cd37b7944d78e48730617b56bfa53dd70edc22e45b695ec8218bdf9886d684",
+    "runtime_sha256": "7488566c708d3fc12de665d35dfc7c26a1902908c9fec63e3c905b1446757a78",
+    "independent_archive_stream_verified": true,
+    "archive": {
+      "original_bytes": 320929792,
+      "original_sha256": "47a1a71777cd2834cab97d1136fe0d5338129c4c3b7e92793850fa9b38e168be",
+      "archive_bytes": 80998431,
+      "archive_sha256": "25482f80a79b04107a95e9e3c120a9906de0a58020388869b9b9330c4520ba5c",
+      "full_stream_verified": true,
+      "qemu_exit": 0
+    },
+    "final_container": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 0,
+      "Error": "",
+      "StartedAt": "2026-10-30T01:45:06.82599447Z",
+      "FinishedAt": "2026-10-30T02:00:37.298853329Z"
+    }
+  },
+  "26": {
+    "candidate_source_manifest_sha256": "78cd37b7944d78e48730617b56bfa53dd70edc22e45b695ec8218bdf9886d684",
+    "runtime_sha256": "7488566c708d3fc12de665d35dfc7c26a1902908c9fec63e3c905b1446757a78",
+    "independent_archive_stream_verified": true,
+    "archive": {
+      "original_bytes": 377618432,
+      "original_sha256": "74bd5a2c9b717427d2953dc35a91ccb55796a154d3881289c70b83163c54bdfa",
+      "archive_bytes": 130432592,
+      "archive_sha256": "b97e715397ddf57183569c948ed76d9124698aff40eb9d9531cf1e005633a3c1",
+      "full_stream_verified": true,
+      "qemu_exit": 0
+    },
+    "final_container": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 0,
+      "Error": "",
+      "StartedAt": "2026-10-30T02:01:09.84275228Z",
+      "FinishedAt": "2026-10-30T02:08:21.779850033Z"
+    }
+  }
+}

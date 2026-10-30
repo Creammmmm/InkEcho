@@ -1,0 +1,60 @@
+[
+  {
+    "request": {
+      "sequence": 1,
+      "keyval": 97,
+      "pid": 11376,
+      "profile": "/run/user/1000/inkecho-browser-415h6ikr/chrome-profile",
+      "proof": {
+        "label": "hardware-1",
+        "pid": 11376,
+        "native": {
+          "surface": true,
+          "toplevel": true,
+          "keyboard_enter": true
+        },
+        "display_unset": true,
+        "dom": {
+          "focus": true,
+          "active": "a",
+          "url": "file:///run/user/1000/inkecho-browser-415h6ikr/owned.html",
+          "visible": "visible"
+        },
+        "sampled_monotonic": 817.762555456
+      }
+    },
+    "guard_returncode": 0,
+    "qmp_returncode": 0,
+    "stdout": "{\"ok\": true, \"key\": \"97\"}\n",
+    "stderr": ""
+  },
+  {
+    "request": {
+      "sequence": 2,
+      "keyval": 65293,
+      "pid": 11376,
+      "profile": "/run/user/1000/inkecho-browser-415h6ikr/chrome-profile",
+      "proof": {
+        "label": "hardware-2",
+        "pid": 11376,
+        "native": {
+          "surface": true,
+          "toplevel": true,
+          "keyboard_enter": true
+        },
+        "display_unset": true,
+        "dom": {
+          "focus": true,
+          "active": "a",
+          "url": "file:///run/user/1000/inkecho-browser-415h6ikr/owned.html",
+          "visible": "visible"
+        },
+        "sampled_monotonic": 818.424543131
+      }
+    },
+    "guard_returncode": 0,
+    "qmp_returncode": 0,
+    "stdout": "{\"ok\": true, \"key\": \"65293\"}\n",
+    "stderr": ""
+  }
+]

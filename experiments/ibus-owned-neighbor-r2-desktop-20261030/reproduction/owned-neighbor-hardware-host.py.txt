@@ -1,0 +1,17 @@
+import subprocess,json,time,shlex
+from pathlib import Path
+b=Path('/home/lth/github/InkEcho/dist/ibus-owned-neighbor-r2-desktop-20261030/vm24');name='inkecho-owned-neighbor-r2-24-20261030'
+ssh=['docker','exec','-i',name,'ssh','-T','-i','/secrets/testkey','-p2222','-o','BatchMode=yes','-o','ConnectTimeout=8','-o','StrictHostKeyChecking=yes','-o','UserKnownHostsFile=/prior/known_hosts','inkecho@127.0.0.1']
+log=(b/'hardware-baseline.log').open('w');p=subprocess.Popen(ssh+["env INKECHO_OUTPUT_STAGE=wayland RUN_LABEL=hardware-baseline OWNED_IM=ibus ACTIVE_FCITX=0 NATIVE_IME=1 OWNED_FIELD=contenteditable CASES=hardware-control TEST_SAMPLE='a\n' /usr/bin/python3 /mnt/input/launch-native012.py"],stdout=log,stderr=subprocess.STDOUT);last=0;rows=[];start=time.monotonic()
+while p.poll()is None:
+ f=b/'output/browser24-native012-hardware-baseline-contenteditable/key-request.json'
+ if f.exists():
+  r=json.loads(f.read_text())
+  if r['sequence']>last:
+   pid=r['pid'];assert r['keyval']in {97,65293} and r['proof']['dom']['focus']and r['proof']['dom']['active']=='a'and all(r['proof']['native'].values());guard='import pathlib;cmd=pathlib.Path("/proc/'+str(pid)+'/cmdline").read_bytes();assert b"--ozone-platform=wayland"in cmd and '+repr(('--user-data-dir='+r['profile']).encode())+' in cmd;assert pathlib.Path("/proc/'+str(pid)+'/exe").resolve()==pathlib.Path("/opt/inkecho-test-chrome/chrome")'
+
+   c=subprocess.run(ssh+['/usr/bin/python3 -c '+shlex.quote(guard)],capture_output=True,text=True,timeout=10);assert c.returncode==0,(c.stdout,c.stderr)
+   k=subprocess.run(['docker','exec',name,'python3','/input/qmp-key.py',str(r['keyval'])],capture_output=True,text=True,timeout=5);rows.append({'request':r,'guard_returncode':c.returncode,'qmp_returncode':k.returncode,'stdout':k.stdout,'stderr':k.stderr});(b/'hardware-baseline-keys.json').write_text(json.dumps(rows,indent=2));a=f.with_name('key-ack.tmp');a.write_text(json.dumps({'sequence':r['sequence'],'ok':k.returncode==0}));a.replace(f.with_name('key-ack.json'));last=r['sequence']
+ if time.monotonic()-start>65:p.terminate();raise TimeoutError('bounded test')
+ time.sleep(.05)
+rc=p.wait();log.close();(b/'hardware-baseline-exit.json').write_text(json.dumps({'returncode':rc}));print(rc,(b/'hardware-baseline.log').read_text())

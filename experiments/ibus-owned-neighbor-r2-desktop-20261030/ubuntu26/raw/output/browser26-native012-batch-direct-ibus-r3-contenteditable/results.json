@@ -1,0 +1,4808 @@
+{
+  "artifact_sha256": "7488566c708d3fc12de665d35dfc7c26a1902908c9fec63e3c905b1446757a78",
+  "appdir": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchnOoIKb",
+  "test_scope": "published 0.12.0 runtime and staged Fcitx addon, candidate R2 source overlay and JS; NOT unchanged package qualification; actual Session/default Router; synthetic Recorder/provider only",
+  "browser_profile_new": "/run/user/1000/inkecho-browser-n8923n42/chrome-profile",
+  "sandbox_disabled_in_isolated_vm": false,
+  "field": "contenteditable",
+  "system": "Ubuntu 26.04.1 LTS",
+  "session": "wayland",
+  "desktop": "ubuntu:GNOME",
+  "cases": [
+    {
+      "method": "auto",
+      "case": "mixed",
+      "sample": "你好 InkEcho，café Ω\n第二行。",
+      "initial_focus": "a",
+      "neighbor_batch_after_session_close": false,
+      "session": {
+        "route": null,
+        "outcome": "unconfirmed",
+        "metrics_characters": null,
+        "reported_characters": 22,
+        "outcomes": [
+          {
+            "characters": 22
+          }
+        ],
+        "deltas": [
+          {
+            "index": 0,
+            "monotonic": 214.614861846
+          },
+          {
+            "index": 1,
+            "monotonic": 214.640806368
+          },
+          {
+            "index": 2,
+            "monotonic": 214.665958506
+          },
+          {
+            "index": 3,
+            "monotonic": 214.691784838
+          },
+          {
+            "index": 4,
+            "monotonic": 214.717846655
+          },
+          {
+            "index": 5,
+            "monotonic": 214.74299866
+          },
+          {
+            "index": 6,
+            "monotonic": 214.768286652
+          },
+          {
+            "index": 7,
+            "monotonic": 214.794079392
+          },
+          {
+            "index": 8,
+            "monotonic": 214.819319094
+          },
+          {
+            "index": 9,
+            "monotonic": 214.844673256
+          },
+          {
+            "index": 10,
+            "monotonic": 214.870049119
+          },
+          {
+            "index": 11,
+            "monotonic": 214.896244677
+          },
+          {
+            "index": 12,
+            "monotonic": 214.921894218
+          },
+          {
+            "index": 13,
+            "monotonic": 214.947630291
+          },
+          {
+            "index": 14,
+            "monotonic": 214.973224241
+          },
+          {
+            "index": 15,
+            "monotonic": 214.999066393
+          },
+          {
+            "index": 16,
+            "monotonic": 215.024693171
+          },
+          {
+            "index": 17,
+            "monotonic": 215.05077889
+          },
+          {
+            "index": 18,
+            "monotonic": 215.077105841
+          },
+          {
+            "index": 19,
+            "monotonic": 215.103029042
+          },
+          {
+            "index": 20,
+            "monotonic": 215.129216252
+          },
+          {
+            "index": 21,
+            "monotonic": 215.155127922
+          }
+        ],
+        "dispatches": [
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 214.64554191,
+            "route_before": "ibus",
+            "first_sent_at": 214.646217945,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 214.665992023,
+            "route_before": "ibus",
+            "first_sent_at": 214.667526744,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 214.69186698,
+            "route_before": "ibus",
+            "first_sent_at": 214.695114031,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 214.717934452,
+            "route_before": "ibus",
+            "first_sent_at": 214.721304879,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 214.743095891,
+            "route_before": "ibus",
+            "first_sent_at": 214.74649917,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 214.768373921,
+            "route_before": "ibus",
+            "first_sent_at": 214.772167319,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 214.794190797,
+            "route_before": "ibus",
+            "first_sent_at": 214.798378413,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 214.819379896,
+            "route_before": "ibus",
+            "first_sent_at": 214.821253282,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 214.844738141,
+            "route_before": "ibus",
+            "first_sent_at": 214.848249945,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 214.870123934,
+            "route_before": "ibus",
+            "first_sent_at": 214.873489556,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 214.896337005,
+            "route_before": "ibus",
+            "first_sent_at": 214.899880226,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 214.922037068,
+            "route_before": "ibus",
+            "first_sent_at": 214.925475051,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 214.947708727,
+            "route_before": "ibus",
+            "first_sent_at": 214.951085427,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 214.973305461,
+            "route_before": "ibus",
+            "first_sent_at": 214.976431159,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 214.999180995,
+            "route_before": "ibus",
+            "first_sent_at": 215.002442253,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 215.024811878,
+            "route_before": "ibus",
+            "first_sent_at": 215.02818161,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 215.077262573,
+            "route_before": "ibus",
+            "first_sent_at": 215.081326532,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 2,
+            "has_lf": true,
+            "at": 215.103125098,
+            "route_before": "ibus",
+            "first_sent_at": 215.106292927,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 215.129323008,
+            "route_before": "ibus",
+            "first_sent_at": 215.133314074,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 215.155208105,
+            "route_before": "ibus",
+            "first_sent_at": 215.158868462,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 215.180630393,
+            "route_before": "ibus",
+            "first_sent_at": 215.184710169,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          }
+        ],
+        "input_failure": null,
+        "error_code": null
+      },
+      "sent": 22,
+      "route": null,
+      "cancel_requested": false,
+      "first_dom": {
+        "a": "你好 InkEcho，café Ω\n第二行。",
+        "b": "",
+        "a_html": "你好 InkEcho，café Ω<div>第二行。</div>",
+        "a_text": "你好 InkEcho，café Ω第二行。",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "你",
+            "inputType": "insertText",
+            "time": 1478.7000000000116
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 1480.2000000000116
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "好",
+            "inputType": "insertText",
+            "time": 1499.8999999999942
+          },
+          {
+            "id": "a",
+            "len": 2,
+            "type": "input",
+            "time": 1500.1000000000058
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": " ",
+            "inputType": "insertText",
+            "time": 1527.8999999999942
+          },
+          {
+            "id": "a",
+            "len": 3,
+            "type": "input",
+            "time": 1528.3000000000175
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "I",
+            "inputType": "insertText",
+            "time": 1553.8999999999942
+          },
+          {
+            "id": "a",
+            "len": 4,
+            "type": "input",
+            "time": 1554.5
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "n",
+            "inputType": "insertText",
+            "time": 1579.1000000000058
+          },
+          {
+            "id": "a",
+            "len": 5,
+            "type": "input",
+            "time": 1581.3000000000175
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "k",
+            "inputType": "insertText",
+            "time": 1604.6000000000058
+          },
+          {
+            "id": "a",
+            "len": 6,
+            "type": "input",
+            "time": 1605.3999999999942
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "E",
+            "inputType": "insertText",
+            "time": 1630.6000000000058
+          },
+          {
+            "id": "a",
+            "len": 7,
+            "type": "input",
+            "time": 1631.3000000000175
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "c",
+            "inputType": "insertText",
+            "time": 1653.7000000000116
+          },
+          {
+            "id": "a",
+            "len": 8,
+            "type": "input",
+            "time": 1654.1000000000058
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "h",
+            "inputType": "insertText",
+            "time": 1680.8000000000175
+          },
+          {
+            "id": "a",
+            "len": 9,
+            "type": "input",
+            "time": 1681.3999999999942
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "o",
+            "inputType": "insertText",
+            "time": 1706.2000000000116
+          },
+          {
+            "id": "a",
+            "len": 10,
+            "type": "input",
+            "time": 1706.8999999999942
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "，",
+            "inputType": "insertText",
+            "time": 1733
+          },
+          {
+            "id": "a",
+            "len": 11,
+            "type": "input",
+            "time": 1734.2000000000116
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "c",
+            "inputType": "insertText",
+            "time": 1758
+          },
+          {
+            "id": "a",
+            "len": 12,
+            "type": "input",
+            "time": 1758.7000000000116
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "a",
+            "inputType": "insertText",
+            "time": 1784.1000000000058
+          },
+          {
+            "id": "a",
+            "len": 13,
+            "type": "input",
+            "time": 1784.7000000000116
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "f",
+            "inputType": "insertText",
+            "time": 1809.2000000000116
+          },
+          {
+            "id": "a",
+            "len": 14,
+            "type": "input",
+            "time": 1809.8000000000175
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "é",
+            "inputType": "insertText",
+            "time": 1835.5
+          },
+          {
+            "id": "a",
+            "len": 15,
+            "type": "input",
+            "time": 1836.2000000000116
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": " ",
+            "inputType": "insertText",
+            "time": 1860.8999999999942
+          },
+          {
+            "id": "a",
+            "len": 16,
+            "type": "input",
+            "time": 1861.5
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "Ω",
+            "inputType": "insertText",
+            "time": 1914.7000000000116
+          },
+          {
+            "id": "a",
+            "len": 17,
+            "type": "input",
+            "time": 1916.2000000000116
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "\n第",
+            "inputType": "insertText",
+            "time": 1938.7000000000116
+          },
+          {
+            "id": "a",
+            "len": 19,
+            "type": "input",
+            "time": 1940.3999999999942
+          },
+          {
+            "id": "a",
+            "len": 19,
+            "type": "input",
+            "time": 1940.8999999999942
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "二",
+            "inputType": "insertText",
+            "time": 1966.1000000000058
+          },
+          {
+            "id": "a",
+            "len": 20,
+            "type": "input",
+            "time": 1966.7000000000116
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "行",
+            "inputType": "insertText",
+            "time": 1991.3999999999942
+          },
+          {
+            "id": "a",
+            "len": 21,
+            "type": "input",
+            "time": 1991.8999999999942
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "。",
+            "inputType": "insertText",
+            "time": 2017.3999999999942
+          },
+          {
+            "id": "a",
+            "len": 22,
+            "type": "input",
+            "time": 2018
+          }
+        ]
+      },
+      "last_dom": {
+        "a": "你好 InkEcho，café Ω\n第二行。",
+        "b": "",
+        "a_html": "你好 InkEcho，café Ω<div>第二行。</div>",
+        "a_text": "你好 InkEcho，café Ω第二行。",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "你",
+            "inputType": "insertText",
+            "time": 1478.7000000000116
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 1480.2000000000116
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "好",
+            "inputType": "insertText",
+            "time": 1499.8999999999942
+          },
+          {
+            "id": "a",
+            "len": 2,
+            "type": "input",
+            "time": 1500.1000000000058
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": " ",
+            "inputType": "insertText",
+            "time": 1527.8999999999942
+          },
+          {
+            "id": "a",
+            "len": 3,
+            "type": "input",
+            "time": 1528.3000000000175
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "I",
+            "inputType": "insertText",
+            "time": 1553.8999999999942
+          },
+          {
+            "id": "a",
+            "len": 4,
+            "type": "input",
+            "time": 1554.5
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "n",
+            "inputType": "insertText",
+            "time": 1579.1000000000058
+          },
+          {
+            "id": "a",
+            "len": 5,
+            "type": "input",
+            "time": 1581.3000000000175
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "k",
+            "inputType": "insertText",
+            "time": 1604.6000000000058
+          },
+          {
+            "id": "a",
+            "len": 6,
+            "type": "input",
+            "time": 1605.3999999999942
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "E",
+            "inputType": "insertText",
+            "time": 1630.6000000000058
+          },
+          {
+            "id": "a",
+            "len": 7,
+            "type": "input",
+            "time": 1631.3000000000175
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "c",
+            "inputType": "insertText",
+            "time": 1653.7000000000116
+          },
+          {
+            "id": "a",
+            "len": 8,
+            "type": "input",
+            "time": 1654.1000000000058
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "h",
+            "inputType": "insertText",
+            "time": 1680.8000000000175
+          },
+          {
+            "id": "a",
+            "len": 9,
+            "type": "input",
+            "time": 1681.3999999999942
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "o",
+            "inputType": "insertText",
+            "time": 1706.2000000000116
+          },
+          {
+            "id": "a",
+            "len": 10,
+            "type": "input",
+            "time": 1706.8999999999942
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "，",
+            "inputType": "insertText",
+            "time": 1733
+          },
+          {
+            "id": "a",
+            "len": 11,
+            "type": "input",
+            "time": 1734.2000000000116
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "c",
+            "inputType": "insertText",
+            "time": 1758
+          },
+          {
+            "id": "a",
+            "len": 12,
+            "type": "input",
+            "time": 1758.7000000000116
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "a",
+            "inputType": "insertText",
+            "time": 1784.1000000000058
+          },
+          {
+            "id": "a",
+            "len": 13,
+            "type": "input",
+            "time": 1784.7000000000116
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "f",
+            "inputType": "insertText",
+            "time": 1809.2000000000116
+          },
+          {
+            "id": "a",
+            "len": 14,
+            "type": "input",
+            "time": 1809.8000000000175
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "é",
+            "inputType": "insertText",
+            "time": 1835.5
+          },
+          {
+            "id": "a",
+            "len": 15,
+            "type": "input",
+            "time": 1836.2000000000116
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": " ",
+            "inputType": "insertText",
+            "time": 1860.8999999999942
+          },
+          {
+            "id": "a",
+            "len": 16,
+            "type": "input",
+            "time": 1861.5
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "Ω",
+            "inputType": "insertText",
+            "time": 1914.7000000000116
+          },
+          {
+            "id": "a",
+            "len": 17,
+            "type": "input",
+            "time": 1916.2000000000116
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "\n第",
+            "inputType": "insertText",
+            "time": 1938.7000000000116
+          },
+          {
+            "id": "a",
+            "len": 19,
+            "type": "input",
+            "time": 1940.3999999999942
+          },
+          {
+            "id": "a",
+            "len": 19,
+            "type": "input",
+            "time": 1940.8999999999942
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "二",
+            "inputType": "insertText",
+            "time": 1966.1000000000058
+          },
+          {
+            "id": "a",
+            "len": 20,
+            "type": "input",
+            "time": 1966.7000000000116
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "行",
+            "inputType": "insertText",
+            "time": 1991.3999999999942
+          },
+          {
+            "id": "a",
+            "len": 21,
+            "type": "input",
+            "time": 1991.8999999999942
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "。",
+            "inputType": "insertText",
+            "time": 2017.3999999999942
+          },
+          {
+            "id": "a",
+            "len": 22,
+            "type": "input",
+            "time": 2018
+          }
+        ]
+      },
+      "no_late": true,
+      "passed": true,
+      "received_lengths": [
+        22,
+        0
+      ]
+    },
+    {
+      "method": "auto",
+      "case": "leading-lf",
+      "sample": "\n甲",
+      "initial_focus": "a",
+      "neighbor_batch_after_session_close": false,
+      "session": {
+        "route": null,
+        "outcome": "unconfirmed",
+        "metrics_characters": null,
+        "reported_characters": 2,
+        "outcomes": [
+          {
+            "characters": 2
+          }
+        ],
+        "deltas": [
+          {
+            "index": 0,
+            "monotonic": 217.053394282
+          },
+          {
+            "index": 1,
+            "monotonic": 217.078926059
+          }
+        ],
+        "dispatches": [
+          {
+            "length": 2,
+            "has_lf": true,
+            "at": 217.160093716,
+            "route_before": "ibus",
+            "first_sent_at": 217.160719047,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          }
+        ],
+        "input_failure": null,
+        "error_code": null
+      },
+      "sent": 2,
+      "route": null,
+      "cancel_requested": false,
+      "first_dom": {
+        "a": "\n\n甲",
+        "b": "",
+        "a_html": "<div><br></div><div>甲</div>",
+        "a_text": "甲",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "\n甲",
+            "inputType": "insertText",
+            "time": 3993
+          },
+          {
+            "id": "a",
+            "len": 3,
+            "type": "input",
+            "time": 3993.7000000000116
+          },
+          {
+            "id": "a",
+            "len": 3,
+            "type": "input",
+            "time": 3993.899999999994
+          }
+        ]
+      },
+      "last_dom": {
+        "a": "\n\n甲",
+        "b": "",
+        "a_html": "<div><br></div><div>甲</div>",
+        "a_text": "甲",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "\n甲",
+            "inputType": "insertText",
+            "time": 3993
+          },
+          {
+            "id": "a",
+            "len": 3,
+            "type": "input",
+            "time": 3993.7000000000116
+          },
+          {
+            "id": "a",
+            "len": 3,
+            "type": "input",
+            "time": 3993.899999999994
+          }
+        ]
+      },
+      "no_late": true,
+      "passed": false,
+      "received_lengths": [
+        3,
+        0
+      ]
+    },
+    {
+      "method": "auto",
+      "case": "trailing-lf",
+      "sample": "甲\n",
+      "initial_focus": "a",
+      "neighbor_batch_after_session_close": false,
+      "session": {
+        "route": null,
+        "outcome": "unconfirmed",
+        "metrics_characters": null,
+        "reported_characters": 2,
+        "outcomes": [
+          {
+            "characters": 2
+          }
+        ],
+        "deltas": [
+          {
+            "index": 0,
+            "monotonic": 219.00852413
+          },
+          {
+            "index": 1,
+            "monotonic": 219.033973651
+          }
+        ],
+        "dispatches": [
+          {
+            "length": 2,
+            "has_lf": true,
+            "at": 219.059870464,
+            "route_before": "ibus",
+            "first_sent_at": 219.060638454,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          }
+        ],
+        "input_failure": null,
+        "error_code": null
+      },
+      "sent": 2,
+      "route": null,
+      "cancel_requested": false,
+      "first_dom": {
+        "a": "甲\n\n",
+        "b": "",
+        "a_html": "甲<div><br></div>",
+        "a_text": "甲",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "甲\n",
+            "inputType": "insertText",
+            "time": 5892.899999999994
+          },
+          {
+            "id": "a",
+            "len": 3,
+            "type": "input",
+            "time": 5893.3000000000175
+          },
+          {
+            "id": "a",
+            "len": 3,
+            "type": "input",
+            "time": 5893.399999999994
+          }
+        ]
+      },
+      "last_dom": {
+        "a": "甲\n\n",
+        "b": "",
+        "a_html": "甲<div><br></div>",
+        "a_text": "甲",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "甲\n",
+            "inputType": "insertText",
+            "time": 5892.899999999994
+          },
+          {
+            "id": "a",
+            "len": 3,
+            "type": "input",
+            "time": 5893.3000000000175
+          },
+          {
+            "id": "a",
+            "len": 3,
+            "type": "input",
+            "time": 5893.399999999994
+          }
+        ]
+      },
+      "no_late": true,
+      "passed": false,
+      "received_lengths": [
+        3,
+        0
+      ]
+    },
+    {
+      "method": "auto",
+      "case": "consecutive-tail",
+      "sample": "甲\n\n",
+      "initial_focus": "a",
+      "neighbor_batch_after_session_close": false,
+      "session": {
+        "route": null,
+        "outcome": "unconfirmed",
+        "metrics_characters": null,
+        "reported_characters": 3,
+        "outcomes": [
+          {
+            "characters": 3
+          }
+        ],
+        "deltas": [
+          {
+            "index": 0,
+            "monotonic": 220.911286901
+          },
+          {
+            "index": 1,
+            "monotonic": 220.937347093
+          },
+          {
+            "index": 2,
+            "monotonic": 220.962611234
+          }
+        ],
+        "dispatches": [
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 220.982695148,
+            "route_before": "ibus",
+            "first_sent_at": 220.983230945,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 2,
+            "has_lf": true,
+            "at": 220.988577042,
+            "route_before": "ibus",
+            "first_sent_at": 220.989267788,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          }
+        ],
+        "input_failure": null,
+        "error_code": null
+      },
+      "sent": 3,
+      "route": null,
+      "cancel_requested": false,
+      "first_dom": {
+        "a": "甲\n\n\n\n",
+        "b": "",
+        "a_html": "甲<div><br></div><div><br></div>",
+        "a_text": "甲",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "甲",
+            "inputType": "insertText",
+            "time": 7815.600000000006
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 7815.8000000000175
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "\n\n",
+            "inputType": "insertText",
+            "time": 7821.399999999994
+          },
+          {
+            "id": "a",
+            "len": 5,
+            "type": "input",
+            "time": 7821.8000000000175
+          },
+          {
+            "id": "a",
+            "len": 5,
+            "type": "input",
+            "time": 7822.200000000012
+          }
+        ]
+      },
+      "last_dom": {
+        "a": "甲\n\n\n\n",
+        "b": "",
+        "a_html": "甲<div><br></div><div><br></div>",
+        "a_text": "甲",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "甲",
+            "inputType": "insertText",
+            "time": 7815.600000000006
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 7815.8000000000175
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "\n\n",
+            "inputType": "insertText",
+            "time": 7821.399999999994
+          },
+          {
+            "id": "a",
+            "len": 5,
+            "type": "input",
+            "time": 7821.8000000000175
+          },
+          {
+            "id": "a",
+            "len": 5,
+            "type": "input",
+            "time": 7822.200000000012
+          }
+        ]
+      },
+      "no_late": true,
+      "passed": false,
+      "received_lengths": [
+        5,
+        0
+      ]
+    },
+    {
+      "method": "auto",
+      "case": "direct-two-lf",
+      "sample": "\n\n",
+      "initial_focus": "a",
+      "neighbor_batch_after_session_close": false,
+      "session": {
+        "reported_characters": 2,
+        "route": null,
+        "input_failure": "ibus_delivery_unknown"
+      },
+      "sent": 2,
+      "route": null,
+      "cancel_requested": false,
+      "error": {
+        "code": "ibus_delivery_unknown"
+      },
+      "first_dom": {
+        "a": "\n\n\n\n\n",
+        "b": "",
+        "a_html": "<div><br></div><div><br></div><div><br></div>",
+        "a_text": "",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "\n\n",
+            "inputType": "insertText",
+            "time": 9682
+          },
+          {
+            "id": "a",
+            "len": 5,
+            "type": "input",
+            "time": 9682.399999999994
+          },
+          {
+            "id": "a",
+            "len": 5,
+            "type": "input",
+            "time": 9682.600000000006
+          }
+        ]
+      },
+      "last_dom": {
+        "a": "\n\n\n\n\n",
+        "b": "",
+        "a_html": "<div><br></div><div><br></div><div><br></div>",
+        "a_text": "",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "\n\n",
+            "inputType": "insertText",
+            "time": 9682
+          },
+          {
+            "id": "a",
+            "len": 5,
+            "type": "input",
+            "time": 9682.399999999994
+          },
+          {
+            "id": "a",
+            "len": 5,
+            "type": "input",
+            "time": 9682.600000000006
+          }
+        ]
+      },
+      "no_late": true,
+      "passed": false,
+      "received_lengths": [
+        5,
+        0
+      ]
+    },
+    {
+      "method": "auto",
+      "case": "direct-three-lf",
+      "sample": "\n\n\n",
+      "initial_focus": "a",
+      "neighbor_batch_after_session_close": false,
+      "session": {
+        "reported_characters": 3,
+        "route": null,
+        "input_failure": "ibus_delivery_unknown"
+      },
+      "sent": 3,
+      "route": null,
+      "cancel_requested": false,
+      "error": {
+        "code": "ibus_delivery_unknown"
+      },
+      "first_dom": {
+        "a": "\n\n\n\n\n\n\n",
+        "b": "",
+        "a_html": "<div><br></div><div><br></div><div><br></div><div><br></div>",
+        "a_text": "",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "\n\n\n",
+            "inputType": "insertText",
+            "time": 11564.899999999994
+          },
+          {
+            "id": "a",
+            "len": 7,
+            "type": "input",
+            "time": 11565.5
+          },
+          {
+            "id": "a",
+            "len": 7,
+            "type": "input",
+            "time": 11565.700000000012
+          },
+          {
+            "id": "a",
+            "len": 7,
+            "type": "input",
+            "time": 11565.700000000012
+          }
+        ]
+      },
+      "last_dom": {
+        "a": "\n\n\n\n\n\n\n",
+        "b": "",
+        "a_html": "<div><br></div><div><br></div><div><br></div><div><br></div>",
+        "a_text": "",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "\n\n\n",
+            "inputType": "insertText",
+            "time": 11564.899999999994
+          },
+          {
+            "id": "a",
+            "len": 7,
+            "type": "input",
+            "time": 11565.5
+          },
+          {
+            "id": "a",
+            "len": 7,
+            "type": "input",
+            "time": 11565.700000000012
+          },
+          {
+            "id": "a",
+            "len": 7,
+            "type": "input",
+            "time": 11565.700000000012
+          }
+        ]
+      },
+      "no_late": true,
+      "passed": false,
+      "received_lengths": [
+        7,
+        0
+      ]
+    },
+    {
+      "method": "auto",
+      "case": "synchronous",
+      "sample": "甲乙\n\n\n丙\n",
+      "initial_focus": "a",
+      "neighbor_batch_after_session_close": false,
+      "session": {
+        "route": null,
+        "outcome": "unconfirmed",
+        "metrics_characters": null,
+        "reported_characters": 7,
+        "outcomes": [
+          {
+            "characters": 7
+          }
+        ],
+        "deltas": [],
+        "dispatches": [
+          {
+            "length": 7,
+            "has_lf": true,
+            "at": 226.583201393,
+            "route_before": "keyboard",
+            "first_sent_at": 226.627410791,
+            "error_code": "ibus_delivery_unknown",
+            "error_type": "OutputRouterError",
+            "protocol": null,
+            "route_after": null,
+            "backend_type": "NoneType",
+            "native_attempts": null
+          },
+          {
+            "length": 7,
+            "has_lf": true,
+            "at": 226.583243484,
+            "route_before": "keyboard",
+            "first_sent_at": 226.627410791,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          }
+        ],
+        "input_failure": "ibus_delivery_unknown",
+        "error_code": null
+      },
+      "sent": 7,
+      "route": null,
+      "cancel_requested": false,
+      "error": {
+        "code": "ibus_delivery_unknown"
+      },
+      "first_dom": {
+        "a": "甲乙\n\n\n\n\n丙\n\n",
+        "b": "",
+        "a_html": "甲乙<div><br></div><div><br></div><div>丙</div><div><br></div>",
+        "a_text": "甲乙丙",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "甲",
+            "inputType": "insertText",
+            "time": 13459.700000000012
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 13460
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "乙",
+            "inputType": "insertText",
+            "time": 13461.399999999994
+          },
+          {
+            "id": "a",
+            "len": 2,
+            "type": "input",
+            "time": 13461.700000000012
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "\n\n",
+            "inputType": "insertText",
+            "time": 13462.700000000012
+          },
+          {
+            "id": "a",
+            "len": 6,
+            "type": "input",
+            "time": 13462.899999999994
+          },
+          {
+            "id": "a",
+            "len": 6,
+            "type": "input",
+            "time": 13463
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "\n丙\n",
+            "inputType": "insertText",
+            "time": 13464.399999999994
+          },
+          {
+            "id": "a",
+            "len": 10,
+            "type": "input",
+            "time": 13464.899999999994
+          },
+          {
+            "id": "a",
+            "len": 10,
+            "type": "input",
+            "time": 13465
+          },
+          {
+            "id": "a",
+            "len": 10,
+            "type": "input",
+            "time": 13465.100000000006
+          }
+        ]
+      },
+      "last_dom": {
+        "a": "甲乙\n\n\n\n\n丙\n\n",
+        "b": "",
+        "a_html": "甲乙<div><br></div><div><br></div><div>丙</div><div><br></div>",
+        "a_text": "甲乙丙",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "甲",
+            "inputType": "insertText",
+            "time": 13459.700000000012
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 13460
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "乙",
+            "inputType": "insertText",
+            "time": 13461.399999999994
+          },
+          {
+            "id": "a",
+            "len": 2,
+            "type": "input",
+            "time": 13461.700000000012
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "\n\n",
+            "inputType": "insertText",
+            "time": 13462.700000000012
+          },
+          {
+            "id": "a",
+            "len": 6,
+            "type": "input",
+            "time": 13462.899999999994
+          },
+          {
+            "id": "a",
+            "len": 6,
+            "type": "input",
+            "time": 13463
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "\n丙\n",
+            "inputType": "insertText",
+            "time": 13464.399999999994
+          },
+          {
+            "id": "a",
+            "len": 10,
+            "type": "input",
+            "time": 13464.899999999994
+          },
+          {
+            "id": "a",
+            "len": 10,
+            "type": "input",
+            "time": 13465
+          },
+          {
+            "id": "a",
+            "len": 10,
+            "type": "input",
+            "time": 13465.100000000006
+          }
+        ]
+      },
+      "no_late": true,
+      "passed": false,
+      "received_lengths": [
+        10,
+        0
+      ]
+    },
+    {
+      "method": "auto",
+      "case": "cancel",
+      "sample": "你好 InkEcho，café Ω\n第二行。",
+      "initial_focus": "a",
+      "neighbor_batch_after_session_close": false,
+      "session": {
+        "route": null,
+        "outcome": "cancelled",
+        "metrics_characters": null,
+        "reported_characters": 1,
+        "outcomes": [
+          {
+            "characters": 1
+          }
+        ],
+        "deltas": [
+          {
+            "index": 0,
+            "monotonic": 228.499515242
+          },
+          {
+            "index": 1,
+            "monotonic": 228.525297678
+          },
+          {
+            "index": 2,
+            "monotonic": 228.550329381
+          }
+        ],
+        "dispatches": [
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 228.551826004,
+            "route_before": "ibus",
+            "first_sent_at": 228.552404567,
+            "error_code": "ibus_cancelled",
+            "error_type": "OutputRouterError",
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          }
+        ],
+        "input_failure": "ibus_cancelled",
+        "error_code": null
+      },
+      "sent": 1,
+      "route": null,
+      "cancel_requested": true,
+      "error": {
+        "code": "ibus_cancelled"
+      },
+      "first_dom": {
+        "a": "你",
+        "b": "",
+        "a_html": "你",
+        "a_text": "你",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "你",
+            "inputType": "insertText",
+            "time": 15384.800000000017
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 15385
+          }
+        ]
+      },
+      "last_dom": {
+        "a": "你",
+        "b": "",
+        "a_html": "你",
+        "a_text": "你",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "你",
+            "inputType": "insertText",
+            "time": 15384.800000000017
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 15385
+          }
+        ]
+      },
+      "no_late": true,
+      "passed": true,
+      "received_lengths": [
+        1,
+        0
+      ]
+    },
+    {
+      "method": "auto",
+      "case": "pending-cancel",
+      "sample": "甲\n乙",
+      "initial_focus": "a",
+      "neighbor_batch_after_session_close": false,
+      "session": {
+        "route": null,
+        "outcome": "cancelled",
+        "metrics_characters": null,
+        "reported_characters": 0,
+        "outcomes": [
+          {
+            "characters": 0
+          }
+        ],
+        "deltas": [
+          {
+            "index": 0,
+            "monotonic": 230.405775065
+          },
+          {
+            "index": 1,
+            "monotonic": 230.431101115
+          }
+        ],
+        "dispatches": [],
+        "input_failure": null,
+        "error_code": null
+      },
+      "sent": 0,
+      "route": null,
+      "cancel_requested": true,
+      "first_dom": {
+        "a": "",
+        "b": "",
+        "a_html": "",
+        "a_text": "",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": []
+      },
+      "last_dom": {
+        "a": "",
+        "b": "",
+        "a_html": "",
+        "a_text": "",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": []
+      },
+      "no_late": true,
+      "passed": true,
+      "received_lengths": [
+        0,
+        0
+      ]
+    },
+    {
+      "method": "auto",
+      "case": "prepare-switch",
+      "sample": "你好 InkEcho，café Ω\n第二行。",
+      "initial_focus": "a",
+      "neighbor_batch_after_session_close": false,
+      "session": {
+        "route": null,
+        "outcome": "unconfirmed",
+        "metrics_characters": null,
+        "reported_characters": 22,
+        "outcomes": [
+          {
+            "characters": 22
+          }
+        ],
+        "deltas": [
+          {
+            "index": 0,
+            "monotonic": 232.320763972
+          },
+          {
+            "index": 1,
+            "monotonic": 232.346198994
+          },
+          {
+            "index": 2,
+            "monotonic": 232.372239655
+          },
+          {
+            "index": 3,
+            "monotonic": 232.398316302
+          },
+          {
+            "index": 4,
+            "monotonic": 232.424524928
+          },
+          {
+            "index": 5,
+            "monotonic": 232.449926162
+          },
+          {
+            "index": 6,
+            "monotonic": 232.475746699
+          },
+          {
+            "index": 7,
+            "monotonic": 232.501513669
+          },
+          {
+            "index": 8,
+            "monotonic": 232.52682865
+          },
+          {
+            "index": 9,
+            "monotonic": 232.552350356
+          },
+          {
+            "index": 10,
+            "monotonic": 232.578045084
+          },
+          {
+            "index": 11,
+            "monotonic": 232.603544723
+          },
+          {
+            "index": 12,
+            "monotonic": 232.629569473
+          },
+          {
+            "index": 13,
+            "monotonic": 232.654811947
+          },
+          {
+            "index": 14,
+            "monotonic": 232.680819028
+          },
+          {
+            "index": 15,
+            "monotonic": 232.706033683
+          },
+          {
+            "index": 16,
+            "monotonic": 232.732195575
+          },
+          {
+            "index": 17,
+            "monotonic": 232.757960018
+          },
+          {
+            "index": 18,
+            "monotonic": 232.783904028
+          },
+          {
+            "index": 19,
+            "monotonic": 232.809161992
+          },
+          {
+            "index": 20,
+            "monotonic": 232.834375553
+          },
+          {
+            "index": 21,
+            "monotonic": 232.860554429
+          }
+        ],
+        "dispatches": [
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 232.356849988,
+            "route_before": "ibus",
+            "first_sent_at": 232.357623589,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 232.372257193,
+            "route_before": "ibus",
+            "first_sent_at": 232.373047597,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 232.398370705,
+            "route_before": "ibus",
+            "first_sent_at": 232.401042882,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 232.42459992,
+            "route_before": "ibus",
+            "first_sent_at": 232.428259929,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 232.450020724,
+            "route_before": "ibus",
+            "first_sent_at": 232.453171538,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 232.475814875,
+            "route_before": "ibus",
+            "first_sent_at": 232.479453273,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 232.501605754,
+            "route_before": "ibus",
+            "first_sent_at": 232.505666434,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 232.526955827,
+            "route_before": "ibus",
+            "first_sent_at": 232.53167191,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 232.552414763,
+            "route_before": "ibus",
+            "first_sent_at": 232.555692087,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 232.578127471,
+            "route_before": "ibus",
+            "first_sent_at": 232.581903161,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 232.603620171,
+            "route_before": "ibus",
+            "first_sent_at": 232.606947449,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 232.629634716,
+            "route_before": "ibus",
+            "first_sent_at": 232.633041467,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 232.65487647,
+            "route_before": "ibus",
+            "first_sent_at": 232.658116746,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 232.680901441,
+            "route_before": "ibus",
+            "first_sent_at": 232.68412855,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 232.706105437,
+            "route_before": "ibus",
+            "first_sent_at": 232.709909754,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 232.732287436,
+            "route_before": "ibus",
+            "first_sent_at": 232.736226662,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 232.783970438,
+            "route_before": "ibus",
+            "first_sent_at": 232.787376993,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 2,
+            "has_lf": true,
+            "at": 232.809224945,
+            "route_before": "ibus",
+            "first_sent_at": 232.812573622,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 232.834457528,
+            "route_before": "ibus",
+            "first_sent_at": 232.837655325,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 232.860621827,
+            "route_before": "ibus",
+            "first_sent_at": 232.863938647,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 232.886805833,
+            "route_before": "ibus",
+            "first_sent_at": 232.890228287,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          }
+        ],
+        "input_failure": null,
+        "error_code": null
+      },
+      "sent": 22,
+      "route": null,
+      "cancel_requested": false,
+      "first_dom": {
+        "a": "",
+        "b": "你好 InkEcho，café Ω\n第二行。",
+        "a_html": "",
+        "a_text": "",
+        "b_html": "你好 InkEcho，café Ω<div>第二行。</div>",
+        "b_text": "你好 InkEcho，café Ω第二行。",
+        "active": "b",
+        "focus": true,
+        "events": [
+          {
+            "id": "b",
+            "type": "focus",
+            "time": 19151.399999999994
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "你",
+            "inputType": "insertText",
+            "time": 19189.899999999994
+          },
+          {
+            "id": "b",
+            "len": 1,
+            "type": "input",
+            "time": 19190.20000000001
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "好",
+            "inputType": "insertText",
+            "time": 19205.20000000001
+          },
+          {
+            "id": "b",
+            "len": 2,
+            "type": "input",
+            "time": 19205.399999999994
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": " ",
+            "inputType": "insertText",
+            "time": 19233.800000000017
+          },
+          {
+            "id": "b",
+            "len": 3,
+            "type": "input",
+            "time": 19234.300000000017
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "I",
+            "inputType": "insertText",
+            "time": 19260.899999999994
+          },
+          {
+            "id": "b",
+            "len": 4,
+            "type": "input",
+            "time": 19261.5
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "n",
+            "inputType": "insertText",
+            "time": 19285.600000000006
+          },
+          {
+            "id": "b",
+            "len": 5,
+            "type": "input",
+            "time": 19286.300000000017
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "k",
+            "inputType": "insertText",
+            "time": 19312.5
+          },
+          {
+            "id": "b",
+            "len": 6,
+            "type": "input",
+            "time": 19313.100000000006
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "E",
+            "inputType": "insertText",
+            "time": 19338.300000000017
+          },
+          {
+            "id": "b",
+            "len": 7,
+            "type": "input",
+            "time": 19338.800000000017
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "c",
+            "inputType": "insertText",
+            "time": 19364.800000000017
+          },
+          {
+            "id": "b",
+            "len": 8,
+            "type": "input",
+            "time": 19365.399999999994
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "h",
+            "inputType": "insertText",
+            "time": 19388.300000000017
+          },
+          {
+            "id": "b",
+            "len": 9,
+            "type": "input",
+            "time": 19388.899999999994
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "o",
+            "inputType": "insertText",
+            "time": 19414.300000000017
+          },
+          {
+            "id": "b",
+            "len": 10,
+            "type": "input",
+            "time": 19414.899999999994
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "，",
+            "inputType": "insertText",
+            "time": 19439.5
+          },
+          {
+            "id": "b",
+            "len": 11,
+            "type": "input",
+            "time": 19440
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "c",
+            "inputType": "insertText",
+            "time": 19465.800000000017
+          },
+          {
+            "id": "b",
+            "len": 12,
+            "type": "input",
+            "time": 19466.399999999994
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "a",
+            "inputType": "insertText",
+            "time": 19490.600000000006
+          },
+          {
+            "id": "b",
+            "len": 13,
+            "type": "input",
+            "time": 19491.20000000001
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "f",
+            "inputType": "insertText",
+            "time": 19516.899999999994
+          },
+          {
+            "id": "b",
+            "len": 14,
+            "type": "input",
+            "time": 19517.5
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "é",
+            "inputType": "insertText",
+            "time": 19542
+          },
+          {
+            "id": "b",
+            "len": 15,
+            "type": "input",
+            "time": 19542.70000000001
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": " ",
+            "inputType": "insertText",
+            "time": 19568.70000000001
+          },
+          {
+            "id": "b",
+            "len": 16,
+            "type": "input",
+            "time": 19569.300000000017
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "Ω",
+            "inputType": "insertText",
+            "time": 19620.399999999994
+          },
+          {
+            "id": "b",
+            "len": 17,
+            "type": "input",
+            "time": 19621
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "\n第",
+            "inputType": "insertText",
+            "time": 19644.800000000017
+          },
+          {
+            "id": "b",
+            "len": 19,
+            "type": "input",
+            "time": 19646
+          },
+          {
+            "id": "b",
+            "len": 19,
+            "type": "input",
+            "time": 19646.5
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "二",
+            "inputType": "insertText",
+            "time": 19670.600000000006
+          },
+          {
+            "id": "b",
+            "len": 20,
+            "type": "input",
+            "time": 19671.20000000001
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "行",
+            "inputType": "insertText",
+            "time": 19696.800000000017
+          },
+          {
+            "id": "b",
+            "len": 21,
+            "type": "input",
+            "time": 19697.399999999994
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "。",
+            "inputType": "insertText",
+            "time": 19723.20000000001
+          },
+          {
+            "id": "b",
+            "len": 22,
+            "type": "input",
+            "time": 19724
+          }
+        ]
+      },
+      "last_dom": {
+        "a": "",
+        "b": "你好 InkEcho，café Ω\n第二行。",
+        "a_html": "",
+        "a_text": "",
+        "b_html": "你好 InkEcho，café Ω<div>第二行。</div>",
+        "b_text": "你好 InkEcho，café Ω第二行。",
+        "active": "b",
+        "focus": true,
+        "events": [
+          {
+            "id": "b",
+            "type": "focus",
+            "time": 19151.399999999994
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "你",
+            "inputType": "insertText",
+            "time": 19189.899999999994
+          },
+          {
+            "id": "b",
+            "len": 1,
+            "type": "input",
+            "time": 19190.20000000001
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "好",
+            "inputType": "insertText",
+            "time": 19205.20000000001
+          },
+          {
+            "id": "b",
+            "len": 2,
+            "type": "input",
+            "time": 19205.399999999994
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": " ",
+            "inputType": "insertText",
+            "time": 19233.800000000017
+          },
+          {
+            "id": "b",
+            "len": 3,
+            "type": "input",
+            "time": 19234.300000000017
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "I",
+            "inputType": "insertText",
+            "time": 19260.899999999994
+          },
+          {
+            "id": "b",
+            "len": 4,
+            "type": "input",
+            "time": 19261.5
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "n",
+            "inputType": "insertText",
+            "time": 19285.600000000006
+          },
+          {
+            "id": "b",
+            "len": 5,
+            "type": "input",
+            "time": 19286.300000000017
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "k",
+            "inputType": "insertText",
+            "time": 19312.5
+          },
+          {
+            "id": "b",
+            "len": 6,
+            "type": "input",
+            "time": 19313.100000000006
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "E",
+            "inputType": "insertText",
+            "time": 19338.300000000017
+          },
+          {
+            "id": "b",
+            "len": 7,
+            "type": "input",
+            "time": 19338.800000000017
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "c",
+            "inputType": "insertText",
+            "time": 19364.800000000017
+          },
+          {
+            "id": "b",
+            "len": 8,
+            "type": "input",
+            "time": 19365.399999999994
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "h",
+            "inputType": "insertText",
+            "time": 19388.300000000017
+          },
+          {
+            "id": "b",
+            "len": 9,
+            "type": "input",
+            "time": 19388.899999999994
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "o",
+            "inputType": "insertText",
+            "time": 19414.300000000017
+          },
+          {
+            "id": "b",
+            "len": 10,
+            "type": "input",
+            "time": 19414.899999999994
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "，",
+            "inputType": "insertText",
+            "time": 19439.5
+          },
+          {
+            "id": "b",
+            "len": 11,
+            "type": "input",
+            "time": 19440
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "c",
+            "inputType": "insertText",
+            "time": 19465.800000000017
+          },
+          {
+            "id": "b",
+            "len": 12,
+            "type": "input",
+            "time": 19466.399999999994
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "a",
+            "inputType": "insertText",
+            "time": 19490.600000000006
+          },
+          {
+            "id": "b",
+            "len": 13,
+            "type": "input",
+            "time": 19491.20000000001
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "f",
+            "inputType": "insertText",
+            "time": 19516.899999999994
+          },
+          {
+            "id": "b",
+            "len": 14,
+            "type": "input",
+            "time": 19517.5
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "é",
+            "inputType": "insertText",
+            "time": 19542
+          },
+          {
+            "id": "b",
+            "len": 15,
+            "type": "input",
+            "time": 19542.70000000001
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": " ",
+            "inputType": "insertText",
+            "time": 19568.70000000001
+          },
+          {
+            "id": "b",
+            "len": 16,
+            "type": "input",
+            "time": 19569.300000000017
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "Ω",
+            "inputType": "insertText",
+            "time": 19620.399999999994
+          },
+          {
+            "id": "b",
+            "len": 17,
+            "type": "input",
+            "time": 19621
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "\n第",
+            "inputType": "insertText",
+            "time": 19644.800000000017
+          },
+          {
+            "id": "b",
+            "len": 19,
+            "type": "input",
+            "time": 19646
+          },
+          {
+            "id": "b",
+            "len": 19,
+            "type": "input",
+            "time": 19646.5
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "二",
+            "inputType": "insertText",
+            "time": 19670.600000000006
+          },
+          {
+            "id": "b",
+            "len": 20,
+            "type": "input",
+            "time": 19671.20000000001
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "行",
+            "inputType": "insertText",
+            "time": 19696.800000000017
+          },
+          {
+            "id": "b",
+            "len": 21,
+            "type": "input",
+            "time": 19697.399999999994
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "。",
+            "inputType": "insertText",
+            "time": 19723.20000000001
+          },
+          {
+            "id": "b",
+            "len": 22,
+            "type": "input",
+            "time": 19724
+          }
+        ]
+      },
+      "no_late": true,
+      "passed": true,
+      "received_lengths": [
+        0,
+        22
+      ]
+    },
+    {
+      "method": "auto",
+      "case": "switch",
+      "sample": "你好 InkEcho，café Ω\n第二行。",
+      "initial_focus": "a",
+      "neighbor_batch_after_session_close": false,
+      "session": {
+        "route": null,
+        "outcome": "unconfirmed",
+        "metrics_characters": null,
+        "reported_characters": 22,
+        "outcomes": [
+          {
+            "characters": 22
+          }
+        ],
+        "deltas": [
+          {
+            "index": 0,
+            "monotonic": 234.771203167
+          },
+          {
+            "index": 1,
+            "monotonic": 234.797329256
+          },
+          {
+            "index": 2,
+            "monotonic": 234.82332435
+          },
+          {
+            "index": 3,
+            "monotonic": 234.848950948
+          },
+          {
+            "index": 4,
+            "monotonic": 234.87421997
+          },
+          {
+            "index": 5,
+            "monotonic": 234.899505681
+          },
+          {
+            "index": 6,
+            "monotonic": 234.925911878
+          },
+          {
+            "index": 7,
+            "monotonic": 234.95207675
+          },
+          {
+            "index": 8,
+            "monotonic": 234.978060983
+          },
+          {
+            "index": 9,
+            "monotonic": 235.00360915
+          },
+          {
+            "index": 10,
+            "monotonic": 235.029745284
+          },
+          {
+            "index": 11,
+            "monotonic": 235.05581043
+          },
+          {
+            "index": 12,
+            "monotonic": 235.081141264
+          },
+          {
+            "index": 13,
+            "monotonic": 235.106758487
+          },
+          {
+            "index": 14,
+            "monotonic": 235.132836497
+          },
+          {
+            "index": 15,
+            "monotonic": 235.158355978
+          },
+          {
+            "index": 16,
+            "monotonic": 235.184417982
+          },
+          {
+            "index": 17,
+            "monotonic": 235.209854197
+          },
+          {
+            "index": 18,
+            "monotonic": 235.235798931
+          },
+          {
+            "index": 19,
+            "monotonic": 235.26147116
+          },
+          {
+            "index": 20,
+            "monotonic": 235.2867622
+          },
+          {
+            "index": 21,
+            "monotonic": 235.311906884
+          }
+        ],
+        "dispatches": [
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 234.866286633,
+            "route_before": "ibus",
+            "first_sent_at": 234.8675431,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 234.867567892,
+            "route_before": "ibus",
+            "first_sent_at": 234.868768272,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 234.86879046,
+            "route_before": "ibus",
+            "first_sent_at": 234.874699997,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 234.874726917,
+            "route_before": "ibus",
+            "first_sent_at": 234.87543193,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 234.899551844,
+            "route_before": "ibus",
+            "first_sent_at": 234.901966048,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 234.926055999,
+            "route_before": "ibus",
+            "first_sent_at": 234.929182833,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 234.952176784,
+            "route_before": "ibus",
+            "first_sent_at": 234.956120771,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 234.978127028,
+            "route_before": "ibus",
+            "first_sent_at": 234.981953227,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 235.003770386,
+            "route_before": "ibus",
+            "first_sent_at": 235.009291261,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 235.029812651,
+            "route_before": "ibus",
+            "first_sent_at": 235.033023287,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 235.055882878,
+            "route_before": "ibus",
+            "first_sent_at": 235.058243813,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 235.081208605,
+            "route_before": "ibus",
+            "first_sent_at": 235.084416437,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 235.106839314,
+            "route_before": "ibus",
+            "first_sent_at": 235.111175307,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 235.132893989,
+            "route_before": "ibus",
+            "first_sent_at": 235.135749194,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 235.158434685,
+            "route_before": "ibus",
+            "first_sent_at": 235.161452527,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 235.184499855,
+            "route_before": "ibus",
+            "first_sent_at": 235.187557981,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 235.235869452,
+            "route_before": "ibus",
+            "first_sent_at": 235.239710177,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 2,
+            "has_lf": true,
+            "at": 235.261552793,
+            "route_before": "ibus",
+            "first_sent_at": 235.265071318,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 235.286836584,
+            "route_before": "ibus",
+            "first_sent_at": 235.290642649,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 235.311976904,
+            "route_before": "ibus",
+            "first_sent_at": 235.315301158,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 235.338053328,
+            "route_before": "ibus",
+            "first_sent_at": 235.341616894,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          }
+        ],
+        "input_failure": null,
+        "error_code": null
+      },
+      "sent": 22,
+      "route": null,
+      "cancel_requested": false,
+      "first_dom": {
+        "a": "你",
+        "b": "好 InkEcho，café Ω\n第二行。",
+        "a_html": "你",
+        "a_text": "你",
+        "b_html": "好 InkEcho，café Ω<div>第二行。</div>",
+        "b_text": "好 InkEcho，café Ω第二行。",
+        "active": "b",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "focus",
+            "time": 21392
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "你",
+            "inputType": "insertText",
+            "time": 21699.899999999994
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 21700.20000000001
+          },
+          {
+            "id": "b",
+            "type": "focus",
+            "time": 21700.399999999994
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "好",
+            "inputType": "insertText",
+            "time": 21702.100000000006
+          },
+          {
+            "id": "b",
+            "len": 1,
+            "type": "input",
+            "time": 21702.300000000017
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": " ",
+            "inputType": "insertText",
+            "time": 21707.20000000001
+          },
+          {
+            "id": "b",
+            "len": 2,
+            "type": "input",
+            "time": 21707.300000000017
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "I",
+            "inputType": "insertText",
+            "time": 21707.70000000001
+          },
+          {
+            "id": "b",
+            "len": 3,
+            "type": "input",
+            "time": 21708
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "n",
+            "inputType": "insertText",
+            "time": 21734.100000000006
+          },
+          {
+            "id": "b",
+            "len": 4,
+            "type": "input",
+            "time": 21734.600000000006
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "k",
+            "inputType": "insertText",
+            "time": 21762.800000000017
+          },
+          {
+            "id": "b",
+            "len": 5,
+            "type": "input",
+            "time": 21763.300000000017
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "E",
+            "inputType": "insertText",
+            "time": 21788.70000000001
+          },
+          {
+            "id": "b",
+            "len": 6,
+            "type": "input",
+            "time": 21790
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "c",
+            "inputType": "insertText",
+            "time": 21814.5
+          },
+          {
+            "id": "b",
+            "len": 7,
+            "type": "input",
+            "time": 21815
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "h",
+            "inputType": "insertText",
+            "time": 21841.100000000006
+          },
+          {
+            "id": "b",
+            "len": 8,
+            "type": "input",
+            "time": 21841.70000000001
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "o",
+            "inputType": "insertText",
+            "time": 21865.800000000017
+          },
+          {
+            "id": "b",
+            "len": 9,
+            "type": "input",
+            "time": 21866.5
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "，",
+            "inputType": "insertText",
+            "time": 21890.70000000001
+          },
+          {
+            "id": "b",
+            "len": 10,
+            "type": "input",
+            "time": 21891.20000000001
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "c",
+            "inputType": "insertText",
+            "time": 21916.800000000017
+          },
+          {
+            "id": "b",
+            "len": 11,
+            "type": "input",
+            "time": 21917.5
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "a",
+            "inputType": "insertText",
+            "time": 21944.600000000006
+          },
+          {
+            "id": "b",
+            "len": 12,
+            "type": "input",
+            "time": 21945.20000000001
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "f",
+            "inputType": "insertText",
+            "time": 21968.5
+          },
+          {
+            "id": "b",
+            "len": 13,
+            "type": "input",
+            "time": 21969.100000000006
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "é",
+            "inputType": "insertText",
+            "time": 21993.899999999994
+          },
+          {
+            "id": "b",
+            "len": 14,
+            "type": "input",
+            "time": 21994.5
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": " ",
+            "inputType": "insertText",
+            "time": 22020.5
+          },
+          {
+            "id": "b",
+            "len": 15,
+            "type": "input",
+            "time": 22021.100000000006
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "Ω",
+            "inputType": "insertText",
+            "time": 22072.800000000017
+          },
+          {
+            "id": "b",
+            "len": 16,
+            "type": "input",
+            "time": 22073.5
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "\n第",
+            "inputType": "insertText",
+            "time": 22098.20000000001
+          },
+          {
+            "id": "b",
+            "len": 18,
+            "type": "input",
+            "time": 22099.20000000001
+          },
+          {
+            "id": "b",
+            "len": 18,
+            "type": "input",
+            "time": 22099.70000000001
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "二",
+            "inputType": "insertText",
+            "time": 22123.899999999994
+          },
+          {
+            "id": "b",
+            "len": 19,
+            "type": "input",
+            "time": 22124.399999999994
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "行",
+            "inputType": "insertText",
+            "time": 22147.899999999994
+          },
+          {
+            "id": "b",
+            "len": 20,
+            "type": "input",
+            "time": 22148.600000000006
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "。",
+            "inputType": "insertText",
+            "time": 22174.399999999994
+          },
+          {
+            "id": "b",
+            "len": 21,
+            "type": "input",
+            "time": 22175
+          }
+        ]
+      },
+      "last_dom": {
+        "a": "你",
+        "b": "好 InkEcho，café Ω\n第二行。",
+        "a_html": "你",
+        "a_text": "你",
+        "b_html": "好 InkEcho，café Ω<div>第二行。</div>",
+        "b_text": "好 InkEcho，café Ω第二行。",
+        "active": "b",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "focus",
+            "time": 21392
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data": "你",
+            "inputType": "insertText",
+            "time": 21699.899999999994
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 21700.20000000001
+          },
+          {
+            "id": "b",
+            "type": "focus",
+            "time": 21700.399999999994
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "好",
+            "inputType": "insertText",
+            "time": 21702.100000000006
+          },
+          {
+            "id": "b",
+            "len": 1,
+            "type": "input",
+            "time": 21702.300000000017
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": " ",
+            "inputType": "insertText",
+            "time": 21707.20000000001
+          },
+          {
+            "id": "b",
+            "len": 2,
+            "type": "input",
+            "time": 21707.300000000017
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "I",
+            "inputType": "insertText",
+            "time": 21707.70000000001
+          },
+          {
+            "id": "b",
+            "len": 3,
+            "type": "input",
+            "time": 21708
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "n",
+            "inputType": "insertText",
+            "time": 21734.100000000006
+          },
+          {
+            "id": "b",
+            "len": 4,
+            "type": "input",
+            "time": 21734.600000000006
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "k",
+            "inputType": "insertText",
+            "time": 21762.800000000017
+          },
+          {
+            "id": "b",
+            "len": 5,
+            "type": "input",
+            "time": 21763.300000000017
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "E",
+            "inputType": "insertText",
+            "time": 21788.70000000001
+          },
+          {
+            "id": "b",
+            "len": 6,
+            "type": "input",
+            "time": 21790
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "c",
+            "inputType": "insertText",
+            "time": 21814.5
+          },
+          {
+            "id": "b",
+            "len": 7,
+            "type": "input",
+            "time": 21815
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "h",
+            "inputType": "insertText",
+            "time": 21841.100000000006
+          },
+          {
+            "id": "b",
+            "len": 8,
+            "type": "input",
+            "time": 21841.70000000001
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "o",
+            "inputType": "insertText",
+            "time": 21865.800000000017
+          },
+          {
+            "id": "b",
+            "len": 9,
+            "type": "input",
+            "time": 21866.5
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "，",
+            "inputType": "insertText",
+            "time": 21890.70000000001
+          },
+          {
+            "id": "b",
+            "len": 10,
+            "type": "input",
+            "time": 21891.20000000001
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "c",
+            "inputType": "insertText",
+            "time": 21916.800000000017
+          },
+          {
+            "id": "b",
+            "len": 11,
+            "type": "input",
+            "time": 21917.5
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "a",
+            "inputType": "insertText",
+            "time": 21944.600000000006
+          },
+          {
+            "id": "b",
+            "len": 12,
+            "type": "input",
+            "time": 21945.20000000001
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "f",
+            "inputType": "insertText",
+            "time": 21968.5
+          },
+          {
+            "id": "b",
+            "len": 13,
+            "type": "input",
+            "time": 21969.100000000006
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "é",
+            "inputType": "insertText",
+            "time": 21993.899999999994
+          },
+          {
+            "id": "b",
+            "len": 14,
+            "type": "input",
+            "time": 21994.5
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": " ",
+            "inputType": "insertText",
+            "time": 22020.5
+          },
+          {
+            "id": "b",
+            "len": 15,
+            "type": "input",
+            "time": 22021.100000000006
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "Ω",
+            "inputType": "insertText",
+            "time": 22072.800000000017
+          },
+          {
+            "id": "b",
+            "len": 16,
+            "type": "input",
+            "time": 22073.5
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "\n第",
+            "inputType": "insertText",
+            "time": 22098.20000000001
+          },
+          {
+            "id": "b",
+            "len": 18,
+            "type": "input",
+            "time": 22099.20000000001
+          },
+          {
+            "id": "b",
+            "len": 18,
+            "type": "input",
+            "time": 22099.70000000001
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "二",
+            "inputType": "insertText",
+            "time": 22123.899999999994
+          },
+          {
+            "id": "b",
+            "len": 19,
+            "type": "input",
+            "time": 22124.399999999994
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "行",
+            "inputType": "insertText",
+            "time": 22147.899999999994
+          },
+          {
+            "id": "b",
+            "len": 20,
+            "type": "input",
+            "time": 22148.600000000006
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data": "。",
+            "inputType": "insertText",
+            "time": 22174.399999999994
+          },
+          {
+            "id": "b",
+            "len": 21,
+            "type": "input",
+            "time": 22175
+          }
+        ]
+      },
+      "no_late": true,
+      "passed": true,
+      "received_lengths": [
+        1,
+        21
+      ]
+    }
+  ],
+  "failures": [],
+  "requested_im_environment": "ibus",
+  "private_fcitx_daemon_requested": false,
+  "fcitx_attempts": [],
+  "owned_requests": [
+    {
+      "method": "CommitBatch",
+      "sequence": 0,
+      "length": 1,
+      "text": "你",
+      "batch_negotiated": true,
+      "monotonic": 214.645555536
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 1,
+      "length": 1,
+      "text": "好",
+      "batch_negotiated": true,
+      "monotonic": 214.666025357
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 2,
+      "length": 1,
+      "text": " ",
+      "batch_negotiated": true,
+      "monotonic": 214.691900357
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 3,
+      "length": 1,
+      "text": "I",
+      "batch_negotiated": true,
+      "monotonic": 214.717971813
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 4,
+      "length": 1,
+      "text": "n",
+      "batch_negotiated": true,
+      "monotonic": 214.743135931
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 5,
+      "length": 1,
+      "text": "k",
+      "batch_negotiated": true,
+      "monotonic": 214.768419955
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 6,
+      "length": 1,
+      "text": "E",
+      "batch_negotiated": true,
+      "monotonic": 214.79424032
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 7,
+      "length": 1,
+      "text": "c",
+      "batch_negotiated": true,
+      "monotonic": 214.819402037
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 8,
+      "length": 1,
+      "text": "h",
+      "batch_negotiated": true,
+      "monotonic": 214.844778316
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 9,
+      "length": 1,
+      "text": "o",
+      "batch_negotiated": true,
+      "monotonic": 214.870164585
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 10,
+      "length": 1,
+      "text": "，",
+      "batch_negotiated": true,
+      "monotonic": 214.896386188
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 11,
+      "length": 1,
+      "text": "c",
+      "batch_negotiated": true,
+      "monotonic": 214.92207852
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 12,
+      "length": 1,
+      "text": "a",
+      "batch_negotiated": true,
+      "monotonic": 214.947746867
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 13,
+      "length": 1,
+      "text": "f",
+      "batch_negotiated": true,
+      "monotonic": 214.973345093
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 14,
+      "length": 1,
+      "text": "é",
+      "batch_negotiated": true,
+      "monotonic": 214.999219733
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 15,
+      "length": 1,
+      "text": " ",
+      "batch_negotiated": true,
+      "monotonic": 215.024853394
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 16,
+      "length": 1,
+      "text": "Ω",
+      "batch_negotiated": true,
+      "monotonic": 215.077329384
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 17,
+      "length": 2,
+      "text": "\n第",
+      "batch_negotiated": true,
+      "monotonic": 215.103168706
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 18,
+      "length": 1,
+      "text": "二",
+      "batch_negotiated": true,
+      "monotonic": 215.129362722
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 19,
+      "length": 1,
+      "text": "行",
+      "batch_negotiated": true,
+      "monotonic": 215.155246396
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 20,
+      "length": 1,
+      "text": "。",
+      "batch_negotiated": true,
+      "monotonic": 215.180697041
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 0,
+      "length": 2,
+      "text": "\n甲",
+      "batch_negotiated": true,
+      "monotonic": 217.160105684
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 0,
+      "length": 2,
+      "text": "甲\n",
+      "batch_negotiated": true,
+      "monotonic": 219.059883401
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 0,
+      "length": 1,
+      "text": "甲",
+      "batch_negotiated": true,
+      "monotonic": 220.982704659
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 1,
+      "length": 2,
+      "text": "\n\n",
+      "batch_negotiated": true,
+      "monotonic": 220.988585902
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 0,
+      "length": 2,
+      "text": "\n\n",
+      "batch_negotiated": true,
+      "monotonic": 222.849035749
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 0,
+      "length": 3,
+      "text": "\n\n\n",
+      "batch_negotiated": true,
+      "monotonic": 224.731951002
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 0,
+      "length": 1,
+      "text": "甲",
+      "batch_negotiated": true,
+      "monotonic": 226.626754125
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 1,
+      "length": 1,
+      "text": "乙",
+      "batch_negotiated": true,
+      "monotonic": 226.627424618
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 2,
+      "length": 2,
+      "text": "\n\n",
+      "batch_negotiated": true,
+      "monotonic": 226.628168871
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 3,
+      "length": 3,
+      "text": "\n丙\n",
+      "batch_negotiated": true,
+      "monotonic": 226.629378106
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 0,
+      "length": 1,
+      "text": "你",
+      "batch_negotiated": true,
+      "monotonic": 228.551835472
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 0,
+      "length": 1,
+      "text": "你",
+      "batch_negotiated": true,
+      "monotonic": 232.356859974
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 1,
+      "length": 1,
+      "text": "好",
+      "batch_negotiated": true,
+      "monotonic": 232.372267878
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 2,
+      "length": 1,
+      "text": " ",
+      "batch_negotiated": true,
+      "monotonic": 232.398399681
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 3,
+      "length": 1,
+      "text": "I",
+      "batch_negotiated": true,
+      "monotonic": 232.424638714
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 4,
+      "length": 1,
+      "text": "n",
+      "batch_negotiated": true,
+      "monotonic": 232.45006082
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 5,
+      "length": 1,
+      "text": "k",
+      "batch_negotiated": true,
+      "monotonic": 232.475852218
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 6,
+      "length": 1,
+      "text": "E",
+      "batch_negotiated": true,
+      "monotonic": 232.501643872
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 7,
+      "length": 1,
+      "text": "c",
+      "batch_negotiated": true,
+      "monotonic": 232.527060686
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 8,
+      "length": 1,
+      "text": "h",
+      "batch_negotiated": true,
+      "monotonic": 232.552452393
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 9,
+      "length": 1,
+      "text": "o",
+      "batch_negotiated": true,
+      "monotonic": 232.578167349
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 10,
+      "length": 1,
+      "text": "，",
+      "batch_negotiated": true,
+      "monotonic": 232.603659806
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 11,
+      "length": 1,
+      "text": "c",
+      "batch_negotiated": true,
+      "monotonic": 232.629674054
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 12,
+      "length": 1,
+      "text": "a",
+      "batch_negotiated": true,
+      "monotonic": 232.654914131
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 13,
+      "length": 1,
+      "text": "f",
+      "batch_negotiated": true,
+      "monotonic": 232.680942515
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 14,
+      "length": 1,
+      "text": "é",
+      "batch_negotiated": true,
+      "monotonic": 232.706147036
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 15,
+      "length": 1,
+      "text": " ",
+      "batch_negotiated": true,
+      "monotonic": 232.732327566
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 16,
+      "length": 1,
+      "text": "Ω",
+      "batch_negotiated": true,
+      "monotonic": 232.784033939
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 17,
+      "length": 2,
+      "text": "\n第",
+      "batch_negotiated": true,
+      "monotonic": 232.809265564
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 18,
+      "length": 1,
+      "text": "二",
+      "batch_negotiated": true,
+      "monotonic": 232.834495307
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 19,
+      "length": 1,
+      "text": "行",
+      "batch_negotiated": true,
+      "monotonic": 232.860659673
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 20,
+      "length": 1,
+      "text": "。",
+      "batch_negotiated": true,
+      "monotonic": 232.886845802
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 0,
+      "length": 1,
+      "text": "你",
+      "batch_negotiated": true,
+      "monotonic": 234.866302437
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 1,
+      "length": 1,
+      "text": "好",
+      "batch_negotiated": true,
+      "monotonic": 234.867579562
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 2,
+      "length": 1,
+      "text": " ",
+      "batch_negotiated": true,
+      "monotonic": 234.868801593
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 3,
+      "length": 1,
+      "text": "I",
+      "batch_negotiated": true,
+      "monotonic": 234.874734519
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 4,
+      "length": 1,
+      "text": "n",
+      "batch_negotiated": true,
+      "monotonic": 234.899581432
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 5,
+      "length": 1,
+      "text": "k",
+      "batch_negotiated": true,
+      "monotonic": 234.926097128
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 6,
+      "length": 1,
+      "text": "E",
+      "batch_negotiated": true,
+      "monotonic": 234.952213689
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 7,
+      "length": 1,
+      "text": "c",
+      "batch_negotiated": true,
+      "monotonic": 234.97816484
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 8,
+      "length": 1,
+      "text": "h",
+      "batch_negotiated": true,
+      "monotonic": 235.003837101
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 9,
+      "length": 1,
+      "text": "o",
+      "batch_negotiated": true,
+      "monotonic": 235.029852431
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 10,
+      "length": 1,
+      "text": "，",
+      "batch_negotiated": true,
+      "monotonic": 235.055917044
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 11,
+      "length": 1,
+      "text": "c",
+      "batch_negotiated": true,
+      "monotonic": 235.081245408
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 12,
+      "length": 1,
+      "text": "a",
+      "batch_negotiated": true,
+      "monotonic": 235.106877203
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 13,
+      "length": 1,
+      "text": "f",
+      "batch_negotiated": true,
+      "monotonic": 235.132925945
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 14,
+      "length": 1,
+      "text": "é",
+      "batch_negotiated": true,
+      "monotonic": 235.158471127
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 15,
+      "length": 1,
+      "text": " ",
+      "batch_negotiated": true,
+      "monotonic": 235.184539558
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 16,
+      "length": 1,
+      "text": "Ω",
+      "batch_negotiated": true,
+      "monotonic": 235.235909321
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 17,
+      "length": 2,
+      "text": "\n第",
+      "batch_negotiated": true,
+      "monotonic": 235.261597297
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 18,
+      "length": 1,
+      "text": "二",
+      "batch_negotiated": true,
+      "monotonic": 235.286871679
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 19,
+      "length": 1,
+      "text": "行",
+      "batch_negotiated": true,
+      "monotonic": 235.312047505
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 20,
+      "length": 1,
+      "text": "。",
+      "batch_negotiated": true,
+      "monotonic": 235.338097558
+    }
+  ],
+  "fcitx_observer_only": true,
+  "native_candidate_test_only_override": false,
+  "browser_resource_audit": {
+    "root": "/opt/inkecho-qa-chrome",
+    "program_files": 255,
+    "payload_bytes": 456937066,
+    "manifest_sha256": "01c5c6683bdd5e143b456a5d44b54e56e2b5d5249d3789f80b085a08b626eec4",
+    "wrapper_sha256": "51c3c7ae61c640f573e15a33de080bc481693c6d04375259654d2e92a0621d76",
+    "binary_sha256": "6c792041b07547a662e1b17974d1dc34a3db630379b45d9d89ddd7e3e68cc587",
+    "sandbox_sha256": "24beb85e4149c65db5bf40fa307721143d0883ab8952e60dde1158606f644dee",
+    "sandbox_uid": 0,
+    "sandbox_gid": 0,
+    "sandbox_mode": "0o4755",
+    "sandbox_runtime_acceptance": "not inferred from resource audit"
+  },
+  "browser_version": "Google Chrome 154.0.8037.97",
+  "browser_argv": [
+    "/opt/inkecho-qa-chrome/chrome",
+    "--password-store=basic",
+    "--no-first-run",
+    "--no-default-browser-check",
+    "--disable-background-networking",
+    "--disable-sync",
+    "--ozone-platform=wayland",
+    "--gtk-version=3",
+    "--remote-debugging-port=0",
+    "--remote-allow-origins=*",
+    "--user-data-dir=/run/user/1000/inkecho-browser-n8923n42/chrome-profile",
+    "file:///run/user/1000/inkecho-browser-n8923n42/owned.html",
+    "--enable-wayland-ime",
+    "--wayland-text-input-version=3"
+  ],
+  "focus_proofs": [
+    {
+      "label": "native-before-output",
+      "pid": 4797,
+      "native": {
+        "surface": true,
+        "toplevel": true,
+        "keyboard_enter": true
+      },
+      "display_unset": true,
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-n8923n42/owned.html",
+        "visible": "visible"
+      },
+      "sampled_monotonic": 213.792269459
+    },
+    {
+      "label": "auto-mixed-before-prepare",
+      "pid": 4797,
+      "native": {
+        "surface": true,
+        "toplevel": true,
+        "keyboard_enter": true
+      },
+      "display_unset": true,
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-n8923n42/owned.html",
+        "visible": "visible"
+      },
+      "sampled_monotonic": 214.593342924
+    },
+    {
+      "label": "auto-leading-lf-before-prepare",
+      "pid": 4797,
+      "native": {
+        "surface": true,
+        "toplevel": true,
+        "keyboard_enter": true
+      },
+      "display_unset": true,
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-n8923n42/owned.html",
+        "visible": "visible"
+      },
+      "sampled_monotonic": 217.048154918
+    },
+    {
+      "label": "auto-trailing-lf-before-prepare",
+      "pid": 4797,
+      "native": {
+        "surface": true,
+        "toplevel": true,
+        "keyboard_enter": true
+      },
+      "display_unset": true,
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-n8923n42/owned.html",
+        "visible": "visible"
+      },
+      "sampled_monotonic": 219.000677054
+    },
+    {
+      "label": "auto-consecutive-tail-before-prepare",
+      "pid": 4797,
+      "native": {
+        "surface": true,
+        "toplevel": true,
+        "keyboard_enter": true
+      },
+      "display_unset": true,
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-n8923n42/owned.html",
+        "visible": "visible"
+      },
+      "sampled_monotonic": 220.90648256
+    },
+    {
+      "label": "auto-direct-two-lf-before-prepare",
+      "pid": 4797,
+      "native": {
+        "surface": true,
+        "toplevel": true,
+        "keyboard_enter": true
+      },
+      "display_unset": true,
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-n8923n42/owned.html",
+        "visible": "visible"
+      },
+      "sampled_monotonic": 222.819377757
+    },
+    {
+      "label": "auto-direct-three-lf-before-prepare",
+      "pid": 4797,
+      "native": {
+        "surface": true,
+        "toplevel": true,
+        "keyboard_enter": true
+      },
+      "display_unset": true,
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-n8923n42/owned.html",
+        "visible": "visible"
+      },
+      "sampled_monotonic": 224.690718292
+    },
+    {
+      "label": "auto-synchronous-before-prepare",
+      "pid": 4797,
+      "native": {
+        "surface": true,
+        "toplevel": true,
+        "keyboard_enter": true
+      },
+      "display_unset": true,
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-n8923n42/owned.html",
+        "visible": "visible"
+      },
+      "sampled_monotonic": 226.578338381
+    },
+    {
+      "label": "auto-cancel-before-prepare",
+      "pid": 4797,
+      "native": {
+        "surface": true,
+        "toplevel": true,
+        "keyboard_enter": true
+      },
+      "display_unset": true,
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-n8923n42/owned.html",
+        "visible": "visible"
+      },
+      "sampled_monotonic": 228.491938285
+    },
+    {
+      "label": "auto-pending-cancel-before-prepare",
+      "pid": 4797,
+      "native": {
+        "surface": true,
+        "toplevel": true,
+        "keyboard_enter": true
+      },
+      "display_unset": true,
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-n8923n42/owned.html",
+        "visible": "visible"
+      },
+      "sampled_monotonic": 230.400214297
+    },
+    {
+      "label": "auto-prepare-switch-before-prepare",
+      "pid": 4797,
+      "native": {
+        "surface": true,
+        "toplevel": true,
+        "keyboard_enter": true
+      },
+      "display_unset": true,
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-n8923n42/owned.html",
+        "visible": "visible"
+      },
+      "sampled_monotonic": 232.309883739
+    },
+    {
+      "label": "auto-switch-before-prepare",
+      "pid": 4797,
+      "native": {
+        "surface": true,
+        "toplevel": true,
+        "keyboard_enter": true
+      },
+      "display_unset": true,
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-n8923n42/owned.html",
+        "visible": "visible"
+      },
+      "sampled_monotonic": 234.764605746
+    }
+  ],
+  "sandbox_metadata_probe": {
+    "returncode": 0,
+    "stdout": "[{\"pid\": 4994, \"owned_parent_chain\": [4994, 4812, 4810, 4809], \"seccomp\": \"2\", \"no_new_privs\": \"1\", \"namespace_pids\": [\"4994\", \"41\"]}, {\"pid\": 4988, \"owned_parent_chain\": [4988, 4812, 4810, 4809], \"seccomp\": \"2\", \"no_new_privs\": \"1\", \"namespace_pids\": [\"4988\", \"40\"]}, {\"pid\": 4958, \"owned_parent_chain\": [4958, 4812, 4810, 4809], \"seccomp\": \"2\", \"no_new_privs\": \"1\", \"namespace_pids\": [\"4958\", \"27\"]}, {\"pid\": 5021, \"owned_parent_chain\": [5021, 4812, 4810, 4809], \"seccomp\": \"2\", \"no_new_privs\": \"1\", \"namespace_pids\": [\"5021\", \"60\"]}, {\"pid\": 4881, \"owned_parent_chain\": [4881, 4812, 4810, 4809], \"seccomp\": \"2\", \"no_new_privs\": \"1\", \"namespace_pids\": [\"4881\", \"12\"]}]\n",
+    "stderr": "",
+    "guest_root_readonly": true
+  },
+  "sandbox_renderers": [
+    {
+      "pid": 4994,
+      "owned_parent_chain": [
+        4994,
+        4812,
+        4810,
+        4809
+      ],
+      "seccomp": "2",
+      "no_new_privs": "1",
+      "namespace_pids": [
+        "4994",
+        "41"
+      ]
+    },
+    {
+      "pid": 4988,
+      "owned_parent_chain": [
+        4988,
+        4812,
+        4810,
+        4809
+      ],
+      "seccomp": "2",
+      "no_new_privs": "1",
+      "namespace_pids": [
+        "4988",
+        "40"
+      ]
+    },
+    {
+      "pid": 4958,
+      "owned_parent_chain": [
+        4958,
+        4812,
+        4810,
+        4809
+      ],
+      "seccomp": "2",
+      "no_new_privs": "1",
+      "namespace_pids": [
+        "4958",
+        "27"
+      ]
+    },
+    {
+      "pid": 5021,
+      "owned_parent_chain": [
+        5021,
+        4812,
+        4810,
+        4809
+      ],
+      "seccomp": "2",
+      "no_new_privs": "1",
+      "namespace_pids": [
+        "5021",
+        "60"
+      ]
+    },
+    {
+      "pid": 4881,
+      "owned_parent_chain": [
+        4881,
+        4812,
+        4810,
+        4809
+      ],
+      "seccomp": "2",
+      "no_new_privs": "1",
+      "namespace_pids": [
+        "4881",
+        "12"
+      ]
+    }
+  ],
+  "browser_fcitx_module_maps": [],
+  "loaded_api": "node /io/github/Creammmmm/InkEcho/IBusOwnedCandidateV5 {\n  interface org.freedesktop.DBus.Properties {\n    methods:\n      Get(in  s interface_name,\n          in  s property_name,\n          out v value);\n      GetAll(in  s interface_name,\n             out a{sv} properties);\n      Set(in  s interface_name,\n          in  s property_name,\n          in  v value);\n    signals:\n      PropertiesChanged(s interface_name,\n                        a{sv} changed_properties,\n                        as invalidated_properties);\n    properties:\n  };\n  interface org.freedesktop.DBus.Introspectable {\n    methods:\n      Introspect(out s xml_data);\n    signals:\n    properties:\n  };\n  interface org.freedesktop.DBus.Peer {\n    methods:\n      Ping();\n      GetMachineId(out s machine_uuid);\n    signals:\n    properties:\n  };\n  interface io.github.Creammmmm.InkEcho.IBusOwnedCandidateV51 {\n    methods:\n      Probe(out s arg_0);\n      Begin(in  s arg_0,\n            in  s arg_1,\n            out b arg_2);\n      Commit(in  u arg_0,\n             in  s arg_1,\n             out s arg_2);\n      BeginBatch(in  s arg_0,\n                 in  s arg_1,\n                 in  u arg_2,\n                 out b arg_3);\n      CommitBatch(in  u arg_0,\n                  in  s arg_1,\n                  out s arg_2);\n      Cancel(out b arg_0);\n    signals:\n    properties:\n  };\n};\n",
+  "app_xdg_data_home": null,
+  "app_home": "/home/inkecho",
+  "owned_installation_state": "enabled",
+  "owned_context_probe": [
+    "ibus",
+    ":1.8"
+  ],
+  "browser_normal_close": true,
+  "passed": false,
+  "browser_exit": 0,
+  "hints_restored": true,
+  "native_protocol_proof": {
+    "surface": true,
+    "toplevel": true,
+    "keyboard_enter": true
+  },
+  "startup_diagnostics": [
+    "\n",
+    "DevTools listening on ws://127.0.0.1:37183/devtools/browser/aff67ab0-c463-4c62-a229-8763f56ff6f6\n",
+    "libva error: /usr/lib/x86_64-linux-gnu/dri/virtio_gpu_drv_video.so init failed\n",
+    "[4838:4838:1030/020444.345768:ERROR:media/gpu/vaapi/vaapi_wrapper.cc:1801] vaInitialize failed: resource allocation failed\n",
+    "第\")\n",
+    "第\n",
+    "\", 29, 29)\n",
+    "第二\n",
+    "\", 32, 32)\n",
+    "第二行\n",
+    "\", 35, 35)\n",
+    "第二行。\n",
+    "\", 38, 38)\n",
+    "甲\")\n",
+    "甲\n",
+    "\", 4, 4)\n",
+    "\")\n",
+    "\n",
+    "\", 4, 4)\n",
+    "\n",
+    "\")\n",
+    "\n",
+    "\n",
+    "\", 5, 5)\n",
+    "\n",
+    "\")\n",
+    "\n",
+    "\n",
+    "\", 2, 2)\n",
+    "\n"
+  ],
+  "candidate_source_manifest_sha256": "78cd37b7944d78e48730617b56bfa53dd70edc22e45b695ec8218bdf9886d684",
+  "package_module_origins": {
+    "inkecho.platform.fcitx5_staging": "/mnt/input/candidate-src/inkecho/platform/fcitx5_staging.py",
+    "inkecho.platform.fcitx5_install": "/mnt/input/candidate-src/inkecho/platform/fcitx5_install.py",
+    "inkecho.platform.framework_detection": "/mnt/input/candidate-src/inkecho/platform/framework_detection.py",
+    "inkecho.platform.ibus_lifecycle": "/mnt/input/candidate-src/inkecho/platform/ibus_lifecycle.py",
+    "inkecho.platform.ibus": "/mnt/input/candidate-src/inkecho/platform/ibus.py",
+    "inkecho.text_units": "/mnt/input/candidate-src/inkecho/text_units.py",
+    "inkecho.platform.ibus_owned": "/mnt/input/candidate-src/inkecho/platform/ibus_owned.py",
+    "inkecho.platform.fcitx5_capability": "/mnt/input/candidate-src/inkecho/platform/fcitx5_capability.py",
+    "inkecho.platform.fcitx5": "/mnt/input/candidate-src/inkecho/platform/fcitx5.py",
+    "inkecho.platform.output_pacing": "/mnt/input/candidate-src/inkecho/platform/output_pacing.py",
+    "inkecho.platform.keyboard": "/mnt/input/candidate-src/inkecho/platform/keyboard.py",
+    "inkecho.text_normalization": "/mnt/input/candidate-src/inkecho/text_normalization.py",
+    "inkecho.platform.output_router": "/mnt/input/candidate-src/inkecho/platform/output_router.py",
+    "inkecho.platform.ibus_owned_auto": "/mnt/input/candidate-src/inkecho/platform/ibus_owned_auto.py",
+    "inkecho.platform.owned_installation": "/mnt/input/candidate-src/inkecho/platform/owned_installation.py",
+    "inkecho.platform.ibus_owned_default": "/mnt/input/candidate-src/inkecho/platform/ibus_owned_default.py",
+    "inkecho.platform.wayland_keyboard": "/mnt/input/candidate-src/inkecho/platform/wayland_keyboard.py",
+    "inkecho.config": "/mnt/input/candidate-src/inkecho/config.py",
+    "inkecho.provider_catalog": "/mnt/input/candidate-src/inkecho/provider_catalog.py",
+    "inkecho.providers": "/mnt/input/candidate-src/inkecho/providers.py",
+    "inkecho.audio": "/mnt/input/candidate-src/inkecho/audio.py",
+    "inkecho.core": "/mnt/input/candidate-src/inkecho/core.py",
+    "inkecho.performance": "/mnt/input/candidate-src/inkecho/performance.py",
+    "inkecho.realtime": "/mnt/input/candidate-src/inkecho/realtime.py",
+    "inkecho.security": "/mnt/input/candidate-src/inkecho/security.py",
+    "inkecho.streaming_output": "/mnt/input/candidate-src/inkecho/streaming_output.py",
+    "inkecho.app": "/mnt/input/candidate-src/inkecho/app.py",
+    "inkecho.platform.hybrid_keyboard": "/mnt/input/candidate-src/inkecho/platform/hybrid_keyboard.py"
+  }
+}

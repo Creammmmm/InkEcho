@@ -1,0 +1,6 @@
+{
+  "command": "systemctl --user show-environment | grep -E \"XDG_SESSION_TYPE|WAYLAND_DISPLAY\"; ls /mnt/input | head",
+  "returncode": 255,
+  "stdout": "",
+  "stderr": "Connection timed out during banner exchange\nConnection to 127.0.0.1 port 2222 timed out\n"
+}

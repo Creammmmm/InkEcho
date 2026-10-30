@@ -1,0 +1,24 @@
+from pathlib import Path
+import shutil,os,json,hashlib,subprocess
+repo=Path('/home/lth/github/InkEcho');old=repo/'dist/chrome24-native-0.12.0-20261030';r=repo/'dist/ibus-owned-neighbor-r2-desktop-20261030';r.mkdir(mode=0o700);b=r/'vm24';b.mkdir();inp=b/'input';shutil.copytree(old/'input',inp,copy_function=os.link)
+(inp/'candidate-src').mkdir();shutil.copytree('/tmp/inkecho-ibus-owned-neighbor-20261030/src',inp/'candidate-src',dirs_exist_ok=True,ignore=shutil.ignore_patterns('__pycache__','*.pyc'))
+def write(p,s):
+ t=p.with_suffix(p.suffix+'.new');t.write_text(s);t.replace(p)
+manifest={str(p.relative_to(inp/'candidate-src')):{'size':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest()}for p in sorted((inp/'candidate-src').rglob('*'))if p.is_file()};write(inp/'candidate-source-manifest.json',json.dumps(manifest,indent=2)+'\n')
+w=(inp/'wrapper.py').read_text().replace('8e873ceb6dfc51547ca85cc3c3848bd25f82aa4997f7e3c6a99dcf5d190d2fce','0678d1ed75eefc1bdd9026955bc518bf8a259bc3a0dccbc59bfa74963e681a5f');write(inp/'wrapper.py',w)
+launch=json.loads((old/'launch.json').read_text());launch[launch.index('--name')+1]='inkecho-owned-neighbor-r2-24-20261030'
+for i,x in enumerate(launch):
+ if x=='type=bind,src='+str(repo/'dist/candidate-0.12.0-895d03b-20261030/vm24/output')+',dst=/snapshot,readonly':launch[i]='type=bind,src='+str(old/'output')+',dst=/snapshot,readonly'
+ elif str(old) in x:launch[i]=x.replace(str(old),str(b))
+(b/'output').mkdir(mode=0o700);write(b/'launch.json',json.dumps(launch,indent=2)+'\n')
+# Private overlay use is explicit: runtime/dependencies and staged Fcitx remain immutable published package.
+p=inp/'launch-native012.py';s=p.read_text().replace("PYTHONPATH=str(A/'packages')","PYTHONPATH='/mnt/input/candidate-src:'+str(A/'packages')");write(p,s)
+p=inp/'browser-native012.py';s=p.read_text().replace('actual unmodified 0.12.0 AppImage modules and staged addon; actual Session/default Router; synthetic Recorder/provider only','published 0.12.0 runtime and staged Fcitx addon, candidate R2 source overlay and JS; NOT unchanged package qualification; actual Session/default Router; synthetic Recorder/provider only')
+s=s.replace("assert all(Path(v).is_relative_to(A/'packages')for v in report['package_module_origins'].values())","assert all(Path(v).is_relative_to('/mnt/input/candidate-src')for v in report['package_module_origins'].values())")
+s=s.replace("report['package_module_origins']={","report['candidate_source_manifest_sha256']=hashlib.sha256(Path('/mnt/input/candidate-source-manifest.json').read_bytes()).hexdigest()\n  report['package_module_origins']={")
+s=s.replace("for case in (['mixed','pending-cancel']if LABEL.startswith('disabled')else ['mixed','cancel','pending-cancel','prepare-switch','switch']):","for case in ['mixed','leading-lf','trailing-lf','consecutive-tail','pure-three-tail','solo-lf','two-lf','synchronous','original-fallback','cancel','pending-cancel','prepare-switch','switch']:")
+write(p,s)
+(r/'scope.json').write_text(json.dumps({'baseline':'f0b9e22d6b9a26865818b433767b90f9e8ebfc03','patch_sha256':'ef3817d9e19369b4d339a0cbfbfe4903ab47eef2615e1db5699fb82adfa15901','published_runtime_sha256':'7488566c708d3fc12de665d35dfc7c26a1902908c9fec63e3c905b1446757a78','scope':'source overlay desktop qualification only, no rebuilt package, no host install'},indent=2))
+print(r)
+assert not subprocess.check_output(['docker','ps','-q'],text=True).strip()
+p=subprocess.run(launch,capture_output=True,text=True);(b/'boot.json').write_text(json.dumps({'returncode':p.returncode,'stdout':p.stdout,'stderr':p.stderr},indent=2));print(p.stdout,p.stderr);p.check_returncode()

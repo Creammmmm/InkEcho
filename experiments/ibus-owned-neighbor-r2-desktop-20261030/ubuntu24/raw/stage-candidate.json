@@ -1,0 +1,6 @@
+{
+  "command": "set -eu; /usr/bin/python3 /mnt/input/stage-candidate.py; sudo -n systemctl restart gdm3",
+  "returncode": 1,
+  "stdout": "",
+  "stderr": "Traceback (most recent call last):\n  File \"/mnt/input/stage-candidate.py\", line 6, in <module>\n    from inkecho.platform.owned_installation import installed_directory,verified_installation,FILES,LEGACY_FILES\n  File \"/mnt/input/candidate-src/inkecho/platform/owned_installation.py\", line 10, in <module>\n    from inkecho.platform.framework_detection import _command\n  File \"/mnt/input/candidate-src/inkecho/platform/framework_detection.py\", line 14, in <module>\n    from dbus_next import Message, MessageType\nModuleNotFoundError: No module named 'dbus_next'\n"
+}

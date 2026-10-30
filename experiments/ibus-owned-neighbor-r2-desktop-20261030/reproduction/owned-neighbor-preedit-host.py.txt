@@ -1,0 +1,16 @@
+import subprocess,json,time,shlex
+from pathlib import Path
+b=Path('/home/lth/github/InkEcho/dist/ibus-owned-neighbor-r2-desktop-20261030/vm24');name='inkecho-owned-neighbor-r2-24-20261030'
+ssh=['docker','exec','-i',name,'ssh','-T','-i','/secrets/testkey','-p2222','-o','BatchMode=yes','-o','ConnectTimeout=8','-o','StrictHostKeyChecking=yes','-o','UserKnownHostsFile=/prior/known_hosts','inkecho@127.0.0.1']
+log=(b/'preedit-host.log').open('w');p=subprocess.Popen(ssh+['env INKECHO_OUTPUT_STAGE=wayland /usr/bin/python3 /mnt/input/launch-preedit.py'],stdout=log,stderr=subprocess.STDOUT);last=0;rows=[];start=time.monotonic()
+while p.poll()is None:
+ f=b/'output/preedit-candidate/key-request.json'
+ if f.exists():
+  r=json.loads(f.read_text())
+  if r['sequence']>last:
+   pid=r['actor']['pid'];guard='import pathlib,json;d=json.loads(pathlib.Path('+repr(r['state'])+').read_text());assert d["pid"]=='+str(pid)+' and d["active"] and d["focus"];assert b"preedit-actor.py" in pathlib.Path("/proc/'+str(pid)+'/cmdline").read_bytes()'
+   c=subprocess.run(ssh+['/usr/bin/python3 -c '+shlex.quote(guard)],capture_output=True,text=True,timeout=10);assert c.returncode==0,(c.stdout,c.stderr)
+   k=subprocess.run(['docker','exec',name,'python3','/input/qmp-key.py',str(r['keyval'])],capture_output=True,text=True,timeout=5);rows.append({'request':r,'guard_returncode':c.returncode,'qmp_returncode':k.returncode,'stdout':k.stdout,'stderr':k.stderr});(b/'preedit-hardware.json').write_text(json.dumps(rows,indent=2));a=f.with_name('key-ack.tmp');a.write_text(json.dumps({'sequence':r['sequence'],'ok':k.returncode==0}));a.replace(f.with_name('key-ack.json'));last=r['sequence']
+ if time.monotonic()-start>65:p.terminate();raise TimeoutError('bounded test')
+ time.sleep(.05)
+rc=p.wait();log.close();(b/'preedit-host-exit.json').write_text(json.dumps({'returncode':rc}));print(rc,(b/'preedit-host.log').read_text())

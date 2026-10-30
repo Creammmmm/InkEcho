@@ -1,0 +1,6 @@
+{
+  "command": "sudo -n dpkg -i /mnt/input/pinyin-debs/*.deb",
+  "returncode": 2,
+  "stdout": "",
+  "stderr": "dpkg: error: cannot access archive '/mnt/input/pinyin-debs/*.deb': No such file or directory\n"
+}

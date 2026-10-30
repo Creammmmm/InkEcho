@@ -1,0 +1,378 @@
+{
+  "inkecho/__init__.py": {
+    "size": 59,
+    "sha256": "61cbd4842d68234ccfe3e63807b67a18d3e0e8a0b6015b14f5e0dc71c5981e2d"
+  },
+  "inkecho/__main__.py": {
+    "size": 9530,
+    "sha256": "44670f4abc2676f95caae33639e3ef26005f388bfbb3a801757a54e29cac6d8d"
+  },
+  "inkecho/app.py": {
+    "size": 57699,
+    "sha256": "82911fc6faeaa41369b52617e2e3932f8060c455fd4eedd6a0ad3bcaa38b2cf6"
+  },
+  "inkecho/asr_streaming.py": {
+    "size": 1967,
+    "sha256": "a6426173cadd5a159679cf4032989190c11a33c98d57ab7bb59712fc8324a3f4"
+  },
+  "inkecho/asr_wire.py": {
+    "size": 3427,
+    "sha256": "a64a604d47249206cdd66fa964a48085701782fbebf9b65b2627f2eeaf2f4414"
+  },
+  "inkecho/assets/inkecho-128.png": {
+    "size": 15600,
+    "sha256": "e9f783e05fe0af7fa3c979adb72ac23fd1e08d3636e12bbb137dd28f7c4f9cde"
+  },
+  "inkecho/assets/inkecho-16.png": {
+    "size": 627,
+    "sha256": "0a8f26b907192e620403a6c9907d660f9014341016ad26d1cebbc156312ac499"
+  },
+  "inkecho/assets/inkecho-24.png": {
+    "size": 1026,
+    "sha256": "f50bf2f9d3434c8a89fea5b2dcec0d8e72141e27d11df9f20f7fda73dd387932"
+  },
+  "inkecho/assets/inkecho-256.png": {
+    "size": 52824,
+    "sha256": "f694df1872697f875d6e4c226e4f9dd39e20c2243dc3a10570330807600b7d2f"
+  },
+  "inkecho/assets/inkecho-32.png": {
+    "size": 1608,
+    "sha256": "62ed206914638da5b256fdaffb7c999d81c79e474755b6e2146778fd133bd7ee"
+  },
+  "inkecho/assets/inkecho-48.png": {
+    "size": 2982,
+    "sha256": "06f7f4e1cf6bf3f9aedbe71f5140ce0f91b1157ac3f81a91bc014a13d06d6e85"
+  },
+  "inkecho/assets/inkecho-512.png": {
+    "size": 182352,
+    "sha256": "c9753f525db34349c34134e116cef9871126d267c5250844552aba1da3c05aa0"
+  },
+  "inkecho/assets/inkecho-64.png": {
+    "size": 4877,
+    "sha256": "60e6a040d2e81574cdbd5315997e06b25a9a4cdb24502e3debae231cae0181d6"
+  },
+  "inkecho/assets/inkecho.png": {
+    "size": 1079389,
+    "sha256": "42449d99f4fb0f87bc14aaa89e68f118ef8568bdb53be8a1fc5bc177a45947a5"
+  },
+  "inkecho/audio.py": {
+    "size": 6891,
+    "sha256": "7a7c52be4465858476f0b85e12832fa6846aed0f1355ab1bb98efbe1febfdd53"
+  },
+  "inkecho/billing.py": {
+    "size": 5472,
+    "sha256": "e84564487afa285eae151d24a0fc5827a1a6609ca6e6865d75a6afa241c6ba31"
+  },
+  "inkecho/config.py": {
+    "size": 21493,
+    "sha256": "1134540f4b469dd828aa8006f64ac1800f7a4e3806c4d1b626e7f52437f8baeb"
+  },
+  "inkecho/core.py": {
+    "size": 7025,
+    "sha256": "3b4122d5985413f58cec23714ae5ebff19cbb58e5496e3b5177f5174dbb61b01"
+  },
+  "inkecho/dashscope_realtime.py": {
+    "size": 7705,
+    "sha256": "c0544296c53747777e0963942c56c894038c0c4ce404283ca15059ca549482f2"
+  },
+  "inkecho/http_asr.py": {
+    "size": 8923,
+    "sha256": "af1f08169b572a44022151835ee0b83176248984bbcdb7db382499abc4a6574b"
+  },
+  "inkecho/integration.py": {
+    "size": 11846,
+    "sha256": "306110cc262a73793f4b7f487409cbdb11d90409fdee60b4d2e5eabc470c848b"
+  },
+  "inkecho/logging.py": {
+    "size": 4154,
+    "sha256": "b89082aa532ee7b03732e738be61098694ca22f1e58c154c9324cdd63541dcc3"
+  },
+  "inkecho/performance.py": {
+    "size": 4496,
+    "sha256": "223a6dcef338533562c35fb916ef6e4a5e95d9d336c8c15e1bdb3e983306c3d4"
+  },
+  "inkecho/platform/capabilities.py": {
+    "size": 1763,
+    "sha256": "e50e1dd66420bad9072fff4da11e2063d71cba29be386431446cde0718cfdf8c"
+  },
+  "inkecho/platform/eis.py": {
+    "size": 15947,
+    "sha256": "a9343b0e4fd84c3ba8adda37e7fc5f9d7554eb7b78aab5179851587bfb0cfd19"
+  },
+  "inkecho/platform/escape.py": {
+    "size": 9959,
+    "sha256": "c111ee8666ee0c1a76b6383bd6c4f0ea4af5bec72a95b06e84571aa1740b7cc1"
+  },
+  "inkecho/platform/fcitx5.py": {
+    "size": 23727,
+    "sha256": "cd75ab99acf78797fafe8d6711127349d2da8795fa3724c5ce898676083dd275"
+  },
+  "inkecho/platform/fcitx5_capability.py": {
+    "size": 5614,
+    "sha256": "a8aa702a1339ee8c5a3909563ffcf5d4be6aa52c8d292c3f4b01fcac378895cf"
+  },
+  "inkecho/platform/fcitx5_install.py": {
+    "size": 7290,
+    "sha256": "ecd9b0af0234d3c7cc3f10576b9014a10ea356d50f7dabba256ea5b54087d51a"
+  },
+  "inkecho/platform/fcitx5_staging.py": {
+    "size": 11504,
+    "sha256": "1c71dcc660a808a0812bac8338e877bb577075d9147fdba421a9b1ab849d7f07"
+  },
+  "inkecho/platform/framework_detection.py": {
+    "size": 10522,
+    "sha256": "119ebfaee65ce6a8b04e3652f9712c7916e57e73c64a37e3b59ac5844555033d"
+  },
+  "inkecho/platform/hotkeys.py": {
+    "size": 8785,
+    "sha256": "b7987d18288b6eef925a32283e91fb03b77a1cced0f8ea5760a63f526ae024aa"
+  },
+  "inkecho/platform/hybrid_keyboard.py": {
+    "size": 10032,
+    "sha256": "038c50fdd70f1c6636a913a196b03442944a150cc2c5986d15ad7a0ab58348c6"
+  },
+  "inkecho/platform/ibus.py": {
+    "size": 11477,
+    "sha256": "02fdefd9b0ffeee15fe7da8c32e05f3d321eadcc73545e6e3cf400b687cc9dcf"
+  },
+  "inkecho/platform/ibus_candidate/capability.js": {
+    "size": 2784,
+    "sha256": "fcbaf3e7fd0184ca3141f3c4d811f7496ef753fd6282714ec128a26151a1c881"
+  },
+  "inkecho/platform/ibus_candidate/delivery_gate.js": {
+    "size": 1938,
+    "sha256": "6900065ef4996dced1e451b7a0f14d744862e1da089e8474caf8d1789b9b9e6d"
+  },
+  "inkecho/platform/ibus_candidate/extension.js": {
+    "size": 2740,
+    "sha256": "b9b762262dd38d3086f029747750a21cb8b62a46d73b05bf70c7fdc307a911b2"
+  },
+  "inkecho/platform/ibus_candidate/metadata.json": {
+    "size": 198,
+    "sha256": "c53d67c6b8d2e9769e7dcf0a3b6545dbc57673e8ea29a7e487bf55761c214317"
+  },
+  "inkecho/platform/ibus_extension.py": {
+    "size": 4894,
+    "sha256": "52fbb8568b1f34231641632df68bea4c3e07b4216a4e936afb2aa8bbca2cc325"
+  },
+  "inkecho/platform/ibus_lifecycle.py": {
+    "size": 2573,
+    "sha256": "f2345bef05a6a030076252456dc159120973660a8e0b172ef6582933454c1355"
+  },
+  "inkecho/platform/ibus_owned.py": {
+    "size": 15435,
+    "sha256": "f64dc2c9ad5e1053607e8b2e5c1aa0d7f5e75665fffbc080fa7ee33571ca2f28"
+  },
+  "inkecho/platform/ibus_owned_auto.py": {
+    "size": 3934,
+    "sha256": "a1544f915d1606b05686640e8cdfaaa72d9ce547f9378aa63ea1cb8f0344af18"
+  },
+  "inkecho/platform/ibus_owned_candidate/capability.js": {
+    "size": 2784,
+    "sha256": "fcbaf3e7fd0184ca3141f3c4d811f7496ef753fd6282714ec128a26151a1c881"
+  },
+  "inkecho/platform/ibus_owned_candidate/delivery_gate.js": {
+    "size": 2674,
+    "sha256": "085b80da7c48d46308e10ed078de071a7599b84124daf688492957d98317a2ba"
+  },
+  "inkecho/platform/ibus_owned_candidate/extension.js": {
+    "size": 5867,
+    "sha256": "d99531033313e308c1c904dafec2cfe443bd25a12e93a06c20f99aef379e811f"
+  },
+  "inkecho/platform/ibus_owned_candidate/identity.js": {
+    "size": 404,
+    "sha256": "5a50a88cc6f08619b4742e2f1c269a2dce7a517ece32176270ad69f3ffc8e9ac"
+  },
+  "inkecho/platform/ibus_owned_candidate/metadata.json": {
+    "size": 235,
+    "sha256": "3affc5dde73c67f8e6638d8dd115b3f7b9504b86ac29af147365675d28824549"
+  },
+  "inkecho/platform/ibus_owned_candidate/owned_gate.js": {
+    "size": 3208,
+    "sha256": "d121f01a897e91fedca6cbee11587f28840751bbd319e13f366848d9d3d35816"
+  },
+  "inkecho/platform/ibus_owned_candidate/probe.js": {
+    "size": 951,
+    "sha256": "39adc6ccc1109bf7d9cae419314781164dccbf0a2f6d6a778888a15755a12dc4"
+  },
+  "inkecho/platform/ibus_owned_default.py": {
+    "size": 10029,
+    "sha256": "09cab028445a339d57ec75101365b871e11a9d811b8bbf485d533629e5141af3"
+  },
+  "inkecho/platform/keyboard.py": {
+    "size": 42110,
+    "sha256": "67000fe0de6592017796ebd07cb47dc0e187a1d24457ade68cfe4243cde5920e"
+  },
+  "inkecho/platform/output_pacing.py": {
+    "size": 14033,
+    "sha256": "024b3df0a8da6b79b8a13febbdfde7c84af02a3af9e1270ddb81a69e56f60d92"
+  },
+  "inkecho/platform/output_router.py": {
+    "size": 27506,
+    "sha256": "d227a4297db3fd60bdf503a338ccb6b0401fcf0633d6a4556e2d8b959605d7a8"
+  },
+  "inkecho/platform/owned_asset_manifest.json": {
+    "size": 870,
+    "sha256": "487df3f27a43d02e964f5d94a9fe9dd60c6ed6117e64fd3ff610d2df2de1aa49"
+  },
+  "inkecho/platform/owned_extension.py": {
+    "size": 3107,
+    "sha256": "f4088b7c99bdf79cccc3b76ba73dfb24d2763485418a77e3407d0fc3c64b9761"
+  },
+  "inkecho/platform/owned_installation.py": {
+    "size": 6049,
+    "sha256": "e75b73a19c97a1288851e0a86d65c24c369e78b6ae914eb9259069b34af2f13e"
+  },
+  "inkecho/platform/portal_escape.py": {
+    "size": 10019,
+    "sha256": "80927f8ccd01dc6f596d388bd7224c0e93b6f52b36a018e420c72b23d1b295ce"
+  },
+  "inkecho/platform/wayland_keyboard.py": {
+    "size": 21443,
+    "sha256": "bd76f5d8bb972fce9a7c3bd0dcbfc44fc61f128ab3e6b27bbe7415da4eff29bf"
+  },
+  "inkecho/platform/wayland_keymap.py": {
+    "size": 9344,
+    "sha256": "884d12541b48e434f3eb087f339aa71e87b1d506fd8978484b969b342dc3260a"
+  },
+  "inkecho/platform/wayland_worker.py": {
+    "size": 30643,
+    "sha256": "45330a05e596c9b280d579457cc37bf7af7b4180762a7a1c3a78ef3ecb68c6eb"
+  },
+  "inkecho/platform/x11_feedback.py": {
+    "size": 16286,
+    "sha256": "cb4e58f12b9409a72f0b7ec9a0c39aeb6b49f53e5915f4e30e3e8d830df471ac"
+  },
+  "inkecho/polish_protocols.py": {
+    "size": 27890,
+    "sha256": "c1fb15a9e1f42496e597f5c6f8b470650d7f36bdaffb7074970097986df713dc"
+  },
+  "inkecho/polish_stream.py": {
+    "size": 8543,
+    "sha256": "47588cd3b4e546e6a8f6eef1057208d32c49ce6cee564919e1f42660b10582dd"
+  },
+  "inkecho/provider_capability.py": {
+    "size": 2482,
+    "sha256": "6c8b5627c0bc56e1339bf63f8ea2cb12ea2c20b72d3a0e7ae6e5cf9feb9079c0"
+  },
+  "inkecho/provider_catalog.py": {
+    "size": 11674,
+    "sha256": "79ff7b639c9b91df6697edef433bdfa40eb16fe2d1207722325a231759038dc6"
+  },
+  "inkecho/provider_credentials.py": {
+    "size": 1363,
+    "sha256": "5169894c590fee0b19230fce2be2f0ebb293c3a87d3bdaae42eeef94d1cc4949"
+  },
+  "inkecho/provider_guidance.py": {
+    "size": 11243,
+    "sha256": "af65fbe1aa0763046f4e68f5b71777d8fbe6a6d3b6395411171fdd1dc4aad18f"
+  },
+  "inkecho/providers.py": {
+    "size": 23268,
+    "sha256": "0e4015a5e5b3a7793e47e48f0f14399933c5fdd352411cc9b3d2aa87f6419867"
+  },
+  "inkecho/qwen_vad.py": {
+    "size": 9156,
+    "sha256": "6e05a8215585fec7a66fbb3bdfc31a0afc32bf4ded4878f67b38eb0a59cc6ed5"
+  },
+  "inkecho/realtime.py": {
+    "size": 24655,
+    "sha256": "c9a997a59e250e1938e4478e9a125cca25d68665d3607b7d54dd8c31f78e31da"
+  },
+  "inkecho/runtime.py": {
+    "size": 1164,
+    "sha256": "28508099d1811f27562b548c71403c85601bab2e961a68db77ca72692ea798bf"
+  },
+  "inkecho/security.py": {
+    "size": 6005,
+    "sha256": "be28a62da5ae8c38456b60bfb62a3ea8692bddbbcf07ce8584edd43b07141219"
+  },
+  "inkecho/statistics.py": {
+    "size": 5774,
+    "sha256": "b2e9f5a28e363c8fd021344190d484be86d11cfea274f0c5c300be1d25893771"
+  },
+  "inkecho/step_realtime.py": {
+    "size": 8131,
+    "sha256": "ceef9f800d279d582e6f71c257ebf04bdb32ac4cc55bf4c09c7712afa85c9267"
+  },
+  "inkecho/streaming_output.py": {
+    "size": 9027,
+    "sha256": "5540b0eabf1bf6cbdf3432858fedd90a392ff9c4285c127cfdae611e6793f8ab"
+  },
+  "inkecho/tencent_realtime.py": {
+    "size": 6110,
+    "sha256": "86411b1803d003509773dd99b01fa344a6cdde492fecea61d4df7e0769c1dd56"
+  },
+  "inkecho/text_normalization.py": {
+    "size": 235,
+    "sha256": "81812f2c6157f310ddf4f14bbccb9afa165e7e001fa08497a74053551ff27c32"
+  },
+  "inkecho/text_units.py": {
+    "size": 2206,
+    "sha256": "5e4c216fcab6dbd7cac0888ffc802f0893637607a35c3b4767ef90aed61376b1"
+  },
+  "inkecho/ui/__init__.py": {
+    "size": 61,
+    "sha256": "0543b7f5a2e36d0dc827428d25d540e31b3aee74c5e32e3ee0f24e1493a6f078"
+  },
+  "inkecho/ui/dashboard.py": {
+    "size": 14741,
+    "sha256": "a26fe54a05ee80623d348b5289b597976bcb903f51c40e3291ebb4e2f8dd93ce"
+  },
+  "inkecho/ui/information.py": {
+    "size": 29087,
+    "sha256": "f187c262ba24134d11df38475930f44fa5e30534f6a2df6208f41f416c70eec8"
+  },
+  "inkecho/ui/notifications.py": {
+    "size": 5257,
+    "sha256": "447110164fbca7cd735d59f8bb23254e55bcacd0fe66f0b929ce767affaec09f"
+  },
+  "inkecho/ui/overlay.py": {
+    "size": 7679,
+    "sha256": "233d7ffc30a7383246592412eb890f82f8e42d289b5c4427fdae7b816f2a0c41"
+  },
+  "inkecho/ui/overlay_host.py": {
+    "size": 5512,
+    "sha256": "3668000b648a9e18a35cb61737ab199d693519da296b6c43970ea475b53b03b8"
+  },
+  "inkecho/ui/overlay_proxy.py": {
+    "size": 7892,
+    "sha256": "862c56b0d4fce32de6cdae36341bddf8dc533592624080ef21787f1fcb903501"
+  },
+  "inkecho/ui/prompts.py": {
+    "size": 6363,
+    "sha256": "0ba01ac6adc99efa655e992407869f374edda349f6687edb96fe942985f22494"
+  },
+  "inkecho/ui/providers.py": {
+    "size": 33178,
+    "sha256": "29b8538d86cbfcc07fc64327f23e067f8fcf56dea14a81ab290da7365ab20420"
+  },
+  "inkecho/ui/settings.py": {
+    "size": 10449,
+    "sha256": "bf1c6b978e2aa3be3840d4ca7d7a97d74909dabc1bb6ea714dcb692012f4277a"
+  },
+  "inkecho/ui/widgets.py": {
+    "size": 6766,
+    "sha256": "ff7bbaf57cd447d6589bad2bc2aea1890fa03ce0d66ec40804459654c3a74559"
+  },
+  "inkecho/ui/window.py": {
+    "size": 14914,
+    "sha256": "7e640803ff59854057710042d75f140479e4660ff137280fd7f4e6ecbecb785c"
+  },
+  "inkecho/ui/workspace.py": {
+    "size": 7410,
+    "sha256": "10074e238da0d628f37aacd8865ad28b39170289f1ad9ca1fbaaa0a0ec703b13"
+  },
+  "inkecho/updates.py": {
+    "size": 3866,
+    "sha256": "b960196cc9cda2e36ffbe5125b5f1a25d5a1885724ac46f14f48ce1d3529e3e7"
+  },
+  "inkecho/volc_realtime.py": {
+    "size": 7130,
+    "sha256": "f6b05b87639636db0b6ca26525eda6e8b1c9dce6e4dfe1e326df541675ab7012"
+  },
+  "inkecho/xfyun_realtime.py": {
+    "size": 8636,
+    "sha256": "5a7b11a16a921b1febcb0be6fd9ffe6af526ca79e18f000983fdd05d9acb6552"
+  }
+}

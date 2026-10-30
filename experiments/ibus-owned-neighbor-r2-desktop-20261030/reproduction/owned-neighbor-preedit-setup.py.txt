@@ -1,0 +1,54 @@
+from pathlib import Path
+import shutil
+b=Path('/home/lth/github/InkEcho/dist/ibus-owned-neighbor-r2-desktop-20261030/vm24/input')
+shutil.copy2('/home/lth/github/InkEcho/dist/candidate-0.12.0-895d03b-20261030/vm24/input/qmp-key.py',b/'qmp-key.py')
+(b/'preedit-actor.py').write_text('''from pathlib import Path
+import os,json,sys,gi
+
+gi.require_version('Gtk','3.0')
+from gi.repository import Gtk,GLib
+p=Path(sys.argv[1]);w=Gtk.Window(title='InkEcho owned batch preedit acceptance');e=Gtk.Entry();w.add(e);pre=[''];e.connect('preedit-changed',lambda _e,s:pre.__setitem__(0,s));w.connect('destroy',Gtk.main_quit);w.show_all();e.grab_focus();w.present()
+def save():
+ p.write_text(json.dumps({'pid':os.getpid(),'active':w.is_active(),'focus':e.has_focus(),'text':e.get_text(),'preedit':pre[0]}));return True
+GLib.timeout_add(30,save);Gtk.main()
+''')
+(b/'preedit-candidate.py').write_text('''from pathlib import Path
+import os,json,subprocess,asyncio,time,signal
+from inkecho.platform.ibus_owned_auto import probe_owned
+from inkecho.platform.ibus_owned_default import DefaultAutoOutputRouter
+from inkecho.platform.wayland_keyboard import keyboard_for_desktop
+O=Path('/mnt/output/preedit-candidate');O.mkdir(mode=0o700);W=Path('/run/user/1000/inkecho-neighbor-preedit');W.mkdir(mode=0o700);state=W/'actor.json';rows=[];p=None;r=None
+async def main():
+ global p,r
+ env={k:v for k,v in os.environ.items()if k not in {'APPDIR','PYTHONPATH','PYTHONHOME','LD_LIBRARY_PATH','PYTHONNOUSERSITE'}};env.update(GDK_BACKEND='wayland',GTK_IM_MODULE='ibus');env.pop('DISPLAY',None)
+ before=subprocess.check_output(['gsettings','get','org.gnome.desktop.input-sources','sources'],env=env,text=True).strip();engine=subprocess.check_output(['ibus','engine'],env=env,text=True).strip();report={'sources_before':before,'engine_before':engine,'rows':rows}
+ try:
+  subprocess.run(['gsettings','set','org.gnome.desktop.input-sources','sources',"[('xkb', 'us'), ('ibus', 'libpinyin')]"],env=env,check=True)
+  s=subprocess.run(['ibus','engine','libpinyin'],env=env,capture_output=True,text=True);report['select']={'returncode':s.returncode,'stdout':s.stdout,'stderr':s.stderr};await asyncio.sleep(.5);assert subprocess.check_output(['ibus','engine'],env=env,text=True).strip()=='libpinyin'
+  p=subprocess.Popen(['/usr/bin/python3','/mnt/input/preedit-actor.py',str(state)],env=env,stdout=(O/'actor.log').open('w'),stderr=subprocess.STDOUT)
+  for _ in range(100):
+   if state.exists()and (d:=json.loads(state.read_text()))['active']and d['focus']:break
+   assert p.poll()is None;await asyncio.sleep(.05)
+  else:raise AssertionError('owned actor focus unavailable')
+  for seq,key in enumerate([110,105],1):
+   d=json.loads(state.read_text());assert d['pid']==p.pid and d['active']and d['focus'];req={'sequence':seq,'keyval':key,'actor':d,'state':str(state),'cmdline':'preedit-actor.py'};tmp=O/'key-request.tmp';tmp.write_text(json.dumps(req));tmp.replace(O/'key-request.json')
+   for _ in range(200):
+    ack=O/'key-ack.json'
+    if ack.exists()and json.loads(ack.read_text()).get('sequence')==seq:assert json.loads(ack.read_text())['ok'];break
+    await asyncio.sleep(.05)
+   else:raise AssertionError('bounded hardware acknowledgement timed out')
+   await asyncio.sleep(.3)
+  before_state=json.loads(state.read_text());report['before_output']=before_state;assert before_state['preedit']=='ni'and before_state['text']==''
+  report['probe']=await probe_owned();r=DefaultAutoOutputRouter(keyboard_for_desktop());await r.prepare_task('auto')
+  try:
+   async with r.output_session():await r.insert('甲\\n',lambda:True,deadline=time.monotonic()+5)
+  except Exception as err:report['output_error']={'kind':type(err).__name__,'code':getattr(err,'code',None)}
+  else:raise AssertionError('preedit output unexpectedly accepted')
+  await r.aclose();r=None;await asyncio.sleep(1.3);after=json.loads(state.read_text());report['after_output']=after;report['passed']=after['preedit']=='ni'and after['text']=='';assert report['passed']
+ finally:
+  if r:await r.aclose()
+  if p and p.poll()is None:p.terminate();report['actor_exit']=p.wait(timeout=5)
+  subprocess.run(['gsettings','set','org.gnome.desktop.input-sources','sources',before],env=env,check=True);subprocess.run(['ibus','engine',engine],env=env,capture_output=True);report['sources_after']=subprocess.check_output(['gsettings','get','org.gnome.desktop.input-sources','sources'],env=env,text=True).strip();assert report['sources_after']==before;(O/'results.json').write_text(json.dumps(report,ensure_ascii=False,indent=2))
+asyncio.run(main())
+''')
+(b/'launch-preedit.py').write_text((b/'launch-native012.py').read_text().replace("LABEL=os.environ.get('RUN_LABEL','disabled-fcitx');FIELD=os.environ.get('OWNED_FIELD','textarea');O=Path('/mnt/output/browser24-native012-'+LABEL+'-'+FIELD);O.mkdir(mode=0o700);", "O=Path('/mnt/output/preedit-launch');O.mkdir(mode=0o700);").replace("'/mnt/input/browser-native012.py'","'/mnt/input/preedit-candidate.py'"))

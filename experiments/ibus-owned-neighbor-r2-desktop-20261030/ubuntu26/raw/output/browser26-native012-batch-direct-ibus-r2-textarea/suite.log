@@ -1,0 +1,21 @@
+[1030/020220.061542:WARNING:chrome/app/chrome_main_linux.cc:84] Read channel stable from /opt/inkecho-qa-chrome/CHROME_VERSION_EXTRA
+Traceback (most recent call last):
+  File "/mnt/input/browser-native012.py", line 183, in <module>
+    asyncio.run(run())
+    ~~~~~~~~~~~^^^^^^^
+  File "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchnOoIKb/usr/lib/python3.13/asyncio/runners.py", line 196, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchnOoIKb/usr/lib/python3.13/asyncio/runners.py", line 119, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchnOoIKb/usr/lib/python3.13/asyncio/base_events.py", line 726, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/mnt/input/browser-native012.py", line 92, in run
+    cdp('Page.bringToFront',{});js('a.focus();true');await asyncio.sleep(.5)
+                                ~~^^^^^^^^^^^^^^^^^^
+  File "/mnt/input/browser-native012.py", line 91, in js
+    r=cdp('Runtime.evaluate',{'expression':expr,'returnByValue':True});assert 'exceptionDetails'not in r,r;return r.get('result',{}).get('value')
+                                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'result': {'type': 'object', 'subtype': 'error', 'className': 'ReferenceError', 'description': 'ReferenceError: a is not defined\n    at <anonymous>:1:1', 'objectId': '1365973173322232044.1.1'}, 'exceptionDetails': {'exceptionId': 1, 'text': 'Uncaught', 'lineNumber': 0, 'columnNumber': 0, 'scriptId': '3', 'exception': {'type': 'object', 'subtype': 'error', 'className': 'ReferenceError', 'description': 'ReferenceError: a is not defined\n    at <anonymous>:1:1', 'objectId': '1365973173322232044.1.2'}}}

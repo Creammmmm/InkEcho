@@ -1,0 +1,14 @@
+from pathlib import Path
+b=Path('/home/lth/github/InkEcho/dist/ibus-owned-neighbor-r2-desktop-20261030/vm24');p=b/'input/browser-native012.py';s=p.read_text();(b/'input/browser-native012-before-hardware.py').write_text(s)
+s=s.replace("if case.startswith('direct-'):","if case=='hardware-control':\n      for kseq,key in enumerate([97,65293],1):\n       pr=proof('hardware-'+str(kseq));assert good(pr)and pr['dom']['active']=='a'\n       req={'sequence':kseq,'keyval':key,'pid':chrome.pid,'profile':str(profile),'proof':pr};t=O/'key-request.tmp';t.write_text(json.dumps(req));t.replace(O/'key-request.json')\n       for _ in range(200):\n        a=O/'key-ack.json'\n        if a.exists()and json.loads(a.read_text()).get('sequence')==kseq:assert json.loads(a.read_text())['ok'];break\n        await asyncio.sleep(.05)\n       else:raise AssertionError('bounded hardware ack timed out')\n       await asyncio.sleep(.3)\n      result={'reported_characters':2,'route':'hardware-control-only','input_failure':None}\n     elif case.startswith('direct-'):")
+s=s.replace("elif case.startswith('direct-'):ok=d['a']==sample", "elif case.startswith('direct-')or case=='hardware-control':ok=d['a']==sample")
+p.write_text(s)
+p=b/'input/qmp-key.py';p.write_text(p.read_text().replace("32:'spc'","32:'spc',65293:'ret'"))
+q=Path('/tmp/owned-neighbor-preedit-host.py').read_text().replace("b/'preedit-host.log'","b/'hardware-baseline.log'").replace("env INKECHO_OUTPUT_STAGE=wayland /usr/bin/python3 /mnt/input/launch-preedit.py","env INKECHO_OUTPUT_STAGE=wayland RUN_LABEL=hardware-baseline OWNED_IM=ibus ACTIVE_FCITX=0 NATIVE_IME=1 OWNED_FIELD=contenteditable CASES=hardware-control TEST_SAMPLE='a\\n' /usr/bin/python3 /mnt/input/launch-native012.py").replace("b/'output/preedit-candidate/key-request.json'","b/'output/browser24-native012-hardware-baseline-contenteditable/key-request.json'")
+a=q.index("   pid=r['actor']['pid'];guard=");z=q.index("\n   c=subprocess.run",a)
+q=q[:a]+'''   pid=r['pid'];assert r['keyval']in {97,65293} and r['proof']['dom']['focus']and r['proof']['dom']['active']=='a'and all(r['proof']['native'].values());guard='import pathlib;cmd=pathlib.Path("/proc/'+str(pid)+'/cmdline").read_bytes();assert b"--ozone-platform=wayland"in cmd and '+repr(('--user-data-dir='+r['profile']).encode())+' in cmd;assert pathlib.Path("/proc/'+str(pid)+'/exe").resolve()==pathlib.Path("/opt/inkecho-test-chrome/chrome")'
+'''+q[z:]
+q=q.replace("b/'preedit-hardware.json'","b/'hardware-baseline-keys.json'").replace("b/'preedit-host-exit.json'","b/'hardware-baseline-exit.json'").replace("(b/'preedit-host.log')","(b/'hardware-baseline.log')")
+# The requested newline is an actual LF, not shell backslash-n.
+q=q.replace("TEST_SAMPLE='a\\n'", "TEST_SAMPLE=\"+shlex.quote('a\\n')+\"")
+Path('/tmp/owned-neighbor-hardware-host.py').write_text(q)
