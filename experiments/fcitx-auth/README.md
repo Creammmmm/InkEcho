@@ -65,3 +65,11 @@ Offline validation: run `.venv/bin/pytest -q tests/test_fcitx_task_policy_experi
 and `g++ -std=c++20 -Wall -Wextra -Werror experiments/fcitx-auth/capability_gate_test.cpp -o /tmp/inkecho-cap-gate-test && /tmp/inkecho-cap-gate-test`.
 Both passed on the development host; no Fcitx runtime, VM, D-Bus authorization,
 AppImage integration or Ubuntu compatibility is established by those tests.
+
+2026-10-30 offline follow-up: the experimental Python capability now keeps the
+created file descriptor open through cleanup and checks that the directory
+entry is a regular file before unlinking it. This prevents immediate inode
+reuse from causing a replaced entry to be removed. With `TMPDIR=/var/tmp`,
+`.venv/bin/pytest -q tests/test_fcitx_task_policy_experiment.py` passed 13 tests,
+including symlink and regular-file replacement. This does not establish safety
+against same-UID concurrent replacement or validate the production addon.

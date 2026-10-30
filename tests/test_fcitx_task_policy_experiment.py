@@ -106,3 +106,18 @@ def test_unsafe_runtime_rejected(tmp_path):
     tmp_path.chmod(0o755)
     with pytest.raises(ValueError, match="unsafe runtime"):
         cap_module.Capability(tmp_path)
+
+
+def test_private_capability_preserves_replacement_regular_file(tmp_path):
+    cap_path = Path(__file__).parents[1] / "experiments/fcitx-auth/capability.py"
+    cap_spec = importlib.util.spec_from_file_location(
+        "experimental_capability3", cap_path
+    )
+    cap_module = importlib.util.module_from_spec(cap_spec)
+    cap_spec.loader.exec_module(cap_module)
+    cap = cap_module.Capability(tmp_path)
+    path = tmp_path / "inkecho-fcitx-candidate.cap"
+    path.unlink()
+    path.write_text("replacement")
+    cap.close()
+    assert path.read_text() == "replacement"
