@@ -505,3 +505,127 @@ def test_stop_at_detached_close_still_starts_fcitx_cleanup(monkeypatch):
         assert previous.closed == 1 and owned.closed == 1 and not owned.sent
 
     asyncio.run(run())
+
+
+def test_handoff_stops_if_owned_extension_disabled_during_fcitx_close():
+    async def run():
+        state = ["enabled"]
+
+        class DisableDuringClose(Fcitx):
+            async def aclose(self):
+                self.closed += 1
+                state[0] = "disabled"
+
+        async def state_probe():
+            return state[0]
+
+        async def detector():
+            return ("fcitx", ":1.8")
+
+        async def proof():
+            return ("ibus", ":1.17")
+
+        previous, owned = DisableDuringClose(), Owned()
+        router = DefaultAutoOutputRouter(
+            Keyboard(),
+            state_probe=state_probe,
+            system_detector=detector,
+            owned_probe=proof,
+            bridge_factory=lambda: previous,
+            owned_factory=lambda: owned,
+        )
+        await router.prepare_task("auto")
+        with pytest.raises(OutputRouterError, match="input_capability_unknown"):
+            async with router.output_session():
+                await router.insert("甲", lambda: True)
+        assert previous.closed == 1 and owned.closed == 1
+        assert owned.sent == []
+
+    asyncio.run(run())
+
+
+def test_handoff_cancel_during_final_state_recheck_aborts_candidate():
+    async def run():
+        checks = 0
+        entered = asyncio.Event()
+
+        async def state_probe():
+            nonlocal checks
+            checks += 1
+            if checks == 3:
+                entered.set()
+                await asyncio.Event().wait()
+            return "enabled"
+
+        async def detector():
+            return ("fcitx", ":1.8")
+
+        async def proof():
+            return ("ibus", ":1.17")
+
+        previous, owned = Fcitx(), Owned()
+        router = DefaultAutoOutputRouter(
+            Keyboard(),
+            state_probe=state_probe,
+            system_detector=detector,
+            owned_probe=proof,
+            bridge_factory=lambda: previous,
+            owned_factory=lambda: owned,
+        )
+        await router.prepare_task("auto")
+
+        async def send():
+            async with router.output_session():
+                await router.insert("甲", lambda: True)
+
+        task = asyncio.create_task(send())
+        await asyncio.wait_for(entered.wait(), 1)
+        task.cancel()
+        with pytest.raises(asyncio.CancelledError):
+            await asyncio.wait_for(task, 1)
+        assert previous.closed == 1 and owned.closed == 1
+        assert owned.sent == []
+
+    asyncio.run(run())
+
+
+@pytest.mark.parametrize("changed", ["fcitx", "owned"])
+def test_handoff_rechecks_service_owners_after_final_state_wait(changed):
+    async def run():
+        checks = 0
+        fc_owner = [":1.8"]
+        owned_owner = [":1.17"]
+
+        async def state_probe():
+            nonlocal checks
+            checks += 1
+            if checks == 3:
+                if changed == "fcitx":
+                    fc_owner[0] = ":1.9"
+                else:
+                    owned_owner[0] = ":1.18"
+            return "enabled"
+
+        async def detector():
+            return ("fcitx", fc_owner[0])
+
+        async def proof():
+            return ("ibus", owned_owner[0])
+
+        previous, owned = Fcitx(), Owned()
+        router = DefaultAutoOutputRouter(
+            Keyboard(),
+            state_probe=state_probe,
+            system_detector=detector,
+            owned_probe=proof,
+            bridge_factory=lambda: previous,
+            owned_factory=lambda: owned,
+        )
+        await router.prepare_task("auto")
+        with pytest.raises(OutputRouterError, match="input_capability_unknown"):
+            async with router.output_session():
+                await router.insert("甲", lambda: True)
+        assert previous.closed == 1 and owned.closed == 1
+        assert owned.sent == []
+
+    asyncio.run(run())

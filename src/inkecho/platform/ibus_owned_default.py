@@ -322,6 +322,24 @@ class DefaultAutoOutputRouter(OwnedAutoOutputRouter):
                 self._check_task(active, deadline)
                 raise OutputRouterError("input_cleanup_failed") from None
             self._check_task(active, deadline)
+            # Cleanup can take time; a user may disable the owned extension
+            # before it becomes the output route. Never send on stale consent.
+            state = await self._wait_auto_preflight(
+                self._state_probe(), active, deadline, timeout=1.5
+            )
+            if state != "enabled":
+                raise OutputRouterError("input_capability_unknown")
+            # The last state check is asynchronous. Recheck both identities;
+            # none of these checks can make the subsequent send atomic.
+            current = await self._wait_auto_preflight(
+                self._legacy_detector(), active, deadline, timeout=1.5
+            )
+            refreshed = await self._wait_auto_preflight(
+                self._owned_probe(), active, deadline, timeout=1.5
+            )
+            if current != evidence or refreshed != proof:
+                raise OutputRouterError("input_capability_unknown")
+            self._check_task(active, deadline)
         except BaseException as failure:
             await self._abort_preflight_after_stop(candidate)
             if isinstance(failure, IBusBridgeError):
