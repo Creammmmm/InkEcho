@@ -75,6 +75,7 @@ class WaylandKeyboardInput:
         self._closing = False
         self._busy = False
         self._output_owner = None
+        self._acknowledged_keys = 0
         self._output_failed = False
         self._output_deadline = None
         self._output_process = None
@@ -87,6 +88,11 @@ class WaylandKeyboardInput:
 
     def _cleaning(self):
         return self._cleanup_task is not None and self._cleanup_process is self._process
+
+    @property
+    def acknowledged_attempts(self):
+        """Worker-acknowledged key requests, not target delivery receipts."""
+        return self._acknowledged_keys if self._output_owner is not None else 0
 
     @property
     def connected(self) -> bool:
@@ -326,6 +332,7 @@ class WaylandKeyboardInput:
             raise KeyboardError("busy")
         if not self.authorized:
             raise KeyboardError("permission_required")
+        self._acknowledged_keys = 0
         self._output_owner = owner
         self._output_process = self._process
         self._output_deadline = None
@@ -466,8 +473,8 @@ class WaylandKeyboardInput:
                     fields["hint"] = hint
                 result = await self._request("key", **fields)
                 acknowledged = time.monotonic()
-                check()
                 if type(result.get("count")) is not int or result["count"] != 1:
+                    check()
                     raise KeyboardError("injection_failed")
                 sent_at = result.get("sent_at")
                 if (
@@ -475,7 +482,13 @@ class WaylandKeyboardInput:
                     or not request_start <= sent_at <= acknowledged
                     or not math.isfinite(sent_at)
                 ):
+                    check()
                     raise KeyboardError("injection_failed")
+                # The worker completed this key request; target delivery is unknown.
+                # Count before any callback that may synchronously cancel.
+                self._acknowledged_keys += 1
+                # A stop after a valid reply must still prevent another key.
+                check()
                 # Optional telemetry cannot turn an already successful press into
                 # failure. Old workers without it still provide an INPUT RTT.
                 feedback = _input_feedback(result.get("input_feedback"))
@@ -496,8 +509,13 @@ class WaylandKeyboardInput:
                 count += 1
             check()
             return count
-        except BaseException:
+        except BaseException as error:
             self._output_failed = True
+            if isinstance(error, Exception):
+                try:
+                    error.acknowledged_attempts = self._acknowledged_keys
+                except Exception:
+                    pass
             if self._begun:
                 self._begun = False
                 await self._cancel_and_clean(process)

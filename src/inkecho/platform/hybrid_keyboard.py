@@ -28,6 +28,7 @@ class HybridKeyboardInput:
         self._closing = False
         self._task = None
         self._output_owner = None
+        self._completed_dispatches = 0
         self._output_failed = False
         self._output_deadline = None
         self._scope = None
@@ -54,6 +55,16 @@ class HybridKeyboardInput:
 
     def set_feedback_timeout_reader(self, reader):
         self._feedback_timeout_reader = reader
+
+    @property
+    def acknowledged_attempts(self):
+        """Completed backend dispatches; not target delivery receipts."""
+        if self._output_owner is None:
+            return 0
+        current = getattr(self._backend, "acknowledged_attempts", 0)
+        if type(current) is not int or current < 0:
+            current = 0
+        return self._completed_dispatches + current
 
     @property
     def connected(self) -> bool:
@@ -95,13 +106,23 @@ class HybridKeyboardInput:
 
     async def _release_scope(self, error=None):
         scope, self._scope = self._scope, None
-        self._backend = None
+        backend, self._backend = self._backend, None
         if scope is not None:
-            await scope.__aexit__(
-                type(error) if error is not None else None,
-                error,
-                error.__traceback__ if error is not None else None,
-            )
+            count = getattr(backend, "acknowledged_attempts", 0)
+            if type(count) is int and count >= 0:
+                self._completed_dispatches += count
+            try:
+                await scope.__aexit__(
+                    type(error) if error is not None else None,
+                    error,
+                    error.__traceback__ if error is not None else None,
+                )
+            except Exception as failure:
+                try:
+                    failure.acknowledged_attempts = self._completed_dispatches
+                except Exception:
+                    pass
+                raise
 
     @asynccontextmanager
     async def output_session(self) -> AsyncIterator[None]:
@@ -125,6 +146,7 @@ class HybridKeyboardInput:
             configure = getattr(self.x11, "set_receiver_feedback_wait_reader", None)
             if callable(configure):
                 configure(lambda: receiver_wait)
+        self._completed_dispatches = 0
         self._output_owner = owner
         self._output_failed = False
         self._output_deadline = None
@@ -245,6 +267,11 @@ class HybridKeyboardInput:
             return offset
         except BaseException as error:
             self._output_failed = True
+            if isinstance(error, Exception):
+                try:
+                    error.acknowledged_attempts = self.acknowledged_attempts
+                except Exception:
+                    pass
             await self._release_scope(error)
             raise
         finally:

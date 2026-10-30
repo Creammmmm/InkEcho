@@ -1840,3 +1840,109 @@ def test_stream_second_segment_counts_once(factory, monkeypatch, ending):
         await session.close()
 
     asyncio.run(scenario())
+
+
+def test_wayland_hybrid_cancel_after_native_ack_counts_dispatch(factory, monkeypatch):
+    from test_hybrid_keyboard import Driver
+    from test_keyboard import fast_sleep
+    from test_wayland_keyboard import connected
+
+    from inkecho.platform.hybrid_keyboard import HybridKeyboardInput
+    from inkecho.platform.keyboard import KeyboardInput
+    from inkecho.platform.output_router import OutputRouter
+
+    fast_sleep(monkeypatch)
+
+    async def scenario():
+        session = factory()
+        session.store.save_settings(
+            replace(session.settings, polishing_enabled=False, output_method="keyboard")
+        )
+        driver = Driver([])
+        driver.is_x = False
+        native, process = await connected()
+        await native.authorize()
+        hybrid = HybridKeyboardInput(
+            native=native, x11=KeyboardInput(driver_factory=lambda: driver)
+        )
+        original = hybrid.insert
+
+        async def cancel_first(text, active, **kwargs):
+            callback = kwargs.get("on_first_sent")
+
+            def sent(at):
+                if callback:
+                    callback(at)
+                session.cancel()
+
+            kwargs["on_first_sent"] = sent
+            return await original(text, active, **kwargs)
+
+        hybrid.insert = cancel_first
+        session.inputs = OutputRouter(hybrid)
+        outcomes = []
+        session.finished.connect(outcomes.append)
+        await session.toggle()
+        session.recorder.stop()
+        for _ in range(1000):
+            await asyncio.sleep(0)
+            if outcomes and not session.pending:
+                break
+        assert outcomes[0]["outcome"] == "cancelled"
+        assert outcomes[0]["characters"] == 1
+        assert [r["value"] for r in process.requests if r["op"] == "key"] == ["你"]
+        await session.close()
+
+    asyncio.run(scenario())
+
+
+def test_wayland_hybrid_cancel_before_worker_reply_does_not_claim_dispatch(factory):
+    from test_hybrid_keyboard import Driver
+    from test_wayland_keyboard import connected
+
+    from inkecho.platform.hybrid_keyboard import HybridKeyboardInput
+    from inkecho.platform.keyboard import KeyboardInput
+    from inkecho.platform.output_router import OutputRouter
+
+    async def scenario():
+        entered = asyncio.Event()
+        pending = []
+
+        def handle(_process, request):
+            if request["op"] == "key":
+                pending.append(request)
+                entered.set()
+                return True
+            return False
+
+        session = factory()
+        session.store.save_settings(
+            replace(session.settings, polishing_enabled=False, output_method="keyboard")
+        )
+        driver = Driver([])
+        driver.is_x = False
+        native, process = await connected(handle)
+        await native.authorize()
+        session.inputs = OutputRouter(
+            HybridKeyboardInput(
+                native=native, x11=KeyboardInput(driver_factory=lambda: driver)
+            )
+        )
+        outcomes = []
+        session.finished.connect(outcomes.append)
+        await session.toggle()
+        session.recorder.stop()
+        await asyncio.wait_for(entered.wait(), 2)
+        session.cancel()
+        assert outcomes[0]["characters"] == 0  # finished was already emitted
+        process.reply(pending[0], count=1)  # Late ACK cannot rewrite that event.
+        for _ in range(500):
+            await asyncio.sleep(0)
+            if outcomes and not session.pending:
+                break
+        assert outcomes[0]["outcome"] == "cancelled"
+        assert outcomes[0]["characters"] == 0
+        assert [r["value"] for r in process.requests if r["op"] == "key"] == ["你"]
+        await session.close()
+
+    asyncio.run(scenario())

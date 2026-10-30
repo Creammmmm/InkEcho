@@ -1370,3 +1370,195 @@ def test_fragments_retain_input_baselines_and_fixed_deadline_until_scope_exit():
         await inputs.aclose()
 
     asyncio.run(run())
+
+
+def test_native_acknowledged_key_visible_before_synchronous_cancel():
+    async def scenario():
+        inputs, process = await connected()
+        await inputs.authorize()
+        active = True
+        observed = []
+
+        def cancel(_at):
+            nonlocal active
+            observed.append(inputs.acknowledged_attempts)
+            active = False
+
+        with pytest.raises(KeyboardError, match="input_cancelled"):
+            async with inputs.output_session():
+                await inputs.insert("甲乙", lambda: active, on_first_sent=cancel)
+        assert observed == [1]
+        assert [r["value"] for r in process.requests if r["op"] == "key"] == ["甲"]
+        assert inputs.acknowledged_attempts == 0
+        await inputs.aclose()
+
+    asyncio.run(scenario())
+
+
+def test_native_unknown_inflight_key_never_counted():
+    async def scenario():
+        entered = asyncio.Event()
+
+        def handle(_process, request):
+            if request["op"] == "key":
+                entered.set()
+                return True
+            return False
+
+        inputs, process = await connected(handle)
+        await inputs.authorize()
+        snapshots = []
+
+        async def output():
+            async with inputs.output_session():
+                try:
+                    await inputs.insert("甲乙", lambda: True)
+                finally:
+                    snapshots.append(inputs.acknowledged_attempts)
+
+        task = asyncio.create_task(output())
+        await asyncio.wait_for(entered.wait(), 1)
+        task.cancel()
+        with pytest.raises(asyncio.CancelledError):
+            await task
+        assert snapshots == [0]
+        assert [r["value"] for r in process.requests if r["op"] == "key"] == ["甲"]
+        await inputs.aclose()
+
+    asyncio.run(scenario())
+
+
+def test_valid_worker_reply_is_counted_before_active_stop():
+    async def scenario():
+        active = True
+        callbacks = []
+
+        def handle(process, request):
+            nonlocal active
+            if request["op"] == "key":
+                active = False
+                process.reply(request, count=1)
+                return True
+            return False
+
+        inputs, process = await connected(handle)
+        await inputs.authorize()
+        snapshots = []
+        with pytest.raises(KeyboardError, match="input_cancelled") as failure:
+            async with inputs.output_session():
+                try:
+                    await inputs.insert(
+                        "甲乙", lambda: active, on_first_sent=callbacks.append
+                    )
+                finally:
+                    snapshots.append(inputs.acknowledged_attempts)
+        assert snapshots == [1]
+        assert failure.value.acknowledged_attempts == 1
+        assert callbacks == []
+        assert [r["value"] for r in process.requests if r["op"] == "key"] == ["甲"]
+        await inputs.aclose()
+
+    asyncio.run(scenario())
+
+
+def test_valid_worker_reply_is_counted_before_expired_deadline(monkeypatch):
+    async def scenario():
+        offset = 0.0
+        real_time = time.monotonic
+
+        def clock():
+            return real_time() + offset
+
+        def handle(process, request):
+            nonlocal offset
+            if request["op"] == "key":
+                process.reply(request, count=1)
+                offset = 10.0
+                return True
+            return False
+
+        inputs, process = await connected(handle)
+        await inputs.authorize()
+        deadline = time.monotonic() + 5
+        monkeypatch.setattr("inkecho.platform.wayland_keyboard.time.monotonic", clock)
+        snapshots = []
+        with pytest.raises(KeyboardError, match="input_cancelled") as failure:
+            async with inputs.output_session():
+                try:
+                    await inputs.insert("甲乙", lambda: True, deadline=deadline)
+                finally:
+                    snapshots.append(inputs.acknowledged_attempts)
+        assert snapshots == [1]
+        assert failure.value.acknowledged_attempts == 1
+        assert [r["value"] for r in process.requests if r["op"] == "key"] == ["甲"]
+        await inputs.aclose()
+
+    asyncio.run(scenario())
+
+
+@pytest.mark.parametrize("malformed", ["count", "sent_at"])
+def test_malformed_worker_reply_after_active_stop_prioritizes_cancel(malformed):
+    async def scenario():
+        active = True
+        callbacks = []
+
+        def handle(process, request):
+            nonlocal active
+            if request["op"] == "key":
+                active = False
+                fields = (
+                    {"count": 0}
+                    if malformed == "count"
+                    else {"count": 1, "sent_at": "bad"}
+                )
+                process.reply(request, **fields)
+                return True
+            return False
+
+        inputs, process = await connected(handle)
+        await inputs.authorize()
+        with pytest.raises(KeyboardError, match="input_cancelled") as failure:
+            await inputs.insert("甲乙", lambda: active, on_first_sent=callbacks.append)
+        assert failure.value.acknowledged_attempts == 0
+        assert callbacks == []
+        assert [r["value"] for r in process.requests if r["op"] == "key"] == ["甲"]
+        await inputs.aclose()
+
+    asyncio.run(scenario())
+
+
+@pytest.mark.parametrize("malformed", ["count", "sent_at"])
+def test_malformed_worker_reply_after_deadline_prioritizes_cancel(
+    monkeypatch, malformed
+):
+    async def scenario():
+        offset = 0.0
+        real_time = time.monotonic
+
+        def clock():
+            return real_time() + offset
+
+        def handle(process, request):
+            nonlocal offset
+            if request["op"] == "key":
+                fields = (
+                    {"count": 0}
+                    if malformed == "count"
+                    else {"count": 1, "sent_at": "bad"}
+                )
+                process.reply(request, **fields)
+                offset = 10.0
+                return True
+            return False
+
+        inputs, process = await connected(handle)
+        await inputs.authorize()
+        deadline = time.monotonic() + 5
+        monkeypatch.setattr("inkecho.platform.wayland_keyboard.time.monotonic", clock)
+        with pytest.raises(KeyboardError, match="input_cancelled") as failure:
+            await inputs.insert("甲乙", lambda: True, deadline=deadline)
+        assert failure.value.acknowledged_attempts == 0
+        assert [r["value"] for r in process.requests if r["op"] == "key"] == ["甲"]
+        await inputs.aclose()
+
+    asyncio.run(scenario())

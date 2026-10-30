@@ -630,3 +630,229 @@ def test_receiver_wait_keeps_hybrid_snapshot_and_reports_native_unavailable():
         await inputs.aclose()
 
     asyncio.run(run())
+
+
+def test_hybrid_accumulates_native_ack_and_x_dispatch_before_cancel(monkeypatch):
+    from test_keyboard import fast_sleep
+    from test_wayland_keyboard import connected
+
+    fast_sleep(monkeypatch)
+
+    async def scenario():
+        events = []
+        driver = Driver(events)
+        x11 = KeyboardInput(driver_factory=lambda: driver)
+        native, process = await connected()
+        await native.authorize()
+        hybrid = HybridKeyboardInput(native=native, x11=x11)
+        await hybrid.connect()
+        driver.is_x = False
+        active = True
+        seen = []
+
+        def cancel(_at):
+            nonlocal active
+            seen.append(hybrid.acknowledged_attempts)
+            active = False
+
+        with pytest.raises(KeyboardError, match="input_cancelled"):
+            async with hybrid.output_session():
+                assert await hybrid.insert("甲", lambda: active) == 1
+                driver.is_x = True
+                await hybrid.insert("乙丙", lambda: active, on_first_sent=cancel)
+        assert seen == [2]
+        assert [r["value"] for r in process.requests if r["op"] == "key"] == ["甲"]
+        assert [event for event in events if event[0] == "x"] == [
+            ("x", "乙", True),
+            ("x", "乙", False),
+        ]
+        assert hybrid.acknowledged_attempts == 0
+        await hybrid.aclose()
+
+    asyncio.run(scenario())
+
+
+def test_hybrid_accumulates_x_dispatch_and_native_ack_before_cancel(monkeypatch):
+    from test_keyboard import fast_sleep
+    from test_wayland_keyboard import connected
+
+    fast_sleep(monkeypatch)
+
+    async def scenario():
+        events = []
+        driver = Driver(events)
+        native, process = await connected()
+        await native.authorize()
+        hybrid = HybridKeyboardInput(
+            native=native, x11=KeyboardInput(driver_factory=lambda: driver)
+        )
+        await hybrid.connect()
+        active = True
+        observed = []
+
+        def cancel(_at):
+            nonlocal active
+            observed.append(hybrid.acknowledged_attempts)
+            active = False
+
+        with pytest.raises(KeyboardError, match="input_cancelled"):
+            async with hybrid.output_session():
+                assert await hybrid.insert("甲", lambda: active) == 1
+                driver.is_x = False
+                await hybrid.insert("乙丙", lambda: active, on_first_sent=cancel)
+        assert observed == [2]
+        assert [event for event in events if event[0] == "x"] == [
+            ("x", "甲", True),
+            ("x", "甲", False),
+        ]
+        assert [r["value"] for r in process.requests if r["op"] == "key"] == ["乙"]
+        await hybrid.aclose()
+
+    asyncio.run(scenario())
+
+
+def test_hybrid_cleanup_failure_preserves_acknowledged_dispatch(monkeypatch):
+    import json
+
+    from test_keyboard import fast_sleep
+    from test_wayland_keyboard import connected
+
+    fast_sleep(monkeypatch)
+
+    async def scenario():
+        events = []
+        driver = Driver(events)
+        driver.is_x = False
+
+        def handle(process, request):
+            if request["op"] == "finish":
+                process.stdout.feed_data(
+                    json.dumps(
+                        {"id": request["id"], "ok": False, "error": "injection_failed"}
+                    ).encode()
+                    + b"\n"
+                )
+                return True
+            return False
+
+        native, process = await connected(handle)
+        await native.authorize()
+        hybrid = HybridKeyboardInput(
+            native=native, x11=KeyboardInput(driver_factory=lambda: driver)
+        )
+        await hybrid.connect()
+        with pytest.raises(KeyboardError) as failure:
+            async with hybrid.output_session():
+                assert await hybrid.insert("甲", lambda: True) == 1
+        assert failure.value.acknowledged_attempts == 1
+        assert [r["value"] for r in process.requests if r["op"] == "key"] == ["甲"]
+        await hybrid.aclose()
+
+    asyncio.run(scenario())
+
+
+def test_hybrid_dispatch_count_resets_for_each_output_task(monkeypatch):
+    from test_keyboard import fast_sleep
+    from test_wayland_keyboard import connected
+
+    fast_sleep(monkeypatch)
+
+    async def scenario():
+        driver = Driver([])
+        driver.is_x = False
+        native, _process = await connected()
+        await native.authorize()
+        hybrid = HybridKeyboardInput(
+            native=native, x11=KeyboardInput(driver_factory=lambda: driver)
+        )
+        await hybrid.connect()
+        async with hybrid.output_session():
+            assert await hybrid.insert("甲乙", lambda: True) == 2
+            assert hybrid.acknowledged_attempts == 2
+        assert hybrid.acknowledged_attempts == 0
+        async with hybrid.output_session():
+            assert hybrid.acknowledged_attempts == 0
+            assert await hybrid.insert("丙", lambda: True) == 1
+            assert hybrid.acknowledged_attempts == 1
+        await hybrid.aclose()
+
+    asyncio.run(scenario())
+
+
+def test_hybrid_x_native_x_counts_each_scope_once(monkeypatch):
+    from test_keyboard import fast_sleep
+    from test_wayland_keyboard import connected
+
+    fast_sleep(monkeypatch)
+
+    async def scenario():
+        driver = Driver([])
+        native, process = await connected()
+        await native.authorize()
+        hybrid = HybridKeyboardInput(
+            native=native, x11=KeyboardInput(driver_factory=lambda: driver)
+        )
+        await hybrid.connect()
+        active = True
+        snapshots = []
+
+        def cancel(_at):
+            nonlocal active
+            snapshots.append(hybrid.acknowledged_attempts)
+            active = False
+
+        with pytest.raises(KeyboardError, match="input_cancelled"):
+            async with hybrid.output_session():
+                assert await hybrid.insert("甲", lambda: active) == 1
+                driver.is_x = False
+                assert await hybrid.insert("乙", lambda: active) == 1
+                driver.is_x = True
+                await hybrid.insert("丙丁", lambda: active, on_first_sent=cancel)
+        assert snapshots == [3]
+        assert [r["value"] for r in process.requests if r["op"] == "key"] == ["乙"]
+        await hybrid.aclose()
+
+    asyncio.run(scenario())
+
+
+def test_hybrid_cancel_during_backend_cleanup_keeps_completed_lower_bound():
+    from test_wayland_keyboard import connected
+
+    async def scenario():
+        entered = asyncio.Event()
+        driver = Driver([])
+        driver.is_x = False
+
+        def handle(_process, request):
+            if request["op"] == "finish":
+                entered.set()
+                return True
+            return False
+
+        native, process = await connected(handle)
+        await native.authorize()
+        hybrid = HybridKeyboardInput(
+            native=native, x11=KeyboardInput(driver_factory=lambda: driver)
+        )
+        await hybrid.connect()
+        snapshots = []
+
+        async def output():
+            async with hybrid.output_session():
+                try:
+                    assert await hybrid.insert("甲", lambda: True) == 1
+                    driver.is_x = True
+                    await hybrid.insert("乙", lambda: True)
+                finally:
+                    snapshots.append(hybrid.acknowledged_attempts)
+
+        task = asyncio.create_task(output())
+        await asyncio.wait_for(entered.wait(), 2)
+        task.cancel()
+        with pytest.raises(asyncio.CancelledError):
+            await task
+        assert snapshots == [1]
+        assert [r["value"] for r in process.requests if r["op"] == "key"] == ["甲"]
+        await hybrid.aclose()
+
+    asyncio.run(scenario())
