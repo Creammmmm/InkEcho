@@ -1,0 +1,44 @@
+{
+  "candidate_only": true,
+  "release_gate": "failed_incomplete",
+  "artifact": {
+    "source_commit": "3613057ca7d026fbd5edad355225ce738884a550",
+    "artifact": "/home/lth/github/InkEcho/dist/candidate-0.13.0-3613057-20261030/source/dist/InkEcho-0.13.0-x86_64.AppImage",
+    "sha256": "b8d14e9f815f932fc55e256f0323a9fdf2fd0699ea371fc6d94296898cda45d2",
+    "bytes": 104425976,
+    "version": "0.13.0",
+    "source_bytes_match": true,
+    "candidate_only": true
+  },
+  "ubuntu24": "safe-stop upgrade diagnosis failure; positive new transport samples not run",
+  "ubuntu26": "not started",
+  "original_wait_session": 89066,
+  "original_wait_returncode": 0,
+  "container_state": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-10-30T05:35:11.507324553Z",
+    "FinishedAt": "2026-10-30T05:45:26.885094487Z"
+  },
+  "archive_independent_stream": {
+    "bytes": 829095936,
+    "sha256": "9c173c943c9d84fd1f1dc22f07378ac009dc9e7a1749e25f593bb6633f30f1e5"
+  },
+  "archive": {
+    "original_bytes": 829095936,
+    "original_sha256": "9c173c943c9d84fd1f1dc22f07378ac009dc9e7a1749e25f593bb6633f30f1e5",
+    "archive_bytes": 195449900,
+    "archive_sha256": "a0bec4019c8477145ac31399372e953c0dac3a626b76c65e6f59110e757ee817",
+    "full_stream_verified": true,
+    "qemu_exit": 0
+  },
+  "restoration_completed": true,
+  "stable_entry_changed": false
+}

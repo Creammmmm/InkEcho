@@ -1,0 +1,21 @@
+# Preserve direct owned-route upgrade diagnosis
+
+## Actual defect and candidate identity
+
+The unmodified0.13.0 candidate built from `3613057ca7d026fbd5edad355225ce738884a550` has SHA256 `b8d14e9f815f932fc55e256f0323a9fdf2fd0699ea371fc6d94296898cda45d2` (104425976bytes). Its complete per-run report remains at `dist/candidate-0.13.0-3613057-20261030/REPORT.md`; an exact copy is retained as [raw/REPORT.md](raw/REPORT.md). It is a FAILED/INCOMPLETE candidate, never a release or dual-Ubuntu acceptance.
+
+The authoritative reproduction is [legacy013-ibus-r4/results.json](raw/vm24/output/browser24-native012-legacy013-ibus-r4-textarea/results.json), with matching [driver command/result](raw/vm24/legacy-protocol-package-ibus-r4.json). One isolated Ubuntu24.04.5 GNOME46 Wayland guest ran this exact FUSE-mounted package and normal-sandbox Chrome154 with a fresh profile, native text-input-v3, consistent IBus hints and no private Fcitx daemon. The original complete published V5 extension was enabled. OS/DOM focus, authenticated owned scope and complete old Begin/Commit/Cancel API were checked; every imported application module originated inside the mounted package, with no source overlay.
+
+Direct new-client negotiation rejected the complete old protocol before Begin/Commit. Actual default automatic selection also emitted zero text, but returned `input_capability_unknown` instead of `ibus_upgrade_required`, so legacy-auto is explicitly FALSE. Both fields remained empty over1.3seconds. Earlier missing-helper and contradictory-hint failures remain in the external full run; unlike those earlier fixture conditions, r4 has consistent native IBus setup. Repeated safe rejection is not successful upgrade guidance, and zero output is not a receiving-app ACK.
+
+## Fix and local validation
+
+`OutputRouter._choose_auto` formerly discarded all owned IBus connection diagnoses after cleanup. The explicit IBus prepare path and Fcitx-to-owned handoff have different code, so their tests did not cover this direct-owned branch. The fix preserves only typed `IBusBridgeError('upgrade_required')` in the automatic owned branch, after its existing cleanup and cancellation/deadline check. The real Client still authenticates the unique Shell owner and complete old signatures before producing that code. Malformed/partial protocols and untrusted identity remain unknown; no keyboard authorization, fallback, body Begin/Commit, retry or replay is enabled.
+
+Independent targeted tests passed141cases, including the real Client/Bridge with controlled authenticated D-Bus transport and the default router. New tests cover old scalar/batch schemas, malformed schema, untrusted owner, cancellation precedence, capability/transport cleanup and no retry or keyboard fallback. This is offline regression evidence, not repaired-package desktop acceptance. Full clean-HEAD workflow is recorded locally by the normal validator after this commit.
+
+## Partial package gates, restoration and untested scope
+
+The failed candidate had passed actual packaged audit/GUI lifecycle, local HTTP-ASR/Qwen-VAD/provider UI and packaged provider protocol tests on Ubuntu24 Wayland. Its manager refused old-extension install/enable without altering old assets, then the isolated test explicitly staged its new extension. Root review stopped further tests before new-service positive text/preedit checks. Ubuntu26 was prepared but never started. New-service Unicode/newline/cancellation, Xorg/XWayland, physical microphone/hotkeys, overlay/autostart and all Ubuntu26 acceptance remain unverified for this SHA. Historical R3 source experiments cannot qualify it. A repaired/new artifact must pass its own same-version/same-SHA dual-system package gates.
+
+All seven original assets and three Shell settings were restored; stock Mutter hashes, FUSE unmount and owned resource checks passed. Normal QEMU exit0 and the original wait89066 returned0; Docker ended PID0/Exit0/OOMfalse. The whole stopped child archive independently decompressed to829095936bytes, SHA256 `9c173c943c9d84fd1f1dc22f07378ac009dc9e7a1749e25f593bb6633f30f1e5`. See [final-receipt.json](raw/final-receipt.json). Full archive, package and other raw records remain under the persistent dist run. No host input method, credentials or private surrounding text were accessed. No tag, stable entry or release was changed.

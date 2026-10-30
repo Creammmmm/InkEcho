@@ -496,6 +496,13 @@ class OutputRouter:
                 if framework == "ibus" and getattr(
                     self, "_owned_auto_candidate", False
                 ):
+                    # Only complete, authenticated legacy negotiation proves an
+                    # upgrade is needed. It is never permission for fallback.
+                    if (
+                        isinstance(error, IBusBridgeError)
+                        and error.code == "upgrade_required"
+                    ):
+                        raise OutputRouterError("ibus_upgrade_required") from None
                     raise OutputRouterError("input_capability_unknown") from None
             else:
                 self._selected, self._kind = bridge, framework
