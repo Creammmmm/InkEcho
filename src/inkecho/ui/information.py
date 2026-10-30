@@ -53,7 +53,8 @@ class CompatibilityPage(Page):
             ("自动选择", "auto"),
             ("模拟键盘", "keyboard"),
             ("Fcitx5（需要 InkEcho 输入桥）", "fcitx"),
-            ("IBus（实验性，需要手动启用扩展）", "ibus"),
+            ("IBus（旧 V2 实验扩展）", "ibus"),
+            ("IBus（GNOME 新版扩展）", "ibus-owned"),
         ):
             self.output_method.addItem(title, value)
         selected = self.output_method.findData(
@@ -153,7 +154,7 @@ class CompatibilityPage(Page):
         owned_layout.addWidget(
             label(
                 "与上方显式 IBus 的旧 V2 实验扩展分别管理；其协议保障不相同。"
-                "安装和启用后，自动方式可尝试使用此扩展；"
+                "安装和启用后，自动方式或所选「IBus（GNOME 新版扩展）」可使用此扩展；"
                 "它不会切换输入法，也无法确认目标是否收到文字。"
                 "本版本只使用带服务端期限的新协议；旧扩展需先停用并卸载，"
                 "再安装匹配版本并重新登录桌面；仅停用再启用可能仍加载缓存代码。"
@@ -400,7 +401,14 @@ class CompatibilityPage(Page):
         keyboard = getattr(self.session.inputs, "keyboard", self.session.inputs)
         keyboard_connected = getattr(keyboard, "connected", self.session.connected)
         keyboard_authorized = getattr(keyboard, "authorized", False)
-        if method == "ibus":
+        if method == "ibus-owned":
+            text = (
+                "只使用新版 GNOME IBus 扩展，适用于兼容的原生 Wayland 控件；"
+                "X11 / XWayland 目标不适用。输出时检查实际目标、服务身份与协议。"
+                "未安装、未启用或目标不兼容时停止，不回退其他方式；"
+                "录音准备不校验目标，提交完成仍不代表目标确认接收。"
+            )
+        elif method == "ibus":
             text = "IBus 仅尝试提交；目标未接入时可能没有文字，无法自动确认接收。"
         elif method == "fcitx":
             text = "Fcitx5 输入桥将在任务开始时检查；未安装或未运行时无法输出。"
@@ -434,7 +442,13 @@ class CompatibilityPage(Page):
             self.message.setText("输入设置无法读取，请检查配置文件。")
             return
         self.refresh()
-        if method == "auto":
+        if method == "ibus-owned":
+            self.message.setText(
+                "已保存本次准备；新版扩展身份与目标将在实际输出时验证，本次未输入文字。"
+                if enabled
+                else "新版扩展准备失败，请查看错误提示。"
+            )
+        elif method == "auto":
             keyboard = getattr(self.session.inputs, "keyboard", self.session.inputs)
             if enabled and getattr(keyboard, "authorized", False):
                 self.message.setText(

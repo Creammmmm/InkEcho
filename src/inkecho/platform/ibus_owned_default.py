@@ -1,5 +1,8 @@
 """Default auto dispatch with an explicitly installed, versioned optional bridge."""
 
+import asyncio
+from contextlib import asynccontextmanager
+
 from inkecho.platform.framework_detection import detect_system_framework
 from inkecho.platform.ibus import IBusBridgeError
 from inkecho.platform.ibus_owned_auto import OwnedAutoOutputRouter
@@ -27,6 +30,146 @@ class DefaultAutoOutputRouter(OwnedAutoOutputRouter):
         self._state_probe = state_probe
         self._legacy_detector = system_detector
 
+    async def _prepare_task(self, mode, parent_window, on_keyboard_authorization):
+        # Recording never captures a target or requests text-method permission.
+        # This explicit option defers authentication until actual output, but
+        # never permits the automatic Fcitx/keyboard fallback policy.
+        self._explicit_owned_task = mode == "ibus-owned"
+        self._explicit_owned_check = None
+        return await super()._prepare_task(
+            "auto" if self._explicit_owned_task else mode,
+            parent_window,
+            on_keyboard_authorization,
+        )
+
+    def _remember_explicit_task(self, active, deadline):
+        owner = asyncio.current_task()
+        if (
+            not getattr(self, "_explicit_owned_task", False)
+            or self._selected is None
+            or self._closed
+            or self._owner not in (None, owner)
+            or self._busy
+        ):
+            return
+        previous = getattr(self, "_explicit_owned_check", None)
+        if previous is not None and previous[0] is owner and previous[2] is not None:
+            deadline = previous[2] if deadline is None else min(previous[2], deadline)
+        self._explicit_owned_check = (owner, active, deadline)
+
+    async def prepare_stream(self, can_continue, *, deadline=None):
+        self._remember_explicit_task(can_continue, deadline)
+        return await super().prepare_stream(can_continue, deadline=deadline)
+
+    async def insert(self, text, can_continue, *, deadline=None, on_first_sent=None):
+        self._remember_explicit_task(can_continue, deadline)
+        return await super().insert(
+            text, can_continue, deadline=deadline, on_first_sent=on_first_sent
+        )
+
+    def _check_explicit_scope_stop(self, check, attempts, error=None):
+        if check is None:
+            return
+        try:
+            self._check_task(check[1], check[2])
+        except OutputRouterError as stopped:
+            acknowledged = getattr(error, "acknowledged_attempts", 0)
+            if type(acknowledged) is not int or acknowledged < 0:
+                acknowledged = 0
+            raise OutputRouterError(
+                stopped.code, acknowledged_attempts=max(attempts, acknowledged)
+            ) from None
+
+    @asynccontextmanager
+    async def output_session(self):
+        explicit = getattr(self, "_explicit_owned_task", False)
+        owner = asyncio.current_task()
+        attempts = 0
+        body_error = None
+        scope_check = None
+        try:
+            async with super().output_session():
+                try:
+                    yield
+                except BaseException as error:
+                    body_error = error
+                    raise
+                finally:
+                    if explicit:
+                        # Snapshot before base cleanup clears the selected client.
+                        # Inflight input never becomes a confirmed receipt.
+                        attempts = self.acknowledged_attempts
+                        check = getattr(self, "_explicit_owned_check", None)
+                        if check is not None and check[0] is owner:
+                            scope_check = check
+        except Exception as error:
+            if explicit:
+                cleanup_failed = error is not body_error and not isinstance(
+                    error, OutputRouterError
+                )
+                if cleanup_failed:
+                    self._report_cleanup_failure()
+                if isinstance(body_error, asyncio.CancelledError):
+                    raise body_error from None
+                self._check_explicit_scope_stop(scope_check, attempts, error)
+                if cleanup_failed:
+                    # A transport cleanup fault cannot erase the dispatch record
+                    # or authorize replay, even when it masks the body's error.
+                    acknowledged = getattr(body_error, "acknowledged_attempts", 0)
+                    if type(acknowledged) is not int or acknowledged < 0:
+                        acknowledged = 0
+                    attempts = max(attempts, acknowledged)
+                    raise OutputRouterError(
+                        "ibus_delivery_unknown" if attempts else "ibus_cleanup_failed",
+                        acknowledged_attempts=attempts,
+                    ) from None
+            raise
+        else:
+            if explicit:
+                self._check_explicit_scope_stop(scope_check, attempts)
+        finally:
+            if explicit and getattr(self, "_explicit_owned_check", None) is scope_check:
+                self._explicit_owned_check = None
+
+    async def _choose_explicit_owned(self, active, deadline):
+        try:
+            state = await self._wait_auto_preflight(
+                self._state_probe(), active, deadline, timeout=1.5
+            )
+        except (asyncio.CancelledError, OutputRouterError):
+            raise
+        except Exception:
+            raise OutputRouterError("input_capability_unknown") from None
+        if state in {"absent", "disabled"}:
+            raise OutputRouterError("ibus_unavailable")
+        if state != "enabled":
+            raise OutputRouterError("input_capability_unknown")
+
+        async def checked_owned():
+            proof = await self._owned_probe()
+            if proof is None:
+                raise OutputRouterError("ibus_target_unavailable")
+            if not (
+                isinstance(proof, tuple)
+                and len(proof) == 2
+                and proof[0] == "ibus"
+                and isinstance(proof[1], str)
+                and proof[1].startswith(":")
+            ):
+                # No compatible target is not authorization for another route.
+                raise OutputRouterError("input_capability_unknown")
+            return proof
+
+        detector, factory = self._system_detector, self._ibus_factory
+        self._system_detector, self._ibus_factory = checked_owned, self._owned_factory
+        self._owned_auto_candidate = True
+        try:
+            result = await OutputRouter._choose_auto(self, active, deadline)
+            self._owned_auto_scope = self._kind == "ibus"
+            return result
+        finally:
+            self._system_detector, self._ibus_factory = detector, factory
+
     async def _legacy_auto(self, active, deadline, *, pinned=None):
         flag, detector = self._owned_auto_candidate, self._system_detector
         self._owned_auto_candidate = False
@@ -51,6 +194,8 @@ class DefaultAutoOutputRouter(OwnedAutoOutputRouter):
             self._system_detector = detector
 
     async def _choose_auto(self, can_continue=lambda: True, deadline=None):
+        if getattr(self, "_explicit_owned_task", False):
+            return await self._choose_explicit_owned(can_continue, deadline)
         self._owned_auto_candidate = True
         self._fcitx_keyboard_fallback_allowed = False
         self._owned_install_state = "unknown"

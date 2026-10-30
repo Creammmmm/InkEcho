@@ -105,6 +105,7 @@ class Settings:
             "keyboard",
             "fcitx",
             "ibus",
+            "ibus-owned",
         }:
             raise ConfigError("Choose a supported output method.")
         if type(self.sample_rate) is not int or self.sample_rate not in {

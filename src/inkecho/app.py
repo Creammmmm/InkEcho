@@ -89,6 +89,10 @@ KEYBOARD_LABELS = {
     "cleanup_pending": "键盘布局尚未恢复，输入已暂停。请先松开所有按键并稍候。",
     "unsupported_layout": "当前键盘布局没有可用的兼容键位，暂时无法使用此输入方式。",
     "fcitx_unavailable": "Fcitx5 输入桥未安装或未运行，无法使用所选输入方式。",
+    "ibus_target_unavailable": (
+        "新版 GNOME IBus 方式只适用于兼容的原生 Wayland 控件。"
+        "当前目标不可用或已变化，已停止；未切换其他方式，也不会重放已尝试的文字。"
+    ),
     "ibus_unavailable": "IBus 实验性扩展未启用或不可用，请选择键盘输入。",
     "ibus_upgrade_required": (
         "IBus 扩展仍在运行旧协议。请停用并卸载旧扩展，安装匹配版本后重新登录桌面加载；"

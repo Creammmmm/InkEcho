@@ -471,6 +471,9 @@ class OutputRouter:
                     raise RuntimeError("owner_changed")
             except OutputRouterError:
                 await self._abort_preflight_after_stop(bridge)
+                # A stop observed during asynchronous cleanup takes priority
+                # over the earlier target/probe diagnostic. No input is retried.
+                self._check_task(can_continue, deadline)
                 raise
             except asyncio.CancelledError:
                 await self._abort_preflight_after_stop(bridge)
@@ -617,6 +620,28 @@ class OutputRouter:
                 f"{self._kind}_" + error.code, acknowledged_attempts=error.accepted
             ) from None
         except IBusBridgeError as error:
+            if getattr(self, "_explicit_owned_task", False):
+                self._failed = True
+                self._check_task(can_continue, deadline)
+                # Known zero does not authorize changing an explicitly chosen
+                # route. After any body attempt, uncertainty remains terminal.
+                if error.code == "no_service":
+                    definitely_unsent = (
+                        not self._ibus_attempted and error.acknowledged_attempts == 0
+                    )
+                    code = (
+                        "ibus_target_unavailable"
+                        if definitely_unsent
+                        else "ibus_delivery_unknown"
+                    )
+                else:
+                    code = "ibus_" + error.code
+                raise OutputRouterError(
+                    code,
+                    acknowledged_attempts=max(
+                        self._ibus_acknowledged_attempts, error.acknowledged_attempts
+                    ),
+                ) from None
             if getattr(self, "_owned_handoff_scope", False):
                 self._failed = True
                 raise OutputRouterError(
