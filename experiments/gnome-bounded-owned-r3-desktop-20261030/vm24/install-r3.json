@@ -1,0 +1,6 @@
+{
+  "command": "set -e; python3 /mnt/input/stage-candidate.py; sudo -n systemctl restart gdm3",
+  "returncode": 0,
+  "stdout": "explicit candidate install complete; old complete assets preserved; not enabled until normal GNOME reload\n",
+  "stderr": ""
+}

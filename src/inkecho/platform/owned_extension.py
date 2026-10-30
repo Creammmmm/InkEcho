@@ -67,6 +67,24 @@ class OwnedExtensionManager(ExtensionManager):
             raise ExtensionError("扩展文件校验失败；未启用。") from None
         if not valid:
             raise ExtensionError("未发现当前版本的扩展；未启用。")
+        try:
+            self._verified(installed_directory())
+        except ExtensionError:
+            raise ExtensionError(
+                "检测到完整旧版自动输入扩展。请先停用并卸载旧扩展，"
+                "再安装本版本并重新登录桌面；尚未启用或替换文件。"
+            ) from None
+
+    def install(self):
+        # Never overwrite a complete old extension, mixed files or a symlink.
+        # GNOME may also keep old modules loaded until the next login.
+        root = installed_directory()
+        if os.path.lexists(root):
+            self._verify_installed(self._run("info", UUID))
+            raise ExtensionError(
+                "当前扩展文件已安装；如服务仍为旧协议，请重新登录桌面。"
+            )
+        super().install()
 
     def enable(self):
         self._verify_installed(self._run("info", UUID))
@@ -79,6 +97,6 @@ class OwnedExtensionManager(ExtensionManager):
         try:
             info = self._run("info", UUID)
             self._verify_installed(info)
-        except ExtensionError:
-            return "当前版本的可选输入扩展未安装、不可用或未通过校验。"
+        except ExtensionError as error:
+            return str(error)
         return "扩展文件已校验；自动输出时仍须验证当前目标和服务身份。"

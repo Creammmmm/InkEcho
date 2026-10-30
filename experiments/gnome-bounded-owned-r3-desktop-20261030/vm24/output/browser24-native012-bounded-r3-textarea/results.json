@@ -1,0 +1,4093 @@
+{
+  "artifact_sha256": "7488566c708d3fc12de665d35dfc7c26a1902908c9fec63e3c905b1446757a78",
+  "appdir": "/run/user/1000/inkecho-package-gate-0.12.0/.mount_InkEchoPgIkB",
+  "test_scope": "published 0.12.0 runtime and staged Fcitx addon, candidate R2 source overlay and JS; NOT unchanged package qualification; actual Session/default Router; synthetic Recorder/provider only",
+  "browser_profile_new": "/run/user/1000/inkecho-browser-w4n1n_dp/chrome-profile",
+  "sandbox_disabled_in_isolated_vm": false,
+  "field": "textarea",
+  "system": "Ubuntu 24.04.5 LTS",
+  "session": "wayland",
+  "desktop": "ubuntu:GNOME",
+  "cases": [
+    {
+      "method": "auto",
+      "case": "old-client-new-service",
+      "sample_length": 22,
+      "initial_focus": "a",
+      "published_legacy_rejected": true,
+      "neighbor_batch_after_session_close": false,
+      "session": {
+        "reported_characters": 0,
+        "route": "published-old-client-explicit-negative",
+        "input_failure": null
+      },
+      "sent": 0,
+      "route": "published-old-client-explicit-negative",
+      "cancel_requested": false,
+      "first_dom": {
+        "a_length": 0,
+        "b_length": 0,
+        "a_html": "",
+        "a_text": "",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": []
+      },
+      "last_dom": {
+        "a_length": 0,
+        "b_length": 0,
+        "a_html": "",
+        "a_text": "",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": []
+      },
+      "no_late": true,
+      "exact_fixture_match": false,
+      "passed": true,
+      "received_lengths": [
+        0,
+        0
+      ]
+    },
+    {
+      "method": "auto",
+      "case": "legacy-during-new",
+      "sample_length": 1,
+      "initial_focus": "a",
+      "legacy_rejected_without_mutating_new_task": true,
+      "neighbor_batch_after_session_close": false,
+      "session": {
+        "reported_characters": 1,
+        "route": "explicit-protocol-isolation",
+        "input_failure": null
+      },
+      "sent": 1,
+      "route": "explicit-protocol-isolation",
+      "cancel_requested": false,
+      "first_dom": {
+        "a_length": 1,
+        "b_length": 0,
+        "a_html": "",
+        "a_text": "",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 3209.7999999999884
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 3211.6999999999534
+          }
+        ]
+      },
+      "last_dom": {
+        "a_length": 1,
+        "b_length": 0,
+        "a_html": "",
+        "a_text": "",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 3209.7999999999884
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 3211.6999999999534
+          }
+        ]
+      },
+      "no_late": true,
+      "exact_fixture_match": true,
+      "passed": true,
+      "received_lengths": [
+        1,
+        0
+      ]
+    },
+    {
+      "method": "CommitBatch",
+      "case": "server-expired",
+      "sample_length": 22,
+      "initial_focus": "a",
+      "server_expired_rejected": true,
+      "neighbor_batch_after_session_close": false,
+      "session": {
+        "reported_characters": 0,
+        "route": "explicit-bounded-protocol-probe",
+        "input_failure": null
+      },
+      "sent": 0,
+      "route": "explicit-bounded-protocol-probe",
+      "cancel_requested": false,
+      "first_dom": {
+        "a_length": 0,
+        "b_length": 0,
+        "a_html": "",
+        "a_text": "",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": []
+      },
+      "last_dom": {
+        "a_length": 0,
+        "b_length": 0,
+        "a_html": "",
+        "a_text": "",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": []
+      },
+      "no_late": true,
+      "exact_fixture_match": false,
+      "passed": true,
+      "received_lengths": [
+        0,
+        0
+      ]
+    },
+    {
+      "method": "CommitBatch",
+      "case": "mixed",
+      "sample_length": 22,
+      "initial_focus": "a",
+      "neighbor_batch_after_session_close": false,
+      "session": {
+        "route": null,
+        "outcome": "unconfirmed",
+        "metrics_characters": null,
+        "reported_characters": 22,
+        "outcomes": [
+          {
+            "characters": 22
+          }
+        ],
+        "deltas": [
+          {
+            "index": 0,
+            "monotonic": 358.569665854
+          },
+          {
+            "index": 1,
+            "monotonic": 358.595532666
+          },
+          {
+            "index": 2,
+            "monotonic": 358.621137362
+          },
+          {
+            "index": 3,
+            "monotonic": 358.646845052
+          },
+          {
+            "index": 4,
+            "monotonic": 358.672774671
+          },
+          {
+            "index": 5,
+            "monotonic": 358.698733551
+          },
+          {
+            "index": 6,
+            "monotonic": 358.724126271
+          },
+          {
+            "index": 7,
+            "monotonic": 358.749535977
+          },
+          {
+            "index": 8,
+            "monotonic": 358.774768908
+          },
+          {
+            "index": 9,
+            "monotonic": 358.800744042
+          },
+          {
+            "index": 10,
+            "monotonic": 358.826233308
+          },
+          {
+            "index": 11,
+            "monotonic": 358.851765907
+          },
+          {
+            "index": 12,
+            "monotonic": 358.877642692
+          },
+          {
+            "index": 13,
+            "monotonic": 358.903259088
+          },
+          {
+            "index": 14,
+            "monotonic": 358.928879263
+          },
+          {
+            "index": 15,
+            "monotonic": 358.955182495
+          },
+          {
+            "index": 16,
+            "monotonic": 358.981187495
+          },
+          {
+            "index": 17,
+            "monotonic": 359.006755429
+          },
+          {
+            "index": 18,
+            "monotonic": 359.031982579
+          },
+          {
+            "index": 19,
+            "monotonic": 359.057823001
+          },
+          {
+            "index": 20,
+            "monotonic": 359.083438435
+          },
+          {
+            "index": 21,
+            "monotonic": 359.108758695
+          }
+        ],
+        "dispatches": [
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 358.665631693,
+            "route_before": "fcitx",
+            "first_sent_at": 359.290252999,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 359.29028251,
+            "route_before": "ibus",
+            "first_sent_at": 359.29105703,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 359.291075097,
+            "route_before": "ibus",
+            "first_sent_at": 359.291808049,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 359.291838748,
+            "route_before": "ibus",
+            "first_sent_at": 359.292460267,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 359.292474538,
+            "route_before": "ibus",
+            "first_sent_at": 359.293204735,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 359.293218726,
+            "route_before": "ibus",
+            "first_sent_at": 359.294039309,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 359.294054295,
+            "route_before": "ibus",
+            "first_sent_at": 359.295914055,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 359.295929922,
+            "route_before": "ibus",
+            "first_sent_at": 359.299505836,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 359.299525759,
+            "route_before": "ibus",
+            "first_sent_at": 359.300344481,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 359.300360528,
+            "route_before": "ibus",
+            "first_sent_at": 359.30147152,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 359.301485875,
+            "route_before": "ibus",
+            "first_sent_at": 359.303081209,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 359.303097912,
+            "route_before": "ibus",
+            "first_sent_at": 359.303759785,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 359.303774737,
+            "route_before": "ibus",
+            "first_sent_at": 359.304579479,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 359.304593521,
+            "route_before": "ibus",
+            "first_sent_at": 359.305551246,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 359.305571025,
+            "route_before": "ibus",
+            "first_sent_at": 359.306107825,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 359.306121908,
+            "route_before": "ibus",
+            "first_sent_at": 359.306985262,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 359.307005437,
+            "route_before": "ibus",
+            "first_sent_at": 359.307880925,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 2,
+            "has_lf": true,
+            "at": 359.307894601,
+            "route_before": "ibus",
+            "first_sent_at": 359.30858639,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 359.308598681,
+            "route_before": "ibus",
+            "first_sent_at": 359.309314912,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 359.309329315,
+            "route_before": "ibus",
+            "first_sent_at": 359.310161964,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 359.310185284,
+            "route_before": "ibus",
+            "first_sent_at": 359.310996385,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          }
+        ],
+        "input_failure": null,
+        "error_code": null
+      },
+      "sent": 22,
+      "route": null,
+      "cancel_requested": false,
+      "first_dom": {
+        "a_length": 22,
+        "b_length": 0,
+        "a_html": "",
+        "a_text": "",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7628.799999999988
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 7631.799999999988
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7632
+          },
+          {
+            "id": "a",
+            "len": 2,
+            "type": "input",
+            "time": 7632.099999999977
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7632.199999999953
+          },
+          {
+            "id": "a",
+            "len": 3,
+            "type": "input",
+            "time": 7632.399999999965
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7632.5
+          },
+          {
+            "id": "a",
+            "len": 4,
+            "type": "input",
+            "time": 7632.5
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7632.599999999977
+          },
+          {
+            "id": "a",
+            "len": 5,
+            "type": "input",
+            "time": 7633
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7633.5
+          },
+          {
+            "id": "a",
+            "len": 6,
+            "type": "input",
+            "time": 7633.899999999965
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7634.099999999977
+          },
+          {
+            "id": "a",
+            "len": 7,
+            "type": "input",
+            "time": 7634.299999999988
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7638.099999999977
+          },
+          {
+            "id": "a",
+            "len": 8,
+            "type": "input",
+            "time": 7638.199999999953
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7638.899999999965
+          },
+          {
+            "id": "a",
+            "len": 9,
+            "type": "input",
+            "time": 7639
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7639.699999999953
+          },
+          {
+            "id": "a",
+            "len": 10,
+            "type": "input",
+            "time": 7639.799999999988
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7640.899999999965
+          },
+          {
+            "id": "a",
+            "len": 11,
+            "type": "input",
+            "time": 7641.099999999977
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7642.199999999953
+          },
+          {
+            "id": "a",
+            "len": 12,
+            "type": "input",
+            "time": 7642.399999999965
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7643.099999999977
+          },
+          {
+            "id": "a",
+            "len": 13,
+            "type": "input",
+            "time": 7643.199999999953
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7643.799999999988
+          },
+          {
+            "id": "a",
+            "len": 14,
+            "type": "input",
+            "time": 7643.899999999965
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7644.599999999977
+          },
+          {
+            "id": "a",
+            "len": 15,
+            "type": "input",
+            "time": 7644.799999999988
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7645.299999999988
+          },
+          {
+            "id": "a",
+            "len": 16,
+            "type": "input",
+            "time": 7645.299999999988
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7646.099999999977
+          },
+          {
+            "id": "a",
+            "len": 17,
+            "type": "input",
+            "time": 7646.299999999988
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 2,
+            "inputType": "insertText",
+            "time": 7647.199999999953
+          },
+          {
+            "id": "a",
+            "len": 19,
+            "type": "input",
+            "time": 7648
+          },
+          {
+            "id": "a",
+            "len": 19,
+            "type": "input",
+            "time": 7648
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7648.099999999977
+          },
+          {
+            "id": "a",
+            "len": 20,
+            "type": "input",
+            "time": 7648.199999999953
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7648.699999999953
+          },
+          {
+            "id": "a",
+            "len": 21,
+            "type": "input",
+            "time": 7648.799999999988
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7649.5
+          },
+          {
+            "id": "a",
+            "len": 22,
+            "type": "input",
+            "time": 7649.599999999977
+          }
+        ]
+      },
+      "last_dom": {
+        "a_length": 22,
+        "b_length": 0,
+        "a_html": "",
+        "a_text": "",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7628.799999999988
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 7631.799999999988
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7632
+          },
+          {
+            "id": "a",
+            "len": 2,
+            "type": "input",
+            "time": 7632.099999999977
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7632.199999999953
+          },
+          {
+            "id": "a",
+            "len": 3,
+            "type": "input",
+            "time": 7632.399999999965
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7632.5
+          },
+          {
+            "id": "a",
+            "len": 4,
+            "type": "input",
+            "time": 7632.5
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7632.599999999977
+          },
+          {
+            "id": "a",
+            "len": 5,
+            "type": "input",
+            "time": 7633
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7633.5
+          },
+          {
+            "id": "a",
+            "len": 6,
+            "type": "input",
+            "time": 7633.899999999965
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7634.099999999977
+          },
+          {
+            "id": "a",
+            "len": 7,
+            "type": "input",
+            "time": 7634.299999999988
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7638.099999999977
+          },
+          {
+            "id": "a",
+            "len": 8,
+            "type": "input",
+            "time": 7638.199999999953
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7638.899999999965
+          },
+          {
+            "id": "a",
+            "len": 9,
+            "type": "input",
+            "time": 7639
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7639.699999999953
+          },
+          {
+            "id": "a",
+            "len": 10,
+            "type": "input",
+            "time": 7639.799999999988
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7640.899999999965
+          },
+          {
+            "id": "a",
+            "len": 11,
+            "type": "input",
+            "time": 7641.099999999977
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7642.199999999953
+          },
+          {
+            "id": "a",
+            "len": 12,
+            "type": "input",
+            "time": 7642.399999999965
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7643.099999999977
+          },
+          {
+            "id": "a",
+            "len": 13,
+            "type": "input",
+            "time": 7643.199999999953
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7643.799999999988
+          },
+          {
+            "id": "a",
+            "len": 14,
+            "type": "input",
+            "time": 7643.899999999965
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7644.599999999977
+          },
+          {
+            "id": "a",
+            "len": 15,
+            "type": "input",
+            "time": 7644.799999999988
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7645.299999999988
+          },
+          {
+            "id": "a",
+            "len": 16,
+            "type": "input",
+            "time": 7645.299999999988
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7646.099999999977
+          },
+          {
+            "id": "a",
+            "len": 17,
+            "type": "input",
+            "time": 7646.299999999988
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 2,
+            "inputType": "insertText",
+            "time": 7647.199999999953
+          },
+          {
+            "id": "a",
+            "len": 19,
+            "type": "input",
+            "time": 7648
+          },
+          {
+            "id": "a",
+            "len": 19,
+            "type": "input",
+            "time": 7648
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7648.099999999977
+          },
+          {
+            "id": "a",
+            "len": 20,
+            "type": "input",
+            "time": 7648.199999999953
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7648.699999999953
+          },
+          {
+            "id": "a",
+            "len": 21,
+            "type": "input",
+            "time": 7648.799999999988
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7649.5
+          },
+          {
+            "id": "a",
+            "len": 22,
+            "type": "input",
+            "time": 7649.599999999977
+          }
+        ]
+      },
+      "no_late": true,
+      "exact_fixture_match": true,
+      "passed": true,
+      "received_lengths": [
+        22,
+        0
+      ]
+    },
+    {
+      "method": "CommitBatch",
+      "case": "mixed",
+      "sample_length": 22,
+      "initial_focus": "a",
+      "neighbor_batch_after_session_close": false,
+      "session": {
+        "route": null,
+        "outcome": "unconfirmed",
+        "metrics_characters": null,
+        "reported_characters": 22,
+        "outcomes": [
+          {
+            "characters": 22
+          }
+        ],
+        "deltas": [
+          {
+            "index": 0,
+            "monotonic": 361.160842004
+          },
+          {
+            "index": 1,
+            "monotonic": 361.186163652
+          },
+          {
+            "index": 2,
+            "monotonic": 361.211616658
+          },
+          {
+            "index": 3,
+            "monotonic": 361.237239482
+          },
+          {
+            "index": 4,
+            "monotonic": 361.262337916
+          },
+          {
+            "index": 5,
+            "monotonic": 361.28849197
+          },
+          {
+            "index": 6,
+            "monotonic": 361.313814599
+          },
+          {
+            "index": 7,
+            "monotonic": 361.339186224
+          },
+          {
+            "index": 8,
+            "monotonic": 361.364791189
+          },
+          {
+            "index": 9,
+            "monotonic": 361.390430434
+          },
+          {
+            "index": 10,
+            "monotonic": 361.416147132
+          },
+          {
+            "index": 11,
+            "monotonic": 361.442065557
+          },
+          {
+            "index": 12,
+            "monotonic": 361.468128544
+          },
+          {
+            "index": 13,
+            "monotonic": 361.494103527
+          },
+          {
+            "index": 14,
+            "monotonic": 361.519503089
+          },
+          {
+            "index": 15,
+            "monotonic": 361.545157007
+          },
+          {
+            "index": 16,
+            "monotonic": 361.571300176
+          },
+          {
+            "index": 17,
+            "monotonic": 361.597224616
+          },
+          {
+            "index": 18,
+            "monotonic": 361.623340787
+          },
+          {
+            "index": 19,
+            "monotonic": 361.648916483
+          },
+          {
+            "index": 20,
+            "monotonic": 361.674409934
+          },
+          {
+            "index": 21,
+            "monotonic": 361.699887404
+          }
+        ],
+        "dispatches": [
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 361.223096695,
+            "route_before": "fcitx",
+            "first_sent_at": 361.783633359,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 361.783659457,
+            "route_before": "ibus",
+            "first_sent_at": 361.78508785,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 361.785119038,
+            "route_before": "ibus",
+            "first_sent_at": 361.789701662,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 361.789720181,
+            "route_before": "ibus",
+            "first_sent_at": 361.791097738,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 361.791113808,
+            "route_before": "ibus",
+            "first_sent_at": 361.79200802,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 361.792023518,
+            "route_before": "ibus",
+            "first_sent_at": 361.793005884,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 361.793020034,
+            "route_before": "ibus",
+            "first_sent_at": 361.793862291,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 361.793876314,
+            "route_before": "ibus",
+            "first_sent_at": 361.794523595,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 361.794537211,
+            "route_before": "ibus",
+            "first_sent_at": 361.795621662,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 361.795635566,
+            "route_before": "ibus",
+            "first_sent_at": 361.796363704,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 361.796377623,
+            "route_before": "ibus",
+            "first_sent_at": 361.800546879,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 361.800566523,
+            "route_before": "ibus",
+            "first_sent_at": 361.801209592,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 361.801227243,
+            "route_before": "ibus",
+            "first_sent_at": 361.801911057,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 361.801925981,
+            "route_before": "ibus",
+            "first_sent_at": 361.802878254,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 361.802892857,
+            "route_before": "ibus",
+            "first_sent_at": 361.803502616,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 361.803516928,
+            "route_before": "ibus",
+            "first_sent_at": 361.80436468,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 361.804379553,
+            "route_before": "ibus",
+            "first_sent_at": 361.805652456,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 2,
+            "has_lf": true,
+            "at": 361.805667325,
+            "route_before": "ibus",
+            "first_sent_at": 361.80643158,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 361.806446101,
+            "route_before": "ibus",
+            "first_sent_at": 361.807674469,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 361.807688717,
+            "route_before": "ibus",
+            "first_sent_at": 361.808436577,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 361.808465382,
+            "route_before": "ibus",
+            "first_sent_at": 361.809436208,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          }
+        ],
+        "input_failure": null,
+        "error_code": null
+      },
+      "sent": 22,
+      "route": null,
+      "cancel_requested": false,
+      "first_dom": {
+        "a_length": 22,
+        "b_length": 0,
+        "a_html": "",
+        "a_text": "",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 10122.199999999953
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 10122.399999999965
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 10123.5
+          },
+          {
+            "id": "a",
+            "len": 2,
+            "type": "input",
+            "time": 10123.699999999953
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 10128.299999999988
+          },
+          {
+            "id": "a",
+            "len": 3,
+            "type": "input",
+            "time": 10128.599999999977
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 10129.299999999988
+          },
+          {
+            "id": "a",
+            "len": 4,
+            "type": "input",
+            "time": 10129.399999999965
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 10130.299999999988
+          },
+          {
+            "id": "a",
+            "len": 5,
+            "type": "input",
+            "time": 10130.299999999988
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 10131.299999999988
+          },
+          {
+            "id": "a",
+            "len": 6,
+            "type": "input",
+            "time": 10131.399999999965
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 10132.299999999988
+          },
+          {
+            "id": "a",
+            "len": 7,
+            "type": "input",
+            "time": 10132.299999999988
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 10133.199999999953
+          },
+          {
+            "id": "a",
+            "len": 8,
+            "type": "input",
+            "time": 10133.199999999953
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 10133.799999999988
+          },
+          {
+            "id": "a",
+            "len": 9,
+            "type": "input",
+            "time": 10133.899999999965
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 10135
+          },
+          {
+            "id": "a",
+            "len": 10,
+            "type": "input",
+            "time": 10135.199999999953
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 10135.799999999988
+          },
+          {
+            "id": "a",
+            "len": 11,
+            "type": "input",
+            "time": 10135.899999999965
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 10139.699999999953
+          },
+          {
+            "id": "a",
+            "len": 12,
+            "type": "input",
+            "time": 10139.899999999965
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 10140.399999999965
+          },
+          {
+            "id": "a",
+            "len": 13,
+            "type": "input",
+            "time": 10140.5
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 10141.099999999977
+          },
+          {
+            "id": "a",
+            "len": 14,
+            "type": "input",
+            "time": 10141.199999999953
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 10142.299999999988
+          },
+          {
+            "id": "a",
+            "len": 15,
+            "type": "input",
+            "time": 10142.399999999965
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 10142.799999999988
+          },
+          {
+            "id": "a",
+            "len": 16,
+            "type": "input",
+            "time": 10143.299999999988
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 10143.899999999965
+          },
+          {
+            "id": "a",
+            "len": 17,
+            "type": "input",
+            "time": 10144.099999999977
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 2,
+            "inputType": "insertText",
+            "time": 10144.799999999988
+          },
+          {
+            "id": "a",
+            "len": 19,
+            "type": "input",
+            "time": 10145
+          },
+          {
+            "id": "a",
+            "len": 19,
+            "type": "input",
+            "time": 10145.099999999977
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 10145.699999999953
+          },
+          {
+            "id": "a",
+            "len": 20,
+            "type": "input",
+            "time": 10145.799999999988
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 10146.699999999953
+          },
+          {
+            "id": "a",
+            "len": 21,
+            "type": "input",
+            "time": 10146.799999999988
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 10148.5
+          },
+          {
+            "id": "a",
+            "len": 22,
+            "type": "input",
+            "time": 10148.699999999953
+          }
+        ]
+      },
+      "last_dom": {
+        "a_length": 22,
+        "b_length": 0,
+        "a_html": "",
+        "a_text": "",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 10122.199999999953
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 10122.399999999965
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 10123.5
+          },
+          {
+            "id": "a",
+            "len": 2,
+            "type": "input",
+            "time": 10123.699999999953
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 10128.299999999988
+          },
+          {
+            "id": "a",
+            "len": 3,
+            "type": "input",
+            "time": 10128.599999999977
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 10129.299999999988
+          },
+          {
+            "id": "a",
+            "len": 4,
+            "type": "input",
+            "time": 10129.399999999965
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 10130.299999999988
+          },
+          {
+            "id": "a",
+            "len": 5,
+            "type": "input",
+            "time": 10130.299999999988
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 10131.299999999988
+          },
+          {
+            "id": "a",
+            "len": 6,
+            "type": "input",
+            "time": 10131.399999999965
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 10132.299999999988
+          },
+          {
+            "id": "a",
+            "len": 7,
+            "type": "input",
+            "time": 10132.299999999988
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 10133.199999999953
+          },
+          {
+            "id": "a",
+            "len": 8,
+            "type": "input",
+            "time": 10133.199999999953
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 10133.799999999988
+          },
+          {
+            "id": "a",
+            "len": 9,
+            "type": "input",
+            "time": 10133.899999999965
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 10135
+          },
+          {
+            "id": "a",
+            "len": 10,
+            "type": "input",
+            "time": 10135.199999999953
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 10135.799999999988
+          },
+          {
+            "id": "a",
+            "len": 11,
+            "type": "input",
+            "time": 10135.899999999965
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 10139.699999999953
+          },
+          {
+            "id": "a",
+            "len": 12,
+            "type": "input",
+            "time": 10139.899999999965
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 10140.399999999965
+          },
+          {
+            "id": "a",
+            "len": 13,
+            "type": "input",
+            "time": 10140.5
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 10141.099999999977
+          },
+          {
+            "id": "a",
+            "len": 14,
+            "type": "input",
+            "time": 10141.199999999953
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 10142.299999999988
+          },
+          {
+            "id": "a",
+            "len": 15,
+            "type": "input",
+            "time": 10142.399999999965
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 10142.799999999988
+          },
+          {
+            "id": "a",
+            "len": 16,
+            "type": "input",
+            "time": 10143.299999999988
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 10143.899999999965
+          },
+          {
+            "id": "a",
+            "len": 17,
+            "type": "input",
+            "time": 10144.099999999977
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 2,
+            "inputType": "insertText",
+            "time": 10144.799999999988
+          },
+          {
+            "id": "a",
+            "len": 19,
+            "type": "input",
+            "time": 10145
+          },
+          {
+            "id": "a",
+            "len": 19,
+            "type": "input",
+            "time": 10145.099999999977
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 10145.699999999953
+          },
+          {
+            "id": "a",
+            "len": 20,
+            "type": "input",
+            "time": 10145.799999999988
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 10146.699999999953
+          },
+          {
+            "id": "a",
+            "len": 21,
+            "type": "input",
+            "time": 10146.799999999988
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 10148.5
+          },
+          {
+            "id": "a",
+            "len": 22,
+            "type": "input",
+            "time": 10148.699999999953
+          }
+        ]
+      },
+      "no_late": true,
+      "exact_fixture_match": true,
+      "passed": true,
+      "received_lengths": [
+        22,
+        0
+      ]
+    },
+    {
+      "method": "CommitBatch",
+      "case": "switch",
+      "sample_length": 22,
+      "initial_focus": "a",
+      "neighbor_batch_after_session_close": false,
+      "session": {
+        "route": null,
+        "outcome": "unconfirmed",
+        "metrics_characters": null,
+        "reported_characters": 22,
+        "outcomes": [
+          {
+            "characters": 22
+          }
+        ],
+        "deltas": [
+          {
+            "index": 0,
+            "monotonic": 363.660513879
+          },
+          {
+            "index": 1,
+            "monotonic": 363.685635168
+          },
+          {
+            "index": 2,
+            "monotonic": 363.711745269
+          },
+          {
+            "index": 3,
+            "monotonic": 363.737481631
+          },
+          {
+            "index": 4,
+            "monotonic": 363.762812358
+          },
+          {
+            "index": 5,
+            "monotonic": 363.788565394
+          },
+          {
+            "index": 6,
+            "monotonic": 363.814464183
+          },
+          {
+            "index": 7,
+            "monotonic": 363.840077328
+          },
+          {
+            "index": 8,
+            "monotonic": 363.865933971
+          },
+          {
+            "index": 9,
+            "monotonic": 363.891678833
+          },
+          {
+            "index": 10,
+            "monotonic": 363.917417432
+          },
+          {
+            "index": 11,
+            "monotonic": 363.942880097
+          },
+          {
+            "index": 12,
+            "monotonic": 363.968623475
+          },
+          {
+            "index": 13,
+            "monotonic": 363.994643045
+          },
+          {
+            "index": 14,
+            "monotonic": 364.020031655
+          },
+          {
+            "index": 15,
+            "monotonic": 364.045412632
+          },
+          {
+            "index": 16,
+            "monotonic": 364.071470858
+          },
+          {
+            "index": 17,
+            "monotonic": 364.097519343
+          },
+          {
+            "index": 18,
+            "monotonic": 364.123083263
+          },
+          {
+            "index": 19,
+            "monotonic": 364.148491043
+          },
+          {
+            "index": 20,
+            "monotonic": 364.174206839
+          },
+          {
+            "index": 21,
+            "monotonic": 364.199382846
+          }
+        ],
+        "dispatches": [
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 363.751074608,
+            "route_before": "fcitx",
+            "first_sent_at": 364.319868016,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 364.319891687,
+            "route_before": "ibus",
+            "first_sent_at": 364.321110882,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 364.321127036,
+            "route_before": "ibus",
+            "first_sent_at": 364.324755265,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 364.324789081,
+            "route_before": "ibus",
+            "first_sent_at": 364.325716738,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 364.325732124,
+            "route_before": "ibus",
+            "first_sent_at": 364.326310438,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 364.326325409,
+            "route_before": "ibus",
+            "first_sent_at": 364.327028178,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 364.327042223,
+            "route_before": "ibus",
+            "first_sent_at": 364.327777662,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 364.327792246,
+            "route_before": "ibus",
+            "first_sent_at": 364.328889419,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 364.328903897,
+            "route_before": "ibus",
+            "first_sent_at": 364.329427453,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 364.329441753,
+            "route_before": "ibus",
+            "first_sent_at": 364.330239801,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 364.330253153,
+            "route_before": "ibus",
+            "first_sent_at": 364.331277833,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 364.331292285,
+            "route_before": "ibus",
+            "first_sent_at": 364.332143331,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 364.332158044,
+            "route_before": "ibus",
+            "first_sent_at": 364.332896804,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 364.332911374,
+            "route_before": "ibus",
+            "first_sent_at": 364.333626035,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 364.333640574,
+            "route_before": "ibus",
+            "first_sent_at": 364.334477954,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 364.334493142,
+            "route_before": "ibus",
+            "first_sent_at": 364.338196566,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 364.338213239,
+            "route_before": "ibus",
+            "first_sent_at": 364.33872883,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 2,
+            "has_lf": true,
+            "at": 364.338742885,
+            "route_before": "ibus",
+            "first_sent_at": 364.339498599,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 364.339513508,
+            "route_before": "ibus",
+            "first_sent_at": 364.340275426,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 364.340289208,
+            "route_before": "ibus",
+            "first_sent_at": 364.341060371,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 364.341081868,
+            "route_before": "ibus",
+            "first_sent_at": 364.341790713,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          }
+        ],
+        "input_failure": null,
+        "error_code": null
+      },
+      "sent": 22,
+      "route": null,
+      "cancel_requested": false,
+      "first_dom": {
+        "a_length": 1,
+        "b_length": 21,
+        "a_html": "",
+        "a_text": "",
+        "b_html": "",
+        "b_text": "",
+        "active": "b",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 12658.5
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 12658.699999999953
+          },
+          {
+            "id": "b",
+            "type": "focus",
+            "time": 12658.899999999965
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 12660.299999999988
+          },
+          {
+            "id": "b",
+            "len": 1,
+            "type": "input",
+            "time": 12660.799999999988
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 12662.899999999965
+          },
+          {
+            "id": "b",
+            "len": 2,
+            "type": "input",
+            "time": 12663.099999999977
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 12663.899999999965
+          },
+          {
+            "id": "b",
+            "len": 3,
+            "type": "input",
+            "time": 12664
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 12664.799999999988
+          },
+          {
+            "id": "b",
+            "len": 4,
+            "type": "input",
+            "time": 12664.899999999965
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 12665.599999999977
+          },
+          {
+            "id": "b",
+            "len": 5,
+            "type": "input",
+            "time": 12665.699999999953
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 12666.299999999988
+          },
+          {
+            "id": "b",
+            "len": 6,
+            "type": "input",
+            "time": 12666.399999999965
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 12666.799999999988
+          },
+          {
+            "id": "b",
+            "len": 7,
+            "type": "input",
+            "time": 12667
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 12667.899999999965
+          },
+          {
+            "id": "b",
+            "len": 8,
+            "type": "input",
+            "time": 12668
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 12668.599999999977
+          },
+          {
+            "id": "b",
+            "len": 9,
+            "type": "input",
+            "time": 12668.899999999965
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 12669.5
+          },
+          {
+            "id": "b",
+            "len": 10,
+            "type": "input",
+            "time": 12669.599999999977
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 12670.699999999953
+          },
+          {
+            "id": "b",
+            "len": 11,
+            "type": "input",
+            "time": 12670.799999999988
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 12671.399999999965
+          },
+          {
+            "id": "b",
+            "len": 12,
+            "type": "input",
+            "time": 12671.5
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 12672.099999999977
+          },
+          {
+            "id": "b",
+            "len": 13,
+            "type": "input",
+            "time": 12672.199999999953
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 12673.199999999953
+          },
+          {
+            "id": "b",
+            "len": 14,
+            "type": "input",
+            "time": 12673.299999999988
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 12674.5
+          },
+          {
+            "id": "b",
+            "len": 15,
+            "type": "input",
+            "time": 12674.599999999977
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 12677.299999999988
+          },
+          {
+            "id": "b",
+            "len": 16,
+            "type": "input",
+            "time": 12677.299999999988
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 2,
+            "inputType": "insertText",
+            "time": 12678
+          },
+          {
+            "id": "b",
+            "len": 18,
+            "type": "input",
+            "time": 12678.199999999953
+          },
+          {
+            "id": "b",
+            "len": 18,
+            "type": "input",
+            "time": 12678.299999999988
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 12678.799999999988
+          },
+          {
+            "id": "b",
+            "len": 19,
+            "type": "input",
+            "time": 12678.799999999988
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 12679.599999999977
+          },
+          {
+            "id": "b",
+            "len": 20,
+            "type": "input",
+            "time": 12679.699999999953
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 12680.299999999988
+          },
+          {
+            "id": "b",
+            "len": 21,
+            "type": "input",
+            "time": 12680.399999999965
+          }
+        ]
+      },
+      "last_dom": {
+        "a_length": 1,
+        "b_length": 21,
+        "a_html": "",
+        "a_text": "",
+        "b_html": "",
+        "b_text": "",
+        "active": "b",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 12658.5
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 12658.699999999953
+          },
+          {
+            "id": "b",
+            "type": "focus",
+            "time": 12658.899999999965
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 12660.299999999988
+          },
+          {
+            "id": "b",
+            "len": 1,
+            "type": "input",
+            "time": 12660.799999999988
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 12662.899999999965
+          },
+          {
+            "id": "b",
+            "len": 2,
+            "type": "input",
+            "time": 12663.099999999977
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 12663.899999999965
+          },
+          {
+            "id": "b",
+            "len": 3,
+            "type": "input",
+            "time": 12664
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 12664.799999999988
+          },
+          {
+            "id": "b",
+            "len": 4,
+            "type": "input",
+            "time": 12664.899999999965
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 12665.599999999977
+          },
+          {
+            "id": "b",
+            "len": 5,
+            "type": "input",
+            "time": 12665.699999999953
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 12666.299999999988
+          },
+          {
+            "id": "b",
+            "len": 6,
+            "type": "input",
+            "time": 12666.399999999965
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 12666.799999999988
+          },
+          {
+            "id": "b",
+            "len": 7,
+            "type": "input",
+            "time": 12667
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 12667.899999999965
+          },
+          {
+            "id": "b",
+            "len": 8,
+            "type": "input",
+            "time": 12668
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 12668.599999999977
+          },
+          {
+            "id": "b",
+            "len": 9,
+            "type": "input",
+            "time": 12668.899999999965
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 12669.5
+          },
+          {
+            "id": "b",
+            "len": 10,
+            "type": "input",
+            "time": 12669.599999999977
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 12670.699999999953
+          },
+          {
+            "id": "b",
+            "len": 11,
+            "type": "input",
+            "time": 12670.799999999988
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 12671.399999999965
+          },
+          {
+            "id": "b",
+            "len": 12,
+            "type": "input",
+            "time": 12671.5
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 12672.099999999977
+          },
+          {
+            "id": "b",
+            "len": 13,
+            "type": "input",
+            "time": 12672.199999999953
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 12673.199999999953
+          },
+          {
+            "id": "b",
+            "len": 14,
+            "type": "input",
+            "time": 12673.299999999988
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 12674.5
+          },
+          {
+            "id": "b",
+            "len": 15,
+            "type": "input",
+            "time": 12674.599999999977
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 12677.299999999988
+          },
+          {
+            "id": "b",
+            "len": 16,
+            "type": "input",
+            "time": 12677.299999999988
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 2,
+            "inputType": "insertText",
+            "time": 12678
+          },
+          {
+            "id": "b",
+            "len": 18,
+            "type": "input",
+            "time": 12678.199999999953
+          },
+          {
+            "id": "b",
+            "len": 18,
+            "type": "input",
+            "time": 12678.299999999988
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 12678.799999999988
+          },
+          {
+            "id": "b",
+            "len": 19,
+            "type": "input",
+            "time": 12678.799999999988
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 12679.599999999977
+          },
+          {
+            "id": "b",
+            "len": 20,
+            "type": "input",
+            "time": 12679.699999999953
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 12680.299999999988
+          },
+          {
+            "id": "b",
+            "len": 21,
+            "type": "input",
+            "time": 12680.399999999965
+          }
+        ]
+      },
+      "no_late": true,
+      "exact_fixture_match": true,
+      "passed": true,
+      "received_lengths": [
+        1,
+        21
+      ]
+    },
+    {
+      "method": "CommitBatch",
+      "case": "cancel",
+      "sample_length": 22,
+      "initial_focus": "a",
+      "neighbor_batch_after_session_close": false,
+      "session": {
+        "route": null,
+        "outcome": "cancelled",
+        "metrics_characters": null,
+        "reported_characters": 1,
+        "outcomes": [
+          {
+            "characters": 1
+          }
+        ],
+        "deltas": [
+          {
+            "index": 0,
+            "monotonic": 366.206782646
+          },
+          {
+            "index": 1,
+            "monotonic": 366.232546105
+          },
+          {
+            "index": 2,
+            "monotonic": 366.25787842
+          },
+          {
+            "index": 3,
+            "monotonic": 366.283205868
+          },
+          {
+            "index": 4,
+            "monotonic": 366.308914451
+          },
+          {
+            "index": 5,
+            "monotonic": 366.334101167
+          },
+          {
+            "index": 6,
+            "monotonic": 366.359595374
+          },
+          {
+            "index": 7,
+            "monotonic": 366.3848582
+          },
+          {
+            "index": 8,
+            "monotonic": 366.410858092
+          },
+          {
+            "index": 9,
+            "monotonic": 366.436754772
+          },
+          {
+            "index": 10,
+            "monotonic": 366.46212269
+          },
+          {
+            "index": 11,
+            "monotonic": 366.487489011
+          },
+          {
+            "index": 12,
+            "monotonic": 366.513334822
+          },
+          {
+            "index": 13,
+            "monotonic": 366.538783922
+          },
+          {
+            "index": 14,
+            "monotonic": 366.564936127
+          },
+          {
+            "index": 15,
+            "monotonic": 366.590516034
+          },
+          {
+            "index": 16,
+            "monotonic": 366.615893098
+          },
+          {
+            "index": 17,
+            "monotonic": 366.641439846
+          },
+          {
+            "index": 18,
+            "monotonic": 366.666994195
+          },
+          {
+            "index": 19,
+            "monotonic": 366.693117359
+          },
+          {
+            "index": 20,
+            "monotonic": 366.719524469
+          },
+          {
+            "index": 21,
+            "monotonic": 366.745381685
+          }
+        ],
+        "dispatches": [
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 366.283842235,
+            "route_before": "fcitx",
+            "first_sent_at": 366.836377844,
+            "error_code": "input_cancelled",
+            "error_type": "OutputRouterError",
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          }
+        ],
+        "input_failure": "input_cancelled",
+        "error_code": null
+      },
+      "sent": 1,
+      "route": null,
+      "cancel_requested": true,
+      "error": {
+        "code": "input_cancelled"
+      },
+      "first_dom": {
+        "a_length": 1,
+        "b_length": 0,
+        "a_html": "",
+        "a_text": "",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "focus",
+            "time": 14337.199999999953
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 15175
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 15175.299999999988
+          }
+        ]
+      },
+      "last_dom": {
+        "a_length": 1,
+        "b_length": 0,
+        "a_html": "",
+        "a_text": "",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "focus",
+            "time": 14337.199999999953
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 15175
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 15175.299999999988
+          }
+        ]
+      },
+      "no_late": true,
+      "exact_fixture_match": false,
+      "passed": true,
+      "received_lengths": [
+        1,
+        0
+      ]
+    },
+    {
+      "method": "CommitBatch",
+      "case": "pending-cancel",
+      "sample_length": 3,
+      "initial_focus": "a",
+      "neighbor_batch_after_session_close": false,
+      "session": {
+        "route": null,
+        "outcome": "cancelled",
+        "metrics_characters": null,
+        "reported_characters": 0,
+        "outcomes": [
+          {
+            "characters": 0
+          }
+        ],
+        "deltas": [
+          {
+            "index": 0,
+            "monotonic": 368.69280193
+          },
+          {
+            "index": 1,
+            "monotonic": 368.718529588
+          }
+        ],
+        "dispatches": [],
+        "input_failure": null,
+        "error_code": null
+      },
+      "sent": 0,
+      "route": null,
+      "cancel_requested": true,
+      "first_dom": {
+        "a_length": 0,
+        "b_length": 0,
+        "a_html": "",
+        "a_text": "",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": []
+      },
+      "last_dom": {
+        "a_length": 0,
+        "b_length": 0,
+        "a_html": "",
+        "a_text": "",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": []
+      },
+      "no_late": true,
+      "exact_fixture_match": false,
+      "passed": true,
+      "received_lengths": [
+        0,
+        0
+      ]
+    }
+  ],
+  "failures": [],
+  "requested_im_environment": "fcitx",
+  "private_fcitx_daemon_requested": true,
+  "fcitx_attempts": [
+    {
+      "length": 1,
+      "protocol": 4,
+      "outcome": "FcitxOutputError",
+      "code": "no_target",
+      "accepted": 0,
+      "uncertain": false,
+      "unsent_offset": 0
+    },
+    {
+      "length": 1,
+      "protocol": 4,
+      "outcome": "FcitxOutputError",
+      "code": "no_target",
+      "accepted": 0,
+      "uncertain": false,
+      "unsent_offset": 0
+    },
+    {
+      "length": 1,
+      "protocol": 4,
+      "outcome": "FcitxOutputError",
+      "code": "no_target",
+      "accepted": 0,
+      "uncertain": false,
+      "unsent_offset": 0
+    },
+    {
+      "length": 1,
+      "protocol": 4,
+      "outcome": "FcitxOutputError",
+      "code": "no_target",
+      "accepted": 0,
+      "uncertain": false,
+      "unsent_offset": 0
+    }
+  ],
+  "owned_requests": [
+    {
+      "method": "Commit",
+      "sequence": 0,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 354.859121013
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 0,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 354.860079038
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 0,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 354.865365083
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 0,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 356.723243028
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 0,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 359.289266598
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 1,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 359.29029383
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 2,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 359.291083539
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 3,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 359.291846883
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 4,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 359.292482042
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 5,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 359.293225833
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 6,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 359.294062291
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 7,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 359.295937902
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 8,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 359.299534249
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 9,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 359.300368506
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 10,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 359.301494482
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 11,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 359.303106116
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 12,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 359.303782291
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 13,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 359.304600792
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 14,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 359.305578885
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 15,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 359.306129423
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 16,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 359.307014193
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 17,
+      "length": 2,
+      "batch_negotiated": true,
+      "monotonic": 359.307902939
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 18,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 359.308605743
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 19,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 359.309336966
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 20,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 359.31019283
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 0,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 361.782840261
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 1,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 361.783668599
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 2,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 361.78512659
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 3,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 361.789728077
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 4,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 361.791122227
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 5,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 361.792031078
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 6,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 361.793027284
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 7,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 361.793883716
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 8,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 361.794544614
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 9,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 361.795642803
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 10,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 361.796385135
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 11,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 361.800574968
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 12,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 361.801235233
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 13,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 361.801934037
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 14,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 361.802900661
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 15,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 361.803524275
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 16,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 361.804387412
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 17,
+      "length": 2,
+      "batch_negotiated": true,
+      "monotonic": 361.805676134
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 18,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 361.806458676
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 19,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 361.80769665
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 20,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 361.808472966
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 0,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 364.31911188
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 1,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 364.31990013
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 2,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 364.321135092
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 3,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 364.324797043
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 4,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 364.325740042
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 5,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 364.326333111
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 6,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 364.327049394
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 7,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 364.327799917
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 8,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 364.328911947
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 9,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 364.329449238
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 10,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 364.33026049
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 11,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 364.33130001
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 12,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 364.332165709
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 13,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 364.332918961
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 14,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 364.333648432
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 15,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 364.334500927
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 16,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 364.338221655
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 17,
+      "length": 2,
+      "batch_negotiated": true,
+      "monotonic": 364.338751327
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 18,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 364.339521233
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 19,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 364.340296963
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 20,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 364.341089628
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 0,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 366.835604575
+    }
+  ],
+  "fcitx_observer_only": true,
+  "native_candidate_test_only_override": false,
+  "addon_in_default_app_data_home": true,
+  "browser_resource_audit": {
+    "root": "/opt/inkecho-test-chrome",
+    "files": 255,
+    "manifest_sha256": "208eb4c91aed99ca97bbf68b8d5e7190190ca36d745d10dfdb9130d8de1b4ee4",
+    "binary_sha256": "6c792041b07547a662e1b17974d1dc34a3db630379b45d9d89ddd7e3e68cc587",
+    "sandbox_sha256": "24beb85e4149c65db5bf40fa307721143d0883ab8952e60dde1158606f644dee",
+    "sandbox_uid": 0,
+    "sandbox_mode": "4755",
+    "sandbox_runtime_acceptance": "requires separate renderer checks"
+  },
+  "browser_version": "Google Chrome 154.0.8037.97",
+  "browser_argv": [
+    "/opt/inkecho-test-chrome/chrome",
+    "--password-store=basic",
+    "--no-first-run",
+    "--no-default-browser-check",
+    "--disable-background-networking",
+    "--disable-sync",
+    "--ozone-platform=wayland",
+    "--gtk-version=3",
+    "--remote-debugging-port=0",
+    "--remote-allow-origins=*",
+    "--user-data-dir=/run/user/1000/inkecho-browser-w4n1n_dp/chrome-profile",
+    "file:///run/user/1000/inkecho-browser-w4n1n_dp/owned.html",
+    "--enable-wayland-ime",
+    "--wayland-text-input-version=3"
+  ],
+  "focus_proofs": [
+    {
+      "label": "native-before-output",
+      "pid": 3735,
+      "native": {
+        "surface": true,
+        "toplevel": true,
+        "keyboard_enter": true
+      },
+      "display_unset": true,
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-w4n1n_dp/owned.html",
+        "visible": "visible"
+      },
+      "sampled_monotonic": 352.243776873
+    },
+    {
+      "label": "auto-old-client-new-service-before-prepare",
+      "pid": 3735,
+      "native": {
+        "surface": true,
+        "toplevel": true,
+        "keyboard_enter": true
+      },
+      "display_unset": true,
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-w4n1n_dp/owned.html",
+        "visible": "visible"
+      },
+      "sampled_monotonic": 352.995019159
+    },
+    {
+      "label": "auto-legacy-during-new-before-prepare",
+      "pid": 3735,
+      "native": {
+        "surface": true,
+        "toplevel": true,
+        "keyboard_enter": true
+      },
+      "display_unset": true,
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-w4n1n_dp/owned.html",
+        "visible": "visible"
+      },
+      "sampled_monotonic": 354.846996569
+    },
+    {
+      "label": "CommitBatch-server-expired-before-prepare",
+      "pid": 3735,
+      "native": {
+        "surface": true,
+        "toplevel": true,
+        "keyboard_enter": true
+      },
+      "display_unset": true,
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-w4n1n_dp/owned.html",
+        "visible": "visible"
+      },
+      "sampled_monotonic": 356.712916468
+    },
+    {
+      "label": "CommitBatch-mixed-before-prepare",
+      "pid": 3735,
+      "native": {
+        "surface": true,
+        "toplevel": true,
+        "keyboard_enter": true
+      },
+      "display_unset": true,
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-w4n1n_dp/owned.html",
+        "visible": "visible"
+      },
+      "sampled_monotonic": 358.562458855
+    },
+    {
+      "label": "CommitBatch-mixed-before-prepare",
+      "pid": 3735,
+      "native": {
+        "surface": true,
+        "toplevel": true,
+        "keyboard_enter": true
+      },
+      "display_unset": true,
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-w4n1n_dp/owned.html",
+        "visible": "visible"
+      },
+      "sampled_monotonic": 361.155996277
+    },
+    {
+      "label": "CommitBatch-switch-before-prepare",
+      "pid": 3735,
+      "native": {
+        "surface": true,
+        "toplevel": true,
+        "keyboard_enter": true
+      },
+      "display_unset": true,
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-w4n1n_dp/owned.html",
+        "visible": "visible"
+      },
+      "sampled_monotonic": 363.65574894
+    },
+    {
+      "label": "CommitBatch-cancel-before-prepare",
+      "pid": 3735,
+      "native": {
+        "surface": true,
+        "toplevel": true,
+        "keyboard_enter": true
+      },
+      "display_unset": true,
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-w4n1n_dp/owned.html",
+        "visible": "visible"
+      },
+      "sampled_monotonic": 366.201742397
+    },
+    {
+      "label": "CommitBatch-pending-cancel-before-prepare",
+      "pid": 3735,
+      "native": {
+        "surface": true,
+        "toplevel": true,
+        "keyboard_enter": true
+      },
+      "display_unset": true,
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-w4n1n_dp/owned.html",
+        "visible": "visible"
+      },
+      "sampled_monotonic": 368.689309748
+    }
+  ],
+  "sandbox_metadata_probe": {
+    "returncode": 0,
+    "stdout": "[{\"pid\": 3858, \"owned_parent_chain\": [3858, 3750, 3748, 3747], \"seccomp\": \"2\", \"no_new_privs\": \"1\", \"namespace_pids\": [\"3858\", \"40\"]}, {\"pid\": 3855, \"owned_parent_chain\": [3855, 3750, 3748, 3747], \"seccomp\": \"2\", \"no_new_privs\": \"1\", \"namespace_pids\": [\"3855\", \"39\"]}, {\"pid\": 3842, \"owned_parent_chain\": [3842, 3750, 3748, 3747], \"seccomp\": \"2\", \"no_new_privs\": \"1\", \"namespace_pids\": [\"3842\", \"27\"]}, {\"pid\": 3884, \"owned_parent_chain\": [3884, 3750, 3748, 3747], \"seccomp\": \"2\", \"no_new_privs\": \"1\", \"namespace_pids\": [\"3884\", \"61\"]}, {\"pid\": 3818, \"owned_parent_chain\": [3818, 3750, 3748, 3747], \"seccomp\": \"2\", \"no_new_privs\": \"1\", \"namespace_pids\": [\"3818\", \"12\"]}]\n",
+    "stderr": "",
+    "guest_root_readonly": true
+  },
+  "sandbox_renderers": [
+    {
+      "pid": 3858,
+      "owned_parent_chain": [
+        3858,
+        3750,
+        3748,
+        3747
+      ],
+      "seccomp": "2",
+      "no_new_privs": "1",
+      "namespace_pids": [
+        "3858",
+        "40"
+      ]
+    },
+    {
+      "pid": 3855,
+      "owned_parent_chain": [
+        3855,
+        3750,
+        3748,
+        3747
+      ],
+      "seccomp": "2",
+      "no_new_privs": "1",
+      "namespace_pids": [
+        "3855",
+        "39"
+      ]
+    },
+    {
+      "pid": 3842,
+      "owned_parent_chain": [
+        3842,
+        3750,
+        3748,
+        3747
+      ],
+      "seccomp": "2",
+      "no_new_privs": "1",
+      "namespace_pids": [
+        "3842",
+        "27"
+      ]
+    },
+    {
+      "pid": 3884,
+      "owned_parent_chain": [
+        3884,
+        3750,
+        3748,
+        3747
+      ],
+      "seccomp": "2",
+      "no_new_privs": "1",
+      "namespace_pids": [
+        "3884",
+        "61"
+      ]
+    },
+    {
+      "pid": 3818,
+      "owned_parent_chain": [
+        3818,
+        3750,
+        3748,
+        3747
+      ],
+      "seccomp": "2",
+      "no_new_privs": "1",
+      "namespace_pids": [
+        "3818",
+        "12"
+      ]
+    }
+  ],
+  "browser_fcitx_module_maps": [],
+  "loaded_api": "node /io/github/Creammmmm/InkEcho/IBusOwnedCandidateV5 {\n  interface org.freedesktop.DBus.Properties {\n    methods:\n      Get(in  s interface_name,\n          in  s property_name,\n          out v value);\n      GetAll(in  s interface_name,\n             out a{sv} properties);\n      Set(in  s interface_name,\n          in  s property_name,\n          in  v value);\n    signals:\n      PropertiesChanged(s interface_name,\n                        a{sv} changed_properties,\n                        as invalidated_properties);\n    properties:\n  };\n  interface org.freedesktop.DBus.Introspectable {\n    methods:\n      Introspect(out s xml_data);\n    signals:\n    properties:\n  };\n  interface org.freedesktop.DBus.Peer {\n    methods:\n      Ping();\n      GetMachineId(out s machine_uuid);\n    signals:\n    properties:\n  };\n  interface io.github.Creammmmm.InkEcho.IBusOwnedCandidateV51 {\n    methods:\n      Probe(out s arg_0);\n      Begin(in  s arg_0,\n            in  s arg_1,\n            out b arg_2);\n      Commit(in  u arg_0,\n             in  s arg_1,\n             out s arg_2);\n      BeginBatch(in  s arg_0,\n                 in  s arg_1,\n                 in  u arg_2,\n                 out b arg_3);\n      CommitBatch(in  u arg_0,\n                  in  s arg_1,\n                  out s arg_2);\n      BeginBounded(in  s arg_0,\n                   in  s arg_1,\n                   in  u arg_2,\n                   in  t arg_3,\n                   out b arg_4);\n      CommitBounded(in  u arg_0,\n                    in  s arg_1,\n                    in  t arg_2,\n                    out s arg_3);\n      Cancel(out b arg_0);\n    signals:\n    properties:\n  };\n};\n",
+  "app_xdg_data_home": null,
+  "app_home": "/home/inkecho",
+  "owned_installation_state": "enabled",
+  "owned_context_probe": [
+    "ibus",
+    ":1.24"
+  ],
+  "browser_normal_close": true,
+  "passed": true,
+  "addon_disabled_before_daemon_stop": true,
+  "browser_exit": 0,
+  "fcitx_exit": 0,
+  "hints_restored": true,
+  "native_protocol_proof": {
+    "surface": true,
+    "toplevel": true,
+    "keyboard_enter": true
+  },
+  "startup_diagnostics": [
+    "browser_error_redacted"
+  ],
+  "candidate_source_manifest_sha256": "8b8d5b87a1e276bab15d477969df8ffd138f22e452baaa13fc71c2a32951e2c2",
+  "package_module_origins": {
+    "inkecho.platform.fcitx5_staging": "/mnt/input/candidate-src/inkecho/platform/fcitx5_staging.py",
+    "inkecho.platform.fcitx5_install": "/mnt/input/candidate-src/inkecho/platform/fcitx5_install.py",
+    "inkecho.platform.framework_detection": "/mnt/input/candidate-src/inkecho/platform/framework_detection.py",
+    "inkecho.platform.ibus_lifecycle": "/mnt/input/candidate-src/inkecho/platform/ibus_lifecycle.py",
+    "inkecho.platform.ibus": "/mnt/input/candidate-src/inkecho/platform/ibus.py",
+    "inkecho.text_units": "/mnt/input/candidate-src/inkecho/text_units.py",
+    "inkecho.platform.ibus_owned": "/mnt/input/candidate-src/inkecho/platform/ibus_owned.py",
+    "inkecho.platform.fcitx5_capability": "/mnt/input/candidate-src/inkecho/platform/fcitx5_capability.py",
+    "inkecho.platform.fcitx5": "/mnt/input/candidate-src/inkecho/platform/fcitx5.py",
+    "inkecho.platform.output_pacing": "/mnt/input/candidate-src/inkecho/platform/output_pacing.py",
+    "inkecho.platform.keyboard": "/mnt/input/candidate-src/inkecho/platform/keyboard.py",
+    "inkecho.text_normalization": "/mnt/input/candidate-src/inkecho/text_normalization.py",
+    "inkecho.platform.output_router": "/mnt/input/candidate-src/inkecho/platform/output_router.py",
+    "inkecho.platform.ibus_owned_auto": "/mnt/input/candidate-src/inkecho/platform/ibus_owned_auto.py",
+    "inkecho.platform.owned_installation": "/mnt/input/candidate-src/inkecho/platform/owned_installation.py",
+    "inkecho.platform.ibus_owned_default": "/mnt/input/candidate-src/inkecho/platform/ibus_owned_default.py",
+    "inkecho.platform.wayland_keyboard": "/mnt/input/candidate-src/inkecho/platform/wayland_keyboard.py",
+    "inkecho.config": "/mnt/input/candidate-src/inkecho/config.py",
+    "inkecho.provider_catalog": "/mnt/input/candidate-src/inkecho/provider_catalog.py",
+    "inkecho.providers": "/mnt/input/candidate-src/inkecho/providers.py",
+    "inkecho.audio": "/mnt/input/candidate-src/inkecho/audio.py",
+    "inkecho.core": "/mnt/input/candidate-src/inkecho/core.py",
+    "inkecho.performance": "/mnt/input/candidate-src/inkecho/performance.py",
+    "inkecho.realtime": "/mnt/input/candidate-src/inkecho/realtime.py",
+    "inkecho.security": "/mnt/input/candidate-src/inkecho/security.py",
+    "inkecho.streaming_output": "/mnt/input/candidate-src/inkecho/streaming_output.py",
+    "inkecho.app": "/mnt/input/candidate-src/inkecho/app.py",
+    "inkecho.platform.hybrid_keyboard": "/mnt/input/candidate-src/inkecho/platform/hybrid_keyboard.py"
+  }
+}

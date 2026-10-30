@@ -1,0 +1,6 @@
+{
+  "command": "env INKECHO_OUTPUT_STAGE=wayland RUN_LABEL=legacy-r3 OWNED_IM=fcitx ACTIVE_FCITX=1 NATIVE_IME=1 OWNED_FIELD=textarea CASES=legacy-protocol,legacy-auto python3 /mnt/input/launch-native012.py",
+  "returncode": 0,
+  "stdout": "[1030/050206.249599:WARNING:chrome/app/chrome_main_linux.cc:84] Read channel stable from /opt/inkecho-qa-chrome/CHROME_VERSION_EXTRA\n{\"method\": \"auto\", \"case\": \"legacy-protocol\", \"passed\": true, \"route\": \"explicit-bounded-protocol-probe\", \"received_lengths\": [0, 0], \"error\": null}\n{\"method\": \"auto\", \"case\": \"legacy-auto\", \"passed\": true, \"route\": null, \"received_lengths\": [0, 0], \"error\": {\"code\": \"ibus_upgrade_required\"}}\n\n",
+  "stderr": ""
+}

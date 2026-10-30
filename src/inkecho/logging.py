@@ -61,6 +61,7 @@ CODES = (
         "fcitx_cancelled",
         "fcitx_expired",
         "ibus_unavailable",
+        "ibus_upgrade_required",
         "ibus_authorization_failed",
         "ibus_permission_denied",
         "ibus_untrusted_owner",

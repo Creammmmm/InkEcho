@@ -1,0 +1,16 @@
+import gzip,shutil,subprocess,json,hashlib,pathlib,sys
+s=pathlib.Path('/snapshot/stopped-followup-child.qcow2.gz');dst=pathlib.Path('/state/guest.qcow2');h=hashlib.sha256()
+with gzip.open(s,'rb') as f,dst.open('wb') as out:
+ while chunk:=f.read(1024*1024):h.update(chunk);out.write(chunk)
+assert h.hexdigest()=='2e1447dacb7ef8236c634c15fde1e4684af5dbb2fce6f8e4144101cb278dca07'
+r=subprocess.run(json.loads(pathlib.Path('/input/qemu.json').read_text()))
+pathlib.Path('/output/qemu-exit.json').write_text(json.dumps({'returncode':r.returncode}))
+shutil.copy2('/state/serial.log','/output/serial.log')
+a=pathlib.Path('/output/stopped-followup-child.qcow2.gz');h=hashlib.sha256()
+with dst.open('rb') as src,gzip.open(a,'wb',compresslevel=9) as out:
+ while chunk:=src.read(1024*1024):h.update(chunk);out.write(chunk)
+a.chmod(0o600);check=hashlib.sha256()
+with gzip.open(a,'rb') as f:
+ while chunk:=f.read(1024*1024):check.update(chunk)
+assert h.hexdigest()==check.hexdigest()
+pathlib.Path('/output/ram-overlay-archive.json').write_text(json.dumps({'original_bytes':dst.stat().st_size,'original_sha256':h.hexdigest(),'archive_bytes':a.stat().st_size,'archive_sha256':hashlib.sha256(a.read_bytes()).hexdigest(),'full_stream_verified':True,'qemu_exit':r.returncode},indent=2));sys.exit(r.returncode)

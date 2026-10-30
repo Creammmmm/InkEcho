@@ -2,6 +2,7 @@
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 import IBus from 'gi://IBus';
+import Clutter from 'gi://Clutter';
 import Meta from 'gi://Meta';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import {OwnedGate} from './owned_gate.js';
@@ -17,6 +18,10 @@ const XML = `<node><interface name="${SERVICE}1">
  <method name="Probe"><arg type="s" direction="out"/></method>
  <method name="Begin"><arg type="s" direction="in"/><arg type="s" direction="in"/><arg type="b" direction="out"/></method>
  <method name="Commit"><arg type="u" direction="in"/><arg type="s" direction="in"/><arg type="s" direction="out"/></method>
+ <method name="BeginBatch"><arg type="s" direction="in"/><arg type="s" direction="in"/><arg type="u" direction="in"/><arg type="b" direction="out"/></method>
+ <method name="CommitBatch"><arg type="u" direction="in"/><arg type="s" direction="in"/><arg type="s" direction="out"/></method>
+ <method name="BeginBounded"><arg type="s" direction="in"/><arg type="s" direction="in"/><arg type="u" direction="in"/><arg type="t" direction="in"/><arg type="b" direction="out"/></method>
+ <method name="CommitBounded"><arg type="u" direction="in"/><arg type="s" direction="in"/><arg type="t" direction="in"/><arg type="s" direction="out"/></method>
  <method name="Cancel"><arg type="b" direction="out"/></method>
 </interface></node>`;
 
@@ -29,15 +34,15 @@ export default class Candidate extends Extension {
         this._delivery = new DeliveryGateV2(() => {
             const panel = getIBusManager()._panelService;
             if (!panel) return null;
-            return character => panel.commit_text(IBus.Text.new_from_string(character));
-        }, ([name, token]) => consumeCapability(name, token));
+            return character => Main.inputMethod.commit(character);
+        }, ([name, token]) => consumeCapability(name, token), () => GLib.get_monotonic_time());
         this._gate = new OwnedGate(this._delivery, () => this._snapshot(),
             im => new Promise((resolve, reject) => {
                 try { im._ibus.current_input_context_async(750, null, (bus, result) => {
                     try { resolve(bus.current_input_context_async_finish(result)); }
                     catch (error) { reject(error); }
                 }); } catch (error) { reject(error); }
-            }));
+            }), () => this._producerBoundary());
         this._obj = Gio.DBusExportedObject.wrapJSObject(XML, this);
         this._obj.export(Gio.DBus.session, PATH);
         this._owner = Gio.bus_own_name_on_connection(Gio.DBus.session, SERVICE,
@@ -49,6 +54,37 @@ export default class Candidate extends Extension {
                 if (name.startsWith(':') && oldOwner && !newOwner)
                     this._gate.ownerLost(name);
             });
+    }
+    _producerBoundary() {
+        // GNOME 46 source: stage processes queued events before after-update;
+        // text-input done is scheduled at CLUTTER_PRIORITY_EVENTS + 1 (=1).
+        // Priority 2 below runs only after that ready producer source. Not ACK.
+        return new Promise(resolve => {
+            let signal = 0, idle = 0, timeout = 0, finished = false;
+            const finish = ok => {
+                if (finished) return;
+                finished = true;
+                if (signal) global.stage.disconnect(signal);
+                if (idle) GLib.source_remove(idle);
+                if (timeout) GLib.source_remove(timeout);
+                this._boundaryAbort = null;
+                resolve(ok);
+            };
+            this._boundaryAbort = () => finish(false);
+            signal = global.stage.connect('after-update', () => {
+                if (Clutter.events_pending()) { global.stage.schedule_update(); return; }
+                global.stage.disconnect(signal); signal = 0;
+                idle = GLib.idle_add(2, () => {
+                    idle = 0;
+                    finish(true);
+                    return GLib.SOURCE_REMOVE;
+                });
+            });
+            timeout = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 750, () => {
+                timeout = 0; finish(false); return GLib.SOURCE_REMOVE;
+            });
+            global.stage.schedule_update();
+        });
     }
     _snapshot() {
         const im = Main.inputMethod, w = global.display.focus_window;
@@ -74,20 +110,37 @@ export default class Candidate extends Extension {
         }
         invocation.return_value(new GLib.Variant('(s)', [result]));
     }
+    // Legacy methods stay introspectable but can never create or mutate a task.
+    // A matching upgraded client must negotiate the bounded methods.
     BeginAsync([name, token], invocation) {
         invocation.return_value(new GLib.Variant('(b)',
-            [this._gate.begin(invocation.get_sender(), [name, token])]));
+            [false]));
     }
     async CommitAsync([sequence, text], invocation) {
-        const result = await this._gate.commit(invocation.get_sender(), sequence, text);
+        invocation.return_value(new GLib.Variant('(s)', ['rejected']));
+    }
+    BeginBatchAsync([name, token, version], invocation) {
+        invocation.return_value(new GLib.Variant('(b)',
+            [false]));
+    }
+    async CommitBatchAsync([sequence, text], invocation) {
+        invocation.return_value(new GLib.Variant('(s)', ['rejected']));
+    }
+    BeginBoundedAsync([name, token, version, deadlineUs], invocation) {
+        invocation.return_value(new GLib.Variant('(b)',
+            [this._gate.beginBounded(invocation.get_sender(), [name, token], version, deadlineUs)]));
+    }
+    async CommitBoundedAsync([sequence, text, deadlineUs], invocation) {
+        const result = await this._gate.commitBounded(invocation.get_sender(), sequence, text, deadlineUs);
         invocation.return_value(new GLib.Variant('(s)', [result]));
     }
     CancelAsync(_args, invocation) {
         invocation.return_value(new GLib.Variant('(b)',
-            [this._gate.cancel(invocation.get_sender())]));
+            [this._gate.cancel(invocation.get_sender(), () => this._boundaryAbort?.())]));
     }
     disable() {
         this._alive = false;
+        this._boundaryAbort?.();
         this._gate.close();
         if (this._focusWatch) global.display.disconnect(this._focusWatch);
         if (this._stageWatch) global.stage.disconnect(this._stageWatch);

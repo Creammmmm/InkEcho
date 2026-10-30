@@ -2,8 +2,9 @@ import {verdict} from './identity.js';
 
 // One pending query per session. Never retries or credits target receipt.
 export class OwnedGate {
-    constructor(delivery, snapshot, current) {
+    constructor(delivery, snapshot, current, boundary) {
         this.delivery = delivery;
+        this.boundary = boundary;
         this.snapshot = snapshot;
         this.current = current;
         this.generation = 0;
@@ -16,16 +17,39 @@ export class OwnedGate {
         if (ok) this.generation++;
         return ok;
     }
+    beginBatch(sender, token, version) {
+        if (this.closed || this.pending) return false;
+        const ok = this.delivery.beginBatch(sender, token, version);
+        if (ok) this.generation++;
+        return ok;
+    }
+    beginBounded(sender, token, version, deadlineUs) {
+        if (this.closed || this.pending) return false;
+        const ok = this.delivery.beginBounded(sender, token, version, deadlineUs);
+        if (ok) this.generation++;
+        return ok;
+    }
+    async commitBounded(sender, sequence, text, deadlineUs) {
+        const s = this.delivery.session;
+        if (this.closed || this.pending || !s || s.sender !== sender ||
+            s.failed || sequence !== s.next || s.deadlineUs === undefined)
+            return 'rejected';
+        if (!Number.isSafeInteger(deadlineUs) || deadlineUs <= 0 ||
+            deadlineUs > s.deadlineUs) { s.failed = true; return 'unknown'; }
+        s.deadlineUs = deadlineUs; // May tighten, never extend across fragments.
+        return this.commit(sender, sequence, text, true);
+    }
     reject() {
         const s = this.delivery.session;
         if (!s) return 'rejected';
         s.failed = true;
         return s.attempts === 0 ? 'no_service' : 'unknown';
     }
-    async commit(sender, sequence, text) {
+    async commit(sender, sequence, text, batch = false) {
         const s = this.delivery.session;
         if (this.closed || this.pending || !s || s.sender !== sender ||
             s.failed || sequence !== s.next) return 'rejected';
+        if (!this.delivery.unexpired()) { s.failed = true; return 'unknown'; }
         const generation = this.generation;
         this.pending = true;
         try {
@@ -37,6 +61,7 @@ export class OwnedGate {
             const path = await this.current(before.im);
             if (this.closed || generation !== this.generation ||
                 this.delivery.session !== s) return 'rejected';
+            if (!this.delivery.unexpired()) { s.failed = true; return 'unknown'; }
             const after = this.snapshot();
             if (after.preedit !== false) { s.failed = true; return 'unknown'; }
             if (before.im !== after.im || before.epoch !== after.epoch ||
@@ -44,7 +69,14 @@ export class OwnedGate {
                 verdict(after, path) !== 'gnome_owned_native_candidate')
                 return this.reject();
             // No await between final identity guard and panel dispatch attempt.
-            return this.delivery.commit(sender, sequence, text);
+            const result = batch ? this.delivery.commitBatch(sender, sequence, text) :
+                this.delivery.commit(sender, sequence, text);
+            if (result !== 'attempted') return result;
+            const completed = await this.boundary();
+            if (!completed || this.closed || generation !== this.generation ||
+                this.delivery.session !== s) { s.failed = true; return 'unknown'; }
+            if (!this.delivery.unexpired()) { s.failed = true; return 'unknown'; }
+            return result;
         } catch (_) {
             // A failed query/snapshot cannot prove absence of composition or target.
             if (generation !== this.generation || this.delivery.session !== s)
@@ -53,9 +85,12 @@ export class OwnedGate {
             return 'unknown';
         } finally { this.pending = false; }
     }
-    cancel(sender) {
+    cancel(sender, abort = () => {}) {
         const ok = this.delivery.cancel(sender);
-        if (ok) this.generation++;
+        if (ok) {
+            this.generation++;
+            abort(); // Only the authenticated current sender may abort its boundary.
+        }
         return ok;
     }
     ownerLost(sender) {

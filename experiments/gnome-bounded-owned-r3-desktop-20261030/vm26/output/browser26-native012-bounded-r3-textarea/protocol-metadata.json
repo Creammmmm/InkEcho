@@ -1,0 +1,3896 @@
+[
+  {
+    "at": 80.312492344,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 80.330045371,
+    "direction": "event",
+    "interface": "wl_keyboard",
+    "object": 3,
+    "event": "enter"
+  },
+  {
+    "at": 80.330057638,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "enter"
+  },
+  {
+    "at": 80.330060204,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "enable"
+  },
+  {
+    "at": 80.330062166,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_content_type"
+  },
+  {
+    "at": 80.330064232,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 80.336565314,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 2
+  },
+  {
+    "at": 80.336572595,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 80.336575007,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 80.336699351,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 3
+  },
+  {
+    "at": 80.849596642,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 80.84960469,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 80.850029406,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "disable"
+  },
+  {
+    "at": 80.850031584,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 80.850034056,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "enable"
+  },
+  {
+    "at": 80.850036454,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_content_type"
+  },
+  {
+    "at": 80.850038788,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 80.854693766,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 6
+  },
+  {
+    "at": 80.854698135,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 80.854702854,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 80.859399667,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 7
+  },
+  {
+    "at": 81.050869506,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 81.050876904,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 81.050879002,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "disable"
+  },
+  {
+    "at": 81.050880598,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 81.050882697,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "enable"
+  },
+  {
+    "at": 81.050884518,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_content_type"
+  },
+  {
+    "at": 81.050886468,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 81.050888382,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 10
+  },
+  {
+    "at": 81.050890927,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 81.050898539,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 81.051699943,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 11
+  },
+  {
+    "at": 83.463917695,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 83.46398847,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 11
+  },
+  {
+    "at": 83.466430812,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 83.467052064,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 12
+  },
+  {
+    "at": 83.467063912,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 83.467069473,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 83.467267285,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 13
+  },
+  {
+    "at": 85.11677862,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 85.116788103,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 85.117074538,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 14
+  },
+  {
+    "at": 85.117085052,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 85.117545811,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 15
+  },
+  {
+    "at": 87.857200895,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 87.857220634,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 15
+  },
+  {
+    "at": 87.858037287,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 87.858098433,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 15
+  },
+  {
+    "at": 87.859639054,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 87.859652355,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 15
+  },
+  {
+    "at": 87.859662572,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 87.859665319,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 16
+  },
+  {
+    "at": 87.859668603,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 87.859671596,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 87.859673255,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 17
+  },
+  {
+    "at": 87.85967632,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 87.859682808,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 87.859685283,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 18
+  },
+  {
+    "at": 87.860252089,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 87.860754775,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 87.860767983,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 19
+  },
+  {
+    "at": 87.860771605,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 87.860773828,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 87.862941282,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 20
+  },
+  {
+    "at": 87.86294551,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 87.862953475,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 87.863264049,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 21
+  },
+  {
+    "at": 87.863797615,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 87.863811183,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 21
+  },
+  {
+    "at": 87.864734987,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 87.865013376,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 87.865054432,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 22
+  },
+  {
+    "at": 87.865127133,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 87.86513077,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 87.865262573,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 23
+  },
+  {
+    "at": 87.865414866,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 87.86566872,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 24
+  },
+  {
+    "at": 87.86567265,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 87.865675008,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 87.865737343,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 25
+  },
+  {
+    "at": 87.878311178,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 87.87833024,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 25
+  },
+  {
+    "at": 87.878616851,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 87.87874102,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 26
+  },
+  {
+    "at": 87.87874644,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 87.878748968,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 87.878815715,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 27
+  },
+  {
+    "at": 87.892604481,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 87.892636661,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 27
+  },
+  {
+    "at": 87.893124143,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 87.893345374,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 28
+  },
+  {
+    "at": 87.893358107,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 87.893365976,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 87.893598003,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 29
+  },
+  {
+    "at": 87.906845023,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 87.906886745,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 29
+  },
+  {
+    "at": 87.907530547,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 87.907880942,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 30
+  },
+  {
+    "at": 87.907895796,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 87.907903851,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 87.908246734,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 31
+  },
+  {
+    "at": 87.920466232,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 87.920514186,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 31
+  },
+  {
+    "at": 87.921239558,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 87.921583567,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 32
+  },
+  {
+    "at": 87.921595772,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 87.921602422,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 87.921917401,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 33
+  },
+  {
+    "at": 87.934077021,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 87.934130307,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 33
+  },
+  {
+    "at": 87.93516569,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 87.935666968,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 34
+  },
+  {
+    "at": 87.935682461,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 87.935689515,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 87.935877123,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 35
+  },
+  {
+    "at": 87.947345971,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 87.947391755,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 35
+  },
+  {
+    "at": 87.948127485,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 87.948426548,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 36
+  },
+  {
+    "at": 87.948437441,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 87.948443527,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 87.948759172,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 37
+  },
+  {
+    "at": 87.959783496,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 87.95983317,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 37
+  },
+  {
+    "at": 87.960400119,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 87.960739296,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 38
+  },
+  {
+    "at": 87.960751824,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 87.960757651,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 87.961078018,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 39
+  },
+  {
+    "at": 87.973741183,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 87.973783092,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 39
+  },
+  {
+    "at": 87.974398908,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 87.97477303,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 40
+  },
+  {
+    "at": 87.974785237,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 87.974791971,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 87.97511777,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 41
+  },
+  {
+    "at": 87.987239076,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 87.987286487,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 41
+  },
+  {
+    "at": 87.988474722,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 87.988635312,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 42
+  },
+  {
+    "at": 87.988645599,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 87.988652408,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 87.989841284,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 43
+  },
+  {
+    "at": 87.991232983,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 87.991267392,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 43
+  },
+  {
+    "at": 87.991829291,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 87.992229103,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 44
+  },
+  {
+    "at": 87.992246941,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 87.992256845,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 87.99227137,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 45
+  },
+  {
+    "at": 87.999655861,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 87.999690235,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 45
+  },
+  {
+    "at": 88.000241873,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 88.000513079,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 46
+  },
+  {
+    "at": 88.00052206,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 88.000526872,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 88.000639274,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 47
+  },
+  {
+    "at": 88.013045385,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 2
+  },
+  {
+    "at": 88.013092753,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 47
+  },
+  {
+    "at": 88.015226671,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 88.015255581,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 88.015450176,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 48
+  },
+  {
+    "at": 88.025231108,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 88.026652314,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 88.02670035,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 49
+  },
+  {
+    "at": 88.027743174,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 88.02780359,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 50
+  },
+  {
+    "at": 88.027817376,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 88.027824904,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 88.028192033,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 51
+  },
+  {
+    "at": 88.029872595,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 88.029981596,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 51
+  },
+  {
+    "at": 88.030389924,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 88.030685078,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 52
+  },
+  {
+    "at": 88.030694901,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 88.030699769,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 88.031008749,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 53
+  },
+  {
+    "at": 88.040305692,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 88.040347217,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 53
+  },
+  {
+    "at": 88.040923621,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 88.04135378,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 54
+  },
+  {
+    "at": 88.04136519,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 88.041371366,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 88.041490448,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 55
+  },
+  {
+    "at": 89.717168464,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 89.717176976,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 89.717506042,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 56
+  },
+  {
+    "at": 89.7175206,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 89.717525466,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 57
+  },
+  {
+    "at": 90.538556576,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 90.538575399,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 57
+  },
+  {
+    "at": 90.539050523,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 90.53926795,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 58
+  },
+  {
+    "at": 90.539273288,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 90.539275737,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 90.539393008,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 59
+  },
+  {
+    "at": 90.540301536,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 90.540319223,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 59
+  },
+  {
+    "at": 90.540613864,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 90.547537115,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 60
+  },
+  {
+    "at": 90.547541622,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 90.547544256,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 90.548482958,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 61
+  },
+  {
+    "at": 90.548607673,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 90.54869951,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 61
+  },
+  {
+    "at": 90.549011747,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 90.549218432,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 62
+  },
+  {
+    "at": 90.549222906,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 90.549225307,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 90.549319968,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 63
+  },
+  {
+    "at": 90.559805566,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 90.559826913,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 63
+  },
+  {
+    "at": 90.561667912,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 90.561822844,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 64
+  },
+  {
+    "at": 90.561827126,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 90.561829493,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 90.561918118,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 65
+  },
+  {
+    "at": 90.571685271,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 90.571706988,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 65
+  },
+  {
+    "at": 90.572005932,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 90.572261348,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 66
+  },
+  {
+    "at": 90.572266819,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 90.572269203,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 90.572326591,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 67
+  },
+  {
+    "at": 90.585828542,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 90.585862811,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 67
+  },
+  {
+    "at": 90.58629153,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 90.586500277,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 68
+  },
+  {
+    "at": 90.586507335,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 90.58651132,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 90.5868244,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 69
+  },
+  {
+    "at": 90.600051077,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 90.600096398,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 69
+  },
+  {
+    "at": 90.600856584,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 90.601055323,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 70
+  },
+  {
+    "at": 90.601066186,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 90.601072032,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 90.601290697,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 71
+  },
+  {
+    "at": 90.614298337,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 90.614348773,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 71
+  },
+  {
+    "at": 90.615077493,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 90.615687971,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 72
+  },
+  {
+    "at": 90.615710194,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 90.615717673,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 90.615875305,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 73
+  },
+  {
+    "at": 90.627622012,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 90.627673405,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 73
+  },
+  {
+    "at": 90.628399906,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 90.628782889,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 74
+  },
+  {
+    "at": 90.628823594,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 90.628838611,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 90.629196523,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 75
+  },
+  {
+    "at": 90.641386258,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 90.641441718,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 75
+  },
+  {
+    "at": 90.642146697,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 90.642575112,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 76
+  },
+  {
+    "at": 90.64258935,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 90.642600424,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 90.642995744,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 77
+  },
+  {
+    "at": 90.655249116,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 90.655314739,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 77
+  },
+  {
+    "at": 90.656115509,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 90.656598852,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 78
+  },
+  {
+    "at": 90.656612964,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 90.656620994,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 90.657050992,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 79
+  },
+  {
+    "at": 90.667625917,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 90.667671682,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 79
+  },
+  {
+    "at": 90.668349095,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 90.668662474,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 80
+  },
+  {
+    "at": 90.66867735,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 90.668684223,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 90.669178747,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 81
+  },
+  {
+    "at": 90.681336361,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 90.681391191,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 81
+  },
+  {
+    "at": 90.682308616,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 90.682732706,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 82
+  },
+  {
+    "at": 90.68276171,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 90.682770971,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 90.683182873,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 83
+  },
+  {
+    "at": 90.694996615,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 90.69508489,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 83
+  },
+  {
+    "at": 90.695859477,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 90.696290627,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 84
+  },
+  {
+    "at": 90.696314532,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 90.696322886,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 90.696777706,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 85
+  },
+  {
+    "at": 90.708337271,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 90.708393643,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 85
+  },
+  {
+    "at": 90.709138154,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 90.709627204,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 86
+  },
+  {
+    "at": 90.70964699,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 90.709655171,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 90.709906944,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 87
+  },
+  {
+    "at": 90.721448176,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 90.721499067,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 87
+  },
+  {
+    "at": 90.72224556,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 90.722623111,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 88
+  },
+  {
+    "at": 90.722643929,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 90.722657611,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 90.723088011,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 89
+  },
+  {
+    "at": 90.734440298,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 90.734517031,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 89
+  },
+  {
+    "at": 90.73605193,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 90.736196824,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 90
+  },
+  {
+    "at": 90.736205022,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 90.736209871,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 90.736524716,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 91
+  },
+  {
+    "at": 90.737258348,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 2
+  },
+  {
+    "at": 90.737292881,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 91
+  },
+  {
+    "at": 90.73813112,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 90.738138474,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 90.738295618,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 92
+  },
+  {
+    "at": 90.744198257,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 90.746056895,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 93
+  },
+  {
+    "at": 90.746867671,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 90.746906703,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 93
+  },
+  {
+    "at": 90.747363422,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 90.747600414,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 94
+  },
+  {
+    "at": 90.747610442,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 90.74761476,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 90.747754342,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 95
+  },
+  {
+    "at": 90.760536852,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 90.760595455,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 95
+  },
+  {
+    "at": 90.76150808,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 90.761835703,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 96
+  },
+  {
+    "at": 90.761849273,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 90.761857064,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 90.762178713,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 97
+  },
+  {
+    "at": 90.763943742,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 90.763987631,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 97
+  },
+  {
+    "at": 90.764523692,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 90.76482792,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 98
+  },
+  {
+    "at": 90.764842614,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 90.764849392,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 90.765202287,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 99
+  },
+  {
+    "at": 92.426669491,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 92.426679068,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 92.427411933,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 100
+  },
+  {
+    "at": 92.427421404,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 92.428324436,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 101
+  },
+  {
+    "at": 93.322231964,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 93.32225111,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 101
+  },
+  {
+    "at": 93.322711418,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 93.32283862,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 102
+  },
+  {
+    "at": 93.322843158,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 93.322845368,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 93.322847168,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "disable"
+  },
+  {
+    "at": 93.322848744,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 93.322861236,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "enable"
+  },
+  {
+    "at": 93.322862989,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_content_type"
+  },
+  {
+    "at": 93.322864671,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 93.32340861,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 105
+  },
+  {
+    "at": 93.323414464,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 93.323416774,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 93.323419966,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 106
+  },
+  {
+    "at": 93.325188077,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 93.325227351,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 106
+  },
+  {
+    "at": 93.325944549,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 93.326538215,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 93.326553868,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 107
+  },
+  {
+    "at": 93.326593266,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 93.326596281,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 93.327445902,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 108
+  },
+  {
+    "at": 93.327450282,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 93.327458228,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 93.327832455,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 109
+  },
+  {
+    "at": 93.328205697,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 93.328218951,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 109
+  },
+  {
+    "at": 93.328533699,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 93.328679158,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 110
+  },
+  {
+    "at": 93.328683203,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 93.328685429,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 93.328764686,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 111
+  },
+  {
+    "at": 93.328848816,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 93.328861436,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 111
+  },
+  {
+    "at": 93.329350228,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 93.329550163,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 112
+  },
+  {
+    "at": 93.329556012,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 93.329559849,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 93.32976443,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 113
+  },
+  {
+    "at": 93.329784066,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 93.329892631,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 113
+  },
+  {
+    "at": 93.330247104,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 93.330250268,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 114
+  },
+  {
+    "at": 93.330253014,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 93.330254782,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 93.330489223,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 115
+  },
+  {
+    "at": 93.330990686,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 93.331013594,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 115
+  },
+  {
+    "at": 93.331879932,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 93.332215178,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 93.332241527,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 116
+  },
+  {
+    "at": 93.332279074,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 93.33228234,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 93.332381751,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 117
+  },
+  {
+    "at": 93.332511903,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 93.332698169,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 118
+  },
+  {
+    "at": 93.332704191,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 93.332706459,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 93.3328564,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 119
+  },
+  {
+    "at": 93.34407512,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 93.344616049,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 119
+  },
+  {
+    "at": 93.344792431,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 93.345157603,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 120
+  },
+  {
+    "at": 93.345163772,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 93.345166204,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 93.345226406,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 121
+  },
+  {
+    "at": 93.345807876,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 93.345821875,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 121
+  },
+  {
+    "at": 93.346044682,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 93.346210056,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 122
+  },
+  {
+    "at": 93.346215228,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 93.346217769,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 93.346270841,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 123
+  },
+  {
+    "at": 93.357985662,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 93.358133103,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 123
+  },
+  {
+    "at": 93.358923423,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 93.358989079,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 124
+  },
+  {
+    "at": 93.359018318,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 93.359029387,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 93.359303615,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 125
+  },
+  {
+    "at": 93.360301744,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 93.360320651,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 125
+  },
+  {
+    "at": 93.360558836,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 93.360782889,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 126
+  },
+  {
+    "at": 93.360788998,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 93.360792868,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 93.360945188,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 127
+  },
+  {
+    "at": 93.372306724,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 93.37234881,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 127
+  },
+  {
+    "at": 93.372830434,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 93.3740688,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 128
+  },
+  {
+    "at": 93.374075903,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 93.374080641,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 93.374089077,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 129
+  },
+  {
+    "at": 93.37475837,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 93.374828822,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 129
+  },
+  {
+    "at": 93.375134887,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 93.37545497,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 130
+  },
+  {
+    "at": 93.375462861,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 93.375467239,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 93.375589925,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 131
+  },
+  {
+    "at": 93.385065129,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 93.385297512,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 131
+  },
+  {
+    "at": 93.386038559,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 93.386879018,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 132
+  },
+  {
+    "at": 93.38689319,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 93.386899295,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 93.386906867,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 133
+  },
+  {
+    "at": 93.387908203,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 93.387956728,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 133
+  },
+  {
+    "at": 93.388246401,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 93.388513807,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 134
+  },
+  {
+    "at": 93.388528463,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 93.388533673,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 93.388812032,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 135
+  },
+  {
+    "at": 93.400509449,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 93.400556463,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 135
+  },
+  {
+    "at": 93.400989197,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 93.401402616,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 136
+  },
+  {
+    "at": 93.401413519,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 93.401420084,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 93.402415621,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 2
+  },
+  {
+    "at": 93.402460733,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 137
+  },
+  {
+    "at": 93.403765779,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 93.403780383,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 93.403988889,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 138
+  },
+  {
+    "at": 93.411354852,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 93.411889407,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 139
+  },
+  {
+    "at": 93.412636521,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 93.412693751,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 139
+  },
+  {
+    "at": 93.413995379,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 93.414457156,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 140
+  },
+  {
+    "at": 93.414467062,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 93.414472021,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 93.414705606,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 141
+  },
+  {
+    "at": 93.414766836,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 93.414799464,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 141
+  },
+  {
+    "at": 93.415387795,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 93.41564649,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 142
+  },
+  {
+    "at": 93.415653884,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 93.415657913,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 93.415852627,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 143
+  },
+  {
+    "at": 93.425866024,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 93.425958561,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 143
+  },
+  {
+    "at": 93.426662445,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 93.427206331,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 144
+  },
+  {
+    "at": 93.427223707,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 93.427229784,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 93.427337569,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 145
+  },
+  {
+    "at": 95.07760979,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "disable"
+  },
+  {
+    "at": 95.077615709,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 95.077618038,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "enable"
+  },
+  {
+    "at": 95.077620216,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_content_type"
+  },
+  {
+    "at": 95.077622659,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 95.078134663,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 147
+  },
+  {
+    "at": 95.078149725,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 95.078165659,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 95.078838937,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 148
+  },
+  {
+    "at": 95.920861358,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit_string",
+    "length": 1
+  },
+  {
+    "at": 95.920884645,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 148
+  },
+  {
+    "at": 95.921606616,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 95.921696029,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 149
+  },
+  {
+    "at": 95.921700796,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 95.921703354,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 95.922623151,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 150
+  },
+  {
+    "at": 97.584924641,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "set_cursor_rectangle"
+  },
+  {
+    "at": 97.584944983,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 97.585307603,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 151
+  },
+  {
+    "at": 97.58535173,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 97.586422968,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "done",
+    "serial": 152
+  },
+  {
+    "at": 99.476518532,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "disable"
+  },
+  {
+    "at": 99.476524852,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  },
+  {
+    "at": 99.488046756,
+    "direction": "event",
+    "interface": "wl_keyboard",
+    "object": 3,
+    "event": "leave"
+  },
+  {
+    "at": 99.488051813,
+    "direction": "event",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "leave"
+  },
+  {
+    "at": 99.488327239,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "disable"
+  },
+  {
+    "at": 99.488331148,
+    "direction": "request",
+    "interface": "zwp_text_input_v3",
+    "object": 47,
+    "event": "commit"
+  }
+]

@@ -1,0 +1,242 @@
+"""Actual published-package output router to own offline Chrome fields only."""
+from pathlib import Path
+import asyncio,base64,hashlib,http.server,json,os,subprocess,sys,tempfile,threading,time,urllib.request
+from websockets.sync.client import connect
+from inkecho.platform.fcitx5_install import FcitxInstaller
+from inkecho.platform.ibus_owned_default import DefaultAutoOutputRouter
+from inkecho.platform.wayland_keyboard import keyboard_for_desktop
+from session_product_r2 import probe
+from inkecho.platform.fcitx5 import Fcitx5Bridge
+owned_requests=[]
+from inkecho.platform.ibus_owned import Client
+_original_request=Client._request
+async def observed_request(self,method,signature,body):
+ if method in {'Commit','CommitBatch','CommitBounded'}:owned_requests.append({'method':method,'sequence':body[0],'length':len(body[1]),'batch_negotiated':self.supports_neighbor_batch,'monotonic':time.monotonic()})
+ return await _original_request(self,method,signature,body)
+Client._request=observed_request
+fcitx_attempts=[]
+original_insert=Fcitx5Bridge.insert
+async def observed_insert(self,*args,**kwargs):
+ row={'length':len(args[0]),'protocol':self._protocol};fcitx_attempts.append(row)
+ try:
+  result=await original_insert(self,*args,**kwargs);row.update(outcome='returned',returned=result,accepted=self._accepted);return result
+ except BaseException as error:
+  row.update(outcome=type(error).__name__,code=getattr(error,'code',None),accepted=getattr(error,'accepted',None),uncertain=getattr(error,'uncertain',None),unsent_offset=getattr(error,'unsent_offset',None));raise
+Fcitx5Bridge.insert=observed_insert
+LABEL=os.environ.get('RUN_LABEL','disabled-fcitx');IM=os.environ.get('OWNED_IM','fcitx');FCITX=os.environ.get('ACTIVE_FCITX','1')=='1';FIELD=os.environ.get('OWNED_FIELD','textarea');assert FIELD in {'textarea','contenteditable'};O=Path('/mnt/output/browser24-native012-'+LABEL+'-'+FIELD);O.mkdir(mode=0o700,exist_ok=True);A=Path(os.environ['APPDIR']);W=Path(tempfile.mkdtemp(prefix='inkecho-browser-',dir='/run/user/1000'));events=[];lock=threading.Lock();rows=[]
+SAMPLE='你好 InkEcho，café Ω\n第二行。'
+if os.environ.get('SINGLE_LINE')=='1':SAMPLE=SAMPLE.replace('\n','')
+PAGE='''<!doctype html><meta charset=utf-8><title>InkEcho owned Chrome acceptance</title><h1>InkEcho owned offline input</h1><textarea id=a rows=4 cols=60 autofocus></textarea><textarea id=b rows=4 cols=60></textarea><script>window.mode='normal';window.events=[];for(const t of document.querySelectorAll('textarea')){t.addEventListener('input',()=>{events.push({id:t.id,len:t.value.length,type:'input',time:performance.now()});if(mode==='switch'&&t.id==='a')document.getElementById('b').focus();fetch('/event',{method:'POST',body:JSON.stringify({id:t.id,a:a.value,b:b.value,focus:document.hasFocus(),active:document.activeElement.id})});});t.addEventListener('beforeinput',e=>events.push({id:t.id,type:'beforeinput',data:e.data,inputType:e.inputType,time:performance.now()}));for(const k of ['keydown','keyup'])t.addEventListener(k,e=>events.push({id:t.id,type:k,key:e.key,code:e.code,time:performance.now()}));t.addEventListener('focus',()=>events.push({id:t.id,type:'focus',time:performance.now()}));}</script>'''
+if FIELD=='contenteditable':
+ PAGE=PAGE.replace('<textarea id=a rows=4 cols=60 autofocus></textarea><textarea id=b rows=4 cols=60></textarea>', '<div id=a contenteditable=true tabindex=0 style="white-space:pre-wrap;border:1px solid;min-height:100px"></div><div id=b contenteditable=true tabindex=0 style="white-space:pre-wrap;border:1px solid;min-height:100px"></div>').replace("window.mode='normal';", "for(const x of [a,b])Object.defineProperty(x,'value',{get(){return this.innerText},set(v){this.textContent=v}});window.mode='normal';").replace("querySelectorAll('textarea')","querySelectorAll('[contenteditable]')")
+class Handler(http.server.BaseHTTPRequestHandler):
+ def log_message(self,*a):pass
+ def do_GET(self):self.send_response(200);self.send_header('Content-Type','text/html; charset=utf-8');self.end_headers();self.wfile.write(PAGE.encode())
+ def do_POST(self):
+  v=json.loads(self.rfile.read(int(self.headers['Content-Length'])));v['observed_monotonic']=time.monotonic()
+  with lock:events.append(v)
+  self.send_response(204);self.end_headers()
+server=http.server.ThreadingHTTPServer(('127.0.0.1',0),Handler);threading.Thread(target=server.serve_forever,daemon=True).start();port=server.server_address[1]
+ce=dict(os.environ)
+for k in ['APPDIR','PYTHONHOME','PYTHONPATH','LD_LIBRARY_PATH','QT_PLUGIN_PATH','QT_QPA_PLATFORM','PYTHONNOUSERSITE']:ce.pop(k,None)
+ce.update(XDG_CONFIG_HOME=str(W/'config'),XDG_DATA_HOME=str(W/'data'),XDG_CACHE_HOME=str(W/'cache'),GTK_IM_MODULE=IM,QT_IM_MODULE=IM,XMODIFIERS='@im='+IM)
+ce.pop('DISPLAY',None);ce['WAYLAND_DEBUG']='client'
+from protocol_metadata import TraceDecoder, redact_report
+protocol_events=[];protocol_decoder=TraceDecoder()
+native={'surface':False,'toplevel':False,'keyboard_enter':False};stderr_lines=[]
+def drain(stream):
+ for line in iter(stream.readline,b''):
+  event=protocol_decoder.feed(line.decode(errors='replace'))
+  if event is not None and len(protocol_events)<50000:protocol_events.append(event)
+  native['surface']|=b'wl_compositor'in line and b'create_surface'in line
+  native['toplevel']|=b'xdg_toplevel'in line
+  native['keyboard_enter']|=b'wl_keyboard'in line and b'.enter('in line
+  if b'ERROR:'in line or b'FATAL:'in line:stderr_lines.append('browser_error_redacted') if len(stderr_lines)<30 else None
+ stream.close()
+page=W/'owned.html';page.write_text(PAGE);target_url=page.as_uri();profile=W/'chrome-profile';profile.mkdir(mode=0o700);chrome=None;daemon=None;hints=[];install=None
+async def run():
+ global chrome,daemon,hints,install
+ hints=[s for s in subprocess.check_output(['systemctl','--user','show-environment'],text=True).splitlines()if s.split('=',1)[0]in {'GTK_IM_MODULE','QT_IM_MODULE','XMODIFIERS'}]
+ report={'artifact_sha256':hashlib.sha256(Path('/mnt/input/InkEcho.AppImage').read_bytes()).hexdigest(),'appdir':str(A),'test_scope':'published 0.12.0 runtime and staged Fcitx addon, candidate R2 source overlay and JS; NOT unchanged package qualification; actual Session/default Router; synthetic Recorder/provider only','browser_profile_new':str(profile),'sandbox_disabled_in_isolated_vm':False,'field':FIELD,'system':subprocess.check_output(['lsb_release','-ds'],text=True).strip(),'session':os.environ.get('XDG_SESSION_TYPE'),'desktop':os.environ.get('XDG_CURRENT_DESKTOP'),'cases':rows,'failures':[],'requested_im_environment':IM,'private_fcitx_daemon_requested':FCITX,'fcitx_attempts':fcitx_attempts,'owned_requests':owned_requests,'fcitx_observer_only':True}
+ try:
+  assert report['artifact_sha256']=='7488566c708d3fc12de665d35dfc7c26a1902908c9fec63e3c905b1446757a78'
+  subprocess.run(['systemctl','--user','set-environment','GTK_IM_MODULE=fcitx','QT_IM_MODULE=fcitx','XMODIFIERS=@im=fcitx'],check=True)
+  ce['XDG_DATA_HOME']=str(W/'data');Path(ce['XDG_DATA_HOME']).mkdir(mode=0o700);os.environ.update({k:ce[k] for k in ['GTK_IM_MODULE','QT_IM_MODULE','XMODIFIERS']})
+  from inkecho.platform import fcitx5_staging
+  assert fcitx5_staging.TESTED_CANDIDATE_SHA256=='f67c6b5f2cb7ecd7c915c8062efd3b70284c74b97ced4a597d942c4b39594e44'
+  report['native_candidate_test_only_override']=False
+  if FCITX:
+   install=FcitxInstaller(source=A/'usr/share/inkecho/fcitx5/x86_64');install.install();report['addon_in_default_app_data_home']=True
+   daemon_env=dict(ce);daemon_env['XDG_DATA_HOME']=os.environ.get('XDG_DATA_HOME',str(Path.home()/'.local/share'));daemon=subprocess.Popen(['/usr/bin/fcitx5','-D','--disable','clipboard'],env=daemon_env,stdout=(O/'fcitx.log').open('w'),stderr=subprocess.STDOUT)
+   await asyncio.sleep(2);assert daemon.poll()is None;install.enable()
+  from chrome_program import audit_program,assert_owned_executable
+  report['browser_resource_audit']=audit_program();browser='/opt/inkecho-test-chrome/chrome';report['browser_version']=subprocess.check_output([browser,'--version'],env=ce,text=True).strip()
+  argv=[browser,'--password-store=basic','--no-first-run','--no-default-browser-check','--disable-background-networking','--disable-sync','--ozone-platform=wayland','--gtk-version=3','--remote-debugging-port=0','--remote-allow-origins=*','--user-data-dir='+str(profile),target_url]
+  if os.environ.get('NATIVE_IME','0')=='1':argv += ['--enable-wayland-ime','--wayland-text-input-version=3']
+  assert '--no-sandbox'not in argv and '--disable-setuid-sandbox'not in argv
+  report['browser_argv']=argv;chrome=subprocess.Popen(argv,env=ce,stdout=subprocess.DEVNULL,stderr=subprocess.PIPE);reader=threading.Thread(target=drain,args=(chrome.stderr,));reader.start()
+  for _ in range(100):
+   if (profile/'DevToolsActivePort').exists():break
+   assert chrome.poll()is None,'chrome exited';await asyncio.sleep(.1)
+  dp=int((profile/'DevToolsActivePort').read_text().splitlines()[0]);target=None
+  for _ in range(100):
+   targets=json.load(urllib.request.urlopen(f'http://127.0.0.1:{dp}/json/list',timeout=2));target=next((t for t in targets if t.get('url')==target_url),None)
+   if target:break
+   await asyncio.sleep(.1)
+  assert target;ws=connect(target['webSocketDebuggerUrl'],open_timeout=3,close_timeout=3);seq=0
+  def cdp(method,params):
+   nonlocal seq
+   seq+=1;ws.send(json.dumps({'id':seq,'method':method,'params':params}))
+   while True:
+    r=json.loads(ws.recv(timeout=5))
+    if r.get('id')==seq:
+     assert 'error'not in r,r;return r['result']
+  def js(expr):
+   r=cdp('Runtime.evaluate',{'expression':expr,'returnByValue':True});assert 'exceptionDetails'not in r,r;return r.get('result',{}).get('value')
+  for _ in range(100):
+   if js("location.href==="+json.dumps(target_url)+" && document.readyState==='complete' && !!document.getElementById('a') && !!document.getElementById('b') && Array.isArray(window.events)"):break
+   assert chrome.poll()is None;await asyncio.sleep(.05)
+  else:raise AssertionError('bounded owned DOM readiness unavailable')
+  cdp('Page.bringToFront',{});js('a.focus();true');await asyncio.sleep(.5)
+  report['focus_proofs']=[]
+  def proof(label):
+   assert_owned_executable(chrome.pid);assert chrome.poll()is None
+   cmd=Path('/proc',str(chrome.pid),'cmdline').read_bytes().split(b'\0');assert b'--ozone-platform=wayland'in cmd and not any(b'no-sandbox'in c for c in cmd)
+   dom=json.loads(js("JSON.stringify({focus:document.hasFocus(),active:document.activeElement.id,url:location.href,visible:document.visibilityState})"));row={'label':label,'pid':chrome.pid,'native':dict(native),'display_unset':'DISPLAY'not in ce,'dom':dom,'sampled_monotonic':time.monotonic()};report['focus_proofs'].append(row);return row
+  def good(row):return row['display_unset']and all(row['native'].values())and row['dom']['focus']and row['dom']['url']==target_url
+  ready=proof('native-before-output');assert good(ready)and ready['dom']['active']=='a','real native focused owned field unavailable'
+  version=json.load(urllib.request.urlopen(f'http://127.0.0.1:{dp}/json/version',timeout=2))
+  with connect(version['webSocketDebuggerUrl'],open_timeout=3,close_timeout=3)as bw:
+   bw.send(json.dumps({'id':999,'method':'SystemInfo.getProcessInfo'}))
+   while True:
+    reply=json.loads(bw.recv(timeout=5))
+    if reply.get('id')==999:break
+  assert 'error'not in reply;renderer_ids=[int(p['id'])for p in reply['result']['processInfo']if p['type']=='renderer']
+  checked=subprocess.run(['sudo','-n','/usr/bin/python3','/mnt/input/sandbox-proc.py',str(chrome.pid),json.dumps(renderer_ids)],capture_output=True,text=True,timeout=5)
+  report['sandbox_metadata_probe']={'returncode':checked.returncode,'stdout':checked.stdout,'stderr':checked.stderr,'guest_root_readonly':True};assert checked.returncode==0
+  sandbox=json.loads(checked.stdout);report['sandbox_renderers']=sandbox;assert sandbox and all(x['seccomp']=='2'and x['no_new_privs']=='1'and len(x['namespace_pids'])>=2 for x in sandbox),'real sandbox not established'
+  report['browser_fcitx_module_maps']=sorted(set(l.split()[-1]for l in Path('/proc',str(chrome.pid),'maps').read_text().splitlines()if 'fcitx'in l.lower()))
+  js('b.focus();true');await asyncio.sleep(.2);js('a.focus();true');await asyncio.sleep(.3)
+  from inkecho.platform.owned_installation import installation_state
+  from inkecho.platform.ibus_owned_auto import probe_owned
+  report['loaded_api']=subprocess.run(['gdbus','introspect','--session','--dest','io.github.Creammmmm.InkEcho.IBusOwnedCandidateV5','--object-path','/io/github/Creammmmm/InkEcho/IBusOwnedCandidateV5'],capture_output=True,text=True).stdout
+  report['app_xdg_data_home']=os.environ.get('XDG_DATA_HOME');report['app_home']=str(Path.home());report['owned_installation_state']=await installation_state()
+  try:report['owned_context_probe']=await probe_owned()
+  except Exception as error:report['owned_context_probe_error']={'kind':type(error).__name__,'code':getattr(error,'code',None)}
+  for method in ['auto']:
+   for case in os.environ.get('CASES','mixed,leading-lf,trailing-lf,consecutive-tail,pure-three-tail,solo-lf,two-lf,synchronous,original-fallback,cancel,pending-cancel,prepare-switch,switch').split(','):
+    sample={'solo-lf':'\n','leading-lf':'\n甲','trailing-lf':'甲\n','two-lf':'\n\n','direct-two-lf':'\n\n','direct-three-lf':'\n\n\n','direct-solo-lf':'\n','consecutive-tail':'甲\n\n','pure-three-tail':'甲\n\n\n','synchronous':'甲乙\n\n\n丙\n','original-fallback':'甲乙\n\n\n丙\n','keyboard-first':'甲乙\n','pending-cancel':'甲\n乙'}.get(case,SAMPLE)
+    sample=os.environ.get('TEST_SAMPLE',sample)
+    js("window.mode="+json.dumps('switch'if case=='switch'else'normal')+";a.value='';b.value='';events.length=0;a.focus();true")
+    await asyncio.sleep(.2);ready=proof(method+'-'+case+'-before-prepare');assert good(ready)and ready['dom']['active']=='a'
+    r=DefaultAutoOutputRouter(keyboard_for_desktop());active=True;row={'method':method,'case':case,'sample':sample,'initial_focus':'a'};rows.append(row)
+    try:
+     def before_produce():
+      if case=='prepare-switch':js("b.focus();true")
+     if case=='old-client-new-service':
+      import importlib.util
+      from inkecho.platform.ibus_lifecycle import Capability
+      spec=importlib.util.spec_from_file_location('inkecho.platform.published_legacy_probe',A/'packages/inkecho/platform/ibus_owned.py');legacy_module=importlib.util.module_from_spec(spec);spec.loader.exec_module(legacy_module)
+      legacy=legacy_module.Client(Capability('/run/user/1000'));result={'reported_characters':0,'route':'published-old-client-explicit-negative','input_failure':None}
+      try:
+       await legacy.begin();raise AssertionError('new service accepted legacy Begin')
+      except legacy_module.CandidateError as error:
+       assert error.code=='authorization_failed';row['published_legacy_rejected']=True
+      finally:await legacy.cancel();await legacy.close()
+     elif case=='legacy-during-new':
+      from inkecho.platform.ibus_owned import Client,PATH,INTERFACE
+      from inkecho.platform.ibus_lifecycle import Capability
+      from dbus_next import Message
+      from dbus_next.aio import MessageBus
+      client=Client(Capability('/run/user/1000'),expected_owner=report['owned_context_probe'][1]);foreign=None
+      result={'reported_characters':0,'route':'explicit-protocol-isolation','input_failure':None}
+      try:
+       await client.begin()
+       for method in ['Commit','CommitBatch']:
+        reply=await client._request(method,'us',[0,'X']);assert reply.signature=='s'and reply.body==['rejected']
+       foreign=await MessageBus().connect();reply=await foreign.call(Message(destination=client._owner,path=PATH,interface=INTERFACE,member='Cancel'));assert reply.signature=='b'and reply.body==[False]
+       result['reported_characters']=await client.insert('Y',lambda:True,deadline=time.monotonic()+3);row['legacy_rejected_without_mutating_new_task']=True;sample='Y';row['sample']=sample
+      finally:
+       if foreign:foreign.disconnect()
+       await client.cancel();await client.close()
+     elif case in {'legacy-protocol','server-expired'}:
+      from inkecho.platform.ibus_owned import Client,CandidateError
+      from inkecho.platform.ibus_lifecycle import Capability
+      client=Client(Capability('/run/user/1000'),expected_owner=report['owned_context_probe'][1])
+      result={'reported_characters':0,'route':'explicit-bounded-protocol-probe','input_failure':None}
+      try:
+       await client.begin()
+       if case=='legacy-protocol':raise AssertionError('legacy service accepted')
+       reply=await client._request('CommitBounded','ust',[0,'X',int(time.monotonic()*1000000)-1])
+       assert reply.signature=='s' and reply.body==['unknown']
+       row['server_expired_rejected']=True
+      except CandidateError as error:
+       if case!='legacy-protocol' or error.code!='upgrade_required':raise
+       row['legacy_protocol_rejected']=True
+      finally:await client.cancel();await client.close()
+     elif case=='legacy-auto':
+      await r.prepare_task('auto');result={'reported_characters':0,'route':None,'input_failure':None}
+      try:
+       async with r.output_session():result['reported_characters']=await r.insert('X',lambda:True,deadline=time.monotonic()+5)
+      except Exception as error:result['input_failure']=getattr(error,'code',type(error).__name__)
+      result['route']=r.selected
+     elif case=='hardware-control':
+      for kseq,key in enumerate([97,65293],1):
+       pr=proof('hardware-'+str(kseq));assert good(pr)and pr['dom']['active']=='a'
+       req={'sequence':kseq,'keyval':key,'pid':chrome.pid,'profile':str(profile),'proof':pr};t=O/'key-request.tmp';t.write_text(json.dumps(req));t.replace(O/'key-request.json')
+       for _ in range(200):
+        a=O/'key-ack.json'
+        if a.exists()and json.loads(a.read_text()).get('sequence')==kseq:assert json.loads(a.read_text())['ok'];break
+        await asyncio.sleep(.05)
+       else:raise AssertionError('bounded hardware ack timed out')
+       await asyncio.sleep(.3)
+      result={'reported_characters':2,'route':'hardware-control-only','input_failure':None}
+     elif case.startswith('direct-'):
+      await r.prepare_task('auto');result={'reported_characters':0,'route':None,'input_failure':None}
+      try:
+       async with r.output_session():result['reported_characters']=await r.insert(sample,lambda:True,deadline=time.monotonic()+10)
+      except Exception as err:result['input_failure']=getattr(err,'code',type(err).__name__)
+      result['route']=r.selected
+     else:result=await probe(r,sample,W/('session-'+case),case=case,before_produce=before_produce,output_method='keyboard'if case=='keyboard-first'else'auto')
+     row['neighbor_batch_after_session_close']=r.neighbor_batches_enabled;row['session']=result;row['sent']=result['reported_characters'];row['route']=result['route'];row['cancel_requested']=case in {'cancel','pending-cancel'}
+     if result['input_failure']:row['error']={'code':result['input_failure']}
+    except Exception as e:
+     row['error']={'type':type(e).__name__,**{k:getattr(e,k,None)for k in ['code','accepted','acknowledged_attempts','unsent_offset','uncertain']}};row['route']=r.selected
+    finally:await r.aclose()
+    await asyncio.sleep(.3)
+    expr="JSON.stringify({a:a.value,b:b.value,a_html:a.innerHTML,a_text:a.textContent,b_html:b.innerHTML,b_text:b.textContent,active:document.activeElement.id,focus:document.hasFocus(),events:events})"
+    row['first_dom']=json.loads(js(expr));await asyncio.sleep(1.3);row['last_dom']=json.loads(js(expr));d=row['last_dom'];combined=d['a']+d['b'];row['no_late']=row['first_dom']==d
+    if case in {'legacy-protocol','server-expired','old-client-new-service'}:ok=combined=='' and row.get('sent',0)==0
+    elif case=='legacy-during-new':ok=d['a']=='Y'and d['b']=='' and row.get('sent')==1
+    elif case=='legacy-auto':ok=combined=='' and row.get('sent',0)==0 and row.get('error',{}).get('code')=='ibus_upgrade_required'
+    elif case in {'solo-lf','two-lf','direct-solo-lf'}:ok=combined=='' and row.get('sent',0)==0
+    elif case.startswith('direct-')or case=='hardware-control':ok=d['a']==sample and d['b']==''
+    elif case=='pending-cancel':ok=combined==''
+    elif case in {'two-lf','leading-lf','trailing-lf','consecutive-tail','pure-three-tail','synchronous','original-fallback','mixed','keyboard-first'}:ok=d['a']==sample and d['b']==''
+    elif case=='cancel':ok=bool(combined)and sample.startswith(combined)and len(combined)<len(sample)and row.get('cancel_requested',False)
+    elif case=='prepare-switch':ok=d['a']==''and d['b']==sample
+    else:ok=bool(d['a'])and bool(d['b'])and combined==sample and d['active']=='b'
+    row['exact_fixture_match']=combined==sample;row['passed']=ok and row['no_late']and (('error'not in row or (row.get('error',{}).get('code')=='ibus_delivery_unknown' and case in {'synchronous','original-fallback','direct-two-lf','direct-three-lf'}) or case in {'solo-lf','direct-solo-lf','legacy-auto'}) if case not in {'cancel','pending-cancel'}else row.get('error',{}).get('code') in {None,'input_cancelled','cancelled','fcitx_cancelled','ibus_cancelled'})
+    row['received_lengths']=[len(d['a']),len(d['b'])];(O/'results.json').write_text(json.dumps(redact_report(report),ensure_ascii=False,indent=2));print(json.dumps({'method':method,'case':case,'passed':row['passed'],'route':row['route'],'received_lengths':row['received_lengths'],'error':row.get('error')},ensure_ascii=False),flush=True)
+    screen=cdp('Page.captureScreenshot',{'format':'png'});(O/(method+'-'+case+'.png')).write_bytes(base64.b64decode(screen['data']))
+  ws.send(json.dumps({'id':seq+1,'method':'Browser.close'}));ws.close();chrome.wait(timeout=10);report['browser_normal_close']=True;report['passed']=all(r['passed']for r in rows)
+ except Exception as e:
+  report['failures'].append({'type':type(e).__name__,'message':str(e)});report['passed']=False;raise
+ finally:
+  if install and daemon and daemon.poll() is None:
+   try:install.disable();report['addon_disabled_before_daemon_stop']=True
+   except Exception as e:report['cleanup_install_error']=type(e).__name__
+  for p,name in [(chrome,'browser'),(daemon,'fcitx')]:
+   if p is not None:
+    if p.poll()is None:p.terminate()
+    report[name+'_exit']=p.wait(timeout=10)
+  subprocess.run(['systemctl','--user','unset-environment','GTK_IM_MODULE','QT_IM_MODULE','XMODIFIERS'],check=True)
+  if hints:subprocess.run(['systemctl','--user','set-environment',*hints],check=True)
+  report['hints_restored']=[s for s in subprocess.check_output(['systemctl','--user','show-environment'],text=True).splitlines()if s.split('=',1)[0]in {'GTK_IM_MODULE','QT_IM_MODULE','XMODIFIERS'}]==hints
+  report['native_protocol_proof']=dict(native);report['startup_diagnostics']=stderr_lines
+  report['candidate_source_manifest_sha256']=hashlib.sha256(Path('/mnt/input/candidate-source-manifest.json').read_bytes()).hexdigest()
+  report['package_module_origins']={k:str(Path(v.__file__).resolve())for k,v in list(sys.modules.items())if k.startswith('inkecho.')and getattr(v,'__file__',None)}
+  assert all(Path(v).is_relative_to('/mnt/input/candidate-src')for v in report['package_module_origins'].values())
+  (O/'protocol-metadata.json').write_text(json.dumps(protocol_events,indent=2))
+  (O/'results.json').write_text(json.dumps(redact_report(report),ensure_ascii=False,indent=2));server.shutdown()
+asyncio.run(run())

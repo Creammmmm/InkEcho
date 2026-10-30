@@ -111,7 +111,10 @@ class OutputRouter:
         elif self._kind == "ibus":
             client = getattr(self._selected, "_client", None)
             count = max(
-                self._ibus_acknowledged_attempts, getattr(client, "_sequence", 0)
+                self._ibus_acknowledged_attempts,
+                getattr(
+                    client, "_attempted_characters", getattr(client, "_sequence", 0)
+                ),
             )
         else:
             return 0
@@ -213,6 +216,7 @@ class OutputRouter:
                 allowed = {
                     "unavailable",
                     "authorization_failed",
+                    "upgrade_required",
                     "composition_guard_unavailable",
                     "permission_denied",
                     "untrusted_owner",
@@ -302,6 +306,7 @@ class OutputRouter:
         self._ibus_attempted = False
         self._ibus_acknowledged_attempts = 0
         self._owned_handoff_scope = False
+        self._stream_replan_armed = False
         if selected is not None and selected is not self.keyboard:
             await selected.aclose()
 
@@ -350,7 +355,7 @@ class OutputRouter:
 
     @property
     def neighbor_batches_enabled(self):
-        return self._kind == "fcitx" and bool(
+        return self._kind in {"fcitx", "ibus"} and bool(
             getattr(self._selected, "supports_neighbor_batch", False)
         )
 
@@ -367,6 +372,10 @@ class OutputRouter:
             if self._auto_pending:
                 await self._choose_auto(can_continue, deadline)
             self._check_task(can_continue, deadline)
+            # Only this streaming consumer understands a known-zero replan.
+            self._stream_replan_armed = (
+                self._kind == "fcitx" and not self.neighbor_batches_enabled
+            )
             return self.neighbor_batches_enabled
         finally:
             self._busy = False

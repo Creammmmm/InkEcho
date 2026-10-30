@@ -1,0 +1,6 @@
+{
+  "command": "set -e; python3 /mnt/input/owned-settings.py save; python3 /mnt/input/owned-settings.py enabled; env INKECHO_OUTPUT_STAGE=wayland python3 /mnt/input/guest.py prepare",
+  "returncode": 2,
+  "stdout": "",
+  "stderr": "python3: can't open file '/mnt/input/owned-settings.py': [Errno 2] No such file or directory\n"
+}

@@ -1,0 +1,13 @@
+from pathlib import Path
+import json,os,subprocess,shutil
+stage=os.environ['INKECHO_OUTPUT_STAGE'];o=Path('/mnt/output')/stage
+env=dict(os.environ);env.update(DBUS_SESSION_BUS_ADDRESS='unix:path=/run/user/1000/bus',XDG_RUNTIME_DIR='/run/user/1000')
+rows={}
+for key,args in {'user_environment':['systemctl','--user','show-environment'],'sessions':['loginctl','list-sessions','--no-legend'],'gnome_version':['gnome-shell','--version'],'xfce_version':['xfce4-session','--version'],'fcitx_version':['fcitx5','--version'],'xorg_version':['Xorg','-version']}.items():
+ if shutil.which(args[0])is None:rows[key]={'command':args,'available':False};continue
+ p=subprocess.run(args,env=env,capture_output=True,text=True);text=p.stdout
+ if key=='user_environment':text='\n'.join(l for l in text.splitlines()if l.partition('=')[0]in {'DESKTOP_SESSION','XDG_SESSION_TYPE','XDG_CURRENT_DESKTOP','WAYLAND_DISPLAY','DISPLAY','XMODIFIERS','GTK_IM_MODULE','QT_IM_MODULE'})
+ rows[key]={'command':args,'returncode':p.returncode,'stdout':text,'stderr':p.stderr}
+rows['os_release']=Path('/etc/os-release').read_text();(o/'desktop-context.json').write_text(json.dumps(rows,indent=2)+'\n');print(json.dumps(rows))
+
+actual=dict(l.split('=',1)for l in rows['user_environment']['stdout'].splitlines()if '='in l);assert actual.get('XDG_SESSION_TYPE')==('x11'if 'xorg'in stage else'wayland'),actual

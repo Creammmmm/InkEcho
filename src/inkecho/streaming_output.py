@@ -8,7 +8,7 @@ from dataclasses import dataclass, field
 from inkecho.platform.keyboard import KeyboardError
 from inkecho.providers import ProviderError
 from inkecho.text_normalization import normalize_newlines
-from inkecho.text_units import NeighborPlanner
+from inkecho.text_units import UNSENT_NEIGHBOR_ROUTE, NeighborPlanner
 
 CHUNK_CHARACTERS = 128
 QUEUE_CHUNKS = 32
@@ -165,9 +165,26 @@ class StreamingOutput:
         if not text:
             return
         self._check()
+        previously_attempted = self.attempted
         self.attempted = True
         count = await self._send(text)
         self._check()
+        if count is UNSENT_NEIGHBOR_ROUTE:
+            if (
+                previously_attempted
+                or self.sent_characters
+                or self._planner is not None
+                or self._batch_enabled is None
+                or not self._batch_enabled()
+            ):
+                raise KeyboardError("injection_failed")
+            # Re-plan only body proven never attempted on either route. This is
+            # not a retry after unknown delivery, nor a global lookahead delay.
+            self.attempted = False
+            self._planner = NeighborPlanner()
+            for unit in self._planner.feed(text):
+                await self._emit(unit)
+            return
         if type(count) is not int or count != len(text):
             raise KeyboardError("injection_failed")
         self.sent_characters += count

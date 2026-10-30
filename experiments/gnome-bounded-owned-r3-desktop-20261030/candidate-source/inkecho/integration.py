@@ -1,0 +1,313 @@
+"""Managed desktop identity and explicit integration; preserve user-owned files."""
+
+import hashlib
+import os
+import re
+import shutil
+import subprocess
+from importlib.resources import files
+from pathlib import Path
+
+from inkecho.config import atomic_write
+
+APP_ID = "io.github.Creammmmm.InkEcho"
+MARKER = "X-InkEcho-Managed=true"
+SIZES = (16, 24, 32, 48, 64, 128, 256, 512)
+# Exact retired assets. Never replace unknown or unowned artwork.
+LEGACY_ICON_SHA256 = {
+    "inkecho-16.png": (
+        "d26847979e9f027f02d5c46849875c5c47382878b24fe787229184a4a43637ed"
+    ),
+    "inkecho-24.png": (
+        "baed2993f14d0a86468d1d0a613a66be1876765bb06c585c9eed3e4a9a6140d7"
+    ),
+    "inkecho-32.png": (
+        "76603488559747258c0c6db66b2b52c3b7f08a2d560530d0ed6e624563b717b7"
+    ),
+    "inkecho-48.png": (
+        "2fc2dc8d1d7d8eb9abd333c9497ac33cbdb939d7a929fe6e2d4fce1c5b58bd95"
+    ),
+    "inkecho-64.png": (
+        "12927cb4d56f781f8335295f954936c6ce61290fd7f748e87e94ae80eb46113e"
+    ),
+    "inkecho-128.png": (
+        "f2cb2a058835b86d7e165c392714ab2cf05e55a0e0fdd36204469b5ccd3cefc5"
+    ),
+    "inkecho-256.png": (
+        "3e40b7eb151d90b9176f9799573d2ee7fe27f15e292d2eb663b790aab9d1b1c2"
+    ),
+    "inkecho.svg": "df9f4e49cbfe80a6754ff133b2548968550ba74965b69388c6ccdf0ce64a5cc6",
+}
+PREVIOUS_BLUE_ICON_SHA256 = {
+    "inkecho-128.png": (
+        "977eb2c4626fedb81e2c495b254e538f95f397d92cdf6d3bf1dd22e3e1cfb334"
+    ),
+    "inkecho-16.png": (
+        "1bf1fc3351a6222de719c3a6c1be706575c54350bbc25b6dd41019c41a94a311"
+    ),
+    "inkecho-24.png": (
+        "2c426a0e63c23768791248f688c2ccca16d10615e0e8e1cd151279c5c34e92b0"
+    ),
+    "inkecho-256.png": (
+        "aea5d885b344b99fe13054848f1de175a49abf8c0188e61f9fdded15ddb27053"
+    ),
+    "inkecho-32.png": (
+        "744580cd8614192ffdbd336f5a99117a3977b3a09919a25336698f8f37c8d0ef"
+    ),
+    "inkecho-48.png": (
+        "0a4c211f5d1631e27a2defd5a8543035d06537ececd2a40288c0633e86e8f03f"
+    ),
+    "inkecho-512.png": (
+        "71ad95e734e0e18816da789a82b40ab4a064ff0e567ba5eda7fd925cd40a291e"
+    ),
+    "inkecho-64.png": (
+        "75f7579f5465df306058f6b886c1cec8116ebe5beb05a422bc7702b52b0d5dd5"
+    ),
+}
+
+
+class IntegrationError(ValueError):
+    """An executable or desktop integration path needs attention."""
+
+
+def xdg_directory(variable: str, default: str) -> Path:
+    path = Path(os.environ.get(variable, ""))
+    return path if path.is_absolute() else Path.home() / default
+
+
+def desktop_argument(value: str) -> str:
+    if any(char in value for char in "\n\r\0"):
+        raise IntegrationError("Launcher arguments cannot contain control characters.")
+    # Desktop Exec is not shell syntax. Quote reserved characters at both layers.
+    value = value.replace("%", "%%").replace("\\", "\\\\\\\\")
+    for char in ('"', "`", "$"):
+        value = value.replace(char, "\\\\" + char)
+    return f'"{value}"'
+
+
+def desktop_string(value: str) -> str:
+    """Encode a desktop-entry string, independently of Exec argument quoting."""
+    if any(ord(char) < 32 or ord(char) == 127 for char in value):
+        raise IntegrationError("Desktop values cannot contain control characters.")
+    return value.replace("\\", "\\\\")
+
+
+class DesktopIntegration:
+    def __init__(
+        self,
+        executable: Path,
+        *,
+        args: tuple[str, ...] = (),
+        data_home: Path | None = None,
+        config_home: Path | None = None,
+    ) -> None:
+        self.executable = Path(executable)
+        if not self.executable.is_absolute() or "=" in str(self.executable):
+            raise IntegrationError(
+                "Use an absolute executable path without an equal sign."
+            )
+        self.args = args
+        self.data_home = (
+            data_home
+            if data_home is not None
+            else xdg_directory("XDG_DATA_HOME", ".local/share")
+        )
+        self.config_home = (
+            config_home
+            if config_home is not None
+            else xdg_directory("XDG_CONFIG_HOME", ".config")
+        )
+        self.launcher = self.data_home / "applications" / f"{APP_ID}.desktop"
+        self.autostart = self.config_home / "autostart" / f"{APP_ID}.desktop"
+
+    def _entry(self, *, autostart: bool = False) -> str:
+        if not self.executable.is_file() or not os.access(self.executable, os.X_OK):
+            raise IntegrationError("Select an existing executable application path.")
+        # A persistent file bypasses theme-name lookup in a running Shell.
+        # Never reference the AppImage's temporary mounted asset directory.
+        icon = self.data_home / "icons/hicolor/256x256/apps" / f"{APP_ID}.png"
+        icon_value = desktop_string(str(icon.absolute()))
+        command = " ".join(
+            desktop_argument(str(value)) for value in (self.executable, *self.args)
+        )
+        return (
+            "[Desktop Entry]\nType=Application\nName=InkEcho\n"
+            "Comment=Private desktop voice input\n"
+            # GIO checks the executable before expanding %% in its filename.
+            f"Exec=/usr/bin/env -- {command}{' --background' if autostart else ''}\n"
+            f"Icon={icon_value}\nTerminal=false\nCategories=AudioVideo;Audio;\n"
+            f"StartupWMClass=InkEcho\n{MARKER}\n"
+        )
+
+    @staticmethod
+    def _owned(path: Path) -> bool:
+        return (
+            path.is_file()
+            and not path.is_symlink()
+            and MARKER in path.read_text().splitlines()
+        )
+
+    def _write(self, path: Path, content: str) -> None:
+        if path.is_symlink() or (path.exists() and not self._owned(path)):
+            raise IntegrationError(
+                "An unrelated launcher occupies this path; preserve it."
+            )
+        atomic_write(path, content.encode())
+
+    def _icons(self) -> list[tuple[Path, Path]]:
+        assets = Path(str(files("inkecho").joinpath("assets")))
+        icons = self.data_home / "icons/hicolor"
+        return [
+            (
+                assets / f"inkecho-{size}.png",
+                icons / f"{size}x{size}/apps" / f"{APP_ID}.png",
+            )
+            for size in SIZES
+        ]
+
+    def _legacy_svg(self) -> Path:
+        return self.data_home / "icons/hicolor/scalable/apps" / f"{APP_ID}.svg"
+
+    @staticmethod
+    def _legacy_asset(path: Path, name: str) -> bool:
+        return (
+            path.is_file()
+            and not path.is_symlink()
+            and hashlib.sha256(path.read_bytes()).hexdigest()
+            in (LEGACY_ICON_SHA256.get(name), PREVIOUS_BLUE_ICON_SHA256.get(name))
+        )
+
+    def ensure_running_identity(self) -> None:
+        """Register a directly opened AppImage for GNOME's app-ID icon lookup.
+
+        No autostart is enabled, and unrelated launchers/artwork are preserved.
+        Keep the entry after exit so its launcher remains valid.
+        """
+        current = self.status()["current"] and all(
+            destination.is_file()
+            and not destination.is_symlink()
+            and destination.read_bytes() == source.read_bytes()
+            for source, destination in self._icons()
+        )
+        if not current:
+            self.install(refresh=False)
+        self._sync_enabled_autostart()
+
+    def _sync_enabled_autostart(self) -> None:
+        """Update only the executable in an already managed startup command.
+
+        Keep profile arguments and all other desktop fields byte-for-byte. An
+        unfamiliar command layout belongs to its existing owner, not this repair.
+        """
+        if not self._owned(self.autostart):
+            return
+        content = self.autostart.read_text()
+        pattern = (
+            r'(?m)^(Exec=/usr/bin/env -- )"(?:\\.|[^"\\])*"'
+            r"(?= .* --background$| --background$)"
+        )
+        matches = list(re.finditer(pattern, content))
+        if len(matches) != 1 or len(re.findall(r"(?m)^Exec=", content)) != 1:
+            return
+        self._entry()  # Validate the current executable before changing a file.
+        match = matches[0]
+        updated = (
+            content[: match.start()]
+            + match.group(1)
+            + desktop_argument(str(self.executable))
+            + content[match.end() :]
+        )
+        if updated != content:
+            self._write(self.autostart, updated)
+
+    def install(self, *, refresh: bool = True) -> None:
+        entry = self._entry()
+        managed = self._owned(self.launcher)
+        for source, destination in self._icons():
+            if destination.is_symlink() or (
+                destination.exists()
+                and destination.read_bytes() != source.read_bytes()
+                and not (managed and self._legacy_asset(destination, source.name))
+            ):
+                raise IntegrationError(
+                    "An unrelated icon occupies this path; preserve it."
+                )
+        old_svg = self._legacy_svg()
+        if old_svg.is_symlink() or (
+            old_svg.exists()
+            and not (managed and self._legacy_asset(old_svg, "inkecho.svg"))
+        ):
+            raise IntegrationError(
+                "An unrelated scalable icon occupies this path; preserve it."
+            )
+        # Publish the desktop entry only after its icon is resolvable.
+        # Validate launcher ownership before modifying any managed assets.
+        if self.launcher.is_symlink() or (self.launcher.exists() and not managed):
+            raise IntegrationError(
+                "An unrelated launcher occupies this path; preserve it."
+            )
+        for source, destination in self._icons():
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            atomic_write(destination, source.read_bytes())
+        if old_svg.exists():
+            old_svg.unlink()
+        self._write(self.launcher, entry)
+        if refresh:
+            self._refresh()
+
+    def _refresh(self) -> None:
+        for program, arguments in (
+            ("update-desktop-database", [str(self.launcher.parent)]),
+            (
+                "gtk-update-icon-cache",
+                ["-f", "-t", str(self.data_home / "icons/hicolor")],
+            ),
+        ):
+            if shutil.which(program):
+                try:
+                    subprocess.run(
+                        [program, *arguments], timeout=3, capture_output=True
+                    )
+                except (OSError, subprocess.TimeoutExpired):
+                    pass  # Optional caches must not block installation or removal.
+
+    def repair(self) -> None:
+        enabled = self._owned(self.autostart)
+        self.install()
+        if enabled:
+            self.set_autostart(True)
+
+    def set_autostart(self, enabled: bool) -> None:
+        if enabled:
+            self._write(self.autostart, self._entry(autostart=True))
+        elif self._owned(self.autostart):
+            self.autostart.unlink()
+
+    def status(self) -> dict:
+        installed = self._owned(self.launcher)
+        try:
+            current = installed and self.launcher.read_text() == self._entry()
+        except IntegrationError:
+            current = False
+        return {
+            "installed": installed,
+            "current": current,
+            "autostart": self._owned(self.autostart),
+            "executable": str(self.executable),
+        }
+
+    def remove(self) -> None:
+        old_svg = self._legacy_svg()
+        if self._owned(self.launcher) and self._legacy_asset(old_svg, "inkecho.svg"):
+            old_svg.unlink()
+        for path in (self.launcher, self.autostart):
+            if self._owned(path):
+                path.unlink()
+        for source, destination in self._icons():
+            if (
+                destination.is_file()
+                and not destination.is_symlink()
+                and destination.read_bytes() == source.read_bytes()
+            ):
+                destination.unlink()
+        self._refresh()

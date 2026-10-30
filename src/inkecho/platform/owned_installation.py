@@ -11,7 +11,7 @@ from inkecho.platform.framework_detection import _command
 from inkecho.platform.output_router import OutputRouterError
 
 UUID = "inkecho-ibus-owned-v5-prototype@local.invalid"
-FILES = {
+LEGACY_FILES = {
     "capability.js": {
         "sha256": "fcbaf3e7fd0184ca3141f3c4d811f7496ef753fd6282714ec128a26151a1c881",
         "size": 2784,
@@ -35,6 +35,36 @@ FILES = {
     "owned_gate.js": {
         "sha256": "55980b3f06324b79dcfd58d1a69f9ee8e08466e6bf68b1a1916c0afa012561bd",
         "size": 2892,
+    },
+    "probe.js": {
+        "sha256": "39adc6ccc1109bf7d9cae419314781164dccbf0a2f6d6a778888a15755a12dc4",
+        "size": 951,
+    },
+}
+FILES = {
+    "capability.js": {
+        "sha256": "fcbaf3e7fd0184ca3141f3c4d811f7496ef753fd6282714ec128a26151a1c881",
+        "size": 2784,
+    },
+    "owned_gate.js": {
+        "sha256": "35a9c94ec1ddf283dfdb976bd5b59d92003527b76682d5fbe96514836f9548ba",
+        "size": 4757,
+    },
+    "metadata.json": {
+        "sha256": "3affc5dde73c67f8e6638d8dd115b3f7b9504b86ac29af147365675d28824549",
+        "size": 235,
+    },
+    "delivery_gate.js": {
+        "sha256": "fd8181e9d87aa50502db75536dce2999b8df3f3b063026e67db1a609be1d5e76",
+        "size": 3770,
+    },
+    "identity.js": {
+        "sha256": "5a50a88cc6f08619b4742e2f1c269a2dce7a517ece32176270ad69f3ffc8e9ac",
+        "size": 404,
+    },
+    "extension.js": {
+        "sha256": "aa1704833d67be51e95fa96173971cfb4653baa592232ef3858fe174a201c3f4",
+        "size": 8140,
     },
     "probe.js": {
         "sha256": "39adc6ccc1109bf7d9cae419314781164dccbf0a2f6d6a778888a15755a12dc4",
@@ -66,7 +96,9 @@ def verified_installation(root=None):
         info = os.fstat(directory)
         if info.st_uid != os.getuid() or info.st_mode & 0o022:
             raise ValueError
-        for name, expected in FILES.items():
+        observed = {}
+        for name in FILES:
+            maximum = max(FILES[name]["size"], LEGACY_FILES[name]["size"])
             fd = os.open(
                 name, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK, dir_fd=directory
             )
@@ -76,15 +108,20 @@ def verified_installation(root=None):
                     not stat.S_ISREG(info.st_mode)
                     or info.st_uid != os.getuid()
                     or info.st_mode & 0o022
-                    or info.st_size != expected["size"]
+                    or info.st_size > maximum
                 ):
                     raise ValueError
                 with os.fdopen(fd, "rb", closefd=False) as stream:
-                    data = stream.read(expected["size"] + 1)
-                if hashlib.sha256(data).hexdigest() != expected["sha256"]:
-                    raise ValueError
+                    data = stream.read(maximum + 1)
+                observed[name] = {
+                    "sha256": hashlib.sha256(data).hexdigest(),
+                    "size": len(data),
+                }
             finally:
                 os.close(fd)
+        # Accept complete old V5 or complete current bounded bridge, never a mixed set.
+        if observed not in (FILES, LEGACY_FILES):
+            raise ValueError
         return True
     except (OSError, ValueError):
         raise OutputRouterError("input_capability_unknown") from None

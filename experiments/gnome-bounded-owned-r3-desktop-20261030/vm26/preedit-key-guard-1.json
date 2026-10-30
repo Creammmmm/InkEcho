@@ -1,0 +1,6 @@
+{
+  "command": "test $(id -u) = 1000; test $(stat -c %u /proc/5040) = 1000; tr '\\0' ' ' < /proc/5040/cmdline",
+  "returncode": 0,
+  "stdout": "/usr/bin/python3 /mnt/input/preedit-actor.py /run/user/1000/inkecho-neighbor-preedit-xek_fl2s/actor.json ",
+  "stderr": ""
+}

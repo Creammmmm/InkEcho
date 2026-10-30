@@ -5,6 +5,7 @@ from inkecho.platform.ibus import IBusBridgeError
 from inkecho.platform.ibus_owned_auto import OwnedAutoOutputRouter
 from inkecho.platform.output_router import OutputRouter, OutputRouterError
 from inkecho.platform.owned_installation import installation_state
+from inkecho.text_units import UNSENT_NEIGHBOR_ROUTE
 
 
 class DefaultAutoOutputRouter(OwnedAutoOutputRouter):
@@ -185,6 +186,14 @@ class DefaultAutoOutputRouter(OwnedAutoOutputRouter):
         self._selected, self._kind = candidate, "ibus"
         self._owned_auto_scope = True
         self._owned_handoff_scope = True
+        if getattr(self, "_stream_replan_armed", False) and bool(
+            getattr(candidate, "supports_neighbor_batch", False)
+        ):
+            # The strict handoff checks proved the entire previous task unsent;
+            # Begin only prepared this route. No owned Commit has happened.
+            self._check_task(active, deadline)
+            self._stream_replan_armed = False
+            return UNSENT_NEIGHBOR_ROUTE
         try:
             sent = await candidate.insert(
                 text, active, deadline=deadline, on_first_sent=on_first_sent
@@ -205,6 +214,7 @@ class DefaultAutoOutputRouter(OwnedAutoOutputRouter):
         # extension. Emit only diagnostic identifiers understood by Session.
         known = {
             "authorization_failed",
+            "upgrade_required",
             "permission_denied",
             "untrusted_owner",
             "unavailable",

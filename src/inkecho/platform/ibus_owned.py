@@ -1,6 +1,7 @@
-"""Disabled-by-default bounded GNOME-owned context candidate.
+"""Authenticated, bounded GNOME-owned bridge for the optional automatic route.
 
-Explicit test injection only; no installer, detector or automatic route uses this.
+Producer dispatch is unconfirmed input, never a target receipt or replay grant.
+The separately selected legacy IBus V2 mode is not implemented by this module.
 """
 
 import asyncio
@@ -8,6 +9,7 @@ import errno
 import math
 import os
 import time
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
 from dbus_next import Message, MessageType
@@ -15,6 +17,7 @@ from dbus_next.aio import MessageBus
 
 from inkecho.platform.ibus import IBusBridgeError
 from inkecho.platform.ibus_lifecycle import Capability, LifecycleError
+from inkecho.text_units import iter_text_units
 
 SERVICE = "io.github.Creammmmm.InkEcho.IBusOwnedCandidateV5"
 PATH = "/io/github/Creammmmm/InkEcho/IBusOwnedCandidateV5"
@@ -44,6 +47,8 @@ class Client:
         self._timeout = timeout
         self._bus = self._owner = None
         self._sequence = 0
+        self._attempted_characters = 0
+        self._neighbor_batch = False
         self._failed = self._cancelled = self._busy = False
         self._no_service_confirmed = False
 
@@ -83,6 +88,77 @@ class Client:
         except OSError:
             return False
 
+    @property
+    def supports_neighbor_batch(self):
+        return (
+            self._neighbor_batch
+            and self._bus is not None
+            and not (self._failed or self._cancelled)
+        )
+
+    async def _negotiate_batch(self):
+        reply = await self._call(
+            Message(
+                destination=self._owner,
+                path=PATH,
+                interface="org.freedesktop.DBus.Introspectable",
+                member="Introspect",
+            ),
+            self._owner,
+        )
+        if (
+            reply.message_type != MessageType.METHOD_RETURN
+            or reply.signature != "s"
+            or len(reply.body) != 1
+            or not isinstance(reply.body[0], str)
+            or len(reply.body[0]) > 65536
+        ):
+            raise CandidateError("unavailable")
+        try:
+            root = ET.fromstring(reply.body[0])
+        except ET.ParseError:
+            raise CandidateError("unavailable") from None
+        interfaces = root.findall(f"interface[@name='{INTERFACE}']")
+        if len(interfaces) != 1:
+            raise CandidateError("unavailable")
+        methods = interfaces[0].findall("method")
+
+        def exact(name, inputs, outputs):
+            selected = [x for x in methods if x.get("name") == name]
+            if len(selected) != 1:
+                return False
+            args = selected[0].findall("arg")
+            if any(x.get("direction", "in") not in {"in", "out"} for x in args):
+                return False
+            return [
+                x.get("type") for x in args if x.get("direction", "in") == "in"
+            ] == list(inputs) and [
+                x.get("type") for x in args if x.get("direction") == "out"
+            ] == list(outputs)
+
+        # Require the complete bounded protocol. A complete legacy schema needs
+        # an explicit upgrade; partial/malformed schemas remain unavailable.
+        # Never emit via an old method while claiming a bounded task.
+        bounded_advertised = any(
+            method.get("name") in {"BeginBounded", "CommitBounded"}
+            for method in methods
+        )
+        if bounded_advertised:
+            if not (
+                exact("BeginBounded", "ssut", "b")
+                and exact("CommitBounded", "ust", "s")
+                and exact("Cancel", "", "b")
+            ):
+                raise CandidateError("unavailable")
+            return True
+        complete_legacy = exact("Cancel", "", "b") and (
+            (exact("BeginBatch", "ssu", "b") and exact("CommitBatch", "us", "s"))
+            or (exact("Begin", "ss", "b") and exact("Commit", "us", "s"))
+        )
+        if complete_legacy:
+            raise CandidateError("upgrade_required")
+        raise CandidateError("unavailable")
+
     async def begin(self):
         if self._bus is not None or self._cancelled:
             raise CandidateError("busy")
@@ -112,9 +188,17 @@ class Client:
             if not await self._owner_verifier(owner):
                 raise CandidateError("untrusted_owner")
             self._owner = owner
+            self._neighbor_batch = await self._negotiate_batch()
+            # Same Linux CLOCK_MONOTONIC epoch; integer microseconds round down.
+            # The first task ceiling is fixed, never renewed by later fragments.
+            self._deadline_us = int(time.monotonic() * 1_000_000) + 59_000_000
             reply = await self._request(
-                "Begin", "ss", [self._cap.name, self._cap.token]
+                "BeginBounded",
+                "ssut",
+                [self._cap.name, self._cap.token, 1, self._deadline_us],
             )
+            if getattr(reply, "signature", None) != "b":
+                raise CandidateError("unavailable")
             if reply.message_type == MessageType.METHOD_RETURN and reply.body == [
                 False
             ]:
@@ -142,7 +226,7 @@ class Client:
             self._owner,
         )
 
-    async def insert(self, text, active, *, on_first_sent=None):
+    async def insert(self, text, active, *, deadline=None, on_first_sent=None):
         if self._busy or self._bus is None or self._failed or self._cancelled:
             raise CandidateError("not_ready")
         if not isinstance(text, str) or any(
@@ -152,19 +236,48 @@ class Client:
             for c in text
         ):
             raise CandidateError("unsupported_text")
+        # A legacy addon must never receive a known-unsafe standalone LF.
+        # Validate before any request; unknown delivery never enables replay.
+        if "\n" in text and (not self._neighbor_batch or text == "\n"):
+            self._failed = True
+            raise CandidateError("unsupported_text")
+        if deadline is not None:
+            try:
+                valid = type(deadline) in (int, float) and math.isfinite(deadline)
+                # Values beyond our fixed session ceiling do not extend it.
+                if not valid:
+                    raise CandidateError("cancelled")
+                if deadline < self._deadline_us / 1_000_000:
+                    self._deadline_us = math.floor(deadline * 1_000_000)
+            except (OverflowError, ValueError):
+                raise CandidateError("cancelled") from None
+        if not (0 < self._deadline_us <= 2**53 - 1):
+            raise CandidateError("cancelled")
         self._busy = True
         try:
-            for index, char in enumerate(text):
-                if self._cancelled or not active():
+            units = iter_text_units(text) if self._neighbor_batch else iter(text)
+            for index, char in enumerate(units):
+                if (
+                    self._cancelled
+                    or not active()
+                    or time.monotonic() * 1_000_000 >= self._deadline_us
+                ):
                     raise CandidateError("cancelled")
                 try:
-                    reply = await self._request("Commit", "us", [self._sequence, char])
+                    reply = await self._request(
+                        "CommitBounded",
+                        "ust",
+                        [self._sequence, char, self._deadline_us],
+                    )
                 except asyncio.CancelledError:
                     self._failed = True
                     raise
                 except Exception:
                     self._failed = True
                     raise CandidateError("delivery_unknown") from None
+                if getattr(reply, "signature", None) != "s":
+                    self._failed = True
+                    raise CandidateError("delivery_unknown")
                 if (
                     reply.message_type == MessageType.METHOD_RETURN
                     and reply.body == ["no_service"]
@@ -179,9 +292,14 @@ class Client:
                     self._failed = True
                     raise CandidateError("delivery_unknown")
                 self._sequence += 1
+                self._attempted_characters += len(char)
                 if index == 0 and on_first_sent is not None:
                     on_first_sent(time.monotonic())
-                if self._cancelled or not active():
+                if (
+                    self._cancelled
+                    or not active()
+                    or time.monotonic() * 1_000_000 >= self._deadline_us
+                ):
                     raise CandidateError("cancelled")
             return len(text)
         except BaseException:
@@ -218,6 +336,12 @@ class IBusBridge:
         self._client = None
         self._closed = False
 
+    @property
+    def supports_neighbor_batch(self):
+        return bool(
+            self._client and getattr(self._client, "supports_neighbor_batch", False)
+        )
+
     async def connect(self, *, expected_owner=None):
         if self._closed:
             raise IBusBridgeError("closed")
@@ -246,6 +370,7 @@ class IBusBridge:
                 "unavailable",
                 "authorization_failed",
                 "untrusted_owner",
+                "upgrade_required",
             }:
                 code = error.code
             elif isinstance(error, LifecycleError) or (
@@ -285,10 +410,13 @@ class IBusBridge:
             raise IBusBridgeError("cancelled")
         client = self._client
         try:
-            return await client.insert(text, active, on_first_sent=on_first_sent)
+            return await client.insert(
+                text, active, deadline=deadline, on_first_sent=on_first_sent
+            )
         except CandidateError as error:
             raise IBusBridgeError(
-                error.code, acknowledged_attempts=getattr(client, "_sequence", 0)
+                error.code,
+                acknowledged_attempts=getattr(client, "_attempted_characters", 0),
             ) from None
 
     async def close_after_no_service(self):

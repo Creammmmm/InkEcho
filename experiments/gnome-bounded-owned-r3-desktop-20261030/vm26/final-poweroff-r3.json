@@ -1,0 +1,6 @@
+{
+  "command": "set -e; python3 /mnt/input/engine-final.py; sudo -n poweroff",
+  "returncode": 0,
+  "stdout": "",
+  "stderr": ""
+}

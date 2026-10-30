@@ -1,4 +1,4 @@
-"""Opt-in research auto router; never wired to the application by this patch."""
+"""Optional GNOME-owned route used by the default automatic dispatcher."""
 
 import asyncio
 
@@ -69,7 +69,7 @@ async def probe_owned(*, bus_factory=MessageBus, verifier=None):
 
 
 class OwnedAutoOutputRouter(OutputRouter):
-    """Explicit harness injection enables this candidate, default app unchanged.
+    """Select an authenticated optional owned bridge only during output.
 
     Explicit IBus mode still uses the original V2 bridge. Automatic selection
     happens inside output_session at first insert, never during recording.

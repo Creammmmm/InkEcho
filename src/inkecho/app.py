@@ -20,6 +20,7 @@ from inkecho.realtime import (
 )
 from inkecho.security import CredentialError, FileCredentialStore
 from inkecho.streaming_output import StreamingOutput, TextDelta
+from inkecho.text_units import UNSENT_NEIGHBOR_ROUTE
 
 STATE_LABELS = {
     State.IDLE: "准备就绪",
@@ -89,6 +90,10 @@ KEYBOARD_LABELS = {
     "unsupported_layout": "当前键盘布局没有可用的兼容键位，暂时无法使用此输入方式。",
     "fcitx_unavailable": "Fcitx5 输入桥未安装或未运行，无法使用所选输入方式。",
     "ibus_unavailable": "IBus 实验性扩展未启用或不可用，请选择键盘输入。",
+    "ibus_upgrade_required": (
+        "IBus 扩展仍在运行旧协议。请停用并卸载旧扩展，安装匹配版本后重新登录桌面加载；"
+        "本次未自动重试。"
+    ),
     "ibus_authorization_failed": "IBus 扩展未接受本次输入任务，请检查扩展状态后重试。",
     "ibus_permission_denied": "IBus 无法创建任务凭证，请检查用户运行目录权限。",
     "ibus_untrusted_owner": "IBus 扩展服务的身份无法确认，已停止输入。",
@@ -1064,7 +1069,9 @@ class Session(QObject):
         async def send(text):
             if not active():
                 raise asyncio.CancelledError
+            prepared_original = None
             if self.controller.state == State.POLISHING:
+                prepared_original = self.controller.task.original
                 if not self.controller.begin_streaming_output(task_id):
                     raise asyncio.CancelledError
             task = self.controller.task
@@ -1077,6 +1084,18 @@ class Session(QObject):
             count = await self.inputs.insert(text, active, **options)
             if not active():
                 raise asyncio.CancelledError
+            if count is UNSENT_NEIGHBOR_ROUTE:
+                if (
+                    prepared_original is None
+                    or self.metrics.get("characters", 0)
+                    or getattr(self.inputs, "acknowledged_attempts", None) != 0
+                ):
+                    raise KeyboardError("injection_failed")
+                if not self.controller.resume_unsent_streaming_preparation(
+                    task_id, prepared_original
+                ):
+                    raise asyncio.CancelledError
+                return count
             if type(count) is int and count == len(text):
                 self.metrics["characters"] += count
             return count

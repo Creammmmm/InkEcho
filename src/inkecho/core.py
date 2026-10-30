@@ -192,6 +192,23 @@ class TaskController:
         self._state(State.INJECTING)
         return self._valid(task_id, State.INJECTING)
 
+    def resume_unsent_streaming_preparation(self, task_id: str, original: str) -> bool:
+        """Coordinator-only rollback after a typed whole-task-zero route marker.
+
+        No attempted or ambiguous transport result authorizes this transition.
+        Task validity and the absolute deadline remain unchanged.
+        """
+        if (
+            not self._valid(task_id, State.INJECTING)
+            or not isinstance(original, str)
+            or not original
+            or self.task.original != ""
+        ):
+            return False
+        self.task.original = original
+        self._state(State.POLISHING)
+        return self._valid(task_id, State.POLISHING)
+
     def injection_failed(self, task_id: str) -> None:
         if self._valid(task_id, State.INJECTING):
             self._finish(State.FAILED, Failure.INJECTION)

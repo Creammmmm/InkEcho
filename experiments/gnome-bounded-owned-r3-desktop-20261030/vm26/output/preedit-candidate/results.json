@@ -1,0 +1,38 @@
+{
+  "sources_before": "[('xkb', 'us')]",
+  "engine_before": "xkb:us::eng",
+  "rows": [],
+  "select": {
+    "returncode": 1,
+    "stdout": "",
+    "stderr": ""
+  },
+  "engine_selected": "libpinyin",
+  "before_output": {
+    "pid": 5040,
+    "display_type": "GdkWaylandDisplay",
+    "active": true,
+    "focus": true,
+    "text": "",
+    "preedit": "你"
+  },
+  "probe": [
+    "ibus",
+    ":1.8"
+  ],
+  "output_error": {
+    "kind": "OutputRouterError",
+    "code": "ibus_delivery_unknown"
+  },
+  "after_output": {
+    "pid": 5040,
+    "display_type": "GdkWaylandDisplay",
+    "active": true,
+    "focus": true,
+    "text": "",
+    "preedit": "你"
+  },
+  "passed": true,
+  "actor_exit": -15,
+  "sources_after": "[('xkb', 'us')]"
+}

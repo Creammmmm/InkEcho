@@ -1,0 +1,6 @@
+{
+  "command": "id; loginctl list-sessions --no-legend",
+  "returncode": 255,
+  "stdout": "",
+  "stderr": "Connection timed out during banner exchange\nConnection to 127.0.0.1 port 2222 timed out\n"
+}

@@ -64,3 +64,14 @@ def iter_text_units(text):
 
 def text_units(text):
     return list(iter_text_units(text))
+
+
+class UnsentNeighborRoute:
+    """Internal route-prepared marker, never a count or delivery receipt.
+
+    Only a whole-task definitely-unsent streaming handoff may return this.
+    The new route is negotiated but has not attempted any body text.
+    """
+
+
+UNSENT_NEIGHBOR_ROUTE = UnsentNeighborRoute()

@@ -1,0 +1,9 @@
+[1030/045903.512213:WARNING:chrome/app/chrome_main_linux.cc:84] Read channel stable from /opt/inkecho-test-chrome/CHROME_VERSION_EXTRA
+{"method": "auto", "case": "old-client-new-service", "passed": true, "route": "published-old-client-explicit-negative", "received_lengths": [0, 0], "error": null}
+{"method": "CommitBatch", "case": "legacy-during-new", "passed": true, "route": "explicit-protocol-isolation", "received_lengths": [1, 0], "error": null}
+{"method": "CommitBatch", "case": "server-expired", "passed": true, "route": "explicit-bounded-protocol-probe", "received_lengths": [0, 0], "error": null}
+{"method": "CommitBatch", "case": "mixed", "passed": true, "route": null, "received_lengths": [22, 0], "error": null}
+{"method": "CommitBatch", "case": "mixed", "passed": true, "route": null, "received_lengths": [22, 0], "error": null}
+{"method": "CommitBatch", "case": "switch", "passed": true, "route": null, "received_lengths": [1, 21], "error": null}
+{"method": "CommitBatch", "case": "cancel", "passed": true, "route": null, "received_lengths": [1, 0], "error": {"code": "input_cancelled"}}
+{"method": "CommitBatch", "case": "pending-cancel", "passed": true, "route": null, "received_lengths": [0, 0], "error": null}
