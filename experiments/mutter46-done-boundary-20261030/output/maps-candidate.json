@@ -1,0 +1,38 @@
+{
+  "label": "candidate",
+  "pid": 14952,
+  "starttime": "238517",
+  "exe": "/usr/bin/gnome-shell",
+  "libraries": [
+    {
+      "path": "/mnt/output/candidate-root/mnt/output/mutter-active/lib/x86_64-linux-gnu/libmutter-14.so.0.0.0",
+      "bytes": 16080528,
+      "sha256": "452112510fcd84903093d87f4bedc3a69a1fc4ea1a26f6e13d76cdfd9a1a5a93"
+    },
+    {
+      "path": "/mnt/output/candidate-root/mnt/output/mutter-active/lib/x86_64-linux-gnu/mutter-14/libmutter-clutter-14.so.0.0.0",
+      "bytes": 5149376,
+      "sha256": "d64826dc8cbe0bccdd248ab7268c978366f3de1728ef26c7c1736913d6455ecf"
+    },
+    {
+      "path": "/mnt/output/candidate-root/mnt/output/mutter-active/lib/x86_64-linux-gnu/mutter-14/libmutter-cogl-14.so.0.0.0",
+      "bytes": 4093888,
+      "sha256": "d4defab0b85511764215ceebcc7547d2a0e0d411d00f10532685fb5f46ce9a6e"
+    },
+    {
+      "path": "/mnt/output/candidate-root/mnt/output/mutter-active/lib/x86_64-linux-gnu/mutter-14/libmutter-cogl-pango-14.so.0.0.0",
+      "bytes": 225480,
+      "sha256": "55e9ff71b63e63a7208bd4575d69637f6db124d3ef9202a72d3866325d68797b"
+    },
+    {
+      "path": "/mnt/output/candidate-root/mnt/output/mutter-active/lib/x86_64-linux-gnu/mutter-14/libmutter-mtk-14.so.0.0.0",
+      "bytes": 116792,
+      "sha256": "53522df19caca25402dabd4131858584a2c0c62a40c4d6b0e131efcb89ce3bf9"
+    }
+  ],
+  "actual_environment": {
+    "WAYLAND_DISPLAY": "wayland-0",
+    "XDG_SESSION_TYPE": "wayland"
+  },
+  "system_library_files_unchanged": "a66cbe9b4409c17c83b88d355ea0fd360eb8f792be068245017ffac720cecc77"
+}

@@ -1,0 +1,29 @@
+{
+  "container": "inkecho-mutter46-done-boundary-20261030",
+  "state": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-10-30T02:48:30.567377733Z",
+    "FinishedAt": "2026-10-30T03:30:51.110776404Z"
+  },
+  "original_wait_returncode": 0,
+  "original_wait": {
+    "tool_session_id": 13970,
+    "tool_exit_code": 0,
+    "stdout": "0",
+    "scope": "current Mutter experiment; original wait retrieved after normal guest poweroff"
+  },
+  "unrelated_prior_wait": {
+    "tool_session_id": 84796,
+    "container": "inkecho-ibus-r2-protocol-24-20261030",
+    "scope": "earlier protocol diagnostic only; not current shutdown evidence"
+  },
+  "provenance_note": "Tool session metadata is reported from the original tool results; stopped Docker state was independently inspected after shutdown."
+}

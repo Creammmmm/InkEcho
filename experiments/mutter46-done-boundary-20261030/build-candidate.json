@@ -1,0 +1,6 @@
+{
+  "command": "set -eu; cd /mnt/output/mutter-source; test \"$(sha256sum src/wayland/meta-wayland-text-input.c | cut -d \" \" -f1)\" = c762fc6714439b9926ae7c69bf1942679ff2b3645095e0920b1bbeb5fe8972b1; patch -p1 --forward --batch -i /mnt/input/mutter-change.patch > /mnt/output/source-change.log; ninja -C /mnt/output/mutter-build -j2 > /mnt/output/build-candidate.log 2>&1; meson install -C /mnt/output/mutter-build --no-rebuild --destdir=/mnt/output/candidate-root > /mnt/output/install-candidate.log 2>&1; sha256sum /mnt/output/candidate-root/mnt/output/mutter-active/lib/x86_64-linux-gnu/libmutter-14.so.0.0.0",
+  "returncode": 0,
+  "stdout": "452112510fcd84903093d87f4bedc3a69a1fc4ea1a26f6e13d76cdfd9a1a5a93  /mnt/output/candidate-root/mnt/output/mutter-active/lib/x86_64-linux-gnu/libmutter-14.so.0.0.0\n",
+  "stderr": ""
+}

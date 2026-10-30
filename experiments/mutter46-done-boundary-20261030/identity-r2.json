@@ -1,0 +1,6 @@
+{
+  "command": "set -eu; dpkg-query -W libmutter-14-0 mutter-common gnome-shell; df -h /; systemctl --user show-environment | sed -n \"/XDG_SESSION_TYPE/p;/WAYLAND_DISPLAY/p\"; sudo -n mount -t 9p -o trans=virtio,version=9p2000.L,ro inkecho_input /mnt/input; sudo -n mount -t 9p -o trans=virtio,version=9p2000.L inkecho_output /mnt/output; cp /var/lib/dpkg/status /mnt/output/guest-dpkg-status; dpkg-query -W > /mnt/output/guest-packages-before.txt",
+  "returncode": 0,
+  "stdout": "gnome-shell\t46.0-0ubuntu6~24.04.16\nlibmutter-14-0:amd64\t46.2-1ubuntu0.24.04.18\nmutter-common\t46.2-1ubuntu0.24.04.18\nFilesystem      Size  Used Avail Use% Mounted on\n/dev/vda1        30G   18G   13G  60% /\nWAYLAND_DISPLAY=wayland-0\nXDG_SESSION_TYPE=wayland\n",
+  "stderr": ""
+}

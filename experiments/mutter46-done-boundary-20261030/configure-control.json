@@ -1,0 +1,6 @@
+{
+  "command": "set -eu; meson setup /mnt/output/mutter-build /mnt/output/mutter-source --prefix=/mnt/output/mutter-active --libdir=lib/x86_64-linux-gnu --buildtype=debugoptimized --wrap-mode=nodownload -Dauto_features=enabled -Degl_device=true -Dremote_desktop=true -Dwayland_eglstream=true -Dlibdisplay_info=disabled -Dtests=false -Dinstalled_tests=false -Ddocs=false > /mnt/output/configure-control.log 2>&1; meson configure /mnt/output/mutter-build > /mnt/output/build-options.txt; ninja -C /mnt/output/mutter-build -j2 > /mnt/output/build-control.log 2>&1",
+  "returncode": 0,
+  "stdout": "",
+  "stderr": ""
+}

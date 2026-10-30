@@ -1,0 +1,6 @@
+{
+  "command": "env GI_TYPELIB_PATH=/mnt/output/mutter-active/lib/x86_64-linux-gnu/mutter-14 /usr/bin/python3 -c 'import gi;gi.require_version(\"GIRepository\",\"2.0\");from gi.repository import GIRepository;r=GIRepository.Repository.get_default();r.prepend_search_path(\"/usr/lib/x86_64-linux-gnu/mutter-14\");r.require(\"Clutter\",\"14\",0);print(r.get_typelib_path(\"Clutter\"));print(r.get_search_path())'",
+  "returncode": 0,
+  "stdout": "/usr/lib/x86_64-linux-gnu/mutter-14/Clutter-14.typelib\n['/usr/lib/x86_64-linux-gnu/mutter-14', '/mnt/output/mutter-active/lib/x86_64-linux-gnu/mutter-14', '/usr/lib/x86_64-linux-gnu/girepository-1.0', '/usr/lib/girepository-1.0']\n",
+  "stderr": ""
+}
