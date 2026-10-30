@@ -1,0 +1,9 @@
+# XIM 同步回复归属：私有双端验证
+
+2026-10-30，在本机 Ubuntu 26.04.1 使用从官方 Ubuntu 仓库下载、只解包到 `dist/xim-sync-stage0-20261030/root` 的 Xvfb 21.1.22 和 xcb-imdkit 1.0.9。未安装系统包。`run.sh` 生成独立授权、私有 X socket 和无网络命名空间，建立自有 XIM 服务端与客户端，只处理固定合成字符 `A`；不连接用户桌面、系统输入法或 D-Bus。GLX 禁用后运行成功。首次在宿主 `/tmp` 因磁盘配额导致 Xvfb 锁文件创建失败；另一次私有 Xvfb 默认 GLX 因加载宿主 Nvidia EGL 而崩溃，未运行探针。其后在网络/临时目录隔离并关闭 GLX 才取得下述结果。
+
+运行 `bash experiments/xim-sync-private-20261030/run.sh`；需 Ubuntu 26.04 的 gcc、bubblewrap、xauth、系统 XCB 运行库，以及上述已解包的官方 xvfb、libxcb-imdkit1/libxcb-imdkit-dev、libxcb1-dev、libxcb-util-dev 和 x11proto-dev。脚本仅将自建临时目录挂到隔离环境的 `/tmp`，退出时清理。探针先向自有 context 发送同步 COMMIT，紧接调用 `xcb_im_sync_xlib`。不处理客户端事件 400ms，结果 commits0/replies0；仅恢复到 COMMIT 回调结束，然后再次停止客户端所有事件处理，同时放行服务器，结果 commits1、服务端 sync callback1。这说明前一个 COMMIT 的同步回复触发了显式同步的回调，而客户端尚未继续处理后续事件。随后恢复处理再观察1秒，callback 总数仍1。`client_sync_requests` 计数不是请求处理的证明：该库 SYNC handler 不调用此回调；结论依靠强制冻结客户端循环与 [1.0.9 客户端处理源码](https://raw.githubusercontent.com/fcitx/xcb-imdkit/1.0.9/src/clientprotocolhandler.c)。
+
+[1.0.9 服务端回复处理](https://raw.githubusercontent.com/fcitx/xcb-imdkit/1.0.9/src/protocolhandler.c) 使用全局 sync 状态，不按请求序号关联回复。此实验只覆盖自有 xcb-imdkit 双端和一个 context，不是真实 Fcitx 服务、GTK 应用、Ubuntu 24 或最终包测试，不证明文字显示或保存，不应将 callback 当作可跨路径交接的应用回执。没有验证多 context 的交错回复、取消、失焦、预编辑或客户端崩溃；不得据此放宽生产保护或重放文字。
+
+最终探针 SHA-256 `8098ed41253184e6391f3fbe5018dbd4fdf93ddf2e09f8cd4b1ec051b0332e3b`；脚本 `48cbba28d3d254e2c02393cbe02636c89c41b2a87ff812f0f5591c4c748df6d1`。官方 deb：xvfb `e46d389ef552dfd557df22a49a1071fef2ab499951633e9857ebb763d7ae7d24`，libxcb-imdkit1 `9bc0ad6f89f82f1a6d60c17e8af60184dbd09ea40bd8ccfc3a00bfb405a4e1d9`，libxcb-imdkit-dev `032ec34794ac1da744f7367277544258ee1d16b2f5fd328ca7cdbc8b7ac947f2`，libxcb1-dev `9be071fbb1cc4cb311d477456dbe4e1e97ae9b46468cff51b015c76700da9887`，libxcb-util-dev `07309029515f8c9b77160361a4001b55752bb81b38c8bb6955e746e7e0d85fe5`，x11proto-dev `a800a05f9e22011add40fe7deef712be53c721d9e23281bfd07ede46e514dd45`。运行时使用宿主系统 XCB 动态库，以上哈希不覆盖宿主运行库。
