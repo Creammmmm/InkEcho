@@ -1,0 +1,2315 @@
+{
+  "raw/artifact-verification.json": {
+    "sha256": "e74ce5f7fa60f1b3f2ed7ccc00b60abf665066369a7285a1ad92dbe66b86eddb",
+    "bytes": 370,
+    "source": "artifact-verification.json"
+  },
+  "raw/inventory-verification.json": {
+    "sha256": "beaa6e3a6b5c24fa8d733b8757da72580b29a0b3f238ed894c09c08f1ba8a920",
+    "bytes": 68,
+    "source": "inventory-verification.json"
+  },
+  "raw/build-run.json": {
+    "sha256": "727d07dda46084b21c5ee77a43ab8931e8b3c1f6fed96dcc8e30adaf951f4355",
+    "bytes": 2976,
+    "source": "build-run.json"
+  },
+  "raw/build.log": {
+    "sha256": "fa304588e779be8b5a8b39850329c90b4129b65a7f3d3dd0d32d86a269a2ad7a",
+    "bytes": 1151,
+    "source": "build.log"
+  },
+  "raw/vm24/xorg-after-verified-cache-cleanup.json": {
+    "sha256": "f0dfe1993f0ed5d60c635871d3a663c3045b26b551402eab88abed238f549828",
+    "bytes": 2250,
+    "source": "vm24/xorg-after-verified-cache-cleanup.json"
+  },
+  "raw/vm24/actual-xorg-keyboard-gates.json": {
+    "sha256": "829e6792c801b2f1295240ead9c8f6c26f36b15061bbd3af87166ebc494c9209",
+    "bytes": 2422,
+    "source": "vm24/actual-xorg-keyboard-gates.json"
+  },
+  "raw/vm24/fcitx-xorg-final-exit.json": {
+    "sha256": "1e3f6691f455051e8adb15d961e4bf3c7a17e83dd88b2afdd13315cc288250bb",
+    "bytes": 22,
+    "source": "vm24/fcitx-xorg-final-exit.json"
+  },
+  "raw/vm24/legacy-protocol-package-ibus.json": {
+    "sha256": "2ca457b8b10a981b8c70deb9a2b32f4fc4ddf7a302ae7e50959018ad663be0f1",
+    "bytes": 708,
+    "source": "vm24/legacy-protocol-package-ibus.json"
+  },
+  "raw/vm24/xorg-keyboard-gates.json": {
+    "sha256": "4c0629c869153443b5bfa22647e105d59dbe21f74378966d3d44063bd6ccdadf",
+    "bytes": 1239,
+    "source": "vm24/xorg-keyboard-gates.json"
+  },
+  "raw/vm24/xorg-lock-health.json": {
+    "sha256": "57c60c432d184cec549f268c45b02d07e0859c808b1aafa1efdd5124036d5695",
+    "bytes": 491,
+    "source": "vm24/xorg-lock-health.json"
+  },
+  "raw/vm24/verified-cache-archive-cleanup.json": {
+    "sha256": "1e0b8cae263c63e5e48d892f72d1efe62a6c7b191effd26c6f97f3235fe234ed",
+    "bytes": 774,
+    "source": "vm24/verified-cache-archive-cleanup.json"
+  },
+  "raw/vm24/cleanup-xorg-mount-and-cache-inventory.json": {
+    "sha256": "688a2b4c3c09001305bf2626779468d340d1bb71564d7f6a7214fdd898ea3d44",
+    "bytes": 1452,
+    "source": "vm24/cleanup-xorg-mount-and-cache-inventory.json"
+  },
+  "raw/vm24/select-actual-gnome-xorg.json": {
+    "sha256": "45809c3af4daad0d2b9b1434c14d8dcae0212b49e1fc9fcb50b936643505168e",
+    "bytes": 134,
+    "source": "vm24/select-actual-gnome-xorg.json"
+  },
+  "raw/vm24/guest-ram-detail.json": {
+    "sha256": "abb5a56d0fdad5b3f8835536377a0463293a8db507d00046c04dd36327992281",
+    "bytes": 940,
+    "source": "vm24/guest-ram-detail.json"
+  },
+  "raw/vm24/restore-session24-r3.json": {
+    "sha256": "cae81083da6198a016a00a44c90b5749a355e0cef4b84791e131f428c76c8c81",
+    "bytes": 547,
+    "source": "vm24/restore-session24-r3.json"
+  },
+  "raw/vm24/container-final-state.json": {
+    "sha256": "5bebe4f148aa29bcc0b919e5923cc272f794b6f95c8e16633ce383cef4b2673b",
+    "bytes": 269,
+    "source": "vm24/container-final-state.json"
+  },
+  "raw/vm24/keyboard-balance-review.json": {
+    "sha256": "5ab184ac5946d926922c9856838e534bf6fbba62f324d9c2e2edd01853e2c99f",
+    "bytes": 269,
+    "source": "vm24/keyboard-balance-review.json"
+  },
+  "raw/vm24/restore-session24.json": {
+    "sha256": "1ff8e055395d2c9d93fdf65543863503bef5923defcc8852f302e58f301d9106",
+    "bytes": 1211,
+    "source": "vm24/restore-session24.json"
+  },
+  "raw/vm24/bounded-r3-preedit.json": {
+    "sha256": "998e47f3e1235085ffc923ad2c0ee36d69f6fc409921a68fd18ddda4e10e781b",
+    "bytes": 173,
+    "source": "vm24/bounded-r3-preedit.json"
+  },
+  "raw/vm24/preedit-hardware-receipts.json": {
+    "sha256": "e69360e44c20d2f72cbe8a63f05865d7e0b31b00bb063e7f263e2317c6571595",
+    "bytes": 368,
+    "source": "vm24/preedit-hardware-receipts.json"
+  },
+  "raw/vm24/restore-final24.json": {
+    "sha256": "352d49f01273057c36805d01920b8e8c96d6a037412066635962a9a4d7fde35a",
+    "bytes": 2190,
+    "source": "vm24/restore-final24.json"
+  },
+  "raw/vm24/enable-bounded-package.json": {
+    "sha256": "9a0030c35e1a8dd7db8e6c06a625f1b7804b9e6dacfab24983a62cfe8041ef48",
+    "bytes": 912,
+    "source": "vm24/enable-bounded-package.json"
+  },
+  "raw/vm24/fcitx-xorg-final.log": {
+    "sha256": "8ce71e4b8ff102e7a1968b5b9fffc2de8980dedf9638bc61119689b5722d76aa",
+    "bytes": 24,
+    "source": "vm24/fcitx-xorg-final.log"
+  },
+  "raw/vm24/preedit-key-guard-1.json": {
+    "sha256": "3e12684b72ccac6f611d5d0186d91f138bde2439141c882c41f1f028b609fb03",
+    "bytes": 291,
+    "source": "vm24/preedit-key-guard-1.json"
+  },
+  "raw/vm24/bounded-direct-package.json": {
+    "sha256": "f8001933eca4a4e8add814aec19639e0e6dbd563473decd209dc2ee1d98b1705",
+    "bytes": 2082,
+    "source": "vm24/bounded-direct-package.json"
+  },
+  "raw/vm24/bounded-handoff-package.json": {
+    "sha256": "9907f285d6ffee3a2e4e6b1e5a10d8c98c614a324d386ad529ca5ea1d7331e64",
+    "bytes": 2266,
+    "source": "vm24/bounded-handoff-package.json"
+  },
+  "raw/vm24/final-restoration-poweroff24.json": {
+    "sha256": "8ee908f414d7749228c38c039b3f0e220cd321a4b947d7d93d8e268167bfe96a",
+    "bytes": 3105,
+    "source": "vm24/final-restoration-poweroff24.json"
+  },
+  "raw/vm24/xorg-keyboard-owned-focus-r3.json": {
+    "sha256": "08f5128baee1e87c54be8305f52d07fa77f0a9f2a014d734da9ae2514153ecf2",
+    "bytes": 748,
+    "source": "vm24/xorg-keyboard-owned-focus-r3.json"
+  },
+  "raw/vm24/fcitx-xorg-final-keys.json": {
+    "sha256": "eb3957ae54a7e712b2b6c350d6bbb27038c89965d1817c43c8fae679d0b8490c",
+    "bytes": 1921,
+    "source": "vm24/fcitx-xorg-final-keys.json"
+  },
+  "raw/vm24/preedit-key-guard-2.json": {
+    "sha256": "3e12684b72ccac6f611d5d0186d91f138bde2439141c882c41f1f028b609fb03",
+    "bytes": 291,
+    "source": "vm24/preedit-key-guard-2.json"
+  },
+  "raw/vm24/actual-session-inventory.json": {
+    "sha256": "02d0166d931408f125fd922fda46ef06c366b83b2324fbd67a5e894ca0be749a",
+    "bytes": 872,
+    "source": "vm24/actual-session-inventory.json"
+  },
+  "raw/vm24/launch.json": {
+    "sha256": "d6b9e0eefe2356818dbae3e36d4323ec268a0f40cd7f6f89039dd2bd170d4122",
+    "bytes": 1883,
+    "source": "vm24/launch.json"
+  },
+  "raw/vm24/cleanup-wrong-session-mount.json": {
+    "sha256": "0c404ced8c75f224d48d335bb8903043079cd3016d272f675ee66027eb844a51",
+    "bytes": 152,
+    "source": "vm24/cleanup-wrong-session-mount.json"
+  },
+  "raw/vm24/boot.json": {
+    "sha256": "8c4a4ad9e5f5abfe47eac16db6518d9c60202a334004a41c66b692bce17d26e9",
+    "bytes": 2212,
+    "source": "vm24/boot.json"
+  },
+  "raw/vm24/prepare-old-service.json": {
+    "sha256": "664a13abe8d85ad2d77a4561d8f38e627240656a8634cfb8ed88b442cd89bf42",
+    "bytes": 2281,
+    "source": "vm24/prepare-old-service.json"
+  },
+  "raw/vm24/package-gates-and-install.json": {
+    "sha256": "33304ddabe23207c24805389c1ba807445466fff30b8c40af33984fba5bed80d",
+    "bytes": 1207,
+    "source": "vm24/package-gates-and-install.json"
+  },
+  "raw/vm24/protocol-and-install-after-gui-rerun.json": {
+    "sha256": "ed68b0aeb2422645db2965a62221ad745e4757f5cb37d7e6c7c2bb5e51f24555",
+    "bytes": 413,
+    "source": "vm24/protocol-and-install-after-gui-rerun.json"
+  },
+  "raw/vm24/gui-independent-rerun.json": {
+    "sha256": "ae0c47bc30f97a4991924294603becd4dff42523e55d4d7908627383b0d6f228",
+    "bytes": 154,
+    "source": "vm24/gui-independent-rerun.json"
+  },
+  "raw/vm24/transition-to-xorg.json": {
+    "sha256": "a85f836342fd97e2240bcf1b2d62c74435ec0dff8883147ca11f4f201948fe66",
+    "bytes": 927,
+    "source": "vm24/transition-to-xorg.json"
+  },
+  "raw/vm24/ssh-readiness.json": {
+    "sha256": "fdcdbb04ff133f35a91aa362a4166f8fb4b1b2a0b4839ed1bafa3a33c0bb839f",
+    "bytes": 1921,
+    "source": "vm24/ssh-readiness.json"
+  },
+  "raw/vm24/xorg-keyboard-owned-focus-rerun.json": {
+    "sha256": "e67fc688fdb3f537e7f2ad2d8a82967b09c3277919723b3f8fa9ef793c9b013a",
+    "bytes": 1116,
+    "source": "vm24/xorg-keyboard-owned-focus-rerun.json"
+  },
+  "raw/vm24/guest-ram-inventory.json": {
+    "sha256": "1665d8777dbc3ff5c79418311e19325662c86f8a5c77effce613d6ec4be8cd34",
+    "bytes": 672,
+    "source": "vm24/guest-ram-inventory.json"
+  },
+  "raw/vm24/xorg-keyboard-local-click-r4.json": {
+    "sha256": "c54d8f2f94e3e4e0d4d2a63abea92b1ccdedd8dd7a54d54c0e20a9d8ce3303ae",
+    "bytes": 853,
+    "source": "vm24/xorg-keyboard-local-click-r4.json"
+  },
+  "raw/vm24/xorg-wm-health.json": {
+    "sha256": "fe6112b122bc4c2ccb82db3f89f91a298dd41ef8eed469d44cc81eadf19f8820",
+    "bytes": 924,
+    "source": "vm24/xorg-wm-health.json"
+  },
+  "raw/vm24/output/xorg-session-proof.json": {
+    "sha256": "6105b78c2e0dd40148383f3ccf3328e579aff77eafa7ae954ccaba54c8f8989a",
+    "bytes": 584,
+    "source": "vm24/output/xorg-session-proof.json"
+  },
+  "raw/vm24/output/qemu-exit.json": {
+    "sha256": "c365161d39236fe0f1d32937fbc549796b8487d8faf65ed3879b96897c78ea5d",
+    "bytes": 17,
+    "source": "vm24/output/qemu-exit.json"
+  },
+  "raw/vm24/output/extension-settings-before.json": {
+    "sha256": "074e2f3231f15b400940a61419de2a48f5719376ae01d0f6871dddd7717ebc9e",
+    "bytes": 287,
+    "source": "vm24/output/extension-settings-before.json"
+  },
+  "raw/vm24/output/old-install-upgrade-guard.json": {
+    "sha256": "8675c82de5bd6819ffd77c7de566dfbd082568b80ea6a0874b4bc4f7303b9021",
+    "bytes": 485,
+    "source": "vm24/output/old-install-upgrade-guard.json"
+  },
+  "raw/vm24/output/cache-cleanup-receipt.json": {
+    "sha256": "d239300d4b3dcc378a27b5c1baf9f38722ec2d7a8364b3f7684f830265a30a76",
+    "bytes": 632,
+    "source": "vm24/output/cache-cleanup-receipt.json"
+  },
+  "raw/vm24/output/key-request.json": {
+    "sha256": "95d74c43ad30d34e85a47cfe27b57b00e6d9bbe936b28466021a9096f4351ee8",
+    "bytes": 92,
+    "source": "vm24/output/key-request.json"
+  },
+  "raw/vm24/output/extension-restored.json": {
+    "sha256": "feb4c884b166bb499ee404e11c025f733fde72a248dd5932e7e0f3b17d21175e",
+    "bytes": 669,
+    "source": "vm24/output/extension-restored.json"
+  },
+  "raw/vm24/output/stage-candidate-extension.json": {
+    "sha256": "87f7afa40bd4c61f36b942b0c33bb7db8700c4b3f047620157c90696c9e58b54",
+    "bytes": 2008,
+    "source": "vm24/output/stage-candidate-extension.json"
+  },
+  "raw/vm24/output/key-ack.json": {
+    "sha256": "7c8a29fccb39d2945d2e388b6649ae4e7459194be38cd103dce69bc66f33dd90",
+    "bytes": 31,
+    "source": "vm24/output/key-ack.json"
+  },
+  "raw/vm24/output/maps-restored.json": {
+    "sha256": "abc8e65bb82d025dc14679662ae783d0ee2062870aa4e15b0749d395494a0cdc",
+    "bytes": 1313,
+    "source": "vm24/output/maps-restored.json"
+  },
+  "raw/vm24/output/ram-overlay-archive.json": {
+    "sha256": "bdf609a7799d54ba0ab76895239e01240b08851e3dae70c7e0d6425af031f94c",
+    "bytes": 291,
+    "source": "vm24/output/ram-overlay-archive.json"
+  },
+  "raw/vm24/output/xorg-r2/fuse-cleanup.json": {
+    "sha256": "32159e2471718e6279768295267d3a1b2fa4e0585db9767790052077d3013eb3",
+    "bytes": 63,
+    "source": "vm24/output/xorg-r2/fuse-cleanup.json"
+  },
+  "raw/vm24/output/xorg-r2/mount.json": {
+    "sha256": "7e9c23f70cb4afc9b4114136b0ae943e5188dd19ff6054b2f7401c756b3eb1fd",
+    "bytes": 205,
+    "source": "vm24/output/xorg-r2/mount.json"
+  },
+  "raw/vm24/output/xorg-r2/package-audit.log": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "source": "vm24/output/xorg-r2/package-audit.log"
+  },
+  "raw/vm24/output/xorg-r2/package-audit.json": {
+    "sha256": "f79c9adcabd39401fc6a82910fd4d14a70eb39b268cdbb82ab00241cbb7320af",
+    "bytes": 18234,
+    "source": "vm24/output/xorg-r2/package-audit.json"
+  },
+  "raw/vm24/output/xorg-r2/package-audit-exit.json": {
+    "sha256": "a9a48e889912d5452f2b829aa8d973d54807ab09d7fc2eda7cdcd54824b5fd61",
+    "bytes": 596,
+    "source": "vm24/output/xorg-r2/package-audit-exit.json"
+  },
+  "raw/vm24/output/xorg-r2/gui-exit.json": {
+    "sha256": "bfed08cff863daaa40de1a57503784605379b6ee5c6112eb3d0563412e54c87a",
+    "bytes": 316,
+    "source": "vm24/output/xorg-r2/gui-exit.json"
+  },
+  "raw/vm24/output/xorg-r2/gui.log": {
+    "sha256": "cdbfebfe43a3b3f3b0f41e8c467022efe623e770131b9a6cf32dc25b1ffc366a",
+    "bytes": 1027,
+    "source": "vm24/output/xorg-r2/gui.log"
+  },
+  "raw/vm24/output/xorg-r2/fuse-mount.log": {
+    "sha256": "463c0aa4d395fa41bf19d7e0514547133d632cc2250c898a60a5f511ec863de2",
+    "bytes": 63,
+    "source": "vm24/output/xorg-r2/fuse-mount.log"
+  },
+  "raw/vm24/output/xorg/fuse-cleanup.json": {
+    "sha256": "a6de38fca07e1c0bcc3cf56b16562f690709a1e6976c55413a483d7daf022a21",
+    "bytes": 62,
+    "source": "vm24/output/xorg/fuse-cleanup.json"
+  },
+  "raw/vm24/output/xorg/mount.json": {
+    "sha256": "8529427085d668156469ec7bf99bee780afa5263d2c74e28a2a6f86965d23994",
+    "bytes": 208,
+    "source": "vm24/output/xorg/mount.json"
+  },
+  "raw/vm24/output/xorg/desktop-lifecycle-exit.json": {
+    "sha256": "60561d3adc57c3a5ccb6ce5fc5efff7330a11f0fd0a6ecbcbba9b461b996c922",
+    "bytes": 222,
+    "source": "vm24/output/xorg/desktop-lifecycle-exit.json"
+  },
+  "raw/vm24/output/xorg/package-audit.log": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "source": "vm24/output/xorg/package-audit.log"
+  },
+  "raw/vm24/output/xorg/package-audit.json": {
+    "sha256": "1a4f3befeebc8bfbe650abe9e6035b90bb74e0163bcf86795386bb5a167bb64f",
+    "bytes": 18234,
+    "source": "vm24/output/xorg/package-audit.json"
+  },
+  "raw/vm24/output/xorg/package-audit-exit.json": {
+    "sha256": "c662d053d9feee8f949d834458b3fcc8abee7e50ac77496e74a7d28bb033a50d",
+    "bytes": 596,
+    "source": "vm24/output/xorg/package-audit-exit.json"
+  },
+  "raw/vm24/output/xorg/desktop-lifecycle.log": {
+    "sha256": "eb7fd45e6f7b5e7efd4b1ff69d3fd34a0627eb6bb08278362b925d0125ed03a0",
+    "bytes": 442,
+    "source": "vm24/output/xorg/desktop-lifecycle.log"
+  },
+  "raw/vm24/output/xorg/fuse-mount.log": {
+    "sha256": "535456845f2ecb25e12a0f906d4f698a37201ef449176c0aa42c7f12a50bce09",
+    "bytes": 63,
+    "source": "vm24/output/xorg/fuse-mount.log"
+  },
+  "raw/vm24/output/browser24-native012-bounded014-handoff-textarea/suite-exit.json": {
+    "sha256": "c365161d39236fe0f1d32937fbc549796b8487d8faf65ed3879b96897c78ea5d",
+    "bytes": 17,
+    "source": "vm24/output/browser24-native012-bounded014-handoff-textarea/suite-exit.json"
+  },
+  "raw/vm24/output/browser24-native012-bounded014-handoff-textarea/mount.json": {
+    "sha256": "8dfc2361d992a2be834d91ab1ddbb3f013bc62b174090afe4ad14cf2def3c844",
+    "bytes": 208,
+    "source": "vm24/output/browser24-native012-bounded014-handoff-textarea/mount.json"
+  },
+  "raw/vm24/output/browser24-native012-bounded014-handoff-textarea/suite.log": {
+    "sha256": "6160629afb14b1f4281096be7e41c001e333dc499789ad213f166614eda5f018",
+    "bytes": 1675,
+    "source": "vm24/output/browser24-native012-bounded014-handoff-textarea/suite.log"
+  },
+  "raw/vm24/output/browser24-native012-bounded014-handoff-textarea/results.json": {
+    "sha256": "1e3cd50f75939994e3486231fc56194733b3c362b5447de320f9a56ba4079b1c",
+    "bytes": 109128,
+    "source": "vm24/output/browser24-native012-bounded014-handoff-textarea/results.json"
+  },
+  "raw/vm24/output/browser24-native012-bounded014-handoff-textarea/protocol-metadata.json": {
+    "sha256": "38c9b0196dd99388c8fb7dec4b85de0b85f21cd26c9a46a573dedf351fba185b",
+    "bytes": 70350,
+    "source": "vm24/output/browser24-native012-bounded014-handoff-textarea/protocol-metadata.json"
+  },
+  "raw/vm24/output/preedit-candidate/key-request.json": {
+    "sha256": "e10adffed997b43da4e8e6cdb27c3cc7e20f6ac8117b67ae2f49694ce50c27cc",
+    "bytes": 258,
+    "source": "vm24/output/preedit-candidate/key-request.json"
+  },
+  "raw/vm24/output/preedit-candidate/results.json": {
+    "sha256": "edbb8d73624494288d92be4d655ba08aaa6ef0331b7d727eff2c40dbcb1add6a",
+    "bytes": 730,
+    "source": "vm24/output/preedit-candidate/results.json"
+  },
+  "raw/vm24/output/preedit-candidate/actor.log": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "source": "vm24/output/preedit-candidate/actor.log"
+  },
+  "raw/vm24/output/preedit-candidate/key-ack.json": {
+    "sha256": "cd9ef1f0cf4f6616f0703bb05b8ac2725839f8e8c2de5f5dad8850bc9862f4d4",
+    "bytes": 27,
+    "source": "vm24/output/preedit-candidate/key-ack.json"
+  },
+  "raw/vm24/output/browser24-native012-legacy014-ibus-textarea/suite-exit.json": {
+    "sha256": "c365161d39236fe0f1d32937fbc549796b8487d8faf65ed3879b96897c78ea5d",
+    "bytes": 17,
+    "source": "vm24/output/browser24-native012-legacy014-ibus-textarea/suite-exit.json"
+  },
+  "raw/vm24/output/browser24-native012-legacy014-ibus-textarea/mount.json": {
+    "sha256": "8dfc2361d992a2be834d91ab1ddbb3f013bc62b174090afe4ad14cf2def3c844",
+    "bytes": 208,
+    "source": "vm24/output/browser24-native012-legacy014-ibus-textarea/mount.json"
+  },
+  "raw/vm24/output/browser24-native012-legacy014-ibus-textarea/suite.log": {
+    "sha256": "94a235a5d067fea96f60596563678883615902ef70b4898c91f6939e6ad539ae",
+    "bytes": 429,
+    "source": "vm24/output/browser24-native012-legacy014-ibus-textarea/suite.log"
+  },
+  "raw/vm24/output/browser24-native012-legacy014-ibus-textarea/results.json": {
+    "sha256": "d60f589959c1af108146530ccfbcc0a9287b1b54e161948e4bc0c427b34e6d59",
+    "bytes": 13045,
+    "source": "vm24/output/browser24-native012-legacy014-ibus-textarea/results.json"
+  },
+  "raw/vm24/output/browser24-native012-legacy014-ibus-textarea/protocol-metadata.json": {
+    "sha256": "eea9c4d87e412201370207c5020807f19c88667b541a8fe6372a7c43e1d5aaf1",
+    "bytes": 5783,
+    "source": "vm24/output/browser24-native012-legacy014-ibus-textarea/protocol-metadata.json"
+  },
+  "raw/vm24/output/preedit-launch/suite-exit.json": {
+    "sha256": "c365161d39236fe0f1d32937fbc549796b8487d8faf65ed3879b96897c78ea5d",
+    "bytes": 17,
+    "source": "vm24/output/preedit-launch/suite-exit.json"
+  },
+  "raw/vm24/output/preedit-launch/mount.json": {
+    "sha256": "8dfc2361d992a2be834d91ab1ddbb3f013bc62b174090afe4ad14cf2def3c844",
+    "bytes": 208,
+    "source": "vm24/output/preedit-launch/mount.json"
+  },
+  "raw/vm24/output/preedit-launch/suite.log": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "source": "vm24/output/preedit-launch/suite.log"
+  },
+  "raw/vm24/output/wayland-gui-r2/desktop-lifecycle-exit.json": {
+    "sha256": "d156f32668613c0e2f0a6cccc4babe3119c22a772832ee5127d4dd443e856aa7",
+    "bytes": 232,
+    "source": "vm24/output/wayland-gui-r2/desktop-lifecycle-exit.json"
+  },
+  "raw/vm24/output/wayland-gui-r2/desktop-lifecycle.log": {
+    "sha256": "5f72236f55ec34fda1209a4665a6840d2f9731203959db4e605e99806c6a0711",
+    "bytes": 819,
+    "source": "vm24/output/wayland-gui-r2/desktop-lifecycle.log"
+  },
+  "raw/vm24/output/wayland/fuse-cleanup.json": {
+    "sha256": "34e06f2f5c55577644b6984ee605a3bcdcb07ce2d6eb926834b7bfa130caa215",
+    "bytes": 62,
+    "source": "vm24/output/wayland/fuse-cleanup.json"
+  },
+  "raw/vm24/output/wayland/provider-tests-exit.json": {
+    "sha256": "dce97ee1c824bdc8028256f03b16feef2d8c5f0335fa53ed8f9d6ec167785383",
+    "bytes": 1072,
+    "source": "vm24/output/wayland/provider-tests-exit.json"
+  },
+  "raw/vm24/output/wayland/provider-tests.json": {
+    "sha256": "2c17865601256cc52c8b3b6808ee332acbcde86b18162d05e5fa9bb847fc91f2",
+    "bytes": 126822,
+    "source": "vm24/output/wayland/provider-tests.json"
+  },
+  "raw/vm24/output/wayland/http-asr.json": {
+    "sha256": "12a35fe5ae21f8f7322d3ae7779d3ef9f582db376c611a5ea5f6fe28d251ce68",
+    "bytes": 523,
+    "source": "vm24/output/wayland/http-asr.json"
+  },
+  "raw/vm24/output/wayland/mount.json": {
+    "sha256": "8dfc2361d992a2be834d91ab1ddbb3f013bc62b174090afe4ad14cf2def3c844",
+    "bytes": 208,
+    "source": "vm24/output/wayland/mount.json"
+  },
+  "raw/vm24/output/wayland/desktop-lifecycle-exit.json": {
+    "sha256": "2474c12c8f51010f7983ec5246756d5c9990c357056e42d3615c3e49d224eab7",
+    "bytes": 225,
+    "source": "vm24/output/wayland/desktop-lifecycle-exit.json"
+  },
+  "raw/vm24/output/wayland/package-audit.log": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "source": "vm24/output/wayland/package-audit.log"
+  },
+  "raw/vm24/output/wayland/package-audit.json": {
+    "sha256": "d77bd714f3c8e2211a4505c1e6d0cc897ab63e95e9e96c0927fa164ba98e5237",
+    "bytes": 18234,
+    "source": "vm24/output/wayland/package-audit.json"
+  },
+  "raw/vm24/output/wayland/package-audit-exit.json": {
+    "sha256": "5dbc2fbb917de579bb4d25c0edeed373a4dcbd5aa84300cca66c08ae05073b03",
+    "bytes": 596,
+    "source": "vm24/output/wayland/package-audit-exit.json"
+  },
+  "raw/vm24/output/wayland/provider-tests.log": {
+    "sha256": "6c8676cf3ec5696e7e95cf197daa80982cd56a102fe9e4de4f0afc2565dbaca5",
+    "bytes": 341,
+    "source": "vm24/output/wayland/provider-tests.log"
+  },
+  "raw/vm24/output/wayland/qwen-vad.json": {
+    "sha256": "b0412b2a8fc839b2d5bdb0a05f3f09b79a572b3d197911161c1aed6c2a7b4f38",
+    "bytes": 1281,
+    "source": "vm24/output/wayland/qwen-vad.json"
+  },
+  "raw/vm24/output/wayland/qwen-vad.log": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "source": "vm24/output/wayland/qwen-vad.log"
+  },
+  "raw/vm24/output/wayland/qwen-vad-exit.json": {
+    "sha256": "db487427d7989cec95285fa6b7d48e93d35c0ef550e5136e26297b84b0bb2ead",
+    "bytes": 351,
+    "source": "vm24/output/wayland/qwen-vad-exit.json"
+  },
+  "raw/vm24/output/wayland/provider-ui.json": {
+    "sha256": "834e3e1df798c9e8fb64ec426d0c6783957c460ce3234e225628bb41c7bf762f",
+    "bytes": 18795,
+    "source": "vm24/output/wayland/provider-ui.json"
+  },
+  "raw/vm24/output/wayland/desktop-lifecycle.log": {
+    "sha256": "eb7fd45e6f7b5e7efd4b1ff69d3fd34a0627eb6bb08278362b925d0125ed03a0",
+    "bytes": 442,
+    "source": "vm24/output/wayland/desktop-lifecycle.log"
+  },
+  "raw/vm24/output/wayland/http-asr-exit.json": {
+    "sha256": "b51603eab2e5a187d8383f321d7d34dfb6c7e8029b96fe8fa409cad86cea9794",
+    "bytes": 194,
+    "source": "vm24/output/wayland/http-asr-exit.json"
+  },
+  "raw/vm24/output/wayland/fuse-mount.log": {
+    "sha256": "c006a179b2db85fa5e1811b7711bb0764886e232bc83c1705241fcf5b4f733b1",
+    "bytes": 63,
+    "source": "vm24/output/wayland/fuse-mount.log"
+  },
+  "raw/vm24/output/wayland/provider-ui-exit.json": {
+    "sha256": "8bc43d304b265075b0b48e3191631884a5ed35d8570b25c06e051ad174011677",
+    "bytes": 745,
+    "source": "vm24/output/wayland/provider-ui-exit.json"
+  },
+  "raw/vm24/output/wayland/http-asr.log": {
+    "sha256": "d7cfb73776b388884a93ee0b91f03e4c6f716bc72bbf99970474b02fd77c3214",
+    "bytes": 452,
+    "source": "vm24/output/wayland/http-asr.log"
+  },
+  "raw/vm24/output/wayland/provider-ui.log": {
+    "sha256": "b6456239cd2438e74001286f533cc28f7ee3bfa3c846a78e442bf70b34ae1260",
+    "bytes": 17146,
+    "source": "vm24/output/wayland/provider-ui.log"
+  },
+  "raw/vm24/output/wayland/gui-race-diagnosis.json": {
+    "sha256": "85c0cc87f635ba83e66e2bd8e0212a1045abe1042e0d9e65d31194f213e03be1",
+    "bytes": 1546,
+    "source": "vm24/output/wayland/gui-race-diagnosis.json"
+  },
+  "raw/vm24/output/browser24-native012-bounded014-direct-textarea/suite-exit.json": {
+    "sha256": "c365161d39236fe0f1d32937fbc549796b8487d8faf65ed3879b96897c78ea5d",
+    "bytes": 17,
+    "source": "vm24/output/browser24-native012-bounded014-direct-textarea/suite-exit.json"
+  },
+  "raw/vm24/output/browser24-native012-bounded014-direct-textarea/mount.json": {
+    "sha256": "8dfc2361d992a2be834d91ab1ddbb3f013bc62b174090afe4ad14cf2def3c844",
+    "bytes": 208,
+    "source": "vm24/output/browser24-native012-bounded014-direct-textarea/mount.json"
+  },
+  "raw/vm24/output/browser24-native012-bounded014-direct-textarea/suite.log": {
+    "sha256": "d79a3eacde043c8002f0ae1e7054ae950d2584e9a0de7ab3faa2b2c77fb562b3",
+    "bytes": 1616,
+    "source": "vm24/output/browser24-native012-bounded014-direct-textarea/suite.log"
+  },
+  "raw/vm24/output/browser24-native012-bounded014-direct-textarea/results.json": {
+    "sha256": "489fc09ab305f5ec0a26ccf153125399007cac083f2f7d790a55d71324ccd463",
+    "bytes": 105001,
+    "source": "vm24/output/browser24-native012-bounded014-direct-textarea/results.json"
+  },
+  "raw/vm24/output/browser24-native012-bounded014-direct-textarea/protocol-metadata.json": {
+    "sha256": "57b24cacf02a0d2a1c1a87fa50d06a5898218c8735faa7192ef63df6a6ac3ff9",
+    "bytes": 78822,
+    "source": "vm24/output/browser24-native012-bounded014-direct-textarea/protocol-metadata.json"
+  },
+  "raw/vm24/output/xorg-r3/fuse-cleanup.json": {
+    "sha256": "7e2293a6a93a27518ed930cc5d0e118ac65ebf2676e0052aed171d0900fca3d2",
+    "bytes": 63,
+    "source": "vm24/output/xorg-r3/fuse-cleanup.json"
+  },
+  "raw/vm24/output/xorg-r3/final-resource-check.json": {
+    "sha256": "7ba2179640406d29404b91d0cf35066390587d402f756496f0eb9c2ab9d10ac2",
+    "bytes": 339,
+    "source": "vm24/output/xorg-r3/final-resource-check.json"
+  },
+  "raw/vm24/output/xorg-r3/mount.json": {
+    "sha256": "f5155295c3d7234e6516902a1b3770f435e09c3755eebfb95147501f35a09cb6",
+    "bytes": 205,
+    "source": "vm24/output/xorg-r3/mount.json"
+  },
+  "raw/vm24/output/xorg-r3/fcitx-package-exit.json": {
+    "sha256": "187b7280ca51bf8aa1674284e16f419779651bb7391bec0d075c9c8bb9d6571b",
+    "bytes": 158,
+    "source": "vm24/output/xorg-r3/fcitx-package-exit.json"
+  },
+  "raw/vm24/output/xorg-r3/package-audit.log": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "source": "vm24/output/xorg-r3/package-audit.log"
+  },
+  "raw/vm24/output/xorg-r3/package-audit.json": {
+    "sha256": "650b4ca526f7751cd66bff56a39be87a5a9ca2db559e4cabe07512a85490a728",
+    "bytes": 18234,
+    "source": "vm24/output/xorg-r3/package-audit.json"
+  },
+  "raw/vm24/output/xorg-r3/package-audit-exit.json": {
+    "sha256": "d1f631b3cebded48a891e481e0018efe0109a62fa24c7bfdadd7b251da89dca9",
+    "bytes": 596,
+    "source": "vm24/output/xorg-r3/package-audit-exit.json"
+  },
+  "raw/vm24/output/xorg-r3/fcitx-package.log": {
+    "sha256": "46e4641c680e228825657c2f83ce4a432e404fd18d92681a5b251446187d3878",
+    "bytes": 5087,
+    "source": "vm24/output/xorg-r3/fcitx-package.log"
+  },
+  "raw/vm24/output/xorg-r3/gui-exit.json": {
+    "sha256": "913e671653a70dfde9e2f9dd7dab46412f25667ccee81d8a2caadf1a06c76789",
+    "bytes": 306,
+    "source": "vm24/output/xorg-r3/gui-exit.json"
+  },
+  "raw/vm24/output/xorg-r3/gui.log": {
+    "sha256": "62500d820a6d3a641a691418cb8573e895ab8258e0efd90ee62906d3166ab1a1",
+    "bytes": 815,
+    "source": "vm24/output/xorg-r3/gui.log"
+  },
+  "raw/vm24/output/xorg-r3/fuse-mount.log": {
+    "sha256": "b50c6866cd827c5dad871f984af4ed2dd239527492662e05e330fe48acc9e9f1",
+    "bytes": 63,
+    "source": "vm24/output/xorg-r3/fuse-mount.log"
+  },
+  "raw/vm24/output/xorg-transition-r2/gdm-before.conf": {
+    "sha256": "191d1b5c6f6690031bdb3ecff295df9bfce35149cd3f4e09acc005c5bf928b22",
+    "bytes": 58,
+    "source": "vm24/output/xorg-transition-r2/gdm-before.conf"
+  },
+  "raw/vm24/output/xorg-transition-r2/accounts-before.ini": {
+    "sha256": "9b93ff5a773d31d5696da895fcd886aa0dc1e1bb130878be695c0569c5ebcc98",
+    "bytes": 104,
+    "source": "vm24/output/xorg-transition-r2/accounts-before.ini"
+  },
+  "raw/vm24/output/xfce-transition/accounts-before.ini": {
+    "sha256": "1e25e9f72b00e76ed91f0bb4a4f19d4ca2d2f3e275dd8800bf9c07f64632f844",
+    "bytes": 118,
+    "source": "vm24/output/xfce-transition/accounts-before.ini"
+  },
+  "raw/vm24/output/fcitx-raw-xorg-r3/actor.json": {
+    "sha256": "7b76f0d3dc066c9b772c215c7a932e1567dc74a7a270d6eb6abcd3bba45c6a81",
+    "bytes": 636,
+    "source": "vm24/output/fcitx-raw-xorg-r3/actor.json"
+  },
+  "raw/vm24/output/fcitx-raw-xorg-r3/hints-before.json": {
+    "sha256": "fbfda932806ff04cfbe550cc55e63617075efba1b518de2dea5982b4eb65ad1a",
+    "bytes": 44,
+    "source": "vm24/output/fcitx-raw-xorg-r3/hints-before.json"
+  },
+  "raw/vm24/output/fcitx-raw-xorg-r3/results.json": {
+    "sha256": "16642ee23dec1ddc16c6b92d50c772b0369cd4904e5642bd671ff906c5874833",
+    "bytes": 7241,
+    "source": "vm24/output/fcitx-raw-xorg-r3/results.json"
+  },
+  "raw/vm24/output/fcitx-raw-xorg-r3/actor.log": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "source": "vm24/output/fcitx-raw-xorg-r3/actor.log"
+  },
+  "raw/vm24/output/xorg-r3/suite-keyboard-r2-normal/target-immodules.json": {
+    "sha256": "7cb5bb84c434b2910042a5afd252e7b8fc694f01367edbb82d81adaa8247216a",
+    "bytes": 62,
+    "source": "vm24/output/xorg-r3/suite-keyboard-r2-normal/target-immodules.json"
+  },
+  "raw/vm24/output/xorg-r3/suite-keyboard-r2-normal/target.json": {
+    "sha256": "33714ad1f4c4174a5281c50822cd40f48a2a1a8ddb9473a459b2396181a91098",
+    "bytes": 153,
+    "source": "vm24/output/xorg-r3/suite-keyboard-r2-normal/target.json"
+  },
+  "raw/vm24/output/xorg-r3/suite-keyboard-r2-normal/initial-target.json": {
+    "sha256": "6eb7d4e7148b82e0ed6c43b59678b23d293c9610a31b0b68a0a3d5d218482b2f",
+    "bytes": 171,
+    "source": "vm24/output/xorg-r3/suite-keyboard-r2-normal/initial-target.json"
+  },
+  "raw/vm24/output/xorg-r3/suite-keyboard-r2-normal/target.log": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "source": "vm24/output/xorg-r3/suite-keyboard-r2-normal/target.log"
+  },
+  "raw/vm24/output/xorg-r3/suite-keyboard-r3-normal/target.json": {
+    "sha256": "7ba1bddf791e64ef90bb60f09690daec9a8ae2f0d716240ebbccbca8dd490578",
+    "bytes": 153,
+    "source": "vm24/output/xorg-r3/suite-keyboard-r3-normal/target.json"
+  },
+  "raw/vm24/output/xorg-r3/suite-keyboard-r3-normal/fixture-owned-activation.json": {
+    "sha256": "325b690c757c05609004c80197b97ca79b77963a08dda5f58a57b284b15edc3d",
+    "bytes": 98,
+    "source": "vm24/output/xorg-r3/suite-keyboard-r3-normal/fixture-owned-activation.json"
+  },
+  "raw/vm24/output/xorg-r3/suite-keyboard-r3-normal/target.log": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "source": "vm24/output/xorg-r3/suite-keyboard-r3-normal/target.log"
+  },
+  "raw/vm24/output/xorg-r3/suite-keyboard-r4-normal/target-immodules.json": {
+    "sha256": "7cb5bb84c434b2910042a5afd252e7b8fc694f01367edbb82d81adaa8247216a",
+    "bytes": 62,
+    "source": "vm24/output/xorg-r3/suite-keyboard-r4-normal/target-immodules.json"
+  },
+  "raw/vm24/output/xorg-r3/suite-keyboard-r4-normal/target.json": {
+    "sha256": "889af546b2eab4bec75f23d73caef5846f346cff7d1a965409be10403a6a8fb8",
+    "bytes": 2490,
+    "source": "vm24/output/xorg-r3/suite-keyboard-r4-normal/target.json"
+  },
+  "raw/vm24/output/xorg-r3/suite-keyboard-r4-normal/receiver.json": {
+    "sha256": "e9b3cba095c43d0d78264acd465a1bcaa61a3359b17bbc5af9bef588221447df",
+    "bytes": 454,
+    "source": "vm24/output/xorg-r3/suite-keyboard-r4-normal/receiver.json"
+  },
+  "raw/vm24/output/xorg-r3/suite-keyboard-r4-normal/report.json": {
+    "sha256": "037d934f42a53a68eee75ecbfcb5fe2e64c882277932629199ce29f543420a1b",
+    "bytes": 15522,
+    "source": "vm24/output/xorg-r3/suite-keyboard-r4-normal/report.json"
+  },
+  "raw/vm24/output/xorg-r3/suite-keyboard-r4-normal/initial-target.json": {
+    "sha256": "f66f3e99e9c6ba4d72c03a58490e4ac7d9408488b4b8c5806735ec93dc8d7d26",
+    "bytes": 169,
+    "source": "vm24/output/xorg-r3/suite-keyboard-r4-normal/initial-target.json"
+  },
+  "raw/vm24/output/xorg-r3/suite-keyboard-r4-normal/pipeline.log": {
+    "sha256": "53b20ab5a0b44b44ec4e64dcd1291629866d9780594e5c8b4030713db78e9080",
+    "bytes": 2093,
+    "source": "vm24/output/xorg-r3/suite-keyboard-r4-normal/pipeline.log"
+  },
+  "raw/vm24/output/xorg-r3/suite-keyboard-r4-normal/fixture-owned-activation.json": {
+    "sha256": "cfdfba9fbb28f02a08311254d2ad4868d6ce8e17cf3bb1481a766caab42e8015",
+    "bytes": 98,
+    "source": "vm24/output/xorg-r3/suite-keyboard-r4-normal/fixture-owned-activation.json"
+  },
+  "raw/vm24/output/xorg-r3/suite-keyboard-r4-normal/target.log": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "source": "vm24/output/xorg-r3/suite-keyboard-r4-normal/target.log"
+  },
+  "raw/vm24/output/xorg-r3/fcitx-pipeline-cancel-after-first/target.json": {
+    "sha256": "89b141d8c6ddae1d59639ef350446970eddd4d165ab9b72f75f08003d5d171ae",
+    "bytes": 157,
+    "source": "vm24/output/xorg-r3/fcitx-pipeline-cancel-after-first/target.json"
+  },
+  "raw/vm24/output/xorg-r3/fcitx-pipeline-cancel-after-first/receiver.json": {
+    "sha256": "9888703887f2ab547fd60e9a6aa69427495c5e87d8aa0bdb5115a2b5269c30aa",
+    "bytes": 205,
+    "source": "vm24/output/xorg-r3/fcitx-pipeline-cancel-after-first/receiver.json"
+  },
+  "raw/vm24/output/xorg-r3/fcitx-pipeline-cancel-after-first/report.json": {
+    "sha256": "041840718b8f60aed410e87b7be1a763ed7f07ad78a5ac76c51a33216fea05e4",
+    "bytes": 16242,
+    "source": "vm24/output/xorg-r3/fcitx-pipeline-cancel-after-first/report.json"
+  },
+  "raw/vm24/output/xorg-r3/fcitx-pipeline-cancel-after-first/pipeline.log": {
+    "sha256": "37804564a8a48e066fed8d2d8ae766666de67cf76f068b478d63743cef00c137",
+    "bytes": 2213,
+    "source": "vm24/output/xorg-r3/fcitx-pipeline-cancel-after-first/pipeline.log"
+  },
+  "raw/vm24/output/xorg-r3/fcitx-pipeline-cancel-after-first/target.log": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "source": "vm24/output/xorg-r3/fcitx-pipeline-cancel-after-first/target.log"
+  },
+  "raw/vm24/output/xorg-r3/ui/result.json": {
+    "sha256": "62500d820a6d3a641a691418cb8573e895ab8258e0efd90ee62906d3166ab1a1",
+    "bytes": 815,
+    "source": "vm24/output/xorg-r3/ui/result.json"
+  },
+  "raw/vm24/output/xorg-r3/ui/terminal.json": {
+    "sha256": "25460440b5b3491a1c11c17916b20b8aaba5b09cc2002c10b10910aa27d8e0ed",
+    "bytes": 60,
+    "source": "vm24/output/xorg-r3/ui/terminal.json"
+  },
+  "raw/vm24/output/xorg-r3/ui/process.log": {
+    "sha256": "0e2035b058cdc9bbd9dcb9c989b9eeda8988f2d677f400d0a235573b5451f314",
+    "bytes": 1097,
+    "source": "vm24/output/xorg-r3/ui/process.log"
+  },
+  "raw/vm24/output/xorg-r3/fcitx-pipeline-normal/target.json": {
+    "sha256": "b4de27945e40f86fc5641685a7031fdb1206299c4a162c451243d8c5113d22f6",
+    "bytes": 190,
+    "source": "vm24/output/xorg-r3/fcitx-pipeline-normal/target.json"
+  },
+  "raw/vm24/output/xorg-r3/fcitx-pipeline-normal/receiver.json": {
+    "sha256": "82629457d21b11a3030ee16006340ab55006e27115260eaaf2745b008ef58f96",
+    "bytes": 375,
+    "source": "vm24/output/xorg-r3/fcitx-pipeline-normal/receiver.json"
+  },
+  "raw/vm24/output/xorg-r3/fcitx-pipeline-normal/report.json": {
+    "sha256": "c7d1d8b4361225685a9a11609e2ead7d51754e010ccc69e94bb2fb59203c9303",
+    "bytes": 15757,
+    "source": "vm24/output/xorg-r3/fcitx-pipeline-normal/report.json"
+  },
+  "raw/vm24/output/xorg-r3/fcitx-pipeline-normal/pipeline.log": {
+    "sha256": "a5fc0db40a96cbdfc3f3edb0cbd89006436ecdc3e32af54aaa58823f624fdc9b",
+    "bytes": 2094,
+    "source": "vm24/output/xorg-r3/fcitx-pipeline-normal/pipeline.log"
+  },
+  "raw/vm24/output/xorg-r3/fcitx-pipeline-normal/target.log": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "source": "vm24/output/xorg-r3/fcitx-pipeline-normal/target.log"
+  },
+  "raw/vm24/output/xorg-r3/suite-keyboard-r4-cancel-after-first/target-immodules.json": {
+    "sha256": "7cb5bb84c434b2910042a5afd252e7b8fc694f01367edbb82d81adaa8247216a",
+    "bytes": 62,
+    "source": "vm24/output/xorg-r3/suite-keyboard-r4-cancel-after-first/target-immodules.json"
+  },
+  "raw/vm24/output/xorg-r3/suite-keyboard-r4-cancel-after-first/target.json": {
+    "sha256": "9c8c8ce3c05b06b7933848f0b1c0aca452384015a667ce9a6181c599ad2bc112",
+    "bytes": 257,
+    "source": "vm24/output/xorg-r3/suite-keyboard-r4-cancel-after-first/target.json"
+  },
+  "raw/vm24/output/xorg-r3/suite-keyboard-r4-cancel-after-first/receiver.json": {
+    "sha256": "f234a7d4ceffe496e193e323dcb4d168e8b6fcf3c9f9ae02a7b0624c6ea9ff62",
+    "bytes": 261,
+    "source": "vm24/output/xorg-r3/suite-keyboard-r4-cancel-after-first/receiver.json"
+  },
+  "raw/vm24/output/xorg-r3/suite-keyboard-r4-cancel-after-first/report.json": {
+    "sha256": "274f8b3927f1a0a75f6b5b1359de43d3b587bdcb7723a1588df9e0bb9864f550",
+    "bytes": 15939,
+    "source": "vm24/output/xorg-r3/suite-keyboard-r4-cancel-after-first/report.json"
+  },
+  "raw/vm24/output/xorg-r3/suite-keyboard-r4-cancel-after-first/initial-target.json": {
+    "sha256": "66adcc1bf93f4557867337d7777d43a0a7deab65a6fab1472a3fee4c7ba67a98",
+    "bytes": 169,
+    "source": "vm24/output/xorg-r3/suite-keyboard-r4-cancel-after-first/initial-target.json"
+  },
+  "raw/vm24/output/xorg-r3/suite-keyboard-r4-cancel-after-first/pipeline.log": {
+    "sha256": "d841dd64690cd65a86cd80305cacd6605349c5d0dbcc72a0e10e20091a8e3df7",
+    "bytes": 2216,
+    "source": "vm24/output/xorg-r3/suite-keyboard-r4-cancel-after-first/pipeline.log"
+  },
+  "raw/vm24/output/xorg-r3/suite-keyboard-r4-cancel-after-first/fixture-owned-activation.json": {
+    "sha256": "6350448c7a226474b40494c6080c8d91d10334456bc00e0a6151968661cdf469",
+    "bytes": 98,
+    "source": "vm24/output/xorg-r3/suite-keyboard-r4-cancel-after-first/fixture-owned-activation.json"
+  },
+  "raw/vm24/output/xorg-r3/suite-keyboard-r4-cancel-after-first/target.log": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "source": "vm24/output/xorg-r3/suite-keyboard-r4-cancel-after-first/target.log"
+  },
+  "raw/vm24/output/xorg-r3/suite-keyboard-normal/target-immodules.json": {
+    "sha256": "7cb5bb84c434b2910042a5afd252e7b8fc694f01367edbb82d81adaa8247216a",
+    "bytes": 62,
+    "source": "vm24/output/xorg-r3/suite-keyboard-normal/target-immodules.json"
+  },
+  "raw/vm24/output/xorg-r3/suite-keyboard-normal/target.json": {
+    "sha256": "f05e51f4e4106a99bf2236d5789c52e4c40137f24aa2014116b1ac243d04c7d2",
+    "bytes": 153,
+    "source": "vm24/output/xorg-r3/suite-keyboard-normal/target.json"
+  },
+  "raw/vm24/output/xorg-r3/suite-keyboard-normal/initial-target.json": {
+    "sha256": "f7d535e92b1aeb1b03a730c9f2a8454077ba014c695d597a4c1c067fd2ad422f",
+    "bytes": 171,
+    "source": "vm24/output/xorg-r3/suite-keyboard-normal/initial-target.json"
+  },
+  "raw/vm24/output/xorg-r3/suite-keyboard-normal/target.log": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "source": "vm24/output/xorg-r3/suite-keyboard-normal/target.log"
+  },
+  "raw/vm24/output/wayland/ui/terminal.json": {
+    "sha256": "dfeb89694e19b604ab471c4c473033fba484792ea843787f6677dd86ac337bb4",
+    "bytes": 59,
+    "source": "vm24/output/wayland/ui/terminal.json"
+  },
+  "raw/vm24/output/wayland/ui/process.log": {
+    "sha256": "2280b377a3324c8f038818d33913e0121bccfb80b5bf3c019d3c177ffb715079",
+    "bytes": 1244,
+    "source": "vm24/output/wayland/ui/process.log"
+  },
+  "raw/vm24/output/wayland-gui-r2/ui/result.json": {
+    "sha256": "5f72236f55ec34fda1209a4665a6840d2f9731203959db4e605e99806c6a0711",
+    "bytes": 819,
+    "source": "vm24/output/wayland-gui-r2/ui/result.json"
+  },
+  "raw/vm24/output/wayland-gui-r2/ui/terminal.json": {
+    "sha256": "e4ef2d2c6239393a3bd977bc69008c4d61af4ebedd45c29d5a53945edef59fe6",
+    "bytes": 59,
+    "source": "vm24/output/wayland-gui-r2/ui/terminal.json"
+  },
+  "raw/vm24/output/wayland-gui-r2/ui/process.log": {
+    "sha256": "2f705aa41e363f54fd00a01750b9973fa2d214f9569aba093def822fa177eac5",
+    "bytes": 1405,
+    "source": "vm24/output/wayland-gui-r2/ui/process.log"
+  },
+  "raw/vm24/output/xorg/ui/terminal.json": {
+    "sha256": "f82641f7faf9d2bc69bbf3d7b5807fad63f0a98e2e4fa5bbde9cfd0c1829fec4",
+    "bytes": 59,
+    "source": "vm24/output/xorg/ui/terminal.json"
+  },
+  "raw/vm24/output/xorg/ui/process.log": {
+    "sha256": "04f55f1034deb18836efaca3bf196194ecce09c3b0992640910d289bab726e8a",
+    "bytes": 1246,
+    "source": "vm24/output/xorg/ui/process.log"
+  },
+  "raw/vm24/output/xorg-r2/ui/terminal.json": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "source": "vm24/output/xorg-r2/ui/terminal.json"
+  },
+  "raw/vm24/output/xorg-r2/ui/process.log": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "source": "vm24/output/xorg-r2/ui/process.log"
+  },
+  "reproduction/vm24/input/browser-package-012.py": {
+    "sha256": "3d44047e33221cc6d424334178dee96025f7fa2cd6d295910761fd2776db6f24",
+    "bytes": 14013,
+    "source": "vm24/input/browser-package-012.py"
+  },
+  "reproduction/vm24/input/screenshot-owned.py": {
+    "sha256": "15019f620ca8264a19014210bbf58d38c329c26bfea7f81753a8cb8562c10d7d",
+    "bytes": 395,
+    "source": "vm24/input/screenshot-owned.py"
+  },
+  "reproduction/vm24/input/http_asr.py": {
+    "sha256": "2cd394b56c70ab0956bd84f536ec4ab83262807c57db215b94db4da2f54a55a2",
+    "bytes": 2987,
+    "source": "vm24/input/http_asr.py"
+  },
+  "reproduction/vm24/input/new-artifact-identity.json": {
+    "sha256": "e74ce5f7fa60f1b3f2ed7ccc00b60abf665066369a7285a1ad92dbe66b86eddb",
+    "bytes": 370,
+    "source": "vm24/input/new-artifact-identity.json"
+  },
+  "reproduction/vm24/input/session-xorg-proof.py": {
+    "sha256": "0226c59c702aff026e139f84f280c88a66530b8d1502dcb65db1bcae849596ff",
+    "bytes": 1456,
+    "source": "vm24/input/session-xorg-proof.py"
+  },
+  "reproduction/vm24/input/protocol_metadata.py": {
+    "sha256": "8fbd4512620160242b3da0e5b7f499eb1ba3a67d923a24c10b996b856a0d5c1a",
+    "bytes": 2591,
+    "source": "vm24/input/protocol_metadata.py"
+  },
+  "reproduction/vm24/input/focus_proof.py": {
+    "sha256": "db8918f915edac55d1717ee6d872be0ac85532b8f3bf3a684edbdc9abae4d390",
+    "bytes": 2814,
+    "source": "vm24/input/focus_proof.py"
+  },
+  "reproduction/vm24/input/target.py": {
+    "sha256": "a0a7ec56aeec7091a1545cc110dcaef47dd9cd0e11e1272671fd316787a76c24",
+    "bytes": 1554,
+    "source": "vm24/input/target.py"
+  },
+  "reproduction/vm24/input/guest.py": {
+    "sha256": "4dfe72ef98bf2fcefc9b27501af0e49b3bec4bc24e3d7524fc4239bc5f20ee50",
+    "bytes": 5145,
+    "source": "vm24/input/guest.py"
+  },
+  "reproduction/vm24/input/pipeline_suite.py": {
+    "sha256": "3932816f990c6a479c0d01d5184b5ffd42dd6697b1495757ad5ade042ba3939e",
+    "bytes": 2424,
+    "source": "vm24/input/pipeline_suite.py"
+  },
+  "reproduction/vm24/input/wrapper.py": {
+    "sha256": "48f3875db6591af0073eb6050eb852267a92bfa43ded538a8e528faf4c77c3c8",
+    "bytes": 1292,
+    "source": "vm24/input/wrapper.py"
+  },
+  "reproduction/vm24/input/fcitx-package-r3.py": {
+    "sha256": "a409807da6f370083a529fab4463d46d3153163626b31b72dc011eafdd68ef33",
+    "bytes": 8943,
+    "source": "vm24/input/fcitx-package-r3.py"
+  },
+  "reproduction/vm24/input/pipeline.py": {
+    "sha256": "8126d6d4b7b77b3e44e5f078e69f4c3f01171d6711594fc4aa69c5084e64855b",
+    "bytes": 27559,
+    "source": "vm24/input/pipeline.py"
+  },
+  "reproduction/vm24/input/target-before-keymonitor.py": {
+    "sha256": "df86e4d473e5d36eae43ed8bb3ecb0eae06e8f27dd2f0a8aadec407716e654e4",
+    "bytes": 1143,
+    "source": "vm24/input/target-before-keymonitor.py"
+  },
+  "reproduction/vm24/input/preedit-actor.py": {
+    "sha256": "2ca8f0896a9eb729a48a8c86c1168630ede8711a1743743591aa0953436ef041",
+    "bytes": 615,
+    "source": "vm24/input/preedit-actor.py"
+  },
+  "reproduction/vm24/input/resource-check.py": {
+    "sha256": "0d23c36b5d3d1992caf79d9f589e6b75593034a5ddddee46f76f84fffaf4d306",
+    "bytes": 2214,
+    "source": "vm24/input/resource-check.py"
+  },
+  "reproduction/vm24/input/select-wayland.sh": {
+    "sha256": "b6382da79a03ba2a743c76256a3e7d45f6f4bb4bc09448e8d67b7a6f928470fc",
+    "bytes": 770,
+    "source": "vm24/input/select-wayland.sh"
+  },
+  "reproduction/vm24/input/tests-manifest.json": {
+    "sha256": "0389984ed0842aa72cc787d850f44517ad85345f167d4674ee274878a3566e43",
+    "bytes": 33169,
+    "source": "vm24/input/tests-manifest.json"
+  },
+  "reproduction/vm24/input/archive-owned-cache.py": {
+    "sha256": "5eb14be76ab9dc0b4ec81edae4b341eb76a28a41af3043f3b604b0f37b349041",
+    "bytes": 2678,
+    "source": "vm24/input/archive-owned-cache.py"
+  },
+  "reproduction/vm24/input/desktop-state.py": {
+    "sha256": "24709537c5b4b705ac3813ca4e4a8e3006ee1439ffd3672988e7645d48667012",
+    "bytes": 731,
+    "source": "vm24/input/desktop-state.py"
+  },
+  "reproduction/vm24/input/launch-native012.py": {
+    "sha256": "a7ac10f76cd6d54bd46c516b4a8417a40853de82fabe511b0c61864fdbd8e65f",
+    "bytes": 1251,
+    "source": "vm24/input/launch-native012.py"
+  },
+  "reproduction/vm24/input/chrome_program.py": {
+    "sha256": "bee04ebaebd6768fff54d19bca2d666901bfe781985be6a1130ce68e61b25e38",
+    "bytes": 1045,
+    "source": "vm24/input/chrome_program.py"
+  },
+  "reproduction/vm24/input/qmp-key.py": {
+    "sha256": "4e041cde0db4e002497c3d6afdf42a6154588da2c4443775f9741009b411b6a1",
+    "bytes": 687,
+    "source": "vm24/input/qmp-key.py"
+  },
+  "reproduction/vm24/input/gui-private.py": {
+    "sha256": "9ff5eea6f03aec27e9b6fe3c4a735206edd599e185a0ec3c99301e056205273a",
+    "bytes": 1183,
+    "source": "vm24/input/gui-private.py"
+  },
+  "reproduction/vm24/input/chrome-software-manifest.json": {
+    "sha256": "208eb4c91aed99ca97bbf68b8d5e7190190ca36d745d10dfdb9130d8de1b4ee4",
+    "bytes": 23860,
+    "source": "vm24/input/chrome-software-manifest.json"
+  },
+  "reproduction/vm24/input/pipeline_receiver_cancel.py": {
+    "sha256": "f9f8d809e9e08e1229fc349dee9a11cbc7ce84cd8b9c853ed557c2e4c562b871",
+    "bytes": 27682,
+    "source": "vm24/input/pipeline_receiver_cancel.py"
+  },
+  "reproduction/vm24/input/restore-extension.py": {
+    "sha256": "9f1f1cd61448bba069eb00ced7e0fdd5becfeb15713c26f773699883fa344c81",
+    "bytes": 898,
+    "source": "vm24/input/restore-extension.py"
+  },
+  "reproduction/vm24/input/gap.py": {
+    "sha256": "4a84da56ee8519ad2d2d9eb35e99adde28b5d76f772234cddb005ac18f5475fc",
+    "bytes": 6027,
+    "source": "vm24/input/gap.py"
+  },
+  "reproduction/vm24/input/select-xorg.sh": {
+    "sha256": "e2d9d4ef4914250f0ee00ea55d812778fac6c41aa81efc918161fd95532076b3",
+    "bytes": 719,
+    "source": "vm24/input/select-xorg.sh"
+  },
+  "reproduction/vm24/input/fcitx-package.py": {
+    "sha256": "b96dbec32236943e9ceb5b14b4d2e1a6b66374ae5b9e250579aa8a61a9846550",
+    "bytes": 9017,
+    "source": "vm24/input/fcitx-package.py"
+  },
+  "reproduction/vm24/input/context.py": {
+    "sha256": "f5acbab2b30eba235dc0d302ea2a16d8362a13cebba1e7824dab1d5f55b640b3",
+    "bytes": 1370,
+    "source": "vm24/input/context.py"
+  },
+  "reproduction/vm24/input/launch-browser-012.py": {
+    "sha256": "84395873117a4c21acfde7c3233db3e55846230cde94925e9aebcddd992d6f91",
+    "bytes": 1138,
+    "source": "vm24/input/launch-browser-012.py"
+  },
+  "reproduction/vm24/input/qemu.json": {
+    "sha256": "fa91db4461c63f3c0f1f01c021cfbc1663272746055d0d68cd5a9f82328f2e79",
+    "bytes": 882,
+    "source": "vm24/input/qemu.json"
+  },
+  "reproduction/vm24/input/owned-settings.py": {
+    "sha256": "76304793c36930915a95d82496c57ac7975b2651b2933faa35d972d18602f00c",
+    "bytes": 1410,
+    "source": "vm24/input/owned-settings.py"
+  },
+  "reproduction/vm24/input/launch-preedit.py": {
+    "sha256": "185e17f01c6841f641f4e3927375c0b7e114e5e7c1a7a79852ac1585f131f6d2",
+    "bytes": 1131,
+    "source": "vm24/input/launch-preedit.py"
+  },
+  "reproduction/vm24/input/fcitx-package-r1.py": {
+    "sha256": "9d7e5c9e3cf996dd703025298cb0bd90707ecc3a3599fa5b5b22fa6e14bc8470",
+    "bytes": 8532,
+    "source": "vm24/input/fcitx-package-r1.py"
+  },
+  "reproduction/vm24/input/fcitx-zero-xorg-r2-direct-hybrid.py": {
+    "sha256": "1f3d480090d019ed86c0e103d4a5b197d562156033e625ec94baae8d6922b942",
+    "bytes": 7732,
+    "source": "vm24/input/fcitx-zero-xorg-r2-direct-hybrid.py"
+  },
+  "reproduction/vm24/input/actor.py": {
+    "sha256": "adb1f6a4256c215abe1b32d2e5344d1ad9891093e7f418ebd610b53a84f611bb",
+    "bytes": 4504,
+    "source": "vm24/input/actor.py"
+  },
+  "reproduction/vm24/input/stage-candidate.py": {
+    "sha256": "9d83bd1db9eef330138c3c6f2f7d60a5a8ea3924dc5871eed74632cb5639e3d8",
+    "bytes": 2043,
+    "source": "vm24/input/stage-candidate.py"
+  },
+  "reproduction/vm24/input/preedit-candidate.py": {
+    "sha256": "96f950cb429a91deb9ff65b4ca51f243de54cfd975f59426278c676185e864f4",
+    "bytes": 3838,
+    "source": "vm24/input/preedit-candidate.py"
+  },
+  "reproduction/vm24/input/session_product_r2.py": {
+    "sha256": "fe9c54ea63e5ba4ce37d5115712160b702a6ae00ea2d5e3480de8656f0887095",
+    "bytes": 3584,
+    "source": "vm24/input/session_product_r2.py"
+  },
+  "reproduction/vm24/input/browser-native012.py": {
+    "sha256": "8196f841c8df615b343db3f81bace908ae248f35c5ea412fcce2be87d32ff680",
+    "bytes": 23390,
+    "source": "vm24/input/browser-native012.py"
+  },
+  "reproduction/vm24/input/mutter-maps.py": {
+    "sha256": "c1b215786ccc8c6a2ece9b358ddb03f2dfa152c9c0b8d40e977a6ea2a37f929f",
+    "bytes": 1558,
+    "source": "vm24/input/mutter-maps.py"
+  },
+  "reproduction/vm24/input/framework-manifest.json": {
+    "sha256": "b01175767169904824c36199b10e07b21c4f417ce0ee39783b744be199084792",
+    "bytes": 50769,
+    "source": "vm24/input/framework-manifest.json"
+  },
+  "reproduction/vm24/input/fcitx-package-r2.py": {
+    "sha256": "2218fec00086d19a5e303b295701535febabf246d1ca35b8d1f5b03ee262a578",
+    "bytes": 8935,
+    "source": "vm24/input/fcitx-package-r2.py"
+  },
+  "reproduction/vm24/input/focus-cli.py": {
+    "sha256": "c0b762dd2eb4f51d23b616205824be04448c32e50a8f38f00a514e9ace9df1a1",
+    "bytes": 175,
+    "source": "vm24/input/focus-cli.py"
+  },
+  "reproduction/vm24/input/select-xfce.sh": {
+    "sha256": "d165211b23d310c1989331f7758fac876a922fdcee051f8eef84a91ab2e91143",
+    "bytes": 506,
+    "source": "vm24/input/select-xfce.sh"
+  },
+  "reproduction/vm24/input/fcitx-zero.py": {
+    "sha256": "3f7907f31d46d41367dc49a7f509f785514ba43d07b49cbfaaea74c679c254c4",
+    "bytes": 7796,
+    "source": "vm24/input/fcitx-zero.py"
+  },
+  "reproduction/vm24/input/fcitx-zero-wayland-r1.py": {
+    "sha256": "93458720ae7cd226a5751edace1cc911628fc985b807090ae3aabc35e8732adc",
+    "bytes": 7722,
+    "source": "vm24/input/fcitx-zero-wayland-r1.py"
+  },
+  "reproduction/vm24/input/sandbox-proc.py": {
+    "sha256": "f251b41b80de46b409112c8f43239f33af36c54fea737ce5815eeab7126ab53b",
+    "bytes": 872,
+    "source": "vm24/input/sandbox-proc.py"
+  },
+  "reproduction/vm24/run-preedit.py": {
+    "sha256": "4642cc88662a9b920e51e59682bde9952bef160b854d3e5c1447d4c6594f4933",
+    "bytes": 1686,
+    "source": "vm24/run-preedit.py"
+  },
+  "reproduction/vm24/ssh.py": {
+    "sha256": "05f0fe7565fddfaaab79a5b4d826700b919449367ca0a3d3402332f1d3ae4f14",
+    "bytes": 183,
+    "source": "vm24/ssh.py"
+  },
+  "raw/vm26/bounded-contenteditable26.json": {
+    "sha256": "2535f744bd1070c89675a04d9a7fd6908e0012c8ffb8abd2f59ee46d1818ed21",
+    "bytes": 1412,
+    "source": "vm26/bounded-contenteditable26.json"
+  },
+  "raw/vm26/prepare-package26.json": {
+    "sha256": "840d44045a446a378b0ee5c680e8b48d852708107916f41d9446c0bd8bf6d02b",
+    "bytes": 1509,
+    "source": "vm26/prepare-package26.json"
+  },
+  "raw/vm26/bounded-direct-package26-r2.json": {
+    "sha256": "3dbece07d6b5bf831d2e044cc568c093f686009137908e0201d8392a182fe837",
+    "bytes": 2581,
+    "source": "vm26/bounded-direct-package26-r2.json"
+  },
+  "raw/vm26/actual-stage-bounded26.json": {
+    "sha256": "069e4fbb5a7edce1d7d2d1e084b197afc87a633c0945ebd83f112d1987d2f2f0",
+    "bytes": 1360,
+    "source": "vm26/actual-stage-bounded26.json"
+  },
+  "raw/vm26/preedit-xorg-prerequisites26.json": {
+    "sha256": "154652f2e52ff78e68c73194c2ec1d5bf430f6282f29be08581e27cfd5ee1da9",
+    "bytes": 424,
+    "source": "vm26/preedit-xorg-prerequisites26.json"
+  },
+  "raw/vm26/fcitx-xorg-final-exit.json": {
+    "sha256": "1e3f6691f455051e8adb15d961e4bf3c7a17e83dd88b2afdd13315cc288250bb",
+    "bytes": 22,
+    "source": "vm26/fcitx-xorg-final-exit.json"
+  },
+  "raw/vm26/session-resource-inventory26.json": {
+    "sha256": "aaf2c9125590bdb378c9920d594b00179f1cbc354552e10548c9cd504d0057d1",
+    "bytes": 954,
+    "source": "vm26/session-resource-inventory26.json"
+  },
+  "raw/vm26/bounded-handoff-package26.json": {
+    "sha256": "af7acb053d66074ebea13f56b4932692082d38e526d3750a4d82e02de55a7939",
+    "bytes": 2264,
+    "source": "vm26/bounded-handoff-package26.json"
+  },
+  "raw/vm26/enable-new-bounded26.json": {
+    "sha256": "9be1fe477eb88babc66d61a1170e7b6862bb6e67fbfe2d42b5996362c252600d",
+    "bytes": 1216,
+    "source": "vm26/enable-new-bounded26.json"
+  },
+  "raw/vm26/actual-xorg-prepare26.json": {
+    "sha256": "7f25d4b770f7de03cb8b2e0f66267c8702ac6ed73a19066d6b1411c3c48a6d20",
+    "bytes": 1895,
+    "source": "vm26/actual-xorg-prepare26.json"
+  },
+  "raw/vm26/container-final-state.json": {
+    "sha256": "165fba5744b717c731c93993997fadb9aa237291246d1913a424981fbccbbbd5",
+    "bytes": 269,
+    "source": "vm26/container-final-state.json"
+  },
+  "raw/vm26/bounded-r3-preedit.json": {
+    "sha256": "998e47f3e1235085ffc923ad2c0ee36d69f6fc409921a68fd18ddda4e10e781b",
+    "bytes": 173,
+    "source": "vm26/bounded-r3-preedit.json"
+  },
+  "raw/vm26/preedit-hardware-receipts.json": {
+    "sha256": "bf5015a5b4c26caf391333bedbad8a7c408c91b6d206ac37e25fe302e56be1dc",
+    "bytes": 368,
+    "source": "vm26/preedit-hardware-receipts.json"
+  },
+  "raw/vm26/native-keyboard-gates26.json": {
+    "sha256": "f5d6a3478d26936918b5807afe03b4159f9e5415b05cb12b119fd76907023bb4",
+    "bytes": 1856,
+    "source": "vm26/native-keyboard-gates26.json"
+  },
+  "raw/vm26/fcitx-xorg-final.log": {
+    "sha256": "8ce71e4b8ff102e7a1968b5b9fffc2de8980dedf9638bc61119689b5722d76aa",
+    "bytes": 24,
+    "source": "vm26/fcitx-xorg-final.log"
+  },
+  "raw/vm26/preedit-key-guard-1.json": {
+    "sha256": "60689343c75520615457bbfcdf1ed4119f7b1ea18fbcac6b39d15d6102ac865f",
+    "bytes": 291,
+    "source": "vm26/preedit-key-guard-1.json"
+  },
+  "raw/vm26/xorg-cleanup-restore-wayland26.json": {
+    "sha256": "858e3bf4f18c1456c9d8db9c094bc99b84cb9b6778b4b3440e0339f024da21fe",
+    "bytes": 1257,
+    "source": "vm26/xorg-cleanup-restore-wayland26.json"
+  },
+  "raw/vm26/native-cleanup-transition26.json": {
+    "sha256": "a6e2655537f695957fe6ab78a7a34bedf9950fc0fd4e79ed7a5afdc44b8bef3f",
+    "bytes": 1242,
+    "source": "vm26/native-cleanup-transition26.json"
+  },
+  "raw/vm26/final-state-poweroff26.json": {
+    "sha256": "b5f8e2c34dc5d83bccca849a2e65be41a99d437cf9bede1e44bdd189aeb54ee9",
+    "bytes": 1084,
+    "source": "vm26/final-state-poweroff26.json"
+  },
+  "raw/vm26/bounded-direct-package26.json": {
+    "sha256": "485abe9ded5cf6fa421178f72d96f7d7050a7b3eb65eb3f32b8c8f7df9faa319",
+    "bytes": 1316,
+    "source": "vm26/bounded-direct-package26.json"
+  },
+  "raw/vm26/xorg-ui-keyboard26.json": {
+    "sha256": "5bd2956bb15f4ee0722da8d27ba45742a2615c552d75998de6a3c5eae9729934",
+    "bytes": 1763,
+    "source": "vm26/xorg-ui-keyboard26.json"
+  },
+  "raw/vm26/protocol-ui-enable26.json": {
+    "sha256": "5d61c0a6d2aa958662296096892e21b0145f5bb8b289d1f937793cfd6055377f",
+    "bytes": 2874,
+    "source": "vm26/protocol-ui-enable26.json"
+  },
+  "raw/vm26/final-normal-reload26.json": {
+    "sha256": "0c7d9817d5be5e903f2f5b73ada3086cbff36d376970faa0ccd30b1a772d2bbc",
+    "bytes": 129,
+    "source": "vm26/final-normal-reload26.json"
+  },
+  "raw/vm26/fcitx-xorg-final-keys.json": {
+    "sha256": "824cdb63d420b08c4be36a9b122a35b716fef4f53f432d670bb1311045748da3",
+    "bytes": 1921,
+    "source": "vm26/fcitx-xorg-final-keys.json"
+  },
+  "raw/vm26/preedit-key-guard-2.json": {
+    "sha256": "60689343c75520615457bbfcdf1ed4119f7b1ea18fbcac6b39d15d6102ac865f",
+    "bytes": 291,
+    "source": "vm26/preedit-key-guard-2.json"
+  },
+  "raw/vm26/mount-input-package26.json": {
+    "sha256": "51f47081708666dd1a54ab048f531cc862c5cf71002f98bcf37a2d4d88bac2b2",
+    "bytes": 2161,
+    "source": "vm26/mount-input-package26.json"
+  },
+  "raw/vm26/restore-final26.json": {
+    "sha256": "14f6c6186d188d23ecd969bcba40c6c66ce86ffb4c10d8e4e09fcbbd1578a15d",
+    "bytes": 3473,
+    "source": "vm26/restore-final26.json"
+  },
+  "raw/vm26/known-zero-keyboard-fallback26.json": {
+    "sha256": "2c10db7d16e753f59aa0dd446e24166b7bbe871a4e12bc325738960f485d9ee5",
+    "bytes": 693,
+    "source": "vm26/known-zero-keyboard-fallback26.json"
+  },
+  "raw/vm26/launch.json": {
+    "sha256": "495422a30967406f785af2e65d52e99be6f988f6ffbef943064984a7f9660171",
+    "bytes": 1587,
+    "source": "vm26/launch.json"
+  },
+  "raw/vm26/boot.json": {
+    "sha256": "71c0d496685f0a87f33cfa37c6091d18ab9d05a67174cd49aa0e4c59a7769eca",
+    "bytes": 1904,
+    "source": "vm26/boot.json"
+  },
+  "raw/vm26/bounded-direct-package26-r3.json": {
+    "sha256": "ec24b4e3d71c8249358b5ee2b84a5e1f54b0f54001f89140338d976f4d574cfd",
+    "bytes": 2099,
+    "source": "vm26/bounded-direct-package26-r3.json"
+  },
+  "raw/vm26/native-cleanup-transition26-r2.json": {
+    "sha256": "0398088f14ce21c9de15b969111c6bb745acbc24b6bf02a1de2e3e78d82ef469",
+    "bytes": 864,
+    "source": "vm26/native-cleanup-transition26-r2.json"
+  },
+  "raw/vm26/output/qemu-exit.json": {
+    "sha256": "c365161d39236fe0f1d32937fbc549796b8487d8faf65ed3879b96897c78ea5d",
+    "bytes": 17,
+    "source": "vm26/output/qemu-exit.json"
+  },
+  "raw/vm26/output/extension-settings-before.json": {
+    "sha256": "9d5a0528196895d8c91787a1fdb2ff9b847f46a38a45156ea8a52ac8d97bb032",
+    "bytes": 564,
+    "source": "vm26/output/extension-settings-before.json"
+  },
+  "raw/vm26/output/old-install-upgrade-guard.json": {
+    "sha256": "8675c82de5bd6819ffd77c7de566dfbd082568b80ea6a0874b4bc4f7303b9021",
+    "bytes": 485,
+    "source": "vm26/output/old-install-upgrade-guard.json"
+  },
+  "raw/vm26/output/final-restored-state.json": {
+    "sha256": "38e45119c903ba65bfd071fc1f5f055bdd5452ef11beaae4a6f1d614f332f2e5",
+    "bytes": 945,
+    "source": "vm26/output/final-restored-state.json"
+  },
+  "raw/vm26/output/key-request.json": {
+    "sha256": "0eec89fdffd55dbbca3608e9dc4ebec4a758195b19ed095a665c109eed429e50",
+    "bytes": 92,
+    "source": "vm26/output/key-request.json"
+  },
+  "raw/vm26/output/extension-restored.json": {
+    "sha256": "f9b9560de48faeafd09cdd289a9f8e0592425a0d886a95f55d73e5df985ba6db",
+    "bytes": 669,
+    "source": "vm26/output/extension-restored.json"
+  },
+  "raw/vm26/output/stage-candidate-extension.json": {
+    "sha256": "4259eb41dc14ca6a2a71eaf8b52a53f9226aeaa4558d496bef0240085bd3aa47",
+    "bytes": 2008,
+    "source": "vm26/output/stage-candidate-extension.json"
+  },
+  "raw/vm26/output/key-ack.json": {
+    "sha256": "7c8a29fccb39d2945d2e388b6649ae4e7459194be38cd103dce69bc66f33dd90",
+    "bytes": 31,
+    "source": "vm26/output/key-ack.json"
+  },
+  "raw/vm26/output/ram-overlay-archive.json": {
+    "sha256": "51701467be5dd3ccff60ec7a16a3752183abe8986e0b76cd9c96681b17b184d2",
+    "bytes": 290,
+    "source": "vm26/output/ram-overlay-archive.json"
+  },
+  "raw/vm26/output/xorg/fuse-cleanup.json": {
+    "sha256": "e13a562faade66422b10990d4499b4637770f2dbd898ff2f66bd7cc6d421ceca",
+    "bytes": 63,
+    "source": "vm26/output/xorg/fuse-cleanup.json"
+  },
+  "raw/vm26/output/xorg/final-resource-check.json": {
+    "sha256": "7ba2179640406d29404b91d0cf35066390587d402f756496f0eb9c2ab9d10ac2",
+    "bytes": 339,
+    "source": "vm26/output/xorg/final-resource-check.json"
+  },
+  "raw/vm26/output/xorg/mount.json": {
+    "sha256": "2dabbcc193ee12218caa2a4af605d3888c0e206af48f3d471f265c01d6774509",
+    "bytes": 205,
+    "source": "vm26/output/xorg/mount.json"
+  },
+  "raw/vm26/output/xorg/fcitx-package-exit.json": {
+    "sha256": "c03a482eb58fe52ba542085b6b1313d95dcf673c118646fcf76e97c1d3b137a3",
+    "bytes": 158,
+    "source": "vm26/output/xorg/fcitx-package-exit.json"
+  },
+  "raw/vm26/output/xorg/package-audit.log": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "source": "vm26/output/xorg/package-audit.log"
+  },
+  "raw/vm26/output/xorg/package-audit.json": {
+    "sha256": "080d868b2696fae0320da5c6a797ce8903d0f309572f8591e2b58125704cf560",
+    "bytes": 18234,
+    "source": "vm26/output/xorg/package-audit.json"
+  },
+  "raw/vm26/output/xorg/package-audit-exit.json": {
+    "sha256": "2fd6acf3b5b2b7dec5f71f627c3147a989a4c0af6e6898357d68c35c73d7d435",
+    "bytes": 596,
+    "source": "vm26/output/xorg/package-audit-exit.json"
+  },
+  "raw/vm26/output/xorg/fcitx-package.log": {
+    "sha256": "ec9b794906644c939ff3dfefd62ac68bedcd19bd1614242513884d7c14549465",
+    "bytes": 4110,
+    "source": "vm26/output/xorg/fcitx-package.log"
+  },
+  "raw/vm26/output/xorg/gui-exit.json": {
+    "sha256": "7ea8aafde6e00d4aa7c567986a7ec27c20be4ac1e61b90ca38fa3109ea3f65fa",
+    "bytes": 306,
+    "source": "vm26/output/xorg/gui-exit.json"
+  },
+  "raw/vm26/output/xorg/gui.log": {
+    "sha256": "3085e6063ed67ae783d20cdc4297c3d482db16ddbf5d24ecf3ea6b30c7e52085",
+    "bytes": 815,
+    "source": "vm26/output/xorg/gui.log"
+  },
+  "raw/vm26/output/xorg/fuse-mount.log": {
+    "sha256": "df6fb4985c8ce88038b21ccb3b11a923fb83e4b4aff7cdc7a562fa80499e7258",
+    "bytes": 63,
+    "source": "vm26/output/xorg/fuse-mount.log"
+  },
+  "raw/vm26/output/browser26-native012-bounded014-contenteditable-contenteditable/suite-exit.json": {
+    "sha256": "c365161d39236fe0f1d32937fbc549796b8487d8faf65ed3879b96897c78ea5d",
+    "bytes": 17,
+    "source": "vm26/output/browser26-native012-bounded014-contenteditable-contenteditable/suite-exit.json"
+  },
+  "raw/vm26/output/browser26-native012-bounded014-contenteditable-contenteditable/mount.json": {
+    "sha256": "0f738e6d6064502d2179d946cf645faadb75ed91b803222b146a291900370977",
+    "bytes": 208,
+    "source": "vm26/output/browser26-native012-bounded014-contenteditable-contenteditable/mount.json"
+  },
+  "raw/vm26/output/browser26-native012-bounded014-contenteditable-contenteditable/suite.log": {
+    "sha256": "009cd2348e3626259c1793c64995e16803edf616fc8a97d3e24ac12aa12fc3ed",
+    "bytes": 1045,
+    "source": "vm26/output/browser26-native012-bounded014-contenteditable-contenteditable/suite.log"
+  },
+  "raw/vm26/output/browser26-native012-bounded014-contenteditable-contenteditable/results.json": {
+    "sha256": "02bc21c0c942df23669aa7f9b72d871c1a2ddc6624f8eb0847c59dbe1c5dfd12",
+    "bytes": 72151,
+    "source": "vm26/output/browser26-native012-bounded014-contenteditable-contenteditable/results.json"
+  },
+  "raw/vm26/output/browser26-native012-bounded014-contenteditable-contenteditable/protocol-metadata.json": {
+    "sha256": "673e2c43639a661cb27d549d036bc512330ecfe140c19eb87529cbacbeba5719",
+    "bytes": 55052,
+    "source": "vm26/output/browser26-native012-bounded014-contenteditable-contenteditable/protocol-metadata.json"
+  },
+  "raw/vm26/output/preedit-candidate/key-request.json": {
+    "sha256": "b5144ce3d3758d294eefb25e222c1c7c6e37b8c5c2d39495733acaf02269fcf0",
+    "bytes": 258,
+    "source": "vm26/output/preedit-candidate/key-request.json"
+  },
+  "raw/vm26/output/preedit-candidate/results.json": {
+    "sha256": "1cc3c932d1c5dc70cb4169db0f184b3d4a9d3deaf9be9b59d9e1759e59d71293",
+    "bytes": 729,
+    "source": "vm26/output/preedit-candidate/results.json"
+  },
+  "raw/vm26/output/preedit-candidate/actor.log": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "source": "vm26/output/preedit-candidate/actor.log"
+  },
+  "raw/vm26/output/preedit-candidate/key-ack.json": {
+    "sha256": "cd9ef1f0cf4f6616f0703bb05b8ac2725839f8e8c2de5f5dad8850bc9862f4d4",
+    "bytes": 27,
+    "source": "vm26/output/preedit-candidate/key-ack.json"
+  },
+  "raw/vm26/output/browser26-native012-keyboard-fallback014-textarea/suite-exit.json": {
+    "sha256": "c365161d39236fe0f1d32937fbc549796b8487d8faf65ed3879b96897c78ea5d",
+    "bytes": 17,
+    "source": "vm26/output/browser26-native012-keyboard-fallback014-textarea/suite-exit.json"
+  },
+  "raw/vm26/output/browser26-native012-keyboard-fallback014-textarea/mount.json": {
+    "sha256": "e9261aac49511888e67e46a2596a44f504832c1012ed260871c59d1a991c5b6c",
+    "bytes": 209,
+    "source": "vm26/output/browser26-native012-keyboard-fallback014-textarea/mount.json"
+  },
+  "raw/vm26/output/browser26-native012-keyboard-fallback014-textarea/suite.log": {
+    "sha256": "0adffe3dc09ef899367fd1cb8ec24f229bed98d36242968364023ade5b5be110",
+    "bytes": 355,
+    "source": "vm26/output/browser26-native012-keyboard-fallback014-textarea/suite.log"
+  },
+  "raw/vm26/output/browser26-native012-keyboard-fallback014-textarea/results.json": {
+    "sha256": "ddc055ec04ed60496b5c84fc056b1565f337ca020ac142563d12f88c4dac1ff8",
+    "bytes": 48503,
+    "source": "vm26/output/browser26-native012-keyboard-fallback014-textarea/results.json"
+  },
+  "raw/vm26/output/browser26-native012-keyboard-fallback014-textarea/protocol-metadata.json": {
+    "sha256": "40a3444b3c31b948a4e19bea1902821b8d79b7363fba98912a061b9db7109e6b",
+    "bytes": 23860,
+    "source": "vm26/output/browser26-native012-keyboard-fallback014-textarea/protocol-metadata.json"
+  },
+  "raw/vm26/output/preedit-launch/suite-exit.json": {
+    "sha256": "c365161d39236fe0f1d32937fbc549796b8487d8faf65ed3879b96897c78ea5d",
+    "bytes": 17,
+    "source": "vm26/output/preedit-launch/suite-exit.json"
+  },
+  "raw/vm26/output/preedit-launch/mount.json": {
+    "sha256": "0f738e6d6064502d2179d946cf645faadb75ed91b803222b146a291900370977",
+    "bytes": 208,
+    "source": "vm26/output/preedit-launch/mount.json"
+  },
+  "raw/vm26/output/preedit-launch/suite.log": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "source": "vm26/output/preedit-launch/suite.log"
+  },
+  "raw/vm26/output/browser26-native012-bounded014-direct-r2-textarea/suite-exit.json": {
+    "sha256": "64a1526b099d75eed9d9da41a5562dcc164b6ffddeb729dd371c4496bbcded05",
+    "bytes": 17,
+    "source": "vm26/output/browser26-native012-bounded014-direct-r2-textarea/suite-exit.json"
+  },
+  "raw/vm26/output/browser26-native012-bounded014-direct-r2-textarea/mount.json": {
+    "sha256": "0f738e6d6064502d2179d946cf645faadb75ed91b803222b146a291900370977",
+    "bytes": 208,
+    "source": "vm26/output/browser26-native012-bounded014-direct-r2-textarea/mount.json"
+  },
+  "raw/vm26/output/browser26-native012-bounded014-direct-r2-textarea/suite.log": {
+    "sha256": "19928a91665c66a7adbd136394dba89d655e50eaece2fb9523e4b6600e17c608",
+    "bytes": 1405,
+    "source": "vm26/output/browser26-native012-bounded014-direct-r2-textarea/suite.log"
+  },
+  "raw/vm26/output/browser26-native012-bounded014-direct-r2-textarea/results.json": {
+    "sha256": "38860df11760797f53eafd03b883bf2e13f488db666b1df6feef47680b71bc3d",
+    "bytes": 11694,
+    "source": "vm26/output/browser26-native012-bounded014-direct-r2-textarea/results.json"
+  },
+  "raw/vm26/output/browser26-native012-bounded014-direct-r2-textarea/protocol-metadata.json": {
+    "sha256": "99fccfb901a4bfd3fd9068b53ec377aea5f6bfdb136200e2a0c947f11d5c0fbb",
+    "bytes": 5232,
+    "source": "vm26/output/browser26-native012-bounded014-direct-r2-textarea/protocol-metadata.json"
+  },
+  "raw/vm26/output/wayland-fallback/fuse-cleanup.json": {
+    "sha256": "005e0a12f5860f04c326a7e628a2231133e7cda3700e7e0aecd7cb1509310eac",
+    "bytes": 63,
+    "source": "vm26/output/wayland-fallback/fuse-cleanup.json"
+  },
+  "raw/vm26/output/wayland-fallback/final-resource-check.json": {
+    "sha256": "7ba2179640406d29404b91d0cf35066390587d402f756496f0eb9c2ab9d10ac2",
+    "bytes": 339,
+    "source": "vm26/output/wayland-fallback/final-resource-check.json"
+  },
+  "raw/vm26/output/wayland-fallback/mount.json": {
+    "sha256": "e9261aac49511888e67e46a2596a44f504832c1012ed260871c59d1a991c5b6c",
+    "bytes": 209,
+    "source": "vm26/output/wayland-fallback/mount.json"
+  },
+  "raw/vm26/output/wayland-fallback/package-audit.log": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "source": "vm26/output/wayland-fallback/package-audit.log"
+  },
+  "raw/vm26/output/wayland-fallback/package-audit.json": {
+    "sha256": "82d7b95e2e2c65168a257b5b31ffb159e4356e953e89135efd94167e743272b9",
+    "bytes": 18234,
+    "source": "vm26/output/wayland-fallback/package-audit.json"
+  },
+  "raw/vm26/output/wayland-fallback/package-audit-exit.json": {
+    "sha256": "2ee353d053c1db6c995d56d1e85c913719746d211f0ece116bae7012ab7c689f",
+    "bytes": 596,
+    "source": "vm26/output/wayland-fallback/package-audit-exit.json"
+  },
+  "raw/vm26/output/wayland-fallback/fuse-mount.log": {
+    "sha256": "dc5031991f5763fa551045b3aa65b1ec41fc0269d60252e902a7dc214dc51da5",
+    "bytes": 63,
+    "source": "vm26/output/wayland-fallback/fuse-mount.log"
+  },
+  "raw/vm26/output/browser26-native012-bounded014-handoff-textarea/suite-exit.json": {
+    "sha256": "c365161d39236fe0f1d32937fbc549796b8487d8faf65ed3879b96897c78ea5d",
+    "bytes": 17,
+    "source": "vm26/output/browser26-native012-bounded014-handoff-textarea/suite-exit.json"
+  },
+  "raw/vm26/output/browser26-native012-bounded014-handoff-textarea/mount.json": {
+    "sha256": "0f738e6d6064502d2179d946cf645faadb75ed91b803222b146a291900370977",
+    "bytes": 208,
+    "source": "vm26/output/browser26-native012-bounded014-handoff-textarea/mount.json"
+  },
+  "raw/vm26/output/browser26-native012-bounded014-handoff-textarea/suite.log": {
+    "sha256": "b1069253466a47d6c2afa22d8b756fd14e9e6d77f3bfca3ec5f4454f18fe0220",
+    "bytes": 1673,
+    "source": "vm26/output/browser26-native012-bounded014-handoff-textarea/suite.log"
+  },
+  "raw/vm26/output/browser26-native012-bounded014-handoff-textarea/results.json": {
+    "sha256": "cdc1857afcf67d383feae3de52c16659c638e61e92c4b5ed2c2f594889d0346b",
+    "bytes": 109712,
+    "source": "vm26/output/browser26-native012-bounded014-handoff-textarea/results.json"
+  },
+  "raw/vm26/output/browser26-native012-bounded014-handoff-textarea/protocol-metadata.json": {
+    "sha256": "269ac468e4f9021f641b9c3bac6d24873d5d107672b29c29d362504506955982",
+    "bytes": 77202,
+    "source": "vm26/output/browser26-native012-bounded014-handoff-textarea/protocol-metadata.json"
+  },
+  "raw/vm26/output/fcitx-raw-xorg/actor.json": {
+    "sha256": "842c4d05ac53fc2dcab29f4ee20cb16c5cba95e5984e8a369a6fd3a3ba48b6b1",
+    "bytes": 423,
+    "source": "vm26/output/fcitx-raw-xorg/actor.json"
+  },
+  "raw/vm26/output/fcitx-raw-xorg/hints-before.json": {
+    "sha256": "fbfda932806ff04cfbe550cc55e63617075efba1b518de2dea5982b4eb65ad1a",
+    "bytes": 44,
+    "source": "vm26/output/fcitx-raw-xorg/hints-before.json"
+  },
+  "raw/vm26/output/fcitx-raw-xorg/results.json": {
+    "sha256": "acb4b3796d63f2e8b744de91439cc75b36617984ebbb8454c52d5a53490db74e",
+    "bytes": 6264,
+    "source": "vm26/output/fcitx-raw-xorg/results.json"
+  },
+  "raw/vm26/output/fcitx-raw-xorg/actor.log": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "source": "vm26/output/fcitx-raw-xorg/actor.log"
+  },
+  "raw/vm26/output/browser26-native012-bounded014-direct-textarea/suite-exit.json": {
+    "sha256": "64a1526b099d75eed9d9da41a5562dcc164b6ffddeb729dd371c4496bbcded05",
+    "bytes": 17,
+    "source": "vm26/output/browser26-native012-bounded014-direct-textarea/suite-exit.json"
+  },
+  "raw/vm26/output/browser26-native012-bounded014-direct-textarea/mount.json": {
+    "sha256": "0f738e6d6064502d2179d946cf645faadb75ed91b803222b146a291900370977",
+    "bytes": 208,
+    "source": "vm26/output/browser26-native012-bounded014-direct-textarea/mount.json"
+  },
+  "raw/vm26/output/browser26-native012-bounded014-direct-textarea/suite.log": {
+    "sha256": "5bf1f9df78981a786aff154c16ba38ba47ab94a0177ba8e91b6674f78744bb6a",
+    "bytes": 196,
+    "source": "vm26/output/browser26-native012-bounded014-direct-textarea/suite.log"
+  },
+  "raw/vm26/output/wayland/fuse-cleanup.json": {
+    "sha256": "028882028f5b078193e608a6cac6262a111ed822e4e21267c4f5ee311cf71946",
+    "bytes": 62,
+    "source": "vm26/output/wayland/fuse-cleanup.json"
+  },
+  "raw/vm26/output/wayland/owned-install.log": {
+    "sha256": "0e012e6306f3f8c81e1cbdd2b228040e11cbfe467bc1db7119cb4207f9587cee",
+    "bytes": 179,
+    "source": "vm26/output/wayland/owned-install.log"
+  },
+  "raw/vm26/output/wayland/provider-tests-exit.json": {
+    "sha256": "4cb4c854f32903002ea7abf68123667a974dc4b67d04f4a424a9125e6c4313c8",
+    "bytes": 1072,
+    "source": "vm26/output/wayland/provider-tests-exit.json"
+  },
+  "raw/vm26/output/wayland/owned-install-exit.json": {
+    "sha256": "c365161d39236fe0f1d32937fbc549796b8487d8faf65ed3879b96897c78ea5d",
+    "bytes": 17,
+    "source": "vm26/output/wayland/owned-install-exit.json"
+  },
+  "raw/vm26/output/wayland/final-resource-check.json": {
+    "sha256": "7ba2179640406d29404b91d0cf35066390587d402f756496f0eb9c2ab9d10ac2",
+    "bytes": 339,
+    "source": "vm26/output/wayland/final-resource-check.json"
+  },
+  "raw/vm26/output/wayland/provider-tests.json": {
+    "sha256": "73a96a451c10fe9c0b134c63a68448b83626280053522a173091a7f9811e642f",
+    "bytes": 126822,
+    "source": "vm26/output/wayland/provider-tests.json"
+  },
+  "raw/vm26/output/wayland/http-asr.json": {
+    "sha256": "fea55efb7a59420c4890b4bc808b7cf0b6f0bbd7b160eba52311b3934f89c2be",
+    "bytes": 523,
+    "source": "vm26/output/wayland/http-asr.json"
+  },
+  "raw/vm26/output/wayland/mount.json": {
+    "sha256": "0f738e6d6064502d2179d946cf645faadb75ed91b803222b146a291900370977",
+    "bytes": 208,
+    "source": "vm26/output/wayland/mount.json"
+  },
+  "raw/vm26/output/wayland/package-audit.log": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "source": "vm26/output/wayland/package-audit.log"
+  },
+  "raw/vm26/output/wayland/package-audit.json": {
+    "sha256": "3b82882732bb12587d42e53b5e6435930c5fc70fb93a0fdde6a5e5bb199ff313",
+    "bytes": 18234,
+    "source": "vm26/output/wayland/package-audit.json"
+  },
+  "raw/vm26/output/wayland/package-audit-exit.json": {
+    "sha256": "6d4e4cc69bfa37d96ef9fe0cf05481552469776d8c3d10b31ecdc6a64e0de55f",
+    "bytes": 596,
+    "source": "vm26/output/wayland/package-audit-exit.json"
+  },
+  "raw/vm26/output/wayland/provider-tests.log": {
+    "sha256": "2aabc9e14a43ecd342201eeb0887bbbd01b2395f65ee7f665281bd7023e80b7f",
+    "bytes": 341,
+    "source": "vm26/output/wayland/provider-tests.log"
+  },
+  "raw/vm26/output/wayland/qwen-vad.json": {
+    "sha256": "2369b648ec33955421fbeec3a298a57dd59e2e52605632bd22baab793f2aa631",
+    "bytes": 1281,
+    "source": "vm26/output/wayland/qwen-vad.json"
+  },
+  "raw/vm26/output/wayland/gui-exit.json": {
+    "sha256": "1b3e894805917ff78cf01b87e84e3022d00a9820b32d893ec7672a6736406bde",
+    "bytes": 306,
+    "source": "vm26/output/wayland/gui-exit.json"
+  },
+  "raw/vm26/output/wayland/qwen-vad.log": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "source": "vm26/output/wayland/qwen-vad.log"
+  },
+  "raw/vm26/output/wayland/gui.log": {
+    "sha256": "a4c08082e827cf545ee021aecc74ba3962af301f4416f1d88f88ff74d55cfd8f",
+    "bytes": 819,
+    "source": "vm26/output/wayland/gui.log"
+  },
+  "raw/vm26/output/wayland/qwen-vad-exit.json": {
+    "sha256": "770577c469ac6aac0295ef98d0946af6d892f1c3f493b779095571638f494ee1",
+    "bytes": 351,
+    "source": "vm26/output/wayland/qwen-vad-exit.json"
+  },
+  "raw/vm26/output/wayland/provider-ui.json": {
+    "sha256": "d871ee5722660d9a2cb3a9c3fa9c01878dfbca73c03baeed6e974f8b7a1ce382",
+    "bytes": 18795,
+    "source": "vm26/output/wayland/provider-ui.json"
+  },
+  "raw/vm26/output/wayland/http-asr-exit.json": {
+    "sha256": "b215d28346b58d1123d1071f3a82eeb11042261d65d4248006b5b42ef85f52ea",
+    "bytes": 194,
+    "source": "vm26/output/wayland/http-asr-exit.json"
+  },
+  "raw/vm26/output/wayland/fuse-mount.log": {
+    "sha256": "758daa76ecdd0569727057e627e23c2747eb6a84127aa452de568af27e2f9baa",
+    "bytes": 63,
+    "source": "vm26/output/wayland/fuse-mount.log"
+  },
+  "raw/vm26/output/wayland/provider-ui-exit.json": {
+    "sha256": "f75a4559ab51185a8628cf90dd0f4c264cf0b2e13ea559a78aac1c9f7cc884ad",
+    "bytes": 745,
+    "source": "vm26/output/wayland/provider-ui-exit.json"
+  },
+  "raw/vm26/output/wayland/http-asr.log": {
+    "sha256": "973342689058d49af533b8ab5d2870ae0183f94e3305894e46e84d5fcc26af03",
+    "bytes": 452,
+    "source": "vm26/output/wayland/http-asr.log"
+  },
+  "raw/vm26/output/wayland/provider-ui.log": {
+    "sha256": "c3d975c903fc5e8f873e972712778e57f936405909f1cd9eccb361f0fd051d7c",
+    "bytes": 17146,
+    "source": "vm26/output/wayland/provider-ui.log"
+  },
+  "raw/vm26/output/xfce-transition/accounts-before.ini": {
+    "sha256": "1e25e9f72b00e76ed91f0bb4a4f19d4ca2d2f3e275dd8800bf9c07f64632f844",
+    "bytes": 118,
+    "source": "vm26/output/xfce-transition/accounts-before.ini"
+  },
+  "raw/vm26/output/browser26-native012-bounded014-direct-r3-textarea/suite-exit.json": {
+    "sha256": "c365161d39236fe0f1d32937fbc549796b8487d8faf65ed3879b96897c78ea5d",
+    "bytes": 17,
+    "source": "vm26/output/browser26-native012-bounded014-direct-r3-textarea/suite-exit.json"
+  },
+  "raw/vm26/output/browser26-native012-bounded014-direct-r3-textarea/mount.json": {
+    "sha256": "0f738e6d6064502d2179d946cf645faadb75ed91b803222b146a291900370977",
+    "bytes": 208,
+    "source": "vm26/output/browser26-native012-bounded014-direct-r3-textarea/mount.json"
+  },
+  "raw/vm26/output/browser26-native012-bounded014-direct-r3-textarea/suite.log": {
+    "sha256": "eefcf6a99670a0873c455019880c61aa7d76a6f960029a5df30ff0caadbedbbf",
+    "bytes": 1538,
+    "source": "vm26/output/browser26-native012-bounded014-direct-r3-textarea/suite.log"
+  },
+  "raw/vm26/output/browser26-native012-bounded014-direct-r3-textarea/results.json": {
+    "sha256": "4d0018af4c14095e864390a812829469759a5260d1272e540042ed4dc0949a3b",
+    "bytes": 93398,
+    "source": "vm26/output/browser26-native012-bounded014-direct-r3-textarea/results.json"
+  },
+  "raw/vm26/output/browser26-native012-bounded014-direct-r3-textarea/protocol-metadata.json": {
+    "sha256": "64023577ef32634a1a084be271e0bffc9a06d456804918b33736b529702a0116",
+    "bytes": 66192,
+    "source": "vm26/output/browser26-native012-bounded014-direct-r3-textarea/protocol-metadata.json"
+  },
+  "raw/vm26/output/wayland/suite-keyboard-r5-native-normal/target-immodules.json": {
+    "sha256": "7cb5bb84c434b2910042a5afd252e7b8fc694f01367edbb82d81adaa8247216a",
+    "bytes": 62,
+    "source": "vm26/output/wayland/suite-keyboard-r5-native-normal/target-immodules.json"
+  },
+  "raw/vm26/output/wayland/suite-keyboard-r5-native-normal/target.json": {
+    "sha256": "ea24bf000d7abf168b939db64fc726eca45b39956d0a634172cb4be9deec698d",
+    "bytes": 2479,
+    "source": "vm26/output/wayland/suite-keyboard-r5-native-normal/target.json"
+  },
+  "raw/vm26/output/wayland/suite-keyboard-r5-native-normal/receiver.json": {
+    "sha256": "495317eff4b6969713773edb02ca8b4af101a5894f2fa3ac7aec862293a07bc1",
+    "bytes": 462,
+    "source": "vm26/output/wayland/suite-keyboard-r5-native-normal/receiver.json"
+  },
+  "raw/vm26/output/wayland/suite-keyboard-r5-native-normal/report.json": {
+    "sha256": "ef837ddc996395f932a84f618e5071628a328e6d7523ffc836286430c22526f4",
+    "bytes": 17628,
+    "source": "vm26/output/wayland/suite-keyboard-r5-native-normal/report.json"
+  },
+  "raw/vm26/output/wayland/suite-keyboard-r5-native-normal/initial-target.json": {
+    "sha256": "eff77af32ba745ca0befadff0fbe0253fb290b900032c6bb7bf1cdce3ec07931",
+    "bytes": 168,
+    "source": "vm26/output/wayland/suite-keyboard-r5-native-normal/initial-target.json"
+  },
+  "raw/vm26/output/wayland/suite-keyboard-r5-native-normal/pipeline.log": {
+    "sha256": "c900b021b0f859c5c70c1a26addb2db10e62e3a79293f5c19df41de8e7548edb",
+    "bytes": 1720,
+    "source": "vm26/output/wayland/suite-keyboard-r5-native-normal/pipeline.log"
+  },
+  "raw/vm26/output/wayland/suite-keyboard-r5-native-normal/target.log": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "source": "vm26/output/wayland/suite-keyboard-r5-native-normal/target.log"
+  },
+  "raw/vm26/output/wayland/suite-keyboard-r5-native-cancel-after-first/target-immodules.json": {
+    "sha256": "7cb5bb84c434b2910042a5afd252e7b8fc694f01367edbb82d81adaa8247216a",
+    "bytes": 62,
+    "source": "vm26/output/wayland/suite-keyboard-r5-native-cancel-after-first/target-immodules.json"
+  },
+  "raw/vm26/output/wayland/suite-keyboard-r5-native-cancel-after-first/target.json": {
+    "sha256": "5cec68d0a50f7c82b4ad68741bc04e54d01dd61203976a0340423d6bf08157d4",
+    "bytes": 256,
+    "source": "vm26/output/wayland/suite-keyboard-r5-native-cancel-after-first/target.json"
+  },
+  "raw/vm26/output/wayland/suite-keyboard-r5-native-cancel-after-first/receiver.json": {
+    "sha256": "f1edbcdb5d2b06b5b3ca4aa3b124a7f9cac8dc016b7a781475aef0eaaaa67d2b",
+    "bytes": 269,
+    "source": "vm26/output/wayland/suite-keyboard-r5-native-cancel-after-first/receiver.json"
+  },
+  "raw/vm26/output/wayland/suite-keyboard-r5-native-cancel-after-first/report.json": {
+    "sha256": "d77fcd99f6109ee16d2d2b7ba015663846083b8e45f35d79c8e4945d19bdc9c7",
+    "bytes": 18037,
+    "source": "vm26/output/wayland/suite-keyboard-r5-native-cancel-after-first/report.json"
+  },
+  "raw/vm26/output/wayland/suite-keyboard-r5-native-cancel-after-first/initial-target.json": {
+    "sha256": "d105ad6e62f7005550437ca4e8385a2e29a55181bbfc5c4a68a2f9cf6dfbda7a",
+    "bytes": 168,
+    "source": "vm26/output/wayland/suite-keyboard-r5-native-cancel-after-first/initial-target.json"
+  },
+  "raw/vm26/output/wayland/suite-keyboard-r5-native-cancel-after-first/pipeline.log": {
+    "sha256": "46a77070c18d693907d651db95d7e5e261acd8908108b9c2e8599d2aca295e3d",
+    "bytes": 1824,
+    "source": "vm26/output/wayland/suite-keyboard-r5-native-cancel-after-first/pipeline.log"
+  },
+  "raw/vm26/output/wayland/suite-keyboard-r5-native-cancel-after-first/target.log": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "source": "vm26/output/wayland/suite-keyboard-r5-native-cancel-after-first/target.log"
+  },
+  "raw/vm26/output/wayland/ui/result.json": {
+    "sha256": "a4c08082e827cf545ee021aecc74ba3962af301f4416f1d88f88ff74d55cfd8f",
+    "bytes": 819,
+    "source": "vm26/output/wayland/ui/result.json"
+  },
+  "raw/vm26/output/wayland/ui/terminal.json": {
+    "sha256": "2e3da202820a7e92a14c7aefe61d6cbe8236e13f654632d55bfc84172c1381d3",
+    "bytes": 59,
+    "source": "vm26/output/wayland/ui/terminal.json"
+  },
+  "raw/vm26/output/wayland/ui/process.log": {
+    "sha256": "1301a3ebbf2e337399e8b9652dc7166cfa23656801dfa4c67d278d10dcd4ee69",
+    "bytes": 1218,
+    "source": "vm26/output/wayland/ui/process.log"
+  },
+  "raw/vm26/output/xorg/suite-keyboard-xorg-r1-cancel-after-first/target-immodules.json": {
+    "sha256": "7cb5bb84c434b2910042a5afd252e7b8fc694f01367edbb82d81adaa8247216a",
+    "bytes": 62,
+    "source": "vm26/output/xorg/suite-keyboard-xorg-r1-cancel-after-first/target-immodules.json"
+  },
+  "raw/vm26/output/xorg/suite-keyboard-xorg-r1-cancel-after-first/target.json": {
+    "sha256": "dd2ed92974dbfc84c8f94847f32659b68a58da95a771f463fe3c3b0b21d51ead",
+    "bytes": 256,
+    "source": "vm26/output/xorg/suite-keyboard-xorg-r1-cancel-after-first/target.json"
+  },
+  "raw/vm26/output/xorg/suite-keyboard-xorg-r1-cancel-after-first/receiver.json": {
+    "sha256": "f234a7d4ceffe496e193e323dcb4d168e8b6fcf3c9f9ae02a7b0624c6ea9ff62",
+    "bytes": 261,
+    "source": "vm26/output/xorg/suite-keyboard-xorg-r1-cancel-after-first/receiver.json"
+  },
+  "raw/vm26/output/xorg/suite-keyboard-xorg-r1-cancel-after-first/report.json": {
+    "sha256": "99c85ec9d35e16e5bcf4f50bc100d531535c6661e9db5c812f137c51847388c6",
+    "bytes": 15923,
+    "source": "vm26/output/xorg/suite-keyboard-xorg-r1-cancel-after-first/report.json"
+  },
+  "raw/vm26/output/xorg/suite-keyboard-xorg-r1-cancel-after-first/initial-target.json": {
+    "sha256": "a73955eed6f274068872a89b1cfc3076157e789938d824e5df8fd0d3f85bb0dd",
+    "bytes": 168,
+    "source": "vm26/output/xorg/suite-keyboard-xorg-r1-cancel-after-first/initial-target.json"
+  },
+  "raw/vm26/output/xorg/suite-keyboard-xorg-r1-cancel-after-first/pipeline.log": {
+    "sha256": "f352a0cce23ddb4580c2bc10e1d90e4f344aca88785eeb0c8bbed9a8094d1323",
+    "bytes": 1840,
+    "source": "vm26/output/xorg/suite-keyboard-xorg-r1-cancel-after-first/pipeline.log"
+  },
+  "raw/vm26/output/xorg/suite-keyboard-xorg-r1-cancel-after-first/fixture-owned-activation.json": {
+    "sha256": "0656e03e1d054fa6fcf530d81acd1dd6d72edb7f1de4cb123d6002c296a89a06",
+    "bytes": 98,
+    "source": "vm26/output/xorg/suite-keyboard-xorg-r1-cancel-after-first/fixture-owned-activation.json"
+  },
+  "raw/vm26/output/xorg/suite-keyboard-xorg-r1-cancel-after-first/target.log": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "source": "vm26/output/xorg/suite-keyboard-xorg-r1-cancel-after-first/target.log"
+  },
+  "raw/vm26/output/xorg/suite-keyboard-xorg-r1-normal/target-immodules.json": {
+    "sha256": "7cb5bb84c434b2910042a5afd252e7b8fc694f01367edbb82d81adaa8247216a",
+    "bytes": 62,
+    "source": "vm26/output/xorg/suite-keyboard-xorg-r1-normal/target-immodules.json"
+  },
+  "raw/vm26/output/xorg/suite-keyboard-xorg-r1-normal/target.json": {
+    "sha256": "72d439a7a577cda12d500f74eb868ab94ea1dd427c35e9b2d77af23da7b6efd5",
+    "bytes": 2488,
+    "source": "vm26/output/xorg/suite-keyboard-xorg-r1-normal/target.json"
+  },
+  "raw/vm26/output/xorg/suite-keyboard-xorg-r1-normal/receiver.json": {
+    "sha256": "e9b3cba095c43d0d78264acd465a1bcaa61a3359b17bbc5af9bef588221447df",
+    "bytes": 454,
+    "source": "vm26/output/xorg/suite-keyboard-xorg-r1-normal/receiver.json"
+  },
+  "raw/vm26/output/xorg/suite-keyboard-xorg-r1-normal/report.json": {
+    "sha256": "3ae11d03af87c4d3b34c40e1a7caffc3f102114c697b897701c8654811edd1dc",
+    "bytes": 15515,
+    "source": "vm26/output/xorg/suite-keyboard-xorg-r1-normal/report.json"
+  },
+  "raw/vm26/output/xorg/suite-keyboard-xorg-r1-normal/initial-target.json": {
+    "sha256": "0402e4043ccde412544ec36973dc6aadb8fca9b682a1c504550044230995c156",
+    "bytes": 168,
+    "source": "vm26/output/xorg/suite-keyboard-xorg-r1-normal/initial-target.json"
+  },
+  "raw/vm26/output/xorg/suite-keyboard-xorg-r1-normal/pipeline.log": {
+    "sha256": "ff3f2db95951f8192fefa0bb30fec8540a74d81155866cd7d410e985d6c8fa12",
+    "bytes": 1720,
+    "source": "vm26/output/xorg/suite-keyboard-xorg-r1-normal/pipeline.log"
+  },
+  "raw/vm26/output/xorg/suite-keyboard-xorg-r1-normal/fixture-owned-activation.json": {
+    "sha256": "32ced8ed0cce9fbb03248032a63d088fd8c80fdc05113bbcc580da0de67d3a0e",
+    "bytes": 98,
+    "source": "vm26/output/xorg/suite-keyboard-xorg-r1-normal/fixture-owned-activation.json"
+  },
+  "raw/vm26/output/xorg/suite-keyboard-xorg-r1-normal/target.log": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "source": "vm26/output/xorg/suite-keyboard-xorg-r1-normal/target.log"
+  },
+  "raw/vm26/output/xorg/fcitx-pipeline-cancel-after-first/target.json": {
+    "sha256": "ab0d50e799b1ee9afb343cd18fc2d7fd437c15f23e04d8ab1f4eb42bebb16881",
+    "bytes": 156,
+    "source": "vm26/output/xorg/fcitx-pipeline-cancel-after-first/target.json"
+  },
+  "raw/vm26/output/xorg/fcitx-pipeline-cancel-after-first/receiver.json": {
+    "sha256": "9888703887f2ab547fd60e9a6aa69427495c5e87d8aa0bdb5115a2b5269c30aa",
+    "bytes": 205,
+    "source": "vm26/output/xorg/fcitx-pipeline-cancel-after-first/receiver.json"
+  },
+  "raw/vm26/output/xorg/fcitx-pipeline-cancel-after-first/report.json": {
+    "sha256": "1a8d98eedbd0cb33b0736c5bc57875be1685848965ed4700686a9ebc78b03f94",
+    "bytes": 16163,
+    "source": "vm26/output/xorg/fcitx-pipeline-cancel-after-first/report.json"
+  },
+  "raw/vm26/output/xorg/fcitx-pipeline-cancel-after-first/pipeline.log": {
+    "sha256": "55dfbd30d7a6e69584d6fe9a406d548a69524d41a6201709e1bc9ed2d3218aee",
+    "bytes": 1840,
+    "source": "vm26/output/xorg/fcitx-pipeline-cancel-after-first/pipeline.log"
+  },
+  "raw/vm26/output/xorg/fcitx-pipeline-cancel-after-first/target.log": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "source": "vm26/output/xorg/fcitx-pipeline-cancel-after-first/target.log"
+  },
+  "raw/vm26/output/xorg/ui/result.json": {
+    "sha256": "3085e6063ed67ae783d20cdc4297c3d482db16ddbf5d24ecf3ea6b30c7e52085",
+    "bytes": 815,
+    "source": "vm26/output/xorg/ui/result.json"
+  },
+  "raw/vm26/output/xorg/ui/terminal.json": {
+    "sha256": "ccacf4eeff657e66afc209d5ec58c8f1e876424690fd995d0a14488b7f68c853",
+    "bytes": 60,
+    "source": "vm26/output/xorg/ui/terminal.json"
+  },
+  "raw/vm26/output/xorg/ui/process.log": {
+    "sha256": "816b0d6ec013a273083c5c746a0b7e82e28791dfd20af3447c7900b7dc3d6fea",
+    "bytes": 1094,
+    "source": "vm26/output/xorg/ui/process.log"
+  },
+  "raw/vm26/output/xorg/fcitx-pipeline-normal/target.json": {
+    "sha256": "87ffc49df909cde123d1a9ac80624c7979bb9919d5abd37b06d3ebdc184fbe85",
+    "bytes": 189,
+    "source": "vm26/output/xorg/fcitx-pipeline-normal/target.json"
+  },
+  "raw/vm26/output/xorg/fcitx-pipeline-normal/receiver.json": {
+    "sha256": "82629457d21b11a3030ee16006340ab55006e27115260eaaf2745b008ef58f96",
+    "bytes": 375,
+    "source": "vm26/output/xorg/fcitx-pipeline-normal/receiver.json"
+  },
+  "raw/vm26/output/xorg/fcitx-pipeline-normal/report.json": {
+    "sha256": "cf92e0bc2fd98732597acf4ac163a949411e0a5e482c9fdcce19d058d8bbee15",
+    "bytes": 15742,
+    "source": "vm26/output/xorg/fcitx-pipeline-normal/report.json"
+  },
+  "raw/vm26/output/xorg/fcitx-pipeline-normal/pipeline.log": {
+    "sha256": "6387797372c2129d92ad77c17d0189291f9a6b8f7a26a706e601800716c7425b",
+    "bytes": 1719,
+    "source": "vm26/output/xorg/fcitx-pipeline-normal/pipeline.log"
+  },
+  "raw/vm26/output/xorg/fcitx-pipeline-normal/target.log": {
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "source": "vm26/output/xorg/fcitx-pipeline-normal/target.log"
+  },
+  "reproduction/vm26/input/http_asr.py": {
+    "sha256": "2cd394b56c70ab0956bd84f536ec4ab83262807c57db215b94db4da2f54a55a2",
+    "bytes": 2987,
+    "source": "vm26/input/http_asr.py"
+  },
+  "reproduction/vm26/input/new-artifact-identity.json": {
+    "sha256": "e74ce5f7fa60f1b3f2ed7ccc00b60abf665066369a7285a1ad92dbe66b86eddb",
+    "bytes": 370,
+    "source": "vm26/input/new-artifact-identity.json"
+  },
+  "reproduction/vm26/input/protocol_metadata.py": {
+    "sha256": "8fbd4512620160242b3da0e5b7f499eb1ba3a67d923a24c10b996b856a0d5c1a",
+    "bytes": 2591,
+    "source": "vm26/input/protocol_metadata.py"
+  },
+  "reproduction/vm26/input/focus_proof.py": {
+    "sha256": "db8918f915edac55d1717ee6d872be0ac85532b8f3bf3a684edbdc9abae4d390",
+    "bytes": 2814,
+    "source": "vm26/input/focus_proof.py"
+  },
+  "reproduction/vm26/input/target.py": {
+    "sha256": "a0a7ec56aeec7091a1545cc110dcaef47dd9cd0e11e1272671fd316787a76c24",
+    "bytes": 1554,
+    "source": "vm26/input/target.py"
+  },
+  "reproduction/vm26/input/guest.py": {
+    "sha256": "4dfe72ef98bf2fcefc9b27501af0e49b3bec4bc24e3d7524fc4239bc5f20ee50",
+    "bytes": 5145,
+    "source": "vm26/input/guest.py"
+  },
+  "reproduction/vm26/input/pipeline_suite.py": {
+    "sha256": "3932816f990c6a479c0d01d5184b5ffd42dd6697b1495757ad5ade042ba3939e",
+    "bytes": 2424,
+    "source": "vm26/input/pipeline_suite.py"
+  },
+  "reproduction/vm26/input/wrapper.py": {
+    "sha256": "9e4945916b4d6e3da0175711fa6f25f42e55d3cbffc0c16cfe8c450d73dc9645",
+    "bytes": 1292,
+    "source": "vm26/input/wrapper.py"
+  },
+  "reproduction/vm26/input/fcitx-package-r3.py": {
+    "sha256": "a409807da6f370083a529fab4463d46d3153163626b31b72dc011eafdd68ef33",
+    "bytes": 8943,
+    "source": "vm26/input/fcitx-package-r3.py"
+  },
+  "reproduction/vm26/input/pipeline.py": {
+    "sha256": "8126d6d4b7b77b3e44e5f078e69f4c3f01171d6711594fc4aa69c5084e64855b",
+    "bytes": 27559,
+    "source": "vm26/input/pipeline.py"
+  },
+  "reproduction/vm26/input/target-before-keymonitor.py": {
+    "sha256": "df86e4d473e5d36eae43ed8bb3ecb0eae06e8f27dd2f0a8aadec407716e654e4",
+    "bytes": 1143,
+    "source": "vm26/input/target-before-keymonitor.py"
+  },
+  "reproduction/vm26/input/preedit-actor.py": {
+    "sha256": "2ca8f0896a9eb729a48a8c86c1168630ede8711a1743743591aa0953436ef041",
+    "bytes": 615,
+    "source": "vm26/input/preedit-actor.py"
+  },
+  "reproduction/vm26/input/resource-check.py": {
+    "sha256": "0d23c36b5d3d1992caf79d9f589e6b75593034a5ddddee46f76f84fffaf4d306",
+    "bytes": 2214,
+    "source": "vm26/input/resource-check.py"
+  },
+  "reproduction/vm26/input/select-wayland.sh": {
+    "sha256": "b6382da79a03ba2a743c76256a3e7d45f6f4bb4bc09448e8d67b7a6f928470fc",
+    "bytes": 770,
+    "source": "vm26/input/select-wayland.sh"
+  },
+  "reproduction/vm26/input/tests-manifest.json": {
+    "sha256": "0389984ed0842aa72cc787d850f44517ad85345f167d4674ee274878a3566e43",
+    "bytes": 33169,
+    "source": "vm26/input/tests-manifest.json"
+  },
+  "reproduction/vm26/input/launch-native012.py": {
+    "sha256": "1e4f56b019710067f15c1e5be64535648142120e5848e3a2678e990a9666d7f9",
+    "bytes": 1251,
+    "source": "vm26/input/launch-native012.py"
+  },
+  "reproduction/vm26/input/chrome_program.py": {
+    "sha256": "7ac4c00a1248eaf30595fea801774af07040e9b3900dab40aaf23ef872f50904",
+    "bytes": 2875,
+    "source": "vm26/input/chrome_program.py"
+  },
+  "reproduction/vm26/input/qmp-key.py": {
+    "sha256": "4e041cde0db4e002497c3d6afdf42a6154588da2c4443775f9741009b411b6a1",
+    "bytes": 687,
+    "source": "vm26/input/qmp-key.py"
+  },
+  "reproduction/vm26/input/gui-private.py": {
+    "sha256": "9ff5eea6f03aec27e9b6fe3c4a735206edd599e185a0ec3c99301e056205273a",
+    "bytes": 1183,
+    "source": "vm26/input/gui-private.py"
+  },
+  "reproduction/vm26/input/chrome-software-manifest.json": {
+    "sha256": "208eb4c91aed99ca97bbf68b8d5e7190190ca36d745d10dfdb9130d8de1b4ee4",
+    "bytes": 23860,
+    "source": "vm26/input/chrome-software-manifest.json"
+  },
+  "reproduction/vm26/input/pipeline_receiver_cancel.py": {
+    "sha256": "f9f8d809e9e08e1229fc349dee9a11cbc7ce84cd8b9c853ed557c2e4c562b871",
+    "bytes": 27682,
+    "source": "vm26/input/pipeline_receiver_cancel.py"
+  },
+  "reproduction/vm26/input/restore-extension.py": {
+    "sha256": "9f1f1cd61448bba069eb00ced7e0fdd5becfeb15713c26f773699883fa344c81",
+    "bytes": 898,
+    "source": "vm26/input/restore-extension.py"
+  },
+  "reproduction/vm26/input/gap.py": {
+    "sha256": "62167273cc85d8685ee3e4e18706d39ea3bd4e9a29a8db038a1f1050cd76abb6",
+    "bytes": 5956,
+    "source": "vm26/input/gap.py"
+  },
+  "reproduction/vm26/input/fcitx-package.py": {
+    "sha256": "b96dbec32236943e9ceb5b14b4d2e1a6b66374ae5b9e250579aa8a61a9846550",
+    "bytes": 9017,
+    "source": "vm26/input/fcitx-package.py"
+  },
+  "reproduction/vm26/input/context.py": {
+    "sha256": "f5acbab2b30eba235dc0d302ea2a16d8362a13cebba1e7824dab1d5f55b640b3",
+    "bytes": 1370,
+    "source": "vm26/input/context.py"
+  },
+  "reproduction/vm26/input/qemu.json": {
+    "sha256": "b3f622f53ee03febd176c17ff78de547511fefc1440610f4a26dfc4ea5d1bba1",
+    "bytes": 799,
+    "source": "vm26/input/qemu.json"
+  },
+  "reproduction/vm26/input/owned-settings.py": {
+    "sha256": "76304793c36930915a95d82496c57ac7975b2651b2933faa35d972d18602f00c",
+    "bytes": 1410,
+    "source": "vm26/input/owned-settings.py"
+  },
+  "reproduction/vm26/input/launch-preedit.py": {
+    "sha256": "185e17f01c6841f641f4e3927375c0b7e114e5e7c1a7a79852ac1585f131f6d2",
+    "bytes": 1131,
+    "source": "vm26/input/launch-preedit.py"
+  },
+  "reproduction/vm26/input/fcitx-package-r1.py": {
+    "sha256": "9d7e5c9e3cf996dd703025298cb0bd90707ecc3a3599fa5b5b22fa6e14bc8470",
+    "bytes": 8532,
+    "source": "vm26/input/fcitx-package-r1.py"
+  },
+  "reproduction/vm26/input/fcitx-zero-xorg-r2-direct-hybrid.py": {
+    "sha256": "1f3d480090d019ed86c0e103d4a5b197d562156033e625ec94baae8d6922b942",
+    "bytes": 7732,
+    "source": "vm26/input/fcitx-zero-xorg-r2-direct-hybrid.py"
+  },
+  "reproduction/vm26/input/actor.py": {
+    "sha256": "adb1f6a4256c215abe1b32d2e5344d1ad9891093e7f418ebd610b53a84f611bb",
+    "bytes": 4504,
+    "source": "vm26/input/actor.py"
+  },
+  "reproduction/vm26/input/stage-candidate.py": {
+    "sha256": "9d83bd1db9eef330138c3c6f2f7d60a5a8ea3924dc5871eed74632cb5639e3d8",
+    "bytes": 2043,
+    "source": "vm26/input/stage-candidate.py"
+  },
+  "reproduction/vm26/input/preedit-candidate.py": {
+    "sha256": "96f950cb429a91deb9ff65b4ca51f243de54cfd975f59426278c676185e864f4",
+    "bytes": 3838,
+    "source": "vm26/input/preedit-candidate.py"
+  },
+  "reproduction/vm26/input/engine-final.py": {
+    "sha256": "cb803ff3335eab574e667697adeaf4336d28e0101cd8a5833a86da0d9904cd3c",
+    "bytes": 668,
+    "source": "vm26/input/engine-final.py"
+  },
+  "reproduction/vm26/input/session_product_r2.py": {
+    "sha256": "fe9c54ea63e5ba4ce37d5115712160b702a6ae00ea2d5e3480de8656f0887095",
+    "bytes": 3584,
+    "source": "vm26/input/session_product_r2.py"
+  },
+  "reproduction/vm26/input/browser-native012.py": {
+    "sha256": "4c0dc23dc4fbcb617ba01591339e9d423e0b2251421d6a07b01c5d49d05f43ba",
+    "bytes": 23388,
+    "source": "vm26/input/browser-native012.py"
+  },
+  "reproduction/vm26/input/mutter-maps.py": {
+    "sha256": "c1b215786ccc8c6a2ece9b358ddb03f2dfa152c9c0b8d40e977a6ea2a37f929f",
+    "bytes": 1558,
+    "source": "vm26/input/mutter-maps.py"
+  },
+  "reproduction/vm26/input/framework-manifest.json": {
+    "sha256": "b01175767169904824c36199b10e07b21c4f417ce0ee39783b744be199084792",
+    "bytes": 50769,
+    "source": "vm26/input/framework-manifest.json"
+  },
+  "reproduction/vm26/input/fcitx-package-r2.py": {
+    "sha256": "2218fec00086d19a5e303b295701535febabf246d1ca35b8d1f5b03ee262a578",
+    "bytes": 8935,
+    "source": "vm26/input/fcitx-package-r2.py"
+  },
+  "reproduction/vm26/input/select-xfce.sh": {
+    "sha256": "d165211b23d310c1989331f7758fac876a922fdcee051f8eef84a91ab2e91143",
+    "bytes": 506,
+    "source": "vm26/input/select-xfce.sh"
+  },
+  "reproduction/vm26/input/fcitx-zero.py": {
+    "sha256": "3f7907f31d46d41367dc49a7f509f785514ba43d07b49cbfaaea74c679c254c4",
+    "bytes": 7796,
+    "source": "vm26/input/fcitx-zero.py"
+  },
+  "reproduction/vm26/input/final-state.py": {
+    "sha256": "0544936c906e18b54ec274bb0b736276c773f4857e2e98443c90832350cbd399",
+    "bytes": 1638,
+    "source": "vm26/input/final-state.py"
+  },
+  "reproduction/vm26/input/fcitx-zero-wayland-r1.py": {
+    "sha256": "93458720ae7cd226a5751edace1cc911628fc985b807090ae3aabc35e8732adc",
+    "bytes": 7722,
+    "source": "vm26/input/fcitx-zero-wayland-r1.py"
+  },
+  "reproduction/vm26/input/sandbox-proc.py": {
+    "sha256": "dde3516f534ffee5d3cf4e67f67cbcab940f2bbb3fee53788519a5eb78b9f89b",
+    "bytes": 870,
+    "source": "vm26/input/sandbox-proc.py"
+  },
+  "reproduction/vm26/run-preedit.py": {
+    "sha256": "b4c4e2aac874d21e117f8d928b78c66d651c264bf87bc89539b5ec8f73fdc4ef",
+    "bytes": 1686,
+    "source": "vm26/run-preedit.py"
+  },
+  "reproduction/vm26/ssh.py": {
+    "sha256": "edb6463a00231ad9bdcf0ac79f60de88794cff2a46c1c51301c619218e76569f",
+    "bytes": 183,
+    "source": "vm26/ssh.py"
+  },
+  "reproduction/control.py": {
+    "sha256": "14fa04b1f2e6d745076f5082b9b5889c450b048dd6aff667470abbd028053178",
+    "bytes": 4524,
+    "source": "control.py"
+  },
+  "raw/vm24/preedit-driver.log.gz": {
+    "sha256": "8444679ee3e0086e7cc40077de703f0dbd891b0c9b0a1751531fb0a594c9228b",
+    "bytes": 25,
+    "source": "vm24/preedit-driver.log",
+    "encoding": "gzip",
+    "decoded_original_evidence_path": "raw/vm24/preedit-driver.log",
+    "decoded_sha256": "dca7420a9d8e8d1cb51355781472675984af070007b916afea9c32bfbc1a3108",
+    "decoded_bytes": 5
+  },
+  "raw/vm24/output/browser24-native012-bounded014-handoff-textarea/fcitx.log.gz": {
+    "sha256": "0621615aa1c1c8ec24851977b20e2d758f4867a93d9b1354c1ff1147c28b4a2c",
+    "bytes": 2381,
+    "source": "vm24/output/browser24-native012-bounded014-handoff-textarea/fcitx.log",
+    "encoding": "gzip",
+    "decoded_original_evidence_path": "raw/vm24/output/browser24-native012-bounded014-handoff-textarea/fcitx.log",
+    "decoded_sha256": "f5e96518f0ca9a544cf9257628aa82f9352335970f3decca74fe7ba67e6beae5",
+    "decoded_bytes": 9049
+  },
+  "raw/vm24/output/fcitx-raw-xorg-r3/fcitx.log.gz": {
+    "sha256": "b14ff5a240e397dfee0e2d4e550561a1d39663efb02bbbb1b788538001c0760d",
+    "bytes": 1250,
+    "source": "vm24/output/fcitx-raw-xorg-r3/fcitx.log",
+    "encoding": "gzip",
+    "decoded_original_evidence_path": "raw/vm24/output/fcitx-raw-xorg-r3/fcitx.log",
+    "decoded_sha256": "340a4a722ba0f047e13aba2a16985125fc61a446216bfad268e2c2ba4d65cd96",
+    "decoded_bytes": 5160
+  },
+  "raw/vm26/preedit-driver.log.gz": {
+    "sha256": "8444679ee3e0086e7cc40077de703f0dbd891b0c9b0a1751531fb0a594c9228b",
+    "bytes": 25,
+    "source": "vm26/preedit-driver.log",
+    "encoding": "gzip",
+    "decoded_original_evidence_path": "raw/vm26/preedit-driver.log",
+    "decoded_sha256": "dca7420a9d8e8d1cb51355781472675984af070007b916afea9c32bfbc1a3108",
+    "decoded_bytes": 5
+  },
+  "raw/vm26/output/browser26-native012-keyboard-fallback014-textarea/fcitx.log.gz": {
+    "sha256": "c97715b9f0fbd21cb0272491a27a7a1f9e5a5d9b8794cf7d9b776f82d3df03a6",
+    "bytes": 2951,
+    "source": "vm26/output/browser26-native012-keyboard-fallback014-textarea/fcitx.log",
+    "encoding": "gzip",
+    "decoded_original_evidence_path": "raw/vm26/output/browser26-native012-keyboard-fallback014-textarea/fcitx.log",
+    "decoded_sha256": "203b6e60b032126d994baeadfb4a448a9c2ae3e0eaadc83be94e244e7a94fdba",
+    "decoded_bytes": 12958
+  },
+  "raw/vm26/output/browser26-native012-bounded014-handoff-textarea/fcitx.log.gz": {
+    "sha256": "097a14b353eeb6a4705220da3199594f123ae5c31c48262ce1fe98a75047724d",
+    "bytes": 2870,
+    "source": "vm26/output/browser26-native012-bounded014-handoff-textarea/fcitx.log",
+    "encoding": "gzip",
+    "decoded_original_evidence_path": "raw/vm26/output/browser26-native012-bounded014-handoff-textarea/fcitx.log",
+    "decoded_sha256": "d70d08fbd90f60aaa41fe298417c8d48b15d916f375d947be8818e4e613540cd",
+    "decoded_bytes": 12267
+  },
+  "raw/vm26/output/fcitx-raw-xorg/fcitx.log.gz": {
+    "sha256": "5de447e4e575a5698e78099f374e46b5425740f3e2dc7e4731bd58e8cb566443",
+    "bytes": 1319,
+    "source": "vm26/output/fcitx-raw-xorg/fcitx.log",
+    "encoding": "gzip",
+    "decoded_original_evidence_path": "raw/vm26/output/fcitx-raw-xorg/fcitx.log",
+    "decoded_sha256": "09b8cc7ea87bc3283ca64753cfec28919c4323caf8e87ecbbd2632d39567d1b0",
+    "decoded_bytes": 5403
+  }
+}

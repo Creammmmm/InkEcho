@@ -1,0 +1,328 @@
+[
+  {
+    "case": "staged",
+    "sha": "f67c6b5f2cb7ecd7c915c8062efd3b70284c74b97ced4a597d942c4b39594e44",
+    "test_only_override": false,
+    "session": "x11"
+  },
+  {
+    "case": "owned_activation",
+    "pid": 12086,
+    "xid": 39845891,
+    "fixture_only": true
+  },
+  {
+    "case": "ready",
+    "receiver": {
+      "pid": 12086,
+      "active": true,
+      "focus": true,
+      "text": "",
+      "preedit_length": 0,
+      "key_results": [],
+      "module": null,
+      "owned_events": []
+    }
+  },
+  {
+    "case": "frontend_loaded",
+    "paths": [
+      "/usr/lib/x86_64-linux-gnu/gtk-3.0/3.0.0/immodules/im-fcitx5.so"
+    ]
+  },
+  {
+    "case": "normal",
+    "sent": 2,
+    "route": "fcitx",
+    "receiver": {
+      "pid": 12086,
+      "active": true,
+      "focus": true,
+      "text": "\u7532\u4e59",
+      "preedit_length": 0,
+      "key_results": [],
+      "module": null,
+      "owned_events": []
+    }
+  },
+  {
+    "case": "virtual_hardware_control",
+    "receiver": {
+      "pid": 12086,
+      "active": true,
+      "focus": true,
+      "text": "\u7532\u4e59a",
+      "preedit_length": 0,
+      "key_results": [],
+      "module": null,
+      "owned_events": [
+        {
+          "type": "<enum GDK_KEY_PRESS of type Gdk.EventType>",
+          "keyval": 97,
+          "hardware_keycode": 38
+        },
+        {
+          "type": "<enum GDK_KEY_RELEASE of type Gdk.EventType>",
+          "keyval": 97,
+          "hardware_keycode": 38
+        }
+      ]
+    }
+  },
+  {
+    "case": "active_engine",
+    "engine": "pinyin"
+  },
+  {
+    "case": "first_pinyin_key",
+    "receiver": {
+      "pid": 12086,
+      "active": true,
+      "focus": true,
+      "text": "\u7532\u4e59a",
+      "preedit_length": 1,
+      "key_results": [],
+      "module": null,
+      "owned_events": [
+        {
+          "type": "<enum GDK_KEY_PRESS of type Gdk.EventType>",
+          "keyval": 97,
+          "hardware_keycode": 38
+        },
+        {
+          "type": "<enum GDK_KEY_RELEASE of type Gdk.EventType>",
+          "keyval": 97,
+          "hardware_keycode": 38
+        },
+        {
+          "type": "<enum GDK_KEY_RELEASE of type Gdk.EventType>",
+          "keyval": 110,
+          "hardware_keycode": 57
+        }
+      ]
+    }
+  },
+  {
+    "case": "real_preedit_before",
+    "receiver": {
+      "pid": 12086,
+      "active": true,
+      "focus": true,
+      "text": "\u7532\u4e59a",
+      "preedit_length": 2,
+      "key_results": [],
+      "module": null,
+      "owned_events": [
+        {
+          "type": "<enum GDK_KEY_PRESS of type Gdk.EventType>",
+          "keyval": 97,
+          "hardware_keycode": 38
+        },
+        {
+          "type": "<enum GDK_KEY_RELEASE of type Gdk.EventType>",
+          "keyval": 97,
+          "hardware_keycode": 38
+        },
+        {
+          "type": "<enum GDK_KEY_RELEASE of type Gdk.EventType>",
+          "keyval": 110,
+          "hardware_keycode": 57
+        },
+        {
+          "type": "<enum GDK_KEY_RELEASE of type Gdk.EventType>",
+          "keyval": 105,
+          "hardware_keycode": 31
+        }
+      ]
+    }
+  },
+  {
+    "case": "guarded_during_pinyin",
+    "code": "fcitx_composition_active",
+    "attempts": 0,
+    "route": null,
+    "receiver": {
+      "pid": 12086,
+      "active": true,
+      "focus": true,
+      "text": "\u7532\u4e59a",
+      "preedit_length": 2,
+      "key_results": [],
+      "module": null,
+      "owned_events": [
+        {
+          "type": "<enum GDK_KEY_PRESS of type Gdk.EventType>",
+          "keyval": 97,
+          "hardware_keycode": 38
+        },
+        {
+          "type": "<enum GDK_KEY_RELEASE of type Gdk.EventType>",
+          "keyval": 97,
+          "hardware_keycode": 38
+        },
+        {
+          "type": "<enum GDK_KEY_RELEASE of type Gdk.EventType>",
+          "keyval": 110,
+          "hardware_keycode": 57
+        },
+        {
+          "type": "<enum GDK_KEY_RELEASE of type Gdk.EventType>",
+          "keyval": 105,
+          "hardware_keycode": 31
+        }
+      ]
+    }
+  },
+  {
+    "case": "user_finished_composition",
+    "receiver": {
+      "pid": 12086,
+      "active": true,
+      "focus": true,
+      "text": "\u7532\u4e59a\u4f60",
+      "preedit_length": 0,
+      "key_results": [],
+      "module": null,
+      "owned_events": [
+        {
+          "type": "<enum GDK_KEY_PRESS of type Gdk.EventType>",
+          "keyval": 97,
+          "hardware_keycode": 38
+        },
+        {
+          "type": "<enum GDK_KEY_RELEASE of type Gdk.EventType>",
+          "keyval": 97,
+          "hardware_keycode": 38
+        },
+        {
+          "type": "<enum GDK_KEY_RELEASE of type Gdk.EventType>",
+          "keyval": 110,
+          "hardware_keycode": 57
+        },
+        {
+          "type": "<enum GDK_KEY_RELEASE of type Gdk.EventType>",
+          "keyval": 105,
+          "hardware_keycode": 31
+        },
+        {
+          "type": "<enum GDK_KEY_RELEASE of type Gdk.EventType>",
+          "keyval": 32,
+          "hardware_keycode": 65
+        }
+      ]
+    }
+  },
+  {
+    "case": "cancel_after_prefix",
+    "code": "fcitx_cancelled",
+    "attempts": 1,
+    "route": null,
+    "receiver": {
+      "pid": 12086,
+      "active": true,
+      "focus": true,
+      "text": "\u7532\u4e59a\u4f60\u5df1",
+      "preedit_length": 0,
+      "key_results": [],
+      "module": null,
+      "owned_events": [
+        {
+          "type": "<enum GDK_KEY_PRESS of type Gdk.EventType>",
+          "keyval": 97,
+          "hardware_keycode": 38
+        },
+        {
+          "type": "<enum GDK_KEY_RELEASE of type Gdk.EventType>",
+          "keyval": 97,
+          "hardware_keycode": 38
+        },
+        {
+          "type": "<enum GDK_KEY_RELEASE of type Gdk.EventType>",
+          "keyval": 110,
+          "hardware_keycode": 57
+        },
+        {
+          "type": "<enum GDK_KEY_RELEASE of type Gdk.EventType>",
+          "keyval": 105,
+          "hardware_keycode": 31
+        },
+        {
+          "type": "<enum GDK_KEY_RELEASE of type Gdk.EventType>",
+          "keyval": 32,
+          "hardware_keycode": 65
+        }
+      ]
+    }
+  },
+  {
+    "case": "normal_cancel_passed",
+    "value": true,
+    "preedit_verified": true
+  },
+  {
+    "case": "actor_exit_before_pipeline",
+    "exit": 0
+  },
+  {
+    "case": "actual_pipeline",
+    "mode": "normal",
+    "pipeline_exit": 0,
+    "text_exact_or_partial_prefix": true,
+    "no_late_text": true,
+    "old_target_untouched": true,
+    "received_codepoints": [
+      20320,
+      22909,
+      32,
+      73,
+      110,
+      107,
+      69,
+      99,
+      104,
+      111,
+      65292,
+      99,
+      97,
+      102,
+      233,
+      32,
+      937,
+      10,
+      31532,
+      20108,
+      34892,
+      12290
+    ]
+  },
+  {
+    "case": "pipeline_target_exit",
+    "mode": "normal",
+    "exit": -15
+  },
+  {
+    "case": "actual_pipeline",
+    "mode": "cancel-after-first",
+    "pipeline_exit": 0,
+    "text_exact_or_partial_prefix": true,
+    "no_late_text": true,
+    "old_target_untouched": true,
+    "received_codepoints": [
+      20320,
+      22909
+    ]
+  },
+  {
+    "case": "pipeline_target_exit",
+    "mode": "cancel-after-first",
+    "exit": -15
+  },
+  {
+    "case": "daemon_exit",
+    "exit": 0
+  },
+  {
+    "case": "hints_restored",
+    "value": true
+  }
+]

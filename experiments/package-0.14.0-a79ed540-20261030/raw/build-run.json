@@ -1,0 +1,83 @@
+{
+  "source_commit": "0a13b3af12c764992e09622fa6a745067f70cd1d",
+  "version": "0.14.0",
+  "frozen_source": "/home/lth/github/InkEcho/dist/candidate-0.14.0-0a13b3a-20261030/source",
+  "source_archive_sha256": "de2126620640b9d72f7038de45c1d1affc8b1ec8f22ff76bb5aa4036f15ad45a",
+  "command": [
+    "/home/lth/github/InkEcho/.venv/bin/python",
+    "/home/lth/github/InkEcho/dist/candidate-0.14.0-0a13b3a-20261030/source/scripts/packaging/build_appimage.py"
+  ],
+  "verified_cached_assets": [
+    {
+      "name": "libei1_1.5.0-3_amd64.deb",
+      "bytes": 42774,
+      "sha256": "d3b0b40cb7cf3686c0aaebf6e6b4e11c8903d295fb9b5ffc9e66d99cf8448f7b"
+    },
+    {
+      "name": "libxcb-keysyms1_0.4.0-1build4_amd64.deb",
+      "bytes": 7956,
+      "sha256": "6c261aae923175b88a032018c530873ffb40f2bf96b045fdda42bd8bc74cb1c3"
+    },
+    {
+      "name": "libkrb5support0_1.20.1-6ubuntu2.10_amd64.deb",
+      "bytes": 34942,
+      "sha256": "9224ede3246a82a845ea97652ecfae57f88e8d8f520d8a186f9157167574fb34"
+    },
+    {
+      "name": "libkrb5-3_1.20.1-6ubuntu2.10_amd64.deb",
+      "bytes": 347568,
+      "sha256": "60b48c5a3233f1d8caba30d6573edc8e131911ab6d63adcd664f7cbe62708362"
+    },
+    {
+      "name": "libgssapi-krb5-2_1.20.1-6ubuntu2.10_amd64.deb",
+      "bytes": 142830,
+      "sha256": "0d4a0187bcdbbe3e6a10bfa574100087d12052d0d0ef28614fd6210021c587b2"
+    },
+    {
+      "name": "libxcb-image0_0.4.0-2build1_amd64.deb",
+      "bytes": 10810,
+      "sha256": "6af300eeef5523aa0d8dbfab3a23c1fe7006ecc19f8abdc5c636d734d7bb5287"
+    },
+    {
+      "name": "libxcb-icccm4_0.4.1-1.1build3_amd64.deb",
+      "bytes": 10788,
+      "sha256": "9e0e349f3904cd5bc07fea45498c4d03527a5d1178edd78555e84fdbd3793708"
+    },
+    {
+      "name": "libk5crypto3_1.20.1-6ubuntu2.10_amd64.deb",
+      "bytes": 81944,
+      "sha256": "273f7cc95a68d927d7f71c3e78b7717a16a8d86e646a206bae7bf797150ae9db"
+    },
+    {
+      "name": "libxcb-cursor0_0.1.4-1build1_amd64.deb",
+      "bytes": 10718,
+      "sha256": "137cf52479b5a9d8c5926d70d311af04be41941a32ee777340d704cc458c06d8"
+    },
+    {
+      "name": "fonts-noto-cjk_1%3a20230817+repack1-3_all.deb",
+      "bytes": 61229778,
+      "sha256": "7d64b985f6fe128c99eae5610d5c047338e572bdcfb2bb09736be01b824a7f6c"
+    },
+    {
+      "name": "libxcb-render-util0_0.3.9-1build4_amd64.deb",
+      "bytes": 9608,
+      "sha256": "95d895ceb921e38e4edd85555b407b1a0564d8ad097ec7566e261764ce27787b"
+    },
+    {
+      "name": "libcom-err2_1.47.0-2.4~exp1ubuntu4.1_amd64.deb",
+      "bytes": 22982,
+      "sha256": "7ab24d3057dabf86db8f771ad6e43f073ed86b6b950d6e8ba22cb9fe6707bbc9"
+    },
+    {
+      "name": "libkeyutils1_1.6.3-3build1_amd64.deb",
+      "bytes": 9490,
+      "sha256": "0679f198b0128179e46cdf956fb2022c23c758664c00bc8efa0382d509683a8a"
+    }
+  ],
+  "stable_entry_modified": false,
+  "candidate_only": true,
+  "started": 1793339708.8713894,
+  "temporary_root": "/run/user/1000/ib-014-sii48q_7",
+  "returncode": 0,
+  "finished": 1793339719.159096
+}

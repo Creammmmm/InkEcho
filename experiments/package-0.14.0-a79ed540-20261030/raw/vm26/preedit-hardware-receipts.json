@@ -1,0 +1,20 @@
+[
+  {
+    "sequence": 1,
+    "keyval": 110,
+    "actor_pid": 9492,
+    "active": true,
+    "focused": true,
+    "returncode": 0,
+    "stdout": "{\"ok\": true, \"key\": \"110\"}\n"
+  },
+  {
+    "sequence": 2,
+    "keyval": 105,
+    "actor_pid": 9492,
+    "active": true,
+    "focused": true,
+    "returncode": 0,
+    "stdout": "{\"ok\": true, \"key\": \"105\"}\n"
+  }
+]

@@ -1,0 +1,52 @@
+from pathlib import Path
+import os,json,subprocess,sys,time,tempfile,shutil
+O=Path('/mnt/output')/os.environ.get('INKECHO_OUTPUT_STAGE','');O.mkdir(mode=0o700,exist_ok=True);A=Path(json.loads((O/'mount.json').read_text())['appdir']);env=dict(os.environ);env.update(DBUS_SESSION_BUS_ADDRESS='unix:path=/run/user/1000/bus',XDG_RUNTIME_DIR='/run/user/1000')
+for l in subprocess.check_output(['systemctl','--user','show-environment'],env=env,text=True).splitlines():
+ k,_,v=l.partition('=')
+ if k in {'DISPLAY','XAUTHORITY','WAYLAND_DISPLAY','XDG_SESSION_TYPE','XDG_CURRENT_DESKTOP'}:env[k]=v
+env.update(APPDIR=str(A),PYTHONHOME=str(A/'usr'),PYTHONPATH=str(A/'packages'),PYTHONNOUSERSITE='1',LD_LIBRARY_PATH=str(A/'usr/lib/inkecho'),PYTHONDONTWRITEBYTECODE='1',TMPDIR='/run/user/1000/inkecho-package-gate-0.14.0')
+a=sys.argv[1];py=str(A/'usr/bin/python3')
+if a in ('install','enable','disable'):
+ code="import asyncio,json;from inkecho.platform.owned_extension import OwnedExtensionManager;from inkecho.platform.owned_installation import installation_state,verified_installation;m=OwnedExtensionManager();"
+ if a=='install':code+="print('before',asyncio.run(installation_state()));m.install() if not verified_installation() else None;assert verified_installation();"
+ else:code+='m.'+a+'();'
+ code+="print(m.status());print('state',asyncio.run(installation_state()))"
+ with(O/('owned-'+a+'.log')).open('w')as f:r=subprocess.run([py,'-c',code],env=env,stdout=f,stderr=subprocess.STDOUT)
+ (O/('owned-'+a+'-exit.json')).write_text(json.dumps({'returncode':r.returncode}));r.check_returncode()
+elif a.startswith('suite-'):
+ backend=a[6:].split('-')[0];pe=dict(env);pe.update(INKECHO_EXPECTED_BACKEND=backend,QT_QPA_PLATFORM='offscreen')
+ targetenv=dict(env)
+ if backend=='keyboard':pe['INKECHO_MAP_AUDIT']='native' if a.endswith('-native') else 'x11'
+ for k in ['APPDIR','PYTHONHOME','PYTHONPATH','LD_LIBRARY_PATH','PYTHONNOUSERSITE']:targetenv.pop(k,None)
+ targetenv['GDK_BACKEND']='x11' if backend=='keyboard' else ('wayland' if env.get('XDG_SESSION_TYPE')=='wayland' else 'x11');targetenv['GTK_IM_MODULE']='ibus' if backend=='ibus' else'gtk-im-context-simple'
+ if a.endswith('-native'):targetenv['GDK_BACKEND']='wayland'
+ if backend=='ibus' and targetenv['GDK_BACKEND']=='wayland':targetenv.pop('GTK_IM_MODULE',None)
+ for case in ['normal','cancel-after-first']:
+  archive=O/(a+'-'+case);archive.mkdir(mode=0o700);folder=Path(tempfile.mkdtemp(prefix='inkecho-owned-keyboard-',dir='/tmp'));te=dict(targetenv);te['INKECHO_PIPELINE_ROOT']=str(folder)
+  with(folder/'target.log').open('w')as log:p=subprocess.Popen(['/usr/bin/python3','/mnt/input/target.py'],env=te,stdout=log,stderr=subprocess.STDOUT)
+  try:
+   if te['GDK_BACKEND']=='x11':
+    ids=subprocess.check_output(['xdotool','search','--sync','--all','--onlyvisible','--pid',str(p.pid),'--name','^InkEcho candidate owned protocol target$'],env=te,text=True,timeout=5).split();assert len(ids)==1
+    assert int(subprocess.check_output(['xdotool','getwindowpid',ids[0]],env=te,text=True))==p.pid
+    subprocess.run(['xdotool','windowactivate','--sync',ids[0]],env=te,check=True,timeout=5)
+    subprocess.run(['xdotool','mousemove','--window',ids[0],'120','100','click','1'],env=te,check=True,timeout=5)
+    (folder/'fixture-owned-activation.json').write_text(json.dumps({'pid':p.pid,'xid':int(ids[0]),'real_window_activation':True,'guard_unchanged':True},indent=2))
+   row={}
+   for _ in range(100):
+    if(folder/'target.json').exists():
+     row=json.loads((folder/'target.json').read_text())
+     if row.get('active')and row.get('focused'):break
+    time.sleep(.1)
+   (folder/'target-immodules.json').write_text(json.dumps({'loaded':[l.split()[-1]for l in Path('/proc',str(p.pid),'maps').read_text().splitlines()if '/im-'in l],'gtk_im_module':te.get('GTK_IM_MODULE')},indent=2));(folder/'initial-target.json').write_text(json.dumps(row,indent=2));assert row.get('active')and row.get('focused')and row['text']=='',row
+   with(folder/'pipeline.log').open('w')as log:r=subprocess.run([py,'/mnt/input/pipeline_receiver_cancel.py','--package-root',str(A/'packages'),'--output',str(folder/'report.json'),'--backend','auto','--case',case],env=pe,stdout=log,stderr=subprocess.STDOUT,timeout=90)
+   first=json.loads((folder/'target.json').read_text());time.sleep(1.3);last=json.loads((folder/'target.json').read_text());sample='你好 InkEcho，café Ω\n第二行。';ok=last['text']==sample if case=='normal'else bool(last['text'])and len(last['text'])<len(sample)and sample.startswith(last['text'])
+   result={'pipeline_exit':r.returncode,'expected_backend':backend,'session':env.get('XDG_SESSION_TYPE'),'target_backend':te['GDK_BACKEND'],'text_exact_or_partial_prefix':ok,'no_late_text':first['text']==last['text'],'old_target_untouched':last['window_count']==2 and last['first_text']=='','received_codepoints':[ord(c)for c in last['text']]};result['passed']=r.returncode==0 and ok and result['no_late_text']and result['old_target_untouched'];(folder/'receiver.json').write_text(json.dumps(result,indent=2));print(json.dumps(result));assert result['passed'],result
+  finally:
+   if p.poll()is None:p.terminate()
+   print('target exit',p.wait(timeout=5));shutil.copytree(folder,archive,dirs_exist_ok=True)
+elif a=='fcitx-zero':
+ subprocess.run([py,'/mnt/input/fcitx-zero.py'],env=env,check=True)
+elif a=='diagnostic':
+ code="import asyncio,os,json;from inkecho.platform.owned_installation import installation_state,installed_directory,verified_installation;from inkecho.platform.framework_detection import detect_system_framework;print(json.dumps({k:os.environ.get(k) for k in ('HOME','XDG_DATA_HOME','DBUS_SESSION_BUS_ADDRESS','XDG_SESSION_TYPE','XDG_CURRENT_DESKTOP')}));print(installed_directory(),verified_installation());print('state',asyncio.run(installation_state()));print('framework',asyncio.run(detect_system_framework()))"
+ subprocess.run([py,'-c',code],env=env,check=True)
+else:raise ValueError(a)

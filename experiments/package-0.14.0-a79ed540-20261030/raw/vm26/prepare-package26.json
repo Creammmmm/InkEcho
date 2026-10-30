@@ -1,0 +1,7 @@
+{
+  "stage": "wayland",
+  "command": "systemctl --user show-environment; pgrep -a gnome-shell; python3 /mnt/input/guest.py prepare; python3 /mnt/input/owned-settings.py save",
+  "returncode": 2,
+  "stdout": "HOME=/home/inkecho\nLANG=C.UTF-8\nLOGNAME=inkecho\nPATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin\nSHELL=/bin/bash\nUSER=inkecho\nXDG_RUNTIME_DIR=/run/user/1000\nGTK_MODULES=gail:atk-bridge\nQT_ACCESSIBILITY=1\nXDG_DATA_DIRS=/usr/share/ubuntu:/usr/share/gnome:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop\nDBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus\nDEBUGINFOD_URLS=$'https://debuginfod.ubuntu.com '\nDESKTOP_SESSION=ubuntu\nDISPLAY=:0\nGDMSESSION=ubuntu\nGNOME_DESKTOP_SESSION_ID=this-is-deprecated\nGNOME_SETUP_DISPLAY=unix:/tmp/.X11-unix/X1\nGPG_AGENT_INFO=/run/user/1000/gnupg/S.gpg-agent:0:1\nPWD=/home/inkecho\nQT_IM_MODULE=ibus\nQT_IM_MODULES=$'wayland;ibus'\nSHLVL=0\nSSH_AUTH_SOCK=/run/user/1000/openssh_agent\nUSERNAME=inkecho\nWAYLAND_DISPLAY=wayland-0\nXAUTHORITY=/run/user/1000/.mutter-Xwaylandauth.B2YBY3\nXDG_CONFIG_DIRS=/etc/xdg/xdg-ubuntu:/etc/xdg\nXDG_CURRENT_DESKTOP=ubuntu:GNOME\nXDG_MENU_PREFIX=gnome-\nXDG_SESSION_CLASS=user\nXDG_SESSION_DESKTOP=ubuntu\nXDG_SESSION_EXTRA_DEVICE_ACCESS=render:accel\nXDG_SESSION_TYPE=wayland\nXMODIFIERS=@im=ibus\n1389 /usr/bin/gnome-shell --mode=ubuntu\n",
+  "stderr": "python3: can't open file '/mnt/input/guest.py': [Errno 2] No such file or directory\n"
+}

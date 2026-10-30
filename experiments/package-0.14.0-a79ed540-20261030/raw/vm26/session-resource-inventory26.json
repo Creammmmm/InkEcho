@@ -1,0 +1,7 @@
+{
+  "stage": "wayland",
+  "command": "ls -l /usr/share/xsessions /usr/share/wayland-sessions; dpkg-query -W gnome-shell mutter-common xserver-xorg-core; df -h /run/user/1000 /tmp; free -m",
+  "returncode": 0,
+  "stdout": "/usr/share/wayland-sessions:\ntotal 16\n-rw-r--r-- 1 root root  281 Jun 23 09:32 ubuntu.desktop\n-rw-r--r-- 1 root root 9175 Mar  7  2026 xfce-wayland.desktop\n\n/usr/share/xsessions:\ntotal 12\n-rw-r--r-- 1 root root 10257 Mar  7  2026 xfce.desktop\ngnome-shell\t50.1-0ubuntu1.4\nmutter-common\t50.1-0ubuntu2.5\nxserver-xorg-core\t2:21.1.22-1ubuntu1.3\nFilesystem      Size  Used Avail Use% Mounted on\ntmpfs           392M   16M  376M   4% /run/user/1000\ntmpfs           2.0G  288M  1.7G  15% /tmp\n               total        used        free      shared  buff/cache   available\nMem:            3910        1451         875         342        2172        2458\nSwap:              0           0           0\n",
+  "stderr": ""
+}

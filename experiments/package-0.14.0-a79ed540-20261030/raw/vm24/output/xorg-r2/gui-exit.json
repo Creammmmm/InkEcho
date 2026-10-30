@@ -1,0 +1,13 @@
+{
+  "returncode": 1,
+  "command": [
+    "/usr/bin/python3",
+    "/mnt/input/frozen/scripts/validation/desktop_app_probe.py",
+    "--appimage",
+    "/mnt/input/InkEcho.AppImage",
+    "--output",
+    "/run/user/1000/inkecho-gui014-0y3iunx0/ui"
+  ],
+  "private_guest_ram_output": true,
+  "strict_original_probe": true
+}

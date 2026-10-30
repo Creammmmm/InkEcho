@@ -1,0 +1,12 @@
+[1030/064210.481276:WARNING:chrome/app/chrome_main_linux.cc:84] Read channel stable from /opt/inkecho-qa-chrome/CHROME_VERSION_EXTRA
+{"method": "auto", "case": "mixed", "passed": true, "route": null, "received_lengths": [22, 0], "error": null}
+{"method": "auto", "case": "switch", "passed": true, "route": null, "received_lengths": [1, 21], "error": null}
+{"method": "auto", "case": "cancel", "passed": true, "route": null, "received_lengths": [1, 0], "error": {"code": "ibus_cancelled"}}
+{"method": "auto", "case": "pending-cancel", "passed": true, "route": null, "received_lengths": [0, 0], "error": null}
+Future exception was never retrieved
+future: <Future finished exception=BrokenPipeError(32, 'Broken pipe')>
+Traceback (most recent call last):
+  File "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchjjikGO/packages/dbus_next/aio/message_bus.py", line 63, in write_callback
+    self.offset += self.sock.send(self.buf[self.offset:])
+                   ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+BrokenPipeError: [Errno 32] Broken pipe

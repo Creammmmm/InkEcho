@@ -1,0 +1,13 @@
+{
+  "checks": {
+    "install": {
+      "refused": true,
+      "diagnostic": "检测到完整旧版自动输入扩展。请先停用并卸载旧扩展，再安装本版本并重新登录桌面；尚未启用或替换文件。"
+    },
+    "enable": {
+      "refused": true,
+      "diagnostic": "检测到完整旧版自动输入扩展。请先停用并卸载旧扩展，再安装本版本并重新登录桌面；尚未启用或替换文件。"
+    }
+  },
+  "old_assets_unchanged": true
+}

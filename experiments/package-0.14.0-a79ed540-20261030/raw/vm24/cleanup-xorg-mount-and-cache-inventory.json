@@ -1,0 +1,7 @@
+{
+  "stage": "xorg-r2",
+  "command": "python3 /mnt/input/guest.py cleanup; du -h -d 2 /run/user/1000/inkecho-package-gate-0.14.0 /run/user/1000/inkecho-gui014-0y3iunx0 2>/dev/null || true; ps -u 1000 -o pid,comm | grep -E 'python|chrome|InkEcho' || true",
+  "returncode": 0,
+  "stdout": "guest action PASS cleanup\n40K\t/run/user/1000/inkecho-package-gate-0.14.0/provider-tests-wayland/temporary\n44K\t/run/user/1000/inkecho-package-gate-0.14.0/provider-tests-wayland\n8.0K\t/run/user/1000/inkecho-package-gate-0.14.0/provider-ui-wayland/config\n108K\t/run/user/1000/inkecho-package-gate-0.14.0/provider-ui-wayland\n121M\t/run/user/1000/inkecho-package-gate-0.14.0/appimage_extracted_65a2a2b4e5ecb70b06c1169683b768a6/usr\n160M\t/run/user/1000/inkecho-package-gate-0.14.0/appimage_extracted_65a2a2b4e5ecb70b06c1169683b768a6/packages\n280M\t/run/user/1000/inkecho-package-gate-0.14.0/appimage_extracted_65a2a2b4e5ecb70b06c1169683b768a6\n281M\t/run/user/1000/inkecho-package-gate-0.14.0\n0\t/run/user/1000/inkecho-gui014-0y3iunx0/appimage_extracted_65a2a2b4e5ecb70b06c1169683b768a6/usr\n94M\t/run/user/1000/inkecho-gui014-0y3iunx0/appimage_extracted_65a2a2b4e5ecb70b06c1169683b768a6/packages\n94M\t/run/user/1000/inkecho-gui014-0y3iunx0/appimage_extracted_65a2a2b4e5ecb70b06c1169683b768a6\n0\t/run/user/1000/inkecho-gui014-0y3iunx0/ui/private\n0\t/run/user/1000/inkecho-gui014-0y3iunx0/ui\n94M\t/run/user/1000/inkecho-gui014-0y3iunx0\n",
+  "stderr": ""
+}

@@ -1,0 +1,7 @@
+{
+  "stage": "wayland",
+  "command": "test $(id -u) = 1000; test $(stat -c %u /proc/9492) = 1000; tr '\\0' ' ' < /proc/9492/cmdline",
+  "returncode": 0,
+  "stdout": "/usr/bin/python3 /mnt/input/preedit-actor.py /run/user/1000/inkecho-neighbor-preedit-nlrqov12/actor.json ",
+  "stderr": ""
+}

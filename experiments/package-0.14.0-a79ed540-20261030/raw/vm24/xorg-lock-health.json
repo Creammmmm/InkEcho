@@ -1,0 +1,7 @@
+{
+  "stage": "xorg-r3",
+  "command": "env DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/1000/bus gdbus call --session --dest org.gnome.ScreenSaver --object-path /org/gnome/ScreenSaver --method org.gnome.ScreenSaver.GetActive; loginctl show-session 24 -p LockedHint -p Active -p Type; DISPLAY=:0 xprop -root _NET_CLIENT_LIST_STACKING",
+  "returncode": 0,
+  "stdout": "(false,)\nType=x11\nActive=yes\nLockedHint=no\n_NET_CLIENT_LIST_STACKING(WINDOW): window id # 0x2400008\n",
+  "stderr": ""
+}

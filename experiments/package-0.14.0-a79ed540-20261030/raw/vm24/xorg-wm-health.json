@@ -1,0 +1,7 @@
+{
+  "stage": "xorg-r3",
+  "command": "pgrep -a gnome-shell || true; DISPLAY=:0 xprop -root _NET_SUPPORTING_WM_CHECK _NET_ACTIVE_WINDOW || true; loginctl list-sessions --no-legend; df -h /run/user/1000 /tmp; free -m",
+  "returncode": 0,
+  "stdout": "10138 /usr/bin/gnome-shell\n10187 /usr/libexec/gnome-shell-calendar-server\n_NET_SUPPORTING_WM_CHECK(WINDOW): window id # 0x400001\n_NET_ACTIVE_WINDOW(WINDOW): window id # 0x0\n24 1000 inkecho seat0 tty2 active  no -\n33 1000 inkecho -     -    closing no -\n38 1000 inkecho -     -    active  no -\nFilesystem      Size  Used Avail Use% Mounted on\ntmpfs           392M  112M  280M  29% /run/user/1000\n/dev/vda1        30G   19G   12G  62% /\n               total        used        free      shared  buff/cache   available\nMem:            3915        1213         871         124        2202        2702\nSwap:              0           0           0\n",
+  "stderr": ""
+}

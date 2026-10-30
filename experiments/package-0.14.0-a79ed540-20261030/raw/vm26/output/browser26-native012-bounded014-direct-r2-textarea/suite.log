@@ -1,0 +1,19 @@
+[1030/063920.401456:WARNING:chrome/app/chrome_main_linux.cc:84] Read channel stable from /opt/inkecho-qa-chrome/CHROME_VERSION_EXTRA
+{"method": "auto", "case": "old-client-new-service", "passed": false, "route": null, "received_lengths": [0, 0], "error": {"type": "AssertionError", "code": null, "accepted": null, "acknowledged_attempts": null, "unsent_offset": null, "uncertain": null}}
+Traceback (most recent call last):
+  File "/mnt/input/browser-native012.py", line 243, in <module>
+    asyncio.run(run())
+    ~~~~~~~~~~~^^^^^^^
+  File "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchjjikGO/usr/lib/python3.13/asyncio/runners.py", line 196, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchjjikGO/usr/lib/python3.13/asyncio/runners.py", line 119, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchjjikGO/usr/lib/python3.13/asyncio/base_events.py", line 726, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/mnt/input/browser-native012.py", line 222, in run
+    if not row['passed']:raise AssertionError('owned case failed: '+case)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: owned case failed: old-client-new-service

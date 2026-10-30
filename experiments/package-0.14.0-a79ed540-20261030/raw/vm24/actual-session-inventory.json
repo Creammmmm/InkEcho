@@ -1,0 +1,7 @@
+{
+  "stage": "wayland",
+  "command": "ls -l /usr/share/xsessions /usr/share/wayland-sessions; loginctl list-sessions --no-legend; systemctl --user show-environment | grep -E '^XDG_SESSION_TYPE=|^DESKTOP_SESSION='; command -v xfce4-session || true; cat /etc/gdm3/custom.conf",
+  "returncode": 0,
+  "stdout": "/usr/share/wayland-sessions:\ntotal 8\n-rw-r--r-- 1 root root 330 Apr 15  2024 ubuntu-wayland.desktop\n-rw-r--r-- 1 root root 318 Apr 15  2024 ubuntu.desktop\n\n/usr/share/xsessions:\ntotal 8\n-rw-r--r-- 1 root root 301 Apr 15  2024 ubuntu-xorg.desktop\n-rw-r--r-- 1 root root 318 Apr 15  2024 ubuntu.desktop\n20 1000 inkecho seat0 tty2 active  no -\n21 1000 inkecho -     -    closing no -\n22 1000 inkecho -     -    active  no -\nDESKTOP_SESSION=ubuntu\nXDG_SESSION_TYPE=wayland\n[daemon]\nAutomaticLoginEnable=true\nAutomaticLogin=inkecho\n",
+  "stderr": ""
+}

@@ -1,0 +1,7 @@
+{
+  "stage": "xorg-r3",
+  "command": "sudo cp /mnt/output/xorg-transition-r2/gdm-before.conf /etc/gdm3/custom.conf; sudo gdbus call --system --dest org.freedesktop.Accounts --object-path /org/freedesktop/Accounts/User1000 --method org.freedesktop.Accounts.User.SetSession ubuntu-wayland; sudo gdbus call --system --dest org.freedesktop.Accounts --object-path /org/freedesktop/Accounts/User1000 --method org.freedesktop.Accounts.User.SetSessionType wayland; sudo systemctl restart gdm3",
+  "returncode": 0,
+  "stdout": "()\n()\n",
+  "stderr": ""
+}

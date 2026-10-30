@@ -1,0 +1,7 @@
+{
+  "stage": "wayland-gui-r2",
+  "command": "python3 /mnt/input/guest.py gui",
+  "returncode": 0,
+  "stdout": "guest action PASS gui\n",
+  "stderr": ""
+}

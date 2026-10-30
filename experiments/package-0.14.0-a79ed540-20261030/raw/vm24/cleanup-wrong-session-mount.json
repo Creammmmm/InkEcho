@@ -1,0 +1,7 @@
+{
+  "stage": "xorg",
+  "command": "python3 /mnt/input/guest.py cleanup",
+  "returncode": 0,
+  "stdout": "guest action PASS cleanup\n",
+  "stderr": ""
+}

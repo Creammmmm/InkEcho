@@ -1,0 +1,3 @@
+[1030/055831.740012:WARNING:chrome/app/chrome_main_linux.cc:84] Read channel stable from /opt/inkecho-test-chrome/CHROME_VERSION_EXTRA
+{"method": "auto", "case": "legacy-protocol", "passed": true, "route": "explicit-bounded-protocol-probe", "received_lengths": [0, 0], "error": null}
+{"method": "auto", "case": "legacy-auto", "passed": true, "route": null, "received_lengths": [0, 0], "error": {"code": "ibus_upgrade_required"}}

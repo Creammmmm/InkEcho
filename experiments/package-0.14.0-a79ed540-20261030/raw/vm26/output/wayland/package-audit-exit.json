@@ -1,0 +1,8 @@
+{
+  "returncode": 0,
+  "argv": [
+    "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchjjikGO/usr/bin/python3",
+    "-c",
+    "import json,os;from pathlib import Path;from artifact_scope import audit_package,selected_artifact;r={'artifact':selected_artifact(Path('/mnt/input/InkEcho.AppImage'),'a79ed5409e6d935ac1d4f4420f06e5ec6bc454fc20bdfe04c6db1e8ed6def055'),'audit':audit_package(Path(os.environ['APPDIR'])/'packages',Path('/mnt/input/frozen/src'),'0.14.0')};(Path('/mnt/output')/os.environ.get('INKECHO_OUTPUT_STAGE','')/'package-audit.json').write_text(json.dumps(r,indent=2))"
+  ]
+}

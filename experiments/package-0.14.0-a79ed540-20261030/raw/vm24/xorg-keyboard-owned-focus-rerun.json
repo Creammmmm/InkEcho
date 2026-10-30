@@ -1,0 +1,7 @@
+{
+  "stage": "xorg-r3",
+  "command": "python3 /mnt/input/gap.py suite-keyboard-r2",
+  "returncode": 1,
+  "stdout": "target exit -15\n",
+  "stderr": "Traceback (most recent call last):\n  File \"/mnt/input/gap.py\", line 34, in <module>\n    (folder/'target-immodules.json').write_text(json.dumps({'loaded':[l.split()[-1]for l in Path('/proc',str(p.pid),'maps').read_text().splitlines()if '/im-'in l],'gtk_im_module':te.get('GTK_IM_MODULE')},indent=2));(folder/'initial-target.json').write_text(json.dumps(row,indent=2));assert row.get('active')and row.get('focused')and row['text']=='',row\n                                                                                                                                                                                                                                                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: {'text': '', 'key_events': [], 'held_generated_keys': [], 'first_text': '', 'window_count': 1, 'active': False, 'focused': False, 'time': 1689.131776607}\n"
+}

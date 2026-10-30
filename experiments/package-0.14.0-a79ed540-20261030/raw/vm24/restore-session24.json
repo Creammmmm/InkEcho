@@ -1,0 +1,7 @@
+{
+  "stage": "xorg-r3",
+  "command": "python3 /mnt/input/mutter-maps.py restored; sudo cp /mnt/output/xorg-transition-r2/gdm-before.conf /etc/gdm3/custom.conf; sudo gdbus call --system --dest org.freedesktop.Accounts --object-path /org/freedesktop/Accounts/User1000 --method org.freedesktop.Accounts.User.SetSession ubuntu-wayland; sudo gdbus call --system --dest org.freedesktop.Accounts --object-path /org/freedesktop/Accounts/User1000 --method org.freedesktop.Accounts.User.SetSessionType wayland; sudo systemctl restart gdm3",
+  "returncode": 1,
+  "stdout": "",
+  "stderr": "Traceback (most recent call last):\n  File \"/mnt/input/mutter-maps.py\", line 17, in <module>\n    env={l.partition('=')[0]:l.partition('=')[2]for l in subprocess.check_output(['systemctl','--user','show-environment'],text=True).splitlines()if l.partition('=')[0]in {'XDG_SESSION_TYPE','WAYLAND_DISPLAY'}};assert env.get('XDG_SESSION_TYPE')=='wayland'\n                                                                                                                                                                                                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError\n"
+}

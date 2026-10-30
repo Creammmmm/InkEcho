@@ -1,0 +1,7 @@
+{
+  "stage": "xorg-r2",
+  "command": "du -h -d 1 /run/user/1000 2>/dev/null; find /run/user/1000/inkecho-gui014-0y3iunx0 -maxdepth 2 -type d | head -12",
+  "returncode": 1,
+  "stdout": "94M\t/run/user/1000/inkecho-gui014-0y3iunx0\n4.0K\t/run/user/1000/gdm\n4.0K\t/run/user/1000/inkecho-neighbor-preedit-4ao64gck\n6.1M\t/run/user/1000/inkecho-browser-4ews53ql\n5.9M\t/run/user/1000/inkecho-browser-mnyh3iow\n32K\t/run/user/1000/original-v5-disabled\n5.8M\t/run/user/1000/inkecho-browser-ej8ktw8i\n820M\t/run/user/1000/inkecho-package-gate-0.14.0\n0\t/run/user/1000/doc\n0\t/run/user/1000/gnome-shell\n0\t/run/user/1000/at-spi\n4.0K\t/run/user/1000/dconf\n0\t/run/user/1000/gvfs\n0\t/run/user/1000/gvfsd\n0\t/run/user/1000/dbus-1\n0\t/run/user/1000/speech-dispatcher\n4.0K\t/run/user/1000/pulse\n0\t/run/user/1000/keyring\n0\t/run/user/1000/gcr\n0\t/run/user/1000/gnupg\n92K\t/run/user/1000/systemd\n932M\t/run/user/1000\n",
+  "stderr": ""
+}

@@ -1,0 +1,12 @@
+[1030/064047.274470:WARNING:chrome/app/chrome_main_linux.cc:84] Read channel stable from /opt/inkecho-qa-chrome/CHROME_VERSION_EXTRA
+{"method": "auto", "case": "old-client-new-service", "passed": true, "route": "published-old-client-explicit-negative", "received_lengths": [0, 0], "error": null}
+{"method": "auto", "case": "legacy-during-new", "passed": true, "route": "explicit-protocol-isolation", "received_lengths": [1, 0], "error": null}
+{"method": "auto", "case": "server-expired", "passed": true, "route": "explicit-bounded-protocol-probe", "received_lengths": [0, 0], "error": null}
+{"method": "auto", "case": "mixed", "passed": true, "route": null, "received_lengths": [22, 0], "error": null}
+{"method": "auto", "case": "leading-lf", "passed": true, "route": null, "received_lengths": [2, 0], "error": null}
+{"method": "auto", "case": "trailing-lf", "passed": true, "route": null, "received_lengths": [2, 0], "error": null}
+{"method": "auto", "case": "consecutive-tail", "passed": true, "route": null, "received_lengths": [3, 0], "error": null}
+{"method": "auto", "case": "pure-three-tail", "passed": true, "route": null, "received_lengths": [4, 0], "error": null}
+{"method": "auto", "case": "switch", "passed": true, "route": null, "received_lengths": [1, 21], "error": null}
+{"method": "auto", "case": "cancel", "passed": true, "route": null, "received_lengths": [1, 0], "error": {"code": "ibus_cancelled"}}
+{"method": "auto", "case": "pending-cancel", "passed": true, "route": null, "received_lengths": [0, 0], "error": null}

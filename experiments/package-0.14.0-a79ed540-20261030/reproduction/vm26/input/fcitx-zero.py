@@ -1,0 +1,99 @@
+from pathlib import Path
+import asyncio,json,os,subprocess,sys,time,hashlib
+p=Path('/mnt/input');appdir=Path(os.environ['APPDIR']);candidate=appdir/'usr/share/inkecho/fcitx5/x86_64'
+os.environ.update(XDG_RUNTIME_DIR='/run/user/1000',DBUS_SESSION_BUS_ADDRESS='unix:path=/run/user/1000/bus')
+for line in subprocess.check_output(['systemctl','--user','show-environment'],text=True).splitlines():
+ k,_,v=line.partition('=')
+ if k in {'DISPLAY','WAYLAND_DISPLAY','XAUTHORITY','XDG_CURRENT_DESKTOP','XDG_SESSION_TYPE'}:os.environ[k]=v
+from inkecho.platform import fcitx5_staging
+from inkecho.platform.fcitx5_install import FcitxInstaller
+from inkecho.platform.ibus_owned_default import DefaultAutoOutputRouter
+from inkecho.platform.wayland_keyboard import keyboard_for_desktop
+from inkecho.platform.output_router import OutputRouterError
+from inkecho.platform.keyboard import KeyboardError
+expected='f67c6b5f2cb7ecd7c915c8062efd3b70284c74b97ced4a597d942c4b39594e44';assert hashlib.sha256((candidate/'candidate/libinkecho.so').read_bytes()).hexdigest()==expected
+os.umask(0o077)
+assert fcitx5_staging.TESTED_CANDIDATE_SHA256==expected
+label=os.environ.get('INKECHO_OUTPUT_STAGE','default');work=Path('/run/user/1000/inkecho-package-gate-0.14.0')/('fcitx-zero-'+label);work.mkdir(mode=0o700);state=work/'actor.json';data=work/'data';data.mkdir(mode=0o700);rows=[];daemon=None;actor=None
+os.environ['GDK_BACKEND']='x11'
+os.environ.update(GTK_IM_MODULE='fcitx',QT_IM_MODULE='fcitx',XMODIFIERS='@im=fcitx',XDG_DATA_HOME=str(data),XDG_CONFIG_HOME=str(work/'config'),XDG_CACHE_HOME=str(work/'cache'))
+def record(name,**kw):rows.append({'case':name,**kw});(work/'results.json').write_text(json.dumps(rows,indent=2));print(json.dumps(rows[-1]),flush=True)
+def read():return json.loads(state.read_text())
+keyseq=0
+async def key(value,mods=0):
+ global keyseq
+ assert mods==0 and value in {97,110,105,32}
+ before=read();assert before['active'] and before['focus'],before
+ keyseq+=1;share=Path('/mnt/output');request=share/'key-request.json';temporary=share/'key-request.tmp'
+ temporary.write_text(json.dumps({'sequence':keyseq,'keyval':value,'owned_pid':before['pid'],'owned_active':before['active'],'owned_focus':before['focus']}));temporary.replace(request)
+ for _ in range(150):
+  ack=share/'key-ack.json'
+  if ack.exists() and json.loads(ack.read_text()).get('sequence')==keyseq:
+   assert json.loads(ack.read_text())['qmp_ok'];break
+  await asyncio.sleep(.05)
+ else:raise RuntimeError('virtual keyboard acknowledgement timeout')
+ await asyncio.sleep(.5)
+async def output(text,cancel=False):
+ r=DefaultAutoOutputRouter(keyboard_for_desktop());await r.prepare_task('auto');active=True;result={}
+ def first(_):
+  nonlocal active
+  if cancel:active=False
+ try:
+  async with r.output_session():result['sent']=await r.insert(text,lambda:active,deadline=time.monotonic()+5,on_first_sent=first);result['route']=r.selected
+ except (OutputRouterError,KeyboardError) as e:result.update(code=e.code,attempts=getattr(e,'acknowledged_attempts',0),route=r.selected)
+ finally:await r.aclose()
+ await asyncio.sleep(1.2 if cancel else .4);result['receiver']=read();return result
+async def main():
+ global daemon,actor
+ install=FcitxInstaller(source=candidate,data_home=data)
+ hints=[line for line in subprocess.check_output(['systemctl','--user','show-environment'],text=True).splitlines() if line.split('=',1)[0] in {'XMODIFIERS','GTK_IM_MODULE','QT_IM_MODULE'}]
+ (work/'hints-before.json').write_text(json.dumps(hints))
+ try:
+  subprocess.run(['systemctl','--user','set-environment','XMODIFIERS=@im=fcitx','GTK_IM_MODULE=fcitx','QT_IM_MODULE=fcitx'],check=True)
+  install.install();record('staged',sha=expected,test_only_override=False,session=os.environ.get('XDG_SESSION_TYPE'))
+  env=dict(os.environ);env.update(XDG_DATA_HOME=str(data),XDG_CONFIG_HOME=str(work/'config'),XDG_CACHE_HOME=str(work/'cache'))
+  config=work/'config/fcitx5';config.mkdir(parents=True,mode=0o700,exist_ok=True)
+  (config/'profile').write_text('[Groups/0]\nName=Default\nDefault Layout=us\nDefaultIM=pinyin\n\n[Groups/0/Items/0]\nName=keyboard-us\nLayout=\n\n[Groups/0/Items/1]\nName=pinyin\nLayout=\n\n[GroupOrder]\n0=Default\n')
+  daemon_env=dict(env)
+  for k in ['PYTHONHOME','PYTHONPATH','LD_LIBRARY_PATH','QT_PLUGIN_PATH']:daemon_env.pop(k,None)
+  daemon=subprocess.Popen(['/usr/bin/fcitx5','-D','--disable','clipboard'],env=daemon_env,stdout=(work/'fcitx.log').open('w'),stderr=subprocess.STDOUT);await asyncio.sleep(2);assert daemon.poll() is None;install.enable()
+  actor_env=dict(daemon_env);actor_env['GDK_BACKEND']='x11';actor_env['GTK_IM_MODULE']='gtk-im-context-simple'
+  actor=subprocess.Popen(['/usr/bin/python3',str(p/'actor.py'),str(state)],env=actor_env,stdin=subprocess.PIPE,text=True,stdout=(work/'actor.log').open('w'),stderr=subprocess.STDOUT)
+  await asyncio.sleep(.3)
+  ids=subprocess.check_output(['xdotool','search','--all','--onlyvisible','--pid',str(actor.pid),'--name','^InkEcho owned Fcitx guard acceptance$'],env=actor_env,text=True).split();assert len(ids)==1,ids
+  subprocess.run(['xdotool','windowactivate','--sync',ids[0]],env=actor_env,check=True,timeout=5)
+  record('owned_activation',pid=actor.pid,xid=int(ids[0]),fixture_only=True)
+  for _ in range(100):
+   if state.exists() and read()['active'] and read()['focus']:break
+   if actor.poll() is not None:raise RuntimeError('actor exited')
+   await asyncio.sleep(.1)
+  assert read()['active'] and read()['focus'],read();record('ready',receiver=read())
+  frontend=[line.split()[-1]for line in Path('/proc',str(actor.pid),'maps').read_text().splitlines()if 'im-fcitx5'in line];record('fcitx_frontend_absent',paths=frontend);assert not frontend
+  from inkecho.platform.fcitx5 import Fcitx5Bridge,FcitxOutputError
+  original_insert=Fcitx5Bridge.insert
+  async def observed_insert(self,*args,**kwargs):
+   try:return await original_insert(self,*args,**kwargs)
+   except FcitxOutputError as e:
+    record('actual_fcitx_result',code=e.code,accepted=e.accepted,uncertain=e.uncertain,unsent_offset=e.unsent_offset);raise
+  Fcitx5Bridge.insert=observed_insert
+  sample='无目标 fallback Ω。';normal=await output(sample);record('confirmed_zero_fallback',**normal);assert normal.get('sent')==len(sample) and normal['route']=='keyboard' and read()['text']==sample
+  cancel=await output('甲乙丙',True);record('cancel_after_fallback_prefix',**cancel);assert read()['text']==sample+'甲'
+  errors=[r for r in rows if r['case']=='actual_fcitx_result'];assert len(errors)==2 and all(r['code']=='no_target'and r['accepted']==0 and r['uncertain']is False and r['unsent_offset']==0 for r in errors),errors
+  record('actual_zero_fallback_passed',value=True)
+ finally:
+  if actor:
+   if actor.poll() is None:actor.stdin.write('quit\n');actor.stdin.flush()
+   try:record('actor_exit',exit=actor.wait(timeout=5))
+   except subprocess.TimeoutExpired:
+    actor.terminate();record('actor_terminated_after_timeout',exit=actor.wait(timeout=5))
+  if daemon:
+   if daemon.poll() is None:daemon.terminate()
+   record('daemon_exit',exit=daemon.wait(timeout=5))
+  try:install.disable()
+  except Exception as e:record('disable_error',kind=type(e).__name__)
+  subprocess.run(['systemctl','--user','unset-environment','XMODIFIERS','GTK_IM_MODULE','QT_IM_MODULE'],check=True)
+  for value in hints:subprocess.run(['systemctl','--user','set-environment',value],check=True)
+  restored=[line for line in subprocess.check_output(['systemctl','--user','show-environment'],text=True).splitlines() if line.split('=',1)[0] in {'XMODIFIERS','GTK_IM_MODULE','QT_IM_MODULE'}];record('hints_restored',value=sorted(restored)==sorted(hints));assert sorted(restored)==sorted(hints)
+  import shutil
+  shutil.copytree(work,Path('/mnt/output')/('fcitx-zero-raw-'+label),dirs_exist_ok=True)
+asyncio.run(main())

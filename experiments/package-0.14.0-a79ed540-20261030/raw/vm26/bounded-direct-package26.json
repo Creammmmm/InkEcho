@@ -1,0 +1,7 @@
+{
+  "stage": "wayland",
+  "command": "env RUN_LABEL=bounded014-direct CASES=old-client-new-service,legacy-during-new,server-expired,mixed,leading-lf,trailing-lf,consecutive-tail,pure-three-tail,switch,cancel,pending-cancel ACTIVE_FCITX=0 OWNED_IM=ibus NATIVE_IME=1 python3 /mnt/input/launch-native012.py",
+  "returncode": 1,
+  "stdout": "Traceback (most recent call last):\n  File \"/mnt/input/browser-native012.py\", line 8, in <module>\n    from session_product_r2 import probe\nModuleNotFoundError: No module named 'session_product_r2'\n\n",
+  "stderr": "Traceback (most recent call last):\n  File \"/mnt/input/launch-native012.py\", line 9, in <module>\n    (O/'suite-exit.json').write_text(json.dumps({'returncode':r.returncode}));print((O/'suite.log').read_text());r.check_returncode()\n                                                                                                                 ~~~~~~~~~~~~~~~~~~^^\n  File \"/usr/lib/python3.14/subprocess.py\", line 509, in check_returncode\n    raise CalledProcessError(self.returncode, self.args, self.stdout,\n                             self.stderr)\nsubprocess.CalledProcessError: Command '['/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchjjikGO/usr/bin/python3', '/mnt/input/browser-native012.py']' returned non-zero exit status 1.\n"
+}

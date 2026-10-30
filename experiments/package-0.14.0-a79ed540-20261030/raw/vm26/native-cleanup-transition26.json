@@ -1,0 +1,7 @@
+{
+  "stage": "wayland",
+  "command": "python3 /mnt/input/guest.py cleanup; env DISPLAY=:0 python3 /mnt/input/resource-check.py; sh /mnt/input/select-xfce.sh",
+  "returncode": 1,
+  "stdout": "guest action PASS cleanup\n",
+  "stderr": "Authorization required, but no authorization protocol specified\n\nxcb_connection_has_error() returned true\nAuthorization required, but no authorization protocol specified\n\nTraceback (most recent call last):\n  File \"/mnt/input/resource-check.py\", line 17, in <module>\n    x=C.CDLL(ctypes.util.find_library('X11'));x.XOpenDisplay.argtypes=[C.c_char_p];x.XOpenDisplay.restype=C.c_void_p;x.XKeysymToKeycode.argtypes=[C.c_void_p,C.c_ulong];x.XKeysymToKeycode.restype=C.c_ubyte;x.XQueryKeymap.argtypes=[C.c_void_p,C.c_void_p];x.XCloseDisplay.argtypes=[C.c_void_p];d=x.XOpenDisplay(None);assert d;state=C.create_string_buffer(32);x.XQueryKeymap(d,state);held=[]\n                                                                                                                                                                                                                                                                                                                                 ^\nAssertionError\n"
+}

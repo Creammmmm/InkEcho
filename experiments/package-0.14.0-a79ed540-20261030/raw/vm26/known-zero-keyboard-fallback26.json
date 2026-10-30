@@ -1,0 +1,7 @@
+{
+  "stage": "wayland-fallback",
+  "command": "python3 /mnt/input/guest.py prepare; env RUN_LABEL=keyboard-fallback014 CASES=mixed,cancel ACTIVE_FCITX=1 OWNED_IM=fcitx NATIVE_IME=1 python3 /mnt/input/launch-native012.py",
+  "returncode": 0,
+  "stdout": "guest action PASS prepare\n[1030/064602.587904:WARNING:chrome/app/chrome_main_linux.cc:84] Read channel stable from /opt/inkecho-qa-chrome/CHROME_VERSION_EXTRA\n{\"method\": \"auto\", \"case\": \"mixed\", \"passed\": true, \"route\": null, \"received_lengths\": [22, 0], \"error\": null}\n{\"method\": \"auto\", \"case\": \"cancel\", \"passed\": true, \"route\": null, \"received_lengths\": [1, 0], \"error\": null}\n\n",
+  "stderr": ""
+}

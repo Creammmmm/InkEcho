@@ -1,0 +1,3558 @@
+{
+  "artifact_sha256": "a79ed5409e6d935ac1d4f4420f06e5ec6bc454fc20bdfe04c6db1e8ed6def055",
+  "appdir": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchjjikGO",
+  "test_scope": "candidate 0.14.0 runtime and staged Fcitx addon, unchanged 0.14.0 packaged modules and assets; actual-package qualification; actual Session/default Router; synthetic Recorder/provider only",
+  "browser_profile_new": "/run/user/1000/inkecho-browser-1f7bqznl/chrome-profile",
+  "sandbox_disabled_in_isolated_vm": false,
+  "field": "textarea",
+  "system": "Ubuntu 26.04.1 LTS",
+  "session": "wayland",
+  "desktop": "ubuntu:GNOME",
+  "cases": [
+    {
+      "method": "auto",
+      "case": "old-client-new-service",
+      "sample_length": 22,
+      "initial_focus": "a",
+      "published_legacy_rejected": true,
+      "neighbor_batch_after_session_close": false,
+      "session": {
+        "reported_characters": 0,
+        "route": "published-old-client-explicit-negative",
+        "input_failure": null
+      },
+      "sent": 0,
+      "route": "published-old-client-explicit-negative",
+      "cancel_requested": false,
+      "first_dom": {
+        "a_length": 0,
+        "b_length": 0,
+        "a_html": "",
+        "a_text": "",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": []
+      },
+      "last_dom": {
+        "a_length": 0,
+        "b_length": 0,
+        "a_html": "",
+        "a_text": "",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": []
+      },
+      "no_late": true,
+      "exact_fixture_match": false,
+      "passed": true,
+      "received_lengths": [
+        0,
+        0
+      ]
+    },
+    {
+      "method": "auto",
+      "case": "legacy-during-new",
+      "sample_length": 1,
+      "initial_focus": "a",
+      "legacy_rejected_without_mutating_new_task": true,
+      "neighbor_batch_after_session_close": false,
+      "session": {
+        "reported_characters": 1,
+        "route": "explicit-protocol-isolation",
+        "input_failure": null
+      },
+      "sent": 1,
+      "route": "explicit-protocol-isolation",
+      "cancel_requested": false,
+      "first_dom": {
+        "a_length": 1,
+        "b_length": 0,
+        "a_html": "",
+        "a_text": "",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 3337.100000000006
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 3337.7000000000116
+          }
+        ]
+      },
+      "last_dom": {
+        "a_length": 1,
+        "b_length": 0,
+        "a_html": "",
+        "a_text": "",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 3337.100000000006
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 3337.7000000000116
+          }
+        ]
+      },
+      "no_late": true,
+      "exact_fixture_match": true,
+      "passed": true,
+      "received_lengths": [
+        1,
+        0
+      ]
+    },
+    {
+      "method": "auto",
+      "case": "server-expired",
+      "sample_length": 22,
+      "initial_focus": "a",
+      "server_expired_rejected": true,
+      "neighbor_batch_after_session_close": false,
+      "session": {
+        "reported_characters": 0,
+        "route": "explicit-bounded-protocol-probe",
+        "input_failure": null
+      },
+      "sent": 0,
+      "route": "explicit-bounded-protocol-probe",
+      "cancel_requested": false,
+      "first_dom": {
+        "a_length": 0,
+        "b_length": 0,
+        "a_html": "",
+        "a_text": "",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": []
+      },
+      "last_dom": {
+        "a_length": 0,
+        "b_length": 0,
+        "a_html": "",
+        "a_text": "",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": []
+      },
+      "no_late": true,
+      "exact_fixture_match": false,
+      "passed": true,
+      "received_lengths": [
+        0,
+        0
+      ]
+    },
+    {
+      "method": "auto",
+      "case": "mixed",
+      "sample_length": 22,
+      "initial_focus": "a",
+      "neighbor_batch_after_session_close": false,
+      "session": {
+        "route": null,
+        "outcome": "unconfirmed",
+        "metrics_characters": null,
+        "reported_characters": 22,
+        "outcomes": [
+          {
+            "characters": 22
+          }
+        ],
+        "deltas": [
+          {
+            "index": 0,
+            "monotonic": 237.357813204
+          },
+          {
+            "index": 1,
+            "monotonic": 237.383192323
+          },
+          {
+            "index": 2,
+            "monotonic": 237.408309566
+          },
+          {
+            "index": 3,
+            "monotonic": 237.433536302
+          },
+          {
+            "index": 4,
+            "monotonic": 237.458971937
+          },
+          {
+            "index": 5,
+            "monotonic": 237.484166354
+          },
+          {
+            "index": 6,
+            "monotonic": 237.509769485
+          },
+          {
+            "index": 7,
+            "monotonic": 237.535651212
+          },
+          {
+            "index": 8,
+            "monotonic": 237.56172804
+          },
+          {
+            "index": 9,
+            "monotonic": 237.587127552
+          },
+          {
+            "index": 10,
+            "monotonic": 237.612721137
+          },
+          {
+            "index": 11,
+            "monotonic": 237.638453865
+          },
+          {
+            "index": 12,
+            "monotonic": 237.663883112
+          },
+          {
+            "index": 13,
+            "monotonic": 237.689136159
+          },
+          {
+            "index": 14,
+            "monotonic": 237.714821995
+          },
+          {
+            "index": 15,
+            "monotonic": 237.740942907
+          },
+          {
+            "index": 16,
+            "monotonic": 237.766544501
+          },
+          {
+            "index": 17,
+            "monotonic": 237.791851581
+          },
+          {
+            "index": 18,
+            "monotonic": 237.817459907
+          },
+          {
+            "index": 19,
+            "monotonic": 237.842857002
+          },
+          {
+            "index": 20,
+            "monotonic": 237.868920733
+          },
+          {
+            "index": 21,
+            "monotonic": 237.894107433
+          }
+        ],
+        "dispatches": [
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 237.415720807,
+            "route_before": "ibus",
+            "first_sent_at": 237.416502191,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 237.416526087,
+            "route_before": "ibus",
+            "first_sent_at": 237.417649589,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 237.433560589,
+            "route_before": "ibus",
+            "first_sent_at": 237.43473841,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 237.459068132,
+            "route_before": "ibus",
+            "first_sent_at": 237.462059115,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 237.484202763,
+            "route_before": "ibus",
+            "first_sent_at": 237.48637335,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 237.509845028,
+            "route_before": "ibus",
+            "first_sent_at": 237.51419534,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 237.535735502,
+            "route_before": "ibus",
+            "first_sent_at": 237.540022841,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 237.561794822,
+            "route_before": "ibus",
+            "first_sent_at": 237.565743811,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 237.587192466,
+            "route_before": "ibus",
+            "first_sent_at": 237.594327809,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 237.612808644,
+            "route_before": "ibus",
+            "first_sent_at": 237.616532507,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 237.638524752,
+            "route_before": "ibus",
+            "first_sent_at": 237.642095524,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 237.663951636,
+            "route_before": "ibus",
+            "first_sent_at": 237.667554726,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 237.689213985,
+            "route_before": "ibus",
+            "first_sent_at": 237.692747705,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 237.714905512,
+            "route_before": "ibus",
+            "first_sent_at": 237.718679808,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 237.741036402,
+            "route_before": "ibus",
+            "first_sent_at": 237.744511521,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 237.766628516,
+            "route_before": "ibus",
+            "first_sent_at": 237.770281899,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 237.817544596,
+            "route_before": "ibus",
+            "first_sent_at": 237.821740556,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 2,
+            "has_lf": true,
+            "at": 237.84296574,
+            "route_before": "ibus",
+            "first_sent_at": 237.846836295,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 237.869041324,
+            "route_before": "ibus",
+            "first_sent_at": 237.875017721,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 237.89416449,
+            "route_before": "ibus",
+            "first_sent_at": 237.898427413,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 237.919949032,
+            "route_before": "ibus",
+            "first_sent_at": 237.923537145,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          }
+        ],
+        "input_failure": null,
+        "error_code": null
+      },
+      "sent": 22,
+      "route": null,
+      "cancel_requested": false,
+      "first_dom": {
+        "a_length": 22,
+        "b_length": 0,
+        "a_html": "",
+        "a_text": "",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7114.600000000006
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 7116.200000000012
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7116.399999999994
+          },
+          {
+            "id": "a",
+            "len": 2,
+            "type": "input",
+            "time": 7116.5
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7132.700000000012
+          },
+          {
+            "id": "a",
+            "len": 3,
+            "type": "input",
+            "time": 7133
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7160
+          },
+          {
+            "id": "a",
+            "len": 4,
+            "type": "input",
+            "time": 7160.399999999994
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7184.3000000000175
+          },
+          {
+            "id": "a",
+            "len": 5,
+            "type": "input",
+            "time": 7185.5
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7211.700000000012
+          },
+          {
+            "id": "a",
+            "len": 6,
+            "type": "input",
+            "time": 7212.3000000000175
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7238
+          },
+          {
+            "id": "a",
+            "len": 7,
+            "type": "input",
+            "time": 7238.700000000012
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7263.5
+          },
+          {
+            "id": "a",
+            "len": 8,
+            "type": "input",
+            "time": 7264.200000000012
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7288.8000000000175
+          },
+          {
+            "id": "a",
+            "len": 9,
+            "type": "input",
+            "time": 7289.600000000006
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7314.200000000012
+          },
+          {
+            "id": "a",
+            "len": 10,
+            "type": "input",
+            "time": 7314.8000000000175
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7339.700000000012
+          },
+          {
+            "id": "a",
+            "len": 11,
+            "type": "input",
+            "time": 7341
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7365.100000000006
+          },
+          {
+            "id": "a",
+            "len": 12,
+            "type": "input",
+            "time": 7365.8000000000175
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7390.200000000012
+          },
+          {
+            "id": "a",
+            "len": 13,
+            "type": "input",
+            "time": 7391.399999999994
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7416.399999999994
+          },
+          {
+            "id": "a",
+            "len": 14,
+            "type": "input",
+            "time": 7417.200000000012
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7442.200000000012
+          },
+          {
+            "id": "a",
+            "len": 15,
+            "type": "input",
+            "time": 7442.899999999994
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7467.899999999994
+          },
+          {
+            "id": "a",
+            "len": 16,
+            "type": "input",
+            "time": 7468.5
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7519.5
+          },
+          {
+            "id": "a",
+            "len": 17,
+            "type": "input",
+            "time": 7520.5
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 2,
+            "inputType": "insertText",
+            "time": 7544.399999999994
+          },
+          {
+            "id": "a",
+            "len": 19,
+            "type": "input",
+            "time": 7548.399999999994
+          },
+          {
+            "id": "a",
+            "len": 19,
+            "type": "input",
+            "time": 7549
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7571.200000000012
+          },
+          {
+            "id": "a",
+            "len": 20,
+            "type": "input",
+            "time": 7571.700000000012
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7595.3000000000175
+          },
+          {
+            "id": "a",
+            "len": 21,
+            "type": "input",
+            "time": 7596
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7621.200000000012
+          },
+          {
+            "id": "a",
+            "len": 22,
+            "type": "input",
+            "time": 7621.8000000000175
+          }
+        ]
+      },
+      "last_dom": {
+        "a_length": 22,
+        "b_length": 0,
+        "a_html": "",
+        "a_text": "",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7114.600000000006
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 7116.200000000012
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7116.399999999994
+          },
+          {
+            "id": "a",
+            "len": 2,
+            "type": "input",
+            "time": 7116.5
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7132.700000000012
+          },
+          {
+            "id": "a",
+            "len": 3,
+            "type": "input",
+            "time": 7133
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7160
+          },
+          {
+            "id": "a",
+            "len": 4,
+            "type": "input",
+            "time": 7160.399999999994
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7184.3000000000175
+          },
+          {
+            "id": "a",
+            "len": 5,
+            "type": "input",
+            "time": 7185.5
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7211.700000000012
+          },
+          {
+            "id": "a",
+            "len": 6,
+            "type": "input",
+            "time": 7212.3000000000175
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7238
+          },
+          {
+            "id": "a",
+            "len": 7,
+            "type": "input",
+            "time": 7238.700000000012
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7263.5
+          },
+          {
+            "id": "a",
+            "len": 8,
+            "type": "input",
+            "time": 7264.200000000012
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7288.8000000000175
+          },
+          {
+            "id": "a",
+            "len": 9,
+            "type": "input",
+            "time": 7289.600000000006
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7314.200000000012
+          },
+          {
+            "id": "a",
+            "len": 10,
+            "type": "input",
+            "time": 7314.8000000000175
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7339.700000000012
+          },
+          {
+            "id": "a",
+            "len": 11,
+            "type": "input",
+            "time": 7341
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7365.100000000006
+          },
+          {
+            "id": "a",
+            "len": 12,
+            "type": "input",
+            "time": 7365.8000000000175
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7390.200000000012
+          },
+          {
+            "id": "a",
+            "len": 13,
+            "type": "input",
+            "time": 7391.399999999994
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7416.399999999994
+          },
+          {
+            "id": "a",
+            "len": 14,
+            "type": "input",
+            "time": 7417.200000000012
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7442.200000000012
+          },
+          {
+            "id": "a",
+            "len": 15,
+            "type": "input",
+            "time": 7442.899999999994
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7467.899999999994
+          },
+          {
+            "id": "a",
+            "len": 16,
+            "type": "input",
+            "time": 7468.5
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7519.5
+          },
+          {
+            "id": "a",
+            "len": 17,
+            "type": "input",
+            "time": 7520.5
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 2,
+            "inputType": "insertText",
+            "time": 7544.399999999994
+          },
+          {
+            "id": "a",
+            "len": 19,
+            "type": "input",
+            "time": 7548.399999999994
+          },
+          {
+            "id": "a",
+            "len": 19,
+            "type": "input",
+            "time": 7549
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7571.200000000012
+          },
+          {
+            "id": "a",
+            "len": 20,
+            "type": "input",
+            "time": 7571.700000000012
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7595.3000000000175
+          },
+          {
+            "id": "a",
+            "len": 21,
+            "type": "input",
+            "time": 7596
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 7621.200000000012
+          },
+          {
+            "id": "a",
+            "len": 22,
+            "type": "input",
+            "time": 7621.8000000000175
+          }
+        ]
+      },
+      "no_late": true,
+      "exact_fixture_match": true,
+      "passed": true,
+      "received_lengths": [
+        22,
+        0
+      ]
+    },
+    {
+      "method": "auto",
+      "case": "leading-lf",
+      "sample_length": 2,
+      "initial_focus": "a",
+      "neighbor_batch_after_session_close": false,
+      "session": {
+        "route": null,
+        "outcome": "unconfirmed",
+        "metrics_characters": null,
+        "reported_characters": 2,
+        "outcomes": [
+          {
+            "characters": 2
+          }
+        ],
+        "deltas": [
+          {
+            "index": 0,
+            "monotonic": 239.783397171
+          },
+          {
+            "index": 1,
+            "monotonic": 239.808774174
+          }
+        ],
+        "dispatches": [
+          {
+            "length": 2,
+            "has_lf": true,
+            "at": 239.859546309,
+            "route_before": "ibus",
+            "first_sent_at": 239.860204197,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          }
+        ],
+        "input_failure": null,
+        "error_code": null
+      },
+      "sent": 2,
+      "route": null,
+      "cancel_requested": false,
+      "first_dom": {
+        "a_length": 2,
+        "b_length": 0,
+        "a_html": "",
+        "a_text": "",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 2,
+            "inputType": "insertText",
+            "time": 9558.300000000017
+          },
+          {
+            "id": "a",
+            "len": 2,
+            "type": "input",
+            "time": 9558.899999999994
+          },
+          {
+            "id": "a",
+            "len": 2,
+            "type": "input",
+            "time": 9559.100000000006
+          }
+        ]
+      },
+      "last_dom": {
+        "a_length": 2,
+        "b_length": 0,
+        "a_html": "",
+        "a_text": "",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 2,
+            "inputType": "insertText",
+            "time": 9558.300000000017
+          },
+          {
+            "id": "a",
+            "len": 2,
+            "type": "input",
+            "time": 9558.899999999994
+          },
+          {
+            "id": "a",
+            "len": 2,
+            "type": "input",
+            "time": 9559.100000000006
+          }
+        ]
+      },
+      "no_late": true,
+      "exact_fixture_match": true,
+      "passed": true,
+      "received_lengths": [
+        2,
+        0
+      ]
+    },
+    {
+      "method": "auto",
+      "case": "trailing-lf",
+      "sample_length": 2,
+      "initial_focus": "a",
+      "neighbor_batch_after_session_close": false,
+      "session": {
+        "route": null,
+        "outcome": "unconfirmed",
+        "metrics_characters": null,
+        "reported_characters": 2,
+        "outcomes": [
+          {
+            "characters": 2
+          }
+        ],
+        "deltas": [
+          {
+            "index": 0,
+            "monotonic": 241.712041532
+          },
+          {
+            "index": 1,
+            "monotonic": 241.737384552
+          }
+        ],
+        "dispatches": [
+          {
+            "length": 2,
+            "has_lf": true,
+            "at": 241.800423065,
+            "route_before": "ibus",
+            "first_sent_at": 241.801306947,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          }
+        ],
+        "input_failure": null,
+        "error_code": null
+      },
+      "sent": 2,
+      "route": null,
+      "cancel_requested": false,
+      "first_dom": {
+        "a_length": 2,
+        "b_length": 0,
+        "a_html": "",
+        "a_text": "",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 2,
+            "inputType": "insertText",
+            "time": 11499.399999999994
+          },
+          {
+            "id": "a",
+            "len": 2,
+            "type": "input",
+            "time": 11499.899999999994
+          },
+          {
+            "id": "a",
+            "len": 2,
+            "type": "input",
+            "time": 11500.100000000006
+          }
+        ]
+      },
+      "last_dom": {
+        "a_length": 2,
+        "b_length": 0,
+        "a_html": "",
+        "a_text": "",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 2,
+            "inputType": "insertText",
+            "time": 11499.399999999994
+          },
+          {
+            "id": "a",
+            "len": 2,
+            "type": "input",
+            "time": 11499.899999999994
+          },
+          {
+            "id": "a",
+            "len": 2,
+            "type": "input",
+            "time": 11500.100000000006
+          }
+        ]
+      },
+      "no_late": true,
+      "exact_fixture_match": true,
+      "passed": true,
+      "received_lengths": [
+        2,
+        0
+      ]
+    },
+    {
+      "method": "auto",
+      "case": "consecutive-tail",
+      "sample_length": 3,
+      "initial_focus": "a",
+      "neighbor_batch_after_session_close": false,
+      "session": {
+        "route": null,
+        "outcome": "unconfirmed",
+        "metrics_characters": null,
+        "reported_characters": 3,
+        "outcomes": [
+          {
+            "characters": 3
+          }
+        ],
+        "deltas": [
+          {
+            "index": 0,
+            "monotonic": 243.653635056
+          },
+          {
+            "index": 1,
+            "monotonic": 243.679335751
+          },
+          {
+            "index": 2,
+            "monotonic": 243.705415881
+          }
+        ],
+        "dispatches": [
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 243.705460264,
+            "route_before": "ibus",
+            "first_sent_at": 243.706114264,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 2,
+            "has_lf": true,
+            "at": 243.731070644,
+            "route_before": "ibus",
+            "first_sent_at": 243.733246141,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          }
+        ],
+        "input_failure": null,
+        "error_code": null
+      },
+      "sent": 3,
+      "route": null,
+      "cancel_requested": false,
+      "first_dom": {
+        "a_length": 3,
+        "b_length": 0,
+        "a_html": "",
+        "a_text": "",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 13404.200000000012
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 13404.5
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 2,
+            "inputType": "insertText",
+            "time": 13431
+          },
+          {
+            "id": "a",
+            "len": 3,
+            "type": "input",
+            "time": 13431.700000000012
+          },
+          {
+            "id": "a",
+            "len": 3,
+            "type": "input",
+            "time": 13431.899999999994
+          }
+        ]
+      },
+      "last_dom": {
+        "a_length": 3,
+        "b_length": 0,
+        "a_html": "",
+        "a_text": "",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 13404.200000000012
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 13404.5
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 2,
+            "inputType": "insertText",
+            "time": 13431
+          },
+          {
+            "id": "a",
+            "len": 3,
+            "type": "input",
+            "time": 13431.700000000012
+          },
+          {
+            "id": "a",
+            "len": 3,
+            "type": "input",
+            "time": 13431.899999999994
+          }
+        ]
+      },
+      "no_late": true,
+      "exact_fixture_match": true,
+      "passed": true,
+      "received_lengths": [
+        3,
+        0
+      ]
+    },
+    {
+      "method": "auto",
+      "case": "pure-three-tail",
+      "sample_length": 4,
+      "initial_focus": "a",
+      "neighbor_batch_after_session_close": false,
+      "session": {
+        "route": null,
+        "outcome": "unconfirmed",
+        "metrics_characters": null,
+        "reported_characters": 4,
+        "outcomes": [
+          {
+            "characters": 4
+          }
+        ],
+        "deltas": [
+          {
+            "index": 0,
+            "monotonic": 245.601786219
+          },
+          {
+            "index": 1,
+            "monotonic": 245.627627537
+          },
+          {
+            "index": 2,
+            "monotonic": 245.652851876
+          },
+          {
+            "index": 3,
+            "monotonic": 245.678016731
+          }
+        ],
+        "dispatches": [
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 245.677076821,
+            "route_before": "ibus",
+            "first_sent_at": 245.677937711,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 3,
+            "has_lf": true,
+            "at": 245.703263705,
+            "route_before": "ibus",
+            "first_sent_at": 245.706795128,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          }
+        ],
+        "input_failure": null,
+        "error_code": null
+      },
+      "sent": 4,
+      "route": null,
+      "cancel_requested": false,
+      "first_dom": {
+        "a_length": 4,
+        "b_length": 0,
+        "a_html": "",
+        "a_text": "",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 15376
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 15376.300000000017
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 3,
+            "inputType": "insertText",
+            "time": 15404.200000000012
+          },
+          {
+            "id": "a",
+            "len": 4,
+            "type": "input",
+            "time": 15405.899999999994
+          },
+          {
+            "id": "a",
+            "len": 4,
+            "type": "input",
+            "time": 15406.899999999994
+          },
+          {
+            "id": "a",
+            "len": 4,
+            "type": "input",
+            "time": 15407.399999999994
+          }
+        ]
+      },
+      "last_dom": {
+        "a_length": 4,
+        "b_length": 0,
+        "a_html": "",
+        "a_text": "",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 15376
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 15376.300000000017
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 3,
+            "inputType": "insertText",
+            "time": 15404.200000000012
+          },
+          {
+            "id": "a",
+            "len": 4,
+            "type": "input",
+            "time": 15405.899999999994
+          },
+          {
+            "id": "a",
+            "len": 4,
+            "type": "input",
+            "time": 15406.899999999994
+          },
+          {
+            "id": "a",
+            "len": 4,
+            "type": "input",
+            "time": 15407.399999999994
+          }
+        ]
+      },
+      "no_late": true,
+      "exact_fixture_match": true,
+      "passed": true,
+      "received_lengths": [
+        4,
+        0
+      ]
+    },
+    {
+      "method": "auto",
+      "case": "switch",
+      "sample_length": 22,
+      "initial_focus": "a",
+      "neighbor_batch_after_session_close": false,
+      "session": {
+        "route": null,
+        "outcome": "unconfirmed",
+        "metrics_characters": null,
+        "reported_characters": 22,
+        "outcomes": [
+          {
+            "characters": 22
+          }
+        ],
+        "deltas": [
+          {
+            "index": 0,
+            "monotonic": 247.564864441
+          },
+          {
+            "index": 1,
+            "monotonic": 247.590035058
+          },
+          {
+            "index": 2,
+            "monotonic": 247.615188237
+          },
+          {
+            "index": 3,
+            "monotonic": 247.640256942
+          },
+          {
+            "index": 4,
+            "monotonic": 247.666096355
+          },
+          {
+            "index": 5,
+            "monotonic": 247.691582902
+          },
+          {
+            "index": 6,
+            "monotonic": 247.71725962
+          },
+          {
+            "index": 7,
+            "monotonic": 247.742865438
+          },
+          {
+            "index": 8,
+            "monotonic": 247.768980153
+          },
+          {
+            "index": 9,
+            "monotonic": 247.794542172
+          },
+          {
+            "index": 10,
+            "monotonic": 247.820720405
+          },
+          {
+            "index": 11,
+            "monotonic": 247.846446485
+          },
+          {
+            "index": 12,
+            "monotonic": 247.872456832
+          },
+          {
+            "index": 13,
+            "monotonic": 247.898521078
+          },
+          {
+            "index": 14,
+            "monotonic": 247.924085248
+          },
+          {
+            "index": 15,
+            "monotonic": 247.949975172
+          },
+          {
+            "index": 16,
+            "monotonic": 247.975760985
+          },
+          {
+            "index": 17,
+            "monotonic": 248.001693693
+          },
+          {
+            "index": 18,
+            "monotonic": 248.027478941
+          },
+          {
+            "index": 19,
+            "monotonic": 248.052940796
+          },
+          {
+            "index": 20,
+            "monotonic": 248.078543117
+          },
+          {
+            "index": 21,
+            "monotonic": 248.104545906
+          }
+        ],
+        "dispatches": [
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 247.641265901,
+            "route_before": "ibus",
+            "first_sent_at": 247.642233165,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 247.642252261,
+            "route_before": "ibus",
+            "first_sent_at": 247.6447184,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 247.644735537,
+            "route_before": "ibus",
+            "first_sent_at": 247.663905815,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 247.666112412,
+            "route_before": "ibus",
+            "first_sent_at": 247.674769096,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 247.691625252,
+            "route_before": "ibus",
+            "first_sent_at": 247.702254604,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 247.717343603,
+            "route_before": "ibus",
+            "first_sent_at": 247.721143269,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 247.742946107,
+            "route_before": "ibus",
+            "first_sent_at": 247.747360466,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 247.769089378,
+            "route_before": "ibus",
+            "first_sent_at": 247.772955876,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 247.794621586,
+            "route_before": "ibus",
+            "first_sent_at": 247.79910173,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 247.820802492,
+            "route_before": "ibus",
+            "first_sent_at": 247.82518313,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 247.846635734,
+            "route_before": "ibus",
+            "first_sent_at": 247.852832378,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 247.872693567,
+            "route_before": "ibus",
+            "first_sent_at": 247.876626414,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 247.898599452,
+            "route_before": "ibus",
+            "first_sent_at": 247.902191299,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 247.924154727,
+            "route_before": "ibus",
+            "first_sent_at": 247.927631068,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 247.950066716,
+            "route_before": "ibus",
+            "first_sent_at": 247.958273785,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 247.975843648,
+            "route_before": "ibus",
+            "first_sent_at": 247.979790896,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 248.027571071,
+            "route_before": "ibus",
+            "first_sent_at": 248.033550385,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 2,
+            "has_lf": true,
+            "at": 248.053152104,
+            "route_before": "ibus",
+            "first_sent_at": 248.057622915,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 248.078671358,
+            "route_before": "ibus",
+            "first_sent_at": 248.08198516,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 248.104607742,
+            "route_before": "ibus",
+            "first_sent_at": 248.106696553,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          },
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 248.129751557,
+            "route_before": "ibus",
+            "first_sent_at": 248.131346296,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          }
+        ],
+        "input_failure": null,
+        "error_code": null
+      },
+      "sent": 22,
+      "route": null,
+      "cancel_requested": false,
+      "first_dom": {
+        "a_length": 1,
+        "b_length": 21,
+        "a_html": "",
+        "a_text": "",
+        "b_html": "",
+        "b_text": "",
+        "active": "b",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 17340.300000000017
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 17340.600000000006
+          },
+          {
+            "id": "b",
+            "type": "focus",
+            "time": 17340.70000000001
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 17342.600000000006
+          },
+          {
+            "id": "b",
+            "len": 1,
+            "type": "input",
+            "time": 17343.100000000006
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 17346.600000000006
+          },
+          {
+            "id": "b",
+            "len": 2,
+            "type": "input",
+            "time": 17346.800000000017
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 17365.100000000006
+          },
+          {
+            "id": "b",
+            "len": 3,
+            "type": "input",
+            "time": 17365.300000000017
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 17391.899999999994
+          },
+          {
+            "id": "b",
+            "len": 4,
+            "type": "input",
+            "time": 17392.399999999994
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 17418.70000000001
+          },
+          {
+            "id": "b",
+            "len": 5,
+            "type": "input",
+            "time": 17419.5
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 17444.70000000001
+          },
+          {
+            "id": "b",
+            "len": 6,
+            "type": "input",
+            "time": 17445.399999999994
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 17470.70000000001
+          },
+          {
+            "id": "b",
+            "len": 7,
+            "type": "input",
+            "time": 17471.399999999994
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 17496.399999999994
+          },
+          {
+            "id": "b",
+            "len": 8,
+            "type": "input",
+            "time": 17497.300000000017
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 17522.100000000006
+          },
+          {
+            "id": "b",
+            "len": 9,
+            "type": "input",
+            "time": 17522.800000000017
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 17550.600000000006
+          },
+          {
+            "id": "b",
+            "len": 10,
+            "type": "input",
+            "time": 17551.300000000017
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 17574.399999999994
+          },
+          {
+            "id": "b",
+            "len": 11,
+            "type": "input",
+            "time": 17575.100000000006
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 17599.70000000001
+          },
+          {
+            "id": "b",
+            "len": 12,
+            "type": "input",
+            "time": 17600.5
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 17625.20000000001
+          },
+          {
+            "id": "b",
+            "len": 13,
+            "type": "input",
+            "time": 17625.899999999994
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 17651.399999999994
+          },
+          {
+            "id": "b",
+            "len": 14,
+            "type": "input",
+            "time": 17652.100000000006
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 17677.800000000017
+          },
+          {
+            "id": "b",
+            "len": 15,
+            "type": "input",
+            "time": 17678.600000000006
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 17731.70000000001
+          },
+          {
+            "id": "b",
+            "len": 16,
+            "type": "input",
+            "time": 17732.5
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 2,
+            "inputType": "insertText",
+            "time": 17755.20000000001
+          },
+          {
+            "id": "b",
+            "len": 18,
+            "type": "input",
+            "time": 17756.300000000017
+          },
+          {
+            "id": "b",
+            "len": 18,
+            "type": "input",
+            "time": 17756.800000000017
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 17779.800000000017
+          },
+          {
+            "id": "b",
+            "len": 19,
+            "type": "input",
+            "time": 17780.20000000001
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 17804.600000000006
+          },
+          {
+            "id": "b",
+            "len": 20,
+            "type": "input",
+            "time": 17804.899999999994
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 17829.399999999994
+          },
+          {
+            "id": "b",
+            "len": 21,
+            "type": "input",
+            "time": 17829.70000000001
+          }
+        ]
+      },
+      "last_dom": {
+        "a_length": 1,
+        "b_length": 21,
+        "a_html": "",
+        "a_text": "",
+        "b_html": "",
+        "b_text": "",
+        "active": "b",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 17340.300000000017
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 17340.600000000006
+          },
+          {
+            "id": "b",
+            "type": "focus",
+            "time": 17340.70000000001
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 17342.600000000006
+          },
+          {
+            "id": "b",
+            "len": 1,
+            "type": "input",
+            "time": 17343.100000000006
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 17346.600000000006
+          },
+          {
+            "id": "b",
+            "len": 2,
+            "type": "input",
+            "time": 17346.800000000017
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 17365.100000000006
+          },
+          {
+            "id": "b",
+            "len": 3,
+            "type": "input",
+            "time": 17365.300000000017
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 17391.899999999994
+          },
+          {
+            "id": "b",
+            "len": 4,
+            "type": "input",
+            "time": 17392.399999999994
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 17418.70000000001
+          },
+          {
+            "id": "b",
+            "len": 5,
+            "type": "input",
+            "time": 17419.5
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 17444.70000000001
+          },
+          {
+            "id": "b",
+            "len": 6,
+            "type": "input",
+            "time": 17445.399999999994
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 17470.70000000001
+          },
+          {
+            "id": "b",
+            "len": 7,
+            "type": "input",
+            "time": 17471.399999999994
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 17496.399999999994
+          },
+          {
+            "id": "b",
+            "len": 8,
+            "type": "input",
+            "time": 17497.300000000017
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 17522.100000000006
+          },
+          {
+            "id": "b",
+            "len": 9,
+            "type": "input",
+            "time": 17522.800000000017
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 17550.600000000006
+          },
+          {
+            "id": "b",
+            "len": 10,
+            "type": "input",
+            "time": 17551.300000000017
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 17574.399999999994
+          },
+          {
+            "id": "b",
+            "len": 11,
+            "type": "input",
+            "time": 17575.100000000006
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 17599.70000000001
+          },
+          {
+            "id": "b",
+            "len": 12,
+            "type": "input",
+            "time": 17600.5
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 17625.20000000001
+          },
+          {
+            "id": "b",
+            "len": 13,
+            "type": "input",
+            "time": 17625.899999999994
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 17651.399999999994
+          },
+          {
+            "id": "b",
+            "len": 14,
+            "type": "input",
+            "time": 17652.100000000006
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 17677.800000000017
+          },
+          {
+            "id": "b",
+            "len": 15,
+            "type": "input",
+            "time": 17678.600000000006
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 17731.70000000001
+          },
+          {
+            "id": "b",
+            "len": 16,
+            "type": "input",
+            "time": 17732.5
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 2,
+            "inputType": "insertText",
+            "time": 17755.20000000001
+          },
+          {
+            "id": "b",
+            "len": 18,
+            "type": "input",
+            "time": 17756.300000000017
+          },
+          {
+            "id": "b",
+            "len": 18,
+            "type": "input",
+            "time": 17756.800000000017
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 17779.800000000017
+          },
+          {
+            "id": "b",
+            "len": 19,
+            "type": "input",
+            "time": 17780.20000000001
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 17804.600000000006
+          },
+          {
+            "id": "b",
+            "len": 20,
+            "type": "input",
+            "time": 17804.899999999994
+          },
+          {
+            "id": "b",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 17829.399999999994
+          },
+          {
+            "id": "b",
+            "len": 21,
+            "type": "input",
+            "time": 17829.70000000001
+          }
+        ]
+      },
+      "no_late": true,
+      "exact_fixture_match": true,
+      "passed": true,
+      "received_lengths": [
+        1,
+        21
+      ]
+    },
+    {
+      "method": "auto",
+      "case": "cancel",
+      "sample_length": 22,
+      "initial_focus": "a",
+      "neighbor_batch_after_session_close": false,
+      "session": {
+        "route": null,
+        "outcome": "cancelled",
+        "metrics_characters": null,
+        "reported_characters": 1,
+        "outcomes": [
+          {
+            "characters": 1
+          }
+        ],
+        "deltas": [
+          {
+            "index": 0,
+            "monotonic": 249.992948436
+          },
+          {
+            "index": 1,
+            "monotonic": 250.018496477
+          },
+          {
+            "index": 2,
+            "monotonic": 250.043864345
+          },
+          {
+            "index": 3,
+            "monotonic": 250.069332172
+          },
+          {
+            "index": 4,
+            "monotonic": 250.095068753
+          }
+        ],
+        "dispatches": [
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 250.099613397,
+            "route_before": "ibus",
+            "first_sent_at": 250.100678543,
+            "error_code": "ibus_cancelled",
+            "error_type": "OutputRouterError",
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          }
+        ],
+        "input_failure": "ibus_cancelled",
+        "error_code": null
+      },
+      "sent": 1,
+      "route": null,
+      "cancel_requested": true,
+      "error": {
+        "code": "ibus_cancelled"
+      },
+      "first_dom": {
+        "a_length": 1,
+        "b_length": 0,
+        "a_html": "",
+        "a_text": "",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "focus",
+            "time": 19483.100000000006
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 19798.800000000017
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 19799.20000000001
+          }
+        ]
+      },
+      "last_dom": {
+        "a_length": 1,
+        "b_length": 0,
+        "a_html": "",
+        "a_text": "",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": [
+          {
+            "id": "a",
+            "type": "focus",
+            "time": 19483.100000000006
+          },
+          {
+            "id": "a",
+            "type": "beforeinput",
+            "data_length": 1,
+            "inputType": "insertText",
+            "time": 19798.800000000017
+          },
+          {
+            "id": "a",
+            "len": 1,
+            "type": "input",
+            "time": 19799.20000000001
+          }
+        ]
+      },
+      "no_late": true,
+      "exact_fixture_match": false,
+      "passed": true,
+      "received_lengths": [
+        1,
+        0
+      ]
+    },
+    {
+      "method": "auto",
+      "case": "pending-cancel",
+      "sample_length": 3,
+      "initial_focus": "a",
+      "neighbor_batch_after_session_close": false,
+      "session": {
+        "route": null,
+        "outcome": "cancelled",
+        "metrics_characters": null,
+        "reported_characters": 0,
+        "outcomes": [
+          {
+            "characters": 0
+          }
+        ],
+        "deltas": [
+          {
+            "index": 0,
+            "monotonic": 251.960917862
+          },
+          {
+            "index": 1,
+            "monotonic": 251.986804442
+          }
+        ],
+        "dispatches": [],
+        "input_failure": null,
+        "error_code": null
+      },
+      "sent": 0,
+      "route": null,
+      "cancel_requested": true,
+      "first_dom": {
+        "a_length": 0,
+        "b_length": 0,
+        "a_html": "",
+        "a_text": "",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": []
+      },
+      "last_dom": {
+        "a_length": 0,
+        "b_length": 0,
+        "a_html": "",
+        "a_text": "",
+        "b_html": "",
+        "b_text": "",
+        "active": "a",
+        "focus": true,
+        "events": []
+      },
+      "no_late": true,
+      "exact_fixture_match": false,
+      "passed": true,
+      "received_lengths": [
+        0,
+        0
+      ]
+    }
+  ],
+  "failures": [],
+  "requested_im_environment": "ibus",
+  "private_fcitx_daemon_requested": false,
+  "fcitx_attempts": [],
+  "owned_requests": [
+    {
+      "method": "Commit",
+      "sequence": 0,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 233.632459799
+    },
+    {
+      "method": "CommitBatch",
+      "sequence": 0,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 233.634433377
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 0,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 233.637224378
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 0,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 235.505798721
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 0,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 237.415735233
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 1,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 237.416536878
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 2,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 237.433572815
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 3,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 237.459101475
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 4,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 237.484226274
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 5,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 237.509886418
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 6,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 237.535780747
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 7,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 237.561837442
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 8,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 237.587235367
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 9,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 237.612852338
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 10,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 237.638569917
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 11,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 237.663992904
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 12,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 237.689255705
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 13,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 237.714949411
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 14,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 237.741084903
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 15,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 237.766673753
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 16,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 237.817586375
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 17,
+      "length": 2,
+      "batch_negotiated": true,
+      "monotonic": 237.84305035
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 18,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 237.8690976
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 19,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 237.894200862
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 20,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 237.919994537
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 0,
+      "length": 2,
+      "batch_negotiated": true,
+      "monotonic": 239.859558853
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 0,
+      "length": 2,
+      "batch_negotiated": true,
+      "monotonic": 241.800439266
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 0,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 243.705471044
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 1,
+      "length": 2,
+      "batch_negotiated": true,
+      "monotonic": 243.73109783
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 0,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 245.677091009
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 1,
+      "length": 3,
+      "batch_negotiated": true,
+      "monotonic": 245.703307259
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 0,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 247.641278406
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 1,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 247.642261458
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 2,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 247.644743896
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 3,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 247.666121489
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 4,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 247.691652726
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 5,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 247.717383963
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 6,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 247.742991839
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 7,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 247.769133761
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 8,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 247.79466574
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 9,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 247.820845454
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 10,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 247.846702464
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 11,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 247.872755265
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 12,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 247.898642678
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 13,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 247.924198242
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 14,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 247.950109508
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 15,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 247.975886152
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 16,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 248.027618677
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 17,
+      "length": 2,
+      "batch_negotiated": true,
+      "monotonic": 248.053229305
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 18,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 248.078729907
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 19,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 248.104632234
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 20,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 248.129772309
+    },
+    {
+      "method": "CommitBounded",
+      "sequence": 0,
+      "length": 1,
+      "batch_negotiated": true,
+      "monotonic": 250.099627468
+    }
+  ],
+  "fcitx_observer_only": true,
+  "native_candidate_test_only_override": false,
+  "browser_resource_audit": {
+    "root": "/opt/inkecho-qa-chrome",
+    "program_files": 255,
+    "payload_bytes": 456937066,
+    "manifest_sha256": "01c5c6683bdd5e143b456a5d44b54e56e2b5d5249d3789f80b085a08b626eec4",
+    "wrapper_sha256": "51c3c7ae61c640f573e15a33de080bc481693c6d04375259654d2e92a0621d76",
+    "binary_sha256": "6c792041b07547a662e1b17974d1dc34a3db630379b45d9d89ddd7e3e68cc587",
+    "sandbox_sha256": "24beb85e4149c65db5bf40fa307721143d0883ab8952e60dde1158606f644dee",
+    "sandbox_uid": 0,
+    "sandbox_gid": 0,
+    "sandbox_mode": "0o4755",
+    "sandbox_runtime_acceptance": "not inferred from resource audit"
+  },
+  "browser_version": "Google Chrome 154.0.8037.97",
+  "browser_argv": [
+    "/opt/inkecho-qa-chrome/chrome",
+    "--password-store=basic",
+    "--no-first-run",
+    "--no-default-browser-check",
+    "--disable-background-networking",
+    "--disable-sync",
+    "--ozone-platform=wayland",
+    "--gtk-version=3",
+    "--remote-debugging-port=0",
+    "--remote-allow-origins=*",
+    "--user-data-dir=/run/user/1000/inkecho-browser-1f7bqznl/chrome-profile",
+    "file:///run/user/1000/inkecho-browser-1f7bqznl/owned.html",
+    "--enable-wayland-ime",
+    "--wayland-text-input-version=3"
+  ],
+  "focus_proofs": [
+    {
+      "label": "native-before-output",
+      "pid": 6576,
+      "native": {
+        "surface": true,
+        "toplevel": true,
+        "keyboard_enter": true
+      },
+      "display_unset": true,
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-1f7bqznl/owned.html",
+        "visible": "visible"
+      },
+      "sampled_monotonic": 230.968700754
+    },
+    {
+      "label": "auto-old-client-new-service-before-prepare",
+      "pid": 6576,
+      "native": {
+        "surface": true,
+        "toplevel": true,
+        "keyboard_enter": true
+      },
+      "display_unset": true,
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-1f7bqznl/owned.html",
+        "visible": "visible"
+      },
+      "sampled_monotonic": 231.747958781
+    },
+    {
+      "label": "auto-legacy-during-new-before-prepare",
+      "pid": 6576,
+      "native": {
+        "surface": true,
+        "toplevel": true,
+        "keyboard_enter": true
+      },
+      "display_unset": true,
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-1f7bqznl/owned.html",
+        "visible": "visible"
+      },
+      "sampled_monotonic": 233.613868607
+    },
+    {
+      "label": "auto-server-expired-before-prepare",
+      "pid": 6576,
+      "native": {
+        "surface": true,
+        "toplevel": true,
+        "keyboard_enter": true
+      },
+      "display_unset": true,
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-1f7bqznl/owned.html",
+        "visible": "visible"
+      },
+      "sampled_monotonic": 235.495388445
+    },
+    {
+      "label": "auto-mixed-before-prepare",
+      "pid": 6576,
+      "native": {
+        "surface": true,
+        "toplevel": true,
+        "keyboard_enter": true
+      },
+      "display_unset": true,
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-1f7bqznl/owned.html",
+        "visible": "visible"
+      },
+      "sampled_monotonic": 237.350319409
+    },
+    {
+      "label": "auto-leading-lf-before-prepare",
+      "pid": 6576,
+      "native": {
+        "surface": true,
+        "toplevel": true,
+        "keyboard_enter": true
+      },
+      "display_unset": true,
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-1f7bqznl/owned.html",
+        "visible": "visible"
+      },
+      "sampled_monotonic": 239.781986745
+    },
+    {
+      "label": "auto-trailing-lf-before-prepare",
+      "pid": 6576,
+      "native": {
+        "surface": true,
+        "toplevel": true,
+        "keyboard_enter": true
+      },
+      "display_unset": true,
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-1f7bqznl/owned.html",
+        "visible": "visible"
+      },
+      "sampled_monotonic": 241.706843053
+    },
+    {
+      "label": "auto-consecutive-tail-before-prepare",
+      "pid": 6576,
+      "native": {
+        "surface": true,
+        "toplevel": true,
+        "keyboard_enter": true
+      },
+      "display_unset": true,
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-1f7bqznl/owned.html",
+        "visible": "visible"
+      },
+      "sampled_monotonic": 243.648560498
+    },
+    {
+      "label": "auto-pure-three-tail-before-prepare",
+      "pid": 6576,
+      "native": {
+        "surface": true,
+        "toplevel": true,
+        "keyboard_enter": true
+      },
+      "display_unset": true,
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-1f7bqznl/owned.html",
+        "visible": "visible"
+      },
+      "sampled_monotonic": 245.596619624
+    },
+    {
+      "label": "auto-switch-before-prepare",
+      "pid": 6576,
+      "native": {
+        "surface": true,
+        "toplevel": true,
+        "keyboard_enter": true
+      },
+      "display_unset": true,
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-1f7bqznl/owned.html",
+        "visible": "visible"
+      },
+      "sampled_monotonic": 247.559589683
+    },
+    {
+      "label": "auto-cancel-before-prepare",
+      "pid": 6576,
+      "native": {
+        "surface": true,
+        "toplevel": true,
+        "keyboard_enter": true
+      },
+      "display_unset": true,
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-1f7bqznl/owned.html",
+        "visible": "visible"
+      },
+      "sampled_monotonic": 249.987997071
+    },
+    {
+      "label": "auto-pending-cancel-before-prepare",
+      "pid": 6576,
+      "native": {
+        "surface": true,
+        "toplevel": true,
+        "keyboard_enter": true
+      },
+      "display_unset": true,
+      "dom": {
+        "focus": true,
+        "active": "a",
+        "url": "file:///run/user/1000/inkecho-browser-1f7bqznl/owned.html",
+        "visible": "visible"
+      },
+      "sampled_monotonic": 251.955606559
+    }
+  ],
+  "sandbox_metadata_probe": {
+    "returncode": 0,
+    "stdout": "[{\"pid\": 6762, \"owned_parent_chain\": [6762, 6591, 6589, 6588], \"seccomp\": \"2\", \"no_new_privs\": \"1\", \"namespace_pids\": [\"6762\", \"45\"]}, {\"pid\": 6750, \"owned_parent_chain\": [6750, 6591, 6589, 6588], \"seccomp\": \"2\", \"no_new_privs\": \"1\", \"namespace_pids\": [\"6750\", \"36\"]}, {\"pid\": 6731, \"owned_parent_chain\": [6731, 6591, 6589, 6588], \"seccomp\": \"2\", \"no_new_privs\": \"1\", \"namespace_pids\": [\"6731\", \"25\"]}, {\"pid\": 6789, \"owned_parent_chain\": [6789, 6591, 6589, 6588], \"seccomp\": \"2\", \"no_new_privs\": \"1\", \"namespace_pids\": [\"6789\", \"57\"]}, {\"pid\": 6658, \"owned_parent_chain\": [6658, 6591, 6589, 6588], \"seccomp\": \"2\", \"no_new_privs\": \"1\", \"namespace_pids\": [\"6658\", \"12\"]}]\n",
+    "stderr": "",
+    "guest_root_readonly": true
+  },
+  "sandbox_renderers": [
+    {
+      "pid": 6762,
+      "owned_parent_chain": [
+        6762,
+        6591,
+        6589,
+        6588
+      ],
+      "seccomp": "2",
+      "no_new_privs": "1",
+      "namespace_pids": [
+        "6762",
+        "45"
+      ]
+    },
+    {
+      "pid": 6750,
+      "owned_parent_chain": [
+        6750,
+        6591,
+        6589,
+        6588
+      ],
+      "seccomp": "2",
+      "no_new_privs": "1",
+      "namespace_pids": [
+        "6750",
+        "36"
+      ]
+    },
+    {
+      "pid": 6731,
+      "owned_parent_chain": [
+        6731,
+        6591,
+        6589,
+        6588
+      ],
+      "seccomp": "2",
+      "no_new_privs": "1",
+      "namespace_pids": [
+        "6731",
+        "25"
+      ]
+    },
+    {
+      "pid": 6789,
+      "owned_parent_chain": [
+        6789,
+        6591,
+        6589,
+        6588
+      ],
+      "seccomp": "2",
+      "no_new_privs": "1",
+      "namespace_pids": [
+        "6789",
+        "57"
+      ]
+    },
+    {
+      "pid": 6658,
+      "owned_parent_chain": [
+        6658,
+        6591,
+        6589,
+        6588
+      ],
+      "seccomp": "2",
+      "no_new_privs": "1",
+      "namespace_pids": [
+        "6658",
+        "12"
+      ]
+    }
+  ],
+  "browser_fcitx_module_maps": [],
+  "loaded_api": "node /io/github/Creammmmm/InkEcho/IBusOwnedCandidateV5 {\n  interface org.freedesktop.DBus.Properties {\n    methods:\n      Get(in  s interface_name,\n          in  s property_name,\n          out v value);\n      GetAll(in  s interface_name,\n             out a{sv} properties);\n      Set(in  s interface_name,\n          in  s property_name,\n          in  v value);\n    signals:\n      PropertiesChanged(s interface_name,\n                        a{sv} changed_properties,\n                        as invalidated_properties);\n    properties:\n  };\n  interface org.freedesktop.DBus.Introspectable {\n    methods:\n      Introspect(out s xml_data);\n    signals:\n    properties:\n  };\n  interface org.freedesktop.DBus.Peer {\n    methods:\n      Ping();\n      GetMachineId(out s machine_uuid);\n    signals:\n    properties:\n  };\n  interface io.github.Creammmmm.InkEcho.IBusOwnedCandidateV51 {\n    methods:\n      Probe(out s arg_0);\n      Begin(in  s arg_0,\n            in  s arg_1,\n            out b arg_2);\n      Commit(in  u arg_0,\n             in  s arg_1,\n             out s arg_2);\n      BeginBatch(in  s arg_0,\n                 in  s arg_1,\n                 in  u arg_2,\n                 out b arg_3);\n      CommitBatch(in  u arg_0,\n                  in  s arg_1,\n                  out s arg_2);\n      BeginBounded(in  s arg_0,\n                   in  s arg_1,\n                   in  u arg_2,\n                   in  t arg_3,\n                   out b arg_4);\n      CommitBounded(in  u arg_0,\n                    in  s arg_1,\n                    in  t arg_2,\n                    out s arg_3);\n      Cancel(out b arg_0);\n    signals:\n    properties:\n  };\n};\n",
+  "app_xdg_data_home": null,
+  "app_home": "/home/inkecho",
+  "owned_installation_state": "enabled",
+  "owned_context_probe": [
+    "ibus",
+    ":1.8"
+  ],
+  "browser_normal_close": true,
+  "passed": true,
+  "browser_exit": 0,
+  "hints_restored": true,
+  "native_protocol_proof": {
+    "surface": true,
+    "toplevel": true,
+    "keyboard_enter": true
+  },
+  "startup_diagnostics": [
+    "browser_error_redacted",
+    "browser_error_redacted"
+  ],
+  "frozen_source_commit": "0a13b3af12c764992e09622fa6a745067f70cd1d",
+  "package_module_origins": {
+    "inkecho.platform.fcitx5_staging": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchjjikGO/packages/inkecho/platform/fcitx5_staging.py",
+    "inkecho.platform.fcitx5_install": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchjjikGO/packages/inkecho/platform/fcitx5_install.py",
+    "inkecho.platform.framework_detection": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchjjikGO/packages/inkecho/platform/framework_detection.py",
+    "inkecho.platform.ibus_lifecycle": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchjjikGO/packages/inkecho/platform/ibus_lifecycle.py",
+    "inkecho.platform.ibus": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchjjikGO/packages/inkecho/platform/ibus.py",
+    "inkecho.text_units": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchjjikGO/packages/inkecho/text_units.py",
+    "inkecho.platform.ibus_owned": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchjjikGO/packages/inkecho/platform/ibus_owned.py",
+    "inkecho.platform.fcitx5_capability": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchjjikGO/packages/inkecho/platform/fcitx5_capability.py",
+    "inkecho.platform.fcitx5": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchjjikGO/packages/inkecho/platform/fcitx5.py",
+    "inkecho.platform.output_pacing": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchjjikGO/packages/inkecho/platform/output_pacing.py",
+    "inkecho.platform.keyboard": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchjjikGO/packages/inkecho/platform/keyboard.py",
+    "inkecho.text_normalization": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchjjikGO/packages/inkecho/text_normalization.py",
+    "inkecho.platform.output_router": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchjjikGO/packages/inkecho/platform/output_router.py",
+    "inkecho.platform.ibus_owned_auto": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchjjikGO/packages/inkecho/platform/ibus_owned_auto.py",
+    "inkecho.platform.owned_installation": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchjjikGO/packages/inkecho/platform/owned_installation.py",
+    "inkecho.platform.ibus_owned_default": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchjjikGO/packages/inkecho/platform/ibus_owned_default.py",
+    "inkecho.platform.wayland_keyboard": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchjjikGO/packages/inkecho/platform/wayland_keyboard.py",
+    "inkecho.config": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchjjikGO/packages/inkecho/config.py",
+    "inkecho.provider_catalog": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchjjikGO/packages/inkecho/provider_catalog.py",
+    "inkecho.providers": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchjjikGO/packages/inkecho/providers.py",
+    "inkecho.audio": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchjjikGO/packages/inkecho/audio.py",
+    "inkecho.core": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchjjikGO/packages/inkecho/core.py",
+    "inkecho.performance": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchjjikGO/packages/inkecho/performance.py",
+    "inkecho.realtime": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchjjikGO/packages/inkecho/realtime.py",
+    "inkecho.security": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchjjikGO/packages/inkecho/security.py",
+    "inkecho.streaming_output": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchjjikGO/packages/inkecho/streaming_output.py",
+    "inkecho.app": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchjjikGO/packages/inkecho/app.py",
+    "inkecho.platform.hybrid_keyboard": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchjjikGO/packages/inkecho/platform/hybrid_keyboard.py"
+  }
+}

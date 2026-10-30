@@ -1,0 +1,7 @@
+{
+  "stage": "wayland",
+  "command": "python3 /mnt/input/guest.py gui; python3 /mnt/input/guest.py protocol; python3 /mnt/input/guest.py provider-tests; python3 /mnt/input/stage-candidate.py; sudo -n systemctl restart gdm3",
+  "returncode": 1,
+  "stdout": "",
+  "stderr": "Traceback (most recent call last):\n  File \"/mnt/input/guest.py\", line 27, in <module>\n    run('desktop-lifecycle',['/usr/bin/python3',str(F/'scripts/validation/desktop_app_probe.py'),'--appimage',str(A),'--output',str(O/'ui')],timeout=150)\n  File \"/mnt/input/guest.py\", line 11, in run\n    (O/(label+'-exit.json')).write_text(json.dumps({'returncode':r.returncode,'argv':args},indent=2));r.check_returncode()\n                                                                                                      ^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/subprocess.py\", line 502, in check_returncode\n    raise CalledProcessError(self.returncode, self.args, self.stdout,\nsubprocess.CalledProcessError: Command '['/usr/bin/python3', '/mnt/input/frozen/scripts/validation/desktop_app_probe.py', '--appimage', '/mnt/input/InkEcho.AppImage', '--output', '/mnt/output/wayland/ui']' returned non-zero exit status 1.\n"
+}

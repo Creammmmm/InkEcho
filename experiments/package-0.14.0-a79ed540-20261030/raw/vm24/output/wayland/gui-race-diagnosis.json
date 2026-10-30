@@ -1,0 +1,66 @@
+{
+  "pages": [
+    {
+      "name": "page-01.png",
+      "bytes": 81945,
+      "mtime_ns": 1793339943724002682,
+      "width_height": [
+        1214,
+        730
+      ],
+      "all_chunk_crc_valid": true,
+      "iend_valid": true
+    },
+    {
+      "name": "page-02.png",
+      "bytes": 95560,
+      "mtime_ns": 1793339943926004747,
+      "width_height": [
+        1214,
+        730
+      ],
+      "all_chunk_crc_valid": true,
+      "iend_valid": true
+    },
+    {
+      "name": "page-03.png",
+      "bytes": 116819,
+      "mtime_ns": 1793339944121006739,
+      "width_height": [
+        1214,
+        730
+      ],
+      "all_chunk_crc_valid": true,
+      "iend_valid": true
+    },
+    {
+      "name": "page-04.png",
+      "bytes": 69321,
+      "mtime_ns": 1793339944301008578,
+      "width_height": [
+        1214,
+        730
+      ],
+      "all_chunk_crc_valid": true,
+      "iend_valid": true
+    },
+    {
+      "name": "page-05.png",
+      "bytes": 44749,
+      "mtime_ns": 1793339944502010632,
+      "width_height": [
+        1214,
+        730
+      ],
+      "all_chunk_crc_valid": true,
+      "iend_valid": true
+    }
+  ],
+  "probe_log_mtime_ns": 1793339964364213593,
+  "terminal": {
+    "pid": 3511,
+    "returncode": 0,
+    "signals_sent": []
+  },
+  "interpretation": "probe waits on existence of page05 before reading all PNG bytes; Qt writes destination in place. Failure observed invalid magic, but final five PNG streams all complete/CRC valid and producer exit0/5pages/visibletrue. Race evidence, not a product rendering failure."
+}

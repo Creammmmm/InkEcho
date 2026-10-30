@@ -1,0 +1,7 @@
+{
+  "stage": "wayland-fallback",
+  "command": "sudo systemctl restart gdm3",
+  "returncode": 0,
+  "stdout": "",
+  "stderr": ""
+}

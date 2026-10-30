@@ -1,0 +1,7 @@
+{
+  "stage": "xorg-r3",
+  "command": "python3 /mnt/input/gap.py suite-keyboard-r3",
+  "returncode": 1,
+  "stdout": "target exit -15\n",
+  "stderr": "XGetWindowProperty[_NET_ACTIVE_WINDOW] failed (code=1)\nTraceback (most recent call last):\n  File \"/mnt/input/gap.py\", line 36, in <module>\n    row=json.loads((folder/'target.json').read_text())\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/json/__init__.py\", line 346, in loads\n    return _default_decoder.decode(s)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.12/json/decoder.py\", line 340, in decode\n    raise JSONDecodeError(\"Extra data\", s, end)\njson.decoder.JSONDecodeError: Extra data: line 1 column 153 (char 152)\n"
+}

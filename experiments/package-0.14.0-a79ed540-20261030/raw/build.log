@@ -1,0 +1,29 @@
+Parallel mksquashfs: Using 2 processors
+Creating 4.0 filesystem on /home/lth/github/InkEcho/dist/candidate-0.14.0-0a13b3a-20261030/source/build/inkecho.squashfs, block size 131072.
+
+Exportable Squashfs 4.0 filesystem, zstd compressed, data block size 131072
+	compressed data, compressed metadata, compressed fragments,
+	no xattrs, compressed ids
+	duplicates are removed
+Filesystem size 101052.31 Kbytes (98.68 Mbytes)
+	36.40% of uncompressed filesystem size (277608.07 Kbytes)
+Inode table size 43684 bytes (42.66 Kbytes)
+	25.83% of uncompressed inode table size (169093 bytes)
+Directory table size 43624 bytes (42.60 Kbytes)
+	46.28% of uncompressed directory table size (94256 bytes)
+Number of duplicate files found 79
+Number of inodes 4986
+Number of files 3708
+Number of fragments 231
+Number of symbolic links 1048
+Number of device nodes 0
+Number of fifo nodes 0
+Number of socket nodes 0
+Number of directories 230
+Number of hard-links 0
+Number of ids (unique uids + gids) 1
+Number of uids 1
+	root (0)
+Number of gids 1
+	root (0)
+Built /home/lth/github/InkEcho/dist/candidate-0.14.0-0a13b3a-20261030/source/dist/InkEcho-0.14.0-x86_64.AppImage (99 MiB)

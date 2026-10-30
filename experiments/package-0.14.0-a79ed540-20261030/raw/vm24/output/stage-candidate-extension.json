@@ -1,0 +1,66 @@
+{
+  "before": {
+    "owned_gate.js": {
+      "sha256": "55980b3f06324b79dcfd58d1a69f9ee8e08466e6bf68b1a1916c0afa012561bd",
+      "size": 2892
+    },
+    "delivery_gate.js": {
+      "sha256": "6900065ef4996dced1e451b7a0f14d744862e1da089e8474caf8d1789b9b9e6d",
+      "size": 1938
+    },
+    "metadata.json": {
+      "sha256": "3affc5dde73c67f8e6638d8dd115b3f7b9504b86ac29af147365675d28824549",
+      "size": 235
+    },
+    "capability.js": {
+      "sha256": "fcbaf3e7fd0184ca3141f3c4d811f7496ef753fd6282714ec128a26151a1c881",
+      "size": 2784
+    },
+    "identity.js": {
+      "sha256": "5a50a88cc6f08619b4742e2f1c269a2dce7a517ece32176270ad69f3ffc8e9ac",
+      "size": 404
+    },
+    "probe.js": {
+      "sha256": "39adc6ccc1109bf7d9cae419314781164dccbf0a2f6d6a778888a15755a12dc4",
+      "size": 951
+    },
+    "extension.js": {
+      "sha256": "132e1b6d414863bc93191c649b7cac587709fc7dd83fd8551c59b5833ff3accd",
+      "size": 5144
+    }
+  },
+  "after": {
+    "owned_gate.js": {
+      "sha256": "35a9c94ec1ddf283dfdb976bd5b59d92003527b76682d5fbe96514836f9548ba",
+      "size": 4757
+    },
+    "delivery_gate.js": {
+      "sha256": "fd8181e9d87aa50502db75536dce2999b8df3f3b063026e67db1a609be1d5e76",
+      "size": 3770
+    },
+    "metadata.json": {
+      "sha256": "3affc5dde73c67f8e6638d8dd115b3f7b9504b86ac29af147365675d28824549",
+      "size": 235
+    },
+    "capability.js": {
+      "sha256": "fcbaf3e7fd0184ca3141f3c4d811f7496ef753fd6282714ec128a26151a1c881",
+      "size": 2784
+    },
+    "identity.js": {
+      "sha256": "5a50a88cc6f08619b4742e2f1c269a2dce7a517ece32176270ad69f3ffc8e9ac",
+      "size": 404
+    },
+    "probe.js": {
+      "sha256": "39adc6ccc1109bf7d9cae419314781164dccbf0a2f6d6a778888a15755a12dc4",
+      "size": 951
+    },
+    "extension.js": {
+      "sha256": "aa1704833d67be51e95fa96173971cfb4653baa592232ef3858fe174a201c3f4",
+      "size": 8140
+    }
+  },
+  "old_complete": true,
+  "new_complete": true,
+  "explicit_isolated_test_install": true,
+  "runtime_reload_required": true
+}

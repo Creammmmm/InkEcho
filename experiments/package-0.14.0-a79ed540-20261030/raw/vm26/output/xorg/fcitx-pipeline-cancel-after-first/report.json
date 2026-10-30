@@ -1,0 +1,314 @@
+{
+  "public_sample": "你好 InkEcho，café Ω\n第二行。",
+  "events": [],
+  "import_root": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages",
+  "package_imports": true,
+  "configured_vad": false,
+  "case": "cancel-after-first",
+  "keyboard_event_counts_not_instrumented": true,
+  "defaults_before": [
+    "auto_null",
+    "auto_null.monitor"
+  ],
+  "tls_close": [
+    "closed"
+  ],
+  "target_scope": "isolated own GTK TextView target",
+  "factory_type": "DefaultAutoOutputRouter",
+  "inputs_injected": false,
+  "origins_before": {
+    "inkecho": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/__init__.py",
+      "sha256": "575ae67137bebfba28a27523707bc42d56d63da0c3c73ae585811d373a590df5"
+    },
+    "inkecho.audio": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/audio.py",
+      "sha256": "7a7c52be4465858476f0b85e12832fa6846aed0f1355ab1bb98efbe1febfdd53"
+    },
+    "inkecho.config": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/config.py",
+      "sha256": "1134540f4b469dd828aa8006f64ac1800f7a4e3806c4d1b626e7f52437f8baeb"
+    },
+    "inkecho.core": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/core.py",
+      "sha256": "3b4122d5985413f58cec23714ae5ebff19cbb58e5496e3b5177f5174dbb61b01"
+    },
+    "inkecho.performance": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/performance.py",
+      "sha256": "223a6dcef338533562c35fb916ef6e4a5e95d9d336c8c15e1bdb3e983306c3d4"
+    },
+    "inkecho.platform.framework_detection": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/platform/framework_detection.py",
+      "sha256": "119ebfaee65ce6a8b04e3652f9712c7916e57e73c64a37e3b59ac5844555033d"
+    },
+    "inkecho.platform.ibus_lifecycle": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/platform/ibus_lifecycle.py",
+      "sha256": "f2345bef05a6a030076252456dc159120973660a8e0b172ef6582933454c1355"
+    },
+    "inkecho.platform.ibus": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/platform/ibus.py",
+      "sha256": "02fdefd9b0ffeee15fe7da8c32e05f3d321eadcc73545e6e3cf400b687cc9dcf"
+    },
+    "inkecho.text_units": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/text_units.py",
+      "sha256": "5e4c216fcab6dbd7cac0888ffc802f0893637607a35c3b4767ef90aed61376b1"
+    },
+    "inkecho.platform.ibus_owned": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/platform/ibus_owned.py",
+      "sha256": "bbdef876f0f4dc0926844225db3b931374f8fbbf9021116a4f2a5088d71bed96"
+    },
+    "inkecho.platform.fcitx5_capability": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/platform/fcitx5_capability.py",
+      "sha256": "a8aa702a1339ee8c5a3909563ffcf5d4be6aa52c8d292c3f4b01fcac378895cf"
+    },
+    "inkecho.platform.fcitx5": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/platform/fcitx5.py",
+      "sha256": "cd75ab99acf78797fafe8d6711127349d2da8795fa3724c5ce898676083dd275"
+    },
+    "inkecho.platform.output_pacing": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/platform/output_pacing.py",
+      "sha256": "024b3df0a8da6b79b8a13febbdfde7c84af02a3af9e1270ddb81a69e56f60d92"
+    },
+    "inkecho.platform.keyboard": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/platform/keyboard.py",
+      "sha256": "67000fe0de6592017796ebd07cb47dc0e187a1d24457ade68cfe4243cde5920e"
+    },
+    "inkecho.text_normalization": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/text_normalization.py",
+      "sha256": "81812f2c6157f310ddf4f14bbccb9afa165e7e001fa08497a74053551ff27c32"
+    },
+    "inkecho.platform.output_router": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/platform/output_router.py",
+      "sha256": "9cfa2c103366e35cf6ae2055dcbacefddfa4f995208e9371dfc9e65b4797d618"
+    },
+    "inkecho.platform.ibus_owned_auto": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/platform/ibus_owned_auto.py",
+      "sha256": "96946966080228a4975284d5c97de6f6d192b0774f218a2cd1202975ab48ce66"
+    },
+    "inkecho.platform.owned_installation": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/platform/owned_installation.py",
+      "sha256": "89545055508a521c3e9b9caf1a24d9bc9db2ad421017806f8a5ac52b2676a1e5"
+    },
+    "inkecho.platform.ibus_owned_default": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/platform/ibus_owned_default.py",
+      "sha256": "43edf0b0a335412d5a570dee260bcfe6095c3b0e39f14ed55bedf83dc366edca"
+    },
+    "inkecho.platform.wayland_keyboard": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/platform/wayland_keyboard.py",
+      "sha256": "bd76f5d8bb972fce9a7c3bd0dcbfc44fc61f128ab3e6b27bbe7415da4eff29bf"
+    },
+    "inkecho.provider_catalog": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/provider_catalog.py",
+      "sha256": "79ff7b639c9b91df6697edef433bdfa40eb16fe2d1207722325a231759038dc6"
+    },
+    "inkecho.providers": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/providers.py",
+      "sha256": "0e4015a5e5b3a7793e47e48f0f14399933c5fdd352411cc9b3d2aa87f6419867"
+    },
+    "inkecho.realtime": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/realtime.py",
+      "sha256": "c9a997a59e250e1938e4478e9a125cca25d68665d3607b7d54dd8c31f78e31da"
+    },
+    "inkecho.security": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/security.py",
+      "sha256": "be28a62da5ae8c38456b60bfb62a3ea8692bddbbcf07ce8584edd43b07141219"
+    },
+    "inkecho.streaming_output": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/streaming_output.py",
+      "sha256": "5540b0eabf1bf6cbdf3432858fedd90a392ff9c4285c127cfdae611e6793f8ab"
+    },
+    "inkecho.app": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/app.py",
+      "sha256": "bb607200de0801af9763227ea5b9e0f494dcd628536a731797d6a30e9c54543f"
+    },
+    "inkecho.runtime": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/runtime.py",
+      "sha256": "28508099d1811f27562b548c71403c85601bab2e961a68db77ca72692ea798bf"
+    }
+  },
+  "diagnostics": [],
+  "selected_backend": "fcitx",
+  "actual_manual_negotiation": true,
+  "owned_focus_switch_requested_while_recording": true,
+  "cancel": {
+    "trigger": "independent owned receiver first nonempty text",
+    "epoch_before": 1,
+    "epoch_after": 3,
+    "task_inactive": true,
+    "receiver_codepoints_at_cancel": 2,
+    "sender_observation_seconds": 1.2601769099999842
+  },
+  "task_result": {
+    "audio_seconds": 1.299625,
+    "characters": 2,
+    "outcome": "cancelled",
+    "polishing_calls": 1,
+    "transcription_calls": 1,
+    "transcription_seconds": 1.0454825010000377
+  },
+  "local_server_errors": [
+    "ConnectionClosedError",
+    "ConnectionResetError"
+  ],
+  "clock_origin_monotonic": 499.689868532,
+  "timeline_monotonic": {
+    "toggle_requested": 499.689868532,
+    "credential_wait_started": 500.076255321,
+    "first_capture": 499.696377883,
+    "play_requested": 499.773049505,
+    "credential_wait_finished": 500.456801363,
+    "first_audio_on_wire": 500.112255275,
+    "stop_requested": 500.984084967,
+    "final_asr": 501.118206583,
+    "polishing_request": 501.185741393,
+    "polishing_first_delta": 501.269147925,
+    "first_received": 501.315470826,
+    "cancel_requested": 501.315471563,
+    "cancel_observation_started": 501.316391829,
+    "polishing_full_text": 501.650287026,
+    "cancel_observation_finished": 502.576568739
+  },
+  "defaults_observed": [
+    [
+      "auto_null",
+      "auto_null.monitor"
+    ],
+    [
+      "auto_null",
+      "auto_null.monitor"
+    ],
+    [
+      "auto_null",
+      "auto_null.monitor"
+    ]
+  ],
+  "defaults_unchanged": true,
+  "origins_after": {
+    "inkecho": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/__init__.py",
+      "sha256": "575ae67137bebfba28a27523707bc42d56d63da0c3c73ae585811d373a590df5"
+    },
+    "inkecho.audio": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/audio.py",
+      "sha256": "7a7c52be4465858476f0b85e12832fa6846aed0f1355ab1bb98efbe1febfdd53"
+    },
+    "inkecho.config": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/config.py",
+      "sha256": "1134540f4b469dd828aa8006f64ac1800f7a4e3806c4d1b626e7f52437f8baeb"
+    },
+    "inkecho.core": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/core.py",
+      "sha256": "3b4122d5985413f58cec23714ae5ebff19cbb58e5496e3b5177f5174dbb61b01"
+    },
+    "inkecho.performance": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/performance.py",
+      "sha256": "223a6dcef338533562c35fb916ef6e4a5e95d9d336c8c15e1bdb3e983306c3d4"
+    },
+    "inkecho.platform.framework_detection": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/platform/framework_detection.py",
+      "sha256": "119ebfaee65ce6a8b04e3652f9712c7916e57e73c64a37e3b59ac5844555033d"
+    },
+    "inkecho.platform.ibus_lifecycle": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/platform/ibus_lifecycle.py",
+      "sha256": "f2345bef05a6a030076252456dc159120973660a8e0b172ef6582933454c1355"
+    },
+    "inkecho.platform.ibus": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/platform/ibus.py",
+      "sha256": "02fdefd9b0ffeee15fe7da8c32e05f3d321eadcc73545e6e3cf400b687cc9dcf"
+    },
+    "inkecho.text_units": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/text_units.py",
+      "sha256": "5e4c216fcab6dbd7cac0888ffc802f0893637607a35c3b4767ef90aed61376b1"
+    },
+    "inkecho.platform.ibus_owned": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/platform/ibus_owned.py",
+      "sha256": "bbdef876f0f4dc0926844225db3b931374f8fbbf9021116a4f2a5088d71bed96"
+    },
+    "inkecho.platform.fcitx5_capability": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/platform/fcitx5_capability.py",
+      "sha256": "a8aa702a1339ee8c5a3909563ffcf5d4be6aa52c8d292c3f4b01fcac378895cf"
+    },
+    "inkecho.platform.fcitx5": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/platform/fcitx5.py",
+      "sha256": "cd75ab99acf78797fafe8d6711127349d2da8795fa3724c5ce898676083dd275"
+    },
+    "inkecho.platform.output_pacing": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/platform/output_pacing.py",
+      "sha256": "024b3df0a8da6b79b8a13febbdfde7c84af02a3af9e1270ddb81a69e56f60d92"
+    },
+    "inkecho.platform.keyboard": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/platform/keyboard.py",
+      "sha256": "67000fe0de6592017796ebd07cb47dc0e187a1d24457ade68cfe4243cde5920e"
+    },
+    "inkecho.text_normalization": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/text_normalization.py",
+      "sha256": "81812f2c6157f310ddf4f14bbccb9afa165e7e001fa08497a74053551ff27c32"
+    },
+    "inkecho.platform.output_router": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/platform/output_router.py",
+      "sha256": "9cfa2c103366e35cf6ae2055dcbacefddfa4f995208e9371dfc9e65b4797d618"
+    },
+    "inkecho.platform.ibus_owned_auto": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/platform/ibus_owned_auto.py",
+      "sha256": "96946966080228a4975284d5c97de6f6d192b0774f218a2cd1202975ab48ce66"
+    },
+    "inkecho.platform.owned_installation": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/platform/owned_installation.py",
+      "sha256": "89545055508a521c3e9b9caf1a24d9bc9db2ad421017806f8a5ac52b2676a1e5"
+    },
+    "inkecho.platform.ibus_owned_default": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/platform/ibus_owned_default.py",
+      "sha256": "43edf0b0a335412d5a570dee260bcfe6095c3b0e39f14ed55bedf83dc366edca"
+    },
+    "inkecho.platform.wayland_keyboard": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/platform/wayland_keyboard.py",
+      "sha256": "bd76f5d8bb972fce9a7c3bd0dcbfc44fc61f128ab3e6b27bbe7415da4eff29bf"
+    },
+    "inkecho.provider_catalog": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/provider_catalog.py",
+      "sha256": "79ff7b639c9b91df6697edef433bdfa40eb16fe2d1207722325a231759038dc6"
+    },
+    "inkecho.providers": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/providers.py",
+      "sha256": "0e4015a5e5b3a7793e47e48f0f14399933c5fdd352411cc9b3d2aa87f6419867"
+    },
+    "inkecho.realtime": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/realtime.py",
+      "sha256": "c9a997a59e250e1938e4478e9a125cca25d68665d3607b7d54dd8c31f78e31da"
+    },
+    "inkecho.security": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/security.py",
+      "sha256": "be28a62da5ae8c38456b60bfb62a3ea8692bddbbcf07ce8584edd43b07141219"
+    },
+    "inkecho.streaming_output": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/streaming_output.py",
+      "sha256": "5540b0eabf1bf6cbdf3432858fedd90a392ff9c4285c127cfdae611e6793f8ab"
+    },
+    "inkecho.app": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/app.py",
+      "sha256": "bb607200de0801af9763227ea5b9e0f494dcd628536a731797d6a30e9c54543f"
+    },
+    "inkecho.runtime": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/runtime.py",
+      "sha256": "28508099d1811f27562b548c71403c85601bab2e961a68db77ca72692ea798bf"
+    },
+    "inkecho.asr_streaming": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/asr_streaming.py",
+      "sha256": "a6426173cadd5a159679cf4032989190c11a33c98d57ab7bb59712fc8324a3f4"
+    },
+    "inkecho.polish_stream": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/polish_stream.py",
+      "sha256": "47588cd3b4e546e6a8f6eef1057208d32c49ce6cee564919e1f42660b10582dd"
+    },
+    "inkecho.platform.fcitx5_staging": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/platform/fcitx5_staging.py",
+      "sha256": "1c71dcc660a808a0812bac8338e877bb577075d9147fdba421a9b1ab849d7f07"
+    },
+    "inkecho.platform.fcitx5_install": {
+      "path": "/run/user/1000/inkecho-package-gate-0.14.0/.mount_InkEchghApof/packages/inkecho/platform/fcitx5_install.py",
+      "sha256": "ecd9b0af0234d3c7cc3f10576b9014a10ea356d50f7dabba256ea5b54087d51a"
+    }
+  },
+  "balanced": true,
+  "cleanup_errors": []
+}

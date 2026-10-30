@@ -1,0 +1,9 @@
+Traceback (most recent call last):
+  File "/mnt/input/frozen/scripts/validation/desktop_app_probe.py", line 154, in <module>
+    main()
+  File "/mnt/input/frozen/scripts/validation/desktop_app_probe.py", line 147, in main
+    result = probe(
+             ^^^^^^
+  File "/mnt/input/frozen/scripts/validation/desktop_app_probe.py", line 71, in probe
+    raise RuntimeError("Invalid screenshot output.")
+RuntimeError: Invalid screenshot output.

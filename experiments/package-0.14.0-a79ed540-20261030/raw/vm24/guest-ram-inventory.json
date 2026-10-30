@@ -1,0 +1,7 @@
+{
+  "stage": "xorg-r2",
+  "command": "df -h /run/user/1000 /tmp /mnt/output; du -sh /run/user/1000/inkecho-browser-* /run/user/1000/inkecho-gui014-* 2>/dev/null || true; ps -u 1000 -o pid,comm | grep -E 'chrome|python|AppImage' || true",
+  "returncode": 0,
+  "stdout": "Filesystem      Size  Used Avail Use% Mounted on\ntmpfs           392M  392M     0 100% /run/user/1000\n/dev/vda1        30G   19G   12G  61% /\ninkecho_output  1.9T  384G  1.4T  22% /mnt/output\n6.1M\t/run/user/1000/inkecho-browser-4ews53ql\n5.8M\t/run/user/1000/inkecho-browser-ej8ktw8i\n5.9M\t/run/user/1000/inkecho-browser-mnyh3iow\n94M\t/run/user/1000/inkecho-gui014-0y3iunx0\n",
+  "stderr": ""
+}

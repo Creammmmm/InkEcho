@@ -1,0 +1,22 @@
+{
+  "environment": {
+    "DISPLAY": ":0",
+    "WAYLAND_DISPLAY": "wayland-0",
+    "XAUTHORITY": "/run/user/1000/.mutter-Xwaylandauth.RINDY3",
+    "XDG_CURRENT_DESKTOP": "ubuntu:GNOME",
+    "XDG_SESSION_TYPE": "wayland"
+  },
+  "extension_restored_exact": true,
+  "libraries": {
+    "/usr/lib/x86_64-linux-gnu/libmutter-18.so.0.0.0": "72ffe9741f6258c838ab73c37df0d9aece3f5d394ead8b86b4b2a306ad16c192",
+    "/usr/lib/x86_64-linux-gnu/mutter-18/libmutter-clutter-18.so.0.0.0": "e7b5a123dcbed73f7185fe8675f79819065c5367ebcfbd74f47fe7847c1e13d4",
+    "/usr/lib/x86_64-linux-gnu/mutter-18/libmutter-cogl-18.so.0.0.0": "a20f32d7e047cba838982ce932128eb7756fbe9c3d2c093bbad4911e102c9702",
+    "/usr/lib/x86_64-linux-gnu/mutter-18/libmutter-mtk-18.so.0.0.0": "7fb203a57c66651d7c8950fddb184f48d32ee79215238f6aa80726fd4a6d9c8e"
+  },
+  "ibus_engine": {
+    "returncode": 0,
+    "stdout": "xkb:us::eng\n",
+    "stderr": ""
+  },
+  "sources": "[('xkb', 'us')]"
+}
