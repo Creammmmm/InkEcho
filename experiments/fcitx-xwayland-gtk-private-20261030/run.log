@@ -1,0 +1,130 @@
+/home/lth/github/InkEcho/assets/native/fcitx5/x86_64/libinkecho.so: OK
+could not load cursor 'dnd-copy'
+could not load cursor 'dnd-none'
+could not load cursor 'dnd-copy'
+could not load cursor 'dnd-none'
+ERROR loading icon from file '/usr/share/weston/terminal.png', error: 'file not found'
+/usr/share/weston/pattern.png: No such file or directory
+Date: 2026-10-30 CST
+[20:14:23.052] weston 14.0.2
+               https://wayland.freedesktop.org
+               Bug reports to: https://gitlab.freedesktop.org/wayland/weston/issues/
+               Build: 14.0.2
+[20:14:23.052] Command line: root/usr/bin/weston --backend=headless --renderer=pixman --shell=desktop-shell.so --xwayland --no-config --socket=wayland-test --log=/tmp/weston.log
+[20:14:23.052] OS: Linux, 7.0.0-38-generic, #38-Ubuntu SMP PREEMPT_DYNAMIC Fri Sep  4 09:10:14 UTC 2026, x86_64
+[20:14:23.052] Flight recorder: enabled
+[20:14:23.053] Starting with no config file.
+[20:14:23.053] Output repaint window is 7 ms maximum.
+[20:14:23.053] Loading module '/var/tmp/inkecho-fresh-reproduce/root/usr/lib/x86_64-linux-gnu/libweston-14/headless-backend.so'
+[20:14:23.056] Using Pixman renderer
+[20:14:23.056] Registered plugin API 'weston_windowed_output_api_headless_v2' of size 16
+[20:14:23.056] Color manager: no-op
+                 protocol support: no
+[20:14:23.056] Output 'headless' attempts EOTF mode SDR and colorimetry mode default.
+[20:14:23.056] Output 'headless' using color profile: stock sRGB color profile
+[20:14:23.056] Output 'headless' enabled with head(s) headless
+[20:14:23.056] Compositor capabilities:
+               arbitrary surface rotation: yes
+               screen capture uses y-flip: no
+               cursor planes: no
+               arbitrary resolutions: no
+               view mask clipping: yes
+               explicit sync: no
+               color operations: no
+               presentation clock: CLOCK_MONOTONIC_RAW, id 4
+               presentation clock resolution: 0.000000001 s
+[20:14:23.056] Loading module '/var/tmp/inkecho-fresh-reproduce/root/usr/lib/x86_64-linux-gnu/weston/desktop-shell.so'
+[20:14:23.056] Loading module '/var/tmp/inkecho-fresh-reproduce/root/usr/lib/x86_64-linux-gnu/libweston-14/xwayland.so'
+[20:14:23.056] Registered plugin API 'weston_xwayland_v3' of size 32
+[20:14:23.056] Registered plugin API 'weston_xwayland_surface_v2' of size 24
+[20:14:23.056] xserver listening on display :0
+[20:14:23.056] launching '/usr/libexec/weston-keyboard'
+[20:14:23.057] launching '/usr/libexec/weston-desktop-shell'
+total 8
+drwxrwxrwt 2 lth lth 4096 Oct 30 20:14 .
+drwx------ 4 lth lth 4096 Oct 30 20:14 ..
+srwxrwxr-x 1 lth lth    0 Oct 30 20:14 X0
+Xwayland glamor: GBM Wayland interfaces not available
+Failed to initialize glamor, falling back to sw
+_NET_SUPPORTING_WM_CHECK(WINDOW): window id # 0x200027
+XIM_SERVERS(ATOM) = @server=ibus
+FOCUS True True True
+PREEDIT (1,)
+Begin3 (True,)
+Commit (1,)
+GTK_RESULT '测' BACKEND X11Display
+FOCUS True True True
+PREEDIT (2,)
+Begin3 (True,)
+Commit (5,)
+GTK_RESULT '' BACKEND X11Display
+I2026-10-30 20:14:26.180856 instance.cpp:1420] Override Enabled Addons: {}
+I2026-10-30 20:14:26.185019 instance.cpp:1421] Override Disabled Addons: {wayland, waylandim, notificationitem, notifications, classicui, clipboard}
+I2026-10-30 20:14:26.186172 addonmanager.cpp:204] Loaded addon unicode
+I2026-10-30 20:14:26.187928 xcbconnection.cpp:178] Set XFIXES client disconnect mode to TERMINATE
+I2026-10-30 20:14:26.188033 xcbconnection.cpp:198] Connecting to X11 display, display name::0.
+I2026-10-30 20:14:26.188050 xcbconnection.cpp:203] X11 display: :0 is xwayland.
+I2026-10-30 20:14:26.188106 addonmanager.cpp:204] Loaded addon xcb
+I2026-10-30 20:14:26.189035 addonmanager.cpp:204] Loaded addon quickphrase
+I2026-10-30 20:14:26.189502 keyboard.cpp:229] Attempting to load keyboard from: ["/usr/share/X11/xkb"] Rule: evdev
+I2026-10-30 20:14:26.192743 addonmanager.cpp:204] Loaded addon keyboard
+I2026-10-30 20:14:26.192851 addonmanager.cpp:204] Loaded addon imselector
+I2026-10-30 20:14:26.194195 addonmanager.cpp:204] Loaded addon dbus
+I2026-10-30 20:14:26.203421 addonmanager.cpp:204] Loaded addon fcitx4frontend
+I2026-10-30 20:14:26.204048 addonmanager.cpp:204] Loaded addon ibusfrontend
+I2026-10-30 20:14:26.204356 addonmanager.cpp:204] Loaded addon inkecho
+I2026-10-30 20:14:26.204996 addonmanager.cpp:204] Loaded addon dbusfrontend
+I2026-10-30 20:14:26.205139 addonmanager.cpp:204] Loaded addon inkecho_test
+I2026-10-30 20:14:26.205429 addonmanager.cpp:204] Loaded addon xim
+I2026-10-30 20:14:26.224187 inputmethodmanager.cpp:210] Found 748 input method(s) in addon keyboard
+I2026-10-30 20:14:26.224300 inputmethodmanager.cpp:132] No valid input method group in configuration. Building a default one
+I2026-10-30 20:14:26.224340 instance.cpp:396] Items in Default: [InputMethodGroupItem(keyboard-us,layout=)]
+I2026-10-30 20:14:26.224343 instance.cpp:401] Generated groups: [Default]
+I2026-10-30 20:14:26.238690 addonmanager.cpp:204] Loaded addon kimpanel
+I2026-10-30 20:14:26.238864 addonmanager.cpp:204] Loaded addon virtualkeyboard
+I2026-10-30 20:14:26.239160 dbusmodule.cpp:841] Service name change: org.fcitx.Fcitx5  :1.0
+I2026-10-30 20:14:26.239209 kimpanel.cpp:116] Kimpanel new owner:
+I2026-10-30 20:14:26.239239 virtualkeyboard.cpp:218] VirtualKeyboard new owner:
+=========================
+Fcitx 5.1.19 -- Get Signal No.: 15
+Date: try "date -d @1793362473" if you are using GNU date ***
+ProcessID: 25
+root/usr/bin/fcitx5(+0x18e5e) [0x5fbfed980e5e]
+/usr/lib/x86_64-linux-gnu/libc.so.6(+0x45cb0) [0x787fcba45cb0]
+/usr/lib/x86_64-linux-gnu/libc.so.6(+0xac802) [0x787fcbaac802]
+/usr/lib/x86_64-linux-gnu/libc.so.6(+0xa039c) [0x787fcbaa039c]
+/usr/lib/x86_64-linux-gnu/libc.so.6(epoll_wait+0x25) [0x787fcbb378b5]
+/usr/lib/x86_64-linux-gnu/libsystemd.so.0(sd_event_wait+0x181) [0x787fcb932021]
+/usr/lib/x86_64-linux-gnu/libsystemd.so.0(sd_event_run+0x15b) [0x787fcb93333b]
+/usr/lib/x86_64-linux-gnu/libsystemd.so.0(sd_event_loop+0x5f) [0x787fcb9334df]
+/var/tmp/inkecho-fresh-reproduce/root/usr/lib/x86_64-linux-gnu/libFcitx5Utils.so.2(_ZN5fcitx9EventLoop4execEv+0x2b) [0x787fcc27d28b]
+/var/tmp/inkecho-fresh-reproduce/root/usr/lib/x86_64-linux-gnu/libFcitx5Core.so.7(_ZN5fcitx8Instance4execEv+0x5b) [0x787fcc33711b]
+root/usr/bin/fcitx5(+0x16e3b) [0x5fbfed97ee3b]
+/usr/lib/x86_64-linux-gnu/libc.so.6(+0x2a601) [0x787fcba2a601]
+/usr/lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0x88) [0x787fcba2a718]
+root/usr/bin/fcitx5(+0x18215) [0x5fbfed980215]
+I2026-10-30 20:14:33.492707 addonmanager.cpp:306] Unloading addon virtualkeyboard
+I2026-10-30 20:14:33.492786 addonmanager.cpp:306] Unloading addon kimpanel
+I2026-10-30 20:14:33.492809 addonmanager.cpp:306] Unloading addon xim
+I2026-10-30 20:14:33.492880 addonmanager.cpp:306] Unloading addon inkecho_test
+I2026-10-30 20:14:33.492919 addonmanager.cpp:306] Unloading addon dbusfrontend
+I2026-10-30 20:14:33.493097 addonmanager.cpp:306] Unloading addon inkecho
+I2026-10-30 20:14:33.493193 addonmanager.cpp:306] Unloading addon ibusfrontend
+I2026-10-30 20:14:33.498671 addonmanager.cpp:306] Unloading addon fcitx4frontend
+I2026-10-30 20:14:33.498766 addonmanager.cpp:306] Unloading addon dbus
+I2026-10-30 20:14:33.498870 addonmanager.cpp:306] Unloading addon imselector
+I2026-10-30 20:14:33.498900 addonmanager.cpp:306] Unloading addon keyboard
+I2026-10-30 20:14:33.499190 addonmanager.cpp:306] Unloading addon quickphrase
+I2026-10-30 20:14:33.499574 addonmanager.cpp:306] Unloading addon xcb
+I2026-10-30 20:14:33.499847 addonmanager.cpp:306] Unloading addon unicode
+[20:14:23.056] Loading module '/var/tmp/inkecho-fresh-reproduce/root/usr/lib/x86_64-linux-gnu/weston/desktop-shell.so'
+[20:14:23.056] Loading module '/var/tmp/inkecho-fresh-reproduce/root/usr/lib/x86_64-linux-gnu/libweston-14/xwayland.so'
+[20:14:23.056] Registered plugin API 'weston_xwayland_v3' of size 32
+[20:14:23.056] Registered plugin API 'weston_xwayland_surface_v2' of size 24
+[20:14:23.056] xserver listening on display :0
+[20:14:23.056] launching '/usr/libexec/weston-keyboard'
+[20:14:23.057] launching '/usr/libexec/weston-desktop-shell'
+[20:14:26.079] launching '/usr/bin/Xwayland'
+[20:14:26.113] xfixes version: 6.0
+[20:14:26.118] created wm, root 562
+(EE) failed to read Wayland events: Broken pipe

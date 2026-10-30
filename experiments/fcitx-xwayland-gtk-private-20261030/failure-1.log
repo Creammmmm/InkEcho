@@ -1,0 +1,50 @@
+could not load cursor 'dnd-copy'
+could not load cursor 'dnd-none'
+could not load cursor 'dnd-copy'
+could not load cursor 'dnd-none'
+ERROR loading icon from file '/usr/share/weston/terminal.png', error: 'file not found'
+/usr/share/weston/pattern.png: No such file or directory
+Date: 2026-10-30 CST
+[20:13:16.079] weston 14.0.2
+               https://wayland.freedesktop.org
+               Bug reports to: https://gitlab.freedesktop.org/wayland/weston/issues/
+               Build: 14.0.2
+[20:13:16.079] Command line: root/usr/bin/weston --backend=headless --renderer=pixman --shell=desktop-shell.so --xwayland --no-config --socket=wayland-test --log=/tmp/weston.log
+[20:13:16.079] OS: Linux, 7.0.0-38-generic, #38-Ubuntu SMP PREEMPT_DYNAMIC Fri Sep  4 09:10:14 UTC 2026, x86_64
+[20:13:16.079] Flight recorder: enabled
+[20:13:16.079] Starting with no config file.
+[20:13:16.079] Output repaint window is 7 ms maximum.
+[20:13:16.079] Loading module '/var/tmp/inkecho-fresh-reproduce/root/usr/lib/x86_64-linux-gnu/libweston-14/headless-backend.so'
+[20:13:16.082] Using Pixman renderer
+[20:13:16.082] Registered plugin API 'weston_windowed_output_api_headless_v2' of size 16
+[20:13:16.082] Color manager: no-op
+                 protocol support: no
+[20:13:16.082] Output 'headless' attempts EOTF mode SDR and colorimetry mode default.
+[20:13:16.082] Output 'headless' using color profile: stock sRGB color profile
+[20:13:16.082] Output 'headless' enabled with head(s) headless
+[20:13:16.082] Compositor capabilities:
+               arbitrary surface rotation: yes
+               screen capture uses y-flip: no
+               cursor planes: no
+               arbitrary resolutions: no
+               view mask clipping: yes
+               explicit sync: no
+               color operations: no
+               presentation clock: CLOCK_MONOTONIC_RAW, id 4
+               presentation clock resolution: 0.000000001 s
+[20:13:16.082] Loading module '/var/tmp/inkecho-fresh-reproduce/root/usr/lib/x86_64-linux-gnu/weston/desktop-shell.so'
+[20:13:16.082] Loading module '/var/tmp/inkecho-fresh-reproduce/root/usr/lib/x86_64-linux-gnu/libweston-14/xwayland.so'
+[20:13:16.083] Registered plugin API 'weston_xwayland_v3' of size 32
+[20:13:16.083] Registered plugin API 'weston_xwayland_surface_v2' of size 24
+[20:13:16.083] xserver listening on display :0
+[20:13:16.083] launching '/usr/libexec/weston-keyboard'
+[20:13:16.083] launching '/usr/libexec/weston-desktop-shell'
+total 8
+drwxrwxrwt 2 lth lth 4096 Oct 30 20:13 .
+drwx------ 4 lth lth 4096 Oct 30 20:13 ..
+srwxrwxr-x 1 lth lth    0 Oct 30 20:13 X0
+Xwayland glamor: GBM Wayland interfaces not available
+Failed to initialize glamor, falling back to sw
+_NET_SUPPORTING_WM_CHECK(WINDOW): window id # 0x200027
+INJECTED_FAILURE_AFTER_FCITX
+(EE) failed to read Wayland events: Broken pipe

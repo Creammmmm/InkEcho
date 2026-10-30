@@ -1,0 +1,64 @@
+Get:1 http://archive.ubuntu.com/ubuntu resolute/universe amd64 fcitx5-data all 5.1.19-1 [7054 kB]
+Fetched 7054 kB in 3s (2526 kB/s)
+Get:1 http://archive.ubuntu.com/ubuntu resolute/universe amd64 fcitx5-modules amd64 5.1.19-1 [1034 kB]
+Fetched 1034 kB in 4s (283 kB/s)
+Get:1 http://archive.ubuntu.com/ubuntu resolute/universe amd64 fcitx5 amd64 5.1.19-1 [227 kB]
+Fetched 227 kB in 2s (147 kB/s)
+Get:1 http://archive.ubuntu.com/ubuntu resolute/universe amd64 libfcitx5config-dev amd64 5.1.19-1 [15.6 kB]
+Fetched 15.6 kB in 1s (12.3 kB/s)
+Get:1 http://archive.ubuntu.com/ubuntu resolute/universe amd64 libfcitx5config6 amd64 5.1.19-1 [55.4 kB]
+Fetched 55.4 kB in 2s (29.0 kB/s)
+Get:1 http://archive.ubuntu.com/ubuntu resolute/universe amd64 libfcitx5core-dev amd64 5.1.19-1 [35.1 kB]
+Fetched 35.1 kB in 2s (21.5 kB/s)
+Get:1 http://archive.ubuntu.com/ubuntu resolute/universe amd64 libfcitx5core7 amd64 5.1.19-1 [328 kB]
+Fetched 328 kB in 3s (95.5 kB/s)
+Get:1 http://archive.ubuntu.com/ubuntu resolute/universe amd64 libfcitx5utils-dev amd64 5.1.19-1 [83.0 kB]
+Fetched 83.0 kB in 2s (47.0 kB/s)
+Get:1 http://archive.ubuntu.com/ubuntu resolute/universe amd64 libfcitx5utils2 amd64 5.1.19-1 [277 kB]
+Fetched 277 kB in 2s (169 kB/s)
+Get:1 http://archive.ubuntu.com/ubuntu resolute/universe amd64 libweston-14-0 amd64 14.0.2-5 [447 kB]
+Fetched 447 kB in 2s (214 kB/s)
+Get:1 http://archive.ubuntu.com/ubuntu resolute/universe amd64 libxcb-imdkit-dev amd64 1.0.9-1build1 [17.2 kB]
+Fetched 17.2 kB in 2s (7022 B/s)
+Get:1 http://archive.ubuntu.com/ubuntu resolute/universe amd64 libxcb-imdkit1 amd64 1.0.9-1build1 [327 kB]
+Fetched 327 kB in 2s (176 kB/s)
+Get:1 http://archive.ubuntu.com/ubuntu resolute/main amd64 libxcb-util-dev amd64 0.4.1-1build1 [11.0 kB]
+Fetched 11.0 kB in 1s (9212 B/s)
+Get:1 http://archive.ubuntu.com/ubuntu resolute/main amd64 libxcb1-dev amd64 1.17.0-2ubuntu1 [86.3 kB]
+Fetched 86.3 kB in 1s (58.6 kB/s)
+Get:1 http://archive.ubuntu.com/ubuntu resolute/universe amd64 weston amd64 14.0.2-5 [988 kB]
+Fetched 988 kB in 3s (378 kB/s)
+Get:1 http://archive.ubuntu.com/ubuntu resolute/main amd64 x11proto-dev all 2025.1-1 [608 kB]
+Fetched 608 kB in 2s (335 kB/s)
+Get:1 http://archive.ubuntu.com/ubuntu resolute-updates/universe amd64 xvfb amd64 2:21.1.22-1ubuntu1.3 [899 kB]
+Fetched 899 kB in 2s (419 kB/s)
+Get:1 http://archive.ubuntu.com/ubuntu resolute/universe amd64 fcitx5-modules-dev amd64 5.1.19-1 [11.0 kB]
+Fetched 11.0 kB in 4s (2475 B/s)
+Get:1 http://archive.ubuntu.com/ubuntu resolute/main amd64 libxcb-composite0 amd64 1.17.0-2ubuntu1 [5368 B]
+Fetched 5368 B in 1s (4372 B/s)
+Get:1 http://archive.ubuntu.com/ubuntu resolute/universe amd64 libxcb-ewmh2 amd64 0.4.2-1build1 [16.9 kB]
+Fetched 16.9 kB in 1s (11.8 kB/s)
+Get:1 http://archive.ubuntu.com/ubuntu resolute/universe amd64 libxcb-keysyms1 amd64 0.4.1-1build1 [8704 B]
+Fetched 8704 B in 1s (7088 B/s)
+fcitx5-data_5.1.19-1_all.deb: OK
+fcitx5-modules_5.1.19-1_amd64.deb: OK
+fcitx5_5.1.19-1_amd64.deb: OK
+libfcitx5config-dev_5.1.19-1_amd64.deb: OK
+libfcitx5config6_5.1.19-1_amd64.deb: OK
+libfcitx5core-dev_5.1.19-1_amd64.deb: OK
+libfcitx5core7_5.1.19-1_amd64.deb: OK
+libfcitx5utils-dev_5.1.19-1_amd64.deb: OK
+libfcitx5utils2_5.1.19-1_amd64.deb: OK
+libweston-14-0_14.0.2-5_amd64.deb: OK
+libxcb-imdkit-dev_1.0.9-1build1_amd64.deb: OK
+libxcb-imdkit1_1.0.9-1build1_amd64.deb: OK
+libxcb-util-dev_0.4.1-1build1_amd64.deb: OK
+libxcb1-dev_1.17.0-2ubuntu1_amd64.deb: OK
+weston_14.0.2-5_amd64.deb: OK
+x11proto-dev_2025.1-1_all.deb: OK
+xvfb_2%3a21.1.22-1ubuntu1.3_amd64.deb: OK
+fcitx5-modules-dev_5.1.19-1_amd64.deb: OK
+libxcb-composite0_1.17.0-2ubuntu1_amd64.deb: OK
+libxcb-ewmh2_0.4.2-1build1_amd64.deb: OK
+libxcb-keysyms1_0.4.1-1build1_amd64.deb: OK
+Verified dependencies extracted to /var/tmp/inkecho-fresh-reproduce/root

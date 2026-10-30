@@ -1,0 +1,5 @@
+namespace_before: [(1035711, 'bwrap'), (1035712, 'bash'), (1035716, 'weston'), (1035718, 'weston-keyboard'), (1035719, 'weston-desktop-'), (1035764, 'Xwayland'), (1035772, 'dbus-run-sessio'), (1035773, 'dbus-daemon'), (1035774, 'bash'), (1035775, 'fcitx5'), (1035781, 'sleep')]
+injected_exit: 42
+namespace_after: []
+cleanup_check: PASS
+failure_marker: True
