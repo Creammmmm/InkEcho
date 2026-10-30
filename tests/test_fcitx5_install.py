@@ -8,9 +8,30 @@ from inkecho.platform import fcitx5_staging as staging
 from inkecho.platform.fcitx5_install import FcitxInstaller, FcitxInstallError
 
 
-def test_explicit_actions_check_pinned_files_and_preserve_loaded_library(
+@pytest.mark.parametrize("value", [None, "", "relative/data"])
+def test_default_data_home_ignores_unset_empty_or_relative_xdg_path(
+    tmp_path, monkeypatch, value
+):
+    monkeypatch.setenv("HOME", str(tmp_path))
+    if value is None:
+        monkeypatch.delenv("XDG_DATA_HOME", raising=False)
+    else:
+        monkeypatch.setenv("XDG_DATA_HOME", value)
+    assert FcitxInstaller().data_home == tmp_path / ".local/share"
+
+
+def test_data_home_accepts_absolute_xdg_path_and_explicit_override(
     tmp_path, monkeypatch
 ):
+    configured = tmp_path / "configured"
+    explicit = tmp_path / "explicit"
+    monkeypatch.setenv("XDG_DATA_HOME", str(configured))
+    assert FcitxInstaller().data_home == configured
+    assert FcitxInstaller(data_home=explicit).data_home == explicit
+
+
+@pytest.fixture
+def candidate_source(tmp_path, monkeypatch):
     source = tmp_path / "source"
     candidate = source / "candidate"
     candidate.mkdir(parents=True, mode=0o700)
@@ -37,6 +58,47 @@ def test_explicit_actions_check_pinned_files_and_preserve_loaded_library(
     path = source / "manifest.json"
     path.write_text(json.dumps(manifest))
     path.chmod(0o600)
+    return source
+
+
+def test_auto_version_discovers_installed_bridge_for_valid_xdg_paths(
+    tmp_path, monkeypatch, candidate_source
+):
+    monkeypatch.setenv("HOME", str(tmp_path))
+    monkeypatch.setattr(
+        "platform.freedesktop_os_release",
+        lambda: {"ID": "ubuntu", "VERSION_ID": "26.04"},
+    )
+    monkeypatch.setattr("platform.machine", lambda: "x86_64")
+
+    def runner(*_args, **_kwargs):
+        return SimpleNamespace(returncode=0, stdout="5.1.19")
+
+    default_data = tmp_path / ".local/share"
+    default_data.mkdir(parents=True, mode=0o700)
+    FcitxInstaller(
+        source=candidate_source, data_home=default_data, runner=runner
+    ).install()
+    for value in (None, "", "relative/data"):
+        if value is None:
+            monkeypatch.delenv("XDG_DATA_HOME", raising=False)
+        else:
+            monkeypatch.setenv("XDG_DATA_HOME", value)
+        assert FcitxInstaller(runner=runner).auto_version() == "5.1.19"
+    elsewhere = tmp_path / "elsewhere"
+    elsewhere.mkdir(mode=0o700)
+    monkeypatch.setenv("XDG_DATA_HOME", str(elsewhere))
+    assert FcitxInstaller(runner=runner).auto_version() is None
+    monkeypatch.setenv("XDG_DATA_HOME", str(default_data))
+    assert FcitxInstaller(runner=runner).auto_version() == "5.1.19"
+
+
+def test_explicit_actions_check_pinned_files_and_preserve_loaded_library(
+    tmp_path, monkeypatch, candidate_source
+):
+    source = candidate_source
+    binary = (source / "candidate/libinkecho.so").read_bytes()
+    digest = hashlib.sha256(binary).hexdigest()
     data = tmp_path / "data"
     data.mkdir(mode=0o700)
     calls = []

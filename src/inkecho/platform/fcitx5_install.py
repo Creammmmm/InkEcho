@@ -21,9 +21,13 @@ class FcitxInstaller:
         self.source = source or (
             Path(appdir) / "usr/share/inkecho/fcitx5/x86_64" if appdir else None
         )
-        self.data_home = Path(
-            data_home or os.environ.get("XDG_DATA_HOME", Path.home() / ".local/share")
-        )
+        if data_home:
+            self.data_home = Path(data_home)
+        else:
+            configured = Path(os.environ.get("XDG_DATA_HOME", ""))
+            self.data_home = (
+                configured if configured.is_absolute() else Path.home() / ".local/share"
+            )
         self.runner = runner
 
     def _run(self, args):
