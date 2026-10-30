@@ -1,0 +1,10 @@
+from pathlib import Path
+import os,json,subprocess
+O=Path('/mnt/output')/os.environ['INKECHO_OUTPUT_STAGE'];A=Path(json.loads((O/'mount.json').read_text())['appdir']);env=dict(os.environ);env.update(DBUS_SESSION_BUS_ADDRESS='unix:path=/run/user/1000/bus',XDG_RUNTIME_DIR='/run/user/1000')
+for l in subprocess.check_output(['systemctl','--user','show-environment'],env=env,text=True).splitlines():
+ k,_,v=l.partition('=')
+ if k in {'DISPLAY','XAUTHORITY','WAYLAND_DISPLAY','XDG_SESSION_TYPE','XDG_CURRENT_DESKTOP'}:env[k]=v
+env.update(APPDIR=str(A),PYTHONHOME=str(A/'usr'),PYTHONPATH=str(A/'packages'),PYTHONNOUSERSITE='1',LD_LIBRARY_PATH=str(A/'usr/lib/inkecho'),PYTHONDONTWRITEBYTECODE='1',QT_QPA_PLATFORM='offscreen',TMPDIR='/tmp')
+out=Path('/mnt/output')/os.environ['RUN_LABEL'];out.mkdir(mode=0o700,exist_ok=True)
+with(out/'runner.log').open('w')as f:r=subprocess.run([str(A/'usr/bin/python3'),'/mnt/input/cross_runner.py'],env=env,stdout=f,stderr=subprocess.STDOUT,timeout=100)
+(out/'exit.json').write_text(json.dumps({'returncode':r.returncode}));print((out/'runner.log').read_text());r.check_returncode()

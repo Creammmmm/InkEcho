@@ -1,0 +1,7 @@
+{
+  "stage": "wayland",
+  "command": "mountpoint -q /mnt/input || sudo mount -t 9p -o trans=virtio,version=9p2000.L,ro inkecho_input /mnt/input; mountpoint -q /mnt/output || sudo mount -t 9p -o trans=virtio,version=9p2000.L inkecho_output /mnt/output; python3 /mnt/input/guest.py prepare; python3 /mnt/input/owned-settings.py save; pgrep -a gnome-shell",
+  "returncode": 0,
+  "stdout": "guest action PASS prepare\n{\n  \"enabled-extensions\": [],\n  \"disabled-extensions\": [\n    \"inkecho-ibus-candidate@local.invalid\",\n    \"inkecho-ibus-focus-probe@local.invalid\",\n    \"inkecho-ibus-v2-prototype@local.invalid\",\n    \"inkecho-ibus-owned-v5-prototype@local.invalid\"\n  ],\n  \"disable-user-extensions\": false\n}\n{\n  \"action\": \"save\",\n  \"values\": {\n    \"enabled-extensions\": [],\n    \"disabled-extensions\": [\n      \"inkecho-ibus-candidate@local.invalid\",\n      \"inkecho-ibus-focus-probe@local.invalid\",\n      \"inkecho-ibus-v2-prototype@local.invalid\",\n      \"inkecho-ibus-owned-v5-prototype@local.invalid\"\n    ],\n    \"disable-user-extensions\": false\n  },\n  \"info\": \"inkecho-ibus-owned-v5-prototype@local.invalid\\n  Name: InkEcho bounded owned context candidate\\n  Description: Optional InkEcho owned-context bridge; requires explicit installation and activation\\n  Path: /home/inkecho/.local/share/gnome-shell/extensions/inkecho-ibus-owned-v5-prototype@local.invalid\\n  Enabled: No\\n  State: INITIALIZED\\n\"\n}\n1348 /usr/bin/gnome-shell\n1413 /usr/libexec/gnome-shell-calendar-server\n",
+  "stderr": ""
+}

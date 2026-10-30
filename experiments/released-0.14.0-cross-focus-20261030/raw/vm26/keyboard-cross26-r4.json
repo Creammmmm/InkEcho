@@ -1,0 +1,7 @@
+{
+  "stage": "wayland",
+  "command": "env RUN_LABEL=keyboard-native-x-r4 OUTPUT_METHOD=keyboard START_PLATFORM=wayland python3 /mnt/input/launch-cross.py; env RUN_LABEL=keyboard-x-native-r4 OUTPUT_METHOD=keyboard START_PLATFORM=x11 python3 /mnt/input/launch-cross.py",
+  "returncode": 0,
+  "stdout": "{\"error\": null, \"received\": [\"\\u7532\\u00e9\\u4e59\\u4e19\", \"\\u03a9\\n\"], \"whole_sequence_exact\": true, \"no_late\": true, \"cleanup_errors\": []}\n\n{\"error\": null, \"received\": [\"\\u7532\\u00e9\\u4e59\\u4e19\", \"\\u03a9\\n\"], \"whole_sequence_exact\": true, \"no_late\": true, \"cleanup_errors\": []}\n\n",
+  "stderr": ""
+}

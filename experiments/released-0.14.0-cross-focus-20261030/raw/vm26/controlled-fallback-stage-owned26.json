@@ -1,0 +1,7 @@
+{
+  "stage": "wayland",
+  "command": "env RUN_LABEL=auto-knownzero-native-x-cancel-r2 OUTPUT_METHOD=auto START_PLATFORM=wayland WITH_FCITX=1 DISABLE_FCITX_WAYLAND=1 CANCEL=1 python3 /mnt/input/launch-cross.py; python3 /mnt/input/stage-candidate.py; sudo systemctl restart gdm3",
+  "returncode": 0,
+  "stdout": "{\"error\": {\"type\": \"OutputRouterError\", \"code\": \"partial_input_failed\", \"attempts\": 2, \"locations\": [{\"file\": \"cross_runner.py\", \"line\": 89}, {\"file\": \"output_router.py\", \"line\": 613}]}, \"received\": [\"\\u7532\\u00e9\", \"\"], \"whole_sequence_exact\": false, \"no_late\": true, \"cleanup_errors\": []}\n\nexplicit candidate install complete; old complete assets preserved; not enabled until normal GNOME reload\n",
+  "stderr": ""
+}

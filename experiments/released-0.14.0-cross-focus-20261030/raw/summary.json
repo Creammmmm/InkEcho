@@ -1,0 +1,1018 @@
+[
+  {
+    "system": "24",
+    "case": "keyboard-x-native-r1",
+    "path": "vm24/output/keyboard-x-native-r1/result.json",
+    "whole_sequence_exact": false,
+    "received_codepoints": [],
+    "selected": [],
+    "error": {
+      "type": "AttributeError",
+      "code": null,
+      "attempts": null
+    },
+    "fcitx_failures": null,
+    "no_late": true,
+    "x11_map_restored": true,
+    "native_map_restored": null,
+    "native_counts": {
+      "press_success": 0,
+      "release_success": 0,
+      "guard_rejections": 0,
+      "suppressed_unattempted_release": 0
+    },
+    "x11_counts": {
+      "press": 0,
+      "release": 0,
+      "guard_rejections": 0
+    },
+    "cleanup_errors": [],
+    "fixture_sha256": null
+  },
+  {
+    "system": "24",
+    "case": "auto-owned-native-x-r1",
+    "path": "vm24/output/auto-owned-native-x-r1/result.json",
+    "whole_sequence_exact": false,
+    "received_codepoints": [
+      [
+        30002,
+        233
+      ],
+      []
+    ],
+    "selected": [
+      "ibus",
+      null
+    ],
+    "error": {
+      "type": "OutputRouterError",
+      "code": "ibus_delivery_unknown",
+      "attempts": 2,
+      "locations": [
+        {
+          "file": "cross_runner.py",
+          "line": 78
+        },
+        {
+          "file": "output_router.py",
+          "line": 671
+        }
+      ]
+    },
+    "fcitx_failures": null,
+    "no_late": true,
+    "x11_map_restored": true,
+    "native_map_restored": null,
+    "native_counts": null,
+    "x11_counts": {
+      "press": 0,
+      "release": 0,
+      "guard_rejections": 0
+    },
+    "cleanup_errors": [],
+    "fixture_sha256": null
+  },
+  {
+    "system": "24",
+    "case": "keyboard-x-native-r2",
+    "path": "vm24/output/keyboard-x-native-r2/result.json",
+    "whole_sequence_exact": false,
+    "received_codepoints": [
+      [
+        30002,
+        233
+      ],
+      []
+    ],
+    "selected": [
+      "keyboard",
+      null
+    ],
+    "error": {
+      "type": "KeyboardError",
+      "code": "unsupported_compositor",
+      "attempts": null,
+      "locations": [
+        {
+          "file": "cross_runner.py",
+          "line": 78
+        },
+        {
+          "file": "output_router.py",
+          "line": 545
+        },
+        {
+          "file": "hybrid_keyboard.py",
+          "line": 219
+        }
+      ]
+    },
+    "fcitx_failures": null,
+    "no_late": true,
+    "x11_map_restored": true,
+    "native_map_restored": null,
+    "native_counts": {
+      "press_success": 0,
+      "release_success": 0,
+      "guard_rejections": 0,
+      "suppressed_unattempted_release": 0
+    },
+    "x11_counts": {
+      "press": 2,
+      "release": 2,
+      "guard_rejections": 0
+    },
+    "cleanup_errors": [],
+    "fixture_sha256": null
+  },
+  {
+    "system": "24",
+    "case": "auto-fcitx-zero-x-native-r1",
+    "path": "vm24/output/auto-fcitx-zero-x-native-r1/result.json",
+    "whole_sequence_exact": false,
+    "received_codepoints": [
+      [
+        30002,
+        233
+      ],
+      []
+    ],
+    "selected": [
+      "keyboard",
+      null
+    ],
+    "error": {
+      "type": "KeyboardError",
+      "code": "unsupported_compositor",
+      "attempts": null,
+      "locations": [
+        {
+          "file": "cross_runner.py",
+          "line": 78
+        },
+        {
+          "file": "output_router.py",
+          "line": 545
+        },
+        {
+          "file": "hybrid_keyboard.py",
+          "line": 219
+        }
+      ]
+    },
+    "fcitx_failures": [
+      {
+        "code": "no_target",
+        "accepted": 0,
+        "uncertain": false,
+        "unsent_offset": 0
+      }
+    ],
+    "no_late": true,
+    "x11_map_restored": true,
+    "native_map_restored": null,
+    "native_counts": {
+      "press_success": 0,
+      "release_success": 0,
+      "guard_rejections": 0,
+      "suppressed_unattempted_release": 0
+    },
+    "x11_counts": {
+      "press": 2,
+      "release": 2,
+      "guard_rejections": 0
+    },
+    "cleanup_errors": [],
+    "fixture_sha256": null
+  },
+  {
+    "system": "24",
+    "case": "auto-owned-x-native-r1",
+    "path": "vm24/output/auto-owned-x-native-r1/result.json",
+    "whole_sequence_exact": false,
+    "received_codepoints": [
+      [
+        30002,
+        233
+      ],
+      []
+    ],
+    "selected": [
+      "keyboard",
+      null
+    ],
+    "error": {
+      "type": "KeyboardError",
+      "code": "unsupported_compositor",
+      "attempts": null,
+      "locations": [
+        {
+          "file": "cross_runner.py",
+          "line": 78
+        },
+        {
+          "file": "output_router.py",
+          "line": 545
+        },
+        {
+          "file": "hybrid_keyboard.py",
+          "line": 219
+        }
+      ]
+    },
+    "fcitx_failures": null,
+    "no_late": true,
+    "x11_map_restored": true,
+    "native_map_restored": null,
+    "native_counts": {
+      "press_success": 0,
+      "release_success": 0,
+      "guard_rejections": 0,
+      "suppressed_unattempted_release": 0
+    },
+    "x11_counts": {
+      "press": 2,
+      "release": 2,
+      "guard_rejections": 0
+    },
+    "cleanup_errors": [],
+    "fixture_sha256": null
+  },
+  {
+    "system": "26",
+    "case": "auto-fcitx-zero-native-x",
+    "path": "vm26/output/auto-fcitx-zero-native-x/result.json",
+    "whole_sequence_exact": true,
+    "received_codepoints": [
+      [
+        30002,
+        233,
+        20057,
+        19993
+      ],
+      [
+        937,
+        10
+      ]
+    ],
+    "selected": [
+      "keyboard",
+      "keyboard",
+      "keyboard"
+    ],
+    "error": null,
+    "fcitx_failures": [
+      {
+        "code": "no_target",
+        "accepted": 0,
+        "uncertain": false,
+        "unsent_offset": 0
+      }
+    ],
+    "no_late": true,
+    "x11_map_restored": true,
+    "native_map_restored": true,
+    "native_counts": {
+      "press_success": 4,
+      "release_success": 4,
+      "guard_rejections": 0,
+      "suppressed_unattempted_release": 0
+    },
+    "x11_counts": {
+      "press": 2,
+      "release": 2,
+      "guard_rejections": 0
+    },
+    "cleanup_errors": [],
+    "fixture_sha256": "561aef50de6ef9cb1ab96803eb2542bc04e34c8532142c1d59c9449e365ab74d"
+  },
+  {
+    "system": "26",
+    "case": "keyboard-x-native-r1",
+    "path": "vm26/output/keyboard-x-native-r1/result.json",
+    "whole_sequence_exact": false,
+    "received_codepoints": [
+      [
+        30002,
+        233
+      ],
+      []
+    ],
+    "selected": [
+      "keyboard",
+      null
+    ],
+    "error": {
+      "type": "KeyboardError",
+      "code": "input_cancelled",
+      "attempts": null,
+      "locations": [
+        {
+          "file": "cross_runner.py",
+          "line": 78
+        },
+        {
+          "file": "output_router.py",
+          "line": 545
+        },
+        {
+          "file": "hybrid_keyboard.py",
+          "line": 233
+        },
+        {
+          "file": "wayland_keyboard.py",
+          "line": 467
+        },
+        {
+          "file": "wayland_keyboard.py",
+          "line": 175
+        },
+        {
+          "file": "tasks.py",
+          "line": 507
+        }
+      ]
+    },
+    "fcitx_failures": null,
+    "no_late": true,
+    "x11_map_restored": true,
+    "native_map_restored": true,
+    "native_counts": {
+      "press_success": 0,
+      "release_success": 0,
+      "guard_rejections": 1,
+      "suppressed_unattempted_release": 1
+    },
+    "x11_counts": {
+      "press": 2,
+      "release": 2,
+      "guard_rejections": 0
+    },
+    "cleanup_errors": [],
+    "fixture_sha256": null
+  },
+  {
+    "system": "26",
+    "case": "keyboard-native-x-r3",
+    "path": "vm26/output/keyboard-native-x-r3/result.json",
+    "whole_sequence_exact": false,
+    "received_codepoints": [
+      [
+        30002,
+        233
+      ],
+      [
+        937,
+        10
+      ]
+    ],
+    "selected": [
+      "keyboard",
+      "keyboard",
+      null
+    ],
+    "error": {
+      "type": "KeyboardError",
+      "code": "input_cancelled",
+      "attempts": null,
+      "locations": [
+        {
+          "file": "cross_runner.py",
+          "line": 86
+        },
+        {
+          "file": "output_router.py",
+          "line": 545
+        },
+        {
+          "file": "hybrid_keyboard.py",
+          "line": 233
+        },
+        {
+          "file": "wayland_keyboard.py",
+          "line": 467
+        },
+        {
+          "file": "wayland_keyboard.py",
+          "line": 175
+        },
+        {
+          "file": "tasks.py",
+          "line": 507
+        }
+      ]
+    },
+    "fcitx_failures": null,
+    "no_late": true,
+    "x11_map_restored": true,
+    "native_map_restored": true,
+    "native_counts": {
+      "press_success": 2,
+      "release_success": 2,
+      "guard_rejections": 1,
+      "suppressed_unattempted_release": 1
+    },
+    "x11_counts": {
+      "press": 2,
+      "release": 2,
+      "guard_rejections": 0
+    },
+    "cleanup_errors": [],
+    "fixture_sha256": null
+  },
+  {
+    "system": "26",
+    "case": "auto-owned-native-x",
+    "path": "vm26/output/auto-owned-native-x/result.json",
+    "whole_sequence_exact": false,
+    "received_codepoints": [
+      [
+        30002,
+        233
+      ],
+      []
+    ],
+    "selected": [
+      "ibus",
+      null
+    ],
+    "error": {
+      "type": "OutputRouterError",
+      "code": "ibus_delivery_unknown",
+      "attempts": 2,
+      "locations": [
+        {
+          "file": "cross_runner.py",
+          "line": 89
+        },
+        {
+          "file": "output_router.py",
+          "line": 671
+        }
+      ]
+    },
+    "fcitx_failures": null,
+    "no_late": true,
+    "x11_map_restored": true,
+    "native_map_restored": true,
+    "native_counts": null,
+    "x11_counts": {
+      "press": 0,
+      "release": 0,
+      "guard_rejections": 0
+    },
+    "cleanup_errors": [],
+    "fixture_sha256": "8a09ec9b6e8812cc010e5af76561fc41b2b9aed9ce4084cc21bbeba89b94114f"
+  },
+  {
+    "system": "26",
+    "case": "keyboard-native-x-r1",
+    "path": "vm26/output/keyboard-native-x-r1/result.json",
+    "whole_sequence_exact": false,
+    "received_codepoints": [
+      [
+        30002,
+        233
+      ],
+      [
+        937,
+        10
+      ]
+    ],
+    "selected": [
+      "keyboard",
+      "keyboard",
+      null
+    ],
+    "error": {
+      "type": "KeyboardError",
+      "code": "input_cancelled",
+      "attempts": null,
+      "locations": [
+        {
+          "file": "cross_runner.py",
+          "line": 78
+        },
+        {
+          "file": "output_router.py",
+          "line": 545
+        },
+        {
+          "file": "hybrid_keyboard.py",
+          "line": 233
+        },
+        {
+          "file": "wayland_keyboard.py",
+          "line": 467
+        },
+        {
+          "file": "wayland_keyboard.py",
+          "line": 175
+        },
+        {
+          "file": "tasks.py",
+          "line": 507
+        }
+      ]
+    },
+    "fcitx_failures": null,
+    "no_late": true,
+    "x11_map_restored": true,
+    "native_map_restored": true,
+    "native_counts": {
+      "press_success": 2,
+      "release_success": 2,
+      "guard_rejections": 1,
+      "suppressed_unattempted_release": 1
+    },
+    "x11_counts": {
+      "press": 2,
+      "release": 2,
+      "guard_rejections": 0
+    },
+    "cleanup_errors": [],
+    "fixture_sha256": null
+  },
+  {
+    "system": "26",
+    "case": "keyboard-x-native-r2",
+    "path": "vm26/output/keyboard-x-native-r2/result.json",
+    "whole_sequence_exact": false,
+    "received_codepoints": [
+      [
+        30002,
+        233
+      ],
+      []
+    ],
+    "selected": [
+      "keyboard",
+      null
+    ],
+    "error": {
+      "type": "KeyboardError",
+      "code": "input_cancelled",
+      "attempts": null,
+      "locations": [
+        {
+          "file": "cross_runner.py",
+          "line": 86
+        },
+        {
+          "file": "output_router.py",
+          "line": 545
+        },
+        {
+          "file": "hybrid_keyboard.py",
+          "line": 233
+        },
+        {
+          "file": "wayland_keyboard.py",
+          "line": 467
+        },
+        {
+          "file": "wayland_keyboard.py",
+          "line": 175
+        },
+        {
+          "file": "tasks.py",
+          "line": 507
+        }
+      ]
+    },
+    "fcitx_failures": null,
+    "no_late": true,
+    "x11_map_restored": true,
+    "native_map_restored": true,
+    "native_counts": {
+      "press_success": 0,
+      "release_success": 0,
+      "guard_rejections": 1,
+      "suppressed_unattempted_release": 1
+    },
+    "x11_counts": {
+      "press": 2,
+      "release": 2,
+      "guard_rejections": 0
+    },
+    "cleanup_errors": [],
+    "fixture_sha256": null
+  },
+  {
+    "system": "26",
+    "case": "keyboard-x-native-r3",
+    "path": "vm26/output/keyboard-x-native-r3/result.json",
+    "whole_sequence_exact": false,
+    "received_codepoints": [
+      [
+        30002,
+        233
+      ],
+      []
+    ],
+    "selected": [
+      "keyboard",
+      null
+    ],
+    "error": {
+      "type": "KeyboardError",
+      "code": "input_cancelled",
+      "attempts": null,
+      "locations": [
+        {
+          "file": "cross_runner.py",
+          "line": 86
+        },
+        {
+          "file": "output_router.py",
+          "line": 545
+        },
+        {
+          "file": "hybrid_keyboard.py",
+          "line": 233
+        },
+        {
+          "file": "wayland_keyboard.py",
+          "line": 467
+        },
+        {
+          "file": "wayland_keyboard.py",
+          "line": 175
+        },
+        {
+          "file": "tasks.py",
+          "line": 507
+        }
+      ]
+    },
+    "fcitx_failures": null,
+    "no_late": true,
+    "x11_map_restored": true,
+    "native_map_restored": true,
+    "native_counts": {
+      "press_success": 0,
+      "release_success": 0,
+      "guard_rejections": 1,
+      "suppressed_unattempted_release": 1
+    },
+    "x11_counts": {
+      "press": 2,
+      "release": 2,
+      "guard_rejections": 0
+    },
+    "cleanup_errors": [],
+    "fixture_sha256": null
+  },
+  {
+    "system": "26",
+    "case": "keyboard-native-x-cancel",
+    "path": "vm26/output/keyboard-native-x-cancel/result.json",
+    "whole_sequence_exact": false,
+    "received_codepoints": [
+      [
+        30002,
+        233
+      ],
+      [
+        937
+      ]
+    ],
+    "selected": [
+      "keyboard",
+      null
+    ],
+    "error": {
+      "type": "KeyboardError",
+      "code": "input_cancelled",
+      "attempts": null,
+      "locations": [
+        {
+          "file": "cross_runner.py",
+          "line": 88
+        },
+        {
+          "file": "output_router.py",
+          "line": 545
+        },
+        {
+          "file": "hybrid_keyboard.py",
+          "line": 233
+        },
+        {
+          "file": "keyboard.py",
+          "line": 1063
+        },
+        {
+          "file": "keyboard.py",
+          "line": 953
+        }
+      ]
+    },
+    "fcitx_failures": null,
+    "no_late": true,
+    "x11_map_restored": true,
+    "native_map_restored": true,
+    "native_counts": {
+      "press_success": 2,
+      "release_success": 2,
+      "guard_rejections": 0,
+      "suppressed_unattempted_release": 0
+    },
+    "x11_counts": {
+      "press": 1,
+      "release": 1,
+      "guard_rejections": 0
+    },
+    "cleanup_errors": [],
+    "fixture_sha256": "561aef50de6ef9cb1ab96803eb2542bc04e34c8532142c1d59c9449e365ab74d"
+  },
+  {
+    "system": "26",
+    "case": "auto-fcitx-zero-native-x-cancel",
+    "path": "vm26/output/auto-fcitx-zero-native-x-cancel/result.json",
+    "whole_sequence_exact": false,
+    "received_codepoints": [
+      [
+        30002,
+        233
+      ],
+      []
+    ],
+    "selected": [
+      "fcitx",
+      null
+    ],
+    "error": {
+      "type": "OutputRouterError",
+      "code": "partial_input_failed",
+      "attempts": 2,
+      "locations": [
+        {
+          "file": "cross_runner.py",
+          "line": 88
+        },
+        {
+          "file": "output_router.py",
+          "line": 613
+        }
+      ]
+    },
+    "fcitx_failures": [
+      {
+        "code": "expired",
+        "accepted": 2,
+        "uncertain": false,
+        "unsent_offset": null
+      }
+    ],
+    "no_late": true,
+    "x11_map_restored": true,
+    "native_map_restored": true,
+    "native_counts": null,
+    "x11_counts": {
+      "press": 0,
+      "release": 0,
+      "guard_rejections": 0
+    },
+    "cleanup_errors": [],
+    "fixture_sha256": "561aef50de6ef9cb1ab96803eb2542bc04e34c8532142c1d59c9449e365ab74d"
+  },
+  {
+    "system": "26",
+    "case": "keyboard-native-x-r4",
+    "path": "vm26/output/keyboard-native-x-r4/result.json",
+    "whole_sequence_exact": true,
+    "received_codepoints": [
+      [
+        30002,
+        233,
+        20057,
+        19993
+      ],
+      [
+        937,
+        10
+      ]
+    ],
+    "selected": [
+      "keyboard",
+      "keyboard",
+      "keyboard"
+    ],
+    "error": null,
+    "fcitx_failures": null,
+    "no_late": true,
+    "x11_map_restored": true,
+    "native_map_restored": true,
+    "native_counts": {
+      "press_success": 4,
+      "release_success": 4,
+      "guard_rejections": 0,
+      "suppressed_unattempted_release": 0
+    },
+    "x11_counts": {
+      "press": 2,
+      "release": 2,
+      "guard_rejections": 0
+    },
+    "cleanup_errors": [],
+    "fixture_sha256": "561aef50de6ef9cb1ab96803eb2542bc04e34c8532142c1d59c9449e365ab74d"
+  },
+  {
+    "system": "26",
+    "case": "keyboard-x-native-cancel",
+    "path": "vm26/output/keyboard-x-native-cancel/result.json",
+    "whole_sequence_exact": false,
+    "received_codepoints": [
+      [
+        30002,
+        233
+      ],
+      [
+        937
+      ]
+    ],
+    "selected": [
+      "keyboard",
+      null
+    ],
+    "error": {
+      "type": "KeyboardError",
+      "code": "input_cancelled",
+      "attempts": null,
+      "locations": [
+        {
+          "file": "cross_runner.py",
+          "line": 88
+        },
+        {
+          "file": "output_router.py",
+          "line": 545
+        },
+        {
+          "file": "hybrid_keyboard.py",
+          "line": 233
+        },
+        {
+          "file": "wayland_keyboard.py",
+          "line": 442
+        },
+        {
+          "file": "wayland_keyboard.py",
+          "line": 435
+        }
+      ]
+    },
+    "fcitx_failures": null,
+    "no_late": true,
+    "x11_map_restored": true,
+    "native_map_restored": true,
+    "native_counts": {
+      "press_success": 1,
+      "release_success": 1,
+      "guard_rejections": 0,
+      "suppressed_unattempted_release": 0
+    },
+    "x11_counts": {
+      "press": 2,
+      "release": 2,
+      "guard_rejections": 0
+    },
+    "cleanup_errors": [],
+    "fixture_sha256": "561aef50de6ef9cb1ab96803eb2542bc04e34c8532142c1d59c9449e365ab74d"
+  },
+  {
+    "system": "26",
+    "case": "auto-knownzero-native-x-cancel-r2",
+    "path": "vm26/output/auto-knownzero-native-x-cancel-r2/result.json",
+    "whole_sequence_exact": false,
+    "received_codepoints": [
+      [
+        30002,
+        233
+      ],
+      []
+    ],
+    "selected": [
+      "fcitx",
+      null
+    ],
+    "error": {
+      "type": "OutputRouterError",
+      "code": "partial_input_failed",
+      "attempts": 2,
+      "locations": [
+        {
+          "file": "cross_runner.py",
+          "line": 89
+        },
+        {
+          "file": "output_router.py",
+          "line": 613
+        }
+      ]
+    },
+    "fcitx_failures": [
+      {
+        "code": "expired",
+        "accepted": 2,
+        "uncertain": false,
+        "unsent_offset": null
+      }
+    ],
+    "no_late": true,
+    "x11_map_restored": true,
+    "native_map_restored": true,
+    "native_counts": null,
+    "x11_counts": {
+      "press": 0,
+      "release": 0,
+      "guard_rejections": 0
+    },
+    "cleanup_errors": [],
+    "fixture_sha256": "8a09ec9b6e8812cc010e5af76561fc41b2b9aed9ce4084cc21bbeba89b94114f"
+  },
+  {
+    "system": "26",
+    "case": "keyboard-x-native-r4",
+    "path": "vm26/output/keyboard-x-native-r4/result.json",
+    "whole_sequence_exact": true,
+    "received_codepoints": [
+      [
+        30002,
+        233,
+        20057,
+        19993
+      ],
+      [
+        937,
+        10
+      ]
+    ],
+    "selected": [
+      "keyboard",
+      "keyboard",
+      "keyboard"
+    ],
+    "error": null,
+    "fcitx_failures": null,
+    "no_late": true,
+    "x11_map_restored": true,
+    "native_map_restored": true,
+    "native_counts": {
+      "press_success": 2,
+      "release_success": 2,
+      "guard_rejections": 0,
+      "suppressed_unattempted_release": 0
+    },
+    "x11_counts": {
+      "press": 4,
+      "release": 4,
+      "guard_rejections": 0
+    },
+    "cleanup_errors": [],
+    "fixture_sha256": "561aef50de6ef9cb1ab96803eb2542bc04e34c8532142c1d59c9449e365ab74d"
+  },
+  {
+    "system": "26",
+    "case": "auto-owned-x-native",
+    "path": "vm26/output/auto-owned-x-native/result.json",
+    "whole_sequence_exact": true,
+    "received_codepoints": [
+      [
+        30002,
+        233,
+        20057,
+        19993
+      ],
+      [
+        937,
+        10
+      ]
+    ],
+    "selected": [
+      "keyboard",
+      "keyboard",
+      "keyboard"
+    ],
+    "error": null,
+    "fcitx_failures": null,
+    "no_late": true,
+    "x11_map_restored": true,
+    "native_map_restored": true,
+    "native_counts": {
+      "press_success": 2,
+      "release_success": 2,
+      "guard_rejections": 0,
+      "suppressed_unattempted_release": 0
+    },
+    "x11_counts": {
+      "press": 4,
+      "release": 4,
+      "guard_rejections": 0
+    },
+    "cleanup_errors": [],
+    "fixture_sha256": "8a09ec9b6e8812cc010e5af76561fc41b2b9aed9ce4084cc21bbeba89b94114f"
+  }
+]

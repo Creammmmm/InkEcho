@@ -1,0 +1,8 @@
+from pathlib import Path
+import os,subprocess,json,hashlib
+os.environ.update(DBUS_SESSION_BUS_ADDRESS='unix:path=/run/user/1000/bus',XDG_RUNTIME_DIR='/run/user/1000')
+keys={'DISPLAY','XAUTHORITY','WAYLAND_DISPLAY','XDG_SESSION_TYPE','XDG_CURRENT_DESKTOP','IBUS_ADDRESS'}
+env={k:v for line in subprocess.check_output(['systemctl','--user','show-environment'],text=True).splitlines() for k,_,v in [line.partition('=')] if k in keys};os.environ.update(env);assert env['XDG_SESSION_TYPE']=='wayland'
+root=Path('/home/inkecho/.local/share/gnome-shell/extensions/inkecho-ibus-owned-v5-prototype@local.invalid');backup=Path('/mnt/output/original-v5-assets');digest=lambda r:{p.name:hashlib.sha256(p.read_bytes()).hexdigest()for p in r.iterdir()if p.is_file()};assert digest(root)==digest(backup)
+pid=int(subprocess.check_output(['pgrep','-u','1000','-x','gnome-shell'],text=True).strip());libs=sorted({l.split()[-1]for l in Path('/proc',str(pid),'maps').read_text().splitlines()if 'libmutter' in l and '.so.' in l});assert libs and all(Path(p).resolve().is_relative_to('/usr')for p in libs)
+r=subprocess.run(['ibus','engine'],capture_output=True,text=True);d={'environment':env,'extension_restored_exact':True,'libraries':{p:hashlib.sha256(Path(p).read_bytes()).hexdigest()for p in libs},'ibus_engine':{'returncode':r.returncode,'stdout':r.stdout,'stderr':r.stderr},'sources':subprocess.check_output(['gsettings','get','org.gnome.desktop.input-sources','sources'],text=True).strip()};Path('/mnt/output/final-restored-state.json').write_text(json.dumps(d,indent=2));print(json.dumps(d));assert r.returncode==0 and r.stdout.strip()=='xkb:us::eng'

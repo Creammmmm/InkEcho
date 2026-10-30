@@ -1,0 +1,7 @@
+{
+  "stage": "wayland",
+  "command": "python3 /mnt/input/owned-settings.py enabled; sudo systemctl restart gdm3",
+  "returncode": 0,
+  "stdout": "{\n  \"action\": \"enabled\",\n  \"values\": {\n    \"enabled-extensions\": [\n      \"inkecho-ibus-owned-v5-prototype@local.invalid\"\n    ],\n    \"disabled-extensions\": [\n      \"inkecho-ibus-candidate@local.invalid\",\n      \"inkecho-ibus-focus-probe@local.invalid\",\n      \"inkecho-ibus-v2-prototype@local.invalid\"\n    ],\n    \"disable-user-extensions\": false\n  },\n  \"info\": \"inkecho-ibus-owned-v5-prototype@local.invalid\\n  Name: InkEcho bounded owned context candidate\\n  Description: Optional InkEcho owned-context bridge; requires explicit installation and activation\\n  Path: /home/inkecho/.local/share/gnome-shell/extensions/inkecho-ibus-owned-v5-prototype@local.invalid\\n  Enabled: Yes\\n  State: ACTIVE\\n\"\n}\n",
+  "stderr": ""
+}

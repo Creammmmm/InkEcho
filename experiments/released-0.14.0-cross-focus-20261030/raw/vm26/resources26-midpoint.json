@@ -1,0 +1,7 @@
+{
+  "stage": "wayland",
+  "command": "df -h /tmp /run/user/1000; free -m",
+  "returncode": 0,
+  "stdout": "Filesystem      Size  Used Avail Use% Mounted on\ntmpfs           2.0G   97M  1.9G   5% /tmp\ntmpfs           392M   40K  391M   1% /run/user/1000\n               total        used        free      shared  buff/cache   available\nMem:            3910        1086        1243         124        1950        2823\nSwap:              0           0           0\n",
+  "stderr": ""
+}

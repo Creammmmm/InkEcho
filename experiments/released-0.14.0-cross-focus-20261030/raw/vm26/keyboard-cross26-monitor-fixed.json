@@ -1,0 +1,7 @@
+{
+  "stage": "wayland",
+  "command": "env RUN_LABEL=keyboard-native-x-r3 OUTPUT_METHOD=keyboard START_PLATFORM=wayland python3 /mnt/input/launch-cross.py; env RUN_LABEL=keyboard-x-native-r3 OUTPUT_METHOD=keyboard START_PLATFORM=x11 python3 /mnt/input/launch-cross.py",
+  "returncode": 0,
+  "stdout": "{\"error\": {\"type\": \"KeyboardError\", \"code\": \"input_cancelled\", \"attempts\": null, \"locations\": [{\"file\": \"cross_runner.py\", \"line\": 86}, {\"file\": \"output_router.py\", \"line\": 545}, {\"file\": \"hybrid_keyboard.py\", \"line\": 233}, {\"file\": \"wayland_keyboard.py\", \"line\": 467}, {\"file\": \"wayland_keyboard.py\", \"line\": 175}, {\"file\": \"tasks.py\", \"line\": 507}]}, \"received\": [\"\\u7532\\u00e9\", \"\\u03a9\\n\"], \"whole_sequence_exact\": false, \"no_late\": true, \"cleanup_errors\": []}\n\n{\"error\": {\"type\": \"KeyboardError\", \"code\": \"input_cancelled\", \"attempts\": null, \"locations\": [{\"file\": \"cross_runner.py\", \"line\": 86}, {\"file\": \"output_router.py\", \"line\": 545}, {\"file\": \"hybrid_keyboard.py\", \"line\": 233}, {\"file\": \"wayland_keyboard.py\", \"line\": 467}, {\"file\": \"wayland_keyboard.py\", \"line\": 175}, {\"file\": \"tasks.py\", \"line\": 507}]}, \"received\": [\"\\u7532\\u00e9\", \"\"], \"whole_sequence_exact\": false, \"no_late\": true, \"cleanup_errors\": []}\n\n",
+  "stderr": ""
+}

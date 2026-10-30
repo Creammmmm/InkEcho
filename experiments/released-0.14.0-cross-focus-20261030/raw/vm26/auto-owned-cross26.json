@@ -1,0 +1,7 @@
+{
+  "stage": "wayland",
+  "command": "env RUN_LABEL=auto-owned-native-x OUTPUT_METHOD=auto START_PLATFORM=wayland python3 /mnt/input/launch-cross.py; env RUN_LABEL=auto-owned-x-native OUTPUT_METHOD=auto START_PLATFORM=x11 python3 /mnt/input/launch-cross.py",
+  "returncode": 0,
+  "stdout": "{\"error\": {\"type\": \"OutputRouterError\", \"code\": \"ibus_delivery_unknown\", \"attempts\": 2, \"locations\": [{\"file\": \"cross_runner.py\", \"line\": 89}, {\"file\": \"output_router.py\", \"line\": 671}]}, \"received\": [\"\\u7532\\u00e9\", \"\"], \"whole_sequence_exact\": false, \"no_late\": true, \"cleanup_errors\": []}\n\n{\"error\": null, \"received\": [\"\\u7532\\u00e9\\u4e59\\u4e19\", \"\\u03a9\\n\"], \"whole_sequence_exact\": true, \"no_late\": true, \"cleanup_errors\": []}\n\n",
+  "stderr": ""
+}

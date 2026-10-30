@@ -1,0 +1,7 @@
+{
+  "stage": "wayland",
+  "command": "ls /usr/share/fcitx5/addon/*wayland* /usr/share/fcitx5/addon/*xcb*; df -h /tmp; free -m",
+  "returncode": 0,
+  "stdout": "/usr/share/fcitx5/addon/wayland.conf\n/usr/share/fcitx5/addon/waylandim.conf\n/usr/share/fcitx5/addon/xcb.conf\nFilesystem      Size  Used Avail Use% Mounted on\ntmpfs           2.0G  149M  1.8G   8% /tmp\n               total        used        free      shared  buff/cache   available\nMem:            3910        1115        1205         176        2012        2794\nSwap:              0           0           0\n",
+  "stderr": ""
+}

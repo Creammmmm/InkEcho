@@ -1,0 +1,7 @@
+{
+  "stage": "wayland",
+  "command": "env RUN_LABEL=keyboard-x-native-r1 OUTPUT_METHOD=keyboard START_PLATFORM=x11 python3 /mnt/input/launch-cross.py",
+  "returncode": 0,
+  "stdout": "{\"error\": {\"type\": \"AttributeError\", \"code\": null, \"attempts\": null}, \"received\": [], \"whole_sequence_exact\": false, \"no_late\": true, \"cleanup_errors\": []}\n\n",
+  "stderr": ""
+}

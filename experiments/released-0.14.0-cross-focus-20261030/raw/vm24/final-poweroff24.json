@@ -1,0 +1,7 @@
+{
+  "stage": "wayland",
+  "command": "python3 /mnt/input/final-state.py; sudo poweroff",
+  "returncode": 0,
+  "stdout": "{\"environment\": {\"DISPLAY\": \":0\", \"WAYLAND_DISPLAY\": \"wayland-0\", \"XAUTHORITY\": \"/run/user/1000/.mutter-Xwaylandauth.4VP7X3\", \"XDG_CURRENT_DESKTOP\": \"ubuntu:GNOME\", \"XDG_SESSION_TYPE\": \"wayland\"}, \"extension_restored_exact\": true, \"libraries\": {\"/usr/lib/x86_64-linux-gnu/libmutter-14.so.0.0.0\": \"a66cbe9b4409c17c83b88d355ea0fd360eb8f792be068245017ffac720cecc77\", \"/usr/lib/x86_64-linux-gnu/mutter-14/libmutter-clutter-14.so.0.0.0\": \"da06da6a5c383af26f334e87745f2afa31a194b7d8029d2776601e92c4e3017b\", \"/usr/lib/x86_64-linux-gnu/mutter-14/libmutter-cogl-14.so.0.0.0\": \"f37364d26625fc3081fc3037b52af2ca48fe2fbc06d63e086afde3d7bed94a0f\", \"/usr/lib/x86_64-linux-gnu/mutter-14/libmutter-cogl-pango-14.so.0.0.0\": \"bd1ac205598b3f0f43e21f56ed380c7386be76dd4a59b32d0488f685da911024\", \"/usr/lib/x86_64-linux-gnu/mutter-14/libmutter-mtk-14.so.0.0.0\": \"a3007ae4fbcb6e9539e67df875a03e9e08a3cdf1ccad866e435fffb2bdd161c6\"}, \"ibus_engine\": {\"returncode\": 0, \"stdout\": \"xkb:us::eng\\n\", \"stderr\": \"\"}, \"sources\": \"[('xkb', 'us')]\"}\n",
+  "stderr": ""
+}

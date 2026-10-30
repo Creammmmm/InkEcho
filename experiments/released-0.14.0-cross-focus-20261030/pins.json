@@ -1,0 +1,986 @@
+{
+  "raw/summary.json": {
+    "source": "summary.json",
+    "bytes": 21363,
+    "sha256": "edc9f6a56bee2a330dddd946999a4cc21b4fb4c374227128241b3d87c17f09b7"
+  },
+  "raw/release-identity.json": {
+    "source": "release-identity.json",
+    "bytes": 424,
+    "sha256": "0ee942a96ae56698648b8ebd377d7d2105e2582731183ae89d3086f52317ec13"
+  },
+  "raw/vm24/readiness24.json": {
+    "source": "vm24/readiness24.json",
+    "bytes": 252,
+    "sha256": "5ab6d4a110dc55721764a0222d7081b6e2786984d11691e53e7ebefcecabfb80"
+  },
+  "raw/vm24/stage-owned24.json": {
+    "source": "vm24/stage-owned24.json",
+    "bytes": 266,
+    "sha256": "aced01c76f4e72ccdde78dde7ba8e5f25f324d3592408df580a381aa193f24cf"
+  },
+  "raw/vm24/final-poweroff24.json": {
+    "source": "vm24/final-poweroff24.json",
+    "bytes": 1219,
+    "sha256": "7c49f22cc2242d513737bcedbb197b84fdc1230a3818615af272942d4a4cb397"
+  },
+  "raw/vm24/reverse-fallback24.json": {
+    "source": "vm24/reverse-fallback24.json",
+    "bytes": 1890,
+    "sha256": "e7bfd1c2a977d46c78d2ca2342767139008bc3f108b64b7b4f2e78bc13c34168"
+  },
+  "raw/vm24/container-final-state.json": {
+    "source": "vm24/container-final-state.json",
+    "bytes": 269,
+    "sha256": "5d1c4533316fa73a8d89081ec108b94b6894957eee7c2d953cf3ab3803e800e1"
+  },
+  "raw/vm24/enable-owned24.json": {
+    "source": "vm24/enable-owned24.json",
+    "bytes": 909,
+    "sha256": "942fcbe2e21ad66bc75cf8030a53f75ddfd4c777a4d922e4883d049e618c8035"
+  },
+  "raw/vm24/xwayland-baseline24.json": {
+    "source": "vm24/xwayland-baseline24.json",
+    "bytes": 820,
+    "sha256": "ec7f6edcd80946da26d65975ef79bc45104fbd7407f036a246c79daa1f661e38"
+  },
+  "raw/vm24/restore-close24.json": {
+    "source": "vm24/restore-close24.json",
+    "bytes": 1736,
+    "sha256": "d5aa50aac2d34a120c52691556a456a11f2f6cbc0b5916ffae879881dd5846f1"
+  },
+  "raw/vm24/keyboard-cross24-r2.json": {
+    "source": "vm24/keyboard-cross24-r2.json",
+    "bytes": 590,
+    "sha256": "086233cb3375ee5146b29a5688f2a2afde54872cc4bf9cfaf3ece1d1ee90dec2"
+  },
+  "raw/vm24/keyboard-cross24-r1.json": {
+    "source": "vm24/keyboard-cross24-r1.json",
+    "bytes": 381,
+    "sha256": "2b1cbca0bb44adc706532b532dde31a5f3839932cedc50adab323b8027aa6291"
+  },
+  "raw/vm24/parent.json": {
+    "source": "vm24/parent.json",
+    "bytes": 292,
+    "sha256": "d56a3402b186ed31b3456f734f5b91a8ed54ca43e0f4398629bff479329f0d66"
+  },
+  "raw/vm24/launch.json": {
+    "source": "vm24/launch.json",
+    "bytes": 1881,
+    "sha256": "5b5ad98237fce8b6db2a01661f4dd053868c0d409b601e4fde3201dd5de754d9"
+  },
+  "raw/vm24/boot.json": {
+    "source": "vm24/boot.json",
+    "bytes": 2209,
+    "sha256": "95c9c9ced2a83a300a7219ed737e325d7fab6ec3286569fcab52c993d3376155"
+  },
+  "raw/vm24/auto-owned-cross24.json": {
+    "source": "vm24/auto-owned-cross24.json",
+    "bytes": 541,
+    "sha256": "8baebf6abe78a2a81885beb3bd6d0941b2e07ec88390fcf5c698df213c176c70"
+  },
+  "raw/vm24/prepare24.json": {
+    "source": "vm24/prepare24.json",
+    "bytes": 1559,
+    "sha256": "7c6f276ec6ee6eb5d6ca0a22c95082c872be34eb77e4339b313ca232e8a0d2f0"
+  },
+  "raw/vm24/output/qemu-exit.json": {
+    "source": "vm24/output/qemu-exit.json",
+    "bytes": 17,
+    "sha256": "c365161d39236fe0f1d32937fbc549796b8487d8faf65ed3879b96897c78ea5d"
+  },
+  "raw/vm24/output/extension-settings-before.json": {
+    "source": "vm24/output/extension-settings-before.json",
+    "bytes": 287,
+    "sha256": "074e2f3231f15b400940a61419de2a48f5719376ae01d0f6871dddd7717ebc9e"
+  },
+  "raw/vm24/output/serial.log.gz": {
+    "source": "vm24/output/serial.log",
+    "bytes": 22428,
+    "sha256": "ca2e3d32f2ed4c6b7f4f51a1d876d3b669644663a95abdd7c1a2d4285a932b3a",
+    "encoding": "gzip",
+    "decoded_original_evidence_path": "raw/vm24/output/serial.log",
+    "decoded_bytes": 112569,
+    "decoded_sha256": "50b9cfdffd8ff33e269c377b00736cd3dd3d8d60c2c1f455f48e22373fdcea5f"
+  },
+  "raw/vm24/output/old-install-upgrade-guard.json": {
+    "source": "vm24/output/old-install-upgrade-guard.json",
+    "bytes": 485,
+    "sha256": "8675c82de5bd6819ffd77c7de566dfbd082568b80ea6a0874b4bc4f7303b9021"
+  },
+  "raw/vm24/output/final-restored-state.json": {
+    "source": "vm24/output/final-restored-state.json",
+    "bytes": 1089,
+    "sha256": "e3c7464a705972f4da7681bfbc600223a75827e56ac5cf4508d561c22bcd6fc7"
+  },
+  "raw/vm24/output/extension-restored.json": {
+    "source": "vm24/output/extension-restored.json",
+    "bytes": 669,
+    "sha256": "feb4c884b166bb499ee404e11c025f733fde72a248dd5932e7e0f3b17d21175e"
+  },
+  "raw/vm24/output/stage-candidate-extension.json": {
+    "source": "vm24/output/stage-candidate-extension.json",
+    "bytes": 2008,
+    "sha256": "87f7afa40bd4c61f36b942b0c33bb7db8700c4b3f047620157c90696c9e58b54"
+  },
+  "raw/vm24/output/ram-overlay-archive.json": {
+    "source": "vm24/output/ram-overlay-archive.json",
+    "bytes": 291,
+    "sha256": "b6c6e28743d7412ef650d7c0c1c4350fa9c0724451c78355df9c692009d8c18d"
+  },
+  "raw/vm24/output/keyboard-x-native-r1/exit.json": {
+    "source": "vm24/output/keyboard-x-native-r1/exit.json",
+    "bytes": 17,
+    "sha256": "c365161d39236fe0f1d32937fbc549796b8487d8faf65ed3879b96897c78ea5d"
+  },
+  "raw/vm24/output/keyboard-x-native-r1/runner.log": {
+    "source": "vm24/output/keyboard-x-native-r1/runner.log",
+    "bytes": 156,
+    "sha256": "ac0534487cee5835a197ef434c023caaf296cf81e4d3c2f0f20bc55fc1f37738"
+  },
+  "raw/vm24/output/keyboard-x-native-r1/result.json": {
+    "source": "vm24/output/keyboard-x-native-r1/result.json",
+    "bytes": 26075,
+    "sha256": "8c7e393207df9218e2a961feca96fda18735e8c32947efd5ac0a19057e92b42b"
+  },
+  "raw/vm24/output/auto-owned-native-x-r1/exit.json": {
+    "source": "vm24/output/auto-owned-native-x-r1/exit.json",
+    "bytes": 17,
+    "sha256": "c365161d39236fe0f1d32937fbc549796b8487d8faf65ed3879b96897c78ea5d"
+  },
+  "raw/vm24/output/auto-owned-native-x-r1/runner.log": {
+    "source": "vm24/output/auto-owned-native-x-r1/runner.log",
+    "bytes": 292,
+    "sha256": "0f1e900ed1adfa451c91e12ef4edac5d34bc3cba70855408c9fef8636a3b1e35"
+  },
+  "raw/vm24/output/auto-owned-native-x-r1/result.json": {
+    "source": "vm24/output/auto-owned-native-x-r1/result.json",
+    "bytes": 29328,
+    "sha256": "da86f447df9e9aa7add0583ddfa1ad79f579d596b01a6e6fef4c9ff478b7df7e"
+  },
+  "raw/vm24/output/keyboard-x-native-r2/exit.json": {
+    "source": "vm24/output/keyboard-x-native-r2/exit.json",
+    "bytes": 17,
+    "sha256": "c365161d39236fe0f1d32937fbc549796b8487d8faf65ed3879b96897c78ea5d"
+  },
+  "raw/vm24/output/keyboard-x-native-r2/runner.log": {
+    "source": "vm24/output/keyboard-x-native-r2/runner.log",
+    "bytes": 337,
+    "sha256": "b90229265b882f08504db7613bba3499888b159b3cb172be59c17a6d29a6648d"
+  },
+  "raw/vm24/output/keyboard-x-native-r2/result.json": {
+    "source": "vm24/output/keyboard-x-native-r2/result.json",
+    "bytes": 29550,
+    "sha256": "eebc6de6419bd6451108f21a23bd60596419af03a9927c37234010b54053faeb"
+  },
+  "raw/vm24/output/wayland/fuse-cleanup.json": {
+    "source": "vm24/output/wayland/fuse-cleanup.json",
+    "bytes": 62,
+    "sha256": "27e628066c85717a5c7e35989d9abb18513bac13ea54739a66e2441694710664"
+  },
+  "raw/vm24/output/wayland/final-resource-check.json": {
+    "source": "vm24/output/wayland/final-resource-check.json",
+    "bytes": 339,
+    "sha256": "7ba2179640406d29404b91d0cf35066390587d402f756496f0eb9c2ab9d10ac2"
+  },
+  "raw/vm24/output/wayland/mount.json": {
+    "source": "vm24/output/wayland/mount.json",
+    "bytes": 208,
+    "sha256": "c82f9e347977536b1a534913833f3f29ead1922bd186176f26e5c3aa55315045"
+  },
+  "raw/vm24/output/wayland/package-audit.log": {
+    "source": "vm24/output/wayland/package-audit.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "raw/vm24/output/wayland/package-audit.json": {
+    "source": "vm24/output/wayland/package-audit.json",
+    "bytes": 18234,
+    "sha256": "6dfedda5a2e3f0522c2c906b67a58c9991bacad348a3d1b69314513b0b99a0cc"
+  },
+  "raw/vm24/output/wayland/package-audit-exit.json": {
+    "source": "vm24/output/wayland/package-audit-exit.json",
+    "bytes": 596,
+    "sha256": "b27cabcb31887e5b97313edb81daa5f0e111e37f9b8c10a7d6a29f9f50483d06"
+  },
+  "raw/vm24/output/wayland/fuse-mount.log": {
+    "source": "vm24/output/wayland/fuse-mount.log",
+    "bytes": 63,
+    "sha256": "f19119ee26b62363d0ddf32bb6be2697e5f7b20340b46add6f5f2cf0a2d29e46"
+  },
+  "raw/vm24/output/auto-fcitx-zero-x-native-r1/exit.json": {
+    "source": "vm24/output/auto-fcitx-zero-x-native-r1/exit.json",
+    "bytes": 17,
+    "sha256": "c365161d39236fe0f1d32937fbc549796b8487d8faf65ed3879b96897c78ea5d"
+  },
+  "raw/vm24/output/auto-fcitx-zero-x-native-r1/runner.log": {
+    "source": "vm24/output/auto-fcitx-zero-x-native-r1/runner.log",
+    "bytes": 337,
+    "sha256": "b90229265b882f08504db7613bba3499888b159b3cb172be59c17a6d29a6648d"
+  },
+  "raw/vm24/output/auto-fcitx-zero-x-native-r1/result.json": {
+    "source": "vm24/output/auto-fcitx-zero-x-native-r1/result.json",
+    "bytes": 29702,
+    "sha256": "f643ca73ba08d2b48df43b17dbf35137204078983a422acc80a0f5bf18b1856d"
+  },
+  "raw/vm24/output/auto-fcitx-zero-x-native-r1/fcitx.log.gz": {
+    "source": "vm24/output/auto-fcitx-zero-x-native-r1/fcitx.log",
+    "bytes": 1176,
+    "sha256": "f9e8bc0202108a3559c32d1d9228b7cbc985bb74647e573449e652a02b5d4845",
+    "encoding": "gzip",
+    "decoded_original_evidence_path": "raw/vm24/output/auto-fcitx-zero-x-native-r1/fcitx.log",
+    "decoded_bytes": 4801,
+    "decoded_sha256": "91789b7995580df6e8cafcdfada517dd8ae94ad9cf4607a95bdca1940e7d2fc6"
+  },
+  "raw/vm24/output/auto-owned-x-native-r1/exit.json": {
+    "source": "vm24/output/auto-owned-x-native-r1/exit.json",
+    "bytes": 17,
+    "sha256": "c365161d39236fe0f1d32937fbc549796b8487d8faf65ed3879b96897c78ea5d"
+  },
+  "raw/vm24/output/auto-owned-x-native-r1/runner.log": {
+    "source": "vm24/output/auto-owned-x-native-r1/runner.log",
+    "bytes": 337,
+    "sha256": "b90229265b882f08504db7613bba3499888b159b3cb172be59c17a6d29a6648d"
+  },
+  "raw/vm24/output/auto-owned-x-native-r1/result.json": {
+    "source": "vm24/output/auto-owned-x-native-r1/result.json",
+    "bytes": 29546,
+    "sha256": "ceb4bc3e23ba4ffcd3aa60152b1e866abceecb31090227b9b7a7fc6aa63ea34a"
+  },
+  "raw/vm24/output/wayland/suite-keyboard-xwayland-baseline-normal/target-immodules.json": {
+    "source": "vm24/output/wayland/suite-keyboard-xwayland-baseline-normal/target-immodules.json",
+    "bytes": 62,
+    "sha256": "7cb5bb84c434b2910042a5afd252e7b8fc694f01367edbb82d81adaa8247216a"
+  },
+  "raw/vm24/output/wayland/suite-keyboard-xwayland-baseline-normal/target.json": {
+    "source": "vm24/output/wayland/suite-keyboard-xwayland-baseline-normal/target.json",
+    "bytes": 2489,
+    "sha256": "98733e2c909631e1f517943af4b22910973133d52d97801398fedbe20315e74b"
+  },
+  "raw/vm24/output/wayland/suite-keyboard-xwayland-baseline-normal/receiver.json": {
+    "source": "vm24/output/wayland/suite-keyboard-xwayland-baseline-normal/receiver.json",
+    "bytes": 458,
+    "sha256": "25c91820e98b8b2087008eb1f42c752cd35acb075e70cb6cd3c8051003e74c3c"
+  },
+  "raw/vm24/output/wayland/suite-keyboard-xwayland-baseline-normal/report.json": {
+    "source": "vm24/output/wayland/suite-keyboard-xwayland-baseline-normal/report.json",
+    "bytes": 15777,
+    "sha256": "0824aff9ac3cb99a1764423696ff5c23ee033d78e363f317691b7d65bdd29f6a"
+  },
+  "raw/vm24/output/wayland/suite-keyboard-xwayland-baseline-normal/initial-target.json": {
+    "source": "vm24/output/wayland/suite-keyboard-xwayland-baseline-normal/initial-target.json",
+    "bytes": 168,
+    "sha256": "27dc658ebb4555a3b1de2d79535fde4f411668c4e627d2c8ad2bedec5052d790"
+  },
+  "raw/vm24/output/wayland/suite-keyboard-xwayland-baseline-normal/pipeline.log": {
+    "source": "vm24/output/wayland/suite-keyboard-xwayland-baseline-normal/pipeline.log",
+    "bytes": 2096,
+    "sha256": "6ef22d5fc0cd1212eec0c092210a75e8efc828d951da802f982a9bb9d5b0bff7"
+  },
+  "raw/vm24/output/wayland/suite-keyboard-xwayland-baseline-normal/fixture-owned-activation.json": {
+    "source": "vm24/output/wayland/suite-keyboard-xwayland-baseline-normal/fixture-owned-activation.json",
+    "bytes": 97,
+    "sha256": "536a03d4f026c5ac7c630527f57d49e00d2f138141ead8a0071dfd315e97ce9a"
+  },
+  "raw/vm24/output/wayland/suite-keyboard-xwayland-baseline-normal/target.log": {
+    "source": "vm24/output/wayland/suite-keyboard-xwayland-baseline-normal/target.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "raw/vm24/output/wayland/suite-keyboard-xwayland-baseline-cancel-after-first/target-immodules.json": {
+    "source": "vm24/output/wayland/suite-keyboard-xwayland-baseline-cancel-after-first/target-immodules.json",
+    "bytes": 62,
+    "sha256": "7cb5bb84c434b2910042a5afd252e7b8fc694f01367edbb82d81adaa8247216a"
+  },
+  "raw/vm24/output/wayland/suite-keyboard-xwayland-baseline-cancel-after-first/target.json": {
+    "source": "vm24/output/wayland/suite-keyboard-xwayland-baseline-cancel-after-first/target.json",
+    "bytes": 256,
+    "sha256": "f2b8b2b44544a08d60f4cccfdb494aea01d6cacc04867d0275a356f2b67e379c"
+  },
+  "raw/vm24/output/wayland/suite-keyboard-xwayland-baseline-cancel-after-first/receiver.json": {
+    "source": "vm24/output/wayland/suite-keyboard-xwayland-baseline-cancel-after-first/receiver.json",
+    "bytes": 265,
+    "sha256": "291f4ae063e7569af74f8933ea73e2996f0fa918db3b30a002602e0f40a1df48"
+  },
+  "raw/vm24/output/wayland/suite-keyboard-xwayland-baseline-cancel-after-first/report.json": {
+    "source": "vm24/output/wayland/suite-keyboard-xwayland-baseline-cancel-after-first/report.json",
+    "bytes": 16233,
+    "sha256": "5981ec2d24d05de27f3652fea89a587efdf87ef60a459608484800794570a0f4"
+  },
+  "raw/vm24/output/wayland/suite-keyboard-xwayland-baseline-cancel-after-first/initial-target.json": {
+    "source": "vm24/output/wayland/suite-keyboard-xwayland-baseline-cancel-after-first/initial-target.json",
+    "bytes": 168,
+    "sha256": "d091513dfe80ac658ffdadc263927072b61105de7439d4669655c7274d6d0cb6"
+  },
+  "raw/vm24/output/wayland/suite-keyboard-xwayland-baseline-cancel-after-first/pipeline.log": {
+    "source": "vm24/output/wayland/suite-keyboard-xwayland-baseline-cancel-after-first/pipeline.log",
+    "bytes": 2213,
+    "sha256": "cac6b1c151c86173994dc271a2f745d77b56359f6bd3a502eede35859f868dad"
+  },
+  "raw/vm24/output/wayland/suite-keyboard-xwayland-baseline-cancel-after-first/fixture-owned-activation.json": {
+    "source": "vm24/output/wayland/suite-keyboard-xwayland-baseline-cancel-after-first/fixture-owned-activation.json",
+    "bytes": 97,
+    "sha256": "0d85e711262e7e3b20191d9be74fa159077fb11720cbd39430d911b3ec3af591"
+  },
+  "raw/vm24/output/wayland/suite-keyboard-xwayland-baseline-cancel-after-first/target.log": {
+    "source": "vm24/output/wayland/suite-keyboard-xwayland-baseline-cancel-after-first/target.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "reproduction/vm24/input/cross_runner.py": {
+    "source": "vm24/input/cross_runner.py",
+    "bytes": 10799,
+    "sha256": "8a09ec9b6e8812cc010e5af76561fc41b2b9aed9ce4084cc21bbeba89b94114f"
+  },
+  "reproduction/vm24/input/cross_runner-before-monitor-fix.py": {
+    "source": "vm24/input/cross_runner-before-monitor-fix.py",
+    "bytes": 10405,
+    "sha256": "5da16e5ede78ac5266004bf8083209c9d007adfe7d0f2ed7ff32ad6fe499c00c"
+  },
+  "reproduction/vm24/input/launch-cross.py": {
+    "source": "vm24/input/launch-cross.py",
+    "bytes": 1112,
+    "sha256": "795d79e77fa74c85f27612838636bc53da94b370e37856953c9390879adcfcff"
+  },
+  "reproduction/vm24/input/guest.py": {
+    "source": "vm24/input/guest.py",
+    "bytes": 5145,
+    "sha256": "4dfe72ef98bf2fcefc9b27501af0e49b3bec4bc24e3d7524fc4239bc5f20ee50"
+  },
+  "reproduction/vm24/input/gap.py": {
+    "source": "vm24/input/gap.py",
+    "bytes": 6027,
+    "sha256": "4a84da56ee8519ad2d2d9eb35e99adde28b5d76f772234cddb005ac18f5475fc"
+  },
+  "reproduction/vm24/input/target.py": {
+    "source": "vm24/input/target.py",
+    "bytes": 1554,
+    "sha256": "a0a7ec56aeec7091a1545cc110dcaef47dd9cd0e11e1272671fd316787a76c24"
+  },
+  "reproduction/vm24/input/wrapper.py": {
+    "source": "vm24/input/wrapper.py",
+    "bytes": 1292,
+    "sha256": "a4060b1b742717bf378812c6b62850793d4302acb8fead609799909cebffa3e1"
+  },
+  "reproduction/vm24/input/qemu.json": {
+    "source": "vm24/input/qemu.json",
+    "bytes": 882,
+    "sha256": "fa91db4461c63f3c0f1f01c021cfbc1663272746055d0d68cd5a9f82328f2e79"
+  },
+  "reproduction/vm24/input/chrome_program.py": {
+    "source": "vm24/input/chrome_program.py",
+    "bytes": 1045,
+    "sha256": "bee04ebaebd6768fff54d19bca2d666901bfe781985be6a1130ce68e61b25e38"
+  },
+  "reproduction/vm24/input/chrome-software-manifest.json": {
+    "source": "vm24/input/chrome-software-manifest.json",
+    "bytes": 23860,
+    "sha256": "208eb4c91aed99ca97bbf68b8d5e7190190ca36d745d10dfdb9130d8de1b4ee4"
+  },
+  "reproduction/vm24/input/stage-candidate.py": {
+    "source": "vm24/input/stage-candidate.py",
+    "bytes": 2043,
+    "sha256": "9d83bd1db9eef330138c3c6f2f7d60a5a8ea3924dc5871eed74632cb5639e3d8"
+  },
+  "reproduction/vm24/input/restore-extension.py": {
+    "source": "vm24/input/restore-extension.py",
+    "bytes": 898,
+    "sha256": "9f1f1cd61448bba069eb00ced7e0fdd5becfeb15713c26f773699883fa344c81"
+  },
+  "reproduction/vm24/input/owned-settings.py": {
+    "source": "vm24/input/owned-settings.py",
+    "bytes": 1410,
+    "sha256": "76304793c36930915a95d82496c57ac7975b2651b2933faa35d972d18602f00c"
+  },
+  "reproduction/vm24/input/final-state.py": {
+    "source": "vm24/input/final-state.py",
+    "bytes": 1638,
+    "sha256": "0544936c906e18b54ec274bb0b736276c773f4857e2e98443c90832350cbd399"
+  },
+  "reproduction/vm24/input/resource-check.py": {
+    "source": "vm24/input/resource-check.py",
+    "bytes": 2214,
+    "sha256": "0d23c36b5d3d1992caf79d9f589e6b75593034a5ddddee46f76f84fffaf4d306"
+  },
+  "reproduction/vm24/input/crosslib/natural_owned_browser.py": {
+    "source": "vm24/input/crosslib/natural_owned_browser.py",
+    "bytes": 13442,
+    "sha256": "a3ef513ad9b63ee6db755d2856b524ce11296db4a70781d37716435b145b4c84"
+  },
+  "raw/vm26/keyboard-cross26-r4.json": {
+    "source": "vm26/keyboard-cross26-r4.json",
+    "bytes": 645,
+    "sha256": "48b6a96fe6305add871898c4378f90cb9f292197b85ddecde40a8d635762472e"
+  },
+  "raw/vm26/keyboard-normal26.json": {
+    "source": "vm26/keyboard-normal26.json",
+    "bytes": 2108,
+    "sha256": "f7707cf38f7119e1395ddbcf2e5d2cca973120c06d48008edac4f704634007f2"
+  },
+  "raw/vm26/controlled-fallback-stage-owned26.json": {
+    "source": "vm26/controlled-fallback-stage-owned26.json",
+    "bytes": 772,
+    "sha256": "a64d7b3584b318cc9477047589d32a9e6c6ec52d2ae933150d80bac08c6e47bc"
+  },
+  "raw/vm26/container-final-state.json": {
+    "source": "vm26/container-final-state.json",
+    "bytes": 269,
+    "sha256": "e519ddadc663fdbb037c7b95cf603046e7cceace5cea597c69520d9ffe759948"
+  },
+  "raw/vm26/enable-owned26.json": {
+    "source": "vm26/enable-owned26.json",
+    "bytes": 1216,
+    "sha256": "9be1fe477eb88babc66d61a1170e7b6862bb6e67fbfe2d42b5996362c252600d"
+  },
+  "raw/vm26/final-poweroff26.json": {
+    "source": "vm26/final-poweroff26.json",
+    "bytes": 1075,
+    "sha256": "17f76db0b4288026e2f193e02c0ef8ae23a9a3fbc5a7325886218704b0e2ab83"
+  },
+  "raw/vm26/keyboard-cross26-diagnosis.json": {
+    "source": "vm26/keyboard-cross26-diagnosis.json",
+    "bytes": 728,
+    "sha256": "733e3b8f1e1dc3180a15ae29dd52528e05620bc378eca30581a26534ac2d277a"
+  },
+  "raw/vm26/restore-close26.json": {
+    "source": "vm26/restore-close26.json",
+    "bytes": 2043,
+    "sha256": "fb48170273157ff5bfdb4b1ad2b3064b1652b90ce6ef2d404a9178e66f132c9f"
+  },
+  "raw/vm26/resources26-midpoint.json": {
+    "source": "vm26/resources26-midpoint.json",
+    "bytes": 485,
+    "sha256": "cbb86a21c1814df8e453d648f0d7fd192396a9c9b7e613132acf348834b7f3aa"
+  },
+  "raw/vm26/parent.json": {
+    "source": "vm26/parent.json",
+    "bytes": 291,
+    "sha256": "4c15210db917895c32edb17795357b7c0df5ed3ecafc7506b59e5afe35940b4a"
+  },
+  "raw/vm26/keyboard-cross26-monitor-fixed.json": {
+    "source": "vm26/keyboard-cross26-monitor-fixed.json",
+    "bytes": 1379,
+    "sha256": "a2b844fa53e8d5ea1466bf80cc074cae52b6ba3f51d1b4a4b6a2fe86d2d34704"
+  },
+  "raw/vm26/fcitx-frontends26.json": {
+    "source": "vm26/fcitx-frontends26.json",
+    "bytes": 596,
+    "sha256": "62f7b8915ebb70408d186dad736aa8318a6243d5a51fbbd49fe6ca8659fe24b3"
+  },
+  "raw/vm26/launch.json": {
+    "source": "vm26/launch.json",
+    "bytes": 1582,
+    "sha256": "b08d5357315094adbfaf1a9c2722d3dde3ab93cd82e7db1df8ac463993065234"
+  },
+  "raw/vm26/boot.json": {
+    "source": "vm26/boot.json",
+    "bytes": 1898,
+    "sha256": "ba7fb72872575c3b0fad5ba906f8e27f662bc46d4700ade5f307f1b58ca54058"
+  },
+  "raw/vm26/prepare26.json": {
+    "source": "vm26/prepare26.json",
+    "bytes": 2128,
+    "sha256": "94f5deaa4a8002e29432edad6eb228d60f604e6e2ddfc856076882953ee86c2d"
+  },
+  "raw/vm26/cancel-fallback26.json": {
+    "source": "vm26/cancel-fallback26.json",
+    "bytes": 2084,
+    "sha256": "779c3d271a61824f2f6a3eb3b7fcf22299b64e164f7e79e0aba4b5dd6d253abe"
+  },
+  "raw/vm26/auto-owned-cross26.json": {
+    "source": "vm26/auto-owned-cross26.json",
+    "bytes": 808,
+    "sha256": "9cd90aaf6b879d8aa2e4391c0e4ebf7e88336c358aa5c1758df54e5a4d4ecaf5"
+  },
+  "raw/vm26/output/qemu-exit.json": {
+    "source": "vm26/output/qemu-exit.json",
+    "bytes": 17,
+    "sha256": "c365161d39236fe0f1d32937fbc549796b8487d8faf65ed3879b96897c78ea5d"
+  },
+  "raw/vm26/output/extension-settings-before.json": {
+    "source": "vm26/output/extension-settings-before.json",
+    "bytes": 564,
+    "sha256": "9d5a0528196895d8c91787a1fdb2ff9b847f46a38a45156ea8a52ac8d97bb032"
+  },
+  "raw/vm26/output/serial.log.gz": {
+    "source": "vm26/output/serial.log",
+    "bytes": 20038,
+    "sha256": "d4d5443c69654015cc83c195224777cedf37177b1b31d4483eda9aace3afc7a8",
+    "encoding": "gzip",
+    "decoded_original_evidence_path": "raw/vm26/output/serial.log",
+    "decoded_bytes": 93616,
+    "decoded_sha256": "d9b75abe67a37bf1c4493dc636984d9bb2e26c8eec7cbcdfa13198b51f69aa02"
+  },
+  "raw/vm26/output/old-install-upgrade-guard.json": {
+    "source": "vm26/output/old-install-upgrade-guard.json",
+    "bytes": 485,
+    "sha256": "8675c82de5bd6819ffd77c7de566dfbd082568b80ea6a0874b4bc4f7303b9021"
+  },
+  "raw/vm26/output/final-restored-state.json": {
+    "source": "vm26/output/final-restored-state.json",
+    "bytes": 945,
+    "sha256": "95448042257bbc08e6895b7393dc5f1e10937257f3ffc8f0235915d3f76dc2fd"
+  },
+  "raw/vm26/output/extension-restored.json": {
+    "source": "vm26/output/extension-restored.json",
+    "bytes": 669,
+    "sha256": "f9b9560de48faeafd09cdd289a9f8e0592425a0d886a95f55d73e5df985ba6db"
+  },
+  "raw/vm26/output/stage-candidate-extension.json": {
+    "source": "vm26/output/stage-candidate-extension.json",
+    "bytes": 2008,
+    "sha256": "4259eb41dc14ca6a2a71eaf8b52a53f9226aeaa4558d496bef0240085bd3aa47"
+  },
+  "raw/vm26/output/ram-overlay-archive.json": {
+    "source": "vm26/output/ram-overlay-archive.json",
+    "bytes": 290,
+    "sha256": "2d3b2f0015e782a783c30511ada0be2e9c40366b60c3b3bd91dc057413c21b2a"
+  },
+  "raw/vm26/output/auto-fcitx-zero-native-x/exit.json": {
+    "source": "vm26/output/auto-fcitx-zero-native-x/exit.json",
+    "bytes": 17,
+    "sha256": "c365161d39236fe0f1d32937fbc549796b8487d8faf65ed3879b96897c78ea5d"
+  },
+  "raw/vm26/output/auto-fcitx-zero-native-x/runner.log": {
+    "source": "vm26/output/auto-fcitx-zero-native-x/runner.log",
+    "bytes": 139,
+    "sha256": "a99a38dc966ed8b7d37951af380570e90961d34dbb232f398db7e39c7785cafb"
+  },
+  "raw/vm26/output/auto-fcitx-zero-native-x/result.json": {
+    "source": "vm26/output/auto-fcitx-zero-native-x/result.json",
+    "bytes": 30245,
+    "sha256": "6aeb86833f13277ec591215c9dbc1d207b304d27d224c9681dfb25546c95d97d"
+  },
+  "raw/vm26/output/auto-fcitx-zero-native-x/fcitx.log.gz": {
+    "source": "vm26/output/auto-fcitx-zero-native-x/fcitx.log",
+    "bytes": 1432,
+    "sha256": "7e851a7f65cdbc1c0dd9af5d6c87a5f32b4b16f27662058f8695983fd12ef782",
+    "encoding": "gzip",
+    "decoded_original_evidence_path": "raw/vm26/output/auto-fcitx-zero-native-x/fcitx.log",
+    "decoded_bytes": 5643,
+    "decoded_sha256": "c9627bc8a58aab11442e65199af0014265a4b993119351d102e388704ac01f26"
+  },
+  "raw/vm26/output/keyboard-x-native-r1/exit.json": {
+    "source": "vm26/output/keyboard-x-native-r1/exit.json",
+    "bytes": 17,
+    "sha256": "c365161d39236fe0f1d32937fbc549796b8487d8faf65ed3879b96897c78ea5d"
+  },
+  "raw/vm26/output/keyboard-x-native-r1/runner.log": {
+    "source": "vm26/output/keyboard-x-native-r1/runner.log",
+    "bytes": 457,
+    "sha256": "77841ca8e8ef84723e332f422e6248bfc1e7fdfa532c6ade9dca7aeb04601ede"
+  },
+  "raw/vm26/output/keyboard-x-native-r1/result.json": {
+    "source": "vm26/output/keyboard-x-native-r1/result.json",
+    "bytes": 30243,
+    "sha256": "ba7203007abecca116c87b0b1cdb304b5ce3a26418945bf568e33f5f2c67a29b"
+  },
+  "raw/vm26/output/keyboard-native-x-r3/exit.json": {
+    "source": "vm26/output/keyboard-native-x-r3/exit.json",
+    "bytes": 17,
+    "sha256": "c365161d39236fe0f1d32937fbc549796b8487d8faf65ed3879b96897c78ea5d"
+  },
+  "raw/vm26/output/keyboard-native-x-r3/runner.log": {
+    "source": "vm26/output/keyboard-native-x-r3/runner.log",
+    "bytes": 465,
+    "sha256": "ad551c7fbf4124e9284ac641073a04c5f64a739b6ae0a699c4777e6cfbde8e2c"
+  },
+  "raw/vm26/output/keyboard-native-x-r3/result.json": {
+    "source": "vm26/output/keyboard-native-x-r3/result.json",
+    "bytes": 30841,
+    "sha256": "53dc44298aa50e470988380742ed4311578ec0e3c9bcf1278cd17e81ca0f9cec"
+  },
+  "raw/vm26/output/auto-owned-native-x/exit.json": {
+    "source": "vm26/output/auto-owned-native-x/exit.json",
+    "bytes": 17,
+    "sha256": "c365161d39236fe0f1d32937fbc549796b8487d8faf65ed3879b96897c78ea5d"
+  },
+  "raw/vm26/output/auto-owned-native-x/runner.log": {
+    "source": "vm26/output/auto-owned-native-x/runner.log",
+    "bytes": 292,
+    "sha256": "ea95580be744d303adcd53850c7b6958e9f8ce715f4357b2a00bbec6a79697e8"
+  },
+  "raw/vm26/output/auto-owned-native-x/result.json": {
+    "source": "vm26/output/auto-owned-native-x/result.json",
+    "bytes": 29954,
+    "sha256": "77191947ab59fed75b2cec0e8a2336a3dc9776574de5c94ffb17bfd606b2ee2e"
+  },
+  "raw/vm26/output/keyboard-native-x-r1/exit.json": {
+    "source": "vm26/output/keyboard-native-x-r1/exit.json",
+    "bytes": 17,
+    "sha256": "c365161d39236fe0f1d32937fbc549796b8487d8faf65ed3879b96897c78ea5d"
+  },
+  "raw/vm26/output/keyboard-native-x-r1/runner.log": {
+    "source": "vm26/output/keyboard-native-x-r1/runner.log",
+    "bytes": 465,
+    "sha256": "779f4d4cebfd88d1654af71c0c169cdc0a524e0c9501a04c9453b987d35472cd"
+  },
+  "raw/vm26/output/keyboard-native-x-r1/result.json": {
+    "source": "vm26/output/keyboard-native-x-r1/result.json",
+    "bytes": 30522,
+    "sha256": "c411ccfe2e25bbad1ac4f4ac4b48958973f6b8bb9e3776408036f280a6ccd3cd"
+  },
+  "raw/vm26/output/keyboard-x-native-r2/exit.json": {
+    "source": "vm26/output/keyboard-x-native-r2/exit.json",
+    "bytes": 17,
+    "sha256": "c365161d39236fe0f1d32937fbc549796b8487d8faf65ed3879b96897c78ea5d"
+  },
+  "raw/vm26/output/keyboard-x-native-r2/runner.log": {
+    "source": "vm26/output/keyboard-x-native-r2/runner.log",
+    "bytes": 457,
+    "sha256": "20506ed893ae6e0dbdb22b3da9f1cbab9aed3e3ceea47a6fad4c81952afd3858"
+  },
+  "raw/vm26/output/keyboard-x-native-r2/result.json": {
+    "source": "vm26/output/keyboard-x-native-r2/result.json",
+    "bytes": 30564,
+    "sha256": "a1f1f73992a4a3a226d61bf21248b337b0ec038001f3d5a3a1de25b807ba0287"
+  },
+  "raw/vm26/output/wayland/fuse-cleanup.json": {
+    "source": "vm26/output/wayland/fuse-cleanup.json",
+    "bytes": 62,
+    "sha256": "5b4f67605ebcd8482a10884de7f301ec50f84071cecc3d4133e055b56bdd7175"
+  },
+  "raw/vm26/output/wayland/final-resource-check.json": {
+    "source": "vm26/output/wayland/final-resource-check.json",
+    "bytes": 339,
+    "sha256": "7ba2179640406d29404b91d0cf35066390587d402f756496f0eb9c2ab9d10ac2"
+  },
+  "raw/vm26/output/wayland/mount.json": {
+    "source": "vm26/output/wayland/mount.json",
+    "bytes": 208,
+    "sha256": "f71ead75a1640011caaf33e792ff12e1c2f5013d0f429d61a6c031bdc8bd74b7"
+  },
+  "raw/vm26/output/wayland/package-audit.log": {
+    "source": "vm26/output/wayland/package-audit.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "raw/vm26/output/wayland/package-audit.json": {
+    "source": "vm26/output/wayland/package-audit.json",
+    "bytes": 18234,
+    "sha256": "f751f24f998ecba11bfc442c78bef8f01269f4e1e08b0a1f3c49c0113f53826f"
+  },
+  "raw/vm26/output/wayland/package-audit-exit.json": {
+    "source": "vm26/output/wayland/package-audit-exit.json",
+    "bytes": 596,
+    "sha256": "4875bace4229e6c233c7a8fc960411af4c63c2dfe6c62f4bfdc7f6afbde5e2a2"
+  },
+  "raw/vm26/output/wayland/fuse-mount.log": {
+    "source": "vm26/output/wayland/fuse-mount.log",
+    "bytes": 63,
+    "sha256": "ab600e158cc4d7e75fbb2af7556fdfac69887b27be7e3e5de02c48114031f2fc"
+  },
+  "raw/vm26/output/keyboard-x-native-r3/exit.json": {
+    "source": "vm26/output/keyboard-x-native-r3/exit.json",
+    "bytes": 17,
+    "sha256": "c365161d39236fe0f1d32937fbc549796b8487d8faf65ed3879b96897c78ea5d"
+  },
+  "raw/vm26/output/keyboard-x-native-r3/runner.log": {
+    "source": "vm26/output/keyboard-x-native-r3/runner.log",
+    "bytes": 457,
+    "sha256": "20506ed893ae6e0dbdb22b3da9f1cbab9aed3e3ceea47a6fad4c81952afd3858"
+  },
+  "raw/vm26/output/keyboard-x-native-r3/result.json": {
+    "source": "vm26/output/keyboard-x-native-r3/result.json",
+    "bytes": 30564,
+    "sha256": "3641aab8ebe53b59a96e870551b9fb012c552369644e47200b389a510707f4a3"
+  },
+  "raw/vm26/output/keyboard-native-x-cancel/exit.json": {
+    "source": "vm26/output/keyboard-native-x-cancel/exit.json",
+    "bytes": 17,
+    "sha256": "c365161d39236fe0f1d32937fbc549796b8487d8faf65ed3879b96897c78ea5d"
+  },
+  "raw/vm26/output/keyboard-native-x-cancel/runner.log": {
+    "source": "vm26/output/keyboard-native-x-cancel/runner.log",
+    "bytes": 413,
+    "sha256": "94e2fed7fb5a74aa354c67e0c6831dfcc4f7713938c1589fff073b215bc0cb08"
+  },
+  "raw/vm26/output/keyboard-native-x-cancel/result.json": {
+    "source": "vm26/output/keyboard-native-x-cancel/result.json",
+    "bytes": 30306,
+    "sha256": "747e5105ad87d30c0c14c2ef298a9ffbdaf79200105d9b95ff69dec82c989157"
+  },
+  "raw/vm26/output/auto-fcitx-zero-native-x-cancel/exit.json": {
+    "source": "vm26/output/auto-fcitx-zero-native-x-cancel/exit.json",
+    "bytes": 17,
+    "sha256": "c365161d39236fe0f1d32937fbc549796b8487d8faf65ed3879b96897c78ea5d"
+  },
+  "raw/vm26/output/auto-fcitx-zero-native-x-cancel/runner.log": {
+    "source": "vm26/output/auto-fcitx-zero-native-x-cancel/runner.log",
+    "bytes": 291,
+    "sha256": "d674ae61f23bcf2870556712dc7ba0ff8f81a7c792ab35f75d337834b18e522e"
+  },
+  "raw/vm26/output/auto-fcitx-zero-native-x-cancel/result.json": {
+    "source": "vm26/output/auto-fcitx-zero-native-x-cancel/result.json",
+    "bytes": 30107,
+    "sha256": "fca20a0cc436063f9cfe499f839553e5ed64834ec705f8bfacb33336e51066e6"
+  },
+  "raw/vm26/output/auto-fcitx-zero-native-x-cancel/fcitx.log.gz": {
+    "source": "vm26/output/auto-fcitx-zero-native-x-cancel/fcitx.log",
+    "bytes": 1430,
+    "sha256": "0587665362c5de3133fed39c75574746103c9852d19a77b854107ae8ad2df4b7",
+    "encoding": "gzip",
+    "decoded_original_evidence_path": "raw/vm26/output/auto-fcitx-zero-native-x-cancel/fcitx.log",
+    "decoded_bytes": 5643,
+    "decoded_sha256": "401fec7a13cb5766a5732f3b754d41185824bbd6a4894d6aac88ea815c7ba5e1"
+  },
+  "raw/vm26/output/keyboard-native-x-r4/exit.json": {
+    "source": "vm26/output/keyboard-native-x-r4/exit.json",
+    "bytes": 17,
+    "sha256": "c365161d39236fe0f1d32937fbc549796b8487d8faf65ed3879b96897c78ea5d"
+  },
+  "raw/vm26/output/keyboard-native-x-r4/runner.log": {
+    "source": "vm26/output/keyboard-native-x-r4/runner.log",
+    "bytes": 139,
+    "sha256": "a99a38dc966ed8b7d37951af380570e90961d34dbb232f398db7e39c7785cafb"
+  },
+  "raw/vm26/output/keyboard-native-x-r4/result.json": {
+    "source": "vm26/output/keyboard-native-x-r4/result.json",
+    "bytes": 30093,
+    "sha256": "956e700c03dd69b3afe9b12ea9d36db3eba1ab1a0ef179dc957b34b84a6f9022"
+  },
+  "raw/vm26/output/keyboard-x-native-cancel/exit.json": {
+    "source": "vm26/output/keyboard-x-native-cancel/exit.json",
+    "bytes": 17,
+    "sha256": "c365161d39236fe0f1d32937fbc549796b8487d8faf65ed3879b96897c78ea5d"
+  },
+  "raw/vm26/output/keyboard-x-native-cancel/runner.log": {
+    "source": "vm26/output/keyboard-x-native-cancel/runner.log",
+    "bytes": 428,
+    "sha256": "3ff82d1ff35257975a86bff101b120b43c16953898bf508c70a113c5c7ea4a8b"
+  },
+  "raw/vm26/output/keyboard-x-native-cancel/result.json": {
+    "source": "vm26/output/keyboard-x-native-cancel/result.json",
+    "bytes": 30317,
+    "sha256": "5da08a59227ca97276c606fd97bd68608a2097e3f83195543f341847fcc7931d"
+  },
+  "raw/vm26/output/auto-knownzero-native-x-cancel-r2/exit.json": {
+    "source": "vm26/output/auto-knownzero-native-x-cancel-r2/exit.json",
+    "bytes": 17,
+    "sha256": "c365161d39236fe0f1d32937fbc549796b8487d8faf65ed3879b96897c78ea5d"
+  },
+  "raw/vm26/output/auto-knownzero-native-x-cancel-r2/runner.log": {
+    "source": "vm26/output/auto-knownzero-native-x-cancel-r2/runner.log",
+    "bytes": 291,
+    "sha256": "d7f4cb6a838d20e99f690a5c6a7511af9a678bdd9c6d7a1805beb2f1c4cdb181"
+  },
+  "raw/vm26/output/auto-knownzero-native-x-cancel-r2/result.json": {
+    "source": "vm26/output/auto-knownzero-native-x-cancel-r2/result.json",
+    "bytes": 30164,
+    "sha256": "108e99bf45fb0e778d59a489f6b87922a72a69cb9ef5caa8ca7bca793fb4af08"
+  },
+  "raw/vm26/output/auto-knownzero-native-x-cancel-r2/fcitx.log.gz": {
+    "source": "vm26/output/auto-knownzero-native-x-cancel-r2/fcitx.log",
+    "bytes": 1224,
+    "sha256": "7428fbb582823c3f76761150bbca4443541ef358eac913401a9e8692afd4e0ad",
+    "encoding": "gzip",
+    "decoded_original_evidence_path": "raw/vm26/output/auto-knownzero-native-x-cancel-r2/fcitx.log",
+    "decoded_bytes": 4687,
+    "decoded_sha256": "551eec904fa6b7700ff72a361daca88ac91706e4530266651152e9e41bf2b27f"
+  },
+  "raw/vm26/output/keyboard-x-native-r4/exit.json": {
+    "source": "vm26/output/keyboard-x-native-r4/exit.json",
+    "bytes": 17,
+    "sha256": "c365161d39236fe0f1d32937fbc549796b8487d8faf65ed3879b96897c78ea5d"
+  },
+  "raw/vm26/output/keyboard-x-native-r4/runner.log": {
+    "source": "vm26/output/keyboard-x-native-r4/runner.log",
+    "bytes": 139,
+    "sha256": "a99a38dc966ed8b7d37951af380570e90961d34dbb232f398db7e39c7785cafb"
+  },
+  "raw/vm26/output/keyboard-x-native-r4/result.json": {
+    "source": "vm26/output/keyboard-x-native-r4/result.json",
+    "bytes": 30085,
+    "sha256": "8587dd4ac78260a1b8d2b7a082ff50c9e47e5134528fe321e58100440fc22c2a"
+  },
+  "raw/vm26/output/auto-owned-x-native/exit.json": {
+    "source": "vm26/output/auto-owned-x-native/exit.json",
+    "bytes": 17,
+    "sha256": "c365161d39236fe0f1d32937fbc549796b8487d8faf65ed3879b96897c78ea5d"
+  },
+  "raw/vm26/output/auto-owned-x-native/runner.log": {
+    "source": "vm26/output/auto-owned-x-native/runner.log",
+    "bytes": 139,
+    "sha256": "a99a38dc966ed8b7d37951af380570e90961d34dbb232f398db7e39c7785cafb"
+  },
+  "raw/vm26/output/auto-owned-x-native/result.json": {
+    "source": "vm26/output/auto-owned-x-native/result.json",
+    "bytes": 30083,
+    "sha256": "4566e7c1664fe79d6900b1da01b772d46656bfadc063db877c0a1a2e557102d3"
+  },
+  "raw/vm26/output/wayland/suite-keyboard-xwayland-baseline-normal/target-immodules.json": {
+    "source": "vm26/output/wayland/suite-keyboard-xwayland-baseline-normal/target-immodules.json",
+    "bytes": 62,
+    "sha256": "7cb5bb84c434b2910042a5afd252e7b8fc694f01367edbb82d81adaa8247216a"
+  },
+  "raw/vm26/output/wayland/suite-keyboard-xwayland-baseline-normal/target.json": {
+    "source": "vm26/output/wayland/suite-keyboard-xwayland-baseline-normal/target.json",
+    "bytes": 2488,
+    "sha256": "9eb44f6193e7155e2723dbabcd0419950e2d590337e47fd620891a2edd66531f"
+  },
+  "raw/vm26/output/wayland/suite-keyboard-xwayland-baseline-normal/receiver.json": {
+    "source": "vm26/output/wayland/suite-keyboard-xwayland-baseline-normal/receiver.json",
+    "bytes": 458,
+    "sha256": "25c91820e98b8b2087008eb1f42c752cd35acb075e70cb6cd3c8051003e74c3c"
+  },
+  "raw/vm26/output/wayland/suite-keyboard-xwayland-baseline-normal/report.json": {
+    "source": "vm26/output/wayland/suite-keyboard-xwayland-baseline-normal/report.json",
+    "bytes": 15830,
+    "sha256": "a790589c43e9348f1d535bc29aed1a798896c8fae81158fd3d45bf2d60a4a502"
+  },
+  "raw/vm26/output/wayland/suite-keyboard-xwayland-baseline-normal/initial-target.json": {
+    "source": "vm26/output/wayland/suite-keyboard-xwayland-baseline-normal/initial-target.json",
+    "bytes": 167,
+    "sha256": "b2de1687e6f9e4222096fe557248224563287620e85a854e249f0224df00bdf6"
+  },
+  "raw/vm26/output/wayland/suite-keyboard-xwayland-baseline-normal/pipeline.log": {
+    "source": "vm26/output/wayland/suite-keyboard-xwayland-baseline-normal/pipeline.log",
+    "bytes": 1718,
+    "sha256": "fd98bc824500d0cf1d08405cb9a11e80da0bfbabc54dec1ac0fbe675378df3b4"
+  },
+  "raw/vm26/output/wayland/suite-keyboard-xwayland-baseline-normal/fixture-owned-activation.json": {
+    "source": "vm26/output/wayland/suite-keyboard-xwayland-baseline-normal/fixture-owned-activation.json",
+    "bytes": 96,
+    "sha256": "b454e6d83d0d383f69b8fabfd1a691a30a2c60ab90790f998f238352f9e34532"
+  },
+  "raw/vm26/output/wayland/suite-keyboard-xwayland-baseline-normal/target.log": {
+    "source": "vm26/output/wayland/suite-keyboard-xwayland-baseline-normal/target.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "raw/vm26/output/wayland/suite-keyboard-xwayland-baseline-cancel-after-first/target-immodules.json": {
+    "source": "vm26/output/wayland/suite-keyboard-xwayland-baseline-cancel-after-first/target-immodules.json",
+    "bytes": 62,
+    "sha256": "7cb5bb84c434b2910042a5afd252e7b8fc694f01367edbb82d81adaa8247216a"
+  },
+  "raw/vm26/output/wayland/suite-keyboard-xwayland-baseline-cancel-after-first/target.json": {
+    "source": "vm26/output/wayland/suite-keyboard-xwayland-baseline-cancel-after-first/target.json",
+    "bytes": 255,
+    "sha256": "5ef4ee5a9b69cf2f38f988dfe05971d066211c6133c78d8c4c78d5e3459b4c0c"
+  },
+  "raw/vm26/output/wayland/suite-keyboard-xwayland-baseline-cancel-after-first/receiver.json": {
+    "source": "vm26/output/wayland/suite-keyboard-xwayland-baseline-cancel-after-first/receiver.json",
+    "bytes": 265,
+    "sha256": "291f4ae063e7569af74f8933ea73e2996f0fa918db3b30a002602e0f40a1df48"
+  },
+  "raw/vm26/output/wayland/suite-keyboard-xwayland-baseline-cancel-after-first/report.json": {
+    "source": "vm26/output/wayland/suite-keyboard-xwayland-baseline-cancel-after-first/report.json",
+    "bytes": 16154,
+    "sha256": "96f530b51d9191a8523952d414532460c8ec5c07fb2f1c477467c0798e5fcc70"
+  },
+  "raw/vm26/output/wayland/suite-keyboard-xwayland-baseline-cancel-after-first/initial-target.json": {
+    "source": "vm26/output/wayland/suite-keyboard-xwayland-baseline-cancel-after-first/initial-target.json",
+    "bytes": 167,
+    "sha256": "37a8cbcee524ec216b63ece4f53cb0b0267cd74b14d9b6bebf55f9addbff10df"
+  },
+  "raw/vm26/output/wayland/suite-keyboard-xwayland-baseline-cancel-after-first/pipeline.log": {
+    "source": "vm26/output/wayland/suite-keyboard-xwayland-baseline-cancel-after-first/pipeline.log",
+    "bytes": 1841,
+    "sha256": "2fb38a9808ed394467e851c654086d581921c978ba412b3febec216a125d4a43"
+  },
+  "raw/vm26/output/wayland/suite-keyboard-xwayland-baseline-cancel-after-first/fixture-owned-activation.json": {
+    "source": "vm26/output/wayland/suite-keyboard-xwayland-baseline-cancel-after-first/fixture-owned-activation.json",
+    "bytes": 96,
+    "sha256": "216b433d378943b27f9b3e3f59f133cef1ee4afd94dc2a25c68e3c9a41839005"
+  },
+  "raw/vm26/output/wayland/suite-keyboard-xwayland-baseline-cancel-after-first/target.log": {
+    "source": "vm26/output/wayland/suite-keyboard-xwayland-baseline-cancel-after-first/target.log",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "reproduction/vm26/input/cross_runner.py": {
+    "source": "vm26/input/cross_runner.py",
+    "bytes": 10799,
+    "sha256": "8a09ec9b6e8812cc010e5af76561fc41b2b9aed9ce4084cc21bbeba89b94114f"
+  },
+  "reproduction/vm26/input/cross_runner-before-monitor-fix.py": {
+    "source": "vm26/input/cross_runner-before-monitor-fix.py",
+    "bytes": 10405,
+    "sha256": "5da16e5ede78ac5266004bf8083209c9d007adfe7d0f2ed7ff32ad6fe499c00c"
+  },
+  "reproduction/vm26/input/cross_runner-r4.py.txt": {
+    "source": "vm26/input/cross_runner-r4.py.txt",
+    "bytes": 10612,
+    "sha256": "561aef50de6ef9cb1ab96803eb2542bc04e34c8532142c1d59c9449e365ab74d"
+  },
+  "reproduction/vm26/input/launch-cross.py": {
+    "source": "vm26/input/launch-cross.py",
+    "bytes": 1112,
+    "sha256": "795d79e77fa74c85f27612838636bc53da94b370e37856953c9390879adcfcff"
+  },
+  "reproduction/vm26/input/guest.py": {
+    "source": "vm26/input/guest.py",
+    "bytes": 5145,
+    "sha256": "4dfe72ef98bf2fcefc9b27501af0e49b3bec4bc24e3d7524fc4239bc5f20ee50"
+  },
+  "reproduction/vm26/input/gap.py": {
+    "source": "vm26/input/gap.py",
+    "bytes": 5956,
+    "sha256": "62167273cc85d8685ee3e4e18706d39ea3bd4e9a29a8db038a1f1050cd76abb6"
+  },
+  "reproduction/vm26/input/target.py": {
+    "source": "vm26/input/target.py",
+    "bytes": 1554,
+    "sha256": "a0a7ec56aeec7091a1545cc110dcaef47dd9cd0e11e1272671fd316787a76c24"
+  },
+  "reproduction/vm26/input/wrapper.py": {
+    "source": "vm26/input/wrapper.py",
+    "bytes": 1292,
+    "sha256": "0e0fdf5aa6ac0cb4b9bda656333c4fcb422f3760a3ee17e63fde5d7b96c0bffc"
+  },
+  "reproduction/vm26/input/qemu.json": {
+    "source": "vm26/input/qemu.json",
+    "bytes": 799,
+    "sha256": "b3f622f53ee03febd176c17ff78de547511fefc1440610f4a26dfc4ea5d1bba1"
+  },
+  "reproduction/vm26/input/chrome_program.py": {
+    "source": "vm26/input/chrome_program.py",
+    "bytes": 2875,
+    "sha256": "7ac4c00a1248eaf30595fea801774af07040e9b3900dab40aaf23ef872f50904"
+  },
+  "reproduction/vm26/input/chrome-software-manifest.json": {
+    "source": "vm26/input/chrome-software-manifest.json",
+    "bytes": 23860,
+    "sha256": "208eb4c91aed99ca97bbf68b8d5e7190190ca36d745d10dfdb9130d8de1b4ee4"
+  },
+  "reproduction/vm26/input/stage-candidate.py": {
+    "source": "vm26/input/stage-candidate.py",
+    "bytes": 2043,
+    "sha256": "9d83bd1db9eef330138c3c6f2f7d60a5a8ea3924dc5871eed74632cb5639e3d8"
+  },
+  "reproduction/vm26/input/restore-extension.py": {
+    "source": "vm26/input/restore-extension.py",
+    "bytes": 898,
+    "sha256": "9f1f1cd61448bba069eb00ced7e0fdd5becfeb15713c26f773699883fa344c81"
+  },
+  "reproduction/vm26/input/owned-settings.py": {
+    "source": "vm26/input/owned-settings.py",
+    "bytes": 1410,
+    "sha256": "76304793c36930915a95d82496c57ac7975b2651b2933faa35d972d18602f00c"
+  },
+  "reproduction/vm26/input/final-state.py": {
+    "source": "vm26/input/final-state.py",
+    "bytes": 1638,
+    "sha256": "0544936c906e18b54ec274bb0b736276c773f4857e2e98443c90832350cbd399"
+  },
+  "reproduction/vm26/input/resource-check.py": {
+    "source": "vm26/input/resource-check.py",
+    "bytes": 2214,
+    "sha256": "0d23c36b5d3d1992caf79d9f589e6b75593034a5ddddee46f76f84fffaf4d306"
+  },
+  "reproduction/vm26/input/crosslib/natural_owned_browser.py": {
+    "source": "vm26/input/crosslib/natural_owned_browser.py",
+    "bytes": 13442,
+    "sha256": "a3ef513ad9b63ee6db755d2856b524ce11296db4a70781d37716435b145b4c84"
+  },
+  "reproduction/control.py": {
+    "source": "control.py",
+    "bytes": 4515,
+    "sha256": "bae0686c3d0282c88e3ac94f38cbf0f7e848b43cfbf3c9007dcc5b05aa30c296"
+  },
+  "reproduction/initial-cross_runner.py.txt": {
+    "source": "cross_runner.py",
+    "bytes": 9688,
+    "sha256": "df268936d98bcf9077b94d65577bea0e67191bc028b95253e4ba55af5b8bdf01"
+  }
+}
