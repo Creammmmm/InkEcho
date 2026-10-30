@@ -1,0 +1,62 @@
+/home/lth/github/InkEcho/assets/native/fcitx5/x86_64/libinkecho.so: OK
+TEST_TEMP_DIRS /var/tmp/inkecho-fcitx-build.lJm0P4 /var/tmp/inkecho-weston.tnRQfB
+could not load cursor 'dnd-copy'
+could not load cursor 'dnd-none'
+could not load cursor 'dnd-copy'
+could not load cursor 'dnd-none'
+ERROR loading icon from file '/usr/share/weston/terminal.png', error: 'file not found'
+/usr/share/weston/pattern.png: No such file or directory
+Date: 2026-10-30 CST
+[21:16:45.901] weston 14.0.2
+               https://wayland.freedesktop.org
+               Bug reports to: https://gitlab.freedesktop.org/wayland/weston/issues/
+               Build: 14.0.2
+[21:16:45.901] Command line: root/usr/bin/weston --backend=headless --renderer=pixman --shell=desktop-shell.so --xwayland --no-config --socket=wayland-test --log=/tmp/weston.log
+[21:16:45.901] OS: Linux, 7.0.0-38-generic, #38-Ubuntu SMP PREEMPT_DYNAMIC Fri Sep  4 09:10:14 UTC 2026, x86_64
+[21:16:45.901] Flight recorder: enabled
+[21:16:45.901] Starting with no config file.
+[21:16:45.901] Output repaint window is 7 ms maximum.
+[21:16:45.901] Loading module '/var/tmp/inkecho-fresh-reproduce/root/usr/lib/x86_64-linux-gnu/libweston-14/headless-backend.so'
+[21:16:45.905] Using Pixman renderer
+[21:16:45.905] Registered plugin API 'weston_windowed_output_api_headless_v2' of size 16
+[21:16:45.906] Color manager: no-op
+                 protocol support: no
+[21:16:45.906] Output 'headless' attempts EOTF mode SDR and colorimetry mode default.
+[21:16:45.906] Output 'headless' using color profile: stock sRGB color profile
+[21:16:45.906] Output 'headless' enabled with head(s) headless
+[21:16:45.906] Compositor capabilities:
+               arbitrary surface rotation: yes
+               screen capture uses y-flip: no
+               cursor planes: no
+               arbitrary resolutions: no
+               view mask clipping: yes
+               explicit sync: no
+               color operations: no
+               presentation clock: CLOCK_MONOTONIC_RAW, id 4
+               presentation clock resolution: 0.000000001 s
+[21:16:45.906] Loading module '/var/tmp/inkecho-fresh-reproduce/root/usr/lib/x86_64-linux-gnu/weston/desktop-shell.so'
+[21:16:45.906] Loading module '/var/tmp/inkecho-fresh-reproduce/root/usr/lib/x86_64-linux-gnu/libweston-14/xwayland.so'
+[21:16:45.907] Registered plugin API 'weston_xwayland_v3' of size 32
+[21:16:45.907] Registered plugin API 'weston_xwayland_surface_v2' of size 24
+[21:16:45.907] xserver listening on display :0
+[21:16:45.907] launching '/usr/libexec/weston-keyboard'
+[21:16:45.908] launching '/usr/libexec/weston-desktop-shell'
+total 8
+drwxrwxrwt 2 lth lth 4096 Oct 30 21:16 .
+drwx------ 4 lth lth 4096 Oct 30 21:16 ..
+srwxrwxr-x 1 lth lth    0 Oct 30 21:16 X0
+Xwayland glamor: GBM Wayland interfaces not available
+Failed to initialize glamor, falling back to sw
+_NET_SUPPORTING_WM_CHECK(WINDOW): window id # 0x200027
+XIM_SERVERS(ATOM) = @server=ibus
+A_initial_focus 1|1||None|6291460
+TEST_ADDON_GUARDED_MATCH 1
+MONOTONIC_NS initial_match 249139433520334
+MONOTONIC_NS A_stopped 249139433776747
+FAULT_AFTER_STOP
+Traceback (most recent call last):
+  File "/home/lth/github/InkEcho/experiments/fcitx-xwayland-focus-guard-20261030/control.py", line 29, in <module>
+    print('FAULT_AFTER_STOP',flush=True);time.sleep(3);raise RuntimeError('controlled failure')
+                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: controlled failure
+(EE) failed to read Wayland events: Broken pipe
