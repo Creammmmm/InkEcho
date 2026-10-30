@@ -666,6 +666,7 @@ class KeyboardInput:
         self._feedback_timeout_reader = None
         self._receiver_wait_reader = None
         self._output_mapping_wait = MAP_SETTLE_SECONDS
+        self._pressed_attempts = 0
 
     def set_mapping_wait_reader(self, reader):
         """Read the X11 mapping wait once at the next output session."""
@@ -685,6 +686,11 @@ class KeyboardInput:
     def set_feedback_timeout_reader(self, reader):
         """Read the task's X11 draw-feedback timeout at output setup."""
         self._feedback_timeout_reader = reader
+
+    @property
+    def acknowledged_attempts(self):
+        """Completed press dispatches; not a target delivery confirmation."""
+        return self._pressed_attempts if self._output_owner is not None else 0
 
     @property
     def connected(self) -> bool:
@@ -849,6 +855,7 @@ class KeyboardInput:
             self._pacer.config = replace(
                 self._pacer.config, receiver_wait_max=receiver_wait
             )
+        self._pressed_attempts = 0
         self._output_owner, self._output_failed = owner, False
         self._output_mapping_wait = mapping_wait
         self._output_deadline = None
@@ -1050,6 +1057,9 @@ class KeyboardInput:
                 check()
                 try:
                     self._send(window, code, True)
+                    # Dispatch success does not prove target receipt or display.
+                    # Update before callbacks: a callback may cancel synchronously.
+                    self._pressed_attempts += 1
                     sent_at = time.monotonic()
                     # Outside the pre-press reselection handler: a changed scope
                     # after delivery must never trigger a replay.
@@ -1063,6 +1073,14 @@ class KeyboardInput:
                 check()
                 count += 1
             completed = True
+        except Exception as error:
+            # Preserve the original failure, including callback failures, while
+            # exposing only the lower bound of completed press dispatches.
+            try:
+                error.acknowledged_attempts = self._pressed_attempts
+            except Exception:
+                pass
+            raise
         finally:
             try:
                 if not completed and self._output_owner is current:

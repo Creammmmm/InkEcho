@@ -1448,3 +1448,110 @@ def test_receiver_wait_is_snapshotted_and_capability_is_honest(level):
         await inputs.aclose()
 
     asyncio.run(run())
+
+
+def test_press_dispatch_snapshot_is_task_scoped_and_precedes_callback(monkeypatch):
+    fast_sleep(monkeypatch)
+
+    async def scenario():
+        driver = Driver()
+        inputs = KeyboardInput(driver_factory=lambda: driver, pacer=ImmediatePacer())
+        await inputs.connect()
+        snapshots = []
+        async with inputs.output_session():
+            assert (
+                await inputs.insert(
+                    "甲",
+                    lambda: True,
+                    on_first_sent=lambda _at: snapshots.append(
+                        inputs.acknowledged_attempts
+                    ),
+                )
+                == 1
+            )
+            assert await inputs.insert("乙", lambda: True) == 1
+            assert inputs.acknowledged_attempts == 2
+        assert snapshots == [1]
+        assert inputs.acknowledged_attempts == 0
+        async with inputs.output_session():
+            assert inputs.acknowledged_attempts == 0
+            assert await inputs.insert("丙", lambda: True) == 1
+            assert inputs.acknowledged_attempts == 1
+        await inputs.aclose()
+
+    asyncio.run(scenario())
+
+
+@pytest.mark.parametrize("failed_press", [False, True])
+def test_press_dispatch_count_excludes_unknown_press_but_survives_release_failure(
+    monkeypatch, failed_press
+):
+    fast_sleep(monkeypatch)
+
+    class Broken(Driver):
+        def send(self, window, code, pressed):
+            if pressed == failed_press:
+                raise KeyboardError("injection_failed")
+            super().send(window, code, pressed)
+
+    async def scenario():
+        inputs = KeyboardInput(driver_factory=Broken, pacer=ImmediatePacer())
+        await inputs.connect()
+        with pytest.raises(KeyboardError) as result:
+            await inputs.insert("甲", lambda: True)
+        assert result.value.acknowledged_attempts == (0 if failed_press else 1)
+        await inputs.aclose()
+
+    asyncio.run(scenario())
+
+
+def test_task_cancel_during_press_wait_preserves_only_completed_dispatch():
+    async def scenario():
+        driver = Driver()
+        inputs = KeyboardInput(driver_factory=lambda: driver, pacer=ImmediatePacer())
+        await inputs.connect()
+        first = asyncio.Event()
+        seen = []
+
+        async def output():
+            async with inputs.output_session():
+                try:
+                    await inputs.insert(
+                        "甲乙", lambda: True, on_first_sent=lambda _at: first.set()
+                    )
+                finally:
+                    seen.append(inputs.acknowledged_attempts)
+
+        task = asyncio.create_task(output())
+        await asyncio.wait_for(first.wait(), 2)
+        task.cancel()
+        with pytest.raises(asyncio.CancelledError):
+            await task
+        assert seen == [1]
+        assert [event[2] for event in driver.events] == [True, False]
+        assert inputs.acknowledged_attempts == 0
+        await inputs.aclose()
+
+    asyncio.run(scenario())
+
+
+def test_unknown_press_failure_is_not_counted_as_confirmed_dispatch(monkeypatch):
+    fast_sleep(monkeypatch)
+
+    class Unknown(Driver):
+        def send(self, window, code, pressed):
+            super().send(window, code, pressed)
+            if pressed:
+                raise KeyboardError("injection_failed")
+
+    async def scenario():
+        driver = Unknown()
+        inputs = KeyboardInput(driver_factory=lambda: driver, pacer=ImmediatePacer())
+        await inputs.connect()
+        with pytest.raises(KeyboardError) as result:
+            await inputs.insert("甲乙", lambda: True)
+        assert result.value.acknowledged_attempts == 0
+        assert [event[2] for event in driver.events] == [True, False]
+        await inputs.aclose()
+
+    asyncio.run(scenario())

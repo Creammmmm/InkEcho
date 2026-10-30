@@ -508,7 +508,9 @@ class Session(QObject):
                         self.controller.injection_unconfirmed(task_id)
                     else:
                         self.controller.injection_failed(task_id)
-            except Exception:
+            except Exception as error:
+                if self.active(task_id):
+                    self._record_acknowledged_attempts(error)
                 self.controller.injection_failed(task_id)
 
         self.spawn(deliver())
@@ -1205,6 +1207,7 @@ class Session(QObject):
             )
             if self.active(task_id):
                 self._snapshot_acknowledged_attempts()
+                self._record_acknowledged_attempts(error)
             await stop_operations(keep_confirmation=fallback_possible)
             if fallback_possible and confirmation is not None:
                 try:

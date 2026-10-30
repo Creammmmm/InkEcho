@@ -103,11 +103,13 @@ class OutputRouter:
 
     @property
     def acknowledged_attempts(self):
-        """Snapshot acknowledged bridge attempts without waiting for pending calls."""
+        """Snapshot completed dispatch attempts; never a delivery receipt."""
         if self._owner is None:
             return 0
         if self._kind == "fcitx":
             count = getattr(self._selected, "_accepted", 0)
+        elif self._kind == "keyboard":
+            count = getattr(self._selected, "acknowledged_attempts", 0)
         elif self._kind == "ibus":
             client = getattr(self._selected, "_client", None)
             count = max(

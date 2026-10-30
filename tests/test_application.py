@@ -1618,3 +1618,225 @@ def test_unconfirmed_task_cleans_up_and_new_task_can_be_cancelled(factory):
         await session.close()
 
     asyncio.run(scenario())
+
+
+def test_cancel_after_x11_dispatch_counts_attempt_once_and_resets(factory, monkeypatch):
+    from test_keyboard import Driver, ImmediatePacer, fast_sleep
+
+    from inkecho.platform.keyboard import KeyboardInput
+    from inkecho.platform.output_router import OutputRouter
+
+    fast_sleep(monkeypatch)
+
+    async def scenario():
+        session = factory()
+        session.store.save_settings(
+            replace(session.settings, polishing_enabled=False, output_method="keyboard")
+        )
+        driver = Driver()
+        keyboard = KeyboardInput(driver_factory=lambda: driver, pacer=ImmediatePacer())
+        original = keyboard.insert
+
+        async def cancel_first(text, active, **kwargs):
+            callback = kwargs.get("on_first_sent")
+
+            def sent(at):
+                if callback:
+                    callback(at)
+                session.cancel()
+
+            kwargs["on_first_sent"] = sent
+            return await original(text, active, **kwargs)
+
+        keyboard.insert = cancel_first
+        session.inputs = OutputRouter(keyboard)
+        outcomes = []
+        session.finished.connect(outcomes.append)
+        await session.toggle()
+        session.recorder.stop()
+        for _ in range(500):
+            await asyncio.sleep(0)
+            if outcomes and not session.pending:
+                break
+        assert outcomes[0]["outcome"] == "cancelled"
+        assert outcomes[0]["characters"] == 1
+        assert [event[2] for event in driver.events] == [True, False]
+        session.last_toggle = 0
+        await session.toggle()
+        session.cancel()
+        for _ in range(500):
+            await asyncio.sleep(0)
+            if len(outcomes) == 2 and not session.pending:
+                break
+        assert outcomes[1]["outcome"] == "cancelled"
+        assert outcomes[1]["characters"] == 0
+        assert [event[2] for event in driver.events] == [True, False]
+        await session.close()
+
+    asyncio.run(scenario())
+
+
+@pytest.mark.parametrize("fail_on_press", [False, True])
+def test_x11_failed_dispatch_records_only_completed_presses(
+    factory, monkeypatch, fail_on_press
+):
+    from test_keyboard import Driver, ImmediatePacer, fast_sleep
+
+    from inkecho.platform.keyboard import KeyboardError, KeyboardInput
+    from inkecho.platform.output_router import OutputRouter
+
+    fast_sleep(monkeypatch)
+
+    class Broken(Driver):
+        def send(self, window, code, pressed):
+            super().send(window, code, pressed)
+            if pressed == fail_on_press:
+                raise KeyboardError("injection_failed")
+
+    async def scenario():
+        session = factory()
+        session.store.save_settings(
+            replace(session.settings, polishing_enabled=False, output_method="keyboard")
+        )
+        driver = Broken()
+        session.inputs = OutputRouter(
+            KeyboardInput(driver_factory=lambda: driver, pacer=ImmediatePacer())
+        )
+        outcomes = []
+        session.finished.connect(outcomes.append)
+        await session.toggle()
+        session.recorder.stop()
+        for _ in range(500):
+            await asyncio.sleep(0)
+            if outcomes and not session.pending:
+                break
+        assert outcomes[0]["outcome"] == "failed"
+        assert outcomes[0]["characters"] == (0 if fail_on_press else 1)
+        assert [event[2] for event in driver.events] == [True, False]
+        await session.close()
+
+    asyncio.run(scenario())
+
+
+@pytest.mark.parametrize("callback_error", ["generic", "keyboard"])
+def test_x11_first_dispatch_callback_failure_counts_attempt_and_cleans_up(
+    factory, monkeypatch, callback_error
+):
+    from test_keyboard import Driver, ImmediatePacer, fast_sleep
+
+    from inkecho.platform.keyboard import KeyboardError, KeyboardInput
+    from inkecho.platform.output_router import OutputRouter
+
+    fast_sleep(monkeypatch)
+
+    async def scenario():
+        session = factory()
+        session.store.save_settings(
+            replace(session.settings, polishing_enabled=False, output_method="keyboard")
+        )
+        driver = Driver()
+        keyboard = KeyboardInput(driver_factory=lambda: driver, pacer=ImmediatePacer())
+        original = keyboard.insert
+
+        async def fails(text, active, **kwargs):
+            def sent(_at):
+                if callback_error == "keyboard":
+                    raise KeyboardError("injection_failed")
+                raise RuntimeError("synthetic callback fault")
+
+            kwargs["on_first_sent"] = sent
+            return await original(text, active, **kwargs)
+
+        keyboard.insert = fails
+        session.inputs = OutputRouter(keyboard)
+        outcomes = []
+        session.finished.connect(outcomes.append)
+        await session.toggle()
+        session.recorder.stop()
+        for _ in range(500):
+            await asyncio.sleep(0)
+            if outcomes and not session.pending:
+                break
+        assert outcomes[0]["outcome"] == "failed"
+        assert outcomes[0]["characters"] == 1
+        assert [event[2] for event in driver.events] == [True, False]
+        assert driver.applied is None and session.inputs.selected is None
+        await session.close()
+
+    asyncio.run(scenario())
+
+
+@pytest.mark.parametrize("ending", ["cancel", "generic", "keyboard"])
+def test_stream_second_segment_counts_once(factory, monkeypatch, ending):
+    from test_keyboard import Driver, ImmediatePacer, fast_sleep
+
+    from inkecho.platform.keyboard import KeyboardError, KeyboardInput
+    from inkecho.platform.output_router import OutputRouter
+
+    fast_sleep(monkeypatch)
+
+    async def scenario():
+        first_completed = asyncio.Event()
+
+        class Streaming(Client):
+            async def polish_stream(self, *_args):
+                on_delta = _args[-1]
+                await on_delta("甲")
+                await first_completed.wait()
+                await on_delta("乙")
+                return Result("甲乙", Usage(), 0)
+
+        session = factory(client=Streaming())
+        session.store.save_settings(
+            replace(
+                session.settings,
+                polishing_enabled=True,
+                polishing_streaming=True,
+                output_method="keyboard",
+            )
+        )
+        driver = Driver()
+        keyboard = KeyboardInput(driver_factory=lambda: driver, pacer=ImmediatePacer())
+        original = keyboard.insert
+        fragments = []
+
+        async def insert(text, active, **kwargs):
+            fragments.append(text)
+            if len(fragments) == 2:
+                callback = kwargs.get("on_first_sent")
+
+                def sent(at):
+                    if callback:
+                        callback(at)
+                    if ending == "cancel":
+                        session.cancel()
+                    elif ending == "generic":
+                        raise RuntimeError("synthetic callback fault")
+                    else:
+                        raise KeyboardError("injection_failed")
+
+                kwargs["on_first_sent"] = sent
+            result = await original(text, active, **kwargs)
+            if len(fragments) == 1:
+                first_completed.set()
+            return result
+
+        keyboard.insert = insert
+        session.inputs = OutputRouter(keyboard)
+        outcomes = []
+        session.finished.connect(outcomes.append)
+        await session.toggle()
+        session.recorder.stop()
+        for _ in range(1000):
+            await asyncio.sleep(0)
+            if outcomes and not session.pending:
+                break
+        assert fragments == ["甲", "乙"]
+        assert outcomes[0]["outcome"] == (
+            "cancelled" if ending == "cancel" else "failed"
+        )
+        assert outcomes[0]["characters"] == 2
+        assert [event[2] for event in driver.events] == [True, False, True, False]
+        await session.close()
+
+    asyncio.run(scenario())
