@@ -1,0 +1,14 @@
+{
+  "inputs": {
+    "browser-native012.py": "50b9788e5f8ed66e15a6240b84166192ba45ec64c68d4405ae9f050cbef10c52",
+    "protocol_metadata.py": "021b64af7749f70a12b12af417d7ba3b7555a56b45929252ef672274a141a88b",
+    "wrapper.py": "f3c409b3042b285b1baa8a148cf01c8fccdde2e221c3b7793e94e182fa545b3c",
+    "qemu.json": "fa91db4461c63f3c0f1f01c021cfbc1663272746055d0d68cd5a9f82328f2e79"
+  },
+  "scope": "observer-only metadata diagnostic; exact source R2 overlay; actual owned target only; no packet payload persisted",
+  "cache_cleanup": {
+    "directories": 4,
+    "bytes": 1705158,
+    "active_references": []
+  }
+}

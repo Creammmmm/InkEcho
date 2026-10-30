@@ -1,0 +1,6 @@
+{
+  "command": "systemctl --user show-environment | sed -n \"/XDG_SESSION_TYPE/p;/WAYLAND_DISPLAY/p\"; test -f /mnt/input/protocol_metadata.py",
+  "returncode": 1,
+  "stdout": "WAYLAND_DISPLAY=wayland-0\nXDG_SESSION_TYPE=wayland\n",
+  "stderr": ""
+}

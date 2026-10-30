@@ -1,0 +1,33 @@
+# R2 owned IBus Chrome24 protocol diagnostic
+
+This is a source-overlay diagnostic, not unchanged0.12.0 package qualification or a completed repair. Original candidate R2 SHAef3817d9e19369b4d339a0cbfbfe4903ab47eef2615e1db5699fb82adfa15901, published runtime7488566c708d3fc12de665d35dfc7c26a1902908c9fec63e3c905b1446757a78; actual new Ubuntu24.04.5/GNOME46 native Wayland virtualseat, normal-sandbox Chrome154.0.8037.97, real Fcitx known-zero→owned IBus handoff. No host seat/IM changes, no clipboard, no replay, no product scheduling changes.
+
+## Actual controlled results
+
+- r1: normal22/22, dynamic same-window switch1+21/22. Protocol parser matched zero events because libwayland queue prefixes were omitted; preserved as observer blind spot, not a no-protocol claim.
+- r2: normal21/22 FAILED; switch1+21/22 passed. At local receive291.514569950 and291.514593473, same object38 receives two commit_string events(length1 each), followed only then by done(serial11) at291.514602082. No focus change is required for this loss. This parser does not decode LF strings spanning physical log lines, so its total wire count is incomplete; the adjacent one-character collision evidence is intact.
+- r3: complete bounded multiline parser. Normal:21 wire commit events/22 codepoints→DOM22 passed. Dynamic same-window switch:21 wire commits/22 codepoints→DOM1+20 FAILED, without any two commits before a single done. At412.589377555 disable,412.589384262 enable,412.589395814 commit_string(length1),412.590566006 done54; surrounding client reinitialization is observed. Full wire text lengths but fewer DOM input lengths indicate a second client/control-focus boundary; a reset-related causal explanation is plausible, not uniquely proven by these metadata alone.
+
+All three fixtures use NEW private profiles/owned public fields; failures are not overwritten. Each request/DOM payload in saved diagnostic receipts is replaced with length. Protocol filters never persist raw lines, surrounding text, keycodes, commit payload or queue-name strings. Only event kind/object/serial/length and local receive timestamps are stored. Clock timestamps are receiving-thread observations, not compositor dispatch time or target ACK. Public fixture scripts contain the fixed test sample; no user input, provider key, auth token, SSH private key or profile is in this evidence patch. Five parser/privacy tests pass. Metadata observer adds some overhead and can perturb scheduling; no throughput claim is made.
+
+## Source explanation and barrier boundary
+
+The previously frozen official Mutter46 source is /tmp/inkecho-ibus-audit/meta-wayland-text-input.c, SHA c762fc6714439b9926ae7c69bf1942679ff2b3645095e0920b1bbeb5fe8972b1, URL https://raw.githubusercontent.com/GNOME/mutter/46.0/src/wayland/meta-wayland-text-input.c . commit_text sends commit_string immediately but defers done to CLUTTER_PRIORITY_EVENTS+1 idle; flush_done is static/internal, with no supported extension GI method. Chromium upstream main https://raw.githubusercontent.com/chromium/chromium/main/ui/ozone/platform/wayland/host/zwp_text_input_v3.cc assigns OnCommitString to one pending.commit; Enable/Reset/Disable clear pending input; OnDone applies it. Main is NOT asserted equal to exact testedChrome154 source. The real r2 ordering independently demonstrates multiple wire commits before one done; r3 shows a distinct reset boundary without that collision.
+
+GNOME46 official inputMethod.js _onCommitText calls this.commit(), which queues a Clutter IM event. Calling IBus panel.commit_text crosses IBus D-Bus before that queue. A generic GLib idle immediately after panel call is NOT a barrier proving the signal has reached Shell, much less done has reached Wayland. Meta redraw/afterpaint and DBus flush/current-context roundtrips are not target text receipts. A fixed sleep may mitigate but must not be labeled a guarantee. Existing GI enumeration also does not expose InputFocus.commit; do not assume currentFocus.commit is callable. A strict production guarantee through this API remains unproved; no fallback/retry may follow an attempted/unknown batch.
+
+Potential follow-up must first demonstrate a supported compositor scheduling hook that follows this exact own IM event without reading user text or impersonating a client. Only then defer next unit and preserve epoch/preedit/cancel/deadline. Even a proven done enqueue barrier addresses the r2 collision but not automatically the r3 client reset race. If the hook is unavailable, retain explicit unconfirmed semantics and report this boundary rather than promote a timer as a repair.
+
+## Restoration and resource safety
+
+Before deletion, only four OWN stopped __pycache__ directories were inspected for process cwd/FD references (none) and removed, freeing1705158 bytes; all evidence/source/assets/images retained. Initial EDQUOT and sandbox failure were reported before any new VM; new evidence resides on ext4. Earlier24/26 guests were verified stopped before this one launched. New guest networknone, rootread-only, private RAM child; original parent only read-only. The known2minute networkd wait-online delay was retained.
+
+Original7 V5 assets restored byte-exact; three Shell settings restored and V5 inactive. Each Chrome/privateFcitx exited0, manager IM hints restored. Resource check passed with no candidate processes/capabilities/Fcitx service/held test keys, FUSE gone. Normalpoweroff0, QEMU0, original dockerwait84796 returned0. Final container Runningfalse/Pid0/Exit0/noOOM. Full child archive retained and full-stream verified in the referenced ignored dist directory; no disk included in patch.
+
+Persistent raw directory: dist/ibus-r2-protocol-diagnostic-20261030. Scope is a reproducible bounded failure, not new system support, production repair, release or package acceptance.
+
+## Relationship to the preceding desktop evidence
+
+The [R2 dual-desktop source experiment](../ibus-owned-neighbor-r2-desktop-20261030/REPORT.md) records the earlier Ubuntu24 U+0020 loss and Ubuntu26 samples, including the contenteditable control limits. This diagnostic retains lengths only and does not identify the missing codepoint in its new r2/r3 failures. Neither report establishes a completed repair or a newly accepted AppImage.
+
+Privacy filtering is scoped to these self-owned textarea runs; `redact_report` is not a general sanitizer for arbitrary contenteditable markup or key fields. `diagnostic-receipt.json` retains the intermediate r2 parser identity; the final r3 parser identity is recorded separately in `parser-r3-receipt.json` and the pinned input. The five final parser/privacy tests were independently rerun successfully; this does not add desktop or package support.

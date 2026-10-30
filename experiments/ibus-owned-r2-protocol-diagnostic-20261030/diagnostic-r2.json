@@ -1,0 +1,6 @@
+{
+  "command": "env INKECHO_OUTPUT_STAGE=wayland RUN_LABEL=protocol-r2 OWNED_IM=fcitx ACTIVE_FCITX=1 NATIVE_IME=1 OWNED_FIELD=textarea CASES=mixed,switch /usr/bin/python3 /mnt/input/launch-native012.py",
+  "returncode": 0,
+  "stdout": "[1030/021911.396674:WARNING:chrome/app/chrome_main_linux.cc:84] Read channel stable from /opt/inkecho-test-chrome/CHROME_VERSION_EXTRA\n{\"method\": \"auto\", \"case\": \"mixed\", \"passed\": false, \"route\": null, \"received_lengths\": [21, 0], \"error\": null}\n{\"method\": \"auto\", \"case\": \"switch\", \"passed\": true, \"route\": null, \"received_lengths\": [1, 21], \"error\": null}\n\n",
+  "stderr": ""
+}
