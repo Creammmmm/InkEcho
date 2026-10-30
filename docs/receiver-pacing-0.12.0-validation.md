@@ -63,6 +63,12 @@ UI 中的“接收窗口绘制提示等待上限”对应 `receiver_feedback_wai
 
 持久原件：`dist/receiver-pacing-0.12.0-748856-20261030`。公开复现脚本、上下文、时间日志和包来源审计见 [证据目录](evidence/receiver-pacing-0.12.0-748856/)，[manifest](evidence/receiver-pacing-0.12.0-748856/manifest.json) 逐文件记录 SHA；含原始行尾空格的日志无损 gzip 保存。私有配置、测试 SSH/TLS 私钥和完整 VM 镜像没有加入证据补丁。
 
-先核对既有只读父盘身份和实际包 SHA，检查无其他 VM 争用，再运行本轮 `control.py launch 24`。SSH 就绪后挂载 `inkecho_input`（只读）及专用 `inkecho_output`，运行 `guest.py prepare`、`context.py`、`pacing-launch012.py`（首轮含保留失败），再运行 `pacing-launch012-r2.py`。后者仍使用首轮经审计的动态 FUSE APPDIR，不能在卸载后硬编码复用旧 mount 路径。各完整命令和返回值在顶层 `pacing-*.json`，输入在 `input/*.txt`。需重新准备客机专用密钥，不能读取用户密钥；父盘和 AppImage 只读，所有数据只在本任务 RAM child 及持久证据目录。
+复现时使用新的唯一测试目录和容器名；不要覆盖已有证据或原地重复启动同名已停止容器。先核对既有只读父盘身份和实际包 SHA，检查无其他 VM 争用，再运行本轮 `control.py launch 24`。SSH 就绪后挂载 `inkecho_input`（只读）及专用 `inkecho_output`，运行 `guest.py prepare`、`context.py`、`pacing-launch012.py`（首轮含保留失败），再运行 `pacing-launch012-r2.py`。后者仍使用首轮经审计的动态 FUSE APPDIR，不能在卸载后硬编码复用旧 mount 路径。各完整命令和返回值在顶层 `pacing-*.json`，输入在 `input/*.txt`。需重新准备客机专用密钥，不能读取用户密钥；父盘和 AppImage 只读，所有数据只在本任务 RAM child 及持久证据目录。
 
 最后 `guest.py cleanup`、`resource-check` 均通过：无候选进程、capability、虚拟音频、Fcitx owner、生成按键/修饰键 held，锁空闲、FUSE mount 消失。客机正常 poweroff，容器退出0、Pid0、OOMKilled=false；child 原始194,510,848字节 SHA `ad3e6f3453276c7a2861b6d052cc28f6ed0ccec62a91dc048ddbb2b5775fc5da`，归档51,956,329字节 SHA `7e31977c833f13c4a21ef9a1b61e08d49501620225e9b2696f8937772c21fb97`，解压全流校验通过。共享工作树保持干净，未改变稳定入口、tag 或 release。
+
+## 同批文档验证的独立负对照
+
+另一组独立审查的 [GNOME46 AT-SPI 元数据负对照](../experiments/gnome46-atspi-metadata-20261030/REPORT.md) 也在 Ubuntu24.04.5 / GNOME46 原生 Wayland 的自有 GTK3 Entry 中完成。真实 Pinyin `ni` 预编辑长度为2、已提交正文长度为0时，被测 AT-SPI focused/editable/caret/selection 等元数据与无组合输入时相同；Space 后组合完成。该结果仅说明这组元数据不足以证明 composition-none，未调用 InsertText、未读无障碍正文，也没有启用新输出路径。它不改变本报告原生 X11 绘制提示的能力范围。
+
+本次最终完整 workflow 以此文档统一绑定两组已独立审查的文档证据：本报告的同包等待/取消/切焦测量，以及链接报告的元数据负对照。两组原始记录、失败和归档身份均保留；清单及25个 AT-SPI pin 已核对，空 actor 日志真实包含在证据中，复核未发现敏感凭据。完整源码检查只证明该提交的自动化检查通过，不能扩大任一组实际桌面结论。

@@ -1,0 +1,182 @@
+[
+  {
+    "case": "identity",
+    "os_release": "PRETTY_NAME=\"Ubuntu 24.04.5 LTS\"\nNAME=\"Ubuntu\"\nVERSION_ID=\"24.04\"\nVERSION=\"24.04.5 LTS (Noble Numbat)\"\nVERSION_CODENAME=noble\nID=ubuntu\nID_LIKE=debian\nHOME_URL=\"https://www.ubuntu.com/\"\nSUPPORT_URL=\"https://help.ubuntu.com/\"\nBUG_REPORT_URL=\"https://bugs.launchpad.net/ubuntu/\"\nPRIVACY_POLICY_URL=\"https://www.ubuntu.com/legal/terms-and-policies/privacy-policy\"\nUBUNTU_CODENAME=noble\nLOGO=ubuntu-logo\n",
+    "shell": "GNOME Shell 46.0",
+    "session": "wayland"
+  },
+  {
+    "case": "simple_before",
+    "actor": {
+      "pid": 2272,
+      "active": true,
+      "focus": true,
+      "text_length": 0,
+      "preedit_length": 0,
+      "key_events": 0,
+      "backend": "GdkWaylandDisplay"
+    },
+    "metadata": {
+      "interfaces": [
+        "Accessible",
+        "Action",
+        "Collection",
+        "Component",
+        "EditableText",
+        "Text"
+      ],
+      "focused": true,
+      "editable": true,
+      "sensitive": true,
+      "showing": true,
+      "caret_offset": 0,
+      "selection_count": 0
+    }
+  },
+  {
+    "case": "hardware_key",
+    "sequence": 1,
+    "keyval": 97,
+    "owned_pid": 2272
+  },
+  {
+    "case": "simple_typing_control",
+    "actor": {
+      "pid": 2272,
+      "active": true,
+      "focus": true,
+      "text_length": 1,
+      "preedit_length": 0,
+      "key_events": 2,
+      "backend": "GdkWaylandDisplay"
+    }
+  },
+  {
+    "case": "actor_exit",
+    "pid": 2272,
+    "returncode": 0
+  },
+  {
+    "case": "fcitx_before",
+    "actor": {
+      "pid": 2379,
+      "active": true,
+      "focus": true,
+      "text_length": 0,
+      "preedit_length": 0,
+      "key_events": 0,
+      "backend": "GdkWaylandDisplay"
+    },
+    "metadata": {
+      "interfaces": [
+        "Accessible",
+        "Action",
+        "Collection",
+        "Component",
+        "EditableText",
+        "Text"
+      ],
+      "focused": true,
+      "editable": true,
+      "sensitive": true,
+      "showing": true,
+      "caret_offset": 0,
+      "selection_count": 0
+    }
+  },
+  {
+    "case": "hardware_key",
+    "sequence": 2,
+    "keyval": 97,
+    "owned_pid": 2379
+  },
+  {
+    "case": "fcitx_typing_control",
+    "actor": {
+      "pid": 2379,
+      "active": true,
+      "focus": true,
+      "text_length": 1,
+      "preedit_length": 0,
+      "key_events": 2,
+      "backend": "GdkWaylandDisplay"
+    }
+  },
+  {
+    "case": "engine",
+    "name": "pinyin"
+  },
+  {
+    "case": "hardware_key",
+    "sequence": 3,
+    "keyval": 110,
+    "owned_pid": 2379
+  },
+  {
+    "case": "hardware_key",
+    "sequence": 4,
+    "keyval": 105,
+    "owned_pid": 2379
+  },
+  {
+    "case": "real_preedit",
+    "actor": {
+      "pid": 2379,
+      "active": true,
+      "focus": true,
+      "text_length": 0,
+      "preedit_length": 2,
+      "key_events": 4,
+      "backend": "GdkWaylandDisplay"
+    },
+    "metadata": {
+      "interfaces": [
+        "Accessible",
+        "Action",
+        "Collection",
+        "Component",
+        "EditableText",
+        "Text"
+      ],
+      "focused": true,
+      "editable": true,
+      "sensitive": true,
+      "showing": true,
+      "caret_offset": 0,
+      "selection_count": 0
+    },
+    "metadata_equal": true
+  },
+  {
+    "case": "hardware_key",
+    "sequence": 5,
+    "keyval": 32,
+    "owned_pid": 2379
+  },
+  {
+    "case": "composition_finished",
+    "actor": {
+      "pid": 2379,
+      "active": true,
+      "focus": true,
+      "text_length": 1,
+      "preedit_length": 0,
+      "key_events": 5,
+      "backend": "GdkWaylandDisplay"
+    }
+  },
+  {
+    "case": "actor_exit",
+    "pid": 2379,
+    "returncode": 0
+  },
+  {
+    "case": "daemon_exit",
+    "returncode": 0
+  },
+  {
+    "case": "done",
+    "no_insert_text_calls": true,
+    "no_accessibility_body_reads": true
+  }
+]

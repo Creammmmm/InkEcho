@@ -1,0 +1,58 @@
+from pathlib import Path
+import os,subprocess,json,time,sys
+import gi
+gi.require_version('Atspi','2.0');from gi.repository import Atspi
+O=Path('/mnt/output');W=Path('/run/user/1000/inkecho-atspi-metadata');W.mkdir(mode=0o700);rows=[];actor=None;daemon=None
+os.environ.update(DBUS_SESSION_BUS_ADDRESS='unix:path=/run/user/1000/bus',XDG_RUNTIME_DIR='/run/user/1000')
+for l in subprocess.check_output(['systemctl','--user','show-environment'],text=True).splitlines():
+ k,_,v=l.partition('=')
+ if k in {'DISPLAY','XAUTHORITY','WAYLAND_DISPLAY','XDG_SESSION_TYPE','XDG_CURRENT_DESKTOP'}:os.environ[k]=v
+assert os.environ['XDG_SESSION_TYPE']=='wayland' and 'GNOME'in os.environ['XDG_CURRENT_DESKTOP']
+def record(case,**kw):
+ rows.append({'case':case,**kw});(O/'results.json').write_text(json.dumps(rows,indent=2));print(json.dumps(rows[-1]),flush=True)
+def read():return json.loads((W/'actor.json').read_text())
+def metadata(pid):
+ desktop=Atspi.get_desktop(0);apps=[desktop.get_child_at_index(i)for i in range(desktop.get_child_count())];apps=[a for a in apps if a.get_process_id()==pid];assert len(apps)==1,('owned application count',len(apps));queue=apps[:];found=[];seen=0
+ while queue:
+  a=queue.pop(0);seen+=1;assert seen<100
+  interfaces=list(a.get_interfaces());states=a.get_state_set()
+  if 'EditableText'in interfaces and states.contains(Atspi.StateType.FOCUSED):
+   text=a.get_text_iface();found.append({'interfaces':sorted(interfaces),'focused':True,'editable':states.contains(Atspi.StateType.EDITABLE),'sensitive':states.contains(Atspi.StateType.SENSITIVE),'showing':states.contains(Atspi.StateType.SHOWING),'caret_offset':text.get_caret_offset(),'selection_count':text.get_n_selections()})
+  queue += [a.get_child_at_index(i)for i in range(a.get_child_count())]
+ assert len(found)==1,('focused editable count',len(found));return found[0]
+def key(value):
+ before=read();assert before['active']and before['focus']and before['pid']==actor.pid
+ request=O/'key-request.json';req={'sequence':len([x for x in rows if x['case']=='hardware_key'])+1,'keyval':value,'owned_pid':actor.pid};request.write_text(json.dumps(req))
+ for _ in range(100):
+  p=O/'key-ack.json'
+  if p.exists()and json.loads(p.read_text()).get('sequence')==req['sequence']:break
+  time.sleep(.05)
+ else:raise RuntimeError('key acknowledgement timeout')
+ record('hardware_key',**req);time.sleep(.4)
+def stop_actor():
+ global actor
+ if actor:
+  actor.stdin.write('quit\n');actor.stdin.flush();record('actor_exit',pid=actor.pid,returncode=actor.wait(timeout=5));actor=None
+try:
+ record('identity',os_release=Path('/etc/os-release').read_text(),shell=subprocess.check_output(['gnome-shell','--version'],text=True).strip(),session=os.environ['XDG_SESSION_TYPE'])
+ config=W/'config/fcitx5';config.mkdir(parents=True);(config/'profile').write_text('[Groups/0]\nName=Default\nDefault Layout=us\nDefaultIM=pinyin\n\n[Groups/0/Items/0]\nName=keyboard-us\nLayout=\n\n[Groups/0/Items/1]\nName=pinyin\nLayout=\n\n[GroupOrder]\n0=Default\n')
+ env=dict(os.environ);env.update(XDG_CONFIG_HOME=str(W/'config'),XDG_DATA_HOME=str(W/'data'),XDG_CACHE_HOME=str(W/'cache'));daemon=subprocess.Popen(['/usr/bin/fcitx5','-D','--disable','clipboard'],env=env,stdout=(O/'fcitx.log').open('w'),stderr=subprocess.STDOUT);time.sleep(2);assert daemon.poll()is None
+ for mode in ['simple','fcitx']:
+  state=W/'actor.json'
+  if state.exists():state.unlink()
+  ae=dict(env);ae.update(GDK_BACKEND='wayland',GTK_IM_MODULE=mode);ae.pop('NO_AT_BRIDGE',None);actor=subprocess.Popen(['/usr/bin/python3','/mnt/input/actor.py',str(state)],env=ae,stdin=subprocess.PIPE,text=True,stdout=(O/(mode+'-actor.log')).open('w'),stderr=subprocess.STDOUT)
+  for _ in range(80):
+   if state.exists()and read()['active']and read()['focus']:break
+   time.sleep(.1)
+  assert read()['active']and read()['focus'];assert read()['backend']=='GdkWaylandDisplay';time.sleep(.5)
+  before=metadata(actor.pid);record(mode+'_before',actor=read(),metadata=before)
+  subprocess.run(['/usr/bin/fcitx5-remote','-s','keyboard-us'],check=True);subprocess.run(['/usr/bin/fcitx5-remote','-c'],check=True);time.sleep(.3);key(97);assert read()['text_length']==1 and read()['key_events']>=2;record(mode+'_typing_control',actor=read());actor.stdin.write('clear\n');actor.stdin.flush();time.sleep(.3)
+  if mode=='fcitx':
+   subprocess.run(['/usr/bin/fcitx5-remote','-s','pinyin'],check=True);subprocess.run(['/usr/bin/fcitx5-remote','-o'],check=True);time.sleep(.5);record('engine',name=subprocess.check_output(['/usr/bin/fcitx5-remote','-n'],text=True).strip());key(110)
+   if read()['preedit_length']==0:key(110)
+   key(105);assert read()['preedit_length']==2;after=metadata(actor.pid);record('real_preedit',actor=read(),metadata=after,metadata_equal=before==after);key(32);assert read()['preedit_length']==0;record('composition_finished',actor=read())
+  stop_actor()
+finally:
+ stop_actor()
+ if daemon:daemon.terminate();record('daemon_exit',returncode=daemon.wait(timeout=5))
+record('done',no_insert_text_calls=True,no_accessibility_body_reads=True)

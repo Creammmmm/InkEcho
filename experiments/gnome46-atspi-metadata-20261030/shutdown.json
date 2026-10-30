@@ -1,0 +1,5 @@
+{
+  "returncode": 0,
+  "stdout": "2738 bash -c pgrep -af \"fcitx5|/mnt/input/actor.py|/mnt/input/run.py\"; loginctl list-sessions; sudo systemctl poweroff\nSESSION  UID USER    SEAT  TTY  STATE  IDLE SINCE\n      1 1000 inkecho seat0 tty2 active no   -\n     10 1000 inkecho -     -    active no   -\n\n2 sessions listed.\n",
+  "stderr": ""
+}

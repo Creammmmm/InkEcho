@@ -1,0 +1,18 @@
+import gi,os,json,sys
+from pathlib import Path
+gi.require_version('Gtk','3.0');from gi.repository import Gtk,Gdk,GLib
+out=Path(sys.argv[1]);w=Gtk.Window(title='InkEcho owned metadata assay');e=Gtk.Entry();w.add(e);w.set_default_size(500,120);preedit=0;events=0
+def save(*a):
+ p=out.with_suffix('.tmp');p.write_text(json.dumps({'pid':os.getpid(),'active':w.is_active(),'focus':e.is_focus(),'text_length':len(e.get_text()),'preedit_length':preedit,'key_events':events,'backend':type(Gdk.Display.get_default()).__name__}));p.replace(out);return True
+def pre(_e,t):
+ global preedit;preedit=len(t);save()
+def key(*a):
+ global events;events+=1;save();return False
+e.connect('preedit-changed',pre);e.connect('changed',save);e.connect('key-press-event',key);e.connect('key-release-event',key);w.connect('notify::is-active',save)
+def cmd(fd,cond):
+ s=sys.stdin.readline().strip()
+ if s=='quit' or not s:Gtk.main_quit();return False
+ if s=='clear':e.set_text('')
+ if s=='focus':w.present();e.grab_focus()
+ save();return True
+w.connect('destroy',Gtk.main_quit);w.show_all();e.grab_focus();w.present();GLib.io_add_watch(sys.stdin,GLib.IO_IN,cmd);GLib.timeout_add(100,save);save();Gtk.main()

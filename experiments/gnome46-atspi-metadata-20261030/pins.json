@@ -1,0 +1,102 @@
+{
+  "REPORT.md": {
+    "bytes": 2909,
+    "sha256": "0de8a64afcf93a04aabcfe66453fdc5f3857bc8d50f73cdae90cc0ec1da3c1cd"
+  },
+  "container-final.json": {
+    "bytes": 269,
+    "sha256": "fd0f856e9c302e94e3832323dea1fc05c89d4763caabefefc754c7273f43755e"
+  },
+  "shutdown.json": {
+    "bytes": 342,
+    "sha256": "cbc165acdcedc94b00b4e8a8bb39ad8df055dea8c5c561c2a27194183a4e8a34"
+  },
+  "preflight.json": {
+    "bytes": 157,
+    "sha256": "ff1a0e962080812388222565c7bef15c45c643bada3620c930abe1920491345e"
+  },
+  "failures/docker-missing-share.json": {
+    "bytes": 280,
+    "sha256": "7b95269a51d6e704077750343a238d534e17c8d8317db72f4b385419f24af58c"
+  },
+  "failures/launch-r1.json": {
+    "bytes": 1741,
+    "sha256": "bfe11c658772315ee09b8a0409cceb00bdf15b24a59fdd2212b3e17690edb8d4"
+  },
+  "failures/boot-r2.json": {
+    "bytes": 111,
+    "sha256": "a5569e0e54a22a70976775f7dab04a7cbaff11fd0a9ffa697d82231c72f6b50a"
+  },
+  "failures/qemu-exit-r2.json": {
+    "bytes": 17,
+    "sha256": "64a1526b099d75eed9d9da41a5562dcc164b6ffddeb729dd371c4496bbcded05"
+  },
+  "failures/archive-r2.json": {
+    "bytes": 289,
+    "sha256": "40d75ed7f173e87ee6359aa0050c3cf54c255e201a7be008057396630cc43b18"
+  },
+  "launch.json": {
+    "bytes": 1680,
+    "sha256": "6c720d00cb0489f549e00bdb5987ce2b72c50c4fe13953055c539ccaf8b9e3f1"
+  },
+  "boot.json": {
+    "bytes": 111,
+    "sha256": "0e9592a055032b393003b1359b2518d4dbeaa3dad67632d133f93b8c53156bba"
+  },
+  "raw/results.json": {
+    "bytes": 3796,
+    "sha256": "6196e33c08ad9cca9853890e4e55771d6e1c89943ace6f1811aeff6ec80caad1"
+  },
+  "raw/hardware-receipts.json": {
+    "bytes": 1893,
+    "sha256": "d324c6da7df69b55c3d662f1b3073f51a812470e7bf861097269563b01f2285e"
+  },
+  "raw/host-exit.json": {
+    "bytes": 17,
+    "sha256": "c365161d39236fe0f1d32937fbc549796b8487d8faf65ed3879b96897c78ea5d"
+  },
+  "raw/suite.log": {
+    "bytes": 2863,
+    "sha256": "73ff1980ae417630dba721838c4c39167eacbad9f23cfd6a7295e14e9f521e61"
+  },
+  "raw/qemu-exit.json": {
+    "bytes": 17,
+    "sha256": "c365161d39236fe0f1d32937fbc549796b8487d8faf65ed3879b96897c78ea5d"
+  },
+  "raw/ram-overlay-archive.json": {
+    "bytes": 289,
+    "sha256": "3711693a3280ec14a60291207dd9a87249dd413c27613e8417bde05ebe45eb23"
+  },
+  "raw/simple-actor.log": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "raw/fcitx-actor.log": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "input/wrapper.py.txt": {
+    "bytes": 1292,
+    "sha256": "62e2e05feb91c99552665caad77452b889b9be370711ba1de866496247e335aa"
+  },
+  "input/qmp-key.py.txt": {
+    "bytes": 687,
+    "sha256": "4e041cde0db4e002497c3d6afdf42a6154588da2c4443775f9741009b411b6a1"
+  },
+  "input/qemu.json.txt": {
+    "bytes": 882,
+    "sha256": "fa91db4461c63f3c0f1f01c021cfbc1663272746055d0d68cd5a9f82328f2e79"
+  },
+  "input/run.py.txt": {
+    "bytes": 5043,
+    "sha256": "b67a91c9d9ea32e43095af642483fdf47c11dec65e4143724666f7deef4aa00c"
+  },
+  "input/actor.py.txt": {
+    "bytes": 1179,
+    "sha256": "7714f005660734d59df25b5720e6606bb180352b409eb9d96c4a14cbf082f0af"
+  },
+  "host.py.txt": {
+    "bytes": 2041,
+    "sha256": "e835b4f079daa9e4ee81705345bd5412f6317a2cfeeb86ce0808e3269c32c42a"
+  }
+}

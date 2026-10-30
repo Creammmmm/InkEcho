@@ -1,0 +1,18 @@
+from pathlib import Path
+import subprocess,time,json,shlex
+B=Path('/home/lth/github/InkEcho/dist/gnome46-atspi-metadata-20261030');O=B/'output-r3';name='inkecho-gnome46-atspi-metadata-r3-20261030'
+ssh=['docker','exec',name,'ssh','-T','-i','/secrets/testkey','-p2222','-o','BatchMode=yes','-o','ConnectTimeout=8','-o','StrictHostKeyChecking=yes','-o','UserKnownHostsFile=/prior/known_hosts','inkecho@127.0.0.1']
+p=subprocess.Popen(ssh+['python3 /mnt/input/run.py'],stdout=(O/'suite.log').open('w'),stderr=subprocess.STDOUT);end=time.monotonic()+100;done=set();rows=[]
+try:
+ while p.poll()is None and time.monotonic()<end:
+  req=O/'key-request.json'
+  if req.exists():
+   x=json.loads(req.read_text());seq=x['sequence']
+   if seq not in done:
+    guard='import pathlib,json,os; p=pathlib.Path("/run/user/1000/inkecho-atspi-metadata/actor.json");s=json.loads(p.read_text());assert s["pid"]=='+str(x['owned_pid'])+' and s["active"]and s["focus"]and s["backend"]=="GdkWaylandDisplay";assert b"/mnt/input/actor.py"in pathlib.Path("/proc/"+str(s["pid"])+"/cmdline").read_bytes();print("fresh owned native actor")'
+    r=subprocess.run(ssh+['python3 -c '+shlex.quote(guard)],capture_output=True,text=True,timeout=9);rows.append({'request':x,'guard_returncode':r.returncode,'stdout':r.stdout,'stderr':r.stderr});assert r.returncode==0
+    r=subprocess.run(['docker','exec',name,'python3','/input/qmp-key.py',str(x['keyval'])],capture_output=True,text=True,timeout=8);rows.append({'request':x,'key_returncode':r.returncode,'stdout':r.stdout,'stderr':r.stderr});assert r.returncode==0;done.add(seq);tmp=O/'key-ack.tmp';tmp.write_text(json.dumps({'sequence':seq}));tmp.replace(O/'key-ack.json');(O/'hardware-receipts.json').write_text(json.dumps(rows,indent=2))
+  time.sleep(.06)
+ assert p.poll()is not None,'metadata bounded timeout';rc=p.wait();(O/'host-exit.json').write_text(json.dumps({'returncode':rc}));print(rc);print((O/'suite.log').read_text());raise SystemExit(rc)
+finally:
+ (O/'hardware-receipts.json').write_text(json.dumps(rows,indent=2))

@@ -1,0 +1,102 @@
+[
+  {
+    "request": {
+      "sequence": 1,
+      "keyval": 97,
+      "owned_pid": 2272
+    },
+    "guard_returncode": 0,
+    "stdout": "fresh owned native actor\n",
+    "stderr": ""
+  },
+  {
+    "request": {
+      "sequence": 1,
+      "keyval": 97,
+      "owned_pid": 2272
+    },
+    "key_returncode": 0,
+    "stdout": "{\"ok\": true, \"key\": \"97\"}\n",
+    "stderr": ""
+  },
+  {
+    "request": {
+      "sequence": 2,
+      "keyval": 97,
+      "owned_pid": 2379
+    },
+    "guard_returncode": 0,
+    "stdout": "fresh owned native actor\n",
+    "stderr": ""
+  },
+  {
+    "request": {
+      "sequence": 2,
+      "keyval": 97,
+      "owned_pid": 2379
+    },
+    "key_returncode": 0,
+    "stdout": "{\"ok\": true, \"key\": \"97\"}\n",
+    "stderr": ""
+  },
+  {
+    "request": {
+      "sequence": 3,
+      "keyval": 110,
+      "owned_pid": 2379
+    },
+    "guard_returncode": 0,
+    "stdout": "fresh owned native actor\n",
+    "stderr": ""
+  },
+  {
+    "request": {
+      "sequence": 3,
+      "keyval": 110,
+      "owned_pid": 2379
+    },
+    "key_returncode": 0,
+    "stdout": "{\"ok\": true, \"key\": \"110\"}\n",
+    "stderr": ""
+  },
+  {
+    "request": {
+      "sequence": 4,
+      "keyval": 105,
+      "owned_pid": 2379
+    },
+    "guard_returncode": 0,
+    "stdout": "fresh owned native actor\n",
+    "stderr": ""
+  },
+  {
+    "request": {
+      "sequence": 4,
+      "keyval": 105,
+      "owned_pid": 2379
+    },
+    "key_returncode": 0,
+    "stdout": "{\"ok\": true, \"key\": \"105\"}\n",
+    "stderr": ""
+  },
+  {
+    "request": {
+      "sequence": 5,
+      "keyval": 32,
+      "owned_pid": 2379
+    },
+    "guard_returncode": 0,
+    "stdout": "fresh owned native actor\n",
+    "stderr": ""
+  },
+  {
+    "request": {
+      "sequence": 5,
+      "keyval": 32,
+      "owned_pid": 2379
+    },
+    "key_returncode": 0,
+    "stdout": "{\"ok\": true, \"key\": \"32\"}\n",
+    "stderr": ""
+  }
+]
