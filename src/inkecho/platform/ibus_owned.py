@@ -24,6 +24,24 @@ PATH = "/io/github/Creammmmm/InkEcho/IBusOwnedCandidateV5"
 INTERFACE = "io.github.Creammmmm.InkEcho.IBusOwnedCandidateV51"
 
 
+class _OwnedMessageBus(MessageBus):
+    """Observe dbus-next's otherwise discarded per-message write futures.
+
+    dbus-next's call() still reports connection and reply failures normally;
+    this only consumes the separate send future that its _call() ignores.
+    """
+
+    def send(self, message):
+        future = super().send(message)
+
+        def observe(done):
+            if not done.cancelled():
+                done.exception()
+
+        future.add_done_callback(observe)
+        return future
+
+
 class CandidateError(RuntimeError):
     def __init__(self, code):
         self.code = code
@@ -35,7 +53,7 @@ class Client:
         self,
         capability,
         *,
-        bus_factory=MessageBus,
+        bus_factory=_OwnedMessageBus,
         timeout=3,
         owner_verifier=None,
         expected_owner=None,
@@ -140,17 +158,29 @@ class Client:
         # an explicit upgrade; partial/malformed schemas remain unavailable.
         # Never emit via an old method while claiming a bounded task.
         bounded_advertised = any(
-            method.get("name") in {"BeginBounded", "CommitBounded"}
+            method.get("name") in {"BeginLongBounded", "CommitLongBounded"}
             for method in methods
         )
         if bounded_advertised:
             if not (
-                exact("BeginBounded", "ssut", "b")
-                and exact("CommitBounded", "ust", "s")
+                exact("BeginLongBounded", "ssut", "b")
+                and exact("CommitLongBounded", "ust", "s")
                 and exact("Cancel", "", "b")
             ):
                 raise CandidateError("unavailable")
-            return True
+            return 2
+        old_bounded = (
+            exact("BeginBounded", "ssut", "b")
+            and exact("CommitBounded", "ust", "s")
+            and exact("Cancel", "", "b")
+        )
+        if old_bounded:
+            return 1
+        if any(
+            method.get("name") in {"BeginBounded", "CommitBounded"}
+            for method in methods
+        ):
+            raise CandidateError("unavailable")
         complete_legacy = exact("Cancel", "", "b") and (
             (exact("BeginBatch", "ssu", "b") and exact("CommitBatch", "us", "s"))
             or (exact("Begin", "ss", "b") and exact("Commit", "us", "s"))
@@ -159,10 +189,23 @@ class Client:
             raise CandidateError("upgrade_required")
         raise CandidateError("unavailable")
 
-    async def begin(self):
+    async def begin(self, deadline=None):
         if self._bus is not None or self._cancelled:
             raise CandidateError("busy")
         try:
+            if deadline is None:
+                deadline = time.monotonic() + 59
+            try:
+                if type(deadline) not in (int, float) or not math.isfinite(deadline):
+                    raise CandidateError("cancelled")
+                deadline_us = math.floor(deadline * 1_000_000)
+                if (
+                    not 0 < deadline_us <= 2**53 - 1
+                    or deadline_us <= time.monotonic() * 1_000_000
+                ):
+                    raise CandidateError("cancelled")
+            except (OverflowError, ValueError):
+                raise CandidateError("cancelled") from None
             # Retain the transport before authentication so timeouts and
             # cancellation can close a connection that never finishes setup.
             self._bus = self._bus_factory()
@@ -188,14 +231,21 @@ class Client:
             if not await self._owner_verifier(owner):
                 raise CandidateError("untrusted_owner")
             self._owner = owner
-            self._neighbor_batch = await self._negotiate_batch()
+            self._protocol = await self._negotiate_batch()
+            self._neighbor_batch = True
             # Same Linux CLOCK_MONOTONIC epoch; integer microseconds round down.
             # The first task ceiling is fixed, never renewed by later fragments.
-            self._deadline_us = int(time.monotonic() * 1_000_000) + 59_000_000
+            now_us = int(time.monotonic() * 1_000_000)
+            self._deadline_us = min(
+                deadline_us,
+                now_us + (555_000_000 if self._protocol == 2 else 59_000_000),
+            )
+            if self._deadline_us <= now_us:
+                raise CandidateError("cancelled")
             reply = await self._request(
-                "BeginBounded",
+                "BeginLongBounded" if self._protocol == 2 else "BeginBounded",
                 "ssut",
-                [self._cap.name, self._cap.token, 1, self._deadline_us],
+                [self._cap.name, self._cap.token, self._protocol, self._deadline_us],
             )
             if getattr(reply, "signature", None) != "b":
                 raise CandidateError("unavailable")
@@ -265,9 +315,18 @@ class Client:
                     raise CandidateError("cancelled")
                 try:
                     reply = await self._request(
-                        "CommitBounded",
+                        "CommitLongBounded" if self._protocol == 2 else "CommitBounded",
                         "ust",
-                        [self._sequence, char, self._deadline_us],
+                        [
+                            self._sequence,
+                            char,
+                            min(
+                                self._deadline_us,
+                                int(time.monotonic() * 1_000_000) + 2_000_000,
+                            )
+                            if self._protocol == 2
+                            else self._deadline_us,
+                        ],
                     )
                 except asyncio.CancelledError:
                     self._failed = True
@@ -342,7 +401,7 @@ class IBusBridge:
             self._client and getattr(self._client, "supports_neighbor_batch", False)
         )
 
-    async def connect(self, *, expected_owner=None):
+    async def connect(self, *, expected_owner=None, deadline=None):
         if self._closed:
             raise IBusBridgeError("closed")
         if self._client is not None:
@@ -358,7 +417,10 @@ class IBusBridge:
                 if expected_owner is None
                 else self._client_factory(cap, expected_owner=expected_owner)
             )
-            await client.begin()
+            if deadline is None:
+                await client.begin()
+            else:
+                await client.begin(deadline=deadline)
         except asyncio.CancelledError:
             if cap is not None:
                 cap.close()
@@ -371,6 +433,7 @@ class IBusBridge:
                 "authorization_failed",
                 "untrusted_owner",
                 "upgrade_required",
+                "cancelled",
             }:
                 code = error.code
             elif isinstance(error, LifecycleError) or (

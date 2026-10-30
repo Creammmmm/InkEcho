@@ -41,7 +41,7 @@ LEGACY_FILES = {
         "size": 951,
     },
 }
-FILES = {
+BOUNDED_V1_FILES = {
     "capability.js": {
         "sha256": "fcbaf3e7fd0184ca3141f3c4d811f7496ef753fd6282714ec128a26151a1c881",
         "size": 2784,
@@ -73,6 +73,38 @@ FILES = {
 }
 
 
+FILES = {
+    "probe.js": {
+        "sha256": "39adc6ccc1109bf7d9cae419314781164dccbf0a2f6d6a778888a15755a12dc4",
+        "size": 951,
+    },
+    "extension.js": {
+        "sha256": "df03fdd67c4da5253a9fa9ec63ffc3d8585158de4dcff2a7b2cf05d06563ac6a",
+        "size": 9172,
+    },
+    "identity.js": {
+        "sha256": "5a50a88cc6f08619b4742e2f1c269a2dce7a517ece32176270ad69f3ffc8e9ac",
+        "size": 404,
+    },
+    "delivery_gate.js": {
+        "sha256": "1b45c631e458b1a72a2240d6547cf2a2768e5255c7f36763ef3f8157b04555c5",
+        "size": 4066,
+    },
+    "metadata.json": {
+        "sha256": "3affc5dde73c67f8e6638d8dd115b3f7b9504b86ac29af147365675d28824549",
+        "size": 235,
+    },
+    "owned_gate.js": {
+        "sha256": "fff2971ee12563748496b6b0b42e06f3322fce2764f9ee6317b275689ae45422",
+        "size": 5601,
+    },
+    "capability.js": {
+        "sha256": "fcbaf3e7fd0184ca3141f3c4d811f7496ef753fd6282714ec128a26151a1c881",
+        "size": 2784,
+    },
+}
+
+
 def installed_directory():
     data = os.environ.get("XDG_DATA_HOME", "")
     base = (
@@ -98,7 +130,11 @@ def verified_installation(root=None):
             raise ValueError
         observed = {}
         for name in FILES:
-            maximum = max(FILES[name]["size"], LEGACY_FILES[name]["size"])
+            maximum = max(
+                FILES[name]["size"],
+                BOUNDED_V1_FILES[name]["size"],
+                LEGACY_FILES[name]["size"],
+            )
             fd = os.open(
                 name, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK, dir_fd=directory
             )
@@ -120,7 +156,7 @@ def verified_installation(root=None):
             finally:
                 os.close(fd)
         # Accept complete old V5 or complete current bounded bridge, never a mixed set.
-        if observed not in (FILES, LEGACY_FILES):
+        if observed not in (FILES, BOUNDED_V1_FILES, LEGACY_FILES):
             raise ValueError
         return True
     except (OSError, ValueError):

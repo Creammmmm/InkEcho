@@ -132,3 +132,82 @@ def test_actual_session_routes_all_output_paths_with_bounded_owned_protocol(
             await s.close()
 
     asyncio.run(run())
+
+
+@pytest.mark.parametrize("streaming", [False, True])
+def test_session_passes_task_deadline_to_long_owned_begin(sessions, streaming):
+    from test_owned_long_bounded import LongBus, long_schema
+
+    async def run():
+        stream_calls = []
+
+        class Producer(Client):
+            async def transcribe(self, *args):
+                return Result("原始转写", Usage(), 0)
+
+            async def polish_stream(self, *args):
+                stream_calls.append(True)
+                for fragment in ("甲乙", "丙丁"):
+                    await args[-1](fragment)
+                    await asyncio.sleep(0)
+                return Result("甲乙丙丁", Usage(), 0)
+
+        async def state():
+            return "enabled"
+
+        async def detector():
+            return None
+
+        async def owned_probe():
+            return ("ibus", ":1.23")
+
+        bus = LongBus(long_schema())
+        session = sessions(Producer())
+
+        def factory():
+            return IBusBridge(
+                runtime_dir="/unused-private-fixture",
+                capability_factory=lambda _: Cap(),
+                client_factory=lambda cap, **options: OwnedClient(
+                    cap,
+                    bus_factory=lambda: bus,
+                    owner_verifier=lambda _: async_true(),
+                    **options,
+                ),
+            )
+
+        session.store.save_settings(
+            replace(session.settings, polishing_streaming=streaming)
+        )
+        session.inputs = DefaultAutoOutputRouter(
+            Keyboard(),
+            owned_factory=factory,
+            owned_probe=owned_probe,
+            state_probe=state,
+            system_detector=detector,
+        )
+        try:
+            await session.toggle()
+            task_deadline = session.controller.task.deadline
+            session.stop_recording()
+            while session.pending:
+                await asyncio.sleep(0.001)
+            begin = next(call for call in bus.calls if call[0] == "BeginLongBounded")
+            assert begin[2][2] == 2
+            assert begin[2][3] == int(task_deadline * 1_000_000)
+            commits = [
+                body for name, _, body in bus.calls if name == "CommitLongBounded"
+            ]
+            assert len(commits) >= 2
+            assert all(body[2] <= begin[2][3] for body in commits)
+            if streaming:
+                assert stream_calls == [True]
+                assert "".join(body[1] for body in commits) == "甲乙丙丁"
+                assert "".join(body[1] for body in commits) != "原始转写"
+            else:
+                assert stream_calls == []
+            assert session.controller.outcome == State.UNCONFIRMED
+        finally:
+            await session.close()
+
+    asyncio.run(run())

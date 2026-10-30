@@ -23,14 +23,15 @@ export class DeliveryGateV2 {
     }
 
     beginBounded(sender, token, version, deadlineUs) {
-        if (version !== 1 || !this.clockUs || !Number.isSafeInteger(deadlineUs))
+        if (![1, 2].includes(version) || !this.clockUs || !Number.isSafeInteger(deadlineUs))
             return false;
         let now;
         try { now = this.clockUs(); } catch (_) { return false; }
         if (!Number.isSafeInteger(now) || deadlineUs <= now ||
-            deadlineUs - now > 60_000_000) return false;
+            deadlineUs - now > (version === 2 ? 555_000_000 : 60_000_000)) return false;
         if (!this.begin(sender, token, true)) return false;
         this.session.deadlineUs = deadlineUs;
+        this.session.version = version;
         return true;
     }
     unexpired() {
@@ -38,7 +39,9 @@ export class DeliveryGateV2 {
         if (!s || s.deadlineUs === undefined) return true; // Legacy, no new guarantee.
         try {
             const now = this.clockUs();
-            return Number.isSafeInteger(now) && now < s.deadlineUs;
+            return Number.isSafeInteger(now) && now < s.deadlineUs &&
+                (s.version !== 2 || (Number.isSafeInteger(s.requestDeadlineUs) &&
+                    now < s.requestDeadlineUs));
         } catch (_) { return false; }
     }
     commit(sender, sequence, text) {
@@ -51,7 +54,8 @@ export class DeliveryGateV2 {
 
     _commit(sender, sequence, text, batch) {
         const s = this.session;
-        if (!s || s.sender !== sender || s.failed) return 'rejected';
+        if (!s || s.sender !== sender || s.failed ||
+            (s.version === 2 && !Number.isSafeInteger(s.requestDeadlineUs))) return 'rejected';
         if (!this.unexpired()) { s.failed = true; return 'unknown'; }
         if (typeof text !== 'string' || text.length < 1 || text.length > (batch ? 6 : 2)) {
             s.failed = true; return 'rejected';

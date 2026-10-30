@@ -103,3 +103,29 @@ def test_manifest_is_exact_current_asset_set():
     )
     assert owned_installation.FILES != owned_installation.LEGACY_FILES
     owned_extension.OwnedExtensionManager._verified(root / "ibus_owned_candidate")
+
+
+def test_previous_bounded_asset_set_is_detected_but_never_overwritten(
+    tmp_path, monkeypatch
+):
+    root, source = installed(tmp_path, monkeypatch)
+    old = {}
+    for path in root.iterdir():
+        if path.name in {"delivery_gate.js", "extension.js", "owned_gate.js"}:
+            path.write_bytes(b"complete previous bounded fixture\n")
+        data = path.read_bytes()
+        old[path.name] = {"sha256": hashlib.sha256(data).hexdigest(), "size": len(data)}
+    monkeypatch.setattr(owned_installation, "BOUNDED_V1_FILES", old)
+    assert owned_installation.verified_installation(root)
+    before = {path.name: path.read_bytes() for path in root.iterdir()}
+    calls = []
+    manager = owned_extension.OwnedExtensionManager(
+        source=source, runner=runner(root, calls)
+    )
+    for action in (manager.enable, manager.install):
+        with pytest.raises(ExtensionError, match="旧版"):
+            action()
+    assert not any(call[1] in {"enable", "install"} for call in calls)
+    message = manager.status()
+    assert "停用并卸载旧扩展" in message and "重新登录桌面" in message
+    assert before == {path.name: path.read_bytes() for path in root.iterdir()}

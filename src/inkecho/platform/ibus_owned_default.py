@@ -297,7 +297,9 @@ class DefaultAutoOutputRouter(OwnedAutoOutputRouter):
         candidate = self._owned_factory()
         try:
             await self._wait_auto_preflight(
-                candidate.connect(expected_owner=proof[1]), active, deadline
+                candidate.connect(expected_owner=proof[1], deadline=deadline),
+                active,
+                deadline,
             )
             refreshed = await self._wait_auto_preflight(
                 self._owned_probe(), active, deadline, timeout=1.5

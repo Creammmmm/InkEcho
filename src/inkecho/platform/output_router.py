@@ -467,7 +467,9 @@ class OutputRouter:
                 if framework == "fcitx":
                     pending_connect = bridge.connect(expected_owner=expected_owner)
                 elif getattr(self, "_owned_auto_candidate", False):
-                    pending_connect = bridge.connect(expected_owner=expected_owner)
+                    pending_connect = bridge.connect(
+                        expected_owner=expected_owner, deadline=deadline
+                    )
                 else:
                     pending_connect = bridge.connect()
                 await self._wait_auto_preflight(pending_connect, can_continue, deadline)

@@ -70,4 +70,56 @@ function setup({current=async()=>'/owned',boundary=async()=>true,preedit=false}=
  let resolve;const t=setup({boundary:()=>new Promise(r=>resolve=r)});assert(t.g.beginBounded(':a',[],1,2000));const p=t.g.commitBounded(':a',0,'A',2000);while(!resolve)await Promise.resolve();
  const h=new Handler();h._gate=t.g;h._boundaryAbort=()=>resolve(false);h.disable();assert.equal(await p,'unknown');assert.equal(h._gate,null);assert.equal(t.sent,1);assert.equal(await t.g.commitBounded(':a',1,'B',2000),'rejected');count++;
 }
+{
+ // V2 retains one immutable task bound while each dispatch has a fresh short bound.
+ const t=setup();assert(t.g.beginBounded(':a',[],2,200000000));
+ assert.equal(await t.g.commit(':a',0,'A',true),'rejected');
+ assert.equal(t.d.commitBatch(':a',0,'A'),'rejected');
+ assert.equal(await t.g.commitBounded(':a',0,'A',3001000),'attempted');
+ t.now=61001000;
+ assert.equal(await t.g.commitBounded(':a',1,'B',64001000),'attempted');
+ assert.equal(t.sent,2);
+ assert.equal(await t.g.commitBounded(':a',2,'C',200000001),'unknown');
+ assert.equal(t.sent,2);count++;
+}
+{
+ let resolve;const t=setup({current:()=>new Promise(r=>resolve=r)});
+ assert(t.g.beginBounded(':a',[],2,10000000));
+ const p=t.g.commitBounded(':a',0,'A',3001000);t.now=3001000;resolve('/owned');
+ assert.equal(await p,'unknown');assert.equal(t.sent,0);
+ assert.equal(await t.g.commitBounded(':a',0,'A',4001000),'rejected');count++;
+}
+{
+ // Verify the actual externally exported handlers bind their protocol version.
+ const source=fs.readFileSync(new URL('../../src/inkecho/platform/ibus_owned_candidate/extension.js',import.meta.url),'utf8');
+ const method=source.slice(source.indexOf('    BeginBoundedAsync('),source.indexOf('    CancelAsync('));
+ const Handler=new Function('GLib','return class {'+method+'}')({Variant:class {constructor(_type,value){this.value=value;}}});
+ const t=setup(),h=new Handler();h._gate=t.g;
+ function invocation(){let value;return {get_sender:()=>':a',return_value:x=>value=x.value[0],get value(){return value}};}
+ let x=invocation();h.BeginBoundedAsync(['n','t',2,10000000],x);assert.equal(x.value,false);
+ x=invocation();h.BeginLongBoundedAsync(['n','t',1,10000000],x);assert.equal(x.value,false);
+ x=invocation();h.BeginLongBoundedAsync(['n','t',2,10000000],x);assert.equal(x.value,true);
+ x=invocation();await h.CommitBoundedAsync([0,'A',2000],x);assert.equal(x.value,'rejected');assert.equal(t.sent,0);
+ x=invocation();await h.CommitLongBoundedAsync([0,'A',2000],x);assert.equal(x.value,'attempted');assert.equal(t.sent,1);count++;
+}
+{
+ // A concurrent call must not replace the current request deadline.
+ let release;const t=setup({current:()=>new Promise(r=>release=r)});
+ assert(t.g.beginBounded(':a',[],2,10000000));
+ const first=t.g.commitBounded(':a',0,'A',2000);
+ assert.equal(await t.g.commitBounded(':a',0,'B',3000),'rejected');
+ assert.equal(t.d.session.requestDeadlineUs,2000);
+ t.now=2000;release('/owned');assert.equal(await first,'unknown');assert.equal(t.sent,0);count++;
+}
+{
+ // Simulate another request entering after inner pending clears but before
+ // the first wrapper resumes its finally microtask.
+ let secondRelease,second,firstCall=true;const t=setup({current:()=>firstCall ? (firstCall=false,Promise.resolve('/owned')) : new Promise(r=>secondRelease=r)});
+ assert(t.g.beginBounded(':a',[],2,10000000));
+ const original=t.g.commit.bind(t.g);
+ t.g.commit=(...args)=>{const p=original(...args);if (!second) p.then(()=>{second=t.g.commitBounded(':a',1,'B',3000)});return p;};
+ assert.equal(await t.g.commitBounded(':a',0,'A',2000),'attempted');
+ assert(second && secondRelease);assert.equal(t.d.session.requestDeadlineUs,3000);
+ t.now=3000;secondRelease('/owned');assert.equal(await second,'unknown');assert.equal(t.sent,1);count++;
+}
 console.log(JSON.stringify({passed:count,scope:'actual isolated JS service; includes expected undelivered local-cancel limitation; no IPC or client ACK'}));

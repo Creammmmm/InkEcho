@@ -57,7 +57,7 @@ class Owned:
         self.owner = None
         self.failure = failure
 
-    async def connect(self, expected_owner=None):
+    async def connect(self, expected_owner=None, deadline=None):
         self.owner = expected_owner
 
     async def aclose(self):
@@ -266,7 +266,7 @@ def test_handoff_normalizes_owned_failures_to_registered_diagnostic(stage, code)
 
     async def run():
         class Failure(Owned):
-            async def connect(self, expected_owner=None):
+            async def connect(self, expected_owner=None, deadline=None):
                 if stage == "connect":
                     raise IBusBridgeError(code)
                 await super().connect(expected_owner)
@@ -433,7 +433,7 @@ def test_handoff_preflight_errors_are_classified_and_cancellation_wins(stage, ou
             return ("ibus", ":1.17")
 
         class Candidate(Owned):
-            async def connect(self, expected_owner=None):
+            async def connect(self, expected_owner=None, deadline=None):
                 if stage == "connect":
                     fail()
                 await super().connect(expected_owner)
@@ -627,5 +627,44 @@ def test_handoff_rechecks_service_owners_after_final_state_wait(changed):
                 await router.insert("甲", lambda: True)
         assert previous.closed == 1 and owned.closed == 1
         assert owned.sent == []
+
+    asyncio.run(run())
+
+
+def test_handoff_passes_original_task_deadline_to_owned_connect():
+    import time
+
+    async def run():
+        deadline = time.monotonic() + 180
+        previous, owned = Fcitx(), Owned()
+        observed = []
+
+        async def connect(expected_owner=None, deadline=None):
+            observed.append((expected_owner, deadline))
+
+        owned.connect = connect
+
+        async def state():
+            return "enabled"
+
+        async def detect():
+            return ("fcitx", ":1.8")
+
+        async def proof():
+            return ("ibus", ":1.17")
+
+        router = DefaultAutoOutputRouter(
+            Keyboard(),
+            state_probe=state,
+            system_detector=detect,
+            owned_probe=proof,
+            bridge_factory=lambda: previous,
+            owned_factory=lambda: owned,
+        )
+        await router.prepare_task("auto")
+        with pytest.raises(OutputRouterError, match="ibus_delivery_unknown"):
+            async with router.output_session():
+                assert await router.insert("甲", lambda: True, deadline=deadline) == 1
+        assert observed == [(":1.17", deadline)]
 
     asyncio.run(run())

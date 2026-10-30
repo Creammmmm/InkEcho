@@ -22,6 +22,8 @@ const XML = `<node><interface name="${SERVICE}1">
  <method name="CommitBatch"><arg type="u" direction="in"/><arg type="s" direction="in"/><arg type="s" direction="out"/></method>
  <method name="BeginBounded"><arg type="s" direction="in"/><arg type="s" direction="in"/><arg type="u" direction="in"/><arg type="t" direction="in"/><arg type="b" direction="out"/></method>
  <method name="CommitBounded"><arg type="u" direction="in"/><arg type="s" direction="in"/><arg type="t" direction="in"/><arg type="s" direction="out"/></method>
+ <method name="BeginLongBounded"><arg type="s" direction="in"/><arg type="s" direction="in"/><arg type="u" direction="in"/><arg type="t" direction="in"/><arg type="b" direction="out"/></method>
+ <method name="CommitLongBounded"><arg type="u" direction="in"/><arg type="s" direction="in"/><arg type="t" direction="in"/><arg type="s" direction="out"/></method>
  <method name="Cancel"><arg type="b" direction="out"/></method>
 </interface></node>`;
 
@@ -128,10 +130,20 @@ export default class Candidate extends Extension {
     }
     BeginBoundedAsync([name, token, version, deadlineUs], invocation) {
         invocation.return_value(new GLib.Variant('(b)',
-            [this._gate.beginBounded(invocation.get_sender(), [name, token], version, deadlineUs)]));
+            [version === 1 && this._gate.beginBounded(invocation.get_sender(), [name, token], version, deadlineUs)]));
     }
     async CommitBoundedAsync([sequence, text, deadlineUs], invocation) {
-        const result = await this._gate.commitBounded(invocation.get_sender(), sequence, text, deadlineUs);
+        const result = this._gate.delivery.session?.version === 1 ?
+            await this._gate.commitBounded(invocation.get_sender(), sequence, text, deadlineUs) : 'rejected';
+        invocation.return_value(new GLib.Variant('(s)', [result]));
+    }
+    BeginLongBoundedAsync([name, token, version, deadlineUs], invocation) {
+        invocation.return_value(new GLib.Variant('(b)',
+            [version === 2 && this._gate.beginBounded(invocation.get_sender(), [name, token], version, deadlineUs)]));
+    }
+    async CommitLongBoundedAsync([sequence, text, deadlineUs], invocation) {
+        const result = this._gate.delivery.session?.version === 2 ?
+            await this._gate.commitBounded(invocation.get_sender(), sequence, text, deadlineUs) : 'rejected';
         invocation.return_value(new GLib.Variant('(s)', [result]));
     }
     CancelAsync(_args, invocation) {

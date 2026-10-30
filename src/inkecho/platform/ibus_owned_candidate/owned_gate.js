@@ -1,4 +1,5 @@
 import {verdict} from './identity.js';
+const BOUNDED = Symbol('bounded');
 
 // One pending query per session. Never retries or credits target receipt.
 export class OwnedGate {
@@ -36,8 +37,27 @@ export class OwnedGate {
             return 'rejected';
         if (!Number.isSafeInteger(deadlineUs) || deadlineUs <= 0 ||
             deadlineUs > s.deadlineUs) { s.failed = true; return 'unknown'; }
-        s.deadlineUs = deadlineUs; // May tighten, never extend across fragments.
-        return this.commit(sender, sequence, text, true);
+        let requestToken;
+        if (s.version === 2) {
+            let now;
+            try { now = this.delivery.clockUs(); } catch (_) { s.failed = true; return 'unknown'; }
+            if (!Number.isSafeInteger(now) || deadlineUs <= now || deadlineUs - now > 3_000_000) {
+                s.failed = true; return 'unknown';
+            }
+            requestToken = Symbol('request');
+            s.requestToken = requestToken;
+            s.requestDeadlineUs = deadlineUs;
+        } else {
+            s.deadlineUs = deadlineUs; // Legacy contract never extends.
+        }
+        try {
+            return await this.commit(sender, sequence, text, true, BOUNDED);
+        } finally {
+            if (s.version === 2 && s.requestToken === requestToken) {
+                delete s.requestDeadlineUs;
+                delete s.requestToken;
+            }
+        }
     }
     reject() {
         const s = this.delivery.session;
@@ -45,10 +65,11 @@ export class OwnedGate {
         s.failed = true;
         return s.attempts === 0 ? 'no_service' : 'unknown';
     }
-    async commit(sender, sequence, text, batch = false) {
+    async commit(sender, sequence, text, batch = false, authorization = null) {
         const s = this.delivery.session;
         if (this.closed || this.pending || !s || s.sender !== sender ||
-            s.failed || sequence !== s.next) return 'rejected';
+            s.failed || sequence !== s.next ||
+            (s.version === 2 && authorization !== BOUNDED)) return 'rejected';
         if (!this.delivery.unexpired()) { s.failed = true; return 'unknown'; }
         const generation = this.generation;
         this.pending = true;
