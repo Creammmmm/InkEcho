@@ -1,0 +1,165 @@
+{
+  "candidate": {
+    "commit": "b240ec0d23530bb024f4895830b8f2346058921f",
+    "version": "0.15.56",
+    "sha256": "a3817a8fcb9ef15c8b93db9f5358d818e676b6dee94ffb1c1b5f46d6398760b8"
+  },
+  "receipts": {
+    "ubuntu24-first-suite": {
+      "sha256": "538f33e16a6622248f5d2aa9b8a50444ff2050c1e9cfab6dad19d38ee290618d",
+      "returncode": 0
+    },
+    "ubuntu24-first-prepare": {
+      "sha256": "d001c7102839a4f633a985cba1ddcfb44765cb4ec65b473cc7557b42c46bbea1",
+      "returncode": 0
+    },
+    "ubuntu24-first-cleanup": {
+      "sha256": "1f16ce3d45539dd675e737521a82d29249bfde856504cf402dbef9dcebb471e1",
+      "returncode": 0
+    },
+    "ubuntu24-ibus-suite": {
+      "sha256": "6df523f1348e768bf6bea1a0ac9a39a858acae69a5e95878928b3d14cac28b31",
+      "returncode": 0
+    },
+    "ubuntu24-ibus-cleanup": {
+      "sha256": "43d5d2a3d4ff6c8b670c2b6a36a5800ae33eefe8a69f81b357203ba6b6c6ad2b",
+      "returncode": 0
+    },
+    "ubuntu24-ibus-container": {
+      "sha256": "49c4af3c2b8255665f5b46b1d7b1635b4dade9d911ac009a28d44db3369d5b8f",
+      "ExitCode": 0,
+      "OOMKilled": false,
+      "Running": false
+    },
+    "ubuntu26-suite": {
+      "sha256": "9e7bc6f6c35a41f105a309080d83dbf5072fd3e34d9936fcf83516d9e331c1b1",
+      "returncode": 0
+    },
+    "ubuntu26-prepare": {
+      "sha256": "ddaef1340d1ad9fcc633ed735a00916b41cd470aefb42890538db3594ef23ca2",
+      "returncode": 0
+    },
+    "ubuntu26-ibus-suite": {
+      "sha256": "65638be60502eb0e54f9f4ebb35ec2c0b1dd58bb9899644aae134eb28db22f95",
+      "returncode": 0
+    },
+    "ubuntu26-cleanup": {
+      "sha256": "d4f4bba9094e8c38e913a05098c81af1804e35c18737816e083d42b816fe8d7f",
+      "returncode": 0
+    },
+    "ubuntu26-container": {
+      "sha256": "0a5bfa7fc52875276a52112e55e80bb625e76016895c7043b482221aa7884d01",
+      "ExitCode": 0,
+      "OOMKilled": false,
+      "Running": false
+    },
+    "ubuntu24-qwen": {
+      "sha256": "446f2bcd2c09448bf5d8ad10c99c2d7de5b469ae73ed483690451b681b3f92a1",
+      "status": "passed",
+      "synthetic_only": true,
+      "real_cloud": false,
+      "real_microphone": false,
+      "real_keyboard": false,
+      "connections": 2,
+      "manual_commits": 0,
+      "cases": [
+        {
+          "cancel": false,
+          "preview_before_stop": true,
+          "zero_input_before_consent_and_finish": true,
+          "final_exact_once": true,
+          "cancel_zero_output": false,
+          "resources_cleared": true
+        },
+        {
+          "cancel": true,
+          "preview_before_stop": true,
+          "zero_input_before_consent_and_finish": true,
+          "final_exact_once": false,
+          "cancel_zero_output": true,
+          "resources_cleared": true
+        }
+      ],
+      "version": "0.15.56",
+      "scope": "package"
+    },
+    "ubuntu26-qwen": {
+      "sha256": "81dcba0223e2efc7ff0a29b2486a7204998a1a394ccb8a0e68cac08e68662bac",
+      "status": "passed",
+      "synthetic_only": true,
+      "real_cloud": false,
+      "real_microphone": false,
+      "real_keyboard": false,
+      "connections": 2,
+      "manual_commits": 0,
+      "cases": [
+        {
+          "cancel": false,
+          "preview_before_stop": true,
+          "zero_input_before_consent_and_finish": true,
+          "final_exact_once": true,
+          "cancel_zero_output": false,
+          "resources_cleared": true
+        },
+        {
+          "cancel": true,
+          "preview_before_stop": true,
+          "zero_input_before_consent_and_finish": true,
+          "final_exact_once": false,
+          "cancel_zero_output": true,
+          "resources_cleared": true
+        }
+      ],
+      "version": "0.15.56",
+      "scope": "package"
+    },
+    "ubuntu24-ibus-archive": {
+      "sha256": "08eafddc64bc477eb6528e0e0286d833186f07d8191aacd965fba8e807fe5fb1",
+      "full_stream_verified": true,
+      "qemu_exit": 0
+    },
+    "ubuntu24-first-archive": {
+      "sha256": "d4af383118fe3a68b7c5234eb8bf5c065c28cfafa9a571346cf4626b5bf774e0",
+      "full_stream_verified": true,
+      "qemu_exit": 0
+    },
+    "ubuntu26-archive": {
+      "sha256": "70719900c149a75ae6d439ac2e45ed2cb59963ec32b5ebf20d7697f10b3e67ee",
+      "full_stream_verified": true,
+      "qemu_exit": 0
+    },
+    "ubuntu24-package-audit": {
+      "sha256": "7498abc51e4d0ab5bf73151ed78ac48525a4d45b87c3e712b29cef2fd14a5d1f",
+      "artifact_sha256": "a3817a8fcb9ef15c8b93db9f5358d818e676b6dee94ffb1c1b5f46d6398760b8",
+      "artifact_bytes": 104430072,
+      "version": "0.15.56",
+      "inventory": {
+        "inventory_application": "0.15.56",
+        "inventory_files_verified": 3707,
+        "inventory_links_verified": 1048,
+        "application_files_match_source": 94,
+        "websockets_license_copies_verified": 2
+      }
+    },
+    "ubuntu26-package-audit": {
+      "sha256": "930e65133f3e1549b345785ab827dcdd4678da13f479f6a02bf5fec36967d32a",
+      "artifact_sha256": "a3817a8fcb9ef15c8b93db9f5358d818e676b6dee94ffb1c1b5f46d6398760b8",
+      "artifact_bytes": 104430072,
+      "version": "0.15.56",
+      "inventory": {
+        "inventory_application": "0.15.56",
+        "inventory_files_verified": 3707,
+        "inventory_links_verified": 1048,
+        "application_files_match_source": 94,
+        "websockets_license_copies_verified": 2
+      }
+    }
+  },
+  "limitations": [
+    "The first Ubuntu 24 container state file was overwritten by the later guest run; its clean exit was observed in the controller output but no independent final-state file was preserved.",
+    "Qwen and GUI results use synthetic services, audio and private targets.",
+    "The input fixtures were terminated during cleanup; their exit was not natural.",
+    "Inherited input/new-artifact-identity.json concerns an older 0.15.0 artifact and is not evidence for this candidate; package-audit.json records the actual candidate identity.",
+    "The sha256 field on *-archive receipts hashes the archive verification JSON, not the snapshot archive itself."
+  ]
+}
