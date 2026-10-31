@@ -1444,3 +1444,74 @@ def test_fcitx_keyboard_handoff_unlink_failure_releases_lock_and_stops(
             fcntl.flock(lock, fcntl.LOCK_UN)
 
     asyncio.run(run())
+
+
+def test_cleanup_failure_after_fcitx_send_is_classified_as_input_failure():
+    async def run():
+        class CleanupFailure(Bridge):
+            _accepted = 0
+
+            async def insert(self, text, can_continue, **kwargs):
+                self._accepted += len(text)
+                return len(text)
+
+            async def aclose(self):
+                raise FcitxOutputError("cleanup_failed")
+
+        bridge = CleanupFailure()
+        router = OutputRouter(Keyboard(), bridge_factory=lambda: bridge)
+        reports = []
+        router.set_diagnostic_handler(reports.append)
+        await router.prepare_task("fcitx")
+        with pytest.raises(OutputRouterError, match="input_cleanup_failed") as caught:
+            async with router.output_session():
+                await router.insert("甲乙", lambda: True)
+        assert caught.value.acknowledged_attempts == 2
+        assert reports == ["input_cleanup_failed"]
+
+    asyncio.run(run())
+
+
+def test_cleanup_failure_during_cancel_preserves_cancel_and_reports_failure():
+    async def run():
+        class CleanupFailure(Bridge):
+            async def aclose(self):
+                raise FcitxOutputError("cleanup_failed")
+
+        router = OutputRouter(Keyboard(), bridge_factory=CleanupFailure)
+        reports = []
+        router.set_diagnostic_handler(reports.append)
+        await router.prepare_task("fcitx")
+        with pytest.raises(asyncio.CancelledError):
+            async with router.output_session():
+                raise asyncio.CancelledError
+        assert reports == ["input_cleanup_failed"]
+
+    asyncio.run(run())
+
+
+def test_real_fcitx_capability_cleanup_failure_blocks_zero_send_fallback():
+    from inkecho.platform.fcitx5 import Fcitx5Bridge
+
+    async def run():
+        class BrokenCapability:
+            def close(self):
+                raise OSError("sensitive path must not escape")
+
+        class RealCleanupBridge(Fcitx5Bridge):
+            async def connect(self, **_kwargs):
+                self._capability = BrokenCapability()
+
+        router = OutputRouter(Keyboard(), bridge_factory=RealCleanupBridge)
+        reports = []
+        router.set_diagnostic_handler(reports.append)
+        await router.prepare_task("fcitx")
+        with pytest.raises(KeyboardError, match="input_cleanup_failed") as caught:
+            async with router.output_session():
+                raise RuntimeError("polishing failed before output")
+        assert caught.value.acknowledged_attempts == 0
+        assert "sensitive" not in str(caught.value)
+        assert reports == ["input_cleanup_failed"]
+        assert router.selected is None
+
+    asyncio.run(run())

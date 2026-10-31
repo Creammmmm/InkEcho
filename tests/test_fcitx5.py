@@ -1483,3 +1483,80 @@ def test_auto_cancel_during_commit_never_replays_and_next_task_is_clean(cancel_m
         assert second.disconnected and keyboard.sent == []
 
     asyncio.run(run())
+
+
+@pytest.mark.parametrize(
+    ("scenario", "expected", "attempts"),
+    [
+        ("cancelled", "fcitx_cancelled", 0),
+        ("expired", "fcitx_expired", 0),
+        ("partial", "partial_input_failed", 1),
+    ],
+)
+def test_real_bridge_cleanup_failure_preserves_delivery_failure(
+    scenario, expected, attempts
+):
+    import time
+
+    from inkecho.platform.output_router import OutputRouter, OutputRouterError
+
+    class BrokenCapability(FakeCapability):
+        def close(self):
+            raise OSError("private path")
+
+    async def run():
+        bus = FakeBus([reply([1])])
+        bridge = Fcitx5Bridge(
+            bus_factory=lambda: bus, capability_factory=BrokenCapability
+        )
+        await bridge.connect()
+        router = OutputRouter(None)
+        router._selected, router._kind = bridge, "fcitx"
+        reports = []
+        router.set_diagnostic_handler(reports.append)
+        with pytest.raises(OutputRouterError) as caught:
+            async with router.output_session():
+                await router.insert(
+                    "甲乙",
+                    lambda: scenario != "cancelled",
+                    deadline=time.monotonic() - 1 if scenario == "expired" else None,
+                    on_first_sent=(
+                        lambda _: (
+                            bus.change_owner(":1.99") if scenario == "partial" else None
+                        )
+                    ),
+                )
+        assert caught.value.code == expected
+        assert caught.value.acknowledged_attempts == attempts
+        assert reports == ["input_cleanup_failed"]
+        assert bus.disconnected
+        assert len([call for call in bus.calls if call.member == "Commit"]) == attempts
+
+    asyncio.run(run())
+
+
+@pytest.mark.parametrize("signal", [KeyboardInterrupt, SystemExit])
+def test_real_bridge_cleanup_failure_does_not_mask_base_exception(signal):
+    from inkecho.platform.output_router import OutputRouter
+
+    class BrokenCapability(FakeCapability):
+        def close(self):
+            raise OSError("private path")
+
+    async def run():
+        bus = FakeBus()
+        bridge = Fcitx5Bridge(
+            bus_factory=lambda: bus, capability_factory=BrokenCapability
+        )
+        await bridge.connect()
+        router = OutputRouter(None)
+        router._selected, router._kind = bridge, "fcitx"
+        reports = []
+        router.set_diagnostic_handler(reports.append)
+        with pytest.raises(signal):
+            async with router.output_session():
+                raise signal()
+        assert reports == ["input_cleanup_failed"]
+        assert bus.disconnected
+
+    asyncio.run(run())

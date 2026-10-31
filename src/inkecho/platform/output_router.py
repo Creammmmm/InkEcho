@@ -7,6 +7,7 @@ still require independent real-desktop and package acceptance.
 import asyncio
 import logging
 import os
+import sys
 import time
 from collections.abc import AsyncIterator, Callable, Mapping
 from contextlib import AsyncExitStack, asynccontextmanager
@@ -351,9 +352,32 @@ class OutputRouter:
             self._failed = True
             raise
         finally:
+            body_error = sys.exception()
+            kind = self._kind
+            attempts = self.acknowledged_attempts
             self._scope_stack = None
             self._owner = None
-            await self.discard_task()
+            try:
+                await self.discard_task()
+            except Exception:
+                if kind != "fcitx":
+                    raise
+                self._report_cleanup_failure()
+                if body_error is not None and not isinstance(body_error, Exception):
+                    raise body_error from None
+                if isinstance(body_error, OutputRouterError):
+                    raise OutputRouterError(
+                        body_error.code,
+                        acknowledged_attempts=max(
+                            attempts, body_error.acknowledged_attempts
+                        ),
+                        dispatch_complete=body_error.dispatch_complete,
+                    ) from None
+                if isinstance(body_error, KeyboardError):
+                    raise body_error from None
+                raise OutputRouterError(
+                    "input_cleanup_failed", acknowledged_attempts=attempts
+                ) from None
 
     @property
     def neighbor_batches_enabled(self):
