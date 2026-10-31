@@ -1,0 +1,45 @@
+{
+  "observation": "docker inspect after shutdown; guest QEMU exit recorded separately",
+  "state": {
+    "Status": "exited",
+    "Running": false,
+    "ExitCode": 0,
+    "OOMKilled": false,
+    "StartedAt": "2026-10-31T06:52:14.304750186Z",
+    "FinishedAt": "2026-10-31T06:58:32.114611481Z"
+  },
+  "network_mode": "none",
+  "readonly_rootfs": true,
+  "tmpfs": "rw,nosuid,nodev,size=2g,uid=1000,gid=1000",
+  "selected_mounts": {
+    "/seed": {
+      "type": "bind",
+      "rw": false
+    },
+    "/input": {
+      "type": "bind",
+      "rw": false
+    },
+    "/output": {
+      "type": "bind",
+      "rw": true
+    },
+    "/base": {
+      "type": "bind",
+      "rw": false
+    },
+    "/snapshot": {
+      "type": "bind",
+      "rw": false
+    },
+    "/backing": {
+      "type": "bind",
+      "rw": false
+    }
+  },
+  "qemu_exit": {
+    "returncode": 0
+  },
+  "qemu_network": "user,id=n1,restrict=on,hostfwd=tcp:127.0.0.1:2222-:22",
+  "qemu_disk": "file=/state/guest.qcow2,if=virtio,format=qcow2"
+}
