@@ -1560,3 +1560,77 @@ def test_real_bridge_cleanup_failure_does_not_mask_base_exception(signal):
         assert bus.disconnected
 
     asyncio.run(run())
+
+
+@pytest.mark.parametrize(
+    "stop", ["cancel", "expired", "active", "router_error", "runtime_error"]
+)
+def test_real_bridge_cleanup_failure_observes_stop_during_close(stop):
+    import time
+
+    from inkecho.platform.output_router import OutputRouter, OutputRouterError
+
+    class BrokenCapability(FakeCapability):
+        def close(self):
+            raise OSError("private path")
+
+    async def run():
+        closing = asyncio.Event()
+        release = asyncio.Event()
+
+        class ClosingBus(FakeBus):
+            async def call(self, message):
+                if message.member == "Cancel":
+                    closing.set()
+                    await release.wait()
+                return await super().call(message)
+
+        bus = ClosingBus([reply([1])])
+        bridge = Fcitx5Bridge(
+            bus_factory=lambda: bus, capability_factory=BrokenCapability
+        )
+        await bridge.connect()
+        router = OutputRouter(None)
+        router._selected, router._kind = bridge, "fcitx"
+        reports = []
+        router.set_diagnostic_handler(reports.append)
+        active = [True]
+        deadline = time.monotonic() + 0.15 if stop == "expired" else None
+
+        def status():
+            if not active[0] and stop == "router_error":
+                raise OutputRouterError("untrusted_callback_code")
+            if not active[0] and stop == "runtime_error":
+                raise RuntimeError("private detail")
+            return active[0]
+
+        async def output():
+            async with router.output_session():
+                count = await router.insert("甲", status, deadline=deadline)
+                assert count == 1
+
+        task = asyncio.create_task(output())
+        await asyncio.wait_for(closing.wait(), 1)
+        if stop in {"cancel", "router_error", "runtime_error"}:
+            active[0] = False
+        elif stop == "expired":
+            await asyncio.sleep(max(0, deadline - time.monotonic()) + 0.01)
+        release.set()
+        with pytest.raises(OutputRouterError) as caught:
+            await task
+        assert (
+            caught.value.code
+            == {
+                "cancel": "input_cancelled",
+                "expired": "expired",
+                "active": "input_cleanup_failed",
+                "router_error": "input_cleanup_failed",
+                "runtime_error": "input_cleanup_failed",
+            }[stop]
+        )
+        assert caught.value.acknowledged_attempts == 1
+        assert [m.body[2] for m in bus.calls if m.member == "Commit"] == ["甲"]
+        assert reports == ["input_cleanup_failed"]
+        assert bus.disconnected and router.selected is None
+
+    asyncio.run(run())

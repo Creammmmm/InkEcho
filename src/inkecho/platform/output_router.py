@@ -94,6 +94,7 @@ class OutputRouter:
         self._ibus_attempted = False
         self._ibus_acknowledged_attempts = 0
         self._diagnostic_handler = None
+        self._scope_task_status = None
 
     def set_diagnostic_handler(self, handler):
         self._diagnostic_handler = handler
@@ -333,6 +334,7 @@ class OutputRouter:
         if self._selected is None:
             raise OutputRouterError("output_not_prepared")
         self._owner = owner
+        self._scope_task_status = None
         try:
             async with AsyncExitStack() as stack:
                 self._scope_stack = stack
@@ -355,6 +357,7 @@ class OutputRouter:
             body_error = sys.exception()
             kind = self._kind
             attempts = self.acknowledged_attempts
+            task_status, self._scope_task_status = self._scope_task_status, None
             self._scope_stack = None
             self._owner = None
             try:
@@ -363,6 +366,22 @@ class OutputRouter:
                 if kind != "fcitx":
                     raise
                 self._report_cleanup_failure()
+                if body_error is None and task_status is not None:
+                    can_continue, deadline = task_status
+                    try:
+                        stopped_by_caller = not can_continue()
+                    except Exception:
+                        # A broken status reader is not a cancellation signal.
+                        stopped_by_caller = False
+                    stopped = None
+                    if stopped_by_caller:
+                        stopped = "input_cancelled"
+                    elif deadline is not None and time.monotonic() >= deadline:
+                        stopped = "expired"
+                    if stopped is not None:
+                        raise OutputRouterError(
+                            stopped, acknowledged_attempts=attempts
+                        ) from None
                 if body_error is not None and not isinstance(body_error, Exception):
                     raise body_error from None
                 if isinstance(body_error, OutputRouterError):
@@ -576,6 +595,7 @@ class OutputRouter:
                 )
         if self._failed:
             raise OutputRouterError("output_failed")
+        self._scope_task_status = (can_continue, deadline)
         self._busy = True
         try:
             if self._auto_pending:
