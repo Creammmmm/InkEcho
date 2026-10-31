@@ -1,0 +1,88 @@
+{
+  "complete": true,
+  "cases": [
+    {
+      "case": "window-switch",
+      "second_before": {
+        "pid": 5330,
+        "display_type": "X11Display",
+        "active": true,
+        "focus": true,
+        "text": "",
+        "preedit": ""
+      },
+      "focus_before": {
+        "document": true,
+        "active": "a"
+      },
+      "active_window_after_switch": "InkEcho owned batch preedit acceptance",
+      "switch_at": 254.44740083,
+      "session": {
+        "route": null,
+        "outcome": "unconfirmed",
+        "metrics_characters": null,
+        "reported_characters": 10,
+        "outcomes": [
+          {
+            "characters": 10,
+            "finished_at": 254.458063838
+          }
+        ],
+        "deltas": [],
+        "dispatches": [
+          {
+            "length": 10,
+            "has_lf": false,
+            "at": 254.376461668,
+            "route_before": "ibus",
+            "first_sent_at": 254.447406163,
+            "error_code": "ibus_delivery_unknown",
+            "error_type": "OutputRouterError",
+            "protocol": null,
+            "route_after": null,
+            "backend_type": "NoneType",
+            "native_attempts": null
+          },
+          {
+            "length": 10,
+            "has_lf": false,
+            "at": 254.376487217,
+            "route_before": "ibus",
+            "first_sent_at": 254.447406163,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          }
+        ],
+        "input_failure": "ibus_delivery_unknown",
+        "error_code": null
+      },
+      "observed": {
+        "a": "甲",
+        "b": "",
+        "active": "a",
+        "focus": false,
+        "log": [
+          {
+            "id": "a",
+            "a": "甲",
+            "b": "",
+            "t": 667.5
+          }
+        ]
+      },
+      "second_after": {
+        "pid": 5330,
+        "display_type": "X11Display",
+        "active": true,
+        "focus": true,
+        "text": "",
+        "preedit": ""
+      },
+      "second_exit": -15
+    }
+  ],
+  "browser_version": "Google Chrome 154.0.8037.97",
+  "browser_exit": 0
+}

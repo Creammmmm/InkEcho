@@ -1,0 +1,423 @@
+{
+  "complete": true,
+  "cases": [
+    {
+      "case": "normal",
+      "focus_before": {
+        "document": true,
+        "active": "a"
+      },
+      "session": {
+        "route": null,
+        "outcome": "unconfirmed",
+        "metrics_characters": null,
+        "reported_characters": 10,
+        "outcomes": [
+          {
+            "characters": 10,
+            "finished_at": 202.38554159
+          }
+        ],
+        "deltas": [],
+        "dispatches": [
+          {
+            "length": 10,
+            "has_lf": false,
+            "at": 202.376921967,
+            "route_before": "ibus",
+            "first_sent_at": 202.377839901,
+            "error_code": "ibus_delivery_unknown",
+            "error_type": "OutputRouterError",
+            "protocol": null,
+            "route_after": null,
+            "backend_type": "NoneType",
+            "native_attempts": null
+          },
+          {
+            "length": 10,
+            "has_lf": false,
+            "at": 202.376948754,
+            "route_before": "ibus",
+            "first_sent_at": 202.377839901,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          }
+        ],
+        "input_failure": "ibus_delivery_unknown",
+        "error_code": null
+      },
+      "observed": {
+        "a": "甲乙丙丁abc123",
+        "b": "",
+        "active": "a",
+        "focus": true,
+        "log": [
+          {
+            "id": "a",
+            "a": "甲",
+            "b": "",
+            "t": 531.1000000000058
+          },
+          {
+            "id": "a",
+            "a": "甲乙",
+            "b": "",
+            "t": 531.7999999999884
+          },
+          {
+            "id": "a",
+            "a": "甲乙丙",
+            "b": "",
+            "t": 532
+          },
+          {
+            "id": "a",
+            "a": "甲乙丙丁",
+            "b": "",
+            "t": 532
+          },
+          {
+            "id": "a",
+            "a": "甲乙丙丁a",
+            "b": "",
+            "t": 532.1999999999825
+          },
+          {
+            "id": "a",
+            "a": "甲乙丙丁ab",
+            "b": "",
+            "t": 532.6000000000058
+          },
+          {
+            "id": "a",
+            "a": "甲乙丙丁abc",
+            "b": "",
+            "t": 532.6000000000058
+          },
+          {
+            "id": "a",
+            "a": "甲乙丙丁abc1",
+            "b": "",
+            "t": 532.7999999999884
+          },
+          {
+            "id": "a",
+            "a": "甲乙丙丁abc12",
+            "b": "",
+            "t": 532.7999999999884
+          },
+          {
+            "id": "a",
+            "a": "甲乙丙丁abc123",
+            "b": "",
+            "t": 532.8999999999942
+          }
+        ]
+      }
+    },
+    {
+      "case": "caret-switch",
+      "focus_before": {
+        "document": true,
+        "active": "a"
+      },
+      "session": {
+        "route": null,
+        "outcome": "unconfirmed",
+        "metrics_characters": null,
+        "reported_characters": 10,
+        "outcomes": [
+          {
+            "characters": 10,
+            "finished_at": 204.050576551
+          }
+        ],
+        "deltas": [],
+        "dispatches": [
+          {
+            "length": 10,
+            "has_lf": false,
+            "at": 204.035492361,
+            "route_before": "ibus",
+            "first_sent_at": 204.03691775,
+            "error_code": "ibus_delivery_unknown",
+            "error_type": "OutputRouterError",
+            "protocol": null,
+            "route_after": null,
+            "backend_type": "NoneType",
+            "native_attempts": null
+          },
+          {
+            "length": 10,
+            "has_lf": false,
+            "at": 204.035514975,
+            "route_before": "ibus",
+            "first_sent_at": 204.03691775,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          }
+        ],
+        "input_failure": "ibus_delivery_unknown",
+        "error_code": null
+      },
+      "observed": {
+        "a": "甲",
+        "b": "乙丁abc123",
+        "active": "b",
+        "focus": true,
+        "log": [
+          {
+            "id": "a",
+            "a": "甲",
+            "b": "",
+            "t": 2178.399999999994
+          },
+          {
+            "id": "b",
+            "a": "甲",
+            "b": "乙",
+            "t": 2185.399999999994
+          },
+          {
+            "id": "b",
+            "a": "甲",
+            "b": "乙丁",
+            "t": 2193
+          },
+          {
+            "id": "b",
+            "a": "甲",
+            "b": "乙丁a",
+            "t": 2193.100000000006
+          },
+          {
+            "id": "b",
+            "a": "甲",
+            "b": "乙丁ab",
+            "t": 2193.1999999999825
+          },
+          {
+            "id": "b",
+            "a": "甲",
+            "b": "乙丁abc",
+            "t": 2193.2999999999884
+          },
+          {
+            "id": "b",
+            "a": "甲",
+            "b": "乙丁abc1",
+            "t": 2193.399999999994
+          },
+          {
+            "id": "b",
+            "a": "甲",
+            "b": "乙丁abc12",
+            "t": 2194.100000000006
+          },
+          {
+            "id": "b",
+            "a": "甲",
+            "b": "乙丁abc123",
+            "t": 2194.1999999999825
+          }
+        ]
+      }
+    },
+    {
+      "case": "window-switch",
+      "second_before": {
+        "pid": 4407,
+        "display_type": "X11Display",
+        "active": true,
+        "focus": true,
+        "text": "",
+        "preedit": ""
+      },
+      "focus_before": {
+        "document": true,
+        "active": "a"
+      },
+      "session": {
+        "route": null,
+        "outcome": "unconfirmed",
+        "metrics_characters": null,
+        "reported_characters": 10,
+        "outcomes": [
+          {
+            "characters": 10,
+            "finished_at": 205.849219932
+          }
+        ],
+        "deltas": [],
+        "dispatches": [
+          {
+            "length": 10,
+            "has_lf": false,
+            "at": 205.828573815,
+            "route_before": "ibus",
+            "first_sent_at": 205.831233953,
+            "error_code": "ibus_delivery_unknown",
+            "error_type": "OutputRouterError",
+            "protocol": null,
+            "route_after": null,
+            "backend_type": "NoneType",
+            "native_attempts": null
+          },
+          {
+            "length": 10,
+            "has_lf": false,
+            "at": 205.828651566,
+            "route_before": "ibus",
+            "first_sent_at": 205.831233953,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          }
+        ],
+        "input_failure": "ibus_delivery_unknown",
+        "error_code": null
+      },
+      "observed": {
+        "a": "甲乙丙丁abc123",
+        "b": "",
+        "active": "a",
+        "focus": true,
+        "log": [
+          {
+            "id": "a",
+            "a": "甲",
+            "b": "",
+            "t": 3974.600000000006
+          },
+          {
+            "id": "a",
+            "a": "甲乙",
+            "b": "",
+            "t": 3979
+          },
+          {
+            "id": "a",
+            "a": "甲乙丙",
+            "b": "",
+            "t": 3980.7999999999884
+          },
+          {
+            "id": "a",
+            "a": "甲乙丙丁",
+            "b": "",
+            "t": 3984.2999999999884
+          },
+          {
+            "id": "a",
+            "a": "甲乙丙丁a",
+            "b": "",
+            "t": 3985.7999999999884
+          },
+          {
+            "id": "a",
+            "a": "甲乙丙丁ab",
+            "b": "",
+            "t": 3986.6999999999825
+          },
+          {
+            "id": "a",
+            "a": "甲乙丙丁abc",
+            "b": "",
+            "t": 3987.6999999999825
+          },
+          {
+            "id": "a",
+            "a": "甲乙丙丁abc1",
+            "b": "",
+            "t": 3988.399999999994
+          },
+          {
+            "id": "a",
+            "a": "甲乙丙丁abc12",
+            "b": "",
+            "t": 3989.1999999999825
+          },
+          {
+            "id": "a",
+            "a": "甲乙丙丁abc123",
+            "b": "",
+            "t": 3990
+          }
+        ]
+      },
+      "second_after": {
+        "pid": 4407,
+        "display_type": "X11Display",
+        "active": false,
+        "focus": false,
+        "text": "",
+        "preedit": ""
+      },
+      "second_exit": -15
+    },
+    {
+      "case": "cancel",
+      "focus_before": {
+        "document": true,
+        "active": "a"
+      },
+      "session": {
+        "route": null,
+        "outcome": "cancelled",
+        "metrics_characters": null,
+        "reported_characters": 1,
+        "outcomes": [
+          {
+            "characters": 1,
+            "finished_at": 207.506201403
+          }
+        ],
+        "deltas": [
+          {
+            "index": 0,
+            "monotonic": 207.505319163
+          }
+        ],
+        "dispatches": [
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 207.505367446,
+            "route_before": "ibus",
+            "first_sent_at": 207.50610624,
+            "cancel_at": 207.506111321,
+            "error_code": "ibus_cancelled",
+            "error_type": "OutputRouterError",
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          }
+        ],
+        "input_failure": "ibus_cancelled",
+        "error_code": null
+      },
+      "observed": {
+        "a": "甲",
+        "b": "",
+        "active": "a",
+        "focus": true,
+        "log": [
+          {
+            "id": "a",
+            "a": "甲",
+            "b": "",
+            "t": 5648.1999999999825
+          }
+        ]
+      }
+    }
+  ],
+  "browser_version": "Google Chrome 154.0.8037.97",
+  "browser_exit": 0
+}

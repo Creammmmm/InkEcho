@@ -1,0 +1,379 @@
+{
+  "complete": true,
+  "cases": [
+    {
+      "case": "preedit",
+      "focus_before": {
+        "document": true,
+        "active": "a"
+      },
+      "preedit_before": {
+        "a": "你",
+        "b": "",
+        "active": "a",
+        "focus": true,
+        "comp": [
+          {
+            "type": "compositionstart",
+            "data": "",
+            "t": 468.3999999999942
+          },
+          {
+            "type": "compositionupdate",
+            "data": "年",
+            "t": 468.3999999999942
+          },
+          {
+            "type": "compositionupdate",
+            "data": "你",
+            "t": 472.8999999999942
+          }
+        ]
+      },
+      "session": {
+        "route": null,
+        "outcome": "unconfirmed",
+        "metrics_characters": null,
+        "reported_characters": 10,
+        "outcomes": [
+          {
+            "characters": 10,
+            "finished_at": 223.417081504
+          }
+        ],
+        "deltas": [],
+        "dispatches": [
+          {
+            "length": 10,
+            "has_lf": false,
+            "at": 223.409123096,
+            "route_before": "ibus",
+            "first_sent_at": 223.409675318,
+            "error_code": "ibus_delivery_unknown",
+            "error_type": "OutputRouterError",
+            "protocol": null,
+            "route_after": null,
+            "backend_type": "NoneType",
+            "native_attempts": null
+          },
+          {
+            "length": 10,
+            "has_lf": false,
+            "at": 223.409145497,
+            "route_before": "ibus",
+            "first_sent_at": 223.409675318,
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          }
+        ],
+        "input_failure": "ibus_delivery_unknown",
+        "error_code": null
+      },
+      "observed": {
+        "a": "甲乙丙丁abc123",
+        "b": "",
+        "active": "a",
+        "focus": true,
+        "log": [
+          {
+            "id": "a",
+            "a": "年",
+            "b": "",
+            "t": 472.69999999998254
+          },
+          {
+            "id": "a",
+            "a": "你",
+            "b": "",
+            "t": 473.5999999999767
+          },
+          {
+            "id": "a",
+            "a": "甲",
+            "b": "",
+            "t": 1242.2999999999884
+          },
+          {
+            "id": "a",
+            "a": "甲乙",
+            "b": "",
+            "t": 1243.5999999999767
+          },
+          {
+            "id": "a",
+            "a": "甲乙丙",
+            "b": "",
+            "t": 1244
+          },
+          {
+            "id": "a",
+            "a": "甲乙丙丁",
+            "b": "",
+            "t": 1244.1999999999825
+          },
+          {
+            "id": "a",
+            "a": "甲乙丙丁a",
+            "b": "",
+            "t": 1254.3999999999942
+          },
+          {
+            "id": "a",
+            "a": "甲乙丙丁ab",
+            "b": "",
+            "t": 1255
+          },
+          {
+            "id": "a",
+            "a": "甲乙丙丁abc",
+            "b": "",
+            "t": 1255.1999999999825
+          },
+          {
+            "id": "a",
+            "a": "甲乙丙丁abc1",
+            "b": "",
+            "t": 1255.1999999999825
+          },
+          {
+            "id": "a",
+            "a": "甲乙丙丁abc12",
+            "b": "",
+            "t": 1255.3999999999942
+          },
+          {
+            "id": "a",
+            "a": "甲乙丙丁abc123",
+            "b": "",
+            "t": 1255.3999999999942
+          }
+        ]
+      },
+      "before_space": {
+        "a": "甲乙丙丁abc123",
+        "b": "",
+        "comp": [
+          {
+            "type": "compositionstart",
+            "data": "",
+            "t": 468.3999999999942
+          },
+          {
+            "type": "compositionupdate",
+            "data": "年",
+            "t": 468.3999999999942
+          },
+          {
+            "type": "compositionupdate",
+            "data": "你",
+            "t": 472.8999999999942
+          },
+          {
+            "type": "compositionupdate",
+            "data": "甲",
+            "t": 1241.7999999999884
+          },
+          {
+            "type": "compositionend",
+            "data": "甲",
+            "t": 1242.2999999999884
+          }
+        ]
+      },
+      "after_space": {
+        "a": "甲乙丙丁abc123你",
+        "b": "",
+        "comp": [
+          {
+            "type": "compositionstart",
+            "data": "",
+            "t": 468.3999999999942
+          },
+          {
+            "type": "compositionupdate",
+            "data": "年",
+            "t": 468.3999999999942
+          },
+          {
+            "type": "compositionupdate",
+            "data": "你",
+            "t": 472.8999999999942
+          },
+          {
+            "type": "compositionupdate",
+            "data": "甲",
+            "t": 1241.7999999999884
+          },
+          {
+            "type": "compositionend",
+            "data": "甲",
+            "t": 1242.2999999999884
+          }
+        ]
+      }
+    },
+    {
+      "case": "preedit-cancel",
+      "focus_before": {
+        "document": true,
+        "active": "a"
+      },
+      "preedit_before": {
+        "a": "你",
+        "b": "",
+        "active": "a",
+        "focus": true,
+        "comp": [
+          {
+            "type": "compositionstart",
+            "data": "",
+            "t": 3762
+          },
+          {
+            "type": "compositionupdate",
+            "data": "年",
+            "t": 3762
+          },
+          {
+            "type": "compositionupdate",
+            "data": "你",
+            "t": 3763.7999999999884
+          }
+        ]
+      },
+      "session": {
+        "route": null,
+        "outcome": "cancelled",
+        "metrics_characters": null,
+        "reported_characters": 1,
+        "outcomes": [
+          {
+            "characters": 1,
+            "finished_at": 226.777621274
+          }
+        ],
+        "deltas": [
+          {
+            "index": 0,
+            "monotonic": 226.776201075
+          }
+        ],
+        "dispatches": [
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 226.776277794,
+            "route_before": "ibus",
+            "first_sent_at": 226.777470497,
+            "cancel_at": 226.777476545,
+            "error_code": "ibus_cancelled",
+            "error_type": "OutputRouterError",
+            "protocol": null,
+            "route_after": "ibus",
+            "backend_type": "IBusBridge",
+            "native_attempts": null
+          }
+        ],
+        "input_failure": "ibus_cancelled",
+        "error_code": null
+      },
+      "observed": {
+        "a": "甲",
+        "b": "",
+        "active": "a",
+        "focus": true,
+        "log": [
+          {
+            "id": "a",
+            "a": "年",
+            "b": "",
+            "t": 3762.399999999994
+          },
+          {
+            "id": "a",
+            "a": "你",
+            "b": "",
+            "t": 3764
+          },
+          {
+            "id": "a",
+            "a": "甲",
+            "b": "",
+            "t": 4609.899999999994
+          }
+        ]
+      },
+      "before_space": {
+        "a": "甲",
+        "b": "",
+        "comp": [
+          {
+            "type": "compositionstart",
+            "data": "",
+            "t": 3762
+          },
+          {
+            "type": "compositionupdate",
+            "data": "年",
+            "t": 3762
+          },
+          {
+            "type": "compositionupdate",
+            "data": "你",
+            "t": 3763.7999999999884
+          },
+          {
+            "type": "compositionupdate",
+            "data": "甲",
+            "t": 4609.599999999977
+          },
+          {
+            "type": "compositionend",
+            "data": "甲",
+            "t": 4609.899999999994
+          }
+        ]
+      },
+      "after_space": {
+        "a": "甲你",
+        "b": "",
+        "comp": [
+          {
+            "type": "compositionstart",
+            "data": "",
+            "t": 3762
+          },
+          {
+            "type": "compositionupdate",
+            "data": "年",
+            "t": 3762
+          },
+          {
+            "type": "compositionupdate",
+            "data": "你",
+            "t": 3763.7999999999884
+          },
+          {
+            "type": "compositionupdate",
+            "data": "甲",
+            "t": 4609.599999999977
+          },
+          {
+            "type": "compositionend",
+            "data": "甲",
+            "t": 4609.899999999994
+          }
+        ]
+      }
+    }
+  ],
+  "select_return": 1,
+  "engine": "libpinyin",
+  "browser_version": "Google Chrome 154.0.8037.97",
+  "restore_engine_return": 0,
+  "sources_after": "[('xkb', 'us')]",
+  "engine_after": "xkb:us::eng",
+  "browser_exit": 0
+}
