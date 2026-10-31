@@ -18,8 +18,47 @@ async def probe_owned(*, bus_factory=MessageBus, verifier=None):
     consumed and no Commit/Begin is sent during detection.
     """
     bus = bus_factory()
+    changed = False
+
+    def owner_changed(message):
+        nonlocal changed
+        if (
+            message.message_type == MessageType.SIGNAL
+            and message.sender == "org.freedesktop.DBus"
+            and message.interface == "org.freedesktop.DBus"
+            and message.member == "NameOwnerChanged"
+            and message.signature == "sss"
+            and len(message.body) == 3
+            and message.body[0] == SERVICE
+        ):
+            changed = True
+
     try:
         await asyncio.wait_for(bus.connect(), 1)
+        bus.add_message_handler(owner_changed)
+        match = (
+            "type='signal',sender='org.freedesktop.DBus',"
+            "interface='org.freedesktop.DBus',member='NameOwnerChanged',"
+            "arg0='" + SERVICE + "'"
+        )
+        registered = await asyncio.wait_for(
+            bus.call(
+                Message(
+                    destination="org.freedesktop.DBus",
+                    path="/org/freedesktop/DBus",
+                    interface="org.freedesktop.DBus",
+                    member="AddMatch",
+                    signature="s",
+                    body=[match],
+                )
+            ),
+            1,
+        )
+        if (
+            registered.message_type != MessageType.METHOD_RETURN
+            or registered.sender != "org.freedesktop.DBus"
+        ):
+            raise OutputRouterError("input_capability_unknown")
         client = Client(None)
         client._bus = bus
 
@@ -57,6 +96,7 @@ async def probe_owned(*, bus_factory=MessageBus, verifier=None):
             or reply.signature != "s"
             or reply.body not in (["ready"], ["blocked"], ["none"])
             or await owner() != pinned
+            or changed
         ):
             raise OutputRouterError("input_capability_unknown")
         return None if reply.body == ["none"] else ("ibus", pinned)
