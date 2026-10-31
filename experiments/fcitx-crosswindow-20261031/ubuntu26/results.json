@@ -1,0 +1,967 @@
+[
+  {
+    "case": "distinct_browser_windows",
+    "first_target": "4A9641A11F38A0467E63548C6C2D9AEB",
+    "second_target": "47DB96A8A7954594C5A0667FBB5428E8"
+  },
+  {
+    "case": "mutter_focus",
+    "requested": "InkEcho isolated Second",
+    "actual": "('InkEcho isolated Second - Google Chrome',)\n"
+  },
+  {
+    "case": "mutter_focus",
+    "requested": "InkEcho isolated First",
+    "actual": "('InkEcho isolated First - Google Chrome',)\n"
+  },
+  {
+    "case": "before",
+    "mode": "auto",
+    "scenario": "stream",
+    "windows": [
+      {
+        "focus": true,
+        "active": "a"
+      },
+      {
+        "focus": false,
+        "active": "a"
+      }
+    ],
+    "fcitx_debug": "('Group [wayland:] has 1 InputContext(s)\\n  IC [76f5b9369879471185cd256a9fc8ccce] program:gnome-shell frontend:ibus cap:100012 focus:1\\nGroup [x11::0] has 0 InputContext(s)\\nInput Context without group\\n',)\n"
+  },
+  {
+    "case": "mutter_focus",
+    "requested": "InkEcho isolated Second",
+    "actual": "('InkEcho isolated Second - Google Chrome',)\n"
+  },
+  {
+    "case": "switch",
+    "mode": "auto",
+    "scenario": "stream",
+    "first_before_switch": "甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己",
+    "windows": [
+      {
+        "focus": false,
+        "active": "a"
+      },
+      {
+        "focus": true,
+        "active": "a"
+      }
+    ]
+  },
+  {
+    "case": "session_crosswindow",
+    "mode": "auto",
+    "scenario": "stream",
+    "elapsed": 3.573,
+    "outcome": "succeeded",
+    "route": null,
+    "exact": true,
+    "receivers": [
+      {
+        "value": "甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己",
+        "events": [
+          {
+            "type": "input",
+            "id": "a",
+            "data": "甲"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "乙丙丁戊"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "己庚辛壬"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "癸甲乙丙"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "丁戊己庚"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "辛"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "壬癸甲乙"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "丙丁戊己"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "庚辛壬癸"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "甲乙丙丁"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "戊己庚辛"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "壬癸甲乙"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "丙丁戊己"
+          }
+        ],
+        "focus": false
+      },
+      {
+        "value": "庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸",
+        "events": [
+          {
+            "type": "focus",
+            "id": "a",
+            "data": ""
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "庚辛壬癸"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "甲乙丙丁"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "戊己庚辛"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "壬癸甲乙"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "丙丁戊己"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "庚辛壬癸"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "甲乙丙丁"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "戊己庚辛"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "壬癸甲乙"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "丙丁戊己"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "庚辛壬癸"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "甲乙丙丁"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "戊己庚辛"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "壬癸甲乙"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "丙丁戊己"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "庚辛壬癸"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "甲乙丙丁"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "戊己庚辛"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "壬癸甲乙"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "丙丁戊己"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "庚辛壬癸"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "甲乙丙丁"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "戊己庚辛"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "壬癸甲乙"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "丙丁戊己"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "庚辛壬癸"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "甲乙丙丁"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "戊己庚辛"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "壬癸甲乙"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "丙丁戊己"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "庚辛壬癸"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "甲乙丙丁"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "戊己庚辛"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "壬癸甲乙"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "丙丁戊己"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "庚辛壬癸"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "甲乙丙丁"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "戊己庚辛"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "壬"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "癸"
+          }
+        ],
+        "focus": true
+      }
+    ],
+    "dispatch_batch_lengths": [
+      1,
+      4,
+      4,
+      4,
+      4,
+      1,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      1,
+      1
+    ]
+  },
+  {
+    "case": "mutter_focus",
+    "requested": "InkEcho isolated Second",
+    "actual": "('InkEcho isolated Second - Google Chrome',)\n"
+  },
+  {
+    "case": "mutter_focus",
+    "requested": "InkEcho isolated First",
+    "actual": "('InkEcho isolated First - Google Chrome',)\n"
+  },
+  {
+    "case": "before",
+    "mode": "fcitx",
+    "scenario": "stream",
+    "windows": [
+      {
+        "focus": true,
+        "active": "a"
+      },
+      {
+        "focus": false,
+        "active": "a"
+      }
+    ],
+    "fcitx_debug": "('Group [wayland:] has 1 InputContext(s)\\n  IC [76f5b9369879471185cd256a9fc8ccce] program:gnome-shell frontend:ibus cap:100052 focus:1\\nGroup [x11::0] has 0 InputContext(s)\\nInput Context without group\\n',)\n"
+  },
+  {
+    "case": "mutter_focus",
+    "requested": "InkEcho isolated Second",
+    "actual": "('InkEcho isolated Second - Google Chrome',)\n"
+  },
+  {
+    "case": "switch",
+    "mode": "fcitx",
+    "scenario": "stream",
+    "first_before_switch": "甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己",
+    "windows": [
+      {
+        "focus": false,
+        "active": "a"
+      },
+      {
+        "focus": true,
+        "active": "a"
+      }
+    ]
+  },
+  {
+    "case": "session_crosswindow",
+    "mode": "fcitx",
+    "scenario": "stream",
+    "elapsed": 3.59,
+    "outcome": "succeeded",
+    "route": null,
+    "exact": true,
+    "receivers": [
+      {
+        "value": "甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己",
+        "events": [
+          {
+            "type": "input",
+            "id": "a",
+            "data": "甲"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "乙"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "丙丁戊己"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "庚辛壬癸"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "甲乙丙丁"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "戊己庚辛"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "壬癸甲乙"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "丙丁戊己"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "庚辛壬癸"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "甲乙丙丁"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "戊己庚辛"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "壬癸甲乙"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "丙丁戊己"
+          }
+        ],
+        "focus": false
+      },
+      {
+        "value": "庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸",
+        "events": [
+          {
+            "type": "focus",
+            "id": "a",
+            "data": ""
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "庚辛壬癸"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "甲乙丙丁"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "戊己庚辛"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "壬癸甲乙"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "丙丁戊己"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "庚辛壬癸"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "甲乙丙丁"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "戊己庚辛"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "壬癸甲乙"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "丙丁戊己"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "庚辛壬癸"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "甲乙丙丁"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "戊己庚辛"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "壬癸甲乙"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "丙丁戊己"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "庚辛壬癸"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "甲乙丙丁"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "戊己庚辛"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "壬癸甲乙"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "丙丁戊己"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "庚辛壬癸"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "甲乙丙丁"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "戊己庚辛"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "壬癸甲乙"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "丙丁戊己"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "庚辛壬癸"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "甲乙丙丁"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "戊己庚辛"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "壬癸甲乙"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "丙丁戊己"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "庚辛壬癸"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "甲乙丙丁"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "戊己庚辛"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "壬癸甲乙"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "丙丁戊己"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "庚辛壬癸"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "甲乙丙丁"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "戊己庚辛"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "壬"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "癸"
+          }
+        ],
+        "focus": true
+      }
+    ],
+    "dispatch_batch_lengths": [
+      1,
+      1,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      1,
+      1
+    ]
+  },
+  {
+    "case": "mutter_focus",
+    "requested": "InkEcho isolated Second",
+    "actual": "('InkEcho isolated Second - Google Chrome',)\n"
+  },
+  {
+    "case": "mutter_focus",
+    "requested": "InkEcho isolated First",
+    "actual": "('InkEcho isolated First - Google Chrome',)\n"
+  },
+  {
+    "case": "before",
+    "mode": "auto",
+    "scenario": "cancel",
+    "windows": [
+      {
+        "focus": true,
+        "active": "a"
+      },
+      {
+        "focus": false,
+        "active": "a"
+      }
+    ],
+    "fcitx_debug": "('Group [wayland:] has 1 InputContext(s)\\n  IC [76f5b9369879471185cd256a9fc8ccce] program:gnome-shell frontend:ibus cap:100052 focus:1\\nGroup [x11::0] has 0 InputContext(s)\\nInput Context without group\\n',)\n"
+  },
+  {
+    "case": "mutter_focus",
+    "requested": "InkEcho isolated Second",
+    "actual": "('InkEcho isolated Second - Google Chrome',)\n"
+  },
+  {
+    "case": "switch",
+    "mode": "auto",
+    "scenario": "cancel",
+    "first_before_switch": "甲",
+    "windows": [
+      {
+        "focus": false,
+        "active": "a"
+      },
+      {
+        "focus": true,
+        "active": "a"
+      }
+    ]
+  },
+  {
+    "case": "session_crosswindow",
+    "mode": "auto",
+    "scenario": "cancel",
+    "elapsed": 2.369,
+    "outcome": "cancelled",
+    "route": null,
+    "exact": true,
+    "receivers": [
+      {
+        "value": "甲",
+        "events": [
+          {
+            "type": "input",
+            "id": "a",
+            "data": "甲"
+          }
+        ],
+        "focus": false
+      },
+      {
+        "value": "",
+        "events": [
+          {
+            "type": "focus",
+            "id": "a",
+            "data": ""
+          }
+        ],
+        "focus": true
+      }
+    ],
+    "dispatch_batch_lengths": [
+      1
+    ]
+  },
+  {
+    "case": "mutter_focus",
+    "requested": "InkEcho isolated Second",
+    "actual": "('InkEcho isolated Second - Google Chrome',)\n"
+  },
+  {
+    "case": "mutter_focus",
+    "requested": "InkEcho isolated First",
+    "actual": "('InkEcho isolated First - Google Chrome',)\n"
+  },
+  {
+    "case": "before",
+    "mode": "fcitx",
+    "scenario": "cancel",
+    "windows": [
+      {
+        "focus": true,
+        "active": "a"
+      },
+      {
+        "focus": false,
+        "active": "a"
+      }
+    ],
+    "fcitx_debug": "('Group [wayland:] has 1 InputContext(s)\\n  IC [76f5b9369879471185cd256a9fc8ccce] program:gnome-shell frontend:ibus cap:100052 focus:1\\nGroup [x11::0] has 0 InputContext(s)\\nInput Context without group\\n',)\n"
+  },
+  {
+    "case": "mutter_focus",
+    "requested": "InkEcho isolated Second",
+    "actual": "('InkEcho isolated Second - Google Chrome',)\n"
+  },
+  {
+    "case": "switch",
+    "mode": "fcitx",
+    "scenario": "cancel",
+    "first_before_switch": "甲",
+    "windows": [
+      {
+        "focus": false,
+        "active": "a"
+      },
+      {
+        "focus": true,
+        "active": "a"
+      }
+    ]
+  },
+  {
+    "case": "session_crosswindow",
+    "mode": "fcitx",
+    "scenario": "cancel",
+    "elapsed": 2.378,
+    "outcome": "cancelled",
+    "route": null,
+    "exact": true,
+    "receivers": [
+      {
+        "value": "甲",
+        "events": [
+          {
+            "type": "input",
+            "id": "a",
+            "data": "甲"
+          }
+        ],
+        "focus": false
+      },
+      {
+        "value": "",
+        "events": [
+          {
+            "type": "focus",
+            "id": "a",
+            "data": ""
+          }
+        ],
+        "focus": true
+      }
+    ],
+    "dispatch_batch_lengths": [
+      1
+    ]
+  },
+  {
+    "case": "hints_restored",
+    "value": true
+  }
+]

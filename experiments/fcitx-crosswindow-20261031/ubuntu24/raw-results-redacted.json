@@ -1,0 +1,3825 @@
+[
+  {
+    "case": "login_fcitx",
+    "debug": "('Group [x11::0] has 2 InputContext(s)\\n  IC [REDACTED] program: frontend:ibus cap:52 focus:0\\n  IC [REDACTED] program: frontend:ibus cap:52 focus:0\\nInput Context without group\\n',)\n"
+  },
+  {
+    "case": "browser_start",
+    "pid": 5468,
+    "wayland_display": null,
+    "display_absent": false,
+    "args": [
+      "/opt/inkecho-qa-chrome/chrome",
+      "--no-sandbox",
+      "--password-store=basic",
+      "--no-first-run",
+      "--no-default-browser-check",
+      "--disable-background-networking",
+      "--disable-sync",
+      "--ozone-platform=x11",
+      "--gtk-version=3",
+      "--remote-debugging-port=0",
+      "--remote-allow-origins=*",
+      "--user-data-dir=/home/inkecho/inkecho-session-xorg24/session-crosswindow-r4/profile",
+      "file:///home/inkecho/inkecho-session-xorg24/session-crosswindow-r4/owned.html"
+    ]
+  },
+  {
+    "case": "native_windows",
+    "first": "37748739",
+    "second": "37748744"
+  },
+  {
+    "case": "distinct_browser_windows",
+    "first_target": "5E10382BB035CF5943720711932695AB",
+    "second_target": "0AD45447A3336C0FF5FF88FB2DF45604"
+  },
+  {
+    "case": "before",
+    "mode": "auto",
+    "scenario": "stream",
+    "windows": [
+      {
+        "focus": true,
+        "active": "a"
+      },
+      {
+        "focus": false,
+        "active": "a"
+      }
+    ],
+    "fcitx_debug": "('Group [x11::0] has 4 InputContext(s)\\n  IC [REDACTED] program:chrome frontend:dbus cap:6000000032 focus:0\\n  IC [REDACTED] program:chrome frontend:dbus cap:6000000032 focus:1\\n  IC [REDACTED] program: frontend:ibus cap:52 focus:0\\n  IC [REDACTED] program: frontend:ibus cap:52 focus:0\\nInput Context without group\\n',)\n"
+  },
+  {
+    "case": "switch",
+    "mode": "auto",
+    "scenario": "stream",
+    "first_before_switch": "\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59",
+    "windows": [
+      {
+        "focus": false,
+        "active": "a"
+      },
+      {
+        "focus": true,
+        "active": "a"
+      }
+    ]
+  },
+  {
+    "case": "session_crosswindow",
+    "mode": "auto",
+    "scenario": "stream",
+    "elapsed": 3.667,
+    "result": {
+      "route": null,
+      "outcome": "succeeded",
+      "metrics_characters": null,
+      "reported_characters": 200,
+      "outcomes": [
+        {
+          "characters": 200
+        }
+      ],
+      "deltas": [
+        {
+          "index": 0,
+          "monotonic": 431.375612385
+        },
+        {
+          "index": 1,
+          "monotonic": 431.384639822
+        },
+        {
+          "index": 2,
+          "monotonic": 431.385841423
+        },
+        {
+          "index": 3,
+          "monotonic": 431.387027786
+        },
+        {
+          "index": 4,
+          "monotonic": 431.388150178
+        },
+        {
+          "index": 5,
+          "monotonic": 431.389302577
+        },
+        {
+          "index": 6,
+          "monotonic": 431.390416711
+        },
+        {
+          "index": 7,
+          "monotonic": 431.391655617
+        },
+        {
+          "index": 8,
+          "monotonic": 431.392832946
+        },
+        {
+          "index": 9,
+          "monotonic": 431.394106151
+        },
+        {
+          "index": 10,
+          "monotonic": 431.39522721
+        },
+        {
+          "index": 11,
+          "monotonic": 431.396372829
+        },
+        {
+          "index": 12,
+          "monotonic": 431.397722387
+        },
+        {
+          "index": 13,
+          "monotonic": 431.400260495
+        },
+        {
+          "index": 14,
+          "monotonic": 431.402099072
+        },
+        {
+          "index": 15,
+          "monotonic": 431.403706836
+        },
+        {
+          "index": 16,
+          "monotonic": 431.404964394
+        },
+        {
+          "index": 17,
+          "monotonic": 431.406338079
+        },
+        {
+          "index": 18,
+          "monotonic": 431.408109828
+        },
+        {
+          "index": 19,
+          "monotonic": 431.409226749
+        },
+        {
+          "index": 20,
+          "monotonic": 431.410322143
+        },
+        {
+          "index": 21,
+          "monotonic": 431.41155184
+        },
+        {
+          "index": 22,
+          "monotonic": 431.412781629
+        },
+        {
+          "index": 23,
+          "monotonic": 431.413849867
+        },
+        {
+          "index": 24,
+          "monotonic": 431.415019097
+        },
+        {
+          "index": 25,
+          "monotonic": 431.417210518
+        },
+        {
+          "index": 26,
+          "monotonic": 431.418809032
+        },
+        {
+          "index": 27,
+          "monotonic": 431.420704738
+        },
+        {
+          "index": 28,
+          "monotonic": 431.421812291
+        },
+        {
+          "index": 29,
+          "monotonic": 431.423464667
+        },
+        {
+          "index": 30,
+          "monotonic": 431.424830477
+        },
+        {
+          "index": 31,
+          "monotonic": 431.426227475
+        },
+        {
+          "index": 32,
+          "monotonic": 431.427603358
+        },
+        {
+          "index": 33,
+          "monotonic": 431.428679446
+        },
+        {
+          "index": 34,
+          "monotonic": 431.429752288
+        },
+        {
+          "index": 35,
+          "monotonic": 431.430826537
+        },
+        {
+          "index": 36,
+          "monotonic": 431.431895485
+        },
+        {
+          "index": 37,
+          "monotonic": 431.432972537
+        },
+        {
+          "index": 38,
+          "monotonic": 431.434017863
+        },
+        {
+          "index": 39,
+          "monotonic": 431.435087554
+        },
+        {
+          "index": 40,
+          "monotonic": 431.436157373
+        },
+        {
+          "index": 41,
+          "monotonic": 431.437250783
+        },
+        {
+          "index": 42,
+          "monotonic": 431.438346623
+        },
+        {
+          "index": 43,
+          "monotonic": 431.439451781
+        },
+        {
+          "index": 44,
+          "monotonic": 431.44052603
+        },
+        {
+          "index": 45,
+          "monotonic": 431.44160054
+        },
+        {
+          "index": 46,
+          "monotonic": 431.44267027
+        },
+        {
+          "index": 47,
+          "monotonic": 431.443742247
+        },
+        {
+          "index": 48,
+          "monotonic": 431.444808535
+        },
+        {
+          "index": 49,
+          "monotonic": 431.445877768
+        },
+        {
+          "index": 50,
+          "monotonic": 431.446942587
+        },
+        {
+          "index": 51,
+          "monotonic": 431.448023727
+        },
+        {
+          "index": 52,
+          "monotonic": 431.449097675
+        },
+        {
+          "index": 53,
+          "monotonic": 431.450174035
+        },
+        {
+          "index": 54,
+          "monotonic": 431.451243263
+        },
+        {
+          "index": 55,
+          "monotonic": 431.452318165
+        },
+        {
+          "index": 56,
+          "monotonic": 431.453424695
+        },
+        {
+          "index": 57,
+          "monotonic": 431.454507176
+        },
+        {
+          "index": 58,
+          "monotonic": 431.455584049
+        },
+        {
+          "index": 59,
+          "monotonic": 431.456703181
+        },
+        {
+          "index": 60,
+          "monotonic": 431.457784018
+        },
+        {
+          "index": 61,
+          "monotonic": 431.45888907
+        },
+        {
+          "index": 62,
+          "monotonic": 431.460091982
+        },
+        {
+          "index": 63,
+          "monotonic": 431.769679197
+        },
+        {
+          "index": 64,
+          "monotonic": 431.770973128
+        },
+        {
+          "index": 65,
+          "monotonic": 431.772302389
+        },
+        {
+          "index": 66,
+          "monotonic": 431.773579154
+        },
+        {
+          "index": 67,
+          "monotonic": 431.774727729
+        },
+        {
+          "index": 68,
+          "monotonic": 431.776041081
+        },
+        {
+          "index": 69,
+          "monotonic": 431.777213244
+        },
+        {
+          "index": 70,
+          "monotonic": 431.778375138
+        },
+        {
+          "index": 71,
+          "monotonic": 431.779512097
+        },
+        {
+          "index": 72,
+          "monotonic": 431.780686146
+        },
+        {
+          "index": 73,
+          "monotonic": 431.781812809
+        },
+        {
+          "index": 74,
+          "monotonic": 431.782958813
+        },
+        {
+          "index": 75,
+          "monotonic": 431.784088648
+        },
+        {
+          "index": 76,
+          "monotonic": 431.785244513
+        },
+        {
+          "index": 77,
+          "monotonic": 431.786383542
+        },
+        {
+          "index": 78,
+          "monotonic": 431.78753029
+        },
+        {
+          "index": 79,
+          "monotonic": 431.788658619
+        },
+        {
+          "index": 80,
+          "monotonic": 431.789803477
+        },
+        {
+          "index": 81,
+          "monotonic": 431.790950133
+        },
+        {
+          "index": 82,
+          "monotonic": 431.792098966
+        },
+        {
+          "index": 83,
+          "monotonic": 431.793241305
+        },
+        {
+          "index": 84,
+          "monotonic": 431.794399756
+        },
+        {
+          "index": 85,
+          "monotonic": 431.79553059
+        },
+        {
+          "index": 86,
+          "monotonic": 431.796683743
+        },
+        {
+          "index": 87,
+          "monotonic": 431.797814422
+        },
+        {
+          "index": 88,
+          "monotonic": 431.798992115
+        },
+        {
+          "index": 89,
+          "monotonic": 431.80015635
+        },
+        {
+          "index": 90,
+          "monotonic": 431.801346188
+        },
+        {
+          "index": 91,
+          "monotonic": 431.802477525
+        },
+        {
+          "index": 92,
+          "monotonic": 431.803623652
+        },
+        {
+          "index": 93,
+          "monotonic": 431.80475367
+        },
+        {
+          "index": 94,
+          "monotonic": 431.805905581
+        },
+        {
+          "index": 95,
+          "monotonic": 432.159449396
+        },
+        {
+          "index": 96,
+          "monotonic": 432.160656636
+        },
+        {
+          "index": 97,
+          "monotonic": 432.161840772
+        },
+        {
+          "index": 98,
+          "monotonic": 432.163042997
+        },
+        {
+          "index": 99,
+          "monotonic": 432.164252517
+        },
+        {
+          "index": 100,
+          "monotonic": 432.165502655
+        },
+        {
+          "index": 101,
+          "monotonic": 432.166702928
+        },
+        {
+          "index": 102,
+          "monotonic": 432.167839956
+        },
+        {
+          "index": 103,
+          "monotonic": 432.169083286
+        },
+        {
+          "index": 104,
+          "monotonic": 432.170267915
+        },
+        {
+          "index": 105,
+          "monotonic": 432.171406731
+        },
+        {
+          "index": 106,
+          "monotonic": 432.172630207
+        },
+        {
+          "index": 107,
+          "monotonic": 432.173784852
+        },
+        {
+          "index": 108,
+          "monotonic": 432.174879958
+        },
+        {
+          "index": 109,
+          "monotonic": 432.175983849
+        },
+        {
+          "index": 110,
+          "monotonic": 432.177107623
+        },
+        {
+          "index": 111,
+          "monotonic": 432.178209935
+        },
+        {
+          "index": 112,
+          "monotonic": 432.179322661
+        },
+        {
+          "index": 113,
+          "monotonic": 432.18045223
+        },
+        {
+          "index": 114,
+          "monotonic": 432.181537384
+        },
+        {
+          "index": 115,
+          "monotonic": 432.182628662
+        },
+        {
+          "index": 116,
+          "monotonic": 432.183696992
+        },
+        {
+          "index": 117,
+          "monotonic": 432.184815457
+        },
+        {
+          "index": 118,
+          "monotonic": 432.185881628
+        },
+        {
+          "index": 119,
+          "monotonic": 432.186949596
+        },
+        {
+          "index": 120,
+          "monotonic": 432.188015191
+        },
+        {
+          "index": 121,
+          "monotonic": 432.189082652
+        },
+        {
+          "index": 122,
+          "monotonic": 432.190146702
+        },
+        {
+          "index": 123,
+          "monotonic": 432.191222173
+        },
+        {
+          "index": 124,
+          "monotonic": 432.19234679
+        },
+        {
+          "index": 125,
+          "monotonic": 432.193470474
+        },
+        {
+          "index": 126,
+          "monotonic": 432.194631763
+        },
+        {
+          "index": 127,
+          "monotonic": 432.4973362
+        },
+        {
+          "index": 128,
+          "monotonic": 432.498656678
+        },
+        {
+          "index": 129,
+          "monotonic": 432.499889065
+        },
+        {
+          "index": 130,
+          "monotonic": 432.501218107
+        },
+        {
+          "index": 131,
+          "monotonic": 432.502584015
+        },
+        {
+          "index": 132,
+          "monotonic": 432.503902222
+        },
+        {
+          "index": 133,
+          "monotonic": 432.505266212
+        },
+        {
+          "index": 134,
+          "monotonic": 432.506416021
+        },
+        {
+          "index": 135,
+          "monotonic": 432.507600663
+        },
+        {
+          "index": 136,
+          "monotonic": 432.50873379
+        },
+        {
+          "index": 137,
+          "monotonic": 432.509884522
+        },
+        {
+          "index": 138,
+          "monotonic": 432.511038312
+        },
+        {
+          "index": 139,
+          "monotonic": 432.512207604
+        },
+        {
+          "index": 140,
+          "monotonic": 432.513334622
+        },
+        {
+          "index": 141,
+          "monotonic": 432.514512739
+        },
+        {
+          "index": 142,
+          "monotonic": 432.515657967
+        },
+        {
+          "index": 143,
+          "monotonic": 432.516813199
+        },
+        {
+          "index": 144,
+          "monotonic": 432.517964685
+        },
+        {
+          "index": 145,
+          "monotonic": 432.519117195
+        },
+        {
+          "index": 146,
+          "monotonic": 432.520239814
+        },
+        {
+          "index": 147,
+          "monotonic": 432.521376696
+        },
+        {
+          "index": 148,
+          "monotonic": 432.522500757
+        },
+        {
+          "index": 149,
+          "monotonic": 432.52367098
+        },
+        {
+          "index": 150,
+          "monotonic": 432.52480759
+        },
+        {
+          "index": 151,
+          "monotonic": 432.52595295
+        },
+        {
+          "index": 152,
+          "monotonic": 432.527082452
+        },
+        {
+          "index": 153,
+          "monotonic": 432.528259427
+        },
+        {
+          "index": 154,
+          "monotonic": 432.529389269
+        },
+        {
+          "index": 155,
+          "monotonic": 432.530531115
+        },
+        {
+          "index": 156,
+          "monotonic": 432.531660259
+        },
+        {
+          "index": 157,
+          "monotonic": 432.532804987
+        },
+        {
+          "index": 158,
+          "monotonic": 432.533930751
+        },
+        {
+          "index": 159,
+          "monotonic": 432.841456427
+        },
+        {
+          "index": 160,
+          "monotonic": 432.842675916
+        },
+        {
+          "index": 161,
+          "monotonic": 432.843934183
+        },
+        {
+          "index": 162,
+          "monotonic": 432.84512384
+        },
+        {
+          "index": 163,
+          "monotonic": 432.846306122
+        },
+        {
+          "index": 164,
+          "monotonic": 432.8474496
+        },
+        {
+          "index": 165,
+          "monotonic": 432.848760464
+        },
+        {
+          "index": 166,
+          "monotonic": 432.84991432
+        },
+        {
+          "index": 167,
+          "monotonic": 432.851096842
+        },
+        {
+          "index": 168,
+          "monotonic": 432.852517493
+        },
+        {
+          "index": 169,
+          "monotonic": 432.853739614
+        },
+        {
+          "index": 170,
+          "monotonic": 432.854876136
+        },
+        {
+          "index": 171,
+          "monotonic": 432.856089403
+        },
+        {
+          "index": 172,
+          "monotonic": 432.857308186
+        },
+        {
+          "index": 173,
+          "monotonic": 432.858484224
+        },
+        {
+          "index": 174,
+          "monotonic": 432.859613561
+        },
+        {
+          "index": 175,
+          "monotonic": 432.860757275
+        },
+        {
+          "index": 176,
+          "monotonic": 432.861886784
+        },
+        {
+          "index": 177,
+          "monotonic": 432.863082383
+        },
+        {
+          "index": 178,
+          "monotonic": 432.86421968
+        },
+        {
+          "index": 179,
+          "monotonic": 432.865355824
+        },
+        {
+          "index": 180,
+          "monotonic": 432.866481964
+        },
+        {
+          "index": 181,
+          "monotonic": 432.867619172
+        },
+        {
+          "index": 182,
+          "monotonic": 432.868748071
+        },
+        {
+          "index": 183,
+          "monotonic": 432.869889062
+        },
+        {
+          "index": 184,
+          "monotonic": 432.871031877
+        },
+        {
+          "index": 185,
+          "monotonic": 432.87219344
+        },
+        {
+          "index": 186,
+          "monotonic": 432.873336236
+        },
+        {
+          "index": 187,
+          "monotonic": 432.874472108
+        },
+        {
+          "index": 188,
+          "monotonic": 432.875594188
+        },
+        {
+          "index": 189,
+          "monotonic": 432.876736478
+        },
+        {
+          "index": 190,
+          "monotonic": 432.877858573
+        },
+        {
+          "index": 191,
+          "monotonic": 433.187844258
+        },
+        {
+          "index": 192,
+          "monotonic": 433.1895851
+        },
+        {
+          "index": 193,
+          "monotonic": 433.190937803
+        },
+        {
+          "index": 194,
+          "monotonic": 433.192223631
+        },
+        {
+          "index": 195,
+          "monotonic": 433.1935251
+        },
+        {
+          "index": 196,
+          "monotonic": 433.194787415
+        },
+        {
+          "index": 197,
+          "monotonic": 433.196274505
+        },
+        {
+          "index": 198,
+          "monotonic": 433.197434431
+        },
+        {
+          "index": 199,
+          "monotonic": 433.198618639
+        }
+      ],
+      "dispatches": [
+        {
+          "length": 1,
+          "has_lf": false,
+          "at": 431.425970094,
+          "route_before": "fcitx",
+          "first_sent_at": 431.426492443,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 1
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 431.426513815,
+          "route_before": "fcitx",
+          "first_sent_at": 431.469865538,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 5
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 431.46997329,
+          "route_before": "fcitx",
+          "first_sent_at": 431.513569621,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 9
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 431.513653402,
+          "route_before": "fcitx",
+          "first_sent_at": 431.556212571,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 13
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 431.55629206,
+          "route_before": "fcitx",
+          "first_sent_at": 431.598442929,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 17
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 431.598537483,
+          "route_before": "fcitx",
+          "first_sent_at": 431.641160743,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 21
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 431.641277543,
+          "route_before": "fcitx",
+          "first_sent_at": 431.684458017,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 25
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 431.684543921,
+          "route_before": "fcitx",
+          "first_sent_at": 431.726612738,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 29
+        },
+        {
+          "length": 1,
+          "has_lf": false,
+          "at": 431.726684995,
+          "route_before": "fcitx",
+          "first_sent_at": 431.769415448,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 30
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 431.769578813,
+          "route_before": "fcitx",
+          "first_sent_at": 431.812374912,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 34
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 431.812452991,
+          "route_before": "fcitx",
+          "first_sent_at": 431.855103085,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 38
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 431.8552121,
+          "route_before": "fcitx",
+          "first_sent_at": 431.896031691,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 42
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 431.896069259,
+          "route_before": "fcitx",
+          "first_sent_at": 431.989329044,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 46
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 431.989352198,
+          "route_before": "fcitx",
+          "first_sent_at": 432.031802547,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 50
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 432.031843509,
+          "route_before": "fcitx",
+          "first_sent_at": 432.072876985,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 54
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 432.07290205,
+          "route_before": "fcitx",
+          "first_sent_at": 432.116015943,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 58
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 432.116110031,
+          "route_before": "fcitx",
+          "first_sent_at": 432.159138951,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 62
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 432.159329195,
+          "route_before": "fcitx",
+          "first_sent_at": 432.200753706,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 66
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 432.200776226,
+          "route_before": "fcitx",
+          "first_sent_at": 432.242186646,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 70
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 432.242218499,
+          "route_before": "fcitx",
+          "first_sent_at": 432.285321397,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 74
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 432.2854124,
+          "route_before": "fcitx",
+          "first_sent_at": 432.328245523,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 78
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 432.328395465,
+          "route_before": "fcitx",
+          "first_sent_at": 432.369463745,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 82
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 432.369489154,
+          "route_before": "fcitx",
+          "first_sent_at": 432.410656855,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 86
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 432.410685838,
+          "route_before": "fcitx",
+          "first_sent_at": 432.453610675,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 90
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 432.453739903,
+          "route_before": "fcitx",
+          "first_sent_at": 432.496787456,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 94
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 432.497112456,
+          "route_before": "fcitx",
+          "first_sent_at": 432.53977072,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 98
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 432.539861895,
+          "route_before": "fcitx",
+          "first_sent_at": 432.582313002,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 102
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 432.582409504,
+          "route_before": "fcitx",
+          "first_sent_at": 432.626185317,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 106
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 432.626275942,
+          "route_before": "fcitx",
+          "first_sent_at": 432.669787817,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 110
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 432.66988044,
+          "route_before": "fcitx",
+          "first_sent_at": 432.712761123,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 114
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 432.712840784,
+          "route_before": "fcitx",
+          "first_sent_at": 432.756428415,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 118
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 432.756534321,
+          "route_before": "fcitx",
+          "first_sent_at": 432.799127652,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 122
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 432.799248185,
+          "route_before": "fcitx",
+          "first_sent_at": 432.841201101,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 126
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 432.841355347,
+          "route_before": "fcitx",
+          "first_sent_at": 432.884370888,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 130
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 432.884445428,
+          "route_before": "fcitx",
+          "first_sent_at": 432.928413302,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 134
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 432.928506662,
+          "route_before": "fcitx",
+          "first_sent_at": 432.971088692,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 138
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 432.971212598,
+          "route_before": "fcitx",
+          "first_sent_at": 433.013406209,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 142
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 433.013491211,
+          "route_before": "fcitx",
+          "first_sent_at": 433.057295465,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 146
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 433.057396396,
+          "route_before": "fcitx",
+          "first_sent_at": 433.100878332,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 150
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 433.100973277,
+          "route_before": "fcitx",
+          "first_sent_at": 433.144139695,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 154
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 433.144268466,
+          "route_before": "fcitx",
+          "first_sent_at": 433.18758771,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 158
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 433.18774223,
+          "route_before": "fcitx",
+          "first_sent_at": 433.229952055,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 162
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 433.230065823,
+          "route_before": "fcitx",
+          "first_sent_at": 433.273036553,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 166
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 433.273131354,
+          "route_before": "fcitx",
+          "first_sent_at": 433.316330154,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 170
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 433.316421955,
+          "route_before": "fcitx",
+          "first_sent_at": 433.360636326,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 174
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 433.360728367,
+          "route_before": "fcitx",
+          "first_sent_at": 433.404936813,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 178
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 433.405058115,
+          "route_before": "fcitx",
+          "first_sent_at": 433.447650508,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 182
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 433.44773103,
+          "route_before": "fcitx",
+          "first_sent_at": 433.490217139,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 186
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 433.490310212,
+          "route_before": "fcitx",
+          "first_sent_at": 433.534124264,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 190
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 433.534367192,
+          "route_before": "fcitx",
+          "first_sent_at": 433.577030982,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 194
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 433.577129276,
+          "route_before": "fcitx",
+          "first_sent_at": 433.619607461,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 198
+        },
+        {
+          "length": 1,
+          "has_lf": false,
+          "at": 433.619691212,
+          "route_before": "fcitx",
+          "first_sent_at": 433.662579746,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 199
+        },
+        {
+          "length": 1,
+          "has_lf": false,
+          "at": 433.662682708,
+          "route_before": "fcitx",
+          "first_sent_at": 433.705991039,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 200
+        }
+      ],
+      "input_failure": null,
+      "error_code": null
+    },
+    "exact": true,
+    "expected": "\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678",
+    "receivers": [
+      {
+        "value": "\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59",
+        "events": [
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u7532"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u4e59\u4e19\u4e01\u620a"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u5df1\u5e9a\u8f9b\u58ec"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u7678\u7532\u4e59\u4e19"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u4e01\u620a\u5df1\u5e9a"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u8f9b\u58ec\u7678\u7532"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u4e59\u4e19\u4e01\u620a"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u5df1\u5e9a\u8f9b\u58ec"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u7678"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u7532\u4e59\u4e19\u4e01"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u620a\u5df1\u5e9a\u8f9b"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u58ec\u7678\u7532\u4e59"
+          }
+        ],
+        "focus": false
+      },
+      {
+        "value": "\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678",
+        "events": [
+          {
+            "type": "focus",
+            "id": "a",
+            "data": ""
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u4e19\u4e01\u620a\u5df1"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u5e9a\u8f9b\u58ec\u7678"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u7532\u4e59\u4e19\u4e01"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u620a\u5df1\u5e9a\u8f9b"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u58ec\u7678\u7532\u4e59"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u4e19\u4e01\u620a\u5df1"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u5e9a\u8f9b\u58ec\u7678"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u7532\u4e59\u4e19\u4e01"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u620a\u5df1\u5e9a\u8f9b"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u58ec\u7678\u7532\u4e59"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u4e19\u4e01\u620a\u5df1"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u5e9a\u8f9b\u58ec\u7678"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u7532\u4e59\u4e19\u4e01"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u620a\u5df1\u5e9a\u8f9b"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u58ec\u7678\u7532\u4e59"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u4e19\u4e01\u620a\u5df1"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u5e9a\u8f9b\u58ec\u7678"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u7532\u4e59\u4e19\u4e01"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u620a\u5df1\u5e9a\u8f9b"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u58ec\u7678\u7532\u4e59"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u4e19\u4e01\u620a\u5df1"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u5e9a\u8f9b\u58ec\u7678"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u7532\u4e59\u4e19\u4e01"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u620a\u5df1\u5e9a\u8f9b"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u58ec\u7678\u7532\u4e59"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u4e19\u4e01\u620a\u5df1"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u5e9a\u8f9b\u58ec\u7678"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u7532\u4e59\u4e19\u4e01"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u620a\u5df1\u5e9a\u8f9b"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u58ec\u7678\u7532\u4e59"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u4e19\u4e01\u620a\u5df1"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u5e9a\u8f9b\u58ec\u7678"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u7532\u4e59\u4e19\u4e01"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u620a\u5df1\u5e9a\u8f9b"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u58ec\u7678\u7532\u4e59"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u4e19\u4e01\u620a\u5df1"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u5e9a\u8f9b\u58ec\u7678"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u7532\u4e59\u4e19\u4e01"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u620a\u5df1\u5e9a\u8f9b"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u58ec"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u7678"
+          }
+        ],
+        "focus": true
+      }
+    ]
+  },
+  {
+    "case": "before",
+    "mode": "fcitx",
+    "scenario": "stream",
+    "windows": [
+      {
+        "focus": true,
+        "active": "a"
+      },
+      {
+        "focus": false,
+        "active": "a"
+      }
+    ],
+    "fcitx_debug": "('Group [x11::0] has 4 InputContext(s)\\n  IC [REDACTED] program:chrome frontend:dbus cap:6000000032 focus:0\\n  IC [REDACTED] program:chrome frontend:dbus cap:6000000032 focus:1\\n  IC [REDACTED] program: frontend:ibus cap:52 focus:0\\n  IC [REDACTED] program: frontend:ibus cap:52 focus:0\\nInput Context without group\\n',)\n"
+  },
+  {
+    "case": "switch",
+    "mode": "fcitx",
+    "scenario": "stream",
+    "first_before_switch": "\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59",
+    "windows": [
+      {
+        "focus": false,
+        "active": "a"
+      },
+      {
+        "focus": true,
+        "active": "a"
+      }
+    ]
+  },
+  {
+    "case": "session_crosswindow",
+    "mode": "fcitx",
+    "scenario": "stream",
+    "elapsed": 3.669,
+    "result": {
+      "route": null,
+      "outcome": "succeeded",
+      "metrics_characters": null,
+      "reported_characters": 200,
+      "outcomes": [
+        {
+          "characters": 200
+        }
+      ],
+      "deltas": [
+        {
+          "index": 0,
+          "monotonic": 436.003563379
+        },
+        {
+          "index": 1,
+          "monotonic": 436.007639874
+        },
+        {
+          "index": 2,
+          "monotonic": 436.009483414
+        },
+        {
+          "index": 3,
+          "monotonic": 436.010642452
+        },
+        {
+          "index": 4,
+          "monotonic": 436.011736626
+        },
+        {
+          "index": 5,
+          "monotonic": 436.012818121
+        },
+        {
+          "index": 6,
+          "monotonic": 436.013887639
+        },
+        {
+          "index": 7,
+          "monotonic": 436.0150073
+        },
+        {
+          "index": 8,
+          "monotonic": 436.016082281
+        },
+        {
+          "index": 9,
+          "monotonic": 436.01716414
+        },
+        {
+          "index": 10,
+          "monotonic": 436.018249179
+        },
+        {
+          "index": 11,
+          "monotonic": 436.019335672
+        },
+        {
+          "index": 12,
+          "monotonic": 436.020441313
+        },
+        {
+          "index": 13,
+          "monotonic": 436.021538029
+        },
+        {
+          "index": 14,
+          "monotonic": 436.022631916
+        },
+        {
+          "index": 15,
+          "monotonic": 436.023741736
+        },
+        {
+          "index": 16,
+          "monotonic": 436.024837341
+        },
+        {
+          "index": 17,
+          "monotonic": 436.025956973
+        },
+        {
+          "index": 18,
+          "monotonic": 436.027047764
+        },
+        {
+          "index": 19,
+          "monotonic": 436.02818139
+        },
+        {
+          "index": 20,
+          "monotonic": 436.029289975
+        },
+        {
+          "index": 21,
+          "monotonic": 436.030413997
+        },
+        {
+          "index": 22,
+          "monotonic": 436.031544082
+        },
+        {
+          "index": 23,
+          "monotonic": 436.032686007
+        },
+        {
+          "index": 24,
+          "monotonic": 436.033818801
+        },
+        {
+          "index": 25,
+          "monotonic": 436.034958459
+        },
+        {
+          "index": 26,
+          "monotonic": 436.036079069
+        },
+        {
+          "index": 27,
+          "monotonic": 436.03725479
+        },
+        {
+          "index": 28,
+          "monotonic": 436.038382151
+        },
+        {
+          "index": 29,
+          "monotonic": 436.039527417
+        },
+        {
+          "index": 30,
+          "monotonic": 436.040650435
+        },
+        {
+          "index": 31,
+          "monotonic": 436.041818754
+        },
+        {
+          "index": 32,
+          "monotonic": 436.042953823
+        },
+        {
+          "index": 33,
+          "monotonic": 436.044100189
+        },
+        {
+          "index": 34,
+          "monotonic": 436.045244729
+        },
+        {
+          "index": 35,
+          "monotonic": 436.050726313
+        },
+        {
+          "index": 36,
+          "monotonic": 436.051932492
+        },
+        {
+          "index": 37,
+          "monotonic": 436.053160654
+        },
+        {
+          "index": 38,
+          "monotonic": 436.054450692
+        },
+        {
+          "index": 39,
+          "monotonic": 436.055667017
+        },
+        {
+          "index": 40,
+          "monotonic": 436.056809221
+        },
+        {
+          "index": 41,
+          "monotonic": 436.058130179
+        },
+        {
+          "index": 42,
+          "monotonic": 436.059274902
+        },
+        {
+          "index": 43,
+          "monotonic": 436.060432923
+        },
+        {
+          "index": 44,
+          "monotonic": 436.061614295
+        },
+        {
+          "index": 45,
+          "monotonic": 436.062914729
+        },
+        {
+          "index": 46,
+          "monotonic": 436.064075877
+        },
+        {
+          "index": 47,
+          "monotonic": 436.065264005
+        },
+        {
+          "index": 48,
+          "monotonic": 436.066406476
+        },
+        {
+          "index": 49,
+          "monotonic": 436.067557367
+        },
+        {
+          "index": 50,
+          "monotonic": 436.068688998
+        },
+        {
+          "index": 51,
+          "monotonic": 436.069831843
+        },
+        {
+          "index": 52,
+          "monotonic": 436.070957536
+        },
+        {
+          "index": 53,
+          "monotonic": 436.072125067
+        },
+        {
+          "index": 54,
+          "monotonic": 436.073248396
+        },
+        {
+          "index": 55,
+          "monotonic": 436.074392255
+        },
+        {
+          "index": 56,
+          "monotonic": 436.075518292
+        },
+        {
+          "index": 57,
+          "monotonic": 436.076680626
+        },
+        {
+          "index": 58,
+          "monotonic": 436.07781044
+        },
+        {
+          "index": 59,
+          "monotonic": 436.078951948
+        },
+        {
+          "index": 60,
+          "monotonic": 436.080083728
+        },
+        {
+          "index": 61,
+          "monotonic": 436.081239404
+        },
+        {
+          "index": 62,
+          "monotonic": 436.082389544
+        },
+        {
+          "index": 63,
+          "monotonic": 436.083535259
+        },
+        {
+          "index": 64,
+          "monotonic": 436.084662814
+        },
+        {
+          "index": 65,
+          "monotonic": 436.08580518
+        },
+        {
+          "index": 66,
+          "monotonic": 436.086930791
+        },
+        {
+          "index": 67,
+          "monotonic": 436.393518345
+        },
+        {
+          "index": 68,
+          "monotonic": 436.394729966
+        },
+        {
+          "index": 69,
+          "monotonic": 436.395902437
+        },
+        {
+          "index": 70,
+          "monotonic": 436.397109472
+        },
+        {
+          "index": 71,
+          "monotonic": 436.398419399
+        },
+        {
+          "index": 72,
+          "monotonic": 436.399629237
+        },
+        {
+          "index": 73,
+          "monotonic": 436.40079218
+        },
+        {
+          "index": 74,
+          "monotonic": 436.401946296
+        },
+        {
+          "index": 75,
+          "monotonic": 436.403091104
+        },
+        {
+          "index": 76,
+          "monotonic": 436.404285163
+        },
+        {
+          "index": 77,
+          "monotonic": 436.405418278
+        },
+        {
+          "index": 78,
+          "monotonic": 436.406563041
+        },
+        {
+          "index": 79,
+          "monotonic": 436.407690871
+        },
+        {
+          "index": 80,
+          "monotonic": 436.408835953
+        },
+        {
+          "index": 81,
+          "monotonic": 436.409978549
+        },
+        {
+          "index": 82,
+          "monotonic": 436.411090238
+        },
+        {
+          "index": 83,
+          "monotonic": 436.412235183
+        },
+        {
+          "index": 84,
+          "monotonic": 436.413382705
+        },
+        {
+          "index": 85,
+          "monotonic": 436.414528248
+        },
+        {
+          "index": 86,
+          "monotonic": 436.415672833
+        },
+        {
+          "index": 87,
+          "monotonic": 436.416793716
+        },
+        {
+          "index": 88,
+          "monotonic": 436.417928892
+        },
+        {
+          "index": 89,
+          "monotonic": 436.419077463
+        },
+        {
+          "index": 90,
+          "monotonic": 436.420233565
+        },
+        {
+          "index": 91,
+          "monotonic": 436.421352597
+        },
+        {
+          "index": 92,
+          "monotonic": 436.422509156
+        },
+        {
+          "index": 93,
+          "monotonic": 436.42364252
+        },
+        {
+          "index": 94,
+          "monotonic": 436.424810718
+        },
+        {
+          "index": 95,
+          "monotonic": 436.425945171
+        },
+        {
+          "index": 96,
+          "monotonic": 436.427101916
+        },
+        {
+          "index": 97,
+          "monotonic": 436.428377589
+        },
+        {
+          "index": 98,
+          "monotonic": 436.429583648
+        },
+        {
+          "index": 99,
+          "monotonic": 436.805326306
+        },
+        {
+          "index": 100,
+          "monotonic": 436.806622032
+        },
+        {
+          "index": 101,
+          "monotonic": 436.807888631
+        },
+        {
+          "index": 102,
+          "monotonic": 436.809154003
+        },
+        {
+          "index": 103,
+          "monotonic": 436.810575101
+        },
+        {
+          "index": 104,
+          "monotonic": 436.811786332
+        },
+        {
+          "index": 105,
+          "monotonic": 436.813088661
+        },
+        {
+          "index": 106,
+          "monotonic": 436.814281729
+        },
+        {
+          "index": 107,
+          "monotonic": 436.815420385
+        },
+        {
+          "index": 108,
+          "monotonic": 436.8165857
+        },
+        {
+          "index": 109,
+          "monotonic": 436.81771178
+        },
+        {
+          "index": 110,
+          "monotonic": 436.81885294
+        },
+        {
+          "index": 111,
+          "monotonic": 436.819977546
+        },
+        {
+          "index": 112,
+          "monotonic": 436.821117202
+        },
+        {
+          "index": 113,
+          "monotonic": 436.822237584
+        },
+        {
+          "index": 114,
+          "monotonic": 436.823386337
+        },
+        {
+          "index": 115,
+          "monotonic": 436.824511247
+        },
+        {
+          "index": 116,
+          "monotonic": 436.825676123
+        },
+        {
+          "index": 117,
+          "monotonic": 436.8268038
+        },
+        {
+          "index": 118,
+          "monotonic": 436.827951246
+        },
+        {
+          "index": 119,
+          "monotonic": 436.829082437
+        },
+        {
+          "index": 120,
+          "monotonic": 436.830240307
+        },
+        {
+          "index": 121,
+          "monotonic": 436.831367394
+        },
+        {
+          "index": 122,
+          "monotonic": 436.83250833
+        },
+        {
+          "index": 123,
+          "monotonic": 436.833629405
+        },
+        {
+          "index": 124,
+          "monotonic": 436.834767068
+        },
+        {
+          "index": 125,
+          "monotonic": 436.835946147
+        },
+        {
+          "index": 126,
+          "monotonic": 436.837096864
+        },
+        {
+          "index": 127,
+          "monotonic": 436.838242694
+        },
+        {
+          "index": 128,
+          "monotonic": 436.839392653
+        },
+        {
+          "index": 129,
+          "monotonic": 436.840525614
+        },
+        {
+          "index": 130,
+          "monotonic": 436.841667961
+        },
+        {
+          "index": 131,
+          "monotonic": 437.150382515
+        },
+        {
+          "index": 132,
+          "monotonic": 437.151575166
+        },
+        {
+          "index": 133,
+          "monotonic": 437.152887154
+        },
+        {
+          "index": 134,
+          "monotonic": 437.154134591
+        },
+        {
+          "index": 135,
+          "monotonic": 437.155308788
+        },
+        {
+          "index": 136,
+          "monotonic": 437.156442309
+        },
+        {
+          "index": 137,
+          "monotonic": 437.1576425
+        },
+        {
+          "index": 138,
+          "monotonic": 437.15888919
+        },
+        {
+          "index": 139,
+          "monotonic": 437.160113367
+        },
+        {
+          "index": 140,
+          "monotonic": 437.161273442
+        },
+        {
+          "index": 141,
+          "monotonic": 437.162416125
+        },
+        {
+          "index": 142,
+          "monotonic": 437.163542176
+        },
+        {
+          "index": 143,
+          "monotonic": 437.164685108
+        },
+        {
+          "index": 144,
+          "monotonic": 437.165809284
+        },
+        {
+          "index": 145,
+          "monotonic": 437.166951426
+        },
+        {
+          "index": 146,
+          "monotonic": 437.168077365
+        },
+        {
+          "index": 147,
+          "monotonic": 437.169259972
+        },
+        {
+          "index": 148,
+          "monotonic": 437.170388988
+        },
+        {
+          "index": 149,
+          "monotonic": 437.171555751
+        },
+        {
+          "index": 150,
+          "monotonic": 437.172680391
+        },
+        {
+          "index": 151,
+          "monotonic": 437.173821083
+        },
+        {
+          "index": 152,
+          "monotonic": 437.174944983
+        },
+        {
+          "index": 153,
+          "monotonic": 437.176092098
+        },
+        {
+          "index": 154,
+          "monotonic": 437.177225578
+        },
+        {
+          "index": 155,
+          "monotonic": 437.178361888
+        },
+        {
+          "index": 156,
+          "monotonic": 437.179487601
+        },
+        {
+          "index": 157,
+          "monotonic": 437.180628679
+        },
+        {
+          "index": 158,
+          "monotonic": 437.181822107
+        },
+        {
+          "index": 159,
+          "monotonic": 437.182979003
+        },
+        {
+          "index": 160,
+          "monotonic": 437.184121729
+        },
+        {
+          "index": 161,
+          "monotonic": 437.185291942
+        },
+        {
+          "index": 162,
+          "monotonic": 437.186426617
+        },
+        {
+          "index": 163,
+          "monotonic": 437.4933402
+        },
+        {
+          "index": 164,
+          "monotonic": 437.494544734
+        },
+        {
+          "index": 165,
+          "monotonic": 437.495819653
+        },
+        {
+          "index": 166,
+          "monotonic": 437.497147998
+        },
+        {
+          "index": 167,
+          "monotonic": 437.498289129
+        },
+        {
+          "index": 168,
+          "monotonic": 437.499443416
+        },
+        {
+          "index": 169,
+          "monotonic": 437.500581261
+        },
+        {
+          "index": 170,
+          "monotonic": 437.501732905
+        },
+        {
+          "index": 171,
+          "monotonic": 437.502868597
+        },
+        {
+          "index": 172,
+          "monotonic": 437.504083393
+        },
+        {
+          "index": 173,
+          "monotonic": 437.505229939
+        },
+        {
+          "index": 174,
+          "monotonic": 437.506372857
+        },
+        {
+          "index": 175,
+          "monotonic": 437.507500269
+        },
+        {
+          "index": 176,
+          "monotonic": 437.508639748
+        },
+        {
+          "index": 177,
+          "monotonic": 437.509769987
+        },
+        {
+          "index": 178,
+          "monotonic": 437.510927983
+        },
+        {
+          "index": 179,
+          "monotonic": 437.512059565
+        },
+        {
+          "index": 180,
+          "monotonic": 437.513215964
+        },
+        {
+          "index": 181,
+          "monotonic": 437.514364636
+        },
+        {
+          "index": 182,
+          "monotonic": 437.51553439
+        },
+        {
+          "index": 183,
+          "monotonic": 437.516676574
+        },
+        {
+          "index": 184,
+          "monotonic": 437.517862451
+        },
+        {
+          "index": 185,
+          "monotonic": 437.519022853
+        },
+        {
+          "index": 186,
+          "monotonic": 437.520190851
+        },
+        {
+          "index": 187,
+          "monotonic": 437.521538497
+        },
+        {
+          "index": 188,
+          "monotonic": 437.522728508
+        },
+        {
+          "index": 189,
+          "monotonic": 437.523891908
+        },
+        {
+          "index": 190,
+          "monotonic": 437.525243302
+        },
+        {
+          "index": 191,
+          "monotonic": 437.526391929
+        },
+        {
+          "index": 192,
+          "monotonic": 437.527543638
+        },
+        {
+          "index": 193,
+          "monotonic": 437.528670244
+        },
+        {
+          "index": 194,
+          "monotonic": 437.529812124
+        },
+        {
+          "index": 195,
+          "monotonic": 437.838185128
+        },
+        {
+          "index": 196,
+          "monotonic": 437.839385011
+        },
+        {
+          "index": 197,
+          "monotonic": 437.840710304
+        },
+        {
+          "index": 198,
+          "monotonic": 437.84195314
+        },
+        {
+          "index": 199,
+          "monotonic": 437.843153222
+        }
+      ],
+      "dispatches": [
+        {
+          "length": 1,
+          "has_lf": false,
+          "at": 436.007697802,
+          "route_before": "fcitx",
+          "first_sent_at": 436.008360602,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 1
+        },
+        {
+          "length": 1,
+          "has_lf": false,
+          "at": 436.009508865,
+          "route_before": "fcitx",
+          "first_sent_at": 436.050475921,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 2
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 436.05062409,
+          "route_before": "fcitx",
+          "first_sent_at": 436.094285127,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 6
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 436.094376905,
+          "route_before": "fcitx",
+          "first_sent_at": 436.137258101,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 10
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 436.137341427,
+          "route_before": "fcitx",
+          "first_sent_at": 436.180234789,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 14
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 436.180322705,
+          "route_before": "fcitx",
+          "first_sent_at": 436.222924963,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 18
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 436.223029607,
+          "route_before": "fcitx",
+          "first_sent_at": 436.265717953,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 22
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 436.265802753,
+          "route_before": "fcitx",
+          "first_sent_at": 436.307909081,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 26
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 436.308051604,
+          "route_before": "fcitx",
+          "first_sent_at": 436.350867941,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 30
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 436.350963966,
+          "route_before": "fcitx",
+          "first_sent_at": 436.393257303,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 34
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 436.393419825,
+          "route_before": "fcitx",
+          "first_sent_at": 436.436027963,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 38
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 436.436117608,
+          "route_before": "fcitx",
+          "first_sent_at": 436.478666436,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 42
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 436.478768356,
+          "route_before": "fcitx",
+          "first_sent_at": 436.591594275,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 46
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 436.59168162,
+          "route_before": "fcitx",
+          "first_sent_at": 436.634889425,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 50
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 436.634966317,
+          "route_before": "fcitx",
+          "first_sent_at": 436.677638314,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 54
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 436.677720015,
+          "route_before": "fcitx",
+          "first_sent_at": 436.720282116,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 58
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 436.720361218,
+          "route_before": "fcitx",
+          "first_sent_at": 436.762550611,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 62
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 436.762632813,
+          "route_before": "fcitx",
+          "first_sent_at": 436.805051828,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 66
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 436.805229773,
+          "route_before": "fcitx",
+          "first_sent_at": 436.848110808,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 70
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 436.848205633,
+          "route_before": "fcitx",
+          "first_sent_at": 436.891361585,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 74
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 436.891443882,
+          "route_before": "fcitx",
+          "first_sent_at": 436.934946217,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 78
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 436.935052398,
+          "route_before": "fcitx",
+          "first_sent_at": 436.978745171,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 82
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 436.978833965,
+          "route_before": "fcitx",
+          "first_sent_at": 437.020744702,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 86
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 437.020814453,
+          "route_before": "fcitx",
+          "first_sent_at": 437.064072202,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 90
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 437.064162433,
+          "route_before": "fcitx",
+          "first_sent_at": 437.106943559,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 94
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 437.10704482,
+          "route_before": "fcitx",
+          "first_sent_at": 437.150086343,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 98
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 437.150262853,
+          "route_before": "fcitx",
+          "first_sent_at": 437.192929712,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 102
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 437.193025557,
+          "route_before": "fcitx",
+          "first_sent_at": 437.236482545,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 106
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 437.236564757,
+          "route_before": "fcitx",
+          "first_sent_at": 437.279286876,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 110
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 437.27937136,
+          "route_before": "fcitx",
+          "first_sent_at": 437.322472885,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 114
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 437.322552324,
+          "route_before": "fcitx",
+          "first_sent_at": 437.36534029,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 118
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 437.365424777,
+          "route_before": "fcitx",
+          "first_sent_at": 437.407860188,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 122
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 437.407942171,
+          "route_before": "fcitx",
+          "first_sent_at": 437.450738661,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 126
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 437.450832098,
+          "route_before": "fcitx",
+          "first_sent_at": 437.493056791,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 130
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 437.493231711,
+          "route_before": "fcitx",
+          "first_sent_at": 437.535263815,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 134
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 437.535341551,
+          "route_before": "fcitx",
+          "first_sent_at": 437.578955695,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 138
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 437.579151841,
+          "route_before": "fcitx",
+          "first_sent_at": 437.622258281,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 142
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 437.622346632,
+          "route_before": "fcitx",
+          "first_sent_at": 437.665491999,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 146
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 437.665599546,
+          "route_before": "fcitx",
+          "first_sent_at": 437.708462645,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 150
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 437.70856636,
+          "route_before": "fcitx",
+          "first_sent_at": 437.750667137,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 154
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 437.750763136,
+          "route_before": "fcitx",
+          "first_sent_at": 437.794258765,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 158
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 437.7943686,
+          "route_before": "fcitx",
+          "first_sent_at": 437.837892836,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 162
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 437.83806333,
+          "route_before": "fcitx",
+          "first_sent_at": 437.880364022,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 166
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 437.880453143,
+          "route_before": "fcitx",
+          "first_sent_at": 437.923264806,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 170
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 437.923354949,
+          "route_before": "fcitx",
+          "first_sent_at": 437.966518682,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 174
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 437.966612489,
+          "route_before": "fcitx",
+          "first_sent_at": 438.00953645,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 178
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 438.009622241,
+          "route_before": "fcitx",
+          "first_sent_at": 438.05202853,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 182
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 438.052110119,
+          "route_before": "fcitx",
+          "first_sent_at": 438.094676911,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 186
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 438.094758556,
+          "route_before": "fcitx",
+          "first_sent_at": 438.13855409,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 190
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 438.138670015,
+          "route_before": "fcitx",
+          "first_sent_at": 438.181413333,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 194
+        },
+        {
+          "length": 4,
+          "has_lf": false,
+          "at": 438.181529892,
+          "route_before": "fcitx",
+          "first_sent_at": 438.2237125,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 198
+        },
+        {
+          "length": 1,
+          "has_lf": false,
+          "at": 438.223786476,
+          "route_before": "fcitx",
+          "first_sent_at": 438.26675478,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 199
+        },
+        {
+          "length": 1,
+          "has_lf": false,
+          "at": 438.266853767,
+          "route_before": "fcitx",
+          "first_sent_at": 438.309831267,
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 200
+        }
+      ],
+      "input_failure": null,
+      "error_code": null
+    },
+    "exact": true,
+    "expected": "\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678",
+    "receivers": [
+      {
+        "value": "\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59",
+        "events": [
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u7532"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u4e59"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u4e19\u4e01\u620a\u5df1"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u5e9a\u8f9b\u58ec\u7678"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u7532\u4e59\u4e19\u4e01"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u620a\u5df1\u5e9a\u8f9b"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u58ec\u7678\u7532\u4e59"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u4e19\u4e01\u620a\u5df1"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u5e9a\u8f9b\u58ec\u7678"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u7532\u4e59\u4e19\u4e01"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u620a\u5df1\u5e9a\u8f9b"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u58ec\u7678\u7532\u4e59"
+          }
+        ],
+        "focus": false
+      },
+      {
+        "value": "\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678\u7532\u4e59\u4e19\u4e01\u620a\u5df1\u5e9a\u8f9b\u58ec\u7678",
+        "events": [
+          {
+            "type": "focus",
+            "id": "a",
+            "data": ""
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u4e19\u4e01\u620a\u5df1"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u5e9a\u8f9b\u58ec\u7678"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u7532\u4e59\u4e19\u4e01"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u620a\u5df1\u5e9a\u8f9b"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u58ec\u7678\u7532\u4e59"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u4e19\u4e01\u620a\u5df1"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u5e9a\u8f9b\u58ec\u7678"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u7532\u4e59\u4e19\u4e01"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u620a\u5df1\u5e9a\u8f9b"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u58ec\u7678\u7532\u4e59"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u4e19\u4e01\u620a\u5df1"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u5e9a\u8f9b\u58ec\u7678"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u7532\u4e59\u4e19\u4e01"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u620a\u5df1\u5e9a\u8f9b"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u58ec\u7678\u7532\u4e59"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u4e19\u4e01\u620a\u5df1"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u5e9a\u8f9b\u58ec\u7678"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u7532\u4e59\u4e19\u4e01"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u620a\u5df1\u5e9a\u8f9b"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u58ec\u7678\u7532\u4e59"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u4e19\u4e01\u620a\u5df1"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u5e9a\u8f9b\u58ec\u7678"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u7532\u4e59\u4e19\u4e01"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u620a\u5df1\u5e9a\u8f9b"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u58ec\u7678\u7532\u4e59"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u4e19\u4e01\u620a\u5df1"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u5e9a\u8f9b\u58ec\u7678"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u7532\u4e59\u4e19\u4e01"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u620a\u5df1\u5e9a\u8f9b"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u58ec\u7678\u7532\u4e59"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u4e19\u4e01\u620a\u5df1"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u5e9a\u8f9b\u58ec\u7678"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u7532\u4e59\u4e19\u4e01"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u620a\u5df1\u5e9a\u8f9b"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u58ec\u7678\u7532\u4e59"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u4e19\u4e01\u620a\u5df1"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u5e9a\u8f9b\u58ec\u7678"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u7532\u4e59\u4e19\u4e01"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u620a\u5df1\u5e9a\u8f9b"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u58ec"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u7678"
+          }
+        ],
+        "focus": true
+      }
+    ]
+  },
+  {
+    "case": "before",
+    "mode": "auto",
+    "scenario": "cancel",
+    "windows": [
+      {
+        "focus": true,
+        "active": "a"
+      },
+      {
+        "focus": false,
+        "active": "a"
+      }
+    ],
+    "fcitx_debug": "('Group [x11::0] has 4 InputContext(s)\\n  IC [REDACTED] program:chrome frontend:dbus cap:6000000032 focus:0\\n  IC [REDACTED] program:chrome frontend:dbus cap:6000000032 focus:1\\n  IC [REDACTED] program: frontend:ibus cap:52 focus:0\\n  IC [REDACTED] program: frontend:ibus cap:52 focus:0\\nInput Context without group\\n',)\n"
+  },
+  {
+    "case": "switch",
+    "mode": "auto",
+    "scenario": "cancel",
+    "first_before_switch": "\u7532",
+    "windows": [
+      {
+        "focus": false,
+        "active": "a"
+      },
+      {
+        "focus": true,
+        "active": "a"
+      }
+    ]
+  },
+  {
+    "case": "session_crosswindow",
+    "mode": "auto",
+    "scenario": "cancel",
+    "elapsed": 2.088,
+    "result": {
+      "route": null,
+      "outcome": "cancelled",
+      "metrics_characters": null,
+      "reported_characters": 1,
+      "outcomes": [
+        {
+          "characters": 1
+        }
+      ],
+      "deltas": [
+        {
+          "index": 0,
+          "monotonic": 440.546979168
+        },
+        {
+          "index": 1,
+          "monotonic": 440.54875741
+        },
+        {
+          "index": 2,
+          "monotonic": 440.550047993
+        },
+        {
+          "index": 3,
+          "monotonic": 440.551191027
+        },
+        {
+          "index": 4,
+          "monotonic": 440.55243008
+        },
+        {
+          "index": 5,
+          "monotonic": 440.553634176
+        },
+        {
+          "index": 6,
+          "monotonic": 440.554701165
+        },
+        {
+          "index": 7,
+          "monotonic": 440.555941372
+        },
+        {
+          "index": 8,
+          "monotonic": 440.557190792
+        },
+        {
+          "index": 9,
+          "monotonic": 440.55830252
+        },
+        {
+          "index": 10,
+          "monotonic": 440.559487387
+        },
+        {
+          "index": 11,
+          "monotonic": 440.561788607
+        },
+        {
+          "index": 12,
+          "monotonic": 440.562854186
+        },
+        {
+          "index": 13,
+          "monotonic": 440.563984164
+        },
+        {
+          "index": 14,
+          "monotonic": 440.565540054
+        },
+        {
+          "index": 15,
+          "monotonic": 440.567502436
+        },
+        {
+          "index": 16,
+          "monotonic": 440.568759671
+        },
+        {
+          "index": 17,
+          "monotonic": 440.569869876
+        },
+        {
+          "index": 18,
+          "monotonic": 440.570974444
+        },
+        {
+          "index": 19,
+          "monotonic": 440.57203716
+        },
+        {
+          "index": 20,
+          "monotonic": 440.573120197
+        },
+        {
+          "index": 21,
+          "monotonic": 440.574686606
+        },
+        {
+          "index": 22,
+          "monotonic": 440.575754408
+        },
+        {
+          "index": 23,
+          "monotonic": 440.577234243
+        },
+        {
+          "index": 24,
+          "monotonic": 440.578342092
+        },
+        {
+          "index": 25,
+          "monotonic": 440.5800566
+        },
+        {
+          "index": 26,
+          "monotonic": 440.581124719
+        },
+        {
+          "index": 27,
+          "monotonic": 440.582617171
+        },
+        {
+          "index": 28,
+          "monotonic": 440.583767678
+        },
+        {
+          "index": 29,
+          "monotonic": 440.584941759
+        },
+        {
+          "index": 30,
+          "monotonic": 440.586081108
+        },
+        {
+          "index": 31,
+          "monotonic": 440.587213348
+        },
+        {
+          "index": 32,
+          "monotonic": 440.588294556
+        },
+        {
+          "index": 33,
+          "monotonic": 440.591566019
+        }
+      ],
+      "dispatches": [
+        {
+          "length": 1,
+          "has_lf": false,
+          "at": 440.591465882,
+          "route_before": "fcitx",
+          "first_sent_at": 440.591892305,
+          "error_code": "fcitx_cancelled",
+          "error_type": "OutputRouterError",
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 1
+        }
+      ],
+      "input_failure": "fcitx_cancelled",
+      "error_code": null
+    },
+    "exact": true,
+    "expected": "\u7532",
+    "receivers": [
+      {
+        "value": "\u7532",
+        "events": [
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u7532"
+          }
+        ],
+        "focus": false
+      },
+      {
+        "value": "",
+        "events": [
+          {
+            "type": "focus",
+            "id": "a",
+            "data": ""
+          }
+        ],
+        "focus": true
+      }
+    ]
+  },
+  {
+    "case": "before",
+    "mode": "fcitx",
+    "scenario": "cancel",
+    "windows": [
+      {
+        "focus": true,
+        "active": "a"
+      },
+      {
+        "focus": false,
+        "active": "a"
+      }
+    ],
+    "fcitx_debug": "('Group [x11::0] has 4 InputContext(s)\\n  IC [REDACTED] program:chrome frontend:dbus cap:6000000032 focus:0\\n  IC [REDACTED] program:chrome frontend:dbus cap:6000000032 focus:1\\n  IC [REDACTED] program: frontend:ibus cap:52 focus:0\\n  IC [REDACTED] program: frontend:ibus cap:52 focus:0\\nInput Context without group\\n',)\n"
+  },
+  {
+    "case": "switch",
+    "mode": "fcitx",
+    "scenario": "cancel",
+    "first_before_switch": "\u7532",
+    "windows": [
+      {
+        "focus": false,
+        "active": "a"
+      },
+      {
+        "focus": true,
+        "active": "a"
+      }
+    ]
+  },
+  {
+    "case": "session_crosswindow",
+    "mode": "fcitx",
+    "scenario": "cancel",
+    "elapsed": 2.091,
+    "result": {
+      "route": null,
+      "outcome": "cancelled",
+      "metrics_characters": null,
+      "reported_characters": 1,
+      "outcomes": [
+        {
+          "characters": 1
+        }
+      ],
+      "deltas": [
+        {
+          "index": 0,
+          "monotonic": 443.6053511
+        },
+        {
+          "index": 1,
+          "monotonic": 443.606508141
+        }
+      ],
+      "dispatches": [
+        {
+          "length": 1,
+          "has_lf": false,
+          "at": 443.606548538,
+          "route_before": "fcitx",
+          "first_sent_at": 443.607081892,
+          "error_code": "fcitx_cancelled",
+          "error_type": "OutputRouterError",
+          "protocol": 4,
+          "route_after": "fcitx",
+          "backend_type": "Fcitx5Bridge",
+          "native_attempts": 1
+        }
+      ],
+      "input_failure": "fcitx_cancelled",
+      "error_code": null
+    },
+    "exact": true,
+    "expected": "\u7532",
+    "receivers": [
+      {
+        "value": "\u7532",
+        "events": [
+          {
+            "type": "input",
+            "id": "a",
+            "data": "\u7532"
+          }
+        ],
+        "focus": false
+      },
+      {
+        "value": "",
+        "events": [
+          {
+            "type": "focus",
+            "id": "a",
+            "data": ""
+          }
+        ],
+        "focus": true
+      }
+    ]
+  },
+  {
+    "case": "browser_exit",
+    "exit": 0
+  },
+  {
+    "case": "hints_restored",
+    "value": true
+  }
+]

@@ -1,0 +1,912 @@
+[
+  {
+    "case": "native_windows",
+    "first": "37748739",
+    "second": "37748744"
+  },
+  {
+    "case": "distinct_browser_windows",
+    "first_target": "5E10382BB035CF5943720711932695AB",
+    "second_target": "0AD45447A3336C0FF5FF88FB2DF45604"
+  },
+  {
+    "case": "before",
+    "mode": "auto",
+    "scenario": "stream",
+    "windows": [
+      {
+        "focus": true,
+        "active": "a"
+      },
+      {
+        "focus": false,
+        "active": "a"
+      }
+    ],
+    "fcitx_debug": "('Group [x11::0] has 4 InputContext(s)\\n  IC [7f1ff69456fa4d60b63028711035abfc] program:chrome frontend:dbus cap:6000000032 focus:0\\n  IC [22f9fa55c0d647099408dfa05383b5a1] program:chrome frontend:dbus cap:6000000032 focus:1\\n  IC [a95ded5906914236b0c18257490c9ea6] program: frontend:ibus cap:52 focus:0\\n  IC [b07f31be03d748a3810217aa91de621f] program: frontend:ibus cap:52 focus:0\\nInput Context without group\\n',)\n"
+  },
+  {
+    "case": "switch",
+    "mode": "auto",
+    "scenario": "stream",
+    "first_before_switch": "甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙",
+    "windows": [
+      {
+        "focus": false,
+        "active": "a"
+      },
+      {
+        "focus": true,
+        "active": "a"
+      }
+    ]
+  },
+  {
+    "case": "session_crosswindow",
+    "mode": "auto",
+    "scenario": "stream",
+    "elapsed": 3.667,
+    "outcome": "succeeded",
+    "route": null,
+    "exact": true,
+    "receivers": [
+      {
+        "value": "甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙",
+        "events": [
+          {
+            "type": "input",
+            "id": "a",
+            "data": "甲"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "乙丙丁戊"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "己庚辛壬"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "癸甲乙丙"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "丁戊己庚"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "辛壬癸甲"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "乙丙丁戊"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "己庚辛壬"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "癸"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "甲乙丙丁"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "戊己庚辛"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "壬癸甲乙"
+          }
+        ],
+        "focus": false
+      },
+      {
+        "value": "丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸",
+        "events": [
+          {
+            "type": "focus",
+            "id": "a",
+            "data": ""
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "丙丁戊己"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "庚辛壬癸"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "甲乙丙丁"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "戊己庚辛"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "壬癸甲乙"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "丙丁戊己"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "庚辛壬癸"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "甲乙丙丁"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "戊己庚辛"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "壬癸甲乙"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "丙丁戊己"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "庚辛壬癸"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "甲乙丙丁"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "戊己庚辛"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "壬癸甲乙"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "丙丁戊己"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "庚辛壬癸"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "甲乙丙丁"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "戊己庚辛"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "壬癸甲乙"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "丙丁戊己"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "庚辛壬癸"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "甲乙丙丁"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "戊己庚辛"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "壬癸甲乙"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "丙丁戊己"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "庚辛壬癸"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "甲乙丙丁"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "戊己庚辛"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "壬癸甲乙"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "丙丁戊己"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "庚辛壬癸"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "甲乙丙丁"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "戊己庚辛"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "壬癸甲乙"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "丙丁戊己"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "庚辛壬癸"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "甲乙丙丁"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "戊己庚辛"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "壬"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "癸"
+          }
+        ],
+        "focus": true
+      }
+    ],
+    "dispatch_batch_lengths": [
+      1,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      1,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      1,
+      1
+    ]
+  },
+  {
+    "case": "before",
+    "mode": "fcitx",
+    "scenario": "stream",
+    "windows": [
+      {
+        "focus": true,
+        "active": "a"
+      },
+      {
+        "focus": false,
+        "active": "a"
+      }
+    ],
+    "fcitx_debug": "('Group [x11::0] has 4 InputContext(s)\\n  IC [7f1ff69456fa4d60b63028711035abfc] program:chrome frontend:dbus cap:6000000032 focus:0\\n  IC [22f9fa55c0d647099408dfa05383b5a1] program:chrome frontend:dbus cap:6000000032 focus:1\\n  IC [a95ded5906914236b0c18257490c9ea6] program: frontend:ibus cap:52 focus:0\\n  IC [b07f31be03d748a3810217aa91de621f] program: frontend:ibus cap:52 focus:0\\nInput Context without group\\n',)\n"
+  },
+  {
+    "case": "switch",
+    "mode": "fcitx",
+    "scenario": "stream",
+    "first_before_switch": "甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙",
+    "windows": [
+      {
+        "focus": false,
+        "active": "a"
+      },
+      {
+        "focus": true,
+        "active": "a"
+      }
+    ]
+  },
+  {
+    "case": "session_crosswindow",
+    "mode": "fcitx",
+    "scenario": "stream",
+    "elapsed": 3.669,
+    "outcome": "succeeded",
+    "route": null,
+    "exact": true,
+    "receivers": [
+      {
+        "value": "甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙",
+        "events": [
+          {
+            "type": "input",
+            "id": "a",
+            "data": "甲"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "乙"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "丙丁戊己"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "庚辛壬癸"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "甲乙丙丁"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "戊己庚辛"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "壬癸甲乙"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "丙丁戊己"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "庚辛壬癸"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "甲乙丙丁"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "戊己庚辛"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "壬癸甲乙"
+          }
+        ],
+        "focus": false
+      },
+      {
+        "value": "丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸",
+        "events": [
+          {
+            "type": "focus",
+            "id": "a",
+            "data": ""
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "丙丁戊己"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "庚辛壬癸"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "甲乙丙丁"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "戊己庚辛"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "壬癸甲乙"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "丙丁戊己"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "庚辛壬癸"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "甲乙丙丁"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "戊己庚辛"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "壬癸甲乙"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "丙丁戊己"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "庚辛壬癸"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "甲乙丙丁"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "戊己庚辛"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "壬癸甲乙"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "丙丁戊己"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "庚辛壬癸"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "甲乙丙丁"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "戊己庚辛"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "壬癸甲乙"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "丙丁戊己"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "庚辛壬癸"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "甲乙丙丁"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "戊己庚辛"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "壬癸甲乙"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "丙丁戊己"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "庚辛壬癸"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "甲乙丙丁"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "戊己庚辛"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "壬癸甲乙"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "丙丁戊己"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "庚辛壬癸"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "甲乙丙丁"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "戊己庚辛"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "壬癸甲乙"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "丙丁戊己"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "庚辛壬癸"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "甲乙丙丁"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "戊己庚辛"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "壬"
+          },
+          {
+            "type": "input",
+            "id": "a",
+            "data": "癸"
+          }
+        ],
+        "focus": true
+      }
+    ],
+    "dispatch_batch_lengths": [
+      1,
+      1,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      1,
+      1
+    ]
+  },
+  {
+    "case": "before",
+    "mode": "auto",
+    "scenario": "cancel",
+    "windows": [
+      {
+        "focus": true,
+        "active": "a"
+      },
+      {
+        "focus": false,
+        "active": "a"
+      }
+    ],
+    "fcitx_debug": "('Group [x11::0] has 4 InputContext(s)\\n  IC [7f1ff69456fa4d60b63028711035abfc] program:chrome frontend:dbus cap:6000000032 focus:0\\n  IC [22f9fa55c0d647099408dfa05383b5a1] program:chrome frontend:dbus cap:6000000032 focus:1\\n  IC [a95ded5906914236b0c18257490c9ea6] program: frontend:ibus cap:52 focus:0\\n  IC [b07f31be03d748a3810217aa91de621f] program: frontend:ibus cap:52 focus:0\\nInput Context without group\\n',)\n"
+  },
+  {
+    "case": "switch",
+    "mode": "auto",
+    "scenario": "cancel",
+    "first_before_switch": "甲",
+    "windows": [
+      {
+        "focus": false,
+        "active": "a"
+      },
+      {
+        "focus": true,
+        "active": "a"
+      }
+    ]
+  },
+  {
+    "case": "session_crosswindow",
+    "mode": "auto",
+    "scenario": "cancel",
+    "elapsed": 2.088,
+    "outcome": "cancelled",
+    "route": null,
+    "exact": true,
+    "receivers": [
+      {
+        "value": "甲",
+        "events": [
+          {
+            "type": "input",
+            "id": "a",
+            "data": "甲"
+          }
+        ],
+        "focus": false
+      },
+      {
+        "value": "",
+        "events": [
+          {
+            "type": "focus",
+            "id": "a",
+            "data": ""
+          }
+        ],
+        "focus": true
+      }
+    ],
+    "dispatch_batch_lengths": [
+      1
+    ]
+  },
+  {
+    "case": "before",
+    "mode": "fcitx",
+    "scenario": "cancel",
+    "windows": [
+      {
+        "focus": true,
+        "active": "a"
+      },
+      {
+        "focus": false,
+        "active": "a"
+      }
+    ],
+    "fcitx_debug": "('Group [x11::0] has 4 InputContext(s)\\n  IC [7f1ff69456fa4d60b63028711035abfc] program:chrome frontend:dbus cap:6000000032 focus:0\\n  IC [22f9fa55c0d647099408dfa05383b5a1] program:chrome frontend:dbus cap:6000000032 focus:1\\n  IC [a95ded5906914236b0c18257490c9ea6] program: frontend:ibus cap:52 focus:0\\n  IC [b07f31be03d748a3810217aa91de621f] program: frontend:ibus cap:52 focus:0\\nInput Context without group\\n',)\n"
+  },
+  {
+    "case": "switch",
+    "mode": "fcitx",
+    "scenario": "cancel",
+    "first_before_switch": "甲",
+    "windows": [
+      {
+        "focus": false,
+        "active": "a"
+      },
+      {
+        "focus": true,
+        "active": "a"
+      }
+    ]
+  },
+  {
+    "case": "session_crosswindow",
+    "mode": "fcitx",
+    "scenario": "cancel",
+    "elapsed": 2.091,
+    "outcome": "cancelled",
+    "route": null,
+    "exact": true,
+    "receivers": [
+      {
+        "value": "甲",
+        "events": [
+          {
+            "type": "input",
+            "id": "a",
+            "data": "甲"
+          }
+        ],
+        "focus": false
+      },
+      {
+        "value": "",
+        "events": [
+          {
+            "type": "focus",
+            "id": "a",
+            "data": ""
+          }
+        ],
+        "focus": true
+      }
+    ],
+    "dispatch_batch_lengths": [
+      1
+    ]
+  },
+  {
+    "case": "hints_restored",
+    "value": true
+  }
+]
