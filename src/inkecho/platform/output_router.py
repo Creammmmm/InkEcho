@@ -576,6 +576,11 @@ class OutputRouter:
                         and error.code == "upgrade_required"
                     ):
                         raise OutputRouterError("ibus_upgrade_required") from None
+                    if (
+                        isinstance(error, IBusBridgeError)
+                        and error.code == "authorization_failed"
+                    ):
+                        raise OutputRouterError("ibus_authorization_failed") from None
                     raise OutputRouterError("input_capability_unknown") from None
             else:
                 self._selected, self._kind = bridge, framework

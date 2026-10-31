@@ -56,6 +56,14 @@ class FaultClient(Client):
             self.enter.set()
             if self.scenario == "lost":
                 raise TimeoutError()
+            if self.scenario == "denied":
+                return SimpleNamespace(
+                    signature="b", message_type=MessageType.METHOD_RETURN, body=[False]
+                )
+            if self.scenario == "malformed":
+                return SimpleNamespace(
+                    signature="s", message_type=MessageType.METHOD_RETURN, body=["no"]
+                )
             await self.release.wait()
             self.remote = True
             return SimpleNamespace(
@@ -146,5 +154,32 @@ def test_cancel_again_during_compensation_forbids_keyboard():
         except asyncio.CancelledError:
             pass
         assert c.cleanup_failed and bridges[0].preflight_cleanup_failed
+
+    asyncio.run(run())
+
+
+def test_begin_refusal_surfaces_precise_diagnostic_without_keyboard():
+    async def run():
+        router, insert, items, bridges, reports = await env("denied")
+        try:
+            await insert()
+            raise AssertionError("expected refusal")
+        except OutputRouterError as error:
+            assert error.code == "ibus_authorization_failed"
+        assert not items[0].cleanup_failed
+        assert not bridges[0].preflight_cleanup_failed
+
+    asyncio.run(run())
+
+
+def test_malformed_begin_is_cleanup_unknown_not_refusal():
+    async def run():
+        router, insert, items, bridges, reports = await env("malformed")
+        try:
+            await insert()
+            raise AssertionError("expected failure")
+        except OutputRouterError as error:
+            assert error.code == "ibus_cleanup_failed"
+        assert items[0].cleanup_failed and bridges[0].preflight_cleanup_failed
 
     asyncio.run(run())
