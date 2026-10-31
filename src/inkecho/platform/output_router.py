@@ -11,6 +11,7 @@ import sys
 import time
 from collections.abc import AsyncIterator, Callable, Mapping
 from contextlib import AsyncExitStack, asynccontextmanager
+from weakref import WeakSet
 
 from inkecho.platform.fcitx5 import Fcitx5Bridge, FcitxOutputError
 from inkecho.platform.framework_detection import (
@@ -94,7 +95,12 @@ class OutputRouter:
         self._ibus_attempted = False
         self._ibus_acknowledged_attempts = 0
         self._diagnostic_handler = None
+        self._cleanup_failure_tasks = WeakSet()
         self._scope_task_status = None
+
+    def cleanup_failed_for_task(self, task):
+        """Report cleanup faults only for the affected output consumer."""
+        return task in self._cleanup_failure_tasks
 
     def set_diagnostic_handler(self, handler):
         self._diagnostic_handler = handler
@@ -356,6 +362,7 @@ class OutputRouter:
         finally:
             body_error = sys.exception()
             kind = self._kind
+            explicit_owned = getattr(self, "_explicit_owned_task", False)
             attempts = self.acknowledged_attempts
             task_status, self._scope_task_status = self._scope_task_status, None
             self._scope_stack = None
@@ -363,7 +370,9 @@ class OutputRouter:
             try:
                 await self.discard_task()
             except Exception:
-                if kind != "fcitx":
+                if kind not in {"fcitx", "ibus"} or (kind == "ibus" and explicit_owned):
+                    # The explicit owned wrapper has stricter semantics: it
+                    # maps cleanup faults and suppresses dispatch_complete.
                     raise
                 self._report_cleanup_failure()
                 if body_error is None and task_status is not None:
@@ -473,6 +482,9 @@ class OutputRouter:
             self._report_cleanup_failure()
 
     def _report_cleanup_failure(self):
+        task = asyncio.current_task()
+        if task is not None:
+            self._cleanup_failure_tasks.add(task)
         try:
             if self._diagnostic_handler is None:
                 raise RuntimeError("no diagnostic handler")

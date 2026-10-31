@@ -1088,3 +1088,538 @@ def test_polishing_failure_during_partial_ibus_preserves_acknowledged_count(
         await session.close()
 
     asyncio.run(scenario())
+
+
+@pytest.mark.parametrize("after_prefix", [False, True])
+def test_ibus_cleanup_fault_after_producer_error_never_replays_original(
+    sessions, tmp_path, monkeypatch, after_prefix
+):
+    """A provider failure can race cancellation of a prepared IBus consumer."""
+    import os
+
+    from test_output_router import Keyboard
+
+    from inkecho.platform import ibus, ibus_lifecycle
+    from inkecho.platform.output_router import OutputRouter
+
+    async def scenario():
+        entered = asyncio.Event()
+        sent_first = asyncio.Event()
+        sent = []
+        capabilities = []
+        real_unlink = os.unlink
+
+        def create_cap(runtime):
+            cap = ibus_lifecycle.Capability(runtime)
+            capabilities.append(cap)
+            return cap
+
+        def fail_first_cap(path, **kwargs):
+            if capabilities and str(path) == capabilities[0].name:
+                raise OSError("synthetic private information")
+            return real_unlink(path, **kwargs)
+
+        class FakeClient:
+            def __init__(self, cap):
+                self.cap = cap
+                self._sequence = 0
+
+            async def begin(self):
+                pass
+
+            async def cancel(self):
+                pass
+
+            async def close(self):
+                self.cap.close()
+
+            async def insert(self, text, active, **_kwargs):
+                assert active()
+                sent.append(text)
+                self._sequence += len(text)
+                sent_first.set()
+                return len(text)
+
+        class Routed(OutputRouter):
+            @asynccontextmanager
+            async def output_session(self):
+                async with super().output_session():
+                    entered.set()
+                    yield
+
+        class StreamClient(Client):
+            async def polish_stream(self, _provider, _key, _text, _prompt, on_delta):
+                if after_prefix:
+                    await on_delta("甲")
+                    await sent_first.wait()
+                else:
+                    await entered.wait()
+                raise ProviderError("network")
+
+        session = sessions(StreamClient())
+        session.store.save_settings(
+            replace(
+                session.store.load_settings(),
+                output_method="ibus",
+                polishing_fallback=True,
+            )
+        )
+        keyboard = Keyboard()
+        session.inputs = Routed(
+            keyboard,
+            ibus_factory=lambda: ibus.IBusBridge(
+                runtime_dir=str(tmp_path),
+                capability_factory=create_cap,
+                client_factory=FakeClient,
+            ),
+        )
+        # Mimic Session's normal diagnostic hookup after replacing the backend.
+        session.inputs.set_diagnostic_handler(session.diagnostic.emit)
+        outcomes = []
+        session.finished.connect(outcomes.append)
+        monkeypatch.setattr(ibus_lifecycle.os, "unlink", fail_first_cap)
+        await session.toggle()
+        session.stop_recording()
+        await until(lambda: not session.pending)
+        assert sent == (["甲"] if after_prefix else [])
+        assert keyboard.sent == []
+        assert outcomes[0]["outcome"] == "failed"
+        await session.close()
+        monkeypatch.setattr(ibus_lifecycle.os, "unlink", real_unlink)
+        for p in tmp_path.glob("cap-*"):
+            p.unlink()
+
+    asyncio.run(scenario())
+
+
+def test_prior_cleanup_fault_does_not_poison_later_task_fallback(sessions):
+    async def scenario():
+        class EarlierFaultInputs(Inputs):
+            def cleanup_failed_for_task(self, _task):
+                return False
+
+        class FailingClient(Client):
+            async def polish_stream(self, *_args):
+                raise ProviderError("network")
+
+        session = sessions(FailingClient())
+        session.inputs = EarlierFaultInputs()
+        session.store.save_settings(
+            replace(session.store.load_settings(), polishing_fallback=True)
+        )
+        await session.toggle()
+        session.stop_recording()
+        await until(lambda: not session.pending)
+        assert session.inputs.written == "原始识别文本"
+        assert session.controller.outcome == State.SUCCEEDED
+        await session.close()
+
+    asyncio.run(scenario())
+
+
+def test_owned_preflight_cleanup_fault_after_provider_error_never_replays(
+    sessions, tmp_path, monkeypatch
+):
+    import os
+
+    from test_output_router import Keyboard
+
+    from inkecho.platform import ibus_lifecycle, ibus_owned
+    from inkecho.platform.ibus_owned_default import DefaultAutoOutputRouter
+
+    async def scenario():
+        began = asyncio.Event()
+        release = asyncio.Event()
+        sent = []
+        caps = []
+        begins = []
+        real_unlink = os.unlink
+
+        class ClientBridge:
+            def __init__(self, cap, **_options):
+                self.cap = cap
+
+            async def begin(self, **_options):
+                begins.append(1)
+                if len(begins) == 1:
+                    began.set()
+                    await release.wait()
+
+            async def cancel(self):
+                pass
+
+            async def close(self):
+                self.cap.close()
+
+            async def insert(self, text, active, **_options):
+                sent.append(text)
+                return len(text)
+
+        def cap_factory(runtime):
+            cap = ibus_lifecycle.Capability(runtime)
+            caps.append(cap)
+            return cap
+
+        def unlink(path, **kwargs):
+            if caps and str(path) == caps[0].name:
+                raise OSError("private path")
+            return real_unlink(path, **kwargs)
+
+        async def state():
+            return "enabled"
+
+        async def proof():
+            return ("ibus", ":1.23")
+
+        async def no_fcitx():
+            return None
+
+        keyboard = Keyboard()
+        router = DefaultAutoOutputRouter(
+            keyboard,
+            state_probe=state,
+            owned_probe=proof,
+            system_detector=no_fcitx,
+            owned_factory=lambda: ibus_owned.IBusBridge(
+                runtime_dir=str(tmp_path),
+                capability_factory=cap_factory,
+                client_factory=ClientBridge,
+            ),
+        )
+
+        class FailingClient(Client):
+            async def polish_stream(self, _provider, _key, _text, _prompt, on_delta):
+                await on_delta("甲乙丙")
+                await began.wait()
+                raise ProviderError("network")
+
+        session = sessions(FailingClient())
+        session.inputs = router
+        router.set_diagnostic_handler(session.diagnostic.emit)
+        session.store.save_settings(
+            replace(
+                session.store.load_settings(),
+                output_method="ibus-owned",
+                polishing_fallback=True,
+            )
+        )
+        outcomes = []
+        session.finished.connect(outcomes.append)
+        monkeypatch.setattr(ibus_lifecycle.os, "unlink", unlink)
+        await session.toggle()
+        session.stop_recording()
+        await until(lambda: not session.pending)
+        assert outcomes[0]["outcome"] == "failed"
+        assert not sent and not keyboard.sent and keyboard.connects == 0
+        assert len(caps) == 1 and caps[0]._fd is None
+        await session.close()
+        monkeypatch.setattr(ibus_lifecycle.os, "unlink", real_unlink)
+        for p in tmp_path.glob("cap-*"):
+            p.unlink()
+
+    asyncio.run(scenario())
+
+
+def test_ibus_user_cancellation_survives_scope_cleanup_fault(
+    sessions, tmp_path, monkeypatch
+):
+    import os
+
+    from test_output_router import Keyboard
+
+    from inkecho.platform import ibus, ibus_lifecycle
+    from inkecho.platform.output_router import OutputRouter
+
+    async def scenario():
+        entered = asyncio.Event()
+        never = asyncio.Event()
+        caps = []
+        sent = []
+        real_unlink = os.unlink
+
+        def cap_factory(runtime):
+            cap = ibus_lifecycle.Capability(runtime)
+            caps.append(cap)
+            return cap
+
+        def unlink(path, **kwargs):
+            if caps and str(path) == caps[0].name:
+                raise OSError("private path")
+            return real_unlink(path, **kwargs)
+
+        class ClientBridge:
+            def __init__(self, cap):
+                self.cap = cap
+
+            async def begin(self):
+                pass
+
+            async def cancel(self):
+                pass
+
+            async def close(self):
+                self.cap.close()
+
+            async def insert(self, text, active, **_kwargs):
+                sent.append(text)
+                return len(text)
+
+        class Routed(OutputRouter):
+            @asynccontextmanager
+            async def output_session(self):
+                async with super().output_session():
+                    entered.set()
+                    yield
+
+        class FailingClient(Client):
+            async def polish_stream(self, *_args):
+                await entered.wait()
+                await never.wait()
+                raise AssertionError("unexpected")
+
+        keyboard = Keyboard()
+        session = sessions(FailingClient())
+        router = Routed(
+            keyboard,
+            ibus_factory=lambda: ibus.IBusBridge(
+                runtime_dir=str(tmp_path),
+                capability_factory=cap_factory,
+                client_factory=ClientBridge,
+            ),
+        )
+        session.inputs = router
+        router.set_diagnostic_handler(session.diagnostic.emit)
+        session.store.save_settings(
+            replace(
+                session.store.load_settings(),
+                output_method="ibus",
+                polishing_fallback=True,
+            )
+        )
+        outcomes = []
+        session.finished.connect(outcomes.append)
+        monkeypatch.setattr(ibus_lifecycle.os, "unlink", unlink)
+        await session.toggle()
+        session.stop_recording()
+        await until(entered.is_set)
+        session.cancel()
+        await until(lambda: not session.pending)
+        assert outcomes[0]["outcome"] == "cancelled"
+        assert not sent and not keyboard.sent
+        await session.close()
+        monkeypatch.setattr(ibus_lifecycle.os, "unlink", real_unlink)
+        for p in tmp_path.glob("cap-*"):
+            p.unlink()
+
+    asyncio.run(scenario())
+
+
+def test_user_cancel_during_cleanup_after_provider_failure_stays_cancelled(
+    sessions, tmp_path, monkeypatch
+):
+    import os
+
+    from test_output_router import Keyboard
+
+    from inkecho.platform import ibus, ibus_lifecycle
+    from inkecho.platform.output_router import OutputRouter
+
+    async def scenario():
+        entered = asyncio.Event()
+        cleanup_started = asyncio.Event()
+        release = asyncio.Event()
+        caps = []
+        sent = []
+        unlink_original = os.unlink
+
+        def cap_factory(runtime):
+            cap = ibus_lifecycle.Capability(runtime)
+            caps.append(cap)
+            return cap
+
+        def unlink(path, **kwargs):
+            if caps and str(path) == caps[0].name:
+                raise OSError("private path")
+            return unlink_original(path, **kwargs)
+
+        class ClientBridge:
+            def __init__(self, cap):
+                self.cap = cap
+
+            async def begin(self):
+                pass
+
+            async def cancel(self):
+                cleanup_started.set()
+                await release.wait()
+
+            async def close(self):
+                self.cap.close()
+
+            async def insert(self, text, active, **_kwargs):
+                sent.append(text)
+                return len(text)
+
+        class Routed(OutputRouter):
+            @asynccontextmanager
+            async def output_session(self):
+                async with super().output_session():
+                    entered.set()
+                    yield
+
+        class FailingClient(Client):
+            async def polish_stream(self, *_args):
+                await entered.wait()
+                raise ProviderError("network")
+
+        keyboard = Keyboard()
+        session = sessions(FailingClient())
+        router = Routed(
+            keyboard,
+            ibus_factory=lambda: ibus.IBusBridge(
+                runtime_dir=str(tmp_path),
+                capability_factory=cap_factory,
+                client_factory=ClientBridge,
+            ),
+        )
+        session.inputs = router
+        router.set_diagnostic_handler(session.diagnostic.emit)
+        session.store.save_settings(
+            replace(
+                session.store.load_settings(),
+                output_method="ibus",
+                polishing_fallback=True,
+            )
+        )
+        outcomes = []
+        session.finished.connect(outcomes.append)
+        monkeypatch.setattr(ibus_lifecycle.os, "unlink", unlink)
+        await session.toggle()
+        session.stop_recording()
+        await until(cleanup_started.is_set)
+        session.cancel()
+        release.set()
+        await until(lambda: not session.pending)
+        assert outcomes[0]["outcome"] == "cancelled"
+        assert not sent and not keyboard.sent
+        await session.close()
+        monkeypatch.setattr(ibus_lifecycle.os, "unlink", unlink_original)
+        for p in tmp_path.glob("cap-*"):
+            p.unlink()
+
+    asyncio.run(scenario())
+
+
+def test_prior_scope_cleanup_fault_during_new_session_does_not_poison_fallback(
+    sessions, tmp_path, monkeypatch
+):
+    """Cleanup for an earlier consumer must not mark a newer task as unsafe."""
+    import os
+
+    from test_output_router import Keyboard
+
+    from inkecho.platform import ibus, ibus_lifecycle
+    from inkecho.platform.output_router import OutputRouter, OutputRouterError
+
+    async def scenario():
+        old_cleanup_started = asyncio.Event()
+        release_old = asyncio.Event()
+        old_done = asyncio.Event()
+        new_entered = asyncio.Event()
+        caps = []
+        sent = []
+        scopes = []
+        unlink_original = os.unlink
+
+        def cap_factory(runtime):
+            cap = ibus_lifecycle.Capability(runtime)
+            caps.append(cap)
+            return cap
+
+        def unlink(path, **kwargs):
+            if caps and str(path) == caps[0].name:
+                raise OSError("prior task cleanup failed")
+            return unlink_original(path, **kwargs)
+
+        class ClientBridge:
+            def __init__(self, cap):
+                self.cap = cap
+                self._sequence = 0
+                self.first = len(caps) == 1
+
+            async def begin(self):
+                pass
+
+            async def cancel(self):
+                if self.first:
+                    old_cleanup_started.set()
+                    await release_old.wait()
+
+            async def close(self):
+                self.cap.close()
+
+            async def insert(self, text, active, **_kwargs):
+                assert active()
+                sent.append(text)
+                self._sequence += len(text)
+                return len(text)
+
+        class Routed(OutputRouter):
+            @asynccontextmanager
+            async def output_session(self):
+                async with super().output_session():
+                    scopes.append(1)
+                    if len(scopes) == 2:
+                        new_entered.set()
+                    yield
+
+        class FailingClient(Client):
+            async def polish_stream(self, *_args):
+                await old_done.wait()
+                raise ProviderError("network")
+
+        keyboard = Keyboard()
+        router = Routed(
+            keyboard,
+            ibus_factory=lambda: ibus.IBusBridge(
+                runtime_dir=str(tmp_path),
+                capability_factory=cap_factory,
+                client_factory=ClientBridge,
+            ),
+        )
+        session = sessions(FailingClient())
+        session.inputs = router
+        router.set_diagnostic_handler(session.diagnostic.emit)
+        session.store.save_settings(
+            replace(
+                session.store.load_settings(),
+                output_method="ibus",
+                polishing_fallback=True,
+            )
+        )
+        monkeypatch.setattr(ibus_lifecycle.os, "unlink", unlink)
+        await router.prepare_task("ibus")
+
+        async def old_output():
+            with pytest.raises(OutputRouterError, match="input_cleanup_failed"):
+                async with router.output_session():
+                    raise ProviderError("network")
+            old_done.set()
+
+        old = asyncio.create_task(old_output())
+        await asyncio.wait_for(old_cleanup_started.wait(), 1)
+        await session.toggle()
+        session.stop_recording()
+        await asyncio.wait_for(new_entered.wait(), 1)
+        release_old.set()
+        await asyncio.wait_for(old, 1)
+        await until(lambda: not session.pending)
+        assert sent == ["原始识别文本"]
+        assert not keyboard.sent
+        assert session.controller.outcome == State.UNCONFIRMED
+        await session.close()
+        monkeypatch.setattr(ibus_lifecycle.os, "unlink", unlink_original)
+        for p in tmp_path.glob("cap-*"):
+            p.unlink()
+
+    asyncio.run(scenario())

@@ -12,6 +12,7 @@ from inkecho.core import Failure, State, TaskController
 from inkecho.performance import TaskTiming
 from inkecho.platform.ibus_owned_default import DefaultAutoOutputRouter as OutputRouter
 from inkecho.platform.keyboard import KeyboardError
+from inkecho.platform.output_router import OutputRouterError
 from inkecho.platform.wayland_keyboard import keyboard_for_desktop
 from inkecho.providers import ProviderClient, ProviderError, validate_provider_protocol
 from inkecho.realtime import (
@@ -1210,6 +1211,18 @@ class Session(QObject):
                 self._snapshot_acknowledged_attempts()
                 self._record_acknowledged_attempts(error)
             await stop_operations(keep_confirmation=fallback_possible)
+            cleanup_failed = getattr(self.inputs, "cleanup_failed_for_task", None)
+            unsafe_cleanup = False
+            if callable(cleanup_failed):
+                try:
+                    unsafe_cleanup = cleanup_failed(consumer) is True
+                except Exception:
+                    unsafe_cleanup = True
+            if unsafe_cleanup:
+                # A cancelled consumer may have reported a cleanup fault while
+                # retaining CancelledError. Never reprepare for original text.
+                fallback_possible = False
+                error = OutputRouterError("input_cleanup_failed")
             if fallback_possible and confirmation is not None:
                 try:
                     await confirmation
