@@ -57,7 +57,8 @@ def test_capability_is_exclusive_private_and_never_removes_foreign_file(tmp_path
     other.close()
     path.unlink()
     path.write_text("replacement")
-    cap.close()
+    with pytest.raises(ibus_lifecycle.LifecycleCleanupError, match="cleanup_failed"):
+        cap.close()
     assert path.read_text() == "replacement"
 
 
@@ -125,7 +126,7 @@ def test_failed_creation_preserves_replacement_file(tmp_path, monkeypatch):
         raise OSError("simulated write failure")
 
     monkeypatch.setattr(ibus_lifecycle.os, "write", replace_then_fail)
-    with pytest.raises(OSError, match="simulated write failure"):
+    with pytest.raises(ibus_lifecycle.LifecycleCleanupError, match="cleanup_failed"):
         module.Capability(tmp_path)
     assert [path.read_text() for path in tmp_path.iterdir()] == ["foreign replacement"]
 
@@ -141,7 +142,7 @@ def test_failed_identity_check_preserves_unverified_file(tmp_path, monkeypatch):
         return result
 
     monkeypatch.setattr(ibus_lifecycle.os, "fstat", fail_regular_file)
-    with pytest.raises(OSError, match="identity unavailable"):
+    with pytest.raises(ibus_lifecycle.LifecycleCleanupError, match="cleanup_failed"):
         module.Capability(tmp_path)
     assert len(list(tmp_path.iterdir())) == 1
 

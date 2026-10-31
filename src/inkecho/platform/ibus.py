@@ -10,7 +10,11 @@ from pathlib import Path
 from dbus_next import Message, MessageType
 from dbus_next.aio import MessageBus
 
-from inkecho.platform.ibus_lifecycle import Capability, LifecycleError
+from inkecho.platform.ibus_lifecycle import (
+    Capability,
+    LifecycleCleanupError,
+    LifecycleError,
+)
 
 SERVICE = "io.github.Creammmmm.InkEcho.IBusCandidateV2"
 PATH = "/io/github/Creammmmm/InkEcho/IBusCandidateV2"
@@ -35,6 +39,7 @@ class Client:
         self._sequence = 0
         self._failed = self._cancelled = self._busy = False
         self._no_service_confirmed = False
+        self.cleanup_failed = False
 
     async def _call(self, message, expected_sender):
         reply = await asyncio.wait_for(self._bus.call(message), self._timeout)
@@ -112,8 +117,13 @@ class Client:
                 or reply.message_type != MessageType.METHOD_RETURN
             ):
                 raise CandidateError("unavailable")
-        except BaseException:
-            await self.close()
+        except BaseException as error:
+            try:
+                await self.close()
+            except Exception:
+                self.cleanup_failed = True
+                if not isinstance(error, asyncio.CancelledError):
+                    raise CandidateError("cleanup_failed") from None
             raise
 
     async def _request(self, method, signature, body):
@@ -217,6 +227,7 @@ class IBusBridge:
         self._client_factory = client_factory
         self._client = None
         self._closed = False
+        self.preflight_cleanup_failed = False
 
     async def connect(self):
         if self._closed:
@@ -231,13 +242,37 @@ class IBusBridge:
             cap = self._capability_factory(runtime)
             client = self._client_factory(cap)
             await client.begin()
-        except asyncio.CancelledError:
+        except asyncio.CancelledError as error:
+            self.preflight_cleanup_failed |= bool(
+                getattr(error, "cleanup_failed", False)
+            )
             if cap is not None:
-                cap.close()
+                try:
+                    cap.close()
+                except Exception:
+                    self.preflight_cleanup_failed = True
+            self.preflight_cleanup_failed |= bool(
+                getattr(locals().get("client"), "cleanup_failed", False)
+            )
             raise
         except Exception as error:
             if cap is not None:
-                cap.close()
+                try:
+                    cap.close()
+                except Exception:
+                    self.preflight_cleanup_failed = True
+            self.preflight_cleanup_failed |= bool(
+                getattr(locals().get("client"), "cleanup_failed", False)
+            )
+            if (
+                self.preflight_cleanup_failed
+                or isinstance(error, LifecycleCleanupError)
+                or (
+                    isinstance(error, CandidateError) and error.code == "cleanup_failed"
+                )
+            ):
+                self.preflight_cleanup_failed = True
+                raise IBusBridgeError("cleanup_failed") from None
             if isinstance(error, CandidateError) and error.code in {
                 "unavailable",
                 "authorization_failed",
