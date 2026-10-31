@@ -1,0 +1,15 @@
+{
+  "fcitx_exit_command": 0,
+  "profile_restored": true,
+  "addon_absent": true,
+  "autostart_absent": true,
+  "environment_file_absent": true
+}
+SESSION  UID USER    SEAT  TTY  STATE  IDLE SINCE
+     25 1000 inkecho seat0 tty2 active no   -
+     26 1000 inkecho -     -    active no   -
+
+2 sessions listed.
+XDG_CURRENT_DESKTOP=ubuntu:GNOME
+XDG_SESSION_TYPE=x11
+5627 /usr/bin/ibus-daemon --panel disable --xim

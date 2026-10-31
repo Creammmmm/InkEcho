@@ -1,0 +1,27 @@
+{
+  "fcitx_exit_command": 0,
+  "profile_restored": true,
+  "addon_absent": true,
+  "autostart_absent": true,
+  "environment_file_absent": true
+}
+()
+()
+[User]
+Session=ubuntu-wayland
+SessionType=wayland
+Icon=/home/inkecho/.face
+SystemAccount=false
+
+[InputSource0]
+xkb=us
+SESSION  UID USER    SEAT  LEADER CLASS   TTY  IDLE SINCE
+     14 1000 inkecho seat0 4123   user    tty2 no   -
+      2 1000 inkecho -     1249   manager -    no   -
+     31 1000 inkecho seat0 6180   user    tty2 no   -
+     32 1000 inkecho -     6879   user    -    no   -
+
+4 sessions listed.
+XDG_CURRENT_DESKTOP=ubuntu:GNOME
+XDG_SESSION_TYPE=wayland
+6305 /usr/bin/ibus-daemon --panel disable

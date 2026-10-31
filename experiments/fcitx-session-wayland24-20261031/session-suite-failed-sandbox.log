@@ -1,0 +1,21 @@
+{"case": "login_fcitx", "debug": "('Group [wayland:] has 1 InputContext(s)\\n  IC [84facbe9427b45e788bf762ecfa42c22] program: frontend:ibus cap:52 focus:0\\nGroup [x11::0] has 0 InputContext(s)\\nInput Context without group\\n',)\n"}
+{"case": "browser_start", "pid": 3652, "wayland_display": "wayland-0", "display_absent": true, "args": ["/opt/inkecho-qa-chrome/chrome", "--password-store=basic", "--no-first-run", "--no-default-browser-check", "--disable-background-networking", "--disable-sync", "--ozone-platform=wayland", "--enable-wayland-ime", "--wayland-text-input-version=3", "--remote-debugging-port=0", "--remote-allow-origins=*", "--user-data-dir=/home/inkecho/inkecho-session24-validation/session-validation/profile", "file:///home/inkecho/inkecho-session24-validation/session-validation/owned.html"]}
+{"case": "browser_exit", "exit": -5}
+{"case": "hints_restored", "value": true}
+Traceback (most recent call last):
+  File "/home/inkecho/inkecho-session24-validation/session-browser.py", line 67, in <module>
+    asyncio.run(main())
+    ~~~~~~~~~~~^^^^^^^^
+  File "/tmp/.mount_InkEchIeokAk/usr/lib/python3.13/asyncio/runners.py", line 196, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "/tmp/.mount_InkEchIeokAk/usr/lib/python3.13/asyncio/runners.py", line 119, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/tmp/.mount_InkEchIeokAk/usr/lib/python3.13/asyncio/base_events.py", line 726, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/home/inkecho/inkecho-session24-validation/session-browser.py", line 32, in main
+    assert browser.poll() is None,'browser exited';await asyncio.sleep(.1)
+           ^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: browser exited
