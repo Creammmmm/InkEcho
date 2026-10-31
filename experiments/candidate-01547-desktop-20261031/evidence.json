@@ -1,0 +1,170 @@
+{
+  "ubuntu24-wayland": {
+    "artifact_sha256": "fc3023114cd5ae8a41b83d75dc5f3ccfa478c077fa28987a3b0f75d832ba5a98",
+    "version": "0.15.47",
+    "inventory": {
+      "inventory_application": "0.15.47",
+      "inventory_files_verified": 3707,
+      "inventory_links_verified": 1048,
+      "application_files_match_source": 94,
+      "websockets_license_copies_verified": 2
+    },
+    "fcitx_composition_guard": {
+      "code": "fcitx_composition_active",
+      "attempts": 0,
+      "preedit_length": 2,
+      "fixture_checks_passed": true,
+      "preedit_verified": true
+    },
+    "fcitx_pipeline": {
+      "normal": {
+        "backend": "fcitx",
+        "task_outcome": "succeeded",
+        "characters": 22,
+        "defaults_unchanged": true,
+        "balanced": true,
+        "cleanup_errors": []
+      },
+      "cancel-after-first": {
+        "backend": "fcitx",
+        "task_outcome": "cancelled",
+        "characters": 1,
+        "defaults_unchanged": true,
+        "balanced": true,
+        "cleanup_errors": []
+      }
+    },
+    "resource_cleanup_passed": true,
+    "container_exit_code": 0,
+    "container_oom": false,
+    "container_running": false,
+    "fcitx_original_log_sha256": "a83db073833fa90922c05dfbd5c09a457386d730947dd970cb8b7b9783faf0bd",
+    "package_audit_original_sha256": "0edff75f9b9047260621c0aa84567515957f3c696f7ccdff0a98710b53b7f45f"
+  },
+  "ubuntu26-wayland": {
+    "artifact_sha256": "fc3023114cd5ae8a41b83d75dc5f3ccfa478c077fa28987a3b0f75d832ba5a98",
+    "version": "0.15.47",
+    "inventory": {
+      "inventory_application": "0.15.47",
+      "inventory_files_verified": 3707,
+      "inventory_links_verified": 1048,
+      "application_files_match_source": 94,
+      "websockets_license_copies_verified": 2
+    },
+    "fcitx_composition_guard": {
+      "code": "fcitx_composition_active",
+      "attempts": 0,
+      "preedit_length": 2,
+      "fixture_checks_passed": true,
+      "preedit_verified": true
+    },
+    "fcitx_pipeline": {
+      "normal": {
+        "backend": "fcitx",
+        "task_outcome": "succeeded",
+        "characters": 22,
+        "defaults_unchanged": true,
+        "balanced": true,
+        "cleanup_errors": []
+      },
+      "cancel-after-first": {
+        "backend": "fcitx",
+        "task_outcome": "cancelled",
+        "characters": 1,
+        "defaults_unchanged": true,
+        "balanced": true,
+        "cleanup_errors": []
+      }
+    },
+    "resource_cleanup_passed": true,
+    "container_exit_code": 0,
+    "container_oom": false,
+    "container_running": false,
+    "fcitx_original_log_sha256": "8f3417dcfd6f86c665136b168596cf6ec5cce7f48f29fdbae8b3991257735130",
+    "package_audit_original_sha256": "a93e91f243210d75a69c518a61691aea2d0515835c6bc0cdd9b7b57e2c1a9872"
+  },
+  "ubuntu24-xorg": {
+    "artifact_sha256": "fc3023114cd5ae8a41b83d75dc5f3ccfa478c077fa28987a3b0f75d832ba5a98",
+    "version": "0.15.47",
+    "inventory": {
+      "inventory_application": "0.15.47",
+      "inventory_files_verified": 3707,
+      "inventory_links_verified": 1048,
+      "application_files_match_source": 94,
+      "websockets_license_copies_verified": 2
+    },
+    "fcitx_composition_guard": {
+      "code": "fcitx_composition_active",
+      "attempts": 0,
+      "preedit_length": 2,
+      "fixture_checks_passed": true,
+      "preedit_verified": true
+    },
+    "fcitx_pipeline": {
+      "normal": {
+        "backend": "fcitx",
+        "task_outcome": "succeeded",
+        "characters": 22,
+        "defaults_unchanged": true,
+        "balanced": true,
+        "cleanup_errors": []
+      },
+      "cancel-after-first": {
+        "backend": "fcitx",
+        "task_outcome": "cancelled",
+        "characters": 1,
+        "defaults_unchanged": true,
+        "balanced": true,
+        "cleanup_errors": []
+      }
+    },
+    "resource_cleanup_passed": true,
+    "container_exit_code": 0,
+    "container_oom": false,
+    "container_running": false,
+    "fcitx_original_log_sha256": "0af09f71b422a7a5bade2abbecb1aa4de18d95da1f3821c6b963d7c732ab214c",
+    "package_audit_original_sha256": "0b2c7e46f5883f31e53129f668fde6ce476e69bfd58793be7db824cf6bf35da7"
+  },
+  "ubuntu26-xorg": {
+    "artifact_sha256": "fc3023114cd5ae8a41b83d75dc5f3ccfa478c077fa28987a3b0f75d832ba5a98",
+    "version": "0.15.47",
+    "inventory": {
+      "inventory_application": "0.15.47",
+      "inventory_files_verified": 3707,
+      "inventory_links_verified": 1048,
+      "application_files_match_source": 94,
+      "websockets_license_copies_verified": 2
+    },
+    "fcitx_composition_guard": {
+      "code": "fcitx_composition_active",
+      "attempts": 0,
+      "preedit_length": 2,
+      "fixture_checks_passed": true,
+      "preedit_verified": true
+    },
+    "fcitx_pipeline": {
+      "normal": {
+        "backend": "fcitx",
+        "task_outcome": "succeeded",
+        "characters": 22,
+        "defaults_unchanged": true,
+        "balanced": true,
+        "cleanup_errors": []
+      },
+      "cancel-after-first": {
+        "backend": "fcitx",
+        "task_outcome": "cancelled",
+        "characters": 1,
+        "defaults_unchanged": true,
+        "balanced": true,
+        "cleanup_errors": []
+      }
+    },
+    "resource_cleanup_passed": true,
+    "container_exit_code": 0,
+    "container_oom": false,
+    "container_running": false,
+    "fcitx_original_log_sha256": "bb7691e6361be990fa69926f7e463914f54cd0e13df332c530597b561ef86c6c",
+    "package_audit_original_sha256": "79e8f4ebf0bce75bf4ef0a0466277a2b08d3285f2dc821f3caa507dbbd1c4d6a"
+  }
+}

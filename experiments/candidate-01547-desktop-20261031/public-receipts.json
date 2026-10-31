@@ -1,0 +1,332 @@
+{
+  "ubuntu24-wayland": {
+    "ui": {
+      "kind": "appimage",
+      "session": "wayland",
+      "voice_end_to_end": false,
+      "clipboard_accessed": false,
+      "artifact_sha256": "fc3023114cd5ae8a41b83d75dc5f3ccfa478c077fa28987a3b0f75d832ba5a98",
+      "pages": [
+        {
+          "file": "page-01.png",
+          "width": 1214,
+          "height": 730
+        },
+        {
+          "file": "page-02.png",
+          "width": 1214,
+          "height": 730
+        },
+        {
+          "file": "page-03.png",
+          "width": 1214,
+          "height": 730
+        },
+        {
+          "file": "page-04.png",
+          "width": 1214,
+          "height": 730
+        },
+        {
+          "file": "page-05.png",
+          "width": 1214,
+          "height": 730
+        }
+      ],
+      "primary_exit_code": 0,
+      "ipc_show_quit": true,
+      "cold_controls_exit_0_config_unchanged": true,
+      "damaged_config_exit_1_preserved": true,
+      "passed": true
+    },
+    "ui_receipt_sha256": "9670db8890813924b7a44658f852ff55d773f44f5c41aff660c79509b92b378a",
+    "browser": {
+      "artifact_sha256": "fc3023114cd5ae8a41b83d75dc5f3ccfa478c077fa28987a3b0f75d832ba5a98",
+      "session": "wayland",
+      "field": "textarea",
+      "passed": true,
+      "sandbox_disabled_in_isolated_vm": false,
+      "cases": [
+        {
+          "case": "mixed",
+          "outcome": "unconfirmed",
+          "received_lengths": [
+            22,
+            0
+          ],
+          "no_late": true,
+          "exact_fixture_match": true,
+          "passed": true
+        },
+        {
+          "case": "cancel",
+          "outcome": "cancelled",
+          "received_lengths": [
+            1,
+            0
+          ],
+          "no_late": true,
+          "exact_fixture_match": false,
+          "passed": true
+        },
+        {
+          "case": "pending-cancel",
+          "outcome": "cancelled",
+          "received_lengths": [
+            0,
+            0
+          ],
+          "no_late": true,
+          "exact_fixture_match": false,
+          "passed": true
+        },
+        {
+          "case": "prepare-switch",
+          "outcome": "unconfirmed",
+          "received_lengths": [
+            0,
+            22
+          ],
+          "no_late": true,
+          "exact_fixture_match": true,
+          "passed": true
+        }
+      ]
+    },
+    "browser_receipt_sha256": "8bb74c20387a07feb74fcf17e8000ba74c32b2bd42c58d71b2c0f84166fae4a4",
+    "protocol": {
+      "http_passed": true,
+      "http_synthetic_wav": true,
+      "http_real_cloud": false,
+      "qwen_status": "passed",
+      "qwen_synthetic_only": true,
+      "qwen_real_microphone": false,
+      "qwen_real_cloud": false,
+      "qwen_cases": [
+        {
+          "cancel": false,
+          "preview_before_stop": true,
+          "zero_input_before_consent_and_finish": true,
+          "final_exact_once": true,
+          "cancel_zero_output": false,
+          "resources_cleared": true
+        },
+        {
+          "cancel": true,
+          "preview_before_stop": true,
+          "zero_input_before_consent_and_finish": true,
+          "final_exact_once": false,
+          "cancel_zero_output": true,
+          "resources_cleared": true
+        }
+      ]
+    }
+  },
+  "ubuntu26-wayland": {
+    "ui": {
+      "kind": "appimage",
+      "session": "wayland",
+      "voice_end_to_end": false,
+      "clipboard_accessed": false,
+      "artifact_sha256": "fc3023114cd5ae8a41b83d75dc5f3ccfa478c077fa28987a3b0f75d832ba5a98",
+      "pages": [
+        {
+          "file": "page-01.png",
+          "width": 1213,
+          "height": 733
+        },
+        {
+          "file": "page-02.png",
+          "width": 1213,
+          "height": 733
+        },
+        {
+          "file": "page-03.png",
+          "width": 1213,
+          "height": 733
+        },
+        {
+          "file": "page-04.png",
+          "width": 1213,
+          "height": 733
+        },
+        {
+          "file": "page-05.png",
+          "width": 1213,
+          "height": 733
+        }
+      ],
+      "primary_exit_code": 0,
+      "ipc_show_quit": true,
+      "cold_controls_exit_0_config_unchanged": true,
+      "damaged_config_exit_1_preserved": true,
+      "passed": true
+    },
+    "ui_receipt_sha256": "b3c4ee5e8c455bb3453ecafb37ca49967964f4feb7702d09afb97ab11d0f149f",
+    "browser": {
+      "artifact_sha256": "fc3023114cd5ae8a41b83d75dc5f3ccfa478c077fa28987a3b0f75d832ba5a98",
+      "session": "wayland",
+      "field": "textarea",
+      "passed": true,
+      "sandbox_disabled_in_isolated_vm": false,
+      "cases": [
+        {
+          "case": "mixed",
+          "outcome": "unconfirmed",
+          "received_lengths": [
+            22,
+            0
+          ],
+          "no_late": true,
+          "exact_fixture_match": true,
+          "passed": true
+        },
+        {
+          "case": "cancel",
+          "outcome": "cancelled",
+          "received_lengths": [
+            1,
+            0
+          ],
+          "no_late": true,
+          "exact_fixture_match": false,
+          "passed": true
+        },
+        {
+          "case": "pending-cancel",
+          "outcome": "cancelled",
+          "received_lengths": [
+            0,
+            0
+          ],
+          "no_late": true,
+          "exact_fixture_match": false,
+          "passed": true
+        },
+        {
+          "case": "prepare-switch",
+          "outcome": "unconfirmed",
+          "received_lengths": [
+            0,
+            22
+          ],
+          "no_late": true,
+          "exact_fixture_match": true,
+          "passed": true
+        }
+      ]
+    },
+    "browser_receipt_sha256": "0882314d2960859553c469f53af28cf134ac3c60fbecf5674c0fd126d7a6767e",
+    "protocol": {
+      "http_passed": true,
+      "http_synthetic_wav": true,
+      "http_real_cloud": false,
+      "qwen_status": "passed",
+      "qwen_synthetic_only": true,
+      "qwen_real_microphone": false,
+      "qwen_real_cloud": false,
+      "qwen_cases": [
+        {
+          "cancel": false,
+          "preview_before_stop": true,
+          "zero_input_before_consent_and_finish": true,
+          "final_exact_once": true,
+          "cancel_zero_output": false,
+          "resources_cleared": true
+        },
+        {
+          "cancel": true,
+          "preview_before_stop": true,
+          "zero_input_before_consent_and_finish": true,
+          "final_exact_once": false,
+          "cancel_zero_output": true,
+          "resources_cleared": true
+        }
+      ]
+    }
+  },
+  "ubuntu24-xorg": {
+    "ui": {
+      "kind": "appimage",
+      "session": "x11",
+      "voice_end_to_end": false,
+      "clipboard_accessed": false,
+      "artifact_sha256": "fc3023114cd5ae8a41b83d75dc5f3ccfa478c077fa28987a3b0f75d832ba5a98",
+      "pages": [
+        {
+          "file": "page-01.png",
+          "width": 1120,
+          "height": 731
+        },
+        {
+          "file": "page-02.png",
+          "width": 1120,
+          "height": 731
+        },
+        {
+          "file": "page-03.png",
+          "width": 1120,
+          "height": 731
+        },
+        {
+          "file": "page-04.png",
+          "width": 1120,
+          "height": 731
+        },
+        {
+          "file": "page-05.png",
+          "width": 1120,
+          "height": 731
+        }
+      ],
+      "primary_exit_code": 0,
+      "ipc_show_quit": true,
+      "cold_controls_exit_0_config_unchanged": true,
+      "damaged_config_exit_1_preserved": true,
+      "passed": true
+    },
+    "ui_receipt_sha256": "0b56932fc1486e6b753e002b9b0596266004ffbe635bc33ded04a031e5a3c03f"
+  },
+  "ubuntu26-xorg": {
+    "ui": {
+      "kind": "appimage",
+      "session": "x11",
+      "voice_end_to_end": false,
+      "clipboard_accessed": false,
+      "artifact_sha256": "fc3023114cd5ae8a41b83d75dc5f3ccfa478c077fa28987a3b0f75d832ba5a98",
+      "pages": [
+        {
+          "file": "page-01.png",
+          "width": 1120,
+          "height": 850
+        },
+        {
+          "file": "page-02.png",
+          "width": 1120,
+          "height": 850
+        },
+        {
+          "file": "page-03.png",
+          "width": 1120,
+          "height": 850
+        },
+        {
+          "file": "page-04.png",
+          "width": 1120,
+          "height": 850
+        },
+        {
+          "file": "page-05.png",
+          "width": 1120,
+          "height": 850
+        }
+      ],
+      "primary_exit_code": 0,
+      "ipc_show_quit": true,
+      "cold_controls_exit_0_config_unchanged": true,
+      "damaged_config_exit_1_preserved": true,
+      "passed": true
+    },
+    "ui_receipt_sha256": "4d020fc18f28ed96af4c4ea1c6c56a723a0c7ca95ce5e1a6d17cd9fd19f03186"
+  }
+}
