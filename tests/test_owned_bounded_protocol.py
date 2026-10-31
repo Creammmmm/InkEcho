@@ -29,6 +29,7 @@ def xml(begin="ssut", commit="ust", duplicate=False, legacy=False):
             "s",
         )
         + method("Cancel", "", "b")
+        + method("OwnerGuardVersion", "", "s")
     )
     if duplicate:
         s += method("CommitBounded", "ust", "s")
@@ -53,16 +54,30 @@ class Bus:
     async def connect(self):
         return self
 
+    def add_message_handler(self, handler):
+        self.handler = handler
+
     def disconnect(self):
         self.disconnected = True
 
     async def call(self, m):
         self.calls.append((m.member, m.signature, m.body))
         member = m.member
+        if member == "AddMatch":
+            return types.SimpleNamespace(
+                message_type=MessageType.METHOD_RETURN,
+                sender="org.freedesktop.DBus",
+                signature="",
+                body=[],
+            )
         if member == "GetNameOwner":
             sender = "org.freedesktop.DBus"
             signature = "s"
             body = [":1.23"]
+        elif member == "OwnerGuardVersion":
+            sender = ":1.23"
+            signature = "s"
+            body = ["owner-loss-v1"]
         elif member == "Introspect":
             sender = ":1.23"
             signature = "s"
@@ -310,3 +325,24 @@ async def main(tmp_path):
 
 def test_bounded_client_protocol_and_task_boundaries(tmp_path):
     asyncio.run(main(tmp_path))
+
+
+def test_bounded_service_without_owner_guard_requires_upgrade():
+    async def run():
+        schema = xml().replace(
+            '<method name="OwnerGuardVersion"><arg direction="out" type="s"/></method>',
+            "",
+        )
+        bus = Bus(schema)
+        client = Client(
+            Cap(), bus_factory=lambda: bus, owner_verifier=lambda _: async_true()
+        )
+        try:
+            await client.begin()
+            raise AssertionError("old service was accepted")
+        except CandidateError as error:
+            assert error.code == "upgrade_required"
+        assert not any(method.startswith("Begin") for method, *_ in bus.calls)
+        assert bus.disconnected
+
+    asyncio.run(run())

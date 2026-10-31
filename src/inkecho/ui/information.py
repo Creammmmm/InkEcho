@@ -158,8 +158,23 @@ class CompatibilityPage(Page):
                 "它不会切换输入法，也无法确认目标是否收到文字。"
                 "本版本只使用带服务端期限的新协议；旧扩展需先停用并卸载，"
                 "再安装匹配版本并重新登录桌面；仅停用再启用可能仍加载缓存代码。"
-                "新版扩展拒绝旧客户端；请同时更新并重启 InkEcho。"
+                "请同时更新并重启 InkEcho；旧客户端不具备新版保护。"
                 "如不可用，请检查扩展状态或停用扩展后重新检查输入方式。",
+                muted=True,
+            )
+        )
+        owned_layout.addWidget(
+            label(
+                "升级旧自动输入扩展：\n"
+                "1. 点击下方「停用自动输入扩展」。\n"
+                "2. 打开系统「扩展」应用，找到 "
+                "InkEcho bounded owned context candidate，"
+                "选择卸载。若没有卸载选项，可在终端运行：\n"
+                "gnome-extensions uninstall "
+                "inkecho-ibus-owned-v5-prototype@local.invalid\n"
+                "3. 返回这里点击「安装自动输入扩展」，然后点击「启用自动输入扩展」。\n"
+                "4. 退出桌面会话并重新登录，重启 InkEcho 后点击「检查自动输入扩展」。"
+                "程序不会自动卸载或覆盖旧扩展。",
                 muted=True,
             )
         )

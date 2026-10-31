@@ -50,6 +50,6 @@ def test_help_scopes_bounded_upgrade_to_automatic_owned_extension(window):
     bounded = next(text for text in labels if "带服务端期限的新协议" in text)
     assert "显式 IBus 的旧 V2" in bounded
     assert "先停用并卸载" in bounded and "重新登录" in bounded
-    assert "拒绝旧客户端" in bounded and "无法确认目标是否收到" in bounded
+    assert "旧客户端不具备新版保护" in bounded and "无法确认目标是否收到" in bounded
     legacy = next(text for text in labels if "不会自动覆盖旧扩展" in text)
     assert "带服务端期限" not in legacy and "新版扩展拒绝旧协议" not in legacy

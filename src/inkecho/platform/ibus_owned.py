@@ -74,10 +74,11 @@ class Client:
         self._failed = self._cancelled = self._busy = False
         self._no_service_confirmed = False
         self.cleanup_failed = False
+        self._owner_changed = False
 
     async def _call(self, message, expected_sender):
         reply = await asyncio.wait_for(self._bus.call(message), self._timeout)
-        if reply.sender != expected_sender:
+        if self._owner_changed or reply.sender != expected_sender:
             raise CandidateError("unavailable")
         return reply
 
@@ -159,6 +160,19 @@ class Client:
                 x.get("type") for x in args if x.get("direction") == "out"
             ] == list(outputs)
 
+        async def require_owner_guard():
+            if not exact("OwnerGuardVersion", "", "s"):
+                if any(x.get("name") == "OwnerGuardVersion" for x in methods):
+                    raise CandidateError("unavailable")
+                raise CandidateError("upgrade_required")
+            result = await self._request("OwnerGuardVersion", "", [])
+            if (
+                result.message_type != MessageType.METHOD_RETURN
+                or getattr(result, "signature", None) != "s"
+                or result.body != ["owner-loss-v1"]
+            ):
+                raise CandidateError("unavailable")
+
         # Require the complete bounded protocol. A complete legacy schema needs
         # an explicit upgrade; partial/malformed schemas remain unavailable.
         # Never emit via an old method while claiming a bounded task.
@@ -173,6 +187,7 @@ class Client:
                 and exact("Cancel", "", "b")
             ):
                 raise CandidateError("unavailable")
+            await require_owner_guard()
             return 2
         old_bounded = (
             exact("BeginBounded", "ssut", "b")
@@ -180,6 +195,7 @@ class Client:
             and exact("Cancel", "", "b")
         )
         if old_bounded:
+            await require_owner_guard()
             return 1
         if any(
             method.get("name") in {"BeginBounded", "CommitBounded"}
@@ -197,6 +213,17 @@ class Client:
     async def begin(self, deadline=None):
         if self._bus is not None or self._cancelled:
             raise CandidateError("busy")
+        begin_sent = False
+        begin_replied = False
+
+        def check_begin():
+            if (
+                self._cancelled
+                or self._owner_changed
+                or time.monotonic() * 1_000_000 >= deadline_us
+            ):
+                raise CandidateError("cancelled")
+
         try:
             if deadline is None:
                 deadline = time.monotonic() + 59
@@ -215,6 +242,41 @@ class Client:
             # cancellation can close a connection that never finishes setup.
             self._bus = self._bus_factory()
             await asyncio.wait_for(self._bus.connect(), self._timeout)
+            check_begin()
+
+            def watch(message):
+                if (
+                    message.message_type == MessageType.SIGNAL
+                    and message.sender == "org.freedesktop.DBus"
+                    and message.interface == "org.freedesktop.DBus"
+                    and message.member == "NameOwnerChanged"
+                    and message.signature == "sss"
+                    and len(message.body) == 3
+                    and message.body[0] == SERVICE
+                ):
+                    self._owner_changed = True
+                    self._failed = True
+
+            self._bus.add_message_handler(watch)
+            match = (
+                "type='signal',sender='org.freedesktop.DBus',"
+                "interface='org.freedesktop.DBus',member='NameOwnerChanged',"
+                "arg0='" + SERVICE + "'"
+            )
+            registered = await self._call(
+                Message(
+                    destination="org.freedesktop.DBus",
+                    path="/org/freedesktop/DBus",
+                    interface="org.freedesktop.DBus",
+                    member="AddMatch",
+                    signature="s",
+                    body=[match],
+                ),
+                "org.freedesktop.DBus",
+            )
+            check_begin()
+            if registered.message_type != MessageType.METHOD_RETURN:
+                raise CandidateError("unavailable")
             reply = await self._call(
                 Message(
                     destination="org.freedesktop.DBus",
@@ -226,6 +288,7 @@ class Client:
                 ),
                 "org.freedesktop.DBus",
             )
+            check_begin()
             if reply.message_type != MessageType.METHOD_RETURN or len(reply.body) != 1:
                 raise CandidateError("unavailable")
             owner = reply.body[0]
@@ -235,8 +298,10 @@ class Client:
                 raise CandidateError("untrusted_owner")
             if not await self._owner_verifier(owner):
                 raise CandidateError("untrusted_owner")
+            check_begin()
             self._owner = owner
             self._protocol = await self._negotiate_batch()
+            check_begin()
             self._neighbor_batch = True
             # Same Linux CLOCK_MONOTONIC epoch; integer microseconds round down.
             # The first task ceiling is fixed, never renewed by later fragments.
@@ -247,11 +312,43 @@ class Client:
             )
             if self._deadline_us <= now_us:
                 raise CandidateError("cancelled")
+            check_begin()
+            begin_sent = True
             reply = await self._request(
                 "BeginLongBounded" if self._protocol == 2 else "BeginBounded",
                 "ssut",
                 [self._cap.name, self._cap.token, self._protocol, self._deadline_us],
             )
+            if (
+                getattr(reply, "signature", None) != "b"
+                or reply.message_type != MessageType.METHOD_RETURN
+                or len(reply.body) != 1
+                or type(reply.body[0]) is not bool
+            ):
+                raise CandidateError("delivery_unknown")
+            begin_replied = True
+            if (
+                self._cancelled
+                or self._owner_changed
+                or time.monotonic() * 1_000_000 >= deadline_us
+            ):
+                if getattr(reply, "signature", None) == "b" and reply.body == [True]:
+                    try:
+                        stopped = await asyncio.wait_for(
+                            self._request("Cancel", "", []), self._timeout
+                        )
+                        if (
+                            stopped.message_type != MessageType.METHOD_RETURN
+                            or stopped.body != [True]
+                        ):
+                            raise CandidateError("cleanup_failed")
+                    except BaseException as error:
+                        self.cleanup_failed = True
+                        if isinstance(error, asyncio.CancelledError):
+                            raise
+                raise CandidateError(
+                    "cleanup_failed" if self.cleanup_failed else "cancelled"
+                )
             if getattr(reply, "signature", None) != "b":
                 raise CandidateError("unavailable")
             if reply.message_type == MessageType.METHOD_RETURN and reply.body == [
@@ -265,6 +362,8 @@ class Client:
             ):
                 raise CandidateError("unavailable")
         except BaseException as error:
+            if begin_sent and not begin_replied:
+                self.cleanup_failed = True
             try:
                 await self.close()
             except Exception:

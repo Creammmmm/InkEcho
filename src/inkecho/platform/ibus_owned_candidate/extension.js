@@ -15,6 +15,7 @@ import {consumeCapability} from './capability.js';
 const SERVICE = 'io.github.Creammmmm.InkEcho.IBusOwnedCandidateV5';
 const PATH = '/io/github/Creammmmm/InkEcho/IBusOwnedCandidateV5';
 const XML = `<node><interface name="${SERVICE}1">
+ <method name="OwnerGuardVersion"><arg type="s" direction="out"/></method>
  <method name="Probe"><arg type="s" direction="out"/></method>
  <method name="Begin"><arg type="s" direction="in"/><arg type="s" direction="in"/><arg type="b" direction="out"/></method>
  <method name="Commit"><arg type="u" direction="in"/><arg type="s" direction="in"/><arg type="s" direction="out"/></method>
@@ -53,6 +54,9 @@ export default class Candidate extends Extension {
             'org.freedesktop.DBus', 'NameOwnerChanged', '/org/freedesktop/DBus',
             null, Gio.DBusSignalFlags.NONE, (_c, _s, _p, _i, _n, params) => {
                 const [name, oldOwner, newOwner] = params.deep_unpack();
+                if (name === SERVICE && oldOwner === Gio.DBus.session.get_unique_name() &&
+                    newOwner !== oldOwner)
+                    this._gate.close();
                 if (name.startsWith(':') && oldOwner && !newOwner)
                     this._gate.ownerLost(name);
             });
@@ -111,6 +115,9 @@ export default class Candidate extends Extension {
             } finally { this._probing = false; }
         }
         invocation.return_value(new GLib.Variant('(s)', [result]));
+    }
+    OwnerGuardVersionAsync(_args, invocation) {
+        invocation.return_value(new GLib.Variant('(s)', ['owner-loss-v1']));
     }
     // Legacy methods stay introspectable but can never create or mutate a task.
     // A matching upgraded client must negotiate the bounded methods.

@@ -79,8 +79,8 @@ FILES = {
         "size": 951,
     },
     "extension.js": {
-        "sha256": "df03fdd67c4da5253a9fa9ec63ffc3d8585158de4dcff2a7b2cf05d06563ac6a",
-        "size": 9172,
+        "sha256": "c365213f1bf435e016e4b9504c06c8a7464584d2df85ded2a039c7536a5dcb7e",
+        "size": 9552,
     },
     "identity.js": {
         "sha256": "5a50a88cc6f08619b4742e2f1c269a2dce7a517ece32176270ad69f3ffc8e9ac",
@@ -101,6 +101,14 @@ FILES = {
     "capability.js": {
         "sha256": "fcbaf3e7fd0184ca3141f3c4d811f7496ef753fd6282714ec128a26151a1c881",
         "size": 2784,
+    },
+}
+
+PREVIOUS_FILES = {
+    **FILES,
+    "extension.js": {
+        "sha256": "df03fdd67c4da5253a9fa9ec63ffc3d8585158de4dcff2a7b2cf05d06563ac6a",
+        "size": 9172,
     },
 }
 
@@ -133,6 +141,7 @@ def verified_installation(root=None):
             maximum = max(
                 FILES[name]["size"],
                 BOUNDED_V1_FILES[name]["size"],
+                PREVIOUS_FILES[name]["size"],
                 LEGACY_FILES[name]["size"],
             )
             fd = os.open(
@@ -156,7 +165,7 @@ def verified_installation(root=None):
             finally:
                 os.close(fd)
         # Accept complete old V5 or complete current bounded bridge, never a mixed set.
-        if observed not in (FILES, BOUNDED_V1_FILES, LEGACY_FILES):
+        if observed not in (FILES, PREVIOUS_FILES, BOUNDED_V1_FILES, LEGACY_FILES):
             raise ValueError
         return True
     except (OSError, ValueError):
