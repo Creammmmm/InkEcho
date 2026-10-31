@@ -1,0 +1,10 @@
+SESSION  UID USER    SEAT  LEADER CLASS   TTY  IDLE SINCE
+     14 1000 inkecho seat0 5164   user    tty2 no   -
+     15 1000 inkecho -     5856   user    -    no   -
+      2 1000 inkecho -     1310   manager -    no   -
+      6 1000 inkecho seat0 2622   user    tty2 no   -
+
+4 sessions listed.
+XDG_SESSION_TYPE=wayland
+5291 /usr/bin/ibus-daemon --panel disable
+restored
