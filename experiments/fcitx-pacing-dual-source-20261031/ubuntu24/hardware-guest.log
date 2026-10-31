@@ -1,0 +1,23 @@
+{"case": "login_fcitx", "debug": "('Group [x11::0] has 1 InputContext(s)\\n  IC [c6f19c901fbc490e9d4726c354fbb870] program: frontend:ibus cap:52 focus:0\\nInput Context without group\\n',)\n"}
+{"case": "browser_start", "pid": 9021, "wayland_display": null, "display_absent": false, "args": ["/opt/inkecho-qa-chrome/chrome", "--password-store=basic", "--no-first-run", "--no-default-browser-check", "--disable-background-networking", "--disable-sync", "--ozone-platform=x11", "--gtk-version=3", "--remote-debugging-port=0", "--remote-allow-origins=*", "--user-data-dir=/home/inkecho/inkecho-paced24-1031/xorg-preedit-r2/profile", "file:///home/inkecho/inkecho-paced24-1031/xorg-preedit-r2/owned.html"]}
+{"case": "ready", "state": {"focus": true, "active": "a"}}
+{"case": "x11_evidence", "session": "x11", "display": ":0", "browser_pid": 9021}
+{"case": "keyboard_control", "state": {"value": "", "events": [{"type": "focus", "id": "a", "data": ""}]}}
+{"case": "browser_exit", "exit": 0}
+{"case": "hints_restored", "value": true}
+Traceback (most recent call last):
+  File "/home/inkecho/inkecho-paced24-1031/xorg-preedit-r2.py", line 86, in <module>
+    asyncio.run(main())
+  File "/usr/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 687, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/home/inkecho/inkecho-paced24-1031/xorg-preedit-r2.py", line 58, in main
+    subprocess.run(['/usr/bin/fcitx5-remote','-s','keyboard-us'],check=True);await key(97,1);control=json.loads(js("JSON.stringify({value:a.value,events:window.events})"));record('keyboard_control',state=control);assert control['value']=='a';js('a.value="";events.length=0;a.focus();true');subprocess.run(['/usr/bin/fcitx5-remote','-s','pinyin'],check=True);subprocess.run(['/usr/bin/fcitx5-remote','-o'],check=True);await asyncio.sleep(.5);await key(110,2);await key(105,3);await asyncio.sleep(.4)
+                                                                                                                                                                                                                            ^^^^^^^^^^^^^^^^^^^^^
+AssertionError

@@ -1,0 +1,24 @@
+{"case": "login_fcitx", "debug": "('Group [wayland:] has 1 InputContext(s)\\n  IC [6efb7353a041470b93cb38debad0a260] program:gnome-shell frontend:ibus cap:52 focus:0\\nGroup [x11::0] has 0 InputContext(s)\\nInput Context without group\\n',)\n"}
+{"case": "browser_start", "pid": 4561, "wayland_display": "wayland-0", "display_absent": true, "args": ["/opt/inkecho-qa-chrome/chrome", "--password-store=basic", "--no-first-run", "--no-default-browser-check", "--disable-background-networking", "--disable-sync", "--ozone-platform=wayland", "--enable-wayland-ime", "--wayland-text-input-version=3", "--remote-debugging-port=0", "--remote-allow-origins=*", "--user-data-dir=/home/inkecho/fcitx-native-login-1031/native-browser-preedit/profile", "file:///home/inkecho/fcitx-native-login-1031/native-browser-preedit/owned.html"]}
+{"case": "ready", "state": {"focus": true, "active": "a"}}
+{"case": "wayland_trace", "surface": true, "toplevel": true, "keyboard": true}
+{"case": "composition_before", "state": {"value": "ni", "events": [{"type": "focus", "id": "a", "data": ""}, {"type": "compositionstart", "id": "a", "data": ""}, {"type": "compositionupdate", "id": "a", "data": "n"}, {"type": "input", "id": "a", "data": "n"}, {"type": "compositionupdate", "id": "a", "data": "ni"}, {"type": "input", "id": "a", "data": "ni"}], "focus": true, "active": "a"}}
+{"case": "browser_exit", "exit": 0}
+{"case": "hints_restored", "value": true}
+Traceback (most recent call last):
+  File "/home/inkecho/fcitx-native-login-1031/browser-preedit.py", line 86, in <module>
+    asyncio.run(main())
+    ~~~~~~~~~~~^^^^^^^^
+  File "/usr/lib/python3.14/asyncio/runners.py", line 204, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "/usr/lib/python3.14/asyncio/runners.py", line 127, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/usr/lib/python3.14/asyncio/base_events.py", line 719, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/home/inkecho/fcitx-native-login-1031/browser-preedit.py", line 59, in main
+    before=json.loads(js("JSON.stringify({value:a.value,events:window.events,focus:document.hasFocus(),active:document.activeElement.id})"));record('composition_before',state=before);assert before['value']=='' and any(e['type']=='compositionupdate' and e['data'] for e in before['events'])
+                                                                                                                                                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

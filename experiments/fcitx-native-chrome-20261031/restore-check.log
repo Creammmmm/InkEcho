@@ -1,0 +1,14 @@
+SESSION  UID USER    SEAT  LEADER CLASS   TTY  IDLE SINCE
+      2 1000 inkecho -     1307   manager -    no   -
+     36 1000 inkecho seat0 10676  user    tty2 no   -
+     37 1000 inkecho -     11471  user    -    no   -
+
+3 sessions listed.
+10740 /usr/bin/gnome-shell --mode=ubuntu
+10807 /usr/bin/gjs -m /usr/share/gnome-shell/org.gnome.Shell.Notifications
+10812 /usr/bin/ibus-daemon --panel disable
+10959 /usr/bin/gjs -m /usr/share/gnome-shell/org.gnome.ScreenSaver
+11190 gjs /usr/share/gnome-shell/extensions/ding@rastersoft.com/app/ding.js -E -P /usr/share/gnome-shell/extensions/ding@rastersoft.com/app
+11431 gjs -m /usr/share/gnome-shell/extensions/ubuntu-appindicators@ubuntu.com/tools/busAnalyzer.js
+11522 bash -c loginctl list-sessions; pgrep -a -u 1000 -f "fcitx5|ibus-daemon|gnome-shell"; test ! -e ~/.config/autostart/fcitx5-inkecho-qa.desktop && test ! -e ~/.config/environment.d/90-inkecho-qa.conf && test ! -e ~/.local/share/fcitx5/addon/inkecho.conf && echo restored
+restored

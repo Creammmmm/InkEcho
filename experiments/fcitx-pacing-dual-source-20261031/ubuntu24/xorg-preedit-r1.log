@@ -1,0 +1,23 @@
+{"case": "login_fcitx", "debug": "('Group [x11::0] has 1 InputContext(s)\\n  IC [c6f19c901fbc490e9d4726c354fbb870] program: frontend:ibus cap:52 focus:0\\nInput Context without group\\n',)\n"}
+{"case": "browser_start", "pid": 8411, "wayland_display": null, "display_absent": false, "args": ["/opt/inkecho-qa-chrome/chrome", "--password-store=basic", "--no-first-run", "--no-default-browser-check", "--disable-background-networking", "--disable-sync", "--ozone-platform=x11", "--gtk-version=3", "--remote-debugging-port=0", "--remote-allow-origins=*", "--user-data-dir=/home/inkecho/inkecho-paced24-1031/xorg-preedit/profile", "file:///home/inkecho/inkecho-paced24-1031/xorg-preedit/owned.html"]}
+{"case": "ready", "state": {"focus": true, "active": "a"}}
+{"case": "x11_evidence", "session": "x11", "display": ":0", "browser_pid": 8411}
+{"case": "composition_before", "state": {"value": "", "events": [{"type": "focus", "id": "a", "data": ""}], "focus": true, "active": "a"}}
+{"case": "browser_exit", "exit": 0}
+{"case": "hints_restored", "value": true}
+Traceback (most recent call last):
+  File "/home/inkecho/inkecho-paced24-1031/xorg-preedit.py", line 86, in <module>
+    asyncio.run(main())
+  File "/usr/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 687, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "/home/inkecho/inkecho-paced24-1031/xorg-preedit.py", line 59, in main
+    before=json.loads(js("JSON.stringify({value:a.value,events:window.events,focus:document.hasFocus(),active:document.activeElement.id})"));record('composition_before',state=before);assert before['value']=='ni' and any(e['type']=='compositionupdate' and e['data'] for e in before['events'])
+                                                                                                                                                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

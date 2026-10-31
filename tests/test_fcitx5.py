@@ -336,9 +336,10 @@ def test_cancel_between_sends_stops_without_replay():
             bus_factory=lambda: bus, capability_factory=FakeCapability
         )
         await client.connect()
-        checks = iter([True, True, False])
         with pytest.raises(FcitxOutputError) as caught:
-            await client.insert("ab", lambda: next(checks))
+            await client.insert(
+                "ab", lambda: not any(call.member == "Commit" for call in bus.calls)
+            )
         assert caught.value.code == "cancelled"
         assert caught.value.accepted == 1
         assert not caught.value.safe_to_fallback
@@ -666,9 +667,10 @@ def test_waiting_for_focus_checks_cancellation_before_retry():
             bus_factory=lambda: bus, capability_factory=FakeCapability
         )
         await client.connect()
-        checks = iter([True, True, False])
         with pytest.raises(FcitxOutputError, match="cancelled"):
-            await client.insert("甲", lambda: next(checks))
+            await client.insert(
+                "甲", lambda: not any(call.member == "Commit" for call in bus.calls)
+            )
         assert len([x for x in bus.calls if x.member == "Commit"]) == 1
         await client.aclose()
 
@@ -762,6 +764,7 @@ def test_inflight_commit_retains_confirmation_window_near_focus_grace(monkeypatc
 def test_partial_commit_waits_for_focus_until_task_deadline(monkeypatch):
     monkeypatch.setattr(fcitx5, "FOCUS_WAIT_SECONDS", 0.005)
     monkeypatch.setattr(fcitx5, "FOCUS_POLL_SECONDS", 0.001)
+    monkeypatch.setattr(fcitx5, "COMMIT_INTERVAL_SECONDS", 0.001)
 
     async def run():
         bus = FakeBus([reply([1])] + [reply([3])] * 100)
@@ -813,9 +816,10 @@ def test_cancel_during_partial_focus_wait_stops_without_sending_tail(monkeypatch
         )
         await client.connect()
         assert await client.insert("甲", lambda: True) == 1
-        checks = iter([True, True, False])
         with pytest.raises(FcitxOutputError, match="cancelled"):
-            await client.insert("乙丙", lambda: next(checks))
+            await client.insert(
+                "乙丙", lambda: sum(call.member == "Commit" for call in bus.calls) < 2
+            )
         assert [x.body[1:] for x in bus.calls if x.member == "Commit"] == [
             [0, "甲"],
             [1, "乙"],

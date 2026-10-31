@@ -34,6 +34,9 @@ FOCUS_POLL_SECONDS = 0.01
 FOCUS_POLL_MAX_SECONDS = 0.10
 FOCUS_FIRST_POLL_MAX_SECONDS = 0.04
 FOCUS_CANCEL_POLL_SECONDS = 0.01
+# A D-Bus reply acknowledges a commitString attempt, not client consumption.
+# This pacing mitigates observed loss; it does not confirm client receipt.
+COMMIT_INTERVAL_SECONDS = 0.04
 
 
 class FcitxOutputError(RuntimeError):
@@ -77,7 +80,22 @@ class Fcitx5Bridge:
         self._accepted = 0
         self._owner_changed = False
         self._commit_attempted = False
+        self._next_commit_at = 0.0
         self.preflight_cleanup_failed = False
+
+    async def _wait_for_commit_interval(self, can_continue, deadline):
+        while True:
+            if self._closed or not can_continue():
+                raise FcitxOutputError("cancelled", accepted=self._accepted)
+            now = time.monotonic()
+            if now >= deadline:
+                raise FcitxOutputError("expired", accepted=self._accepted)
+            remaining = self._next_commit_at - now
+            if remaining <= 0:
+                return
+            await asyncio.sleep(
+                min(remaining, deadline - now, FOCUS_CANCEL_POLL_SECONDS)
+            )
 
     def _observe_owner_change(self, message):
         if (
@@ -338,6 +356,7 @@ class Fcitx5Bridge:
                     raise FcitxOutputError("cancelled", accepted=self._accepted)
                 if time.monotonic() >= deadline:
                     raise FcitxOutputError("expired", accepted=self._accepted)
+                await self._wait_for_commit_interval(can_continue, deadline)
                 focus_error = "no_target"
                 focus_wait_until = None
                 focus_poll_delay = FOCUS_POLL_SECONDS
@@ -448,6 +467,9 @@ class Fcitx5Bridge:
                             "protocol_error", accepted=self._accepted
                         )
                     if reply.body[0] == 1:
+                        self._next_commit_at = (
+                            time.monotonic() + COMMIT_INTERVAL_SECONDS
+                        )
                         break
                     if self._owner_changed:
                         raise FcitxOutputError("owner_changed", accepted=self._accepted)
