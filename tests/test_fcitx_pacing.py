@@ -172,7 +172,7 @@ def test_v4_stream_fragment_and_newline_neighbor_spacing(monkeypatch):
         await stream.append(TextDelta(2, "乙丙"))
         await stream.finish("甲\n乙丙")
         assert await asyncio.wait_for(worker, 1) == 4
-        assert [text for text, _ in bus.commits] == ["甲\n", "乙", "丙"]
+        assert [text for text, _ in bus.commits] == ["甲\n", "乙丙"]
         assert all(
             after[1] - before[1] >= 0.04
             for before, after in zip(bus.commits, bus.commits[1:], strict=False)

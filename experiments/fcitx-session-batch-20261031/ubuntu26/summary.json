@@ -1,0 +1,116 @@
+[
+  {
+    "mode": "auto",
+    "scenario": "stream",
+    "same_page_switch": false,
+    "elapsed_seconds_including_observation": 3.556,
+    "exact": true,
+    "outcome": "succeeded",
+    "dispatch_lengths": [
+      1,
+      3,
+      4
+    ],
+    "dispatch_count": 52,
+    "routes": [
+      "fcitx"
+    ]
+  },
+  {
+    "mode": "auto",
+    "scenario": "stream",
+    "same_page_switch": true,
+    "elapsed_seconds_including_observation": 3.554,
+    "exact": true,
+    "outcome": "succeeded",
+    "dispatch_lengths": [
+      1,
+      2,
+      4
+    ],
+    "dispatch_count": 52,
+    "routes": [
+      "fcitx"
+    ]
+  },
+  {
+    "mode": "fcitx",
+    "scenario": "stream",
+    "same_page_switch": true,
+    "elapsed_seconds_including_observation": 3.576,
+    "exact": true,
+    "outcome": "succeeded",
+    "dispatch_lengths": [
+      1,
+      4
+    ],
+    "dispatch_count": 53,
+    "routes": [
+      "fcitx"
+    ]
+  },
+  {
+    "mode": "auto",
+    "scenario": "unicode",
+    "same_page_switch": false,
+    "elapsed_seconds_including_observation": 1.519,
+    "exact": true,
+    "outcome": "succeeded",
+    "dispatch_lengths": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "dispatch_count": 5,
+    "routes": [
+      "fcitx"
+    ]
+  },
+  {
+    "mode": "fcitx",
+    "scenario": "unicode",
+    "same_page_switch": false,
+    "elapsed_seconds_including_observation": 1.527,
+    "exact": true,
+    "outcome": "succeeded",
+    "dispatch_lengths": [
+      1,
+      4
+    ],
+    "dispatch_count": 5,
+    "routes": [
+      "fcitx"
+    ]
+  },
+  {
+    "mode": "auto",
+    "scenario": "cancel",
+    "same_page_switch": false,
+    "elapsed_seconds_including_observation": 1.338,
+    "exact": true,
+    "outcome": "cancelled",
+    "dispatch_lengths": [
+      1
+    ],
+    "dispatch_count": 1,
+    "routes": [
+      "fcitx"
+    ]
+  },
+  {
+    "mode": "fcitx",
+    "scenario": "cancel",
+    "same_page_switch": false,
+    "elapsed_seconds_including_observation": 1.353,
+    "exact": true,
+    "outcome": "cancelled",
+    "dispatch_lengths": [
+      1
+    ],
+    "dispatch_count": 1,
+    "routes": [
+      "fcitx"
+    ]
+  }
+]

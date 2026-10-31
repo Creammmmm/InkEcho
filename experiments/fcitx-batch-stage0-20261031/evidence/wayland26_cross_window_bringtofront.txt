@@ -1,0 +1,4 @@
+{"case": "browser_exit", "exit": 0}
+{"case": "hints_restored", "value": true}
+initial=json.loads(js("JSON.stringify({focus:document.hasFocus(),active:document.activeElement.id})"));assert initial=={'focus':True,'active':'a'}
+AssertionError

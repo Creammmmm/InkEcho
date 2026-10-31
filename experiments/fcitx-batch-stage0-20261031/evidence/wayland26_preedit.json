@@ -1,0 +1,204 @@
+[
+  {
+    "case": "composition_before",
+    "state": {
+      "value": "ni",
+      "events": [
+        {
+          "type": "focus",
+          "id": "a",
+          "data": ""
+        },
+        {
+          "type": "compositionstart",
+          "id": "a",
+          "data": ""
+        },
+        {
+          "type": "compositionupdate",
+          "id": "a",
+          "data": "n"
+        },
+        {
+          "type": "input",
+          "id": "a",
+          "data": "n"
+        },
+        {
+          "type": "compositionupdate",
+          "id": "a",
+          "data": "ni"
+        },
+        {
+          "type": "input",
+          "id": "a",
+          "data": "ni"
+        }
+      ],
+      "focus": true,
+      "active": "a"
+    }
+  },
+  {
+    "case": "composition_guard",
+    "error": {
+      "code": "fcitx_composition_active",
+      "attempts": 0
+    },
+    "state": {
+      "value": "ni",
+      "events": [
+        {
+          "type": "focus",
+          "id": "a",
+          "data": ""
+        },
+        {
+          "type": "compositionstart",
+          "id": "a",
+          "data": ""
+        },
+        {
+          "type": "compositionupdate",
+          "id": "a",
+          "data": "n"
+        },
+        {
+          "type": "input",
+          "id": "a",
+          "data": "n"
+        },
+        {
+          "type": "compositionupdate",
+          "id": "a",
+          "data": "ni"
+        },
+        {
+          "type": "input",
+          "id": "a",
+          "data": "ni"
+        }
+      ],
+      "focus": true,
+      "active": "a"
+    }
+  },
+  {
+    "case": "composition_finish",
+    "state": {
+      "value": "你",
+      "events": [
+        {
+          "type": "focus",
+          "id": "a",
+          "data": ""
+        },
+        {
+          "type": "compositionstart",
+          "id": "a",
+          "data": ""
+        },
+        {
+          "type": "compositionupdate",
+          "id": "a",
+          "data": "n"
+        },
+        {
+          "type": "input",
+          "id": "a",
+          "data": "n"
+        },
+        {
+          "type": "compositionupdate",
+          "id": "a",
+          "data": "ni"
+        },
+        {
+          "type": "input",
+          "id": "a",
+          "data": "ni"
+        },
+        {
+          "type": "compositionupdate",
+          "id": "a",
+          "data": "你"
+        },
+        {
+          "type": "input",
+          "id": "a",
+          "data": "你"
+        },
+        {
+          "type": "compositionend",
+          "id": "a",
+          "data": "你"
+        }
+      ]
+    }
+  },
+  {
+    "case": "output",
+    "sent": 3,
+    "route": "fcitx"
+  },
+  {
+    "case": "receiver",
+    "result": {
+      "value": "你甲乙丙",
+      "events": [
+        {
+          "type": "focus",
+          "id": "a",
+          "data": ""
+        },
+        {
+          "type": "compositionstart",
+          "id": "a",
+          "data": ""
+        },
+        {
+          "type": "compositionupdate",
+          "id": "a",
+          "data": "n"
+        },
+        {
+          "type": "input",
+          "id": "a",
+          "data": "n"
+        },
+        {
+          "type": "compositionupdate",
+          "id": "a",
+          "data": "ni"
+        },
+        {
+          "type": "input",
+          "id": "a",
+          "data": "ni"
+        },
+        {
+          "type": "compositionupdate",
+          "id": "a",
+          "data": "你"
+        },
+        {
+          "type": "input",
+          "id": "a",
+          "data": "你"
+        },
+        {
+          "type": "compositionend",
+          "id": "a",
+          "data": "你"
+        },
+        {
+          "type": "input",
+          "id": "a",
+          "data": "甲乙丙"
+        }
+      ],
+      "focus": true,
+      "active": "a"
+    }
+  }
+]

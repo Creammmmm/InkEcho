@@ -1,0 +1,146 @@
+[
+  {
+    "case": "unicode",
+    "batch": 1,
+    "repeat": 0,
+    "sent": 11,
+    "route": "fcitx",
+    "error": null,
+    "exact": true,
+    "fragments": [
+      "甲é",
+      "Ω😀",
+      "\n",
+      "乙",
+      "B👩‍",
+      "💻终"
+    ],
+    "received": "甲éΩ😀\n乙B👩‍💻终"
+  },
+  {
+    "case": "unicode",
+    "batch": 1,
+    "repeat": 1,
+    "sent": 11,
+    "route": "fcitx",
+    "error": null,
+    "exact": true,
+    "fragments": [
+      "甲é",
+      "Ω😀",
+      "\n",
+      "乙",
+      "B👩‍",
+      "💻终"
+    ],
+    "received": "甲éΩ😀\n乙B👩‍💻终"
+  },
+  {
+    "case": "unicode",
+    "batch": 2,
+    "repeat": 0,
+    "sent": 11,
+    "route": "fcitx",
+    "error": null,
+    "exact": true,
+    "fragments": [
+      "甲é",
+      "Ω😀",
+      "\n",
+      "乙",
+      "B👩‍",
+      "💻终"
+    ],
+    "received": "甲éΩ😀\n乙B👩‍💻终"
+  },
+  {
+    "case": "unicode",
+    "batch": 2,
+    "repeat": 1,
+    "sent": 11,
+    "route": "fcitx",
+    "error": null,
+    "exact": true,
+    "fragments": [
+      "甲é",
+      "Ω😀",
+      "\n",
+      "乙",
+      "B👩‍",
+      "💻终"
+    ],
+    "received": "甲éΩ😀\n乙B👩‍💻终"
+  },
+  {
+    "case": "unicode",
+    "batch": 4,
+    "repeat": 0,
+    "sent": 11,
+    "route": "fcitx",
+    "error": null,
+    "exact": true,
+    "fragments": [
+      "甲é",
+      "Ω😀",
+      "\n",
+      "乙",
+      "B👩‍",
+      "💻终"
+    ],
+    "received": "甲éΩ😀\n乙B👩‍💻终"
+  },
+  {
+    "case": "unicode",
+    "batch": 4,
+    "repeat": 1,
+    "sent": 11,
+    "route": "fcitx",
+    "error": null,
+    "exact": true,
+    "fragments": [
+      "甲é",
+      "Ω😀",
+      "\n",
+      "乙",
+      "B👩‍",
+      "💻终"
+    ],
+    "received": "甲éΩ😀\n乙B👩‍💻终"
+  },
+  {
+    "case": "unicode",
+    "batch": 8,
+    "repeat": 0,
+    "sent": 11,
+    "route": "fcitx",
+    "error": null,
+    "exact": true,
+    "fragments": [
+      "甲é",
+      "Ω😀",
+      "\n",
+      "乙",
+      "B👩‍",
+      "💻终"
+    ],
+    "received": "甲éΩ😀\n乙B👩‍💻终"
+  },
+  {
+    "case": "unicode",
+    "batch": 8,
+    "repeat": 1,
+    "sent": 11,
+    "route": "fcitx",
+    "error": null,
+    "exact": true,
+    "fragments": [
+      "甲é",
+      "Ω😀",
+      "\n",
+      "乙",
+      "B👩‍",
+      "💻终"
+    ],
+    "received": "甲éΩ😀\n乙B👩‍💻终"
+  }
+]

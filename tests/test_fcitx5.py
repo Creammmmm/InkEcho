@@ -243,7 +243,7 @@ def test_newline_and_tab_keep_exact_text_in_neighbor_batches():
         await client.connect()
         assert await client.insert("甲\n乙\tZ", lambda: True) == 5
         sends = [call.body[2] for call in bus.calls if call.member == "CommitBatch"]
-        assert sends == ["甲", "\n乙", "\t", "Z"]
+        assert sends == ["甲", "\n乙\tZ"]
         await client.aclose()
 
     asyncio.run(run())
@@ -270,13 +270,13 @@ def test_cancel_after_newline_batch_stops_and_prevents_replay():
         )
         await client.connect()
         with pytest.raises(FcitxOutputError) as caught:
-            await client.insert("甲\n乙\tZ", lambda: active)
+            await client.insert("甲\n乙\tZ末", lambda: active)
         assert caught.value.code == "cancelled"
-        assert caught.value.accepted == 3
+        assert caught.value.accepted == 5
         assert not caught.value.safe_to_fallback
         assert [call.body[2] for call in bus.calls if call.member == "CommitBatch"] == [
             "甲",
-            "\n乙",
+            "\n乙\tZ",
         ]
         with pytest.raises(FcitxOutputError, match="session_failed"):
             await client.insert("乙\tZ", lambda: True)

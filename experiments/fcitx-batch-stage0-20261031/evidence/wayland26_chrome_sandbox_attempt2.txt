@@ -1,0 +1,4 @@
+{"case": "browser_exit", "exit": -5}
+{"case": "hints_restored", "value": true}
+assert browser.poll() is None,'browser exited';await asyncio.sleep(.1)
+AssertionError: browser exited

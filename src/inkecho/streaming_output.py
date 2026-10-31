@@ -8,7 +8,12 @@ from dataclasses import dataclass, field
 from inkecho.platform.keyboard import KeyboardError
 from inkecho.providers import ProviderError
 from inkecho.text_normalization import normalize_newlines
-from inkecho.text_units import UNSENT_NEIGHBOR_ROUTE, NeighborPlanner
+from inkecho.text_units import (
+    FCITX_BATCH_BYTES,
+    FCITX_BATCH_SCALARS,
+    UNSENT_NEIGHBOR_ROUTE,
+    NeighborPlanner,
+)
 
 CHUNK_CHARACTERS = 128
 QUEUE_CHUNKS = 32
@@ -182,13 +187,29 @@ class StreamingOutput:
             # not a retry after unknown delivery, nor a global lookahead delay.
             self.attempted = False
             self._planner = NeighborPlanner()
-            for unit in self._planner.feed(text):
-                await self._emit(unit)
+            await self._emit_units(self._planner.feed(text))
             return
         if type(count) is not int or count != len(text):
             raise KeyboardError("injection_failed")
         self.sent_characters += count
         self._consumed_characters += count
+
+    async def _emit_units(self, units):
+        index = 0
+        while index < len(units):
+            batch = units[index]
+            index += 1
+            if self.sent_characters and self._batch_enabled and self._batch_enabled():
+                while index < len(units):
+                    candidate = batch + units[index]
+                    if (
+                        len(candidate) > FCITX_BATCH_SCALARS
+                        or len(candidate.encode("utf-8")) > FCITX_BATCH_BYTES
+                    ):
+                        break
+                    batch = candidate
+                    index += 1
+            await self._emit(batch)
 
     async def run(self) -> int:
         received = 0
@@ -200,8 +221,7 @@ class StreamingOutput:
                 self._check()
                 if delta is None:
                     if self._planner is not None:
-                        for unit in self._planner.finish():
-                            await self._emit(unit)
+                        await self._emit_units(self._planner.finish())
                     return self.sent_characters
                 if delta.offset != received:
                     raise ProviderError("response")
@@ -216,8 +236,7 @@ class StreamingOutput:
                 if self._planner is None:
                     await self._emit(delta.text)
                     continue
-                for unit in self._planner.feed(delta.text):
-                    await self._emit(unit)
+                await self._emit_units(self._planner.feed(delta.text))
                 # A confirmed-unsent Fcitx route may hand off through existing
                 # guards. Preserve order, flush its held tail once, and restore
                 # ordinary chunk timing on the selected non-Fcitx route.

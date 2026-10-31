@@ -1,0 +1,19 @@
+[
+  {
+    "case": "unicode",
+    "batch": 1,
+    "repeat": 0,
+    "sent": 11,
+    "route": "fcitx",
+    "error": null,
+    "exact": false,
+    "fragments": [
+      "甲é",
+      "Ω😀",
+      "\n乙",
+      "B👩‍",
+      "💻终"
+    ],
+    "received": "甲éΩ😀乙B👩‍💻终"
+  }
+]

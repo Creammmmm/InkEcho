@@ -1,0 +1,4 @@
+{"case": "browser_exit", "exit": 0}
+{"case": "hints_restored", "value": true}
+assert route=='fcitx' and exact, 'matrix failed'
+AssertionError: matrix failed

@@ -99,7 +99,7 @@ wheels = [
 
 [[package]]
 name = "inkecho"
-version = "0.15.46"
+version = "0.15.47"
 source = { editable = "." }
 dependencies = [
     { name = "dbus-next" },

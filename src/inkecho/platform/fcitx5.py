@@ -11,7 +11,7 @@ from collections.abc import Callable
 from dbus_next import Message, MessageType
 from dbus_next.aio import MessageBus
 
-from inkecho.text_units import iter_text_units
+from inkecho.text_units import batch_neighbor_units, iter_text_units
 
 from .fcitx5_capability import Capability
 
@@ -338,7 +338,13 @@ class Fcitx5Bridge:
         if self._protocol == 4 and text == "\n":
             self._failed = True
             raise FcitxOutputError("unsupported_text", accepted=self._accepted)
-        units = iter_text_units(text) if self._protocol == 4 else text
+        units = (
+            batch_neighbor_units(
+                iter_text_units(text), first_single=self._accepted == 0
+            )
+            if self._protocol == 4
+            else text
+        )
         if deadline is None:
             deadline = time.monotonic() + 60
         try:
@@ -524,6 +530,10 @@ class Fcitx5Bridge:
                         ) from None
                 if self._owner_changed:
                     raise FcitxOutputError("owner_changed", accepted=self._accepted)
+                if self._closed or not can_continue():
+                    raise FcitxOutputError("cancelled", accepted=self._accepted)
+                if time.monotonic() >= deadline:
+                    raise FcitxOutputError("expired", accepted=self._accepted)
             return accepted
         except BaseException:
             # A failed output sequence is never resumed or replayed implicitly.

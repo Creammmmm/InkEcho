@@ -1,5 +1,8 @@
 """Bounded real-neighbor units; this module sends no events."""
 
+FCITX_BATCH_SCALARS = 4
+FCITX_BATCH_BYTES = 32
+
 
 class TextUnitError(ValueError):
     pass
@@ -64,6 +67,31 @@ def iter_text_units(text):
 
 def text_units(text):
     return list(iter_text_units(text))
+
+
+def batch_neighbor_units(units, *, first_single=False):
+    """Join whole neighbor units without delaying for future input."""
+    units = iter(units)
+    if first_single:
+        first = next(units, None)
+        if first is not None:
+            yield first
+    pending = ""
+    for unit in units:
+        if (
+            len(unit) > FCITX_BATCH_SCALARS
+            or len(unit.encode("utf-8")) > FCITX_BATCH_BYTES
+        ):
+            raise TextUnitError("neighbor unit exceeds batch limit")
+        if pending and (
+            len(pending) + len(unit) > FCITX_BATCH_SCALARS
+            or len((pending + unit).encode("utf-8")) > FCITX_BATCH_BYTES
+        ):
+            yield pending
+            pending = ""
+        pending += unit
+    if pending:
+        yield pending
 
 
 class UnsentNeighborRoute:
