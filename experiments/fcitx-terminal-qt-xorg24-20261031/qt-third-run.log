@@ -1,0 +1,495 @@
+guest setup done
+I2026-10-31 05:55:29.548492 instance.cpp:1346] Override Enabled Addons: {}
+I2026-10-31 05:55:29.548511 instance.cpp:1347] Override Disabled Addons: {clipboard}
+E2026-10-31 05:55:29.550091 waylandmodule.cpp:230] Failed to open wayland connection
+I2026-10-31 05:55:29.550098 addonmanager.cpp:195] Loaded addon wayland
+I2026-10-31 05:55:29.550194 addonmanager.cpp:195] Loaded addon unicode
+I2026-10-31 05:55:29.551505 xcbconnection.cpp:189] Connecting to X11 display, display name::0.
+I2026-10-31 05:55:29.551598 addonmanager.cpp:195] Loaded addon xcb
+I2026-10-31 05:55:29.552245 addonmanager.cpp:195] Loaded addon quickphrase
+I2026-10-31 05:55:29.554320 addonmanager.cpp:195] Loaded addon keyboard
+I2026-10-31 05:55:29.554401 addonmanager.cpp:195] Loaded addon imselector
+I2026-10-31 05:55:29.554489 addonmanager.cpp:195] Loaded addon waylandim
+I2026-10-31 05:55:29.555254 addonmanager.cpp:195] Loaded addon dbus
+I2026-10-31 05:55:29.555667 addonmanager.cpp:195] Loaded addon dbusfrontend
+I2026-10-31 05:55:29.556473 addonmanager.cpp:195] Loaded addon fcitx4frontend
+I2026-10-31 05:55:29.557132 addonmanager.cpp:195] Loaded addon ibusfrontend
+I2026-10-31 05:55:29.557279 addonmanager.cpp:195] Loaded addon inkecho
+I2026-10-31 05:55:29.557695 addonmanager.cpp:195] Loaded addon xim
+I2026-10-31 05:55:29.570013 inputmethodmanager.cpp:190] Found 737 input method(s) in addon keyboard
+I2026-10-31 05:55:29.577765 addonmanager.cpp:195] Loaded addon kimpanel
+I2026-10-31 05:55:29.577874 addonmanager.cpp:195] Loaded addon virtualkeyboard
+I2026-10-31 05:55:29.591157 classicui.cpp:66] Created classicui for x11 display::0
+I2026-10-31 05:55:29.591175 addonmanager.cpp:195] Loaded addon classicui
+I2026-10-31 05:55:29.591452 addonmanager.cpp:195] Loaded addon notificationitem
+I2026-10-31 05:55:29.591699 addonmanager.cpp:195] Loaded addon notifications
+I2026-10-31 05:55:29.594447 kimpanel.cpp:116] Kimpanel new owner:
+I2026-10-31 05:55:29.594464 virtualkeyboard.cpp:223] VirtualKeyboard new owner:
+I2026-10-31 05:55:29.594477 portalsettingmonitor.cpp:91] A new portal show up, start a new query.
+E2026-10-31 05:55:29.595243 portalsettingmonitor.cpp:115] DBus call error: org.freedesktop.portal.Error.NotFound Requested setting not found
+I2026-10-31 05:55:30.666905 addonmanager.cpp:195] Loaded addon punctuation
+I2026-10-31 05:55:30.790633 addonmanager.cpp:195] Loaded addon pinyin
+qt.core.plugin.factoryloader: checking directory path "/home/inkecho/inkecho-session-xorg24/qt-root/usr/lib/x86_64-linux-gnu/qt6/plugins/platforms" ...
+qt.core.plugin.factoryloader: checking directory path "/home/inkecho/inkecho-session-xorg24/qt-root/usr/lib/x86_64-linux-gnu/qt6/plugins/platforms" ...
+qt.core.plugin.factoryloader: checking directory path "/tmp/.mount_InkEchKfEfoI/packages/PySide6/Qt/plugins/platforms" ...
+qt.core.plugin.factoryloader: checking directory path "/tmp/.mount_InkEchKfEfoI/packages/PySide6/Qt/plugins/platforms" ...
+qt.core.plugin.factoryloader: looking at "libqoffscreen.so"
+qt.core.plugin.factoryloader: looking at "libqoffscreen.so"
+qt.core.plugin.loader: Found metadata in lib /tmp/.mount_InkEchKfEfoI/packages/PySide6/Qt/plugins/platforms/libqoffscreen.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPA.QPlatformIntegrationFactoryInterface.5.3",
+    "MetaData": {
+        "Keys": [
+            "offscreen"
+        ]
+    },
+    "archlevel": 2,
+    "className": "QOffscreenIntegrationPlugin",
+    "debug": false,
+    "version": 396288
+}
+
+
+qt.core.plugin.loader: Found metadata in lib /tmp/.mount_InkEchKfEfoI/packages/PySide6/Qt/plugins/platforms/libqoffscreen.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPA.QPlatformIntegrationFactoryInterface.5.3",
+    "MetaData": {
+        "Keys": [
+            "offscreen"
+        ]
+    },
+    "archlevel": 2,
+    "className": "QOffscreenIntegrationPlugin",
+    "debug": false,
+    "version": 396288
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("offscreen")
+qt.core.plugin.factoryloader: looking at "libqwayland.so"
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("offscreen")
+qt.core.plugin.factoryloader: looking at "libqwayland.so"
+qt.core.plugin.loader: Found metadata in lib /tmp/.mount_InkEchKfEfoI/packages/PySide6/Qt/plugins/platforms/libqwayland.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPA.QPlatformIntegrationFactoryInterface.5.3",
+    "MetaData": {
+        "Keys": [
+            "wayland",
+            "wayland-egl",
+            "wayland-brcm"
+        ]
+    },
+    "archlevel": 2,
+    "className": "QWaylandIntegrationPlugin",
+    "debug": false,
+    "version": 396288
+}
+
+
+qt.core.plugin.loader: Found metadata in lib /tmp/.mount_InkEchKfEfoI/packages/PySide6/Qt/plugins/platforms/libqwayland.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPA.QPlatformIntegrationFactoryInterface.5.3",
+    "MetaData": {
+        "Keys": [
+            "wayland",
+            "wayland-egl",
+            "wayland-brcm"
+        ]
+    },
+    "archlevel": 2,
+    "className": "QWaylandIntegrationPlugin",
+    "debug": false,
+    "version": 396288
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("wayland", "wayland-egl", "wayland-brcm")
+qt.core.plugin.factoryloader: looking at "libqxcb.so"
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("wayland", "wayland-egl", "wayland-brcm")
+qt.core.plugin.factoryloader: looking at "libqxcb.so"
+qt.core.plugin.loader: Found metadata in lib /tmp/.mount_InkEchKfEfoI/packages/PySide6/Qt/plugins/platforms/libqxcb.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPA.QPlatformIntegrationFactoryInterface.5.3",
+    "MetaData": {
+        "Keys": [
+            "xcb"
+        ]
+    },
+    "archlevel": 2,
+    "className": "QXcbIntegrationPlugin",
+    "debug": false,
+    "version": 396288
+}
+
+
+qt.core.plugin.loader: Found metadata in lib /tmp/.mount_InkEchKfEfoI/packages/PySide6/Qt/plugins/platforms/libqxcb.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPA.QPlatformIntegrationFactoryInterface.5.3",
+    "MetaData": {
+        "Keys": [
+            "xcb"
+        ]
+    },
+    "archlevel": 2,
+    "className": "QXcbIntegrationPlugin",
+    "debug": false,
+    "version": 396288
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("xcb")
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("xcb")
+qt.core.plugin.factoryloader: checking directory path "/tmp/.mount_InkEchKfEfoI/usr/bin/platforms" ...
+qt.core.plugin.factoryloader: checking directory path "/tmp/.mount_InkEchKfEfoI/usr/bin/platforms" ...
+qt.core.library: "/tmp/.mount_InkEchKfEfoI/packages/PySide6/Qt/plugins/platforms/libqxcb.so" loaded library
+qt.core.library: "/tmp/.mount_InkEchKfEfoI/packages/PySide6/Qt/plugins/platforms/libqxcb.so" loaded library
+qt.core.plugin.factoryloader: checking directory path "/home/inkecho/inkecho-session-xorg24/qt-root/usr/lib/x86_64-linux-gnu/qt6/plugins/platformthemes" ...
+qt.core.plugin.factoryloader: checking directory path "/home/inkecho/inkecho-session-xorg24/qt-root/usr/lib/x86_64-linux-gnu/qt6/plugins/platformthemes" ...
+qt.core.plugin.factoryloader: checking directory path "/tmp/.mount_InkEchKfEfoI/packages/PySide6/Qt/plugins/platformthemes" ...
+qt.core.plugin.factoryloader: checking directory path "/tmp/.mount_InkEchKfEfoI/packages/PySide6/Qt/plugins/platformthemes" ...
+qt.core.plugin.factoryloader: looking at "libqgtk3.so"
+qt.core.plugin.factoryloader: looking at "libqgtk3.so"
+qt.core.plugin.loader: Found metadata in lib /tmp/.mount_InkEchKfEfoI/packages/PySide6/Qt/plugins/platformthemes/libqgtk3.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPA.QPlatformThemeFactoryInterface.5.1",
+    "MetaData": {
+        "Keys": [
+            "gtk3"
+        ]
+    },
+    "archlevel": 2,
+    "className": "QGtk3ThemePlugin",
+    "debug": false,
+    "version": 396288
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("gtk3")
+qt.core.plugin.factoryloader: looking at "libqxdgdesktopportal.so"
+qt.core.plugin.loader: Found metadata in lib /tmp/.mount_InkEchKfEfoI/packages/PySide6/Qt/plugins/platformthemes/libqgtk3.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPA.QPlatformThemeFactoryInterface.5.1",
+    "MetaData": {
+        "Keys": [
+            "gtk3"
+        ]
+    },
+    "archlevel": 2,
+    "className": "QGtk3ThemePlugin",
+    "debug": false,
+    "version": 396288
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("gtk3")
+qt.core.plugin.factoryloader: looking at "libqxdgdesktopportal.so"
+qt.core.plugin.loader: Found metadata in lib /tmp/.mount_InkEchKfEfoI/packages/PySide6/Qt/plugins/platformthemes/libqxdgdesktopportal.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPA.QPlatformThemeFactoryInterface.5.1",
+    "MetaData": {
+        "Keys": [
+            "xdgdesktopportal",
+            "flatpak",
+            "snap"
+        ]
+    },
+    "archlevel": 2,
+    "className": "QXdgDesktopPortalThemePlugin",
+    "debug": false,
+    "version": 396288
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("xdgdesktopportal", "flatpak", "snap")
+qt.core.plugin.factoryloader: checking directory path "/tmp/.mount_InkEchKfEfoI/usr/bin/platformthemes" ...
+qt.core.plugin.loader: Found metadata in lib /tmp/.mount_InkEchKfEfoI/packages/PySide6/Qt/plugins/platformthemes/libqxdgdesktopportal.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPA.QPlatformThemeFactoryInterface.5.1",
+    "MetaData": {
+        "Keys": [
+            "xdgdesktopportal",
+            "flatpak",
+            "snap"
+        ]
+    },
+    "archlevel": 2,
+    "className": "QXdgDesktopPortalThemePlugin",
+    "debug": false,
+    "version": 396288
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("xdgdesktopportal", "flatpak", "snap")
+qt.core.plugin.factoryloader: checking directory path "/tmp/.mount_InkEchKfEfoI/usr/bin/platformthemes" ...
+qt.core.library: "/tmp/.mount_InkEchKfEfoI/packages/PySide6/Qt/plugins/platformthemes/libqgtk3.so" loaded library
+qt.core.library: "/tmp/.mount_InkEchKfEfoI/packages/PySide6/Qt/plugins/platformthemes/libqgtk3.so" loaded library
+qt.core.plugin.factoryloader: checking directory path "/home/inkecho/inkecho-session-xorg24/qt-root/usr/lib/x86_64-linux-gnu/qt6/plugins/platforminputcontexts" ...
+qt.core.plugin.factoryloader: looking at "libfcitx5platforminputcontextplugin.so"
+qt.core.plugin.loader: Found metadata in lib /home/inkecho/inkecho-session-xorg24/qt-root/usr/lib/x86_64-linux-gnu/qt6/plugins/platforminputcontexts/libfcitx5platforminputcontextplugin.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPlatformInputContextFactoryInterface.5.1",
+    "MetaData": {
+        "Keys": [
+            "fcitx",
+            "fcitx5"
+        ]
+    },
+    "archlevel": 1,
+    "className": "QFcitx5PlatformInputContextPlugin",
+    "debug": false,
+    "version": 394240
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("fcitx", "fcitx5")
+qt.core.plugin.factoryloader: checking directory path "/tmp/.mount_InkEchKfEfoI/packages/PySide6/Qt/plugins/platforminputcontexts" ...
+qt.core.plugin.factoryloader: looking at "libcomposeplatforminputcontextplugin.so"
+qt.core.plugin.factoryloader: checking directory path "/home/inkecho/inkecho-session-xorg24/qt-root/usr/lib/x86_64-linux-gnu/qt6/plugins/platforminputcontexts" ...
+qt.core.plugin.factoryloader: looking at "libfcitx5platforminputcontextplugin.so"
+qt.core.plugin.loader: Found metadata in lib /home/inkecho/inkecho-session-xorg24/qt-root/usr/lib/x86_64-linux-gnu/qt6/plugins/platforminputcontexts/libfcitx5platforminputcontextplugin.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPlatformInputContextFactoryInterface.5.1",
+    "MetaData": {
+        "Keys": [
+            "fcitx",
+            "fcitx5"
+        ]
+    },
+    "archlevel": 1,
+    "className": "QFcitx5PlatformInputContextPlugin",
+    "debug": false,
+    "version": 394240
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("fcitx", "fcitx5")
+qt.core.plugin.factoryloader: checking directory path "/tmp/.mount_InkEchKfEfoI/packages/PySide6/Qt/plugins/platforminputcontexts" ...
+qt.core.plugin.factoryloader: looking at "libcomposeplatforminputcontextplugin.so"
+qt.core.plugin.loader: Found metadata in lib /tmp/.mount_InkEchKfEfoI/packages/PySide6/Qt/plugins/platforminputcontexts/libcomposeplatforminputcontextplugin.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPlatformInputContextFactoryInterface.5.1",
+    "MetaData": {
+        "Keys": [
+            "compose",
+            "xim"
+        ]
+    },
+    "archlevel": 2,
+    "className": "QComposePlatformInputContextPlugin",
+    "debug": false,
+    "version": 396288
+}
+
+
+qt.core.plugin.loader: Found metadata in lib /tmp/.mount_InkEchKfEfoI/packages/PySide6/Qt/plugins/platforminputcontexts/libcomposeplatforminputcontextplugin.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPlatformInputContextFactoryInterface.5.1",
+    "MetaData": {
+        "Keys": [
+            "compose",
+            "xim"
+        ]
+    },
+    "archlevel": 2,
+    "className": "QComposePlatformInputContextPlugin",
+    "debug": false,
+    "version": 396288
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("compose", "xim")
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("compose", "xim")
+qt.core.plugin.factoryloader: looking at "libibusplatforminputcontextplugin.so"
+qt.core.plugin.factoryloader: looking at "libibusplatforminputcontextplugin.so"
+qt.core.plugin.loader: Found metadata in lib /tmp/.mount_InkEchKfEfoI/packages/PySide6/Qt/plugins/platforminputcontexts/libibusplatforminputcontextplugin.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPlatformInputContextFactoryInterface.5.1",
+    "MetaData": {
+        "Keys": [
+            "ibus"
+        ]
+    },
+    "archlevel": 2,
+    "className": "QIbusPlatformInputContextPlugin",
+    "debug": false,
+    "version": 396288
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("ibus")
+qt.core.plugin.factoryloader: looking at "libqtvirtualkeyboardplugin.so"
+qt.core.plugin.loader: Found metadata in lib /tmp/.mount_InkEchKfEfoI/packages/PySide6/Qt/plugins/platforminputcontexts/libqtvirtualkeyboardplugin.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPlatformInputContextFactoryInterface.5.1",
+    "MetaData": {
+        "Keys": [
+            "qtvirtualkeyboard"
+        ]
+    },
+    "archlevel": 2,
+    "className": "QVirtualKeyboardPlugin",
+    "debug": false,
+    "version": 396288
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("qtvirtualkeyboard")
+qt.core.plugin.factoryloader: checking directory path "/tmp/.mount_InkEchKfEfoI/usr/bin/platforminputcontexts" ...
+qt.core.plugin.loader: Found metadata in lib /tmp/.mount_InkEchKfEfoI/packages/PySide6/Qt/plugins/platforminputcontexts/libibusplatforminputcontextplugin.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPlatformInputContextFactoryInterface.5.1",
+    "MetaData": {
+        "Keys": [
+            "ibus"
+        ]
+    },
+    "archlevel": 2,
+    "className": "QIbusPlatformInputContextPlugin",
+    "debug": false,
+    "version": 396288
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("ibus")
+qt.core.plugin.factoryloader: looking at "libqtvirtualkeyboardplugin.so"
+qt.core.library: "/home/inkecho/inkecho-session-xorg24/qt-root/usr/lib/x86_64-linux-gnu/qt6/plugins/platforminputcontexts/libfcitx5platforminputcontextplugin.so" cannot load: Cannot load library /home/inkecho/inkecho-session-xorg24/qt-root/usr/lib/x86_64-linux-gnu/qt6/plugins/platforminputcontexts/libfcitx5platforminputcontextplugin.so: /home/inkecho/inkecho-session-xorg24/qt-root/usr/lib/x86_64-linux-gnu/qt6/plugins/platforminputcontexts/libfcitx5platforminputcontextplugin.so: undefined symbol: _ZN22QWindowSystemInterface22handleExtendedKeyEventEP7QWindowmN6QEvent4TypeEi6QFlagsIN2Qt16KeyboardModifierEEjjjRK7QStringbtb, version Qt_6_PRIVATE_API
+qt.core.plugin.loader: QLibraryPrivate::loadPlugin failed on "/home/inkecho/inkecho-session-xorg24/qt-root/usr/lib/x86_64-linux-gnu/qt6/plugins/platforminputcontexts/libfcitx5platforminputcontextplugin.so" : "Cannot load library /home/inkecho/inkecho-session-xorg24/qt-root/usr/lib/x86_64-linux-gnu/qt6/plugins/platforminputcontexts/libfcitx5platforminputcontextplugin.so: /home/inkecho/inkecho-session-xorg24/qt-root/usr/lib/x86_64-linux-gnu/qt6/plugins/platforminputcontexts/libfcitx5platforminputcontextplugin.so: undefined symbol: _ZN22QWindowSystemInterface22handleExtendedKeyEventEP7QWindowmN6QEvent4TypeEi6QFlagsIN2Qt16KeyboardModifierEEjjjRK7QStringbtb, version Qt_6_PRIVATE_API"
+qt.core.plugin.loader: Found metadata in lib /tmp/.mount_InkEchKfEfoI/packages/PySide6/Qt/plugins/platforminputcontexts/libqtvirtualkeyboardplugin.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPlatformInputContextFactoryInterface.5.1",
+    "MetaData": {
+        "Keys": [
+            "qtvirtualkeyboard"
+        ]
+    },
+    "archlevel": 2,
+    "className": "QVirtualKeyboardPlugin",
+    "debug": false,
+    "version": 396288
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("qtvirtualkeyboard")
+qt.core.plugin.factoryloader: checking directory path "/tmp/.mount_InkEchKfEfoI/usr/bin/platforminputcontexts" ...
+qt.core.library: "/tmp/.mount_InkEchKfEfoI/packages/PySide6/Qt/plugins/platforminputcontexts/libcomposeplatforminputcontextplugin.so" loaded library
+qt.core.library: "/home/inkecho/inkecho-session-xorg24/qt-root/usr/lib/x86_64-linux-gnu/qt6/plugins/platforminputcontexts/libfcitx5platforminputcontextplugin.so" cannot load: Cannot load library /home/inkecho/inkecho-session-xorg24/qt-root/usr/lib/x86_64-linux-gnu/qt6/plugins/platforminputcontexts/libfcitx5platforminputcontextplugin.so: /home/inkecho/inkecho-session-xorg24/qt-root/usr/lib/x86_64-linux-gnu/qt6/plugins/platforminputcontexts/libfcitx5platforminputcontextplugin.so: undefined symbol: _ZN22QWindowSystemInterface22handleExtendedKeyEventEP7QWindowmN6QEvent4TypeEi6QFlagsIN2Qt16KeyboardModifierEEjjjRK7QStringbtb, version Qt_6_PRIVATE_API
+qt.core.plugin.loader: QLibraryPrivate::loadPlugin failed on "/home/inkecho/inkecho-session-xorg24/qt-root/usr/lib/x86_64-linux-gnu/qt6/plugins/platforminputcontexts/libfcitx5platforminputcontextplugin.so" : "Cannot load library /home/inkecho/inkecho-session-xorg24/qt-root/usr/lib/x86_64-linux-gnu/qt6/plugins/platforminputcontexts/libfcitx5platforminputcontextplugin.so: /home/inkecho/inkecho-session-xorg24/qt-root/usr/lib/x86_64-linux-gnu/qt6/plugins/platforminputcontexts/libfcitx5platforminputcontextplugin.so: undefined symbol: _ZN22QWindowSystemInterface22handleExtendedKeyEventEP7QWindowmN6QEvent4TypeEi6QFlagsIN2Qt16KeyboardModifierEEjjjRK7QStringbtb, version Qt_6_PRIVATE_API"
+qt.core.library: "/tmp/.mount_InkEchKfEfoI/packages/PySide6/Qt/plugins/platforminputcontexts/libcomposeplatforminputcontextplugin.so" loaded library
+qt.core.plugin.factoryloader: checking directory path "/home/inkecho/inkecho-session-xorg24/qt-root/usr/lib/x86_64-linux-gnu/qt6/plugins/styles" ...
+qt.core.plugin.factoryloader: checking directory path "/tmp/.mount_InkEchKfEfoI/packages/PySide6/Qt/plugins/styles" ...
+qt.core.plugin.factoryloader: checking directory path "/tmp/.mount_InkEchKfEfoI/usr/bin/styles" ...
+qt.core.plugin.factoryloader: checking directory path "/home/inkecho/inkecho-session-xorg24/qt-root/usr/lib/x86_64-linux-gnu/qt6/plugins/styles" ...
+qt.core.plugin.factoryloader: checking directory path "/tmp/.mount_InkEchKfEfoI/packages/PySide6/Qt/plugins/styles" ...
+qt.core.plugin.factoryloader: checking directory path "/tmp/.mount_InkEchKfEfoI/usr/bin/styles" ...
+qt.core.plugin.factoryloader: checking directory path "/home/inkecho/inkecho-session-xorg24/qt-root/usr/lib/x86_64-linux-gnu/qt6/plugins/accessiblebridge" ...
+qt.core.plugin.factoryloader: checking directory path "/tmp/.mount_InkEchKfEfoI/packages/PySide6/Qt/plugins/accessiblebridge" ...
+qt.core.plugin.factoryloader: checking directory path "/tmp/.mount_InkEchKfEfoI/usr/bin/accessiblebridge" ...
+qt.core.plugin.factoryloader: checking directory path "/home/inkecho/inkecho-session-xorg24/qt-root/usr/lib/x86_64-linux-gnu/qt6/plugins/accessiblebridge" ...
+qt.core.plugin.factoryloader: checking directory path "/tmp/.mount_InkEchKfEfoI/packages/PySide6/Qt/plugins/accessiblebridge" ...
+qt.core.plugin.factoryloader: checking directory path "/tmp/.mount_InkEchKfEfoI/usr/bin/accessiblebridge" ...
+qt.core.plugin.factoryloader: checking directory path "/home/inkecho/inkecho-session-xorg24/qt-root/usr/lib/x86_64-linux-gnu/qt6/plugins/iconengines" ...
+qt.core.plugin.factoryloader: checking directory path "/tmp/.mount_InkEchKfEfoI/packages/PySide6/Qt/plugins/iconengines" ...
+qt.core.plugin.factoryloader: looking at "libqsvgicon.so"
+qt.core.plugin.loader: Found metadata in lib /tmp/.mount_InkEchKfEfoI/packages/PySide6/Qt/plugins/iconengines/libqsvgicon.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QIconEngineFactoryInterface",
+    "MetaData": {
+        "Keys": [
+            "svg",
+            "svgz",
+            "svg.gz"
+        ]
+    },
+    "archlevel": 2,
+    "className": "QSvgIconPlugin",
+    "debug": false,
+    "version": 396288
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("svg", "svgz", "svg.gz")
+qt.core.plugin.factoryloader: checking directory path "/tmp/.mount_InkEchKfEfoI/usr/bin/iconengines" ...
+qt.core.plugin.factoryloader: checking directory path "/home/inkecho/inkecho-session-xorg24/qt-root/usr/lib/x86_64-linux-gnu/qt6/plugins/iconengines" ...
+qt.core.plugin.factoryloader: checking directory path "/tmp/.mount_InkEchKfEfoI/packages/PySide6/Qt/plugins/iconengines" ...
+qt.core.plugin.factoryloader: checking directory path "/home/inkecho/inkecho-session-xorg24/qt-root/usr/lib/x86_64-linux-gnu/qt6/plugins/accessible" ...
+qt.core.plugin.factoryloader: checking directory path "/tmp/.mount_InkEchKfEfoI/packages/PySide6/Qt/plugins/accessible" ...
+qt.core.plugin.factoryloader: looking at "libqsvgicon.so"
+qt.core.plugin.factoryloader: checking directory path "/tmp/.mount_InkEchKfEfoI/usr/bin/accessible" ...
+qt.core.plugin.loader: Found metadata in lib /tmp/.mount_InkEchKfEfoI/packages/PySide6/Qt/plugins/iconengines/libqsvgicon.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QIconEngineFactoryInterface",
+    "MetaData": {
+        "Keys": [
+            "svg",
+            "svgz",
+            "svg.gz"
+        ]
+    },
+    "archlevel": 2,
+    "className": "QSvgIconPlugin",
+    "debug": false,
+    "version": 396288
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("svg", "svgz", "svg.gz")
+qt.core.plugin.factoryloader: checking directory path "/tmp/.mount_InkEchKfEfoI/usr/bin/iconengines" ...
+qt.core.plugin.factoryloader: checking directory path "/home/inkecho/inkecho-session-xorg24/qt-root/usr/lib/x86_64-linux-gnu/qt6/plugins/accessible" ...
+qt.core.plugin.factoryloader: checking directory path "/tmp/.mount_InkEchKfEfoI/packages/PySide6/Qt/plugins/accessible" ...
+qt.core.plugin.factoryloader: checking directory path "/tmp/.mount_InkEchKfEfoI/usr/bin/accessible" ...
+{"case": "stream", "stage": "switch", "focus_ok": true}
+{"case": "stream", "stage": "result", "route": ["keyboard"], "protocol": [null], "outcome": "failed", "input_failure": "cleanup_pending", "error_code": null, "lengths": [0, 0], "actual": "", "exact": false}
+Traceback (most recent call last):
+  File "/home/inkecho/inkecho-session-xorg24/qt-suite.py", line 41, in <module>
+    asyncio.run(main())
+    ~~~~~~~~~~~^^^^^^^^
+  File "/tmp/.mount_InkEchKfEfoI/usr/lib/python3.13/asyncio/runners.py", line 196, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "/tmp/.mount_InkEchKfEfoI/usr/lib/python3.13/asyncio/runners.py", line 119, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/tmp/.mount_InkEchKfEfoI/usr/lib/python3.13/asyncio/base_events.py", line 726, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/home/inkecho/inkecho-session-xorg24/qt-suite.py", line 36, in main
+    assert actual==expected and result['outcome']==('succeeded' if case=='stream' else 'cancelled')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+{
+  "fcitx_exit_command": 0,
+  "profile_restored": true,
+  "addon_absent": true,
+  "autostart_absent": true,
+  "environment_file_absent": true
+}
+I2026-10-31 05:55:38.525761 addonmanager.cpp:298] Unloading addon pinyin
+I2026-10-31 05:55:38.526209 addonmanager.cpp:298] Unloading addon punctuation
+I2026-10-31 05:55:38.526335 addonmanager.cpp:298] Unloading addon notifications
+I2026-10-31 05:55:38.526349 addonmanager.cpp:298] Unloading addon notificationitem
+I2026-10-31 05:55:38.526374 addonmanager.cpp:298] Unloading addon classicui
+I2026-10-31 05:55:38.527025 addonmanager.cpp:298] Unloading addon virtualkeyboard
+I2026-10-31 05:55:38.527615 addonmanager.cpp:298] Unloading addon kimpanel
+I2026-10-31 05:55:38.527710 addonmanager.cpp:298] Unloading addon xim
+I2026-10-31 05:55:38.527899 addonmanager.cpp:298] Unloading addon inkecho
+I2026-10-31 05:55:38.528027 addonmanager.cpp:298] Unloading addon ibusfrontend
+I2026-10-31 05:55:38.529116 addonmanager.cpp:298] Unloading addon fcitx4frontend
+I2026-10-31 05:55:38.529138 addonmanager.cpp:298] Unloading addon dbusfrontend
+I2026-10-31 05:55:38.529150 addonmanager.cpp:298] Unloading addon dbus
+I2026-10-31 05:55:38.529171 addonmanager.cpp:298] Unloading addon waylandim
+I2026-10-31 05:55:38.529178 addonmanager.cpp:298] Unloading addon imselector
+I2026-10-31 05:55:38.529185 addonmanager.cpp:298] Unloading addon keyboard
+I2026-10-31 05:55:38.529238 addonmanager.cpp:298] Unloading addon quickphrase
+I2026-10-31 05:55:38.529300 addonmanager.cpp:298] Unloading addon xcb
+I2026-10-31 05:55:38.529616 addonmanager.cpp:298] Unloading addon unicode
+I2026-10-31 05:55:38.529716 addonmanager.cpp:298] Unloading addon wayland
+Traceback (most recent call last):
+  File "/home/inkecho/inkecho-session-xorg24/qt-runner.py", line 18, in <module>
+    try:run('qt-suite.py')
+        ^^^^^^^^^^^^^^^^^^
+  File "/home/inkecho/inkecho-session-xorg24/qt-runner.py", line 15, in run
+    def run(script):return subprocess.run([str(app/'usr/bin/python3'),str(p/script)],env=env,check=True)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['/tmp/.mount_InkEchKfEfoI/usr/bin/python3', '/home/inkecho/inkecho-session-xorg24/qt-suite.py']' returned non-zero exit status 1.

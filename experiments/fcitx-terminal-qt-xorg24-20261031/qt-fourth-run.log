@@ -1,0 +1,62 @@
+guest setup done
+I2026-10-31 05:56:57.083913 instance.cpp:1346] Override Enabled Addons: {}
+I2026-10-31 05:56:57.083935 instance.cpp:1347] Override Disabled Addons: {clipboard}
+E2026-10-31 05:56:57.085686 waylandmodule.cpp:230] Failed to open wayland connection
+I2026-10-31 05:56:57.085694 addonmanager.cpp:195] Loaded addon wayland
+I2026-10-31 05:56:57.085780 addonmanager.cpp:195] Loaded addon unicode
+I2026-10-31 05:56:57.087398 xcbconnection.cpp:189] Connecting to X11 display, display name::0.
+I2026-10-31 05:56:57.087492 addonmanager.cpp:195] Loaded addon xcb
+I2026-10-31 05:56:57.088130 addonmanager.cpp:195] Loaded addon quickphrase
+I2026-10-31 05:56:57.090207 addonmanager.cpp:195] Loaded addon keyboard
+I2026-10-31 05:56:57.090287 addonmanager.cpp:195] Loaded addon imselector
+I2026-10-31 05:56:57.090380 addonmanager.cpp:195] Loaded addon waylandim
+I2026-10-31 05:56:57.091013 addonmanager.cpp:195] Loaded addon dbus
+I2026-10-31 05:56:57.091388 addonmanager.cpp:195] Loaded addon dbusfrontend
+I2026-10-31 05:56:57.092284 addonmanager.cpp:195] Loaded addon fcitx4frontend
+I2026-10-31 05:56:57.093002 addonmanager.cpp:195] Loaded addon ibusfrontend
+I2026-10-31 05:56:57.093246 addonmanager.cpp:195] Loaded addon inkecho
+I2026-10-31 05:56:57.093625 addonmanager.cpp:195] Loaded addon xim
+I2026-10-31 05:56:57.106125 inputmethodmanager.cpp:190] Found 737 input method(s) in addon keyboard
+I2026-10-31 05:56:57.114041 addonmanager.cpp:195] Loaded addon kimpanel
+I2026-10-31 05:56:57.114154 addonmanager.cpp:195] Loaded addon virtualkeyboard
+I2026-10-31 05:56:57.127439 classicui.cpp:66] Created classicui for x11 display::0
+I2026-10-31 05:56:57.127450 addonmanager.cpp:195] Loaded addon classicui
+I2026-10-31 05:56:57.127614 addonmanager.cpp:195] Loaded addon notificationitem
+I2026-10-31 05:56:57.127771 addonmanager.cpp:195] Loaded addon notifications
+I2026-10-31 05:56:57.130159 kimpanel.cpp:116] Kimpanel new owner:
+I2026-10-31 05:56:57.130173 virtualkeyboard.cpp:223] VirtualKeyboard new owner:
+I2026-10-31 05:56:57.130186 portalsettingmonitor.cpp:91] A new portal show up, start a new query.
+E2026-10-31 05:56:57.131183 portalsettingmonitor.cpp:115] DBus call error: org.freedesktop.portal.Error.NotFound Requested setting not found
+I2026-10-31 05:56:58.167036 addonmanager.cpp:195] Loaded addon punctuation
+I2026-10-31 05:56:58.284011 addonmanager.cpp:195] Loaded addon pinyin
+{"case": "stream", "stage": "switch", "focus_ok": true}
+{"case": "stream", "stage": "result", "route": ["fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx"], "protocol": [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4], "outcome": "succeeded", "input_failure": null, "error_code": null, "lengths": [18, 182], "actual": "甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸", "exact": true}
+{"case": "cancel", "stage": "switch", "focus_ok": true}
+{"case": "cancel", "stage": "result", "route": ["fcitx"], "protocol": [4], "outcome": "cancelled", "input_failure": "fcitx_cancelled", "error_code": null, "lengths": [1, 0], "actual": "甲", "exact": true}
+{
+  "fcitx_exit_command": 0,
+  "profile_restored": true,
+  "addon_absent": true,
+  "autostart_absent": true,
+  "environment_file_absent": true
+}
+I2026-10-31 05:57:13.670985 addonmanager.cpp:298] Unloading addon pinyin
+I2026-10-31 05:57:13.671844 addonmanager.cpp:298] Unloading addon punctuation
+I2026-10-31 05:57:13.671977 addonmanager.cpp:298] Unloading addon notifications
+I2026-10-31 05:57:13.671989 addonmanager.cpp:298] Unloading addon notificationitem
+I2026-10-31 05:57:13.672011 addonmanager.cpp:298] Unloading addon classicui
+I2026-10-31 05:57:13.672494 addonmanager.cpp:298] Unloading addon virtualkeyboard
+I2026-10-31 05:57:13.672713 addonmanager.cpp:298] Unloading addon kimpanel
+I2026-10-31 05:57:13.672819 addonmanager.cpp:298] Unloading addon xim
+I2026-10-31 05:57:13.672920 addonmanager.cpp:298] Unloading addon inkecho
+I2026-10-31 05:57:13.672963 addonmanager.cpp:298] Unloading addon ibusfrontend
+I2026-10-31 05:57:13.673618 addonmanager.cpp:298] Unloading addon fcitx4frontend
+I2026-10-31 05:57:13.673642 addonmanager.cpp:298] Unloading addon dbusfrontend
+I2026-10-31 05:57:13.673670 addonmanager.cpp:298] Unloading addon dbus
+I2026-10-31 05:57:13.673703 addonmanager.cpp:298] Unloading addon waylandim
+I2026-10-31 05:57:13.673711 addonmanager.cpp:298] Unloading addon imselector
+I2026-10-31 05:57:13.673719 addonmanager.cpp:298] Unloading addon keyboard
+I2026-10-31 05:57:13.673789 addonmanager.cpp:298] Unloading addon quickphrase
+I2026-10-31 05:57:13.673870 addonmanager.cpp:298] Unloading addon xcb
+I2026-10-31 05:57:13.673957 addonmanager.cpp:298] Unloading addon unicode
+I2026-10-31 05:57:13.673967 addonmanager.cpp:298] Unloading addon wayland

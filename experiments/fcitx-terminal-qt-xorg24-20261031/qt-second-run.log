@@ -1,0 +1,87 @@
+guest setup done
+I2026-10-31 05:55:02.394022 instance.cpp:1346] Override Enabled Addons: {}
+I2026-10-31 05:55:02.394041 instance.cpp:1347] Override Disabled Addons: {clipboard}
+E2026-10-31 05:55:02.395683 waylandmodule.cpp:230] Failed to open wayland connection
+I2026-10-31 05:55:02.395695 addonmanager.cpp:195] Loaded addon wayland
+I2026-10-31 05:55:02.395794 addonmanager.cpp:195] Loaded addon unicode
+I2026-10-31 05:55:02.397318 xcbconnection.cpp:189] Connecting to X11 display, display name::0.
+I2026-10-31 05:55:02.397423 addonmanager.cpp:195] Loaded addon xcb
+I2026-10-31 05:55:02.398171 addonmanager.cpp:195] Loaded addon quickphrase
+I2026-10-31 05:55:02.400412 addonmanager.cpp:195] Loaded addon keyboard
+I2026-10-31 05:55:02.400493 addonmanager.cpp:195] Loaded addon imselector
+I2026-10-31 05:55:02.400581 addonmanager.cpp:195] Loaded addon waylandim
+I2026-10-31 05:55:02.401414 addonmanager.cpp:195] Loaded addon dbus
+I2026-10-31 05:55:02.401837 addonmanager.cpp:195] Loaded addon dbusfrontend
+I2026-10-31 05:55:02.403019 addonmanager.cpp:195] Loaded addon fcitx4frontend
+I2026-10-31 05:55:02.403758 addonmanager.cpp:195] Loaded addon ibusfrontend
+I2026-10-31 05:55:02.403911 addonmanager.cpp:195] Loaded addon inkecho
+I2026-10-31 05:55:02.404265 addonmanager.cpp:195] Loaded addon xim
+I2026-10-31 05:55:02.416814 inputmethodmanager.cpp:190] Found 737 input method(s) in addon keyboard
+I2026-10-31 05:55:02.424720 addonmanager.cpp:195] Loaded addon kimpanel
+I2026-10-31 05:55:02.424838 addonmanager.cpp:195] Loaded addon virtualkeyboard
+I2026-10-31 05:55:02.439022 classicui.cpp:66] Created classicui for x11 display::0
+I2026-10-31 05:55:02.439033 addonmanager.cpp:195] Loaded addon classicui
+I2026-10-31 05:55:02.439208 addonmanager.cpp:195] Loaded addon notificationitem
+I2026-10-31 05:55:02.439389 addonmanager.cpp:195] Loaded addon notifications
+I2026-10-31 05:55:02.441661 kimpanel.cpp:116] Kimpanel new owner:
+I2026-10-31 05:55:02.441676 virtualkeyboard.cpp:223] VirtualKeyboard new owner:
+I2026-10-31 05:55:02.441690 portalsettingmonitor.cpp:91] A new portal show up, start a new query.
+E2026-10-31 05:55:02.442504 portalsettingmonitor.cpp:115] DBus call error: org.freedesktop.portal.Error.NotFound Requested setting not found
+I2026-10-31 05:55:03.518034 addonmanager.cpp:195] Loaded addon punctuation
+I2026-10-31 05:55:03.617616 addonmanager.cpp:195] Loaded addon pinyin
+{"case": "stream", "stage": "switch", "focus_ok": true}
+{"case": "stream", "stage": "result", "route": ["keyboard"], "protocol": [null], "outcome": "failed", "input_failure": "cleanup_pending", "error_code": null, "lengths": [0, 0], "actual": "", "exact": false}
+Traceback (most recent call last):
+  File "/home/inkecho/inkecho-session-xorg24/qt-suite.py", line 41, in <module>
+    asyncio.run(main())
+    ~~~~~~~~~~~^^^^^^^^
+  File "/tmp/.mount_InkEchECocHE/usr/lib/python3.13/asyncio/runners.py", line 196, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "/tmp/.mount_InkEchECocHE/usr/lib/python3.13/asyncio/runners.py", line 119, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/tmp/.mount_InkEchECocHE/usr/lib/python3.13/asyncio/base_events.py", line 726, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/home/inkecho/inkecho-session-xorg24/qt-suite.py", line 36, in main
+    assert actual==expected and result['outcome']==('succeeded' if case=='stream' else 'cancelled')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+{
+  "fcitx_exit_command": 0,
+  "profile_restored": true,
+  "addon_absent": true,
+  "autostart_absent": true,
+  "environment_file_absent": true
+}
+I2026-10-31 05:55:11.299391 addonmanager.cpp:298] Unloading addon pinyin
+I2026-10-31 05:55:11.299877 addonmanager.cpp:298] Unloading addon punctuation
+I2026-10-31 05:55:11.299927 addonmanager.cpp:298] Unloading addon notifications
+I2026-10-31 05:55:11.299937 addonmanager.cpp:298] Unloading addon notificationitem
+I2026-10-31 05:55:11.299960 addonmanager.cpp:298] Unloading addon classicui
+I2026-10-31 05:55:11.300342 addonmanager.cpp:298] Unloading addon virtualkeyboard
+I2026-10-31 05:55:11.300361 addonmanager.cpp:298] Unloading addon kimpanel
+I2026-10-31 05:55:11.300369 addonmanager.cpp:298] Unloading addon xim
+I2026-10-31 05:55:11.300618 addonmanager.cpp:298] Unloading addon inkecho
+I2026-10-31 05:55:11.300667 addonmanager.cpp:298] Unloading addon ibusfrontend
+I2026-10-31 05:55:11.303076 addonmanager.cpp:298] Unloading addon fcitx4frontend
+I2026-10-31 05:55:11.303190 addonmanager.cpp:298] Unloading addon dbusfrontend
+I2026-10-31 05:55:11.303229 addonmanager.cpp:298] Unloading addon dbus
+I2026-10-31 05:55:11.303251 addonmanager.cpp:298] Unloading addon waylandim
+I2026-10-31 05:55:11.303259 addonmanager.cpp:298] Unloading addon imselector
+I2026-10-31 05:55:11.303267 addonmanager.cpp:298] Unloading addon keyboard
+I2026-10-31 05:55:11.303320 addonmanager.cpp:298] Unloading addon quickphrase
+I2026-10-31 05:55:11.303387 addonmanager.cpp:298] Unloading addon xcb
+I2026-10-31 05:55:11.303644 addonmanager.cpp:298] Unloading addon unicode
+I2026-10-31 05:55:11.303654 addonmanager.cpp:298] Unloading addon wayland
+Traceback (most recent call last):
+  File "/home/inkecho/inkecho-session-xorg24/qt-runner.py", line 18, in <module>
+    try:run('qt-suite.py')
+        ^^^^^^^^^^^^^^^^^^
+  File "/home/inkecho/inkecho-session-xorg24/qt-runner.py", line 15, in run
+    def run(script):return subprocess.run([str(app/'usr/bin/python3'),str(p/script)],env=env,check=True)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['/tmp/.mount_InkEchECocHE/usr/bin/python3', '/home/inkecho/inkecho-session-xorg24/qt-suite.py']' returned non-zero exit status 1.
