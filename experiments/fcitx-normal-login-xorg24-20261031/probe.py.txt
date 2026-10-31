@@ -1,0 +1,39 @@
+import asyncio, json, os, pathlib, subprocess, sys, time, hashlib
+sys.path[:0]=['/home/inkecho/normal-login-current-src','/home/inkecho/inkecho-normal-xorg24-20261031/deps']
+from inkecho.platform.framework_detection import collect_system_framework, detect_system_framework, probe
+import inkecho.platform.framework_detection as det
+print(json.dumps({"loaded_detector":det.__file__,"sha256":hashlib.sha256(pathlib.Path(det.__file__).read_bytes()).hexdigest()}),flush=True)
+from inkecho.platform.ibus_owned_default import DefaultAutoOutputRouter
+from inkecho.platform.hybrid_keyboard import HybridKeyboardInput
+from inkecho.platform.fcitx5_install import FcitxInstaller
+keys=('XMODIFIERS','GTK_IM_MODULE','QT_IM_MODULE','DISPLAY','WAYLAND_DISPLAY','XDG_CURRENT_DESKTOP','XDG_SESSION_TYPE')
+print(json.dumps({'process_environment':{x:os.environ.get(x) for x in keys},'pid':os.getpid(),'fcitx_version':FcitxInstaller().auto_version()}),flush=True)
+async def main():
+ print(json.dumps({'owners':await probe(),'collector':await collect_system_framework(),'auto':await detect_system_framework()}),flush=True)
+ state=pathlib.Path('/tmp/inkecho-normal-login-owned-entry.json'); state.unlink(missing_ok=True)
+ p=subprocess.Popen(['/usr/bin/python3','/home/inkecho/inkecho-normal-xorg24-20261031/actor.py',str(state)],stdin=subprocess.PIPE,stdout=subprocess.DEVNULL,stderr=subprocess.PIPE,text=True)
+ try:
+  for _ in range(80):
+   await asyncio.sleep(.1)
+   if p.poll() is not None:raise RuntimeError('target_exited '+p.stderr.read())
+   if state.exists():
+    try: target=json.loads(state.read_text())
+    except (json.JSONDecodeError,OSError): continue
+    if target['active'] and target['focus']:break
+  else:raise RuntimeError('target_not_focused')
+  print(json.dumps({'focused_target':target}),flush=True)
+  detection=await detect_system_framework()
+  print(json.dumps({'auto_preflight':detection}),flush=True)
+  r=DefaultAutoOutputRouter(HybridKeyboardInput());await r.prepare_task('auto')
+  try:
+   async with r.output_session():
+    result=await r.insert('甲乙丙',lambda:True,deadline=time.monotonic()+8)
+    print(json.dumps({'sent':result,'route':r.selected}),flush=True)
+  except Exception as e:print(json.dumps({'error':type(e).__name__,'code':getattr(e,'code',None),'attempts':getattr(e,'acknowledged_attempts',None)}),flush=True)
+  finally:await r.aclose()
+  await asyncio.sleep(.8);print(json.dumps({'target_after':json.loads(state.read_text())}),flush=True)
+ finally:
+  if p.poll() is None:p.stdin.write('quit\n');p.stdin.flush()
+  try:p.wait(timeout=3)
+  except subprocess.TimeoutExpired:p.terminate();p.wait(timeout=3)
+asyncio.run(main())

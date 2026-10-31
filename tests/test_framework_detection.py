@@ -67,9 +67,131 @@ def test_live_detector_requires_matching_real_owner(monkeypatch):
     assert asyncio.run(module.collect_system_framework()) == ("ibus", ":1.12")
 
     async def changed_identity(_bus, name, **_kwargs):
-        return ("fcitx", ":1.55")
+        return ("fcitx", ":1.55") if name == "org.freedesktop.IBus" else None
 
     monkeypatch.setattr(module, "owner_identity", changed_identity)
+    assert asyncio.run(module.collect_system_framework()) is None
+
+
+def test_fcitx_ibus_compatibility_owner_is_detected_without_hint_override(monkeypatch):
+    import asyncio
+
+    from inkecho.platform import framework_detection as module
+
+    class Bus:
+        async def connect(self):
+            return self
+
+        def disconnect(self):
+            pass
+
+    async def command(*arguments):
+        if arguments[0].endswith("systemctl"):
+            return "XMODIFIERS=@im=ibus\nQT_IM_MODULE=ibus\n"
+        return "[('xkb', 'us')]\n"
+
+    async def identity(_bus, name, **_kwargs):
+        return ("fcitx", ":1.55")
+
+    monkeypatch.setattr(module, "_command", command)
+    monkeypatch.setattr(module, "MessageBus", Bus)
+    monkeypatch.setattr(module, "owner_identity", identity)
+    assert asyncio.run(module.collect_system_framework()) == ("fcitx", ":1.55")
+
+
+@pytest.mark.parametrize("ibus_owner", [("ibus", ":1.55"), ("fcitx", ":1.56"), None])
+def test_fcitx_ibus_compatibility_requires_same_verified_owner(monkeypatch, ibus_owner):
+    import asyncio
+
+    from inkecho.platform import framework_detection as module
+
+    class Bus:
+        async def connect(self):
+            return self
+
+        def disconnect(self):
+            pass
+
+    async def command(*arguments):
+        if arguments[0].endswith("systemctl"):
+            return "XMODIFIERS=@im=ibus\nQT_IM_MODULE=ibus\n"
+        return "[('xkb', 'us')]\n"
+
+    async def identity(_bus, name, **_kwargs):
+        return ibus_owner if name == "org.freedesktop.IBus" else ("fcitx", ":1.55")
+
+    monkeypatch.setattr(module, "_command", command)
+    monkeypatch.setattr(module, "MessageBus", Bus)
+    monkeypatch.setattr(module, "owner_identity", identity)
+    result = asyncio.run(module.collect_system_framework())
+    assert result != ("fcitx", ":1.55")
+
+
+@pytest.mark.parametrize("changed_call", [3, 4])
+@pytest.mark.parametrize("replacement", [("fcitx", ":1.56"), None])
+def test_fcitx_ibus_compatibility_rechecks_name_ownership(
+    monkeypatch, changed_call, replacement
+):
+    import asyncio
+
+    from inkecho.platform import framework_detection as module
+
+    class Bus:
+        async def connect(self):
+            return self
+
+        def disconnect(self):
+            pass
+
+    async def command(*arguments):
+        if arguments[0].endswith("systemctl"):
+            return "XMODIFIERS=@im=ibus\nQT_IM_MODULE=ibus\n"
+        return "[('xkb', 'us')]\n"
+
+    calls = 0
+
+    async def identity(_bus, name, **_kwargs):
+        nonlocal calls
+        calls += 1
+        return replacement if calls == changed_call else ("fcitx", ":1.55")
+
+    monkeypatch.setattr(module, "_command", command)
+    monkeypatch.setattr(module, "MessageBus", Bus)
+    monkeypatch.setattr(module, "owner_identity", identity)
+    assert asyncio.run(module.collect_system_framework()) is None
+
+
+@pytest.mark.parametrize(
+    "hints",
+    [
+        "XMODIFIERS=@im=ibus\nGTK_IM_MODULE=simple\nQT_IM_MODULE=ibus\n",
+        "XMODIFIERS=@im=ibus\nGTK_IM_MODULE=ibus\nQT_IM_MODULE=fcitx\n",
+        "QT_IM_MODULE=ibus\n",
+    ],
+)
+def test_fcitx_ibus_compatibility_rejects_missing_or_conflicting_hints(
+    monkeypatch, hints
+):
+    import asyncio
+
+    from inkecho.platform import framework_detection as module
+
+    class Bus:
+        async def connect(self):
+            return self
+
+        def disconnect(self):
+            pass
+
+    async def command(*arguments):
+        return hints if arguments[0].endswith("systemctl") else "[('xkb', 'us')]\n"
+
+    async def identity(_bus, name, **_kwargs):
+        return ("fcitx", ":1.55")
+
+    monkeypatch.setattr(module, "_command", command)
+    monkeypatch.setattr(module, "MessageBus", Bus)
+    monkeypatch.setattr(module, "owner_identity", identity)
     assert asyncio.run(module.collect_system_framework()) is None
 
 

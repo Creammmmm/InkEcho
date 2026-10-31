@@ -250,6 +250,51 @@ def test_auto_ambiguous_bridge_delivery_is_never_replayed():
     asyncio.run(run())
 
 
+@pytest.mark.parametrize("case", ["cancel", "unknown"])
+def test_ibus_compatibility_fcitx_route_preserves_stop_and_no_replay(monkeypatch, case):
+    from inkecho.platform import framework_detection as detection
+    from inkecho.platform.fcitx5_install import FcitxInstaller
+
+    class Bus:
+        async def connect(self):
+            return self
+
+        def disconnect(self):
+            pass
+
+    async def command(*args):
+        if args[0].endswith("systemctl"):
+            return "XMODIFIERS=@im=ibus\nQT_IM_MODULE=ibus\n"
+        return "[('xkb', 'us')]\n"
+
+    async def owner(_bus, _name, **_kwargs):
+        return ("fcitx", ":1.42")
+
+    async def live(_owner, _version):
+        return True
+
+    monkeypatch.setattr(detection, "MessageBus", Bus)
+    monkeypatch.setattr(detection, "_command", command)
+    monkeypatch.setattr(detection, "owner_identity", owner)
+    monkeypatch.setattr(detection, "_live_fcitx_version_matches", live)
+    monkeypatch.setattr(FcitxInstaller, "auto_version", lambda _self: "5.1.19")
+
+    async def run():
+        keyboard, bridge = Keyboard(), Bridge("delivery_unknown")
+        router = OutputRouter(keyboard, bridge_factory=lambda: bridge)
+        router._system_detector = detection.detect_system_framework
+        await router.prepare_task("auto")
+        with pytest.raises(
+            OutputRouterError,
+            match="input_cancelled" if case == "cancel" else "fcitx_delivery_unknown",
+        ):
+            await router.insert("甲", lambda: case != "cancel")
+        assert keyboard.sent == []
+        assert bridge.sent == ([] if case == "cancel" else ["甲"])
+
+    asyncio.run(run())
+
+
 def test_auto_fcitx_falls_back_when_no_text_was_committed():
     async def run():
         keyboard = Keyboard()

@@ -220,13 +220,17 @@ async def collect_system_framework():
         bus = await asyncio.wait_for(MessageBus().connect(), 2)
         ibus = await owner_identity(bus, "org.freedesktop.IBus", include_owner=True)
         fcitx = await owner_identity(bus, "org.fcitx.Fcitx5", include_owner=True)
+        # Fcitx can own the IBus compatibility name in a GNOME session whose
+        # published toolkit hints still say IBus.  A shared, independently
+        # verified unique owner is stronger evidence than the names alone.
+        fcitx_ibus = ibus is not None and ibus == fcitx and ibus[0] == "fcitx"
         selected = choose(
             Evidence(
                 values.get("XMODIFIERS"),
                 values.get("GTK_IM_MODULE"),
                 values.get("QT_IM_MODULE"),
                 fcitx is not None and fcitx[0] == "fcitx",
-                ibus is not None and ibus[0] == "ibus",
+                ibus is not None and (ibus[0] == "ibus" or fcitx_ibus),
                 True,
                 True,
                 readable,
@@ -235,6 +239,17 @@ async def collect_system_framework():
         if selected == "fcitx":
             return selected, fcitx[1]
         if selected == "ibus":
+            if fcitx_ibus:
+                if (
+                    await owner_identity(
+                        bus, "org.freedesktop.IBus", include_owner=True
+                    )
+                    != ibus
+                    or await owner_identity(bus, "org.fcitx.Fcitx5", include_owner=True)
+                    != fcitx
+                ):
+                    return None
+                return "fcitx", fcitx[1]
             return selected, ibus[1]
         return None
     except Exception:

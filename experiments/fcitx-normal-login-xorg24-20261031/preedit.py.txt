@@ -1,0 +1,43 @@
+import asyncio,json,os,pathlib,subprocess,sys,time,hashlib
+sys.path[:0]=['/home/inkecho/normal-login-current-src','/home/inkecho/inkecho-normal-xorg24-20261031/deps']
+from inkecho.platform.ibus_owned_default import DefaultAutoOutputRouter
+from inkecho.platform.hybrid_keyboard import HybridKeyboardInput
+from inkecho.platform.framework_detection import detect_system_framework
+import inkecho.platform.framework_detection as _det; print(json.dumps({'loaded_detector':_det.__file__,'sha256':hashlib.sha256(pathlib.Path(_det.__file__).read_bytes()).hexdigest(),'im_environment':{k:os.environ.get(k) for k in ('XMODIFIERS','GTK_IM_MODULE','QT_IM_MODULE')} }),flush=True)
+state=pathlib.Path('/tmp/inkecho-normal-preedit-actor.json');state.unlink(missing_ok=True)
+res=pathlib.Path('/home/inkecho/normal-session/preedit-result.json');rows=[]
+def record(case,**kw):
+ rows.append(dict(case=case,at=time.monotonic(),**kw));res.write_text(json.dumps(rows));print(json.dumps(rows[-1]),flush=True)
+async def go():
+ p=subprocess.Popen(['/usr/bin/python3','/home/inkecho/inkecho-normal-xorg24-20261031/actor.py',str(state)],stdin=subprocess.PIPE,stdout=subprocess.DEVNULL,stderr=subprocess.PIPE,text=True)
+ try:
+  for _ in range(100):
+   await asyncio.sleep(.1)
+   if p.poll() is not None:raise RuntimeError('actor exited '+p.stderr.read())
+   if state.exists():
+    try:t=json.loads(state.read_text())
+    except Exception:continue
+    if t['active'] and t['focus']:break
+  else:raise RuntimeError('no focus')
+  await asyncio.sleep(1.5)
+  subprocess.run(['/usr/bin/fcitx5-remote','-s','pinyin'],check=True);subprocess.run(['/usr/bin/fcitx5-remote','-o'],check=True)
+  engine=subprocess.check_output(['/usr/bin/fcitx5-remote','-n'],text=True).strip();d=await detect_system_framework();record('ready',target=t,engine=engine,detector=d,loaded_detector=_det.__file__,sha256=hashlib.sha256(pathlib.Path(_det.__file__).read_bytes()).hexdigest(),im_environment={k:os.environ.get(k) for k in ('XMODIFIERS','GTK_IM_MODULE','QT_IM_MODULE')})
+  if engine!='pinyin' or not d or d[0]!='fcitx':raise RuntimeError('preconditions unavailable')
+  for _ in range(300):
+   await asyncio.sleep(.1);t=json.loads(state.read_text())
+   if t['preedit_length']>=2 and t['active'] and t['focus']:break
+  else:raise RuntimeError('real preedit not observed')
+  record('before',target=t)
+  r=DefaultAutoOutputRouter(HybridKeyboardInput());await r.prepare_task('auto')
+  try:
+   async with r.output_session():
+    try:sent=await r.insert('戊',lambda:True,deadline=time.monotonic()+8);record('unexpected_send',sent=sent,route=r.selected)
+    except Exception as e:record('protected',error=type(e).__name__,code=getattr(e,'code',None),attempts=getattr(e,'acknowledged_attempts',None),route=r.selected)
+  finally:await r.aclose()
+  await asyncio.sleep(.5);record('after',target=json.loads(state.read_text()))
+ except Exception as e:record('error',kind=type(e).__name__,detail=str(e))
+ finally:
+  await asyncio.sleep(.5)
+  if state.exists(): record('final_target',target=json.loads(state.read_text()))
+  if p.poll() is None:p.stdin.write('quit\n');p.stdin.flush();p.wait(timeout=5)
+asyncio.run(go())

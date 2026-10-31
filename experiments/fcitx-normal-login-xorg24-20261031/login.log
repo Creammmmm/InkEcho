@@ -1,0 +1,15 @@
+default
+fcitx5
+ibus
+
+ibus
+1327 /usr/bin/fcitx5 -d
+1 1000 inkecho seat0 tty2 active no -
+3 1000 inkecho -     -    active no -
+DISPLAY=:0
+GTK_IM_MODULE=fcitx
+QT_IM_MODULE=fcitx
+XDG_CURRENT_DESKTOP=ubuntu:GNOME
+XDG_SESSION_TYPE=x11
+XMODIFIERS=@im=fcitx
+523775705dfb1b356f5162d798f94da992a79f4b6ebd11390c4d7b0168866a9d  /home/inkecho/normal-login-current-src/inkecho/platform/framework_detection.py

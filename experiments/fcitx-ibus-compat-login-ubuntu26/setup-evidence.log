@@ -1,0 +1,27 @@
+PRETTY_NAME="Ubuntu 26.04.1 LTS"
+NAME="Ubuntu"
+VERSION_ID="26.04"
+VERSION="26.04.1 LTS (Resolute Raccoon)"
+VERSION_CODENAME=resolute
+ID=ubuntu
+ID_LIKE=debian
+HOME_URL="https://www.ubuntu.com/"
+SUPPORT_URL="https://help.ubuntu.com/"
+BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+UBUNTU_CODENAME=resolute
+LOGO=ubuntu-logo
+default
+fcitx5
+ibus
+
+ibus
+Type=wayland
+Active=yes
+DISPLAY=:0
+QT_IM_MODULE=ibus
+WAYLAND_DISPLAY=wayland-0
+XDG_CURRENT_DESKTOP=ubuntu:GNOME
+XDG_SESSION_TYPE=wayland
+XMODIFIERS=@im=ibus
+20a83ff67deb010b3481cb58dfd7a7b099c21342d537d9b9f82714f59dd00e17  /home/inkecho/im-config.deb

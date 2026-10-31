@@ -1,0 +1,58 @@
+from pathlib import Path
+import asyncio,json,os,subprocess,sys,time,tempfile,urllib.request,hashlib,pathlib
+p=Path.home()/'normal-browser-xorg24-r2';p.mkdir(exist_ok=True);sys.path[:0]=['/home/inkecho/normal-login-current-src','/home/inkecho/inkecho-normal-xorg24-20261031/deps']
+os.environ.update(XDG_RUNTIME_DIR='/run/user/1000',DBUS_SESSION_BUS_ADDRESS='unix:path=/run/user/1000/bus')
+for line in subprocess.check_output(['systemctl','--user','show-environment'],text=True).splitlines():
+ k,_,v=line.partition('=')
+ if k in {'DISPLAY','WAYLAND_DISPLAY','XAUTHORITY','XDG_CURRENT_DESKTOP','XDG_SESSION_TYPE'}:os.environ[k]=v
+from inkecho.platform.fcitx5_install import FcitxInstaller
+from inkecho.platform.ibus_owned_default import DefaultAutoOutputRouter
+from inkecho.platform.hybrid_keyboard import HybridKeyboardInput
+from websockets.sync.client import connect
+import inkecho.platform.framework_detection as _det; print(json.dumps({'loaded_detector':_det.__file__,'sha256':hashlib.sha256(pathlib.Path(_det.__file__).read_bytes()).hexdigest(),'im_environment':{k:os.environ.get(k) for k in ('XMODIFIERS','GTK_IM_MODULE','QT_IM_MODULE')} }),flush=True)
+w=p/'native-browser-login';w.mkdir(mode=0o700);data=w/'data';data.mkdir(mode=0o700);rows=[];daemon=browser=None
+def record(case,**kw):
+ rows.append(dict(case=case,**kw));(w/'results.json').write_text(json.dumps(rows,indent=2));print(json.dumps(rows[-1]),flush=True)
+async def main():
+ global daemon,browser
+ hints=[x for x in subprocess.check_output(['systemctl','--user','show-environment'],text=True).splitlines() if x.split('=',1)[0] in {'XMODIFIERS','GTK_IM_MODULE','QT_IM_MODULE'}];install=FcitxInstaller(source=p/'candidate',data_home=data)
+ try:
+  record('login_fcitx',debug=subprocess.check_output(['gdbus','call','--session','--dest','org.fcitx.Fcitx5','--object-path','/controller','--method','org.fcitx.Fcitx.Controller1.DebugInfo'],text=True))
+  page=w/'owned.html';page.write_text('''<meta charset=utf-8><title>InkEcho own browser</title><textarea id=a autofocus></textarea><textarea id=b></textarea><script>window.events=[];for(const x of [a,b])for(const t of ['input','compositionstart','compositionupdate','compositionend','focus'])x.addEventListener(t,e=>events.push({type:t,id:x.id,data:e.data||''}));</script>''')
+  profile=w/'profile';profile.mkdir(mode=0o700);env=dict(os.environ);env['WAYLAND_DEBUG']='0'
+  args=['/opt/inkecho-qa-chrome/chrome','--password-store=basic','--no-first-run','--no-default-browser-check','--disable-background-networking','--disable-sync','--ozone-platform=x11','--enable-wayland-ime','--wayland-text-input-version=3','--remote-debugging-port=0','--remote-allow-origins=*','--user-data-dir='+str(profile),page.as_uri()]
+  browser=subprocess.Popen(args,env=env,stdout=subprocess.DEVNULL,stderr=(w/'browser.log').open('w'));record('browser_start',pid=browser.pid,wayland_display=env.get('WAYLAND_DISPLAY'),display_absent='DISPLAY' not in env,args=args)
+  for _ in range(120):
+   if (profile/'DevToolsActivePort').exists():break
+   assert browser.poll() is None,'browser exited';await asyncio.sleep(.1)
+  port=int((profile/'DevToolsActivePort').read_text().splitlines()[0]);target=None
+  for _ in range(100):
+   target=next((x for x in json.load(urllib.request.urlopen(f'http://127.0.0.1:{port}/json/list')) if x.get('url')==page.as_uri()),None)
+   if target:break
+   await asyncio.sleep(.1)
+  assert target;ws=connect(target['webSocketDebuggerUrl'],open_timeout=3);seq=0
+  def cdp(method,params):
+   nonlocal seq
+   seq+=1;ws.send(json.dumps({'id':seq,'method':method,'params':params}))
+   while True:
+    r=json.loads(ws.recv(timeout=5))
+    if r.get('id')==seq:assert 'error' not in r;return r['result']
+  def js(expr):return cdp('Runtime.evaluate',{'expression':expr,'returnByValue':True}).get('result',{}).get('value')
+  cdp('Page.bringToFront',{});js('a.focus();true');await asyncio.sleep(.6)
+  state=json.loads(js("JSON.stringify({focus:document.hasFocus(),active:document.activeElement.id})"));record('ready',state=state);assert state=={'focus':True,'active':'a'}
+  record('x11_environment', display=env.get('DISPLAY'), session=env.get('XDG_SESSION_TYPE'));assert env.get('DISPLAY') and env.get('XDG_SESSION_TYPE')=='x11'
+  r=DefaultAutoOutputRouter(HybridKeyboardInput());await r.prepare_task('auto')
+  try:
+   async with r.output_session():
+    try:sent=await r.insert('甲乙丙',lambda:True,deadline=time.monotonic()+8);route=r.selected;record('output',sent=sent,route=route)
+    except Exception as e:record('output_error',kind=type(e).__name__,code=getattr(e,'code',None));raise
+  finally:await r.aclose()
+  await asyncio.sleep(.5);result=json.loads(js("JSON.stringify({value:a.value,events:window.events,focus:document.hasFocus(),active:document.activeElement.id})"));record('receiver',result=result);assert route=='fcitx' and sent==3 and result['value']=='甲乙丙'
+ finally:
+  if browser:
+   browser.terminate()
+   try:record('browser_exit',exit=browser.wait(timeout=8))
+   except subprocess.TimeoutExpired:browser.kill();record('browser_killed',exit=browser.wait(timeout=5))
+  if daemon:daemon.terminate();record('daemon_exit',exit=daemon.wait(timeout=5))
+  now=[x for x in subprocess.check_output(['systemctl','--user','show-environment'],text=True).splitlines() if x.split('=',1)[0] in {'XMODIFIERS','GTK_IM_MODULE','QT_IM_MODULE'}];record('hints_restored',value=sorted(now)==sorted(hints))
+asyncio.run(main())
