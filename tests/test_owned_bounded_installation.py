@@ -1,6 +1,7 @@
 """Exact new/legacy asset sets and explicit upgrade safety, without GNOME calls."""
 
 import hashlib
+import subprocess
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -129,3 +130,60 @@ def test_previous_bounded_asset_set_is_detected_but_never_overwritten(
     message = manager.status()
     assert "停用并卸载旧扩展" in message and "重新登录桌面" in message
     assert before == {path.name: path.read_bytes() for path in root.iterdir()}
+
+
+@pytest.mark.parametrize(
+    ("state", "expected"),
+    [
+        ("ACTIVE", "正在运行"),
+        ("ENABLED", "运行状态未确认"),
+        ("INACTIVE", "未运行"),
+        ("DISABLED", "已停用"),
+        ("ERROR", "运行出错"),
+        ("OUT_OF_DATE", "不兼容"),
+        ("unknown", "运行状态无法确认"),
+        (None, "运行状态无法确认"),
+    ],
+)
+def test_status_reports_actual_gnome_extension_state(
+    tmp_path, monkeypatch, state, expected
+):
+    root, source = installed(tmp_path, monkeypatch)
+    info = f"Path: {root}\n" + (f"State: {state}\n" if state else "")
+    manager = owned_extension.OwnedExtensionManager(
+        source=source,
+        runner=lambda *_args, **_kwargs: SimpleNamespace(
+            returncode=0, stdout=info, stderr=""
+        ),
+    )
+    assert expected in manager.status()
+
+
+@pytest.mark.parametrize(
+    "states", ["State: ACTIVE\nState: DISABLED\n", "State: ACTIVE\nState: ACTIVE\n"]
+)
+def test_status_rejects_duplicate_state_lines(tmp_path, monkeypatch, states):
+    root, source = installed(tmp_path, monkeypatch)
+    manager = owned_extension.OwnedExtensionManager(
+        source=source,
+        runner=lambda *_args, **_kwargs: SimpleNamespace(
+            returncode=0, stdout=f"Path: {root}\n{states}", stderr=""
+        ),
+    )
+    assert "运行状态无法确认" in manager.status()
+
+
+@pytest.mark.parametrize("failure", ["missing", "timeout", "nonzero"])
+def test_status_reports_cli_failures_without_claiming_running(tmp_path, failure):
+    def failed_runner(args, **_kwargs):
+        if failure == "missing":
+            raise FileNotFoundError()
+        if failure == "timeout":
+            raise subprocess.TimeoutExpired(args, 10)
+        return SimpleNamespace(returncode=1, stdout="State: ACTIVE\n", stderr="")
+
+    status = owned_extension.OwnedExtensionManager(
+        source=tmp_path, runner=failed_runner
+    ).status()
+    assert "正在运行" not in status
+    assert "不可用" in status or "操作未完成" in status

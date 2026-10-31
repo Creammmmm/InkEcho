@@ -99,4 +99,18 @@ class OwnedExtensionManager(ExtensionManager):
             self._verify_installed(info)
         except ExtensionError as error:
             return str(error)
-        return "扩展文件已校验；自动输出时仍须验证当前目标和服务身份。"
+        states = [
+            line.split(":", 1)[1].strip().upper()
+            for line in info.splitlines()
+            if line.strip().startswith("State:")
+        ]
+        if len(states) != 1:
+            return "扩展文件已校验，但运行状态无法确认。"
+        return {
+            "ACTIVE": "扩展显示正在运行；自动输出仍须验证当前目标和服务身份。",
+            "ENABLED": "扩展已启用，但运行状态未确认；必要时重新登录桌面。",
+            "INACTIVE": "扩展已安装但未运行；请检查 GNOME 扩展设置。",
+            "DISABLED": "扩展已停用；请点击启用自动输入扩展。",
+            "ERROR": "扩展运行出错；请检查 GNOME 扩展设置或停用扩展。",
+            "OUT_OF_DATE": "扩展与当前 GNOME 版本不兼容。",
+        }.get(states[0], "扩展文件已校验，但运行状态无法确认。")
