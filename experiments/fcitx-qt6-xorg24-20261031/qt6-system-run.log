@@ -1,0 +1,571 @@
+guest setup done
+I2026-10-31 06:08:51.727694 instance.cpp:1346] Override Enabled Addons: {}
+I2026-10-31 06:08:51.727714 instance.cpp:1347] Override Disabled Addons: {clipboard}
+E2026-10-31 06:08:51.731662 waylandmodule.cpp:230] Failed to open wayland connection
+I2026-10-31 06:08:51.731671 addonmanager.cpp:195] Loaded addon wayland
+I2026-10-31 06:08:51.732513 addonmanager.cpp:195] Loaded addon unicode
+I2026-10-31 06:08:51.734933 xcbconnection.cpp:189] Connecting to X11 display, display name::0.
+I2026-10-31 06:08:51.735061 addonmanager.cpp:195] Loaded addon xcb
+I2026-10-31 06:08:51.736590 addonmanager.cpp:195] Loaded addon quickphrase
+I2026-10-31 06:08:51.739189 addonmanager.cpp:195] Loaded addon keyboard
+I2026-10-31 06:08:51.739592 addonmanager.cpp:195] Loaded addon imselector
+I2026-10-31 06:08:51.740482 addonmanager.cpp:195] Loaded addon waylandim
+I2026-10-31 06:08:51.742404 addonmanager.cpp:195] Loaded addon dbus
+I2026-10-31 06:08:51.744006 addonmanager.cpp:195] Loaded addon dbusfrontend
+I2026-10-31 06:08:51.745694 addonmanager.cpp:195] Loaded addon fcitx4frontend
+I2026-10-31 06:08:51.747444 addonmanager.cpp:195] Loaded addon ibusfrontend
+I2026-10-31 06:08:51.747718 addonmanager.cpp:195] Loaded addon inkecho
+I2026-10-31 06:08:51.749261 addonmanager.cpp:195] Loaded addon xim
+I2026-10-31 06:08:51.764175 inputmethodmanager.cpp:190] Found 737 input method(s) in addon keyboard
+I2026-10-31 06:08:51.772875 addonmanager.cpp:195] Loaded addon kimpanel
+I2026-10-31 06:08:51.773593 addonmanager.cpp:195] Loaded addon virtualkeyboard
+I2026-10-31 06:08:51.793482 classicui.cpp:66] Created classicui for x11 display::0
+I2026-10-31 06:08:51.793496 addonmanager.cpp:195] Loaded addon classicui
+I2026-10-31 06:08:51.794400 addonmanager.cpp:195] Loaded addon notificationitem
+I2026-10-31 06:08:51.794726 addonmanager.cpp:195] Loaded addon notifications
+I2026-10-31 06:08:51.797962 kimpanel.cpp:116] Kimpanel new owner:
+I2026-10-31 06:08:51.797978 virtualkeyboard.cpp:223] VirtualKeyboard new owner:
+I2026-10-31 06:08:51.797992 portalsettingmonitor.cpp:91] A new portal show up, start a new query.
+E2026-10-31 06:08:51.799385 portalsettingmonitor.cpp:115] DBus call error: org.freedesktop.portal.Error.NotFound Requested setting not found
+I2026-10-31 06:08:52.905804 addonmanager.cpp:195] Loaded addon punctuation
+E2026-10-31 06:08:53.014837 pinyin.cpp:986] Failed to load pinyin history: io fail: iostream error
+I2026-10-31 06:08:53.029067 addonmanager.cpp:195] Loaded addon pinyin
+qt.core.plugin.factoryloader: checking directory path "/usr/lib/x86_64-linux-gnu/qt6/plugins/platforms" ...
+qt.core.plugin.factoryloader: looking at "/usr/lib/x86_64-linux-gnu/qt6/plugins/platforms/libqwayland-generic.so"
+qt.core.plugin.factoryloader: checking directory path "/usr/lib/x86_64-linux-gnu/qt6/plugins/platforms" ...
+qt.core.plugin.factoryloader: looking at "/usr/lib/x86_64-linux-gnu/qt6/plugins/platforms/libqwayland-generic.so"
+qt.core.plugin.loader: Found metadata in lib /usr/lib/x86_64-linux-gnu/qt6/plugins/platforms/libqwayland-generic.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPA.QPlatformIntegrationFactoryInterface.5.3",
+    "MetaData": {
+        "Keys": [
+            "wayland"
+        ]
+    },
+    "archlevel": 1,
+    "className": "QWaylandIntegrationPlugin",
+    "debug": false,
+    "version": 394240
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("wayland")
+qt.core.plugin.factoryloader: looking at "/usr/lib/x86_64-linux-gnu/qt6/plugins/platforms/libqlinuxfb.so"
+qt.core.plugin.loader: Found metadata in lib /usr/lib/x86_64-linux-gnu/qt6/plugins/platforms/libqwayland-generic.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPA.QPlatformIntegrationFactoryInterface.5.3",
+    "MetaData": {
+        "Keys": [
+            "wayland"
+        ]
+    },
+    "archlevel": 1,
+    "className": "QWaylandIntegrationPlugin",
+    "debug": false,
+    "version": 394240
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("wayland")
+qt.core.plugin.loader: Found metadata in lib /usr/lib/x86_64-linux-gnu/qt6/plugins/platforms/libqlinuxfb.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPA.QPlatformIntegrationFactoryInterface.5.3",
+    "MetaData": {
+        "Keys": [
+            "linuxfb"
+        ]
+    },
+    "archlevel": 1,
+    "className": "QLinuxFbIntegrationPlugin",
+    "debug": false,
+    "version": 394240
+}
+
+
+qt.core.plugin.factoryloader: looking at "/usr/lib/x86_64-linux-gnu/qt6/plugins/platforms/libqlinuxfb.so"
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("linuxfb")
+qt.core.plugin.factoryloader: looking at "/usr/lib/x86_64-linux-gnu/qt6/plugins/platforms/libqeglfs.so"
+qt.core.plugin.loader: Found metadata in lib /usr/lib/x86_64-linux-gnu/qt6/plugins/platforms/libqlinuxfb.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPA.QPlatformIntegrationFactoryInterface.5.3",
+    "MetaData": {
+        "Keys": [
+            "linuxfb"
+        ]
+    },
+    "archlevel": 1,
+    "className": "QLinuxFbIntegrationPlugin",
+    "debug": false,
+    "version": 394240
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("linuxfb")
+qt.core.plugin.factoryloader: looking at "/usr/lib/x86_64-linux-gnu/qt6/plugins/platforms/libqeglfs.so"
+qt.core.plugin.loader: Found metadata in lib /usr/lib/x86_64-linux-gnu/qt6/plugins/platforms/libqeglfs.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPA.QPlatformIntegrationFactoryInterface.5.3",
+    "MetaData": {
+        "Keys": [
+            "eglfs"
+        ]
+    },
+    "archlevel": 1,
+    "className": "QEglFSIntegrationPlugin",
+    "debug": false,
+    "version": 394240
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("eglfs")
+qt.core.plugin.factoryloader: looking at "/usr/lib/x86_64-linux-gnu/qt6/plugins/platforms/libqoffscreen.so"
+qt.core.plugin.loader: Found metadata in lib /usr/lib/x86_64-linux-gnu/qt6/plugins/platforms/libqeglfs.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPA.QPlatformIntegrationFactoryInterface.5.3",
+    "MetaData": {
+        "Keys": [
+            "eglfs"
+        ]
+    },
+    "archlevel": 1,
+    "className": "QEglFSIntegrationPlugin",
+    "debug": false,
+    "version": 394240
+}
+
+
+qt.core.plugin.loader: Found metadata in lib /usr/lib/x86_64-linux-gnu/qt6/plugins/platforms/libqoffscreen.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPA.QPlatformIntegrationFactoryInterface.5.3",
+    "MetaData": {
+        "Keys": [
+            "offscreen"
+        ]
+    },
+    "archlevel": 1,
+    "className": "QOffscreenIntegrationPlugin",
+    "debug": false,
+    "version": 394240
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("eglfs")
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("offscreen")
+qt.core.plugin.factoryloader: looking at "/usr/lib/x86_64-linux-gnu/qt6/plugins/platforms/libqoffscreen.so"
+qt.core.plugin.factoryloader: looking at "/usr/lib/x86_64-linux-gnu/qt6/plugins/platforms/libqvnc.so"
+qt.core.plugin.loader: Found metadata in lib /usr/lib/x86_64-linux-gnu/qt6/plugins/platforms/libqvnc.so, metadata=
+{
+    "IID": qt.core.plugin.loader: Found metadata in lib /usr/lib/x86_64-linux-gnu/qt6/plugins/platforms/libqoffscreen.so, metadata=
+{
+    ""org.qt-project.Qt.QPA.QPlatformIntegrationFactoryInterface.5.3",
+    "MetaData": {
+        "Keys": [
+            "vnc"
+        ]
+    },
+    "archlevel": 1,
+    "className": "QVncIntegrationPlugin",
+    "debug": false,
+    "version": 394240
+}
+
+
+IID": "org.qt-project.Qt.QPA.QPlatformIntegrationFactoryInterface.5.3",
+    "MetaData": {
+        "Keys": [
+            "offscreen"
+        ]
+    },
+    "archlevel": 1,
+    "className": "QOffscreenIntegrationPlugin",
+    "debug": false,
+    "version": 394240
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("vnc")
+qt.core.plugin.factoryloader: looking at "/usr/lib/x86_64-linux-gnu/qt6/plugins/platforms/libqminimal.so"
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("offscreen")
+qt.core.plugin.factoryloader: looking at "/usr/lib/x86_64-linux-gnu/qt6/plugins/platforms/libqvnc.so"
+qt.core.plugin.loader: Found metadata in lib /usr/lib/x86_64-linux-gnu/qt6/plugins/platforms/libqminimal.so, metadata=
+{
+    "IIqt.core.plugin.loader: Found metadata in lib /usr/lib/x86_64-linux-gnu/qt6/plugins/platforms/libqvnc.so, metadata=
+{
+    "IID": D": "org.qt-project.Qt.QPA.QPlatformIntegrationFactoryInterface.5.3",
+    "MetaData": {
+        "Keys": [
+            "minimal"
+"org.qt-project.Qt.QPA.QPlatformIntegrationFactoryInterface.5.3",
+    "MetaData": {
+        "Keys": [
+            "vnc"
+                ]
+    },
+    "archlevel": 1,
+    "className": "QMinimalIntegrationPlugin",
+    "debug": false,
+    "version": 394240
+}
+
+
+]
+    },
+    "archlevel": 1,
+    "className": "QVncIntegrationPlugin",
+    "debug": false,
+    "version": 394240
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("minimal")
+qt.core.plugin.factoryloader: looking at "/usr/lib/x86_64-linux-gnu/qt6/plugins/platforms/libqminimalegl.so"
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("vnc")
+qt.core.plugin.factoryloader: looking at "/usr/lib/x86_64-linux-gnu/qt6/plugins/platforms/libqminimal.so"
+qt.core.plugin.loader: Found metadata in lib /usr/lib/x86_64-linux-gnu/qt6/plugins/platforms/libqminimalegl.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPA.QPlatformIntegrationFactoryInterface.5.3",
+    "MetaData": {
+        "Keys": [
+            "minimalegl"
+        ]
+    },
+    "archlevel": 1,
+    "className": "QMinimalEglIntegrationPlugin",
+    "debug": false,
+    "version": 394240
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("minimalegl")
+qt.core.plugin.factoryloader: looking at "/usr/lib/x86_64-linux-gnu/qt6/plugins/platforms/libqxcb.so"
+qt.core.plugin.loader: Found metadata in lib /usr/lib/x86_64-linux-gnu/qt6/plugins/platforms/libqminimal.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPA.QPlatformIntegrationFactoryInterface.5.3",
+    "MetaData": {
+        "Keys": [
+            "minimal"
+        ]
+    },
+    "archlevel": 1,
+    "className": "QMinimalIntegrationPlugin",
+    "debug": false,
+    "version": 394240
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("minimal")
+qt.core.plugin.factoryloader: looking at "/usr/lib/x86_64-linux-gnu/qt6/plugins/platforms/libqminimalegl.so"
+qt.core.plugin.loader: Found metadata in lib /usr/lib/x86_64-linux-gnu/qt6/plugins/platforms/libqxcb.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPA.QPlatformIntegrationFactoryInterface.5.3",
+    "MetaData": {
+        "Keys": [
+            "xcb"
+        ]
+    },
+    "archlevel": 1,
+    "className": "QXcbIntegrationPlugin",
+    "debug": false,
+    "version": 394240
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("xcb")
+qt.core.plugin.factoryloader: looking at "/usr/lib/x86_64-linux-gnu/qt6/plugins/platforms/libqwayland-egl.so"
+qt.core.plugin.loader: Found metadata in lib /usr/lib/x86_64-linux-gnu/qt6/plugins/platforms/libqwayland-egl.so, metadata=
+{
+   qt.core.plugin.loader: Found metadata in lib /usr/lib/x86_64-linux-gnu/qt6/plugins/platforms/libqminimalegl.so, metadata=
+{
+     "IID": "org.qt-project.Qt.QPA.QPlatformIntegrationFactoryInterface.5.3",
+    "MetaData": {
+        "Keys": [
+            "wayla"IID": "org.qt-project.Qt.QPA.QPlatformIntegrationFactoryInterface.5.3",
+    "MetaData": {
+        "Keys": [
+            "minimand-egl"
+        ]
+    },
+    "archlevel": 1,
+    "className": "QWaylandEglPlatformIntegrationPlugin",
+    "debug": false,
+    "vlegl"
+        ]
+    },
+    "archlevel": 1,
+    "className": "QMinimalEglIntegrationPlugin",
+    "debug": false,
+    "version": 3ersion": 394240
+}
+
+
+94240
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("wayland-egl")
+qt.core.plugin.factoryloader: looking at "/usr/lib/x86_64-linux-gnu/qt6/plugins/platforms/libqvkkhrdisplay.so"
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("minimalegl")
+qt.core.plugin.factoryloader: looking at "/usr/lib/x86_64-linux-gnu/qt6/plugins/platforms/libqxcb.so"
+qt.core.plugin.loader: Found metadata in lib /usr/lib/x86_64-linux-gnu/qt6/plugins/platforms/libqvkkhrdisplay.so, metadata=
+{
+  qt.core.plugin.loader: Found metadata in lib /usr/lib/x86_64-linux-gnu/qt6/plugins/platforms/libqxcb.so, metadata=
+{
+    "IID":   "IID": "org.qt-project.Qt.QPA.QPlatformIntegrationFactoryInterface.5.3",
+    "MetaData": {
+        "Keys": [
+            "vkkh"org.qt-project.Qt.QPA.QPlatformIntegrationFactoryInterface.5.3",
+    "MetaData": {
+        "Keys": [
+            "xcb"
+        rdisplay"
+        ]
+    },
+    "archlevel": 1,
+    "className": "QVkKhrDisplayIntegrationPlugin",
+    "debug": false,
+    "version": 394240
+}
+
+
+]
+    },
+    "archlevel": 1,
+    "className": "QXcbIntegrationPlugin",
+    "debug": false,
+    "version": 394240
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("vkkhrdisplay")
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("xcb")
+qt.core.plugin.factoryloader: checking directory path "/usr/bin/platforms" ...
+qt.core.plugin.factoryloader: looking at "/usr/lib/x86_64-linux-gnu/qt6/plugins/platforms/libqwayland-egl.so"
+qt.core.plugin.loader: Found metadata in lib /usr/lib/x86_64-linux-gnu/qt6/plugins/platforms/libqwayland-egl.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPA.QPlatformIntegrationFactoryInterface.5.3",
+    "MetaData": {
+        "Keys": [
+            "wayland-egl"
+        ]
+    },
+    "archlevel": 1,
+    "className": "QWaylandEglPlatformIntegrationPlugin",
+    "debug": false,
+    "version": 394240
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("wayland-egl")
+qt.core.plugin.factoryloader: looking at "/usr/lib/x86_64-linux-gnu/qt6/plugins/platforms/libqvkkhrdisplay.so"
+qt.core.plugin.loader: Found metadata in lib /usr/lib/x86_64-linux-gnu/qt6/plugins/platforms/libqvkkhrdisplay.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPA.QPlatformIntegrationFactoryInterface.5.3",
+    "MetaData": {
+        "Keys": [
+            "vkkhrdisplay"
+        ]
+    },
+    "archlevel": 1,
+    "className": "QVkKhrDisplayIntegrationPlugin",
+    "debug": false,
+    "version": 394240
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("vkkhrdisplay")
+qt.core.plugin.factoryloader: checking directory path "/usr/bin/platforms" ...
+qt.core.library: "/usr/lib/x86_64-linux-gnu/qt6/plugins/platforms/libqxcb.so" loaded library
+qt.core.library: "/usr/lib/x86_64-linux-gnu/qt6/plugins/platforms/libqxcb.so" loaded library
+qt.core.library: "Xcursor" loaded library
+qt.core.library: "Xcursor" loaded library
+qt.core.plugin.factoryloader: checking directory path "/usr/lib/x86_64-linux-gnu/qt6/plugins/platformthemes" ...
+qt.core.plugin.factoryloader: looking at "/usr/lib/x86_64-linux-gnu/qt6/plugins/platformthemes/libqgtk3.so"
+qt.core.plugin.factoryloader: checking directory path "/usr/lib/x86_64-linux-gnu/qt6/plugins/platformthemes" ...
+qt.core.plugin.loader: Found metadata in lib /usr/lib/x86_64-linux-gnu/qt6/plugins/platformthemes/libqgtk3.so, metadata=
+{
+    "qt.core.plugin.factoryloader: looking at "/usr/lib/x86_64-linux-gnu/qt6/plugins/platformthemes/libqgtk3.so"
+IID": "org.qt-project.Qt.QPA.QPlatformThemeFactoryInterface.5.1",
+    "MetaData": {
+        "Keys": [
+            "gtk3"
+        ]
+    },
+    "archlevel": 1,
+    "className": "QGtk3ThemePlugin",
+    "debug": false,
+    "version": 394240
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("gtk3")
+qt.core.plugin.factoryloader: checking directory path "/usr/bin/platformthemes" ...
+qt.core.plugin.loader: Found metadata in lib /usr/lib/x86_64-linux-gnu/qt6/plugins/platformthemes/libqgtk3.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPA.QPlatformThemeFactoryInterface.5.1",
+    "MetaData": {
+        "Keys": [
+            "gtk3"
+        ]
+    },
+    "archlevel": 1,
+    "className": "QGtk3ThemePlugin",
+    "debug": false,
+    "version": 394240
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("gtk3")
+qt.core.plugin.factoryloader: checking directory path "/usr/bin/platformthemes" ...
+qt.core.library: "/usr/lib/x86_64-linux-gnu/qt6/plugins/platformthemes/libqgtk3.so" loaded library
+qt.core.library: "/usr/lib/x86_64-linux-gnu/qt6/plugins/platformthemes/libqgtk3.so" loaded library
+qt.core.plugin.factoryloader: checking directory path "/usr/lib/x86_64-linux-gnu/qt6/plugins/platforminputcontexts" ...
+qt.core.plugin.factoryloader: looking at "/usr/lib/x86_64-linux-gnu/qt6/plugins/platforminputcontexts/libfcitx5platforminputcontextplugin.so"
+qt.core.plugin.loader: Found metadata in lib /usr/lib/x86_64-linux-gnu/qt6/plugins/platforminputcontexts/libfcitx5platforminputcontextplugin.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPlatformInputContextFactoryInterface.5.1",
+    "MetaData": {
+        "Keys": [
+            "fcitx",
+            "fcitx5"
+        ]
+    },
+    "archlevel": 1,
+    "className": "QFcitx5PlatformInputContextPlugin",
+    "debug": false,
+    "version": 394240
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("fcitx", "fcitx5")
+qt.core.plugin.factoryloader: looking at "/usr/lib/x86_64-linux-gnu/qt6/plugins/platforminputcontexts/libcomposeplatforminputcontextplugin.so"
+qt.core.plugin.loader: Found metadata in lib /usr/lib/x86_64-linux-gnu/qt6/plugins/platforminputcontexts/libcomposeplatforminputcontextplugin.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPlatformInputContextFactoryInterface.5.1",
+    "MetaData": {
+        "Keys": [
+            "compose",
+            "xim"
+        ]
+    },
+    "archlevel": 1,
+    "className": "QComposePlatformInputContextPlugin",
+    "debug": false,
+    "version": 394240
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("compose", "xim")
+qt.core.plugin.factoryloader: looking at "/usr/lib/x86_64-linux-gnu/qt6/plugins/platforminputcontexts/libibusplatforminputcontextplugin.so"
+qt.core.plugin.loader: Found metadata in lib /usr/lib/x86_64-linux-gnu/qt6/plugins/platforminputcontexts/libibusplatforminputcontextplugin.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPlatformInputContextFactoryInterface.5.1",
+    "MetaData": {
+        "Keys": [
+            "ibus"
+        ]
+    },
+    "archlevel": 1,
+    "className": "QIbusPlatformInputContextPlugin",
+    "debug": false,
+    "version": 394240
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("ibus")
+qt.core.plugin.factoryloader: checking directory path "/usr/bin/platforminputcontexts" ...
+qt.core.library: "/usr/lib/x86_64-linux-gnu/qt6/plugins/platforminputcontexts/libfcitx5platforminputcontextplugin.so" loaded library
+qt.core.plugin.factoryloader: checking directory path "/usr/lib/x86_64-linux-gnu/qt6/plugins/platforminputcontexts" ...
+qt.core.plugin.factoryloader: looking at "/usr/lib/x86_64-linux-gnu/qt6/plugins/platforminputcontexts/libfcitx5platforminputcontextplugin.so"
+qt.core.plugin.loader: Found metadata in lib /usr/lib/x86_64-linux-gnu/qt6/plugins/platforminputcontexts/libfcitx5platforminputcontextplugin.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPlatformInputContextFactoryInterface.5.1",
+    "MetaData": {
+        "Keys": [
+            "fcitx",
+            "fcitx5"
+        ]
+    },
+    "archlevel": 1,
+    "className": "QFcitx5PlatformInputContextPlugin",
+    "debug": false,
+    "version": 394240
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("fcitx", "fcitx5")
+qt.core.plugin.factoryloader: looking at "/usr/lib/x86_64-linux-gnu/qt6/plugins/platforminputcontexts/libcomposeplatforminputcontextplugin.so"
+qt.core.plugin.loader: Found metadata in lib /usr/lib/x86_64-linux-gnu/qt6/plugins/platforminputcontexts/libcomposeplatforminputcontextplugin.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPlatformInputContextFactoryInterface.5.1",
+    "MetaData": {
+        "Keys": [
+            "compose",
+            "xim"
+        ]
+    },
+    "archlevel": 1,
+    "className": "QComposePlatformInputContextPlugin",
+    "debug": false,
+    "version": 394240
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("compose", "xim")
+qt.core.plugin.factoryloader: looking at "/usr/lib/x86_64-linux-gnu/qt6/plugins/platforminputcontexts/libibusplatforminputcontextplugin.so"
+qt.core.plugin.loader: Found metadata in lib /usr/lib/x86_64-linux-gnu/qt6/plugins/platforminputcontexts/libibusplatforminputcontextplugin.so, metadata=
+{
+    "IID": "org.qt-project.Qt.QPlatformInputContextFactoryInterface.5.1",
+    "MetaData": {
+        "Keys": [
+            "ibus"
+        ]
+    },
+    "archlevel": 1,
+    "className": "QIbusPlatformInputContextPlugin",
+    "debug": false,
+    "version": 394240
+}
+
+
+qt.core.plugin.factoryloader: Got keys from plugin meta data QList("ibus")
+qt.core.plugin.factoryloader: checking directory path "/usr/bin/platforminputcontexts" ...
+qt.core.library: "/usr/lib/x86_64-linux-gnu/qt6/plugins/platforminputcontexts/libfcitx5platforminputcontextplugin.so" loaded library
+qt.core.plugin.factoryloader: checking directory path "/usr/lib/x86_64-linux-gnu/qt6/plugins/styles" ...
+qt.core.plugin.factoryloader: checking directory path "/usr/bin/styles" ...
+qt.core.plugin.factoryloader: checking directory path "/usr/lib/x86_64-linux-gnu/qt6/plugins/styles" ...
+qt.core.plugin.factoryloader: checking directory path "/usr/bin/styles" ...
+qt.core.plugin.factoryloader: checking directory path "/usr/lib/x86_64-linux-gnu/qt6/plugins/accessiblebridge" ...
+qt.core.plugin.factoryloader: checking directory path "/usr/bin/accessiblebridge" ...
+qt.core.plugin.factoryloader: checking directory path "/usr/lib/x86_64-linux-gnu/qt6/plugins/accessiblebridge" ...
+qt.core.plugin.factoryloader: checking directory path "/usr/bin/accessiblebridge" ...
+{"case": "stream", "stage": "switch", "focus_ok": true}
+{"case": "stream", "stage": "result", "route": ["fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx", "fcitx"], "protocol": [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4], "outcome": "succeeded", "input_failure": null, "error_code": null, "lengths": [18, 182], "actual": "甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸甲乙丙丁戊己庚辛壬癸", "exact": true}
+{"case": "cancel", "stage": "switch", "focus_ok": true}
+{"case": "cancel", "stage": "result", "route": ["fcitx"], "protocol": [4], "outcome": "cancelled", "input_failure": "fcitx_cancelled", "error_code": null, "lengths": [1, 0], "actual": "甲", "exact": true}
+{
+  "fcitx_exit_command": 0,
+  "profile_restored": true,
+  "addon_absent": true,
+  "autostart_absent": true,
+  "environment_file_absent": true
+}
+I2026-10-31 06:09:08.366849 addonmanager.cpp:298] Unloading addon pinyin
+I2026-10-31 06:09:08.367599 addonmanager.cpp:298] Unloading addon punctuation
+I2026-10-31 06:09:08.367671 addonmanager.cpp:298] Unloading addon notifications
+I2026-10-31 06:09:08.367685 addonmanager.cpp:298] Unloading addon notificationitem
+I2026-10-31 06:09:08.367712 addonmanager.cpp:298] Unloading addon classicui
+I2026-10-31 06:09:08.368285 addonmanager.cpp:298] Unloading addon virtualkeyboard
+I2026-10-31 06:09:08.368303 addonmanager.cpp:298] Unloading addon kimpanel
+I2026-10-31 06:09:08.368312 addonmanager.cpp:298] Unloading addon xim
+I2026-10-31 06:09:08.368348 addonmanager.cpp:298] Unloading addon inkecho
+I2026-10-31 06:09:08.368393 addonmanager.cpp:298] Unloading addon ibusfrontend
+I2026-10-31 06:09:08.370552 addonmanager.cpp:298] Unloading addon fcitx4frontend
+I2026-10-31 06:09:08.370576 addonmanager.cpp:298] Unloading addon dbusfrontend
+I2026-10-31 06:09:08.370594 addonmanager.cpp:298] Unloading addon dbus
+I2026-10-31 06:09:08.370627 addonmanager.cpp:298] Unloading addon waylandim
+I2026-10-31 06:09:08.370639 addonmanager.cpp:298] Unloading addon imselector
+I2026-10-31 06:09:08.370648 addonmanager.cpp:298] Unloading addon keyboard
+I2026-10-31 06:09:08.370744 addonmanager.cpp:298] Unloading addon quickphrase
+I2026-10-31 06:09:08.370842 addonmanager.cpp:298] Unloading addon xcb
+I2026-10-31 06:09:08.370951 addonmanager.cpp:298] Unloading addon unicode
+I2026-10-31 06:09:08.370968 addonmanager.cpp:298] Unloading addon wayland

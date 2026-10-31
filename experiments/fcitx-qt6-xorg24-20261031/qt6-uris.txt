@@ -1,0 +1,63 @@
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following additional packages will be installed:
+  libb2-1 libdouble-conversion3 libfcitx5-qt-data libfcitx5-qt6-1 libmd4c0
+  libpcre2-16-0 libqt6core6t64 libqt6dbus6t64 libqt6gui6t64 libqt6network6t64
+  libqt6opengl6t64 libqt6openglwidgets6t64 libqt6printsupport6t64 libqt6qml6
+  libqt6qmlmodels6 libqt6quick6 libqt6sql6-sqlite libqt6sql6t64 libqt6test6t64
+  libqt6waylandclient6 libqt6waylandcompositor6
+  libqt6waylandeglclienthwintegration6
+  libqt6waylandeglcompositorhwintegration6 libqt6widgets6t64
+  libqt6wlshellintegration6 libqt6xml6t64 libts0t64 python3-pyqt6.sip
+  qt6-gtk-platformtheme qt6-qpa-plugins qt6-translations-l10n qt6-wayland
+Suggested packages:
+  qt6-qmltooling-plugins
+The following NEW packages will be installed:
+  fcitx5-frontend-qt6 libb2-1 libdouble-conversion3 libfcitx5-qt-data
+  libfcitx5-qt6-1 libmd4c0 libpcre2-16-0 libqt6core6t64 libqt6dbus6t64
+  libqt6gui6t64 libqt6network6t64 libqt6opengl6t64 libqt6openglwidgets6t64
+  libqt6printsupport6t64 libqt6qml6 libqt6qmlmodels6 libqt6quick6
+  libqt6sql6-sqlite libqt6sql6t64 libqt6test6t64 libqt6waylandclient6
+  libqt6waylandcompositor6 libqt6waylandeglclienthwintegration6
+  libqt6waylandeglcompositorhwintegration6 libqt6widgets6t64
+  libqt6wlshellintegration6 libqt6xml6t64 libts0t64 python3-pyqt6
+  python3-pyqt6.sip qt6-gtk-platformtheme qt6-qpa-plugins
+  qt6-translations-l10n qt6-wayland
+0 upgraded, 34 newly installed, 0 to remove and 39 not upgraded.
+Need to get 19.9 MB of archives.
+After this operation, 83.9 MB of additional disk space will be used.
+'http://archive.ubuntu.com/ubuntu/pool/universe/f/fcitx5-qt/libfcitx5-qt-data_5.1.4-1build5_all.deb' libfcitx5-qt-data_5.1.4-1build5_all.deb 13432 MD5Sum:1cd2df2541708224c6ba24505043ba0a
+'http://archive.ubuntu.com/ubuntu/pool/universe/libb/libb2/libb2-1_0.98.1-1.1build1_amd64.deb' libb2-1_0.98.1-1.1build1_amd64.deb 44960 MD5Sum:c19422c7f9fa04fe0044d5108f98acb0
+'http://archive.ubuntu.com/ubuntu/pool/universe/d/double-conversion/libdouble-conversion3_3.3.0-1build1_amd64.deb' libdouble-conversion3_3.3.0-1build1_amd64.deb 40294 MD5Sum:eb416967197665d8701d0b387eee69b7
+'http://archive.ubuntu.com/ubuntu/pool/main/p/pcre2/libpcre2-16-0_10.42-4ubuntu2.1_amd64.deb' libpcre2-16-0_10.42-4ubuntu2.1_amd64.deb 210092 MD5Sum:2dbd595174fa85b0dd097a5e52e74c97
+'http://archive.ubuntu.com/ubuntu/pool/universe/q/qt6-base/libqt6core6t64_6.4.2%2bdfsg-21.1build5_amd64.deb' libqt6core6t64_6.4.2+dfsg-21.1build5_amd64.deb 1788570 MD5Sum:d3b408cbaeb3c4c8cf2df79f8d61688d
+'http://archive.ubuntu.com/ubuntu/pool/universe/q/qt6-base/libqt6dbus6t64_6.4.2%2bdfsg-21.1build5_amd64.deb' libqt6dbus6t64_6.4.2+dfsg-21.1build5_amd64.deb 266870 MD5Sum:49c61021c9ce425bd19da9725bba5a13
+'http://archive.ubuntu.com/ubuntu/pool/universe/m/md4c/libmd4c0_0.4.8-1build1_amd64.deb' libmd4c0_0.4.8-1build1_amd64.deb 42274 MD5Sum:99dd883f90ea85bc7f7e252752d0ec09
+'http://archive.ubuntu.com/ubuntu/pool/universe/t/tslib/libts0t64_1.22-1.1build1_amd64.deb' libts0t64_1.22-1.1build1_amd64.deb 63828 MD5Sum:84abe8e2e84da74016ff43069d340cad
+'http://archive.ubuntu.com/ubuntu/pool/universe/q/qt6-base/libqt6gui6t64_6.4.2%2bdfsg-21.1build5_amd64.deb' libqt6gui6t64_6.4.2+dfsg-21.1build5_amd64.deb 3119104 MD5Sum:47aca601759ed42a4077aed71eae56a9
+'http://archive.ubuntu.com/ubuntu/pool/universe/q/qt6-base/libqt6widgets6t64_6.4.2%2bdfsg-21.1build5_amd64.deb' libqt6widgets6t64_6.4.2+dfsg-21.1build5_amd64.deb 2648360 MD5Sum:7a7415d2c9dacaafe0293ae081e5e6c1
+'http://archive.ubuntu.com/ubuntu/pool/universe/f/fcitx5-qt/libfcitx5-qt6-1_5.1.4-1build5_amd64.deb' libfcitx5-qt6-1_5.1.4-1build5_amd64.deb 133526 MD5Sum:981c14b5659fe1edb67948bcc1d873ea
+'http://archive.ubuntu.com/ubuntu/pool/universe/f/fcitx5-qt/fcitx5-frontend-qt6_5.1.4-1build5_amd64.deb' fcitx5-frontend-qt6_5.1.4-1build5_amd64.deb 154532 MD5Sum:80bb76de6b94fd4c0eec287d1e172fdb
+'http://archive.ubuntu.com/ubuntu/pool/universe/q/qt6-base/libqt6network6t64_6.4.2%2bdfsg-21.1build5_amd64.deb' libqt6network6t64_6.4.2+dfsg-21.1build5_amd64.deb 740500 MD5Sum:22d9f958704eaf1863d8b639f77d9205
+'http://archive.ubuntu.com/ubuntu/pool/universe/q/qt6-base/libqt6opengl6t64_6.4.2%2bdfsg-21.1build5_amd64.deb' libqt6opengl6t64_6.4.2+dfsg-21.1build5_amd64.deb 419526 MD5Sum:1cd30aba7336e1967b1afc9380627dd5
+'http://archive.ubuntu.com/ubuntu/pool/universe/q/qt6-base/libqt6openglwidgets6t64_6.4.2%2bdfsg-21.1build5_amd64.deb' libqt6openglwidgets6t64_6.4.2+dfsg-21.1build5_amd64.deb 40424 MD5Sum:824b403b08b48404fec282ad50f81d96
+'http://archive.ubuntu.com/ubuntu/pool/universe/q/qt6-base/libqt6printsupport6t64_6.4.2%2bdfsg-21.1build5_amd64.deb' libqt6printsupport6t64_6.4.2+dfsg-21.1build5_amd64.deb 222404 MD5Sum:5ae1f71dd898ca785f84211e214f1d94
+'http://archive.ubuntu.com/ubuntu/pool/universe/q/qt6-declarative/libqt6qml6_6.4.2%2bdfsg-4build3_amd64.deb' libqt6qml6_6.4.2+dfsg-4build3_amd64.deb 1619124 MD5Sum:882d3160a289070c969edb864f4852ae
+'http://archive.ubuntu.com/ubuntu/pool/universe/q/qt6-declarative/libqt6qmlmodels6_6.4.2%2bdfsg-4build3_amd64.deb' libqt6qmlmodels6_6.4.2+dfsg-4build3_amd64.deb 267404 MD5Sum:661852fe6b5481ced50f26deece21a1e
+'http://archive.ubuntu.com/ubuntu/pool/universe/q/qt6-declarative/libqt6quick6_6.4.2%2bdfsg-4build3_amd64.deb' libqt6quick6_6.4.2+dfsg-4build3_amd64.deb 2001150 MD5Sum:faae83cc1a178104439ed7815364cae0
+'http://archive.ubuntu.com/ubuntu/pool/universe/q/qt6-base/libqt6sql6t64_6.4.2%2bdfsg-21.1build5_amd64.deb' libqt6sql6t64_6.4.2+dfsg-21.1build5_amd64.deb 140712 MD5Sum:1ee4de7a1723dc6dd2ff550e24b1f1a9
+'http://archive.ubuntu.com/ubuntu/pool/universe/q/qt6-base/libqt6sql6-sqlite_6.4.2%2bdfsg-21.1build5_amd64.deb' libqt6sql6-sqlite_6.4.2+dfsg-21.1build5_amd64.deb 57770 MD5Sum:aad3a72d62afdf1f65caf9d8d251670e
+'http://archive.ubuntu.com/ubuntu/pool/universe/q/qt6-base/libqt6test6t64_6.4.2%2bdfsg-21.1build5_amd64.deb' libqt6test6t64_6.4.2+dfsg-21.1build5_amd64.deb 166704 MD5Sum:677de63efb2dd1d35a827d9ce87d1f07
+'http://archive.ubuntu.com/ubuntu/pool/universe/q/qt6-wayland/libqt6waylandclient6_6.4.2-5build3_amd64.deb' libqt6waylandclient6_6.4.2-5build3_amd64.deb 251254 MD5Sum:240021f5e91952e21638b8077c8408f2
+'http://archive.ubuntu.com/ubuntu/pool/universe/q/qt6-wayland/libqt6waylandcompositor6_6.4.2-5build3_amd64.deb' libqt6waylandcompositor6_6.4.2-5build3_amd64.deb 426614 MD5Sum:6053efa8ba18ec5d9240a67b103ce0d3
+'http://archive.ubuntu.com/ubuntu/pool/universe/q/qt6-wayland/libqt6waylandeglclienthwintegration6_6.4.2-5build3_amd64.deb' libqt6waylandeglclienthwintegration6_6.4.2-5build3_amd64.deb 19472 MD5Sum:db2fb86967fbcf85b7b41cb98c587a56
+'http://archive.ubuntu.com/ubuntu/pool/universe/q/qt6-wayland/libqt6waylandeglcompositorhwintegration6_6.4.2-5build3_amd64.deb' libqt6waylandeglcompositorhwintegration6_6.4.2-5build3_amd64.deb 15222 MD5Sum:92185e71add61e29d9a0365edbedc49b
+'http://archive.ubuntu.com/ubuntu/pool/universe/q/qt6-wayland/libqt6wlshellintegration6_6.4.2-5build3_amd64.deb' libqt6wlshellintegration6_6.4.2-5build3_amd64.deb 37958 MD5Sum:39596274cc2d2e3c56bbf439f172b842
+'http://archive.ubuntu.com/ubuntu/pool/universe/q/qt6-base/libqt6xml6t64_6.4.2%2bdfsg-21.1build5_amd64.deb' libqt6xml6t64_6.4.2+dfsg-21.1build5_amd64.deb 75906 MD5Sum:10315ec597874e970c687ccc0dd03f20
+'http://archive.ubuntu.com/ubuntu/pool/universe/p/pyqt6-sip/python3-pyqt6.sip_13.6.0-1build2_amd64.deb' python3-pyqt6.sip_13.6.0-1build2_amd64.deb 55354 MD5Sum:502cc484ab6b6c5ed66eadae3584de6c
+'http://archive.ubuntu.com/ubuntu/pool/universe/p/pyqt6/python3-pyqt6_6.6.1-2build4_amd64.deb' python3-pyqt6_6.6.1-2build4_amd64.deb 2797378 MD5Sum:bad06b21b430269944c4864543f38b03
+'http://archive.ubuntu.com/ubuntu/pool/universe/q/qt6-base/qt6-gtk-platformtheme_6.4.2%2bdfsg-21.1build5_amd64.deb' qt6-gtk-platformtheme_6.4.2+dfsg-21.1build5_amd64.deb 55100 MD5Sum:743b16d4d991399c493406f8374d09a6
+'http://archive.ubuntu.com/ubuntu/pool/universe/q/qt6-base/qt6-qpa-plugins_6.4.2%2bdfsg-21.1build5_amd64.deb' qt6-qpa-plugins_6.4.2+dfsg-21.1build5_amd64.deb 89254 MD5Sum:fac65a8bdf65d392f6c0df71481224d6
+'http://archive.ubuntu.com/ubuntu/pool/universe/q/qt6-translations/qt6-translations-l10n_6.4.2-1_all.deb' qt6-translations-l10n_6.4.2-1_all.deb 1761066 MD5Sum:0e933f48127e54d1b461eeef75588912
+'http://archive.ubuntu.com/ubuntu/pool/universe/q/qt6-wayland/qt6-wayland_6.4.2-5build3_amd64.deb' qt6-wayland_6.4.2-5build3_amd64.deb 126792 MD5Sum:fa473b36216fe0ab4a00975f7d9b797d
