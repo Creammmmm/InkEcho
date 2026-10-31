@@ -1,0 +1,790 @@
+{
+  "complete": true,
+  "cases": [
+    {
+      "case": "xtest-preedit",
+      "focus_before": {
+        "document": true,
+        "active": "a"
+      },
+      "preedit_before": {
+        "a": "你",
+        "b": "",
+        "active": "a",
+        "focus": true,
+        "comp": [
+          {
+            "type": "compositionstart",
+            "data": "",
+            "t": 459.70000000001164
+          },
+          {
+            "type": "compositionupdate",
+            "data": "年",
+            "t": 459.70000000001164
+          },
+          {
+            "type": "compositionupdate",
+            "data": "你",
+            "t": 463.29999999998836
+          }
+        ]
+      },
+      "driver": "_XTestDriver",
+      "session": {
+        "route": null,
+        "outcome": "succeeded",
+        "metrics_characters": null,
+        "reported_characters": 10,
+        "outcomes": [
+          {
+            "characters": 10,
+            "finished_at": 260.188198294
+          }
+        ],
+        "deltas": [],
+        "dispatches": [
+          {
+            "length": 10,
+            "has_lf": false,
+            "at": 259.570067811,
+            "route_before": "keyboard",
+            "first_sent_at": 259.701595318,
+            "protocol": null,
+            "route_after": null,
+            "backend_type": "NoneType",
+            "native_attempts": null
+          },
+          {
+            "length": 10,
+            "has_lf": false,
+            "at": 259.5700894,
+            "route_before": "keyboard",
+            "first_sent_at": 259.701595318,
+            "protocol": null,
+            "route_after": "keyboard",
+            "backend_type": "KeyboardInput",
+            "native_attempts": null
+          }
+        ],
+        "input_failure": null,
+        "error_code": null
+      },
+      "observed": {
+        "a": "甲乙丙丁abc123",
+        "b": "",
+        "active": "a",
+        "focus": true,
+        "log": [
+          {
+            "id": "a",
+            "a": "年",
+            "b": "",
+            "t": 463.20000000001164
+          },
+          {
+            "id": "a",
+            "a": "你",
+            "b": "",
+            "t": 463.6000000000058
+          },
+          {
+            "id": "a",
+            "a": "甲",
+            "b": "",
+            "t": 1441.7999999999884
+          },
+          {
+            "id": "a",
+            "a": "甲乙",
+            "b": "",
+            "t": 1466.3999999999942
+          },
+          {
+            "id": "a",
+            "a": "甲乙丙",
+            "b": "",
+            "t": 1553.6000000000058
+          },
+          {
+            "id": "a",
+            "a": "甲乙丙丁",
+            "b": "",
+            "t": 1576.2000000000116
+          },
+          {
+            "id": "a",
+            "a": "甲乙丙丁a",
+            "b": "",
+            "t": 1658.7000000000116
+          },
+          {
+            "id": "a",
+            "a": "甲乙丙丁ab",
+            "b": "",
+            "t": 1683.2999999999884
+          },
+          {
+            "id": "a",
+            "a": "甲乙丙丁abc",
+            "b": "",
+            "t": 1770.2000000000116
+          },
+          {
+            "id": "a",
+            "a": "甲乙丙丁abc1",
+            "b": "",
+            "t": 1794.5
+          },
+          {
+            "id": "a",
+            "a": "甲乙丙丁abc12",
+            "b": "",
+            "t": 1876.2000000000116
+          },
+          {
+            "id": "a",
+            "a": "甲乙丙丁abc123",
+            "b": "",
+            "t": 1899.7000000000116
+          }
+        ]
+      },
+      "before_space": {
+        "a": "甲乙丙丁abc123",
+        "b": "",
+        "comp": [
+          {
+            "type": "compositionstart",
+            "data": "",
+            "t": 459.70000000001164
+          },
+          {
+            "type": "compositionupdate",
+            "data": "年",
+            "t": 459.70000000001164
+          },
+          {
+            "type": "compositionupdate",
+            "data": "你",
+            "t": 463.29999999998836
+          },
+          {
+            "type": "compositionupdate",
+            "data": "甲",
+            "t": 1441.2999999999884
+          },
+          {
+            "type": "compositionend",
+            "data": "甲",
+            "t": 1441.7999999999884
+          }
+        ]
+      },
+      "after_space": {
+        "a": "甲乙丙丁abc123你",
+        "b": "",
+        "comp": [
+          {
+            "type": "compositionstart",
+            "data": "",
+            "t": 459.70000000001164
+          },
+          {
+            "type": "compositionupdate",
+            "data": "年",
+            "t": 459.70000000001164
+          },
+          {
+            "type": "compositionupdate",
+            "data": "你",
+            "t": 463.29999999998836
+          },
+          {
+            "type": "compositionupdate",
+            "data": "甲",
+            "t": 1441.2999999999884
+          },
+          {
+            "type": "compositionend",
+            "data": "甲",
+            "t": 1441.7999999999884
+          }
+        ]
+      }
+    },
+    {
+      "case": "xtest-preedit-cancel",
+      "focus_before": {
+        "document": true,
+        "active": "a"
+      },
+      "preedit_before": {
+        "a": "你",
+        "b": "",
+        "active": "a",
+        "focus": true,
+        "comp": [
+          {
+            "type": "compositionstart",
+            "data": "",
+            "t": 4468.700000000012
+          },
+          {
+            "type": "compositionupdate",
+            "data": "年",
+            "t": 4468.700000000012
+          },
+          {
+            "type": "compositionupdate",
+            "data": "你",
+            "t": 4473.700000000012
+          }
+        ]
+      },
+      "driver": "_XTestDriver",
+      "session": {
+        "route": null,
+        "outcome": "cancelled",
+        "metrics_characters": null,
+        "reported_characters": 1,
+        "outcomes": [
+          {
+            "characters": 1,
+            "finished_at": 263.72045935
+          }
+        ],
+        "deltas": [
+          {
+            "index": 0,
+            "monotonic": 263.580264741
+          },
+          {
+            "index": 1,
+            "monotonic": 263.604593834
+          },
+          {
+            "index": 2,
+            "monotonic": 263.628816993
+          },
+          {
+            "index": 3,
+            "monotonic": 263.652207618
+          },
+          {
+            "index": 4,
+            "monotonic": 263.67629605
+          },
+          {
+            "index": 5,
+            "monotonic": 263.700728814
+          }
+        ],
+        "dispatches": [
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 263.610598876,
+            "route_before": "keyboard",
+            "first_sent_at": 263.71610943,
+            "error_code": null,
+            "error_type": "CancelledError",
+            "protocol": null,
+            "route_after": "keyboard",
+            "backend_type": "KeyboardInput",
+            "native_attempts": null
+          },
+          {
+            "receiver_confirmed_cancel_at": 263.720189379
+          }
+        ],
+        "input_failure": null,
+        "error_code": null
+      },
+      "observed": {
+        "a": "甲",
+        "b": "",
+        "active": "a",
+        "focus": true,
+        "log": [
+          {
+            "id": "a",
+            "a": "年",
+            "b": "",
+            "t": 4468.900000000023
+          },
+          {
+            "id": "a",
+            "a": "你",
+            "b": "",
+            "t": 4473.799999999988
+          },
+          {
+            "id": "a",
+            "a": "甲",
+            "b": "",
+            "t": 5456.400000000023
+          }
+        ]
+      },
+      "before_space": {
+        "a": "甲",
+        "b": "",
+        "comp": [
+          {
+            "type": "compositionstart",
+            "data": "",
+            "t": 4468.700000000012
+          },
+          {
+            "type": "compositionupdate",
+            "data": "年",
+            "t": 4468.700000000012
+          },
+          {
+            "type": "compositionupdate",
+            "data": "你",
+            "t": 4473.700000000012
+          },
+          {
+            "type": "compositionupdate",
+            "data": "甲",
+            "t": 5456
+          },
+          {
+            "type": "compositionend",
+            "data": "甲",
+            "t": 5456.400000000023
+          }
+        ]
+      },
+      "after_space": {
+        "a": "甲你",
+        "b": "",
+        "comp": [
+          {
+            "type": "compositionstart",
+            "data": "",
+            "t": 4468.700000000012
+          },
+          {
+            "type": "compositionupdate",
+            "data": "年",
+            "t": 4468.700000000012
+          },
+          {
+            "type": "compositionupdate",
+            "data": "你",
+            "t": 4473.700000000012
+          },
+          {
+            "type": "compositionupdate",
+            "data": "甲",
+            "t": 5456
+          },
+          {
+            "type": "compositionend",
+            "data": "甲",
+            "t": 5456.400000000023
+          }
+        ]
+      }
+    },
+    {
+      "case": "xsend-preedit",
+      "focus_before": {
+        "document": true,
+        "active": "a"
+      },
+      "preedit_before": {
+        "a": "你",
+        "b": "",
+        "active": "a",
+        "focus": true,
+        "comp": [
+          {
+            "type": "compositionstart",
+            "data": "",
+            "t": 7883.400000000023
+          },
+          {
+            "type": "compositionupdate",
+            "data": "年",
+            "t": 7883.400000000023
+          },
+          {
+            "type": "compositionupdate",
+            "data": "你",
+            "t": 7884.200000000012
+          }
+        ]
+      },
+      "driver": "_XDriver",
+      "session": {
+        "route": null,
+        "outcome": "succeeded",
+        "metrics_characters": null,
+        "reported_characters": 10,
+        "outcomes": [
+          {
+            "characters": 10,
+            "finished_at": 268.086819807
+          }
+        ],
+        "deltas": [],
+        "dispatches": [
+          {
+            "length": 10,
+            "has_lf": false,
+            "at": 266.985679674,
+            "route_before": "keyboard",
+            "first_sent_at": 267.115481371,
+            "protocol": null,
+            "route_after": null,
+            "backend_type": "NoneType",
+            "native_attempts": null
+          },
+          {
+            "length": 10,
+            "has_lf": false,
+            "at": 266.985732898,
+            "route_before": "keyboard",
+            "first_sent_at": 267.115481371,
+            "protocol": null,
+            "route_after": "keyboard",
+            "backend_type": "KeyboardInput",
+            "native_attempts": null
+          }
+        ],
+        "input_failure": null,
+        "error_code": null
+      },
+      "observed": {
+        "a": "甲乙丙丁abc123",
+        "b": "",
+        "active": "a",
+        "focus": true,
+        "log": [
+          {
+            "id": "a",
+            "a": "年",
+            "b": "",
+            "t": 7883.599999999977
+          },
+          {
+            "id": "a",
+            "a": "你",
+            "b": "",
+            "t": 7884.400000000023
+          },
+          {
+            "id": "a",
+            "a": "甲",
+            "b": "",
+            "t": 8855.299999999988
+          },
+          {
+            "id": "a",
+            "a": "甲乙",
+            "b": "",
+            "t": 8962.099999999977
+          },
+          {
+            "id": "a",
+            "a": "甲乙丙",
+            "b": "",
+            "t": 9066.099999999977
+          },
+          {
+            "id": "a",
+            "a": "甲乙丙丁",
+            "b": "",
+            "t": 9174.599999999977
+          },
+          {
+            "id": "a",
+            "a": "甲乙丙丁a",
+            "b": "",
+            "t": 9279.299999999988
+          },
+          {
+            "id": "a",
+            "a": "甲乙丙丁ab",
+            "b": "",
+            "t": 9383.200000000012
+          },
+          {
+            "id": "a",
+            "a": "甲乙丙丁abc",
+            "b": "",
+            "t": 9486.900000000023
+          },
+          {
+            "id": "a",
+            "a": "甲乙丙丁abc1",
+            "b": "",
+            "t": 9593.599999999977
+          },
+          {
+            "id": "a",
+            "a": "甲乙丙丁abc12",
+            "b": "",
+            "t": 9699.5
+          },
+          {
+            "id": "a",
+            "a": "甲乙丙丁abc123",
+            "b": "",
+            "t": 9803.700000000012
+          }
+        ]
+      },
+      "before_space": {
+        "a": "甲乙丙丁abc123",
+        "b": "",
+        "comp": [
+          {
+            "type": "compositionstart",
+            "data": "",
+            "t": 7883.400000000023
+          },
+          {
+            "type": "compositionupdate",
+            "data": "年",
+            "t": 7883.400000000023
+          },
+          {
+            "type": "compositionupdate",
+            "data": "你",
+            "t": 7884.200000000012
+          },
+          {
+            "type": "compositionupdate",
+            "data": "甲",
+            "t": 8855
+          },
+          {
+            "type": "compositionend",
+            "data": "甲",
+            "t": 8855.299999999988
+          }
+        ]
+      },
+      "after_space": {
+        "a": "甲乙丙丁abc123你",
+        "b": "",
+        "comp": [
+          {
+            "type": "compositionstart",
+            "data": "",
+            "t": 7883.400000000023
+          },
+          {
+            "type": "compositionupdate",
+            "data": "年",
+            "t": 7883.400000000023
+          },
+          {
+            "type": "compositionupdate",
+            "data": "你",
+            "t": 7884.200000000012
+          },
+          {
+            "type": "compositionupdate",
+            "data": "甲",
+            "t": 8855
+          },
+          {
+            "type": "compositionend",
+            "data": "甲",
+            "t": 8855.299999999988
+          }
+        ]
+      }
+    },
+    {
+      "case": "xsend-preedit-cancel",
+      "focus_before": {
+        "document": true,
+        "active": "a"
+      },
+      "preedit_before": {
+        "a": "你",
+        "b": "",
+        "active": "a",
+        "focus": true,
+        "comp": [
+          {
+            "type": "compositionstart",
+            "data": "",
+            "t": 12291.700000000012
+          },
+          {
+            "type": "compositionupdate",
+            "data": "年",
+            "t": 12291.700000000012
+          },
+          {
+            "type": "compositionupdate",
+            "data": "你",
+            "t": 12295.599999999977
+          }
+        ]
+      },
+      "driver": "_XDriver",
+      "session": {
+        "route": null,
+        "outcome": "cancelled",
+        "metrics_characters": null,
+        "reported_characters": 1,
+        "outcomes": [
+          {
+            "characters": 1,
+            "finished_at": 271.515213613
+          }
+        ],
+        "deltas": [
+          {
+            "index": 0,
+            "monotonic": 271.384272896
+          },
+          {
+            "index": 1,
+            "monotonic": 271.409172005
+          },
+          {
+            "index": 2,
+            "monotonic": 271.433417335
+          },
+          {
+            "index": 3,
+            "monotonic": 271.45744518
+          },
+          {
+            "index": 4,
+            "monotonic": 271.481394232
+          },
+          {
+            "index": 5,
+            "monotonic": 271.505399187
+          }
+        ],
+        "dispatches": [
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 271.409429291,
+            "route_before": "keyboard",
+            "first_sent_at": 271.510419437,
+            "error_code": null,
+            "error_type": "CancelledError",
+            "protocol": null,
+            "route_after": "keyboard",
+            "backend_type": "KeyboardInput",
+            "native_attempts": null
+          },
+          {
+            "receiver_confirmed_cancel_at": 271.515064169
+          }
+        ],
+        "input_failure": null,
+        "error_code": null
+      },
+      "observed": {
+        "a": "甲",
+        "b": "",
+        "active": "a",
+        "focus": true,
+        "log": [
+          {
+            "id": "a",
+            "a": "年",
+            "b": "",
+            "t": 12291.799999999988
+          },
+          {
+            "id": "a",
+            "a": "你",
+            "b": "",
+            "t": 12295.799999999988
+          },
+          {
+            "id": "a",
+            "a": "甲",
+            "b": "",
+            "t": 13249.900000000023
+          }
+        ]
+      },
+      "before_space": {
+        "a": "甲",
+        "b": "",
+        "comp": [
+          {
+            "type": "compositionstart",
+            "data": "",
+            "t": 12291.700000000012
+          },
+          {
+            "type": "compositionupdate",
+            "data": "年",
+            "t": 12291.700000000012
+          },
+          {
+            "type": "compositionupdate",
+            "data": "你",
+            "t": 12295.599999999977
+          },
+          {
+            "type": "compositionupdate",
+            "data": "甲",
+            "t": 13249.599999999977
+          },
+          {
+            "type": "compositionend",
+            "data": "甲",
+            "t": 13249.900000000023
+          }
+        ]
+      },
+      "after_space": {
+        "a": "甲你",
+        "b": "",
+        "comp": [
+          {
+            "type": "compositionstart",
+            "data": "",
+            "t": 12291.700000000012
+          },
+          {
+            "type": "compositionupdate",
+            "data": "年",
+            "t": 12291.700000000012
+          },
+          {
+            "type": "compositionupdate",
+            "data": "你",
+            "t": 12295.599999999977
+          },
+          {
+            "type": "compositionupdate",
+            "data": "甲",
+            "t": 13249.599999999977
+          },
+          {
+            "type": "compositionend",
+            "data": "甲",
+            "t": 13249.900000000023
+          }
+        ]
+      }
+    }
+  ],
+  "select_return": 1,
+  "engine": "libpinyin",
+  "browser_version": "Google Chrome 154.0.8037.97",
+  "restore_engine_return": 0,
+  "sources_after": "[('xkb', 'us')]",
+  "engine_after": "xkb:us::eng",
+  "browser_exit": 0
+}

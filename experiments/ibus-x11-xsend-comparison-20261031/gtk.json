@@ -1,0 +1,449 @@
+{
+  "complete": true,
+  "cases": [
+    {
+      "case": "xtest-normal",
+      "before": {
+        "pid": 4230,
+        "display_type": "X11Display",
+        "active": true,
+        "focus": true,
+        "text": "",
+        "preedit": ""
+      },
+      "driver": "_XTestDriver",
+      "session": {
+        "route": null,
+        "outcome": "succeeded",
+        "metrics_characters": null,
+        "reported_characters": 10,
+        "outcomes": [
+          {
+            "characters": 10,
+            "finished_at": 282.70896498
+          }
+        ],
+        "deltas": [],
+        "dispatches": [
+          {
+            "length": 10,
+            "has_lf": false,
+            "at": 282.102276508,
+            "route_before": "keyboard",
+            "first_sent_at": 282.220061432,
+            "protocol": null,
+            "route_after": null,
+            "backend_type": "NoneType",
+            "native_attempts": null
+          },
+          {
+            "length": 10,
+            "has_lf": false,
+            "at": 282.102297479,
+            "route_before": "keyboard",
+            "first_sent_at": 282.220061432,
+            "protocol": null,
+            "route_after": "keyboard",
+            "backend_type": "KeyboardInput",
+            "native_attempts": null
+          }
+        ],
+        "input_failure": null,
+        "error_code": null
+      },
+      "after": {
+        "pid": 4230,
+        "display_type": "X11Display",
+        "active": true,
+        "focus": true,
+        "text": "甲乙丙丁abc123",
+        "preedit": ""
+      },
+      "actor_exit": -15
+    },
+    {
+      "case": "xsend-normal",
+      "before": {
+        "pid": 4256,
+        "display_type": "X11Display",
+        "active": true,
+        "focus": true,
+        "text": "",
+        "preedit": ""
+      },
+      "driver": "_XDriver",
+      "session": {
+        "route": null,
+        "outcome": "succeeded",
+        "metrics_characters": null,
+        "reported_characters": 10,
+        "outcomes": [
+          {
+            "characters": 10,
+            "finished_at": 285.250652319
+          }
+        ],
+        "deltas": [],
+        "dispatches": [
+          {
+            "length": 10,
+            "has_lf": false,
+            "at": 284.156302841,
+            "route_before": "keyboard",
+            "first_sent_at": 284.276148513,
+            "protocol": null,
+            "route_after": null,
+            "backend_type": "NoneType",
+            "native_attempts": null
+          },
+          {
+            "length": 10,
+            "has_lf": false,
+            "at": 284.156319571,
+            "route_before": "keyboard",
+            "first_sent_at": 284.276148513,
+            "protocol": null,
+            "route_after": "keyboard",
+            "backend_type": "KeyboardInput",
+            "native_attempts": null
+          }
+        ],
+        "input_failure": null,
+        "error_code": null
+      },
+      "after": {
+        "pid": 4256,
+        "display_type": "X11Display",
+        "active": true,
+        "focus": true,
+        "text": "甲乙丙丁abc123",
+        "preedit": ""
+      },
+      "actor_exit": -15
+    },
+    {
+      "case": "xtest-preedit",
+      "before": {
+        "pid": 4271,
+        "display_type": "X11Display",
+        "active": true,
+        "focus": true,
+        "text": "",
+        "preedit": "你"
+      },
+      "driver": "_XTestDriver",
+      "session": {
+        "route": null,
+        "outcome": "succeeded",
+        "metrics_characters": null,
+        "reported_characters": 10,
+        "outcomes": [
+          {
+            "characters": 10,
+            "finished_at": 288.473909045
+          }
+        ],
+        "deltas": [],
+        "dispatches": [
+          {
+            "length": 10,
+            "has_lf": false,
+            "at": 287.843587277,
+            "route_before": "keyboard",
+            "first_sent_at": 287.987583283,
+            "protocol": null,
+            "route_after": null,
+            "backend_type": "NoneType",
+            "native_attempts": null
+          },
+          {
+            "length": 10,
+            "has_lf": false,
+            "at": 287.843676788,
+            "route_before": "keyboard",
+            "first_sent_at": 287.987583283,
+            "protocol": null,
+            "route_after": "keyboard",
+            "backend_type": "KeyboardInput",
+            "native_attempts": null
+          }
+        ],
+        "input_failure": null,
+        "error_code": null
+      },
+      "after": {
+        "pid": 4271,
+        "display_type": "X11Display",
+        "active": true,
+        "focus": true,
+        "text": "甲乙丙丁abc123",
+        "preedit": "你"
+      },
+      "after_space": {
+        "pid": 4271,
+        "display_type": "X11Display",
+        "active": true,
+        "focus": true,
+        "text": "甲乙丙丁abc123你",
+        "preedit": ""
+      },
+      "actor_exit": -15
+    },
+    {
+      "case": "xsend-preedit",
+      "before": {
+        "pid": 4289,
+        "display_type": "X11Display",
+        "active": true,
+        "focus": true,
+        "text": "",
+        "preedit": "你"
+      },
+      "driver": "_XDriver",
+      "session": {
+        "route": null,
+        "outcome": "succeeded",
+        "metrics_characters": null,
+        "reported_characters": 10,
+        "outcomes": [
+          {
+            "characters": 10,
+            "finished_at": 292.955631855
+          }
+        ],
+        "deltas": [],
+        "dispatches": [
+          {
+            "length": 10,
+            "has_lf": false,
+            "at": 291.847657154,
+            "route_before": "keyboard",
+            "first_sent_at": 291.988160056,
+            "protocol": null,
+            "route_after": null,
+            "backend_type": "NoneType",
+            "native_attempts": null
+          },
+          {
+            "length": 10,
+            "has_lf": false,
+            "at": 291.847745156,
+            "route_before": "keyboard",
+            "first_sent_at": 291.988160056,
+            "protocol": null,
+            "route_after": "keyboard",
+            "backend_type": "KeyboardInput",
+            "native_attempts": null
+          }
+        ],
+        "input_failure": null,
+        "error_code": null
+      },
+      "after": {
+        "pid": 4289,
+        "display_type": "X11Display",
+        "active": true,
+        "focus": true,
+        "text": "甲乙丙丁abc123",
+        "preedit": "你"
+      },
+      "after_space": {
+        "pid": 4289,
+        "display_type": "X11Display",
+        "active": true,
+        "focus": true,
+        "text": "甲乙丙丁abc123你",
+        "preedit": ""
+      },
+      "actor_exit": -15
+    },
+    {
+      "case": "xtest-cancel",
+      "before": {
+        "pid": 4307,
+        "display_type": "X11Display",
+        "active": true,
+        "focus": true,
+        "text": "",
+        "preedit": ""
+      },
+      "driver": "_XTestDriver",
+      "session": {
+        "route": null,
+        "outcome": "cancelled",
+        "metrics_characters": null,
+        "reported_characters": 1,
+        "outcomes": [
+          {
+            "characters": 1,
+            "finished_at": 295.494390908
+          }
+        ],
+        "deltas": [
+          {
+            "index": 0,
+            "monotonic": 295.333391455
+          },
+          {
+            "index": 1,
+            "monotonic": 295.358080066
+          },
+          {
+            "index": 2,
+            "monotonic": 295.382045824
+          },
+          {
+            "index": 3,
+            "monotonic": 295.406461752
+          },
+          {
+            "index": 4,
+            "monotonic": 295.432085591
+          },
+          {
+            "index": 5,
+            "monotonic": 295.45693298
+          },
+          {
+            "index": 6,
+            "monotonic": 295.481114878
+          }
+        ],
+        "dispatches": [
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 295.3497622,
+            "route_before": "keyboard",
+            "first_sent_at": 295.463665724,
+            "protocol": null,
+            "route_after": "keyboard",
+            "backend_type": "KeyboardInput",
+            "native_attempts": null
+          },
+          {
+            "length": 6,
+            "has_lf": false,
+            "at": 295.485381892,
+            "route_before": "keyboard",
+            "error_code": null,
+            "error_type": "CancelledError",
+            "protocol": null,
+            "route_after": "keyboard",
+            "backend_type": "KeyboardInput",
+            "native_attempts": null
+          },
+          {
+            "receiver_confirmed_cancel_at": 295.494205581
+          }
+        ],
+        "input_failure": null,
+        "error_code": null
+      },
+      "after": {
+        "pid": 4307,
+        "display_type": "X11Display",
+        "active": true,
+        "focus": true,
+        "text": "甲",
+        "preedit": ""
+      },
+      "actor_exit": -15
+    },
+    {
+      "case": "xsend-cancel",
+      "before": {
+        "pid": 4321,
+        "display_type": "X11Display",
+        "active": true,
+        "focus": true,
+        "text": "",
+        "preedit": ""
+      },
+      "driver": "_XDriver",
+      "session": {
+        "route": null,
+        "outcome": "cancelled",
+        "metrics_characters": null,
+        "reported_characters": 1,
+        "outcomes": [
+          {
+            "characters": 1,
+            "finished_at": 297.107951479
+          }
+        ],
+        "deltas": [
+          {
+            "index": 0,
+            "monotonic": 296.960822019
+          },
+          {
+            "index": 1,
+            "monotonic": 296.984415165
+          },
+          {
+            "index": 2,
+            "monotonic": 297.008710697
+          },
+          {
+            "index": 3,
+            "monotonic": 297.032104493
+          },
+          {
+            "index": 4,
+            "monotonic": 297.056425754
+          },
+          {
+            "index": 5,
+            "monotonic": 297.080186997
+          },
+          {
+            "index": 6,
+            "monotonic": 297.104375185
+          }
+        ],
+        "dispatches": [
+          {
+            "length": 1,
+            "has_lf": false,
+            "at": 296.969395046,
+            "route_before": "keyboard",
+            "first_sent_at": 297.084059647,
+            "protocol": null,
+            "route_after": "keyboard",
+            "backend_type": "KeyboardInput",
+            "native_attempts": null
+          },
+          {
+            "length": 6,
+            "has_lf": false,
+            "at": 297.10762388,
+            "route_before": "keyboard",
+            "error_code": null,
+            "error_type": "CancelledError",
+            "protocol": null,
+            "route_after": "keyboard",
+            "backend_type": "KeyboardInput",
+            "native_attempts": null
+          },
+          {
+            "receiver_confirmed_cancel_at": 297.107838813
+          }
+        ],
+        "input_failure": null,
+        "error_code": null
+      },
+      "after": {
+        "pid": 4321,
+        "display_type": "X11Display",
+        "active": true,
+        "focus": true,
+        "text": "甲",
+        "preedit": ""
+      },
+      "actor_exit": -15
+    }
+  ],
+  "engine": "libpinyin",
+  "sources_after": "[('xkb', 'us')]"
+}
