@@ -286,6 +286,121 @@ def test_explicit_streaming_off_uses_one_synchronous_request(sessions):
     asyncio.run(scenario())
 
 
+@pytest.mark.parametrize(
+    "after_prefix,fallback", [(False, False), (True, False), (True, True)]
+)
+def test_streaming_control_character_reports_specific_error_without_replay(
+    sessions, after_prefix, fallback
+):
+    async def scenario():
+        release = asyncio.Event()
+
+        class ControlClient(Client):
+            async def polish_stream(self, _provider, _key, _text, _prompt, on_delta):
+                if after_prefix:
+                    await on_delta("前缀")
+                    await release.wait()
+                await on_delta("\t")
+                raise AssertionError("unsupported control must be rejected")
+
+        session = sessions(ControlClient())
+        session.store.save_settings(
+            replace(session.settings, polishing_fallback=fallback)
+        )
+        problems, diagnostics = [], []
+        session.problem.connect(problems.append)
+        session.diagnostic.connect(diagnostics.append)
+        await session.toggle()
+        session.stop_recording()
+        if after_prefix:
+            await until(lambda: session.inputs.written == "前缀")
+        release.set()
+        await until(lambda: not session.pending)
+        assert session.controller.outcome == State.FAILED
+        assert session.inputs.written == ("前缀" if after_prefix else "")
+        assert "response_control" in diagnostics
+        assert any(
+            "控制字符" in message and "制表符" in message for message in problems
+        )
+        await session.close()
+
+    asyncio.run(scenario())
+
+
+def test_control_character_before_output_preserves_original_text_fallback(sessions):
+    async def scenario():
+        class ControlClient(Client):
+            async def polish_stream(self, _provider, _key, _text, _prompt, on_delta):
+                await on_delta("\t")
+                raise AssertionError("unsupported control must be rejected")
+
+        session = sessions(ControlClient())
+        session.store.save_settings(replace(session.settings, polishing_fallback=True))
+        statuses = []
+        session.status.connect(statuses.append)
+        await session.toggle()
+        session.stop_recording()
+        await until(lambda: not session.pending)
+        assert session.controller.outcome == State.SUCCEEDED
+        assert session.inputs.written == "原始识别文本"
+        assert any("控制字符" in message and "原文" in message for message in statuses)
+        await session.close()
+
+    asyncio.run(scenario())
+
+
+def test_control_character_reaches_actual_qt_problem_notice(
+    sessions, qt_app, tmp_path, monkeypatch
+):
+    import sys
+
+    from inkecho.integration import DesktopIntegration
+    from inkecho.logging import DiagnosticLog
+    from inkecho.statistics import Statistics
+    from inkecho.ui.window import MainWindow
+
+    monkeypatch.setenv("XDG_SESSION_TYPE", "x11")
+    monkeypatch.setattr("inkecho.audio.Recorder.devices", lambda: [])
+
+    class ControlClient(Client):
+        async def polish_stream(self, _provider, _key, _text, _prompt, on_delta):
+            await on_delta("\t")
+            raise AssertionError("unsupported control must be rejected")
+
+    session = sessions(ControlClient())
+    session.store.save_settings(replace(session.settings, polishing_fallback=False))
+    log = DiagnosticLog(tmp_path / "ui-log")
+    window = MainWindow(
+        session,
+        Statistics(tmp_path / "ui-statistics.json"),
+        log,
+        DesktopIntegration(
+            sys.executable,
+            data_home=tmp_path / "desktop",
+            config_home=tmp_path / "autostart",
+        ),
+        [sys.executable, "-m", "inkecho", "--toggle"],
+    )
+    window.tray.hide()
+
+    async def scenario():
+        try:
+            await session.toggle()
+            session.stop_recording()
+            await until(lambda: not session.pending)
+            qt_app.processEvents()
+            assert session.inputs.written == ""
+            assert "制表符" in window.statusBar().currentMessage()
+            assert "制表符" in window.problem_notice.message.text()
+            assert window.problem_notice.isVisible()
+        finally:
+            await session.close()
+            window.dispose()
+            log.close()
+
+    asyncio.run(scenario())
+
+
 def test_cancel_inside_one_chunk_stops_remaining_characters(sessions):
     async def scenario():
         class StreamClient(Client):

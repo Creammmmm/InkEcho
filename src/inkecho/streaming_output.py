@@ -114,13 +114,14 @@ class StreamingOutput:
             or type(delta.offset) is not int
             or not 0 <= delta.offset <= len(self._text)
             or not isinstance(delta.text, str)
-            or any(
-                (ord(char) < 32 and char not in "\r\n")
-                or 0x7F <= ord(char) <= 0x9F
-                or 0xD800 <= ord(char) <= 0xDFFF
-                for char in delta.text
-            )
         ):
+            raise ProviderError("response")
+        if any(
+            (ord(char) < 32 and char not in "\r\n") or 0x7F <= ord(char) <= 0x9F
+            for char in delta.text
+        ):
+            raise ProviderError("response_control")
+        if any(0xD800 <= ord(char) <= 0xDFFF for char in delta.text):
             raise ProviderError("response")
         overlap = min(len(self._text) - delta.offset, len(delta.text))
         if delta.text[:overlap] != self._text[delta.offset : delta.offset + overlap]:

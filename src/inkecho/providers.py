@@ -33,6 +33,7 @@ ERRORS = {
     "network": "Cannot connect to the service. Check your network.",
     "timeout": "The service did not reply within the configured time limit.",
     "response": "The service returned an invalid response.",
+    "response_control": "The response contains unsupported control characters.",
     "empty": "The service returned no text.",
     "audio": "Provide a nonempty mono 16-bit WAV within the audio size limit.",
 }

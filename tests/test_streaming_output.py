@@ -96,7 +96,12 @@ def test_invalid_offsets_controls_surrogates_and_output_limit_fail_before_send(d
         output = StreamingOutput(forbidden, lambda: True)
         with pytest.raises(ProviderError) as error:
             await output.append(delta)
-        assert error.value.code == "response" and not output.attempted
+        expected = (
+            "response_control"
+            if delta.text in {"\t", "\0", "\x7f", "\x85"}
+            else "response"
+        )
+        assert error.value.code == expected and not output.attempted
         output.close()
 
     asyncio.run(scenario())

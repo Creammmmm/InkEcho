@@ -58,6 +58,7 @@ PROVIDER_LABELS = {
     "network": "无法连接云端服务，请检查网络。",
     "timeout": "云端服务响应超时。",
     "response": "云端返回了无法解析的结果。",
+    "response_control": "润色结果包含不支持的控制字符（例如制表符），已停止处理。",
     "empty": "云端没有返回有效文字。",
     "audio": "录音格式或大小不符合服务要求。",
 }
@@ -1235,6 +1236,14 @@ class Session(QObject):
                     self.controller.fail(task_id, Failure.INJECTION)
             elif output.attempted:
                 self.controller.fail(task_id, Failure.POLISHING)
+                if (
+                    isinstance(error, ProviderError)
+                    and error.code == "response_control"
+                ):
+                    self.diagnostic.emit(error.code)
+                    self.report_problem(
+                        PROVIDER_LABELS[error.code] + " 已输入的文字不会重放。"
+                    )
             else:
                 # This branch is reachable only before any dispatch attempt.
                 # The consumer scope has already discarded its prepared route.
@@ -1245,10 +1254,16 @@ class Session(QObject):
                 self.controller.polishing_failed(task_id)
                 if isinstance(error, ProviderError):
                     self.diagnostic.emit(error.code)
-                    self.status.emit(
-                        PROVIDER_LABELS[error.code]
-                        + (" 已按设置使用原文。" if self.controller.fallback else "")
+                    message = PROVIDER_LABELS[error.code] + (
+                        " 已按设置使用原文。" if self.controller.fallback else ""
                     )
+                    if (
+                        error.code == "response_control"
+                        and not self.controller.fallback
+                    ):
+                        self.report_problem(message)
+                    else:
+                        self.status.emit(message)
         finally:
             await stop_operations()
 
