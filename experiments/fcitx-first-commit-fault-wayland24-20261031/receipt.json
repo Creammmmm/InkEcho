@@ -1,0 +1,22 @@
+{
+  "source_commit": "8b9a28c",
+  "candidate_runtime_sha256": "a3817a8fcb9ef15c8b93db9f5358d818e676b6dee94ffb1c1b5f46d6398760b8",
+  "candidate_runtime_actual_version": "0.15.56",
+  "source_overlay_fcitx5_sha256": "790300a2eaf14fffc0d66b327ab488fd7e694177088b9677edc9053b295897c4",
+  "source_overlay_router_sha256": "0d7aae8966198a7c6e6863d2e844c66d19a41339ffdef34e4409bb59156cac14",
+  "snapshot_sha256_before_boot": "6c3626234913d5cd58682e01a1f5bcd8d1e5dfda31c0c29b938cce0174174f81",
+  "first_boot_network_wait_seen": true,
+  "second_boot_network_wait_seen": true,
+  "second_boot_os_reached_poweroff": true,
+  "qemu_wait_exit": 0,
+  "container_removed": true,
+  "artifacts": {
+    "after.log": "bcca03aeafbeb242d0894d9d525d3f6cf1ed9f16763dab368db7ce56dc9e1307",
+    "aftercancel.log": "8d51be0707ce850206e273a27a8cb0be6d453ad9275ea4d298da1389ea43de6c",
+    "before.log": "e8d3bb1c7c16365e0b84a799a265be91b146c6f144692a2e41b495d47917e7e6",
+    "run.sh.txt": "fde424174f2fcdb999feb7aac221a8ea70a61cbb30b299ebb6833f88ccb2401c",
+    "sender.py.txt": "eb5fa337319589b749a4948059691f07a98c039005a85efeab1d84fd05de11f0",
+    "target-focus.py.txt": "1ef0f5018902b54d66fa8769b300a8e6a22b63f834d27c391e470cc79b9069ed"
+  },
+  "first_guest_stopped_by_operator_without_confirming_terminal_boot_state": true
+}

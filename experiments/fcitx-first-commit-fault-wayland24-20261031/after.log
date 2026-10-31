@@ -1,0 +1,6 @@
+/tmp/inkecho-r4-test/InkEcho-0.10.2-x86_64.AppImage: OK
+790300a2eaf14fffc0d66b327ab488fd7e694177088b9677edc9053b295897c4  /tmp/inkecho-r4-test/squashfs-root/packages/inkecho/platform/fcitx5.py
+已安装输入桥；运行状态需通过输入服务检查确认。
+{"mode": "owner", "exit": 0, "a": "风", "b": "", "triggered": true, "switch_confirmed": false, "focus_in_b": false, "resumed": false, "fcitx_b_context_proved_by_receipt": false, "stdout": [{"ready": true}, {"events": [["backend", "fcitx"], ["fcitx_insert_started"], ["hidden_reply", "[1]"], ["fcitx_error", "delivery_unknown", 0, null, true], ["diagnostic", "fcitx_delivery_unknown"], ["problem", "输入结果无法确认，已停止输入，未自动重试。"], ["finished", "failed"]], "outcome": "failed", "origin": "/tmp/inkecho-r4-test/squashfs-root/packages/inkecho/app.py"}], "stderr": "", "events": [["first_arrival", 184.791539451]], "passed": true}
+/tmp/inkecho-r4-test/probes/run.sh: line 37:  2728 Killed                  fcitx5 --disable xim -D > "$root/probes/fcitx-$2.log" 2>&1
+未发现经过校验的输入桥；可能尚未安装。
