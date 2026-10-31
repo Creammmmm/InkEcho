@@ -327,7 +327,21 @@ class CompatibilityPage(Page):
                     await self.session.run_input_maintenance(
                         getattr(manager, operation)
                     )
-                status.setText(await asyncio.to_thread(manager.status))
+                try:
+                    status.setText(await asyncio.to_thread(manager.status))
+                except ExtensionError as error:
+                    if operation == "status":
+                        raise
+                    # The change already ran; a failed follow-up inspection
+                    # must not be presented as if the change was rolled back.
+                    status.setText(f"状态检查失败：{error}")
+                except Exception:
+                    # Unexpected inspection failures are separate from the
+                    # completed operation and may contain sensitive details.
+                    status.setText("状态检查失败，请稍后重试。")
+                    if operation == "status":
+                        self.message.setText("状态检查失败，请稍后重试。")
+                        return
             self.message.setText(
                 "扩展操作已提交；请以扩展运行状态为准。"
                 if operation != "status"
@@ -336,6 +350,8 @@ class CompatibilityPage(Page):
         except InputMaintenanceBusy:
             self.message.setText("请先结束当前任务，再调整扩展。")
         except ExtensionError as error:
+            if operation == "status":
+                status.setText(f"状态检查失败：{error}")
             self.message.setText(str(error))
 
     def save_output_method(self):
@@ -427,6 +443,16 @@ class CompatibilityPage(Page):
             )
         else:
             text = "输入服务已连接，请点击「检查并启用所选方式」完成准备。"
+        if environment.session == "x11" and method in {"auto", "keyboard"}:
+            text += (
+                " Xorg 下使用模拟键盘时可能中断正在进行的输入法组词；"
+                "请先完成或取消组词再输出。"
+            )
+        elif environment.session == "x11" and method == "ibus":
+            text += (
+                " Xorg 下使用旧版 IBus 扩展时可能中断正在进行的输入法组词；"
+                "请先完成或取消组词再输出。"
+            )
         self.availability.setText(text)
 
     async def enable(self):

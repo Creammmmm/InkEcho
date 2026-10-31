@@ -1753,6 +1753,111 @@ def test_owned_extension_buttons_call_owned_not_legacy_manager(window):
     asyncio.run(scenario())
 
 
+@pytest.mark.parametrize("backend", ["ibus", "owned"])
+@pytest.mark.parametrize("unexpected", [False, True])
+def test_extension_action_reports_success_when_followup_status_fails(
+    window, qt_app, monkeypatch, backend, unexpected
+):
+    from inkecho.platform.ibus_extension import ExtensionError
+
+    page = window.settings_page.compatibility
+    window.navigation.setCurrentRow(3)
+    window.settings_page.tabs.setCurrentIndex(3)
+    qt_app.processEvents()
+    assert page.isVisible()
+    calls = []
+
+    class Manager:
+        def install(self):
+            calls.append("install")
+
+        def status(self):
+            if unexpected:
+                raise RuntimeError("private diagnostic")
+            raise ExtensionError("状态不可用")
+
+    async def maintenance(operation):
+        operation()
+
+    attribute = "ibus_extension" if backend == "ibus" else "owned_extension"
+    setattr(page, attribute, Manager())
+    monkeypatch.setattr(page.session, "run_input_maintenance", maintenance)
+    asyncio.run(getattr(page, f"{backend}_action")("install"))
+    assert calls == ["install"]
+    assert "操作已提交" in page.message.text()
+    status = page.ibus_status if backend == "ibus" else page.owned_status
+    assert "状态检查失败" in status.text()
+    assert "private diagnostic" not in status.text()
+    status.setText("扩展正在运行")
+    asyncio.run(getattr(page, f"{backend}_action")("status"))
+    assert page.message.text() == (
+        "状态检查失败，请稍后重试。" if unexpected else "状态不可用"
+    )
+    assert "状态检查失败" in status.text()
+    assert "扩展正在运行" not in status.text()
+
+
+@pytest.mark.parametrize("method", ["auto", "keyboard", "ibus"])
+def test_xorg_keyboard_fallback_explains_composition_risk(
+    window, qt_app, monkeypatch, method
+):
+    from dataclasses import replace
+
+    from inkecho.platform.capabilities import detect_desktop
+
+    page = window.settings_page.compatibility
+    window.navigation.setCurrentRow(3)
+    window.settings_page.tabs.setCurrentIndex(3)
+    qt_app.processEvents()
+    assert page.availability.isVisible()
+    for widget in (
+        page.output_method,
+        page.receiver_wait,
+        page.mapping_wait,
+        page.feedback_timeout,
+    ):
+        assert widget.isVisible() and widget.width() > 0 and widget.height() > 0
+    monkeypatch.setattr(
+        "inkecho.ui.information.detect_desktop",
+        lambda: replace(detect_desktop(), session="x11"),
+    )
+    page.output_method.setCurrentIndex(page.output_method.findData(method))
+    page.refresh()
+    assert "可能中断正在进行的输入法组词" in page.availability.text()
+    assert "完成或取消组词" in page.availability.text()
+    if method == "ibus":
+        assert "旧版 IBus 扩展" in page.availability.text()
+        assert "模拟键盘" not in page.availability.text()
+    monkeypatch.setattr(
+        "inkecho.ui.information.detect_desktop",
+        lambda: replace(detect_desktop(), session="wayland"),
+    )
+    page.refresh()
+    assert "可能中断正在进行的输入法组词" not in page.availability.text()
+
+
+@pytest.mark.parametrize("method", ["fcitx", "ibus-owned"])
+def test_xorg_other_input_methods_do_not_claim_keyboard_fallback_risk(
+    window, qt_app, monkeypatch, method
+):
+    from dataclasses import replace
+
+    from inkecho.platform.capabilities import detect_desktop
+
+    page = window.settings_page.compatibility
+    window.navigation.setCurrentRow(3)
+    window.settings_page.tabs.setCurrentIndex(3)
+    qt_app.processEvents()
+    assert page.availability.isVisible()
+    monkeypatch.setattr(
+        "inkecho.ui.information.detect_desktop",
+        lambda: replace(detect_desktop(), session="x11"),
+    )
+    page.output_method.setCurrentIndex(page.output_method.findData(method))
+    page.refresh()
+    assert "可能中断正在进行的输入法组词" not in page.availability.text()
+
+
 def test_auto_input_explanation_distinguishes_optional_bridge_and_unknown(window):
     labels = [
         item.text() for item in window.settings_page.compatibility.findChildren(QLabel)
