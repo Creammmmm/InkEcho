@@ -1315,3 +1315,132 @@ def test_receiver_feedback_never_treats_ime_receipt_as_frame_signal():
         assert router.receiver_feedback_status == "not_checked"
 
     asyncio.run(run())
+
+
+@pytest.mark.parametrize("stop", ["active", "cancel", "expired", "task_cancel"])
+def test_auto_keyboard_handoff_cleanup_failure_is_terminal_and_closes_once(stop):
+    async def run():
+        active = True
+        diagnostics = []
+
+        class BrokenBridge(Bridge):
+            def __init__(self):
+                super().__init__()
+                self.close_count = 0
+
+            async def insert(self, *args, **kwargs):
+                raise FcitxOutputError("no_target", accepted=0, unsent_offset=0)
+
+            async def aclose(self):
+                nonlocal active
+                self.close_count += 1
+                if stop == "cancel":
+                    active = False
+                if stop == "expired":
+                    await asyncio.sleep(0.02)
+                if stop == "task_cancel":
+                    raise asyncio.CancelledError
+                raise FcitxOutputError("cleanup_failed")
+
+        keyboard, bridge = Keyboard(), BrokenBridge()
+        router = OutputRouter(keyboard, bridge_factory=lambda: bridge)
+
+        async def detect():
+            return ("fcitx", ":1.8")
+
+        router._system_detector = detect
+        router.set_diagnostic_handler(diagnostics.append)
+        await router.prepare_task("auto")
+        import time
+
+        deadline = time.monotonic() + 0.01 if stop == "expired" else None
+        code = {
+            "active": "input_cleanup_failed",
+            "cancel": "input_cancelled",
+            "expired": "expired",
+        }
+        error = asyncio.CancelledError if stop == "task_cancel" else OutputRouterError
+        with pytest.raises(error) as caught:
+            async with router.output_session():
+                await router.insert("甲", lambda: active, deadline=deadline)
+        if stop != "task_cancel":
+            assert caught.value.code == code[stop]
+        assert bridge.close_count == 1
+        assert diagnostics == (
+            [] if stop == "task_cancel" else ["input_cleanup_failed"]
+        )
+        assert keyboard.sent == [] and keyboard.connects == 0
+        assert router.selected is None
+
+    asyncio.run(run())
+
+
+def test_fcitx_keyboard_handoff_unlink_failure_releases_lock_and_stops(
+    tmp_path, monkeypatch
+):
+    """Real bridge and capability; D-Bus is simulated and never delivers text."""
+    import fcntl
+    import os
+    import time
+
+    from test_fcitx5 import FakeBus, reply
+
+    from inkecho.platform import fcitx5, fcitx5_capability
+
+    async def run():
+        class UnresponsiveCancelBus(FakeBus):
+            async def call(self, message):
+                if message.member == "Cancel":
+                    self.calls.append(message)
+                    try:
+                        await asyncio.sleep(10)
+                    except asyncio.CancelledError:
+                        self.cancel_timed_out = True
+                        raise
+                    return reply([True])
+                return await super().call(message)
+
+        bus = UnresponsiveCancelBus([reply([3])])
+        bridge = fcitx5.Fcitx5Bridge(
+            bus_factory=lambda: bus,
+            timeout=0.02,
+            capability_factory=lambda _: fcitx5_capability.Capability(tmp_path),
+        )
+        keyboard = Keyboard()
+        router = OutputRouter(keyboard, bridge_factory=lambda: bridge)
+        reports = []
+
+        async def detect():
+            return ("fcitx", ":1.42")
+
+        router._system_detector = detect
+        router.set_diagnostic_handler(reports.append)
+        monkeypatch.setattr(fcitx5, "FOCUS_WAIT_SECONDS", 0)
+        original_unlink = os.unlink
+
+        def unlink(path, *args, **kwargs):
+            if path == "inkecho-fcitx-candidate.cap":
+                raise OSError("injected unlink failure")
+            return original_unlink(path, *args, **kwargs)
+
+        monkeypatch.setattr(fcitx5_capability.os, "unlink", unlink)
+        await router.prepare_task("auto")
+        before = time.monotonic()
+        with pytest.raises(OutputRouterError, match="input_cleanup_failed"):
+            async with router.output_session():
+                await router.insert("甲", lambda: True)
+        assert time.monotonic() - before < 5
+        assert bus.cancel_timed_out is True
+        assert reports == ["input_cleanup_failed"]
+        assert bus.disconnected and bridge._bus is None and bridge._capability is None
+        assert [m.member for m in bus.calls].count("Cancel") == 1
+        assert keyboard.connects == 0 and keyboard.sent == []
+        assert router.selected is None
+        # Simulated server did not consume the capability. An unlink failure
+        # can leave it behind, but local descriptors and the lock are released.
+        assert (tmp_path / "inkecho-fcitx-candidate.cap").exists()
+        with open(tmp_path / "inkecho-fcitx-candidate.lock", "rb") as lock:
+            fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            fcntl.flock(lock, fcntl.LOCK_UN)
+
+    asyncio.run(run())

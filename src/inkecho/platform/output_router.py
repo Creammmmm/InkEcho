@@ -591,7 +591,17 @@ class OutputRouter:
                             error, text, can_continue, deadline, on_first_sent
                         )
                     bridge = self._selected
-                    await bridge.aclose()
+                    # Detach before close: real Fcitx releases local resources
+                    # in its finally block, including when cleanup reports an
+                    # error. Scope teardown must not close it a second time.
+                    self._selected = self._kind = None
+                    try:
+                        await bridge.aclose()
+                    except Exception:
+                        self._report_cleanup_failure()
+                        self._check_task(can_continue, deadline)
+                        raise OutputRouterError("input_cleanup_failed") from None
+                    self._check_task(can_continue, deadline)
                     self._selected, self._kind = self.keyboard, "keyboard"
                     await self._prepare_keyboard(can_continue, deadline)
                     self._check_task(can_continue, deadline)
