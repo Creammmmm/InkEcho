@@ -25,10 +25,24 @@ from inkecho.ui.widgets import Page, actions, button, card, label
 
 
 class CompatibilityPage(Page):
+    OUTPUT_METHODS = (
+        ("自动选择", "auto"),
+        ("模拟键盘", "keyboard"),
+        ("Fcitx5（需要 InkEcho 输入桥）", "fcitx"),
+        ("IBus（旧 V2 实验扩展）", "ibus"),
+        ("IBus（GNOME Wayland）", "ibus-owned"),
+    )
+
     def __init__(self, session):
         super().__init__("输入与兼容性", "识别完成后，像键盘一样向当时的光标位置输入。")
         self.session = session
-        is_xorg = detect_desktop().session == "x11"
+        desktop = detect_desktop()
+        is_xorg = desktop.session == "x11"
+        self._gnome_wayland = (
+            desktop.session == "wayland"
+            and "GNOME" in desktop.desktop.upper().split(":")
+        )
+        saved_method = session.store.load_settings().output_method
         self.fcitx_installer = FcitxInstaller()
         self.fcitx_action_lock = asyncio.Lock()
         frame, layout = card()
@@ -48,17 +62,17 @@ class CompatibilityPage(Page):
         layout.addWidget(label("不使用剪贴板；输入方式可在下方选择。", muted=True))
         form = QFormLayout()
         self.output_method = QComboBox()
-        for title, value in (
-            ("自动选择", "auto"),
-            ("模拟键盘", "keyboard"),
-            ("Fcitx5（需要 InkEcho 输入桥）", "fcitx"),
-            ("IBus（旧 V2 实验扩展）", "ibus"),
-            ("IBus（GNOME 新版扩展）", "ibus-owned"),
-        ):
+        for title, value in self.OUTPUT_METHODS:
+            if value == "ibus" and saved_method != "ibus":
+                continue
+            if (
+                value == "ibus-owned"
+                and not self._gnome_wayland
+                and saved_method != value
+            ):
+                continue
             self.output_method.addItem(title, value)
-        selected = self.output_method.findData(
-            session.store.load_settings().output_method
-        )
+        selected = self.output_method.findData(saved_method)
         self.output_method.setCurrentIndex(selected)
         self._saved_output_method = self.output_method.currentData()
         self.output_method.currentIndexChanged.connect(self.save_output_method)
@@ -114,15 +128,14 @@ class CompatibilityPage(Page):
             layout.addWidget(
                 label(
                     "Fcitx5 可使用下方按钮配置随应用提供的输入桥。"
-                    "当前 IBus 选项保留旧扩展配置；"
                     "此版本尚未提供免扩展的 Xorg IBus 配置。"
-                    "选择 IBus 不会自动安装或启用扩展。"
+                    "已有 IBus 设置会保留。"
                     "自动方式可能使用已有输入桥或模拟键盘；已尝试的文字不会重放。"
                     "设置从下一次任务生效。",
                     muted=True,
                 )
             )
-        else:
+        elif self._gnome_wayland:
             layout.addWidget(
                 label(
                     "Fcitx5 可使用下方按钮配置随应用提供的输入桥。"
@@ -137,7 +150,7 @@ class CompatibilityPage(Page):
                 )
             )
         self.body.addWidget(frame)
-        if not is_xorg:
+        if self._gnome_wayland:
             self._add_ibus_extension_controls()
         fcitx_frame, fcitx_layout = card()
         fcitx_layout.addWidget(label("Fcitx5 实验输入桥"))
@@ -291,41 +304,16 @@ class CompatibilityPage(Page):
             self.message.setText(str(error))
 
     def _add_ibus_extension_controls(self):
-        self.ibus_extension = ExtensionManager()
         self.owned_extension = OwnedExtensionManager()
         self.ibus_action_lock = asyncio.Lock()
-        extension_frame, extension_layout = card()
-        extension_layout.addWidget(label("IBus 实验扩展"))
-        extension_layout.addWidget(
-            label(
-                "仅在 GNOME 46 和 50 的隔离测试中验证；扩展使用 GNOME 私有接口，"
-                "可能不兼容其他版本或应用。它不会切换输入法；只尝试提交，"
-                "无法确认目标收到文字，目标未接入 IBus 时可能没有文字。"
-                "安装、启用和停用均由下方按钮单独执行；安装后可能需要重新登录。"
-                "如已安装旧版 InkEcho 实验扩展，请先在 GNOME 扩展管理器中"
-                "停用并卸载旧版，"
-                "再安装并启用新版；安装不会自动覆盖旧扩展。"
-                "异常退出可能留下临时凭证文件。",
-                muted=True,
-            )
-        )
-        self.ibus_status = label("尚未检查扩展状态。")
-        extension_layout.addWidget(self.ibus_status)
-        extension_layout.addWidget(
-            actions(
-                button("安装实验扩展", lambda: self.run(self.ibus_action("install"))),
-                button("启用实验扩展", lambda: self.run(self.ibus_action("enable"))),
-                button("停用实验扩展", lambda: self.run(self.ibus_action("disable"))),
-                button("检查扩展状态", lambda: self.run(self.ibus_action("status"))),
-            )
-        )
-        self.body.addWidget(extension_frame)
+        if self._saved_output_method == "ibus":
+            self._add_legacy_ibus_controls()
         owned_frame, owned_layout = card()
         owned_layout.addWidget(label("自动方式的可选 GNOME 输入扩展"))
         owned_layout.addWidget(
             label(
-                "与上方显式 IBus 的旧 V2 实验扩展分别管理；其协议保障不相同。"
-                "安装和启用后，自动方式或所选「IBus（GNOME 新版扩展）」可使用此扩展；"
+                "适用于 GNOME 原生 Wayland 的兼容输入控件。"
+                "安装和启用后，自动方式或所选「IBus（GNOME Wayland）」可使用此扩展；"
                 "它不会切换输入法，也无法确认目标是否收到文字。"
                 "本版本只使用带服务端期限的新协议；旧扩展需先停用并卸载，"
                 "再安装匹配版本并重新登录桌面；仅停用再启用可能仍加载缓存代码。"
@@ -368,6 +356,31 @@ class CompatibilityPage(Page):
             )
         )
         self.body.addWidget(owned_frame)
+
+    def _add_legacy_ibus_controls(self):
+        self.ibus_extension = ExtensionManager()
+        frame, layout = card()
+        layout.addWidget(label("已保存的旧版 IBus 配置"))
+        layout.addWidget(
+            label(
+                "保留现有旧 V2 配置，仅提供状态检查和停用。"
+                "此路径只尝试提交，无法确认目标接收，不再提供安装或启用入口。",
+                muted=True,
+            )
+        )
+        self.ibus_status = label("尚未检查扩展状态。")
+        layout.addWidget(self.ibus_status)
+        layout.addWidget(
+            actions(
+                button(
+                    "停用旧版 IBus 扩展", lambda: self.run(self.ibus_action("disable"))
+                ),
+                button(
+                    "检查旧版 IBus 扩展", lambda: self.run(self.ibus_action("status"))
+                ),
+            )
+        )
+        self.body.addWidget(frame)
 
     async def ibus_action(self, operation):
         await self._run_ibus_action(self.ibus_extension, self.ibus_status, operation)
@@ -438,9 +451,14 @@ class CompatibilityPage(Page):
                 pass
             previous = self.output_method.blockSignals(True)
             try:
-                self.output_method.setCurrentIndex(
-                    self.output_method.findData(self._saved_output_method)
-                )
+                index = self.output_method.findData(self._saved_output_method)
+                if index < 0:
+                    for title, value in self.OUTPUT_METHODS:
+                        if value == self._saved_output_method:
+                            self.output_method.addItem(title, value)
+                            index = self.output_method.findData(value)
+                            break
+                self.output_method.setCurrentIndex(index)
             finally:
                 self.output_method.blockSignals(previous)
             self.message.setText("输入设置无法保存。")
@@ -489,6 +507,10 @@ class CompatibilityPage(Page):
                 "此配置仍使用旧版 GNOME IBus 扩展；选择它不会自动安装或完成配置。"
                 "仅已配置的环境可尝试使用，尚不能保证目标接收。"
             )
+        elif method in {"ibus", "ibus-owned"} and not self._gnome_wayland:
+            text = (
+                "已保留原有 IBus 配置。当前会话不是已验证的 GNOME Wayland，未确认可用。"
+            )
         elif method == "ibus-owned":
             text = (
                 "只使用新版 GNOME IBus 扩展，适用于兼容的原生 Wayland 控件；"
@@ -500,6 +522,11 @@ class CompatibilityPage(Page):
             text = "IBus 仅尝试提交；目标未接入时可能没有文字，无法自动确认接收。"
         elif method == "fcitx":
             text = "Fcitx5 输入桥将在任务开始时检查；未安装或未运行时无法输出。"
+        elif method == "auto" and not self._gnome_wayland:
+            text = (
+                "自动模式在输出时检测可用的 Fcitx5 输入桥，"
+                "不满足条件时可能使用键盘或停止。目标兼容性将在输出时检查。"
+            )
         elif method == "auto":
             text = (
                 "自动模式在输出时检测可用的 Fcitx5 或 GNOME IBus 输入桥，"

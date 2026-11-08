@@ -11,8 +11,8 @@ def test_explicit_bounded_choice_is_visible_saved_and_deferred(window):
     combo = page.output_method
     old = combo.findData("ibus")
     current = combo.findData("ibus-owned")
-    assert old >= 0 and current >= 0 and old != current
-    assert "V2" in combo.itemText(old)
+    assert old == -1 and current >= 0
+    assert "GNOME Wayland" in combo.itemText(current)
     combo.setCurrentIndex(current)
     assert window.session.store.load_settings().output_method == "ibus-owned"
     page.refresh()
@@ -22,11 +22,12 @@ def test_explicit_bounded_choice_is_visible_saved_and_deferred(window):
     assert "原生 Wayland" in page.availability.text()
     labels = [x.text() for x in page.findChildren(QLabel)]
     assert any(
-        "IBus（GNOME 新版扩展）" in text and "无法确认目标是否收到" in text
+        "IBus（GNOME Wayland）" in text and "无法确认目标是否收到" in text
         for text in labels
     )
 
 
+@pytest.mark.parametrize("window", ["wayland"], indirect=True)
 def test_auto_status_mentions_both_supported_bridges(window):
     page = window.settings_page.compatibility
     page.output_method.setCurrentIndex(page.output_method.findData("auto"))

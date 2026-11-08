@@ -28,12 +28,14 @@ from inkecho.ui.window import MainWindow
 @pytest.fixture
 def window(tmp_path, qt_app, monkeypatch, request):
     monkeypatch.setenv("XDG_SESSION_TYPE", "x11")
-    if getattr(request, "param", "x11") == "wayland":
+    if getattr(request, "param", "x11") in {"wayland", "wayland-legacy"}:
         from inkecho.ui import information
 
         desktop = information.detect_desktop()
         monkeypatch.setattr(
-            information, "detect_desktop", lambda: replace(desktop, session="wayland")
+            information,
+            "detect_desktop",
+            lambda: replace(desktop, session="wayland", desktop="ubuntu:GNOME"),
         )
     monkeypatch.setattr("inkecho.audio.Recorder.devices", lambda: [])
     store = ConfigStore(tmp_path / "config")
@@ -52,6 +54,13 @@ def window(tmp_path, qt_app, monkeypatch, request):
     store.save_settings(
         replace(
             store.load_settings(),
+            output_method=(
+                "ibus"
+                if getattr(request, "param", "x11") in {"wayland-legacy", "x11-legacy"}
+                else "ibus-owned"
+                if getattr(request, "param", "x11") == "x11-owned"
+                else "auto"
+            ),
             transcription_provider="qwen",
             polishing_provider="deepseek",
         )
@@ -317,7 +326,7 @@ def test_settings_autosave_and_separate_data_logs(window):
     page.compatibility.mapping_wait.setValue(75)
     page.compatibility.feedback_timeout.setValue(60)
     page.compatibility.output_method.setCurrentIndex(
-        page.compatibility.output_method.findData("ibus")
+        page.compatibility.output_method.findData("keyboard")
     )
     settings = window.session.store.load_settings()
     assert settings.polishing_streaming == page.streaming.isChecked()
@@ -326,7 +335,7 @@ def test_settings_autosave_and_separate_data_logs(window):
     assert settings.receiver_feedback_wait_ms == 80
     assert settings.x11_mapping_wait_ms == 75
     assert settings.x11_feedback_timeout_ms == 60
-    assert settings.output_method == "ibus"
+    assert settings.output_method == "keyboard"
     assert not hasattr(page.statistics, "logs")
     assert page.logs.logs.isReadOnly()
     assert not any(
@@ -1410,7 +1419,12 @@ def test_auto_check_does_not_claim_unverified_output_ready(window):
 
 @pytest.mark.parametrize(
     ("backend", "window"),
-    [("fcitx", "x11"), ("fcitx", "wayland"), ("ibus", "wayland"), ("owned", "wayland")],
+    [
+        ("fcitx", "x11"),
+        ("fcitx", "wayland"),
+        ("ibus", "wayland-legacy"),
+        ("owned", "wayland"),
+    ],
     indirect=["window"],
 )
 def test_input_bridge_action_blocks_hotkey_during_background_change(
@@ -1428,6 +1442,7 @@ def test_input_bridge_action_blocks_hotkey_during_background_change(
             assert release.wait(5)
 
         configure = install
+        disable = install
 
         def status(self):
             return "状态已检查"
@@ -1450,7 +1465,11 @@ def test_input_bridge_action_blocks_hotkey_during_background_change(
     async def scenario():
         action = asyncio.create_task(
             getattr(page, f"{backend}_action")(
-                "configure" if backend == "fcitx" else "install"
+                "configure"
+                if backend == "fcitx"
+                else "disable"
+                if backend == "ibus"
+                else "install"
             )
         )
         try:
@@ -1474,9 +1493,9 @@ def test_ibus_extension_upgrade_instructions_visible(window):
     page = window.settings_page.compatibility
     labels = [item.text() for item in page.findChildren(QLabel)]
     assert any(
-        "停用并卸载旧版" in text
-        and "安装并启用新版" in text
-        and "不会自动覆盖旧扩展" in text
+        "旧扩展需先停用并卸载" in text
+        and "重新登录桌面" in text
+        and "旧客户端不具备新版保护" in text
         for text in labels
     )
 
@@ -1536,7 +1555,7 @@ def test_fcitx_configure_checks_live_before_reporting(window, monkeypatch, live)
     assert "停用输入桥" in buttons
 
 
-@pytest.mark.parametrize("method", ["auto", "keyboard", "fcitx", "ibus"])
+@pytest.mark.parametrize("method", ["auto", "keyboard", "fcitx"])
 def test_output_method_choice_saves_and_reloads(window, method):
     page = window.settings_page.compatibility
     page.output_method.setCurrentIndex(page.output_method.findData(method))
@@ -1782,7 +1801,7 @@ def test_owned_extension_buttons_call_owned_not_legacy_manager(window):
     asyncio.run(scenario())
 
 
-@pytest.mark.parametrize("window", ["wayland"], indirect=True)
+@pytest.mark.parametrize("window", ["wayland-legacy"], indirect=True)
 @pytest.mark.parametrize("backend", ["ibus", "owned"])
 @pytest.mark.parametrize("unexpected", [False, True])
 def test_extension_action_reports_success_when_followup_status_fails(
@@ -1827,7 +1846,11 @@ def test_extension_action_reports_success_when_followup_status_fails(
     assert "扩展正在运行" not in status.text()
 
 
-@pytest.mark.parametrize("method", ["auto", "keyboard", "ibus"])
+@pytest.mark.parametrize(
+    ("method", "window"),
+    [("auto", "x11"), ("keyboard", "x11"), ("ibus", "x11-legacy")],
+    indirect=["window"],
+)
 def test_xorg_keyboard_fallback_explains_composition_risk(
     window, qt_app, monkeypatch, method
 ):
@@ -1866,7 +1889,11 @@ def test_xorg_keyboard_fallback_explains_composition_risk(
     assert "可能中断正在进行的输入法组词" not in page.availability.text()
 
 
-@pytest.mark.parametrize("method", ["fcitx", "ibus-owned"])
+@pytest.mark.parametrize(
+    ("method", "window"),
+    [("fcitx", "x11"), ("ibus-owned", "x11-owned")],
+    indirect=["window"],
+)
 def test_xorg_other_input_methods_do_not_claim_keyboard_fallback_risk(
     window, qt_app, monkeypatch, method
 ):
