@@ -45,12 +45,22 @@ def test_default_router_explicit_ibus_never_probes_owned_or_uses_neighbor_delay(
     asyncio.run(run())
 
 
-@pytest.mark.parametrize("window", ["wayland"], indirect=True)
+@pytest.mark.parametrize("window", ["wayland-legacy"], indirect=True)
 def test_help_scopes_bounded_upgrade_to_automatic_owned_extension(window):
     labels = [x.text() for x in window.settings_page.compatibility.findChildren(QLabel)]
     bounded = next(text for text in labels if "带服务端期限的新协议" in text)
-    assert "显式 IBus 的旧 V2" in bounded
+    assert "IBus（GNOME Wayland）" in bounded
+    assert any(text.startswith("升级旧自动输入扩展：") for text in labels)
     assert "先停用并卸载" in bounded and "重新登录" in bounded
     assert "旧客户端不具备新版保护" in bounded and "无法确认目标是否收到" in bounded
-    legacy = next(text for text in labels if "不会自动覆盖旧扩展" in text)
+    legacy_title = next(
+        label
+        for label in window.settings_page.compatibility.findChildren(QLabel)
+        if label.text() == "已保存的旧版 IBus 配置"
+    )
+    legacy = "".join(
+        label.text() for label in legacy_title.parentWidget().findChildren(QLabel)
+    )
+    assert "旧 V2 配置" in legacy and "仅提供状态检查和停用" in legacy
     assert "带服务端期限" not in legacy and "新版扩展拒绝旧协议" not in legacy
+    assert "升级旧自动输入扩展" not in legacy and "新版保护" not in legacy
