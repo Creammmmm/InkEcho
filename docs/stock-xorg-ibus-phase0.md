@@ -178,3 +178,41 @@ AppImage 可用。X11 本地核查与 GTK 信号之间仍不对未来焦点变�
 明确能力协商、接收端最后检查及未知不重放。需单独解决部署、授权与跨工具包
 合同，不能静默替换用户现有系统组件。没有新的已验证产品路径前，保持现有
 真实可用后端与明确限制，不将本阶段原型标为完整交付。
+
+## Stock IBus 的按键方法复核
+
+IBus 1.5.29 的 `ProcessKeyEvent` 只由创建该 InputContext 的连接调用。查询
+`CurrentInputContext` 可以得到路径，但不授予操作权限。在自建上下文调用该方法还
+可能触发 IBus 内部 focus-in，按键交给该上下文的引擎。`ForwardKeyEvent` 是引擎发给
+所属客户端的信号。IBus Simple 的 `Ctrl+Shift+U` 依赖该引擎的组词缓冲区，通过
+X11 键盘事件触发时不能据此保证保留 libpinyin 的现有组词或在一串按键之间安全换焦。
+[连接检查](https://github.com/ibus/ibus/blob/1.5.29/bus/inputcontext.c#L1382-L1453) ·
+[按键与焦点](https://github.com/ibus/ibus/blob/1.5.29/bus/inputcontext.c#L939-L1025) ·
+[转发信号](https://github.com/ibus/ibus/blob/1.5.29/bus/inputcontext.c#L2453-L2482) ·
+[十六进制组词](https://github.com/ibus/ibus/blob/1.5.29/src/ibusenginesimple.c#L810-L1072)
+
+宿主发行版 IBus `1.5.34~rc2-1` 与 Ubuntu 24.04.5 客机发行版 IBus `1.5.29-2`
+得到相同结果。各自启动无显示的私有 session D-Bus 和 IBus daemon，使用临时目录。
+独立连接取得合成上下文 `/org/freedesktop/IBus/InputContext_2`。向此路径提交固定
+Unicode 键值 `0x01007532`（甲），拥有者的 `ProcessKeyEvent` 正常返回 `false`，
+另一个连接等候 500 毫秒后超时，两连接调用 `ForwardKeyEvent` 均返回
+`UnknownMethod`。客机夹具退出码 0，输出结束后的私有总线清理期间另有无法连接
+总线的提示。客机的桌面登录会话为 GNOME Wayland。探针清除了显示变量，仅在无窗口
+的私有 IBus 上下文操作，保留原有引擎。结论限于该发行版 daemon 的连接权限。
+Xorg 实际接收、焦点切换和 AppImage 需要独立验证。
+
+在能创建私有 Unix 套接字、已安装 IBus、`dbus-run-session` 和 `python3-gi` 的
+测试环境，从仓库根目录复制[实测夹具](../experiments/ibus-stock-key-phase0/)并运行。
+结果写入临时目录的 `result.json`，daemon 日志为 `daemon.log`。仓库夹具由客机
+原始脚本整理而来，增加双连接断言和显式清理。整理版在全新的宿主私有总线上退出 0，
+结果字段与客机原始记录一致。
+
+```sh
+probe_dir=$(mktemp -d /tmp/inkecho-ibus-stock-key-XXXXXX)
+cp experiments/ibus-stock-key-phase0/run.sh experiments/ibus-stock-key-phase0/probe.py "$probe_dir/"
+dpkg-query -W ibus python3-gi
+bash "$probe_dir/run.sh"
+```
+
+原始客机记录位于 `/tmp/inkecho-01614-wayland24-auto.IUFmBw/output/stock-key.log`，
+同目录保留版本、退出码和 daemon 日志。
