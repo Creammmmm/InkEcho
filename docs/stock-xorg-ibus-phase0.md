@@ -216,3 +216,40 @@ bash "$probe_dir/run.sh"
 
 原始客机记录位于 `/tmp/inkecho-01614-wayland24-auto.IUFmBw/output/stock-key.log`，
 同目录保留版本、退出码和 daemon 日志。
+
+## 对照桌面听写实现
+
+Canonical Myna 0.3.1 通过 PPA 和 Snap 单独安装。Ubuntu 24.04 及后续版本的 GNOME 路径是
+Wayland，列出的 X11 路径为 Xubuntu 24.04 的 Xfce。GNOME 扩展承载状态浮层。
+听写进程在 Snap 中通过 `desktop-legacy` 连接 IBus 私有套接字，使用发行版 IBus。
+[发布记录](https://github.com/canonical/myna/releases/tag/v0.3.1) ·
+[会话矩阵](https://github.com/canonical/myna/blob/bc2eaff061062efcb296318f2efee84dc8ba4f19/README.md#L20-L52) ·
+[Snap 权限](https://github.com/canonical/myna/blob/bc2eaff061062efcb296318f2efee84dc8ba4f19/myna-snap/snap/snapcraft.yaml#L118-L125) ·
+[发行版依赖](https://github.com/canonical/myna/blob/bc2eaff061062efcb296318f2efee84dc8ba4f19/myna-config-deb/debian/control#L23-L46)
+
+复核固定在 0.3.1 的提交 `bc2eaff061062efcb296318f2efee84dc8ba4f19`。
+Myna 注册 `myna-stt`，将其设为 IBus 全局引擎，通过引擎信号提交正文，
+结束时尝试恢复原引擎。它在录音前绑定输入上下文，实际失焦时停止剩余输出，
+并接收光标周边正文以取得前一个字符。这些选择分别与 InkEcho 的保留当前引擎、
+开始录音不绑定目标、后续输出跟随焦点及不读取周边正文约束冲突。
+[注册](https://github.com/canonical/myna/blob/bc2eaff061062efcb296318f2efee84dc8ba4f19/client/myna-desktop/src/inject/ibus.rs#L1424-L1436) ·
+[切换](https://github.com/canonical/myna/blob/bc2eaff061062efcb296318f2efee84dc8ba4f19/client/myna-desktop/src/inject/ibus.rs#L1340-L1353) ·
+[提交](https://github.com/canonical/myna/blob/bc2eaff061062efcb296318f2efee84dc8ba4f19/client/myna-desktop/src/inject/ibus.rs#L1601-L1631) ·
+[恢复](https://github.com/canonical/myna/blob/bc2eaff061062efcb296318f2efee84dc8ba4f19/client/myna-desktop/src/inject/ibus.rs#L1715-L1736) ·
+[录音入口](https://github.com/canonical/myna/blob/bc2eaff061062efcb296318f2efee84dc8ba4f19/client/myna-desktop/src/controller.rs#L590-L608) ·
+[失焦行为](https://github.com/canonical/myna/blob/bc2eaff061062efcb296318f2efee84dc8ba4f19/client/myna-desktop/src/controller.rs#L670-L686) ·
+[周边正文](https://github.com/canonical/myna/blob/bc2eaff061062efcb296318f2efee84dc8ba4f19/client/myna-desktop/src/inject/ibus.rs#L1148-L1164)
+
+VocaLinux 0.18.5 在输出时临时切换到自有引擎并尝试恢复。Fedora 的语音输入
+也通过用户选择的 `stt` 引擎提交。
+[VocaLinux 切换](https://github.com/VocaHQ/vocalinux/blob/v0.18.5/src/vocalinux/text_injection/ibus_engine.py#L1682-L1700) ·
+[VocaLinux 恢复](https://github.com/VocaHQ/vocalinux/blob/v0.18.5/src/vocalinux/text_injection/ibus_engine.py#L1799-L1805) ·
+[Fedora 配置](https://fedoraproject.org/wiki/Changes/ibus-speech-to-text) ·
+[STT 引擎注册](https://github.com/Manish7093/IBus-Speech-To-Text/blob/c113064ea05d2ca6e0bdcea0bb6bf620b54d972f/engine/main.py#L136-L150)
+
+对照 IBus 1.5.35 发布版，主对象仍公开创建上下文、注册组件、切换全局引擎，
+`CommitText` 仍为上下文发给客户端的信号，上下文方法仍核对所属连接。
+本节基于源码审查，未运行对照项目或 IBus 1.5.35，未增加产品依赖。
+[IBus 主对象](https://github.com/ibus/ibus/blob/1.5.35/bus/ibusimpl.c#L189-L240) ·
+[提交通知](https://github.com/ibus/ibus/blob/1.5.35/bus/inputcontext.c#L275-L330) ·
+[连接权限](https://github.com/ibus/ibus/blob/1.5.35/bus/inputcontext.c#L1537-L1600)
