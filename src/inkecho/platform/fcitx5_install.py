@@ -78,12 +78,12 @@ class FcitxInstaller:
 
     def install(self):
         system = self._system()
-        if self.source is None:
-            raise FcitxInstallError("应用中没有可用的输入桥候选文件。")
         # A verified existing installation is already the desired state. Never
         # replace it: Fcitx may have the library mapped in a running process.
         if self._check_staged(system[3]):
             return
+        if self.source is None:
+            raise FcitxInstallError("应用中没有可用的输入桥候选文件。")
         try:
             staging.stage(
                 self.source,
@@ -111,6 +111,11 @@ class FcitxInstaller:
             raise FcitxInstallError(
                 "安装未完成：文件校验失败或已有输入桥配置。"
             ) from exc
+
+    def configure(self):
+        """Publish the verified bridge and request a live refresh explicitly."""
+        self.install()
+        self.enable()
 
     def _check_staged(self, version):
         digest = staging.TESTED_CANDIDATE_SHA256

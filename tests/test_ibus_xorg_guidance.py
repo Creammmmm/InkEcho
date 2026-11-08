@@ -14,7 +14,7 @@ def test_xorg_legacy_ibus_does_not_claim_configuration(window, monkeypatch, meth
     store.save_settings(replace(store.load_settings(), output_method=method))
     page = information.CompatibilityPage(window.session)
     labels = "".join(x.text() for x in page.findChildren(QLabel))
-    assert "Fcitx5 仍需要输入桥" in labels
+    assert "Fcitx5 可使用下方按钮配置随应用提供的输入桥" in labels
     assert "下一次任务生效" in labels
     assert "此版本尚未提供免扩展" in labels
     assert "下方单独安装" not in labels
@@ -38,6 +38,9 @@ def test_xorg_legacy_ibus_does_not_claim_configuration(window, monkeypatch, meth
 def test_wayland_description_remains(window):
     page = window.settings_page.compatibility
     labels = "".join(x.text() for x in page.findChildren(QLabel))
-    assert "Fcitx5 需要额外安装输入桥；IBus 需要手动启用实验性 GNOME 扩展。" in labels
+    assert (
+        "Fcitx5 可使用下方按钮配置随应用提供的输入桥。"
+        "IBus 需要手动启用实验性 GNOME 扩展。" in labels
+    )
     assert "下方单独安装、启用的 GNOME 自动输入扩展" in labels
     assert "此版本尚未提供免扩展" not in labels

@@ -1946,3 +1946,39 @@ def test_wayland_hybrid_cancel_before_worker_reply_does_not_claim_dispatch(facto
         await session.close()
 
     asyncio.run(scenario())
+
+
+def test_input_maintenance_keeps_verifier_alive_after_caller_cancel(factory):
+    async def scenario():
+        session = factory()
+        started, release = asyncio.Event(), asyncio.Event()
+        calls = []
+
+        async def verify():
+            started.set()
+            await release.wait()
+            calls.append("verified")
+            return True
+
+        action = asyncio.create_task(
+            session.run_input_maintenance(
+                lambda: calls.append("published"), verify=verify
+            )
+        )
+        try:
+            await asyncio.wait_for(started.wait(), 2)
+            action.cancel()
+            with pytest.raises(asyncio.CancelledError):
+                await action
+            assert session.input_maintenance_active
+            await session.toggle()
+            assert not session.recorder.recording
+            assert calls == ["published"]
+        finally:
+            release.set()
+            await asyncio.gather(*tuple(session.input_maintenance_tasks))
+            await session.close()
+        assert calls == ["published", "verified"]
+        assert not session.input_maintenance_active
+
+    asyncio.run(scenario())

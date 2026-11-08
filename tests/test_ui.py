@@ -1413,7 +1413,9 @@ def test_auto_check_does_not_claim_unverified_output_ready(window):
     [("fcitx", "x11"), ("fcitx", "wayland"), ("ibus", "wayland"), ("owned", "wayland")],
     indirect=["window"],
 )
-def test_input_bridge_action_blocks_hotkey_during_background_change(window, backend):
+def test_input_bridge_action_blocks_hotkey_during_background_change(
+    window, backend, monkeypatch
+):
     import threading
 
     page = window.settings_page.compatibility
@@ -1424,6 +1426,8 @@ def test_input_bridge_action_blocks_hotkey_during_background_change(window, back
         def install(self):
             started.set()
             assert release.wait(5)
+
+        configure = install
 
         def status(self):
             return "状态已检查"
@@ -1438,8 +1442,17 @@ def test_input_bridge_action_blocks_hotkey_during_background_change(window, back
         Manager(),
     )
 
+    async def verified():
+        return True
+
+    monkeypatch.setattr(page, "_verify_fcitx_live", verified)
+
     async def scenario():
-        action = asyncio.create_task(getattr(page, f"{backend}_action")("install"))
+        action = asyncio.create_task(
+            getattr(page, f"{backend}_action")(
+                "configure" if backend == "fcitx" else "install"
+            )
+        )
         try:
             for _ in range(200):
                 if started.is_set():
@@ -1488,33 +1501,39 @@ def test_gnome_wayland_scope_does_not_claim_unverified_native_support(window):
     assert "支持中文等基本多文种字符" not in text
 
 
-def test_fcitx_install_explains_service_restart_can_load_addon(window, monkeypatch):
+@pytest.mark.parametrize("live", [True, False])
+def test_fcitx_configure_checks_live_before_reporting(window, monkeypatch, live):
     page = window.settings_page.compatibility
+    calls = []
 
     class Manager:
-        def install(self):
-            pass
+        def configure(self):
+            calls.append("configure")
 
         def status(self):
-            return "已安装输入桥；运行状态需通过输入服务检查确认。"
+            return "已安装输入桥"
 
-    async def maintenance(operation):
+    async def verify():
+        calls.append("verify")
+        return live
+
+    async def maintenance(operation, *, verify):
         operation()
-
-    async def immediate(function, *args):
-        return function(*args)
+        return await verify()
 
     page.fcitx_installer = Manager()
+    monkeypatch.setattr(page, "_verify_fcitx_live", verify)
     monkeypatch.setattr(page.session, "run_input_maintenance", maintenance)
-    monkeypatch.setattr("inkecho.ui.information.asyncio.to_thread", immediate)
-    asyncio.run(page.fcitx_action("install"))
-    assert "重启后可能自动加载" in page.message.text()
-    assert "点击启用" in page.message.text()
-    labels = [item.text() for item in page.findChildren(QLabel)]
-    assert any(
-        "安装到当前用户目录并发布加载配置" in text and "重启后可能自动加载" in text
-        for text in labels
-    )
+    asyncio.run(page.fcitx_action("configure"))
+    assert calls == ["configure", "verify"]
+    assert ("已确认输入桥运行" in page.message.text()) is live
+    if not live:
+        assert "加载配置已发布，但未确认" in page.message.text()
+    buttons = [item.text() for item in page.findChildren(QPushButton)]
+    assert "配置 Fcitx5 输入桥" in buttons
+    assert "安装输入桥" not in buttons
+    assert "启用输入桥" not in buttons
+    assert "停用输入桥" in buttons
 
 
 @pytest.mark.parametrize("method", ["auto", "keyboard", "fcitx", "ibus"])
@@ -1648,8 +1667,7 @@ def test_enable_input_handles_unreadable_settings(window, monkeypatch):
     ("operation", "message"),
     [
         ("disable", "加载配置已移除"),
-        ("install", "输入桥已安装"),
-        ("enable", "已请求 Fcitx5"),
+        ("configure", "已确认输入桥运行"),
     ],
 )
 def test_fcitx_action_reports_success_if_status_check_fails(
@@ -1666,11 +1684,8 @@ def test_fcitx_action_reports_success_if_status_check_fails(
         def disable(self):
             self.completed.append("disable")
 
-        def install(self):
-            self.completed.append("install")
-
-        def enable(self):
-            self.completed.append("enable")
+        def configure(self):
+            self.completed.append("configure")
 
         def status(self):
             raise FcitxInstallError("Fcitx5 服务不可用。")
@@ -1678,8 +1693,9 @@ def test_fcitx_action_reports_success_if_status_check_fails(
     installer = Installer()
     page.fcitx_installer = installer
 
-    async def maintenance(operation):
+    async def maintenance(operation, *, verify=None):
         operation()
+        return True
 
     async def immediate(function, *args):
         return function(*args)
@@ -1907,3 +1923,26 @@ def test_receiver_feedback_ui_reports_capability_without_ack(
     page.refresh()
     assert expected in page.receiver_feedback.text()
     assert page.receiver_wait.value() == 40
+
+
+@pytest.mark.parametrize("owner", [None, ":1.42"])
+def test_fcitx_explicit_status_separates_disk_and_live(window, monkeypatch, owner):
+    page = window.settings_page.compatibility
+    calls = []
+
+    class Manager:
+        def status(self):
+            return "已安装输入桥"
+
+    async def detect():
+        calls.append("detect")
+        return owner
+
+    page.fcitx_installer = Manager()
+    monkeypatch.setattr("inkecho.ui.information.verified_explicit_fcitx_owner", detect)
+    asyncio.run(page.fcitx_action("status"))
+    assert calls == ["detect"]
+    assert page.fcitx_status.text() == "已安装输入桥"
+    assert ("已确认输入桥运行" in page.message.text()) is (owner is not None)
+    if owner is None:
+        assert "仅反映磁盘配置" in page.message.text()

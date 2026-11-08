@@ -276,7 +276,7 @@ class Session(QObject):
         task.add_done_callback(self.ui_tasks.discard)
         return task
 
-    async def run_input_maintenance(self, operation):
+    async def run_input_maintenance(self, operation, *, verify=None):
         """Serialize changes; a worker survives caller cancellation."""
         state = {"started": False}
 
@@ -292,7 +292,8 @@ class Session(QObject):
                 state["started"] = True
                 self.input_maintenance_active = True
                 try:
-                    return await asyncio.to_thread(operation)
+                    result = await asyncio.to_thread(operation)
+                    return await verify() if verify is not None else result
                 finally:
                     self.input_maintenance_active = False
 

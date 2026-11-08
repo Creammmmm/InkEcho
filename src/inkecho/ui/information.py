@@ -17,6 +17,7 @@ from inkecho.app import InputMaintenanceBusy
 from inkecho.integration import IntegrationError
 from inkecho.platform.capabilities import detect_desktop
 from inkecho.platform.fcitx5_install import FcitxInstaller, FcitxInstallError
+from inkecho.platform.framework_detection import verified_explicit_fcitx_owner
 from inkecho.platform.ibus_extension import ExtensionError, ExtensionManager
 from inkecho.platform.owned_extension import OwnedExtensionManager
 from inkecho.statistics import StatisticsError
@@ -112,7 +113,8 @@ class CompatibilityPage(Page):
         if is_xorg:
             layout.addWidget(
                 label(
-                    "Fcitx5 仍需要输入桥。当前 IBus 选项保留旧扩展配置；"
+                    "Fcitx5 可使用下方按钮配置随应用提供的输入桥。"
+                    "当前 IBus 选项保留旧扩展配置；"
                     "此版本尚未提供免扩展的 Xorg IBus 配置。"
                     "选择 IBus 不会自动安装或启用扩展。"
                     "自动方式可能使用已有输入桥或模拟键盘；已尝试的文字不会重放。"
@@ -123,7 +125,8 @@ class CompatibilityPage(Page):
         else:
             layout.addWidget(
                 label(
-                    "Fcitx5 需要额外安装输入桥；IBus 需要手动启用实验性 GNOME 扩展。"
+                    "Fcitx5 可使用下方按钮配置随应用提供的输入桥。"
+                    "IBus 需要手动启用实验性 GNOME 扩展。"
                     "自动模式优先使用检测与握手通过的 Fcitx5；也可使用下方单独安装、"
                     "启用的 GNOME 自动输入扩展。"
                     "扩展未安装或合法停用时保留原有自动策略。"
@@ -141,10 +144,11 @@ class CompatibilityPage(Page):
         fcitx_layout.addWidget(
             label(
                 "仅限已验证的 Ubuntu 与 Fcitx5 版本。未安装 Fcitx5 时，"
-                "请先通过系统软件管理器安装；如需使用，"
+                "请先通过系统软件管理器安装。若尚未选用并运行 Fcitx5，"
                 "请在系统中选择 Fcitx5 并重新登录。"
-                "安装到当前用户目录并发布加载配置；Fcitx5 重启后可能自动加载。"
-                "启用会要求正在运行的 Fcitx5 重新检查插件。"
+                "配置会将随应用提供并校验的输入桥安装到当前用户目录，"
+                "发布加载配置，并要求正在运行的 Fcitx5 检查插件。"
+                "不会切换系统输入法或重启服务。"
                 "自动方式仅在检测到 Fcitx5 和已启用输入桥时尝试使用。"
                 "停用只移除加载配置，"
                 "已加载的插件会保留到 Fcitx5 退出，不会立即卸载。"
@@ -156,8 +160,10 @@ class CompatibilityPage(Page):
         fcitx_layout.addWidget(self.fcitx_status)
         fcitx_layout.addWidget(
             actions(
-                button("安装输入桥", lambda: self.run(self.fcitx_action("install"))),
-                button("启用输入桥", lambda: self.run(self.fcitx_action("enable"))),
+                button(
+                    "配置 Fcitx5 输入桥",
+                    lambda: self.run(self.fcitx_action("configure")),
+                ),
                 button("停用输入桥", lambda: self.run(self.fcitx_action("disable"))),
                 button("检查输入桥", lambda: self.run(self.fcitx_action("status"))),
             )
@@ -218,6 +224,18 @@ class CompatibilityPage(Page):
                 widget.blockSignals(previous)
             self.message.setText("输入设置无法保存。")
 
+    async def _verify_fcitx_live(self):
+        async def check():
+            while True:
+                if await verified_explicit_fcitx_owner() is not None:
+                    return True
+                await asyncio.sleep(0.15)
+
+        try:
+            return await asyncio.wait_for(check(), 3.0)
+        except TimeoutError:
+            return False
+
     async def fcitx_action(self, operation):
         if (
             self.session.controller.task
@@ -228,10 +246,16 @@ class CompatibilityPage(Page):
             return
         try:
             async with self.fcitx_action_lock:
-                if operation != "status":
-                    await self.session.run_input_maintenance(
-                        getattr(self.fcitx_installer, operation)
+                if operation == "configure":
+                    live = await self.session.run_input_maintenance(
+                        self.fcitx_installer.configure, verify=self._verify_fcitx_live
                     )
+                elif operation == "disable":
+                    await self.session.run_input_maintenance(
+                        self.fcitx_installer.disable
+                    )
+                if operation == "status":
+                    live = await verified_explicit_fcitx_owner() is not None
                 try:
                     self.fcitx_status.setText(
                         await asyncio.to_thread(self.fcitx_installer.status)
@@ -247,15 +271,20 @@ class CompatibilityPage(Page):
                 self.message.setText(
                     "加载配置已移除；已加载的插件会保留到 Fcitx5 退出。"
                 )
-            elif operation == "enable":
-                self.message.setText("已请求 Fcitx5 检查插件，请检查输入服务状态。")
-            elif operation == "install":
+            elif operation == "configure":
                 self.message.setText(
-                    "输入桥已安装；Fcitx5 重启后可能自动加载，"
-                    "也可点击启用以请求立即检查。"
+                    "已确认输入桥运行。目标兼容性将在实际输出时检查。"
+                    if live
+                    else "加载配置已发布，但未确认输入桥运行。刷新可能仍在处理中，"
+                    "或服务保留了先前停用、加载失败或旧版插件的状态。"
+                    "可重新检查。如需重启 Fcitx5，请自行操作。"
                 )
             else:
-                self.message.setText("输入桥状态已更新。")
+                self.message.setText(
+                    "已确认输入桥运行。目标兼容性将在实际输出时检查。"
+                    if live
+                    else "未确认输入桥运行。上方安装状态仅反映磁盘配置。"
+                )
         except InputMaintenanceBusy:
             self.message.setText("请先结束当前任务，再调整输入桥。")
         except FcitxInstallError as error:

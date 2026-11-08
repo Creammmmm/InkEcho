@@ -521,3 +521,43 @@ def test_existing_install_with_writable_ancestor_can_be_detected_and_disabled(
     assert manager.auto_version() == "5.1.19"
     manager.disable()
     assert manager.auto_version() is None
+
+
+@pytest.mark.parametrize("failure", [None, "install", "enable"])
+def test_configure_preserves_publication_and_refresh_failures(monkeypatch, failure):
+    installer = FcitxInstaller()
+    calls = []
+
+    def action(name):
+        calls.append(name)
+        if name == failure:
+            raise FcitxInstallError(name)
+
+    monkeypatch.setattr(installer, "install", lambda: action("install"))
+    monkeypatch.setattr(installer, "enable", lambda: action("enable"))
+    if failure:
+        with pytest.raises(FcitxInstallError, match=failure):
+            installer.configure()
+    else:
+        installer.configure()
+    assert calls == (["install"] if failure == "install" else ["install", "enable"])
+
+
+@pytest.mark.parametrize("staged", [True, False])
+def test_configure_without_bundle_preserves_verified_bridge(monkeypatch, staged):
+    monkeypatch.delenv("APPDIR", raising=False)
+    installer = FcitxInstaller()
+    calls = []
+    monkeypatch.setattr(
+        installer, "_system", lambda: ("ubuntu", "24.04", "x86_64", "5.1.7")
+    )
+    monkeypatch.setattr(installer, "_check_staged", lambda version: staged)
+    monkeypatch.setattr(installer, "_run", lambda args: calls.append(args))
+    if staged:
+        installer.configure()
+        assert len(calls) == 1
+        assert calls[0][-1] == "org.fcitx.Fcitx.Controller1.Refresh"
+    else:
+        with pytest.raises(FcitxInstallError, match="没有可用"):
+            installer.configure()
+        assert calls == []
