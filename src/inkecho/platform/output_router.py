@@ -761,6 +761,10 @@ class OutputRouter:
                     else:
                         self._check_task(can_continue, deadline)
                         await bridge.aclose()
+                    self._check_task(can_continue, deadline)
+                    if self._auto_task and getattr(self, "_owned_auto_scope", False):
+                        # Zero IBus dispatch does not prove keyboard composition safety.
+                        raise OutputRouterError("input_capability_unknown")
                     self._selected, self._kind = self.keyboard, "keyboard"
                     self._check_task(can_continue, deadline)
                     await self._prepare_keyboard(can_continue, deadline)
