@@ -26,8 +26,15 @@ from inkecho.ui.window import MainWindow
 
 
 @pytest.fixture
-def window(tmp_path, qt_app, monkeypatch):
+def window(tmp_path, qt_app, monkeypatch, request):
     monkeypatch.setenv("XDG_SESSION_TYPE", "x11")
+    if getattr(request, "param", "x11") == "wayland":
+        from inkecho.ui import information
+
+        desktop = information.detect_desktop()
+        monkeypatch.setattr(
+            information, "detect_desktop", lambda: replace(desktop, session="wayland")
+        )
     monkeypatch.setattr("inkecho.audio.Recorder.devices", lambda: [])
     store = ConfigStore(tmp_path / "config")
     store.initialize()
@@ -1401,7 +1408,11 @@ def test_auto_check_does_not_claim_unverified_output_ready(window):
     assert "已准备" not in page.message.text()
 
 
-@pytest.mark.parametrize("backend", ["fcitx", "ibus", "owned"])
+@pytest.mark.parametrize(
+    ("backend", "window"),
+    [("fcitx", "x11"), ("fcitx", "wayland"), ("ibus", "wayland"), ("owned", "wayland")],
+    indirect=["window"],
+)
 def test_input_bridge_action_blocks_hotkey_during_background_change(window, backend):
     import threading
 
@@ -1445,6 +1456,7 @@ def test_input_bridge_action_blocks_hotkey_during_background_change(window, back
     asyncio.run(scenario())
 
 
+@pytest.mark.parametrize("window", ["wayland"], indirect=True)
 def test_ibus_extension_upgrade_instructions_visible(window):
     page = window.settings_page.compatibility
     labels = [item.text() for item in page.findChildren(QLabel)]
@@ -1720,6 +1732,7 @@ def test_unconfirmed_wayland_sends_explicit_uncertainty_notice(window):
     assert not notices[0][1].get("processing")
 
 
+@pytest.mark.parametrize("window", ["wayland"], indirect=True)
 def test_owned_extension_buttons_call_owned_not_legacy_manager(window):
     page = window.settings_page.compatibility
     calls = []
@@ -1753,6 +1766,7 @@ def test_owned_extension_buttons_call_owned_not_legacy_manager(window):
     asyncio.run(scenario())
 
 
+@pytest.mark.parametrize("window", ["wayland"], indirect=True)
 @pytest.mark.parametrize("backend", ["ibus", "owned"])
 @pytest.mark.parametrize("unexpected", [False, True])
 def test_extension_action_reports_success_when_followup_status_fails(
@@ -1858,6 +1872,7 @@ def test_xorg_other_input_methods_do_not_claim_keyboard_fallback_risk(
     assert "可能中断正在进行的输入法组词" not in page.availability.text()
 
 
+@pytest.mark.parametrize("window", ["wayland"], indirect=True)
 def test_auto_input_explanation_distinguishes_optional_bridge_and_unknown(window):
     labels = [
         item.text() for item in window.settings_page.compatibility.findChildren(QLabel)

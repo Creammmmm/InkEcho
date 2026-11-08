@@ -45,6 +45,7 @@ def test_default_router_explicit_ibus_never_probes_owned_or_uses_neighbor_delay(
     asyncio.run(run())
 
 
+@pytest.mark.parametrize("window", ["wayland"], indirect=True)
 def test_help_scopes_bounded_upgrade_to_automatic_owned_extension(window):
     labels = [x.text() for x in window.settings_page.compatibility.findChildren(QLabel)]
     bounded = next(text for text in labels if "带服务端期限的新协议" in text)

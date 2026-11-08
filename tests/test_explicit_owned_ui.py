@@ -1,9 +1,11 @@
 """The new explicit bounded choice is saved without migrating old V2 users."""
 
+import pytest
 from PySide6.QtWidgets import QLabel
 from test_ui import window as window
 
 
+@pytest.mark.parametrize("window", ["wayland"], indirect=True)
 def test_explicit_bounded_choice_is_visible_saved_and_deferred(window):
     page = window.settings_page.compatibility
     combo = page.output_method

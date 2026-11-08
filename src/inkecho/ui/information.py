@@ -27,11 +27,9 @@ class CompatibilityPage(Page):
     def __init__(self, session):
         super().__init__("输入与兼容性", "识别完成后，像键盘一样向当时的光标位置输入。")
         self.session = session
+        is_xorg = detect_desktop().session == "x11"
         self.fcitx_installer = FcitxInstaller()
         self.fcitx_action_lock = asyncio.Lock()
-        self.ibus_extension = ExtensionManager()
-        self.owned_extension = OwnedExtensionManager()
-        self.ibus_action_lock = asyncio.Lock()
         frame, layout = card()
         self.environment = label("")
         self.availability = label("")
@@ -111,92 +109,33 @@ class CompatibilityPage(Page):
                 muted=True,
             )
         )
-        layout.addWidget(
-            label(
-                "Fcitx5 需要额外安装输入桥；IBus 需要手动启用实验性 GNOME 扩展。"
-                "自动模式优先使用检测与握手通过的 Fcitx5；也可使用下方单独安装、"
-                "启用的 GNOME 自动输入扩展。扩展未安装或合法停用时保留原有自动策略。"
-                "目标、扩展状态或预编辑无法确认时会停止，不盲目切换键盘；"
-                "已尝试但未确认的文字不会重放。应用可能使用不同的输入方式。"
-                "设置从下一次任务生效。",
-                muted=True,
+        if is_xorg:
+            layout.addWidget(
+                label(
+                    "Fcitx5 仍需要输入桥。当前 IBus 选项保留旧扩展配置；"
+                    "此版本尚未提供免扩展的 Xorg IBus 配置。"
+                    "选择 IBus 不会自动安装或启用扩展。"
+                    "自动方式可能使用已有输入桥或模拟键盘；已尝试的文字不会重放。"
+                    "设置从下一次任务生效。",
+                    muted=True,
+                )
             )
-        )
+        else:
+            layout.addWidget(
+                label(
+                    "Fcitx5 需要额外安装输入桥；IBus 需要手动启用实验性 GNOME 扩展。"
+                    "自动模式优先使用检测与握手通过的 Fcitx5；也可使用下方单独安装、"
+                    "启用的 GNOME 自动输入扩展。"
+                    "扩展未安装或合法停用时保留原有自动策略。"
+                    "目标、扩展状态或预编辑无法确认时会停止，不盲目切换键盘；"
+                    "已尝试但未确认的文字不会重放。应用可能使用不同的输入方式。"
+                    "设置从下一次任务生效。",
+                    muted=True,
+                )
+            )
         self.body.addWidget(frame)
-        extension_frame, extension_layout = card()
-        extension_layout.addWidget(label("IBus 实验扩展"))
-        extension_layout.addWidget(
-            label(
-                "仅在 GNOME 46 和 50 的隔离测试中验证；扩展使用 GNOME 私有接口，"
-                "可能不兼容其他版本或应用。它不会切换输入法；只尝试提交，"
-                "无法确认目标收到文字，目标未接入 IBus 时可能没有文字。"
-                "安装、启用和停用均由下方按钮单独执行；安装后可能需要重新登录。"
-                "如已安装旧版 InkEcho 实验扩展，请先在 GNOME 扩展管理器中"
-                "停用并卸载旧版，"
-                "再安装并启用新版；安装不会自动覆盖旧扩展。"
-                "异常退出可能留下临时凭证文件。",
-                muted=True,
-            )
-        )
-        self.ibus_status = label("尚未检查扩展状态。")
-        extension_layout.addWidget(self.ibus_status)
-        extension_layout.addWidget(
-            actions(
-                button("安装实验扩展", lambda: self.run(self.ibus_action("install"))),
-                button("启用实验扩展", lambda: self.run(self.ibus_action("enable"))),
-                button("停用实验扩展", lambda: self.run(self.ibus_action("disable"))),
-                button("检查扩展状态", lambda: self.run(self.ibus_action("status"))),
-            )
-        )
-        self.body.addWidget(extension_frame)
-        owned_frame, owned_layout = card()
-        owned_layout.addWidget(label("自动方式的可选 GNOME 输入扩展"))
-        owned_layout.addWidget(
-            label(
-                "与上方显式 IBus 的旧 V2 实验扩展分别管理；其协议保障不相同。"
-                "安装和启用后，自动方式或所选「IBus（GNOME 新版扩展）」可使用此扩展；"
-                "它不会切换输入法，也无法确认目标是否收到文字。"
-                "本版本只使用带服务端期限的新协议；旧扩展需先停用并卸载，"
-                "再安装匹配版本并重新登录桌面；仅停用再启用可能仍加载缓存代码。"
-                "请同时更新并重启 InkEcho；旧客户端不具备新版保护。"
-                "如不可用，请检查扩展状态或停用扩展后重新检查输入方式。",
-                muted=True,
-            )
-        )
-        owned_layout.addWidget(
-            label(
-                "升级旧自动输入扩展：\n"
-                "1. 点击下方「停用自动输入扩展」。\n"
-                "2. 打开系统「扩展」应用，找到 "
-                "InkEcho bounded owned context candidate，"
-                "选择卸载。若没有卸载选项，可在终端运行：\n"
-                "gnome-extensions uninstall "
-                "inkecho-ibus-owned-v5-prototype@local.invalid\n"
-                "3. 返回这里点击「安装自动输入扩展」，然后点击「启用自动输入扩展」。\n"
-                "4. 退出桌面会话并重新登录，重启 InkEcho 后点击「检查自动输入扩展」。"
-                "程序不会自动卸载或覆盖旧扩展。",
-                muted=True,
-            )
-        )
-        self.owned_status = label("尚未检查扩展状态。")
-        owned_layout.addWidget(self.owned_status)
-        owned_layout.addWidget(
-            actions(
-                button(
-                    "安装自动输入扩展", lambda: self.run(self.owned_action("install"))
-                ),
-                button(
-                    "启用自动输入扩展", lambda: self.run(self.owned_action("enable"))
-                ),
-                button(
-                    "停用自动输入扩展", lambda: self.run(self.owned_action("disable"))
-                ),
-                button(
-                    "检查自动输入扩展", lambda: self.run(self.owned_action("status"))
-                ),
-            )
-        )
-        self.body.addWidget(owned_frame)
+        if not is_xorg:
+            self._add_ibus_extension_controls()
         fcitx_frame, fcitx_layout = card()
         fcitx_layout.addWidget(label("Fcitx5 实验输入桥"))
         fcitx_layout.addWidget(
@@ -322,6 +261,85 @@ class CompatibilityPage(Page):
         except FcitxInstallError as error:
             self.message.setText(str(error))
 
+    def _add_ibus_extension_controls(self):
+        self.ibus_extension = ExtensionManager()
+        self.owned_extension = OwnedExtensionManager()
+        self.ibus_action_lock = asyncio.Lock()
+        extension_frame, extension_layout = card()
+        extension_layout.addWidget(label("IBus 实验扩展"))
+        extension_layout.addWidget(
+            label(
+                "仅在 GNOME 46 和 50 的隔离测试中验证；扩展使用 GNOME 私有接口，"
+                "可能不兼容其他版本或应用。它不会切换输入法；只尝试提交，"
+                "无法确认目标收到文字，目标未接入 IBus 时可能没有文字。"
+                "安装、启用和停用均由下方按钮单独执行；安装后可能需要重新登录。"
+                "如已安装旧版 InkEcho 实验扩展，请先在 GNOME 扩展管理器中"
+                "停用并卸载旧版，"
+                "再安装并启用新版；安装不会自动覆盖旧扩展。"
+                "异常退出可能留下临时凭证文件。",
+                muted=True,
+            )
+        )
+        self.ibus_status = label("尚未检查扩展状态。")
+        extension_layout.addWidget(self.ibus_status)
+        extension_layout.addWidget(
+            actions(
+                button("安装实验扩展", lambda: self.run(self.ibus_action("install"))),
+                button("启用实验扩展", lambda: self.run(self.ibus_action("enable"))),
+                button("停用实验扩展", lambda: self.run(self.ibus_action("disable"))),
+                button("检查扩展状态", lambda: self.run(self.ibus_action("status"))),
+            )
+        )
+        self.body.addWidget(extension_frame)
+        owned_frame, owned_layout = card()
+        owned_layout.addWidget(label("自动方式的可选 GNOME 输入扩展"))
+        owned_layout.addWidget(
+            label(
+                "与上方显式 IBus 的旧 V2 实验扩展分别管理；其协议保障不相同。"
+                "安装和启用后，自动方式或所选「IBus（GNOME 新版扩展）」可使用此扩展；"
+                "它不会切换输入法，也无法确认目标是否收到文字。"
+                "本版本只使用带服务端期限的新协议；旧扩展需先停用并卸载，"
+                "再安装匹配版本并重新登录桌面；仅停用再启用可能仍加载缓存代码。"
+                "请同时更新并重启 InkEcho；旧客户端不具备新版保护。"
+                "如不可用，请检查扩展状态或停用扩展后重新检查输入方式。",
+                muted=True,
+            )
+        )
+        owned_layout.addWidget(
+            label(
+                "升级旧自动输入扩展：\n"
+                "1. 点击下方「停用自动输入扩展」。\n"
+                "2. 打开系统「扩展」应用，找到 "
+                "InkEcho bounded owned context candidate，"
+                "选择卸载。若没有卸载选项，可在终端运行：\n"
+                "gnome-extensions uninstall "
+                "inkecho-ibus-owned-v5-prototype@local.invalid\n"
+                "3. 返回这里点击「安装自动输入扩展」，然后点击「启用自动输入扩展」。\n"
+                "4. 退出桌面会话并重新登录，重启 InkEcho 后点击「检查自动输入扩展」。"
+                "程序不会自动卸载或覆盖旧扩展。",
+                muted=True,
+            )
+        )
+        self.owned_status = label("尚未检查扩展状态。")
+        owned_layout.addWidget(self.owned_status)
+        owned_layout.addWidget(
+            actions(
+                button(
+                    "安装自动输入扩展", lambda: self.run(self.owned_action("install"))
+                ),
+                button(
+                    "启用自动输入扩展", lambda: self.run(self.owned_action("enable"))
+                ),
+                button(
+                    "停用自动输入扩展", lambda: self.run(self.owned_action("disable"))
+                ),
+                button(
+                    "检查自动输入扩展", lambda: self.run(self.owned_action("status"))
+                ),
+            )
+        )
+        self.body.addWidget(owned_frame)
+
     async def ibus_action(self, operation):
         await self._run_ibus_action(self.ibus_extension, self.ibus_status, operation)
 
@@ -432,7 +450,17 @@ class CompatibilityPage(Page):
         keyboard = getattr(self.session.inputs, "keyboard", self.session.inputs)
         keyboard_connected = getattr(keyboard, "connected", self.session.connected)
         keyboard_authorized = getattr(keyboard, "authorized", False)
-        if method == "ibus-owned":
+        if environment.session == "x11" and method == "ibus-owned":
+            text = (
+                "当前保存的是原生 Wayland 专用 IBus 配置，不适用于 Xorg。"
+                "请重新选择输出方式。"
+            )
+        elif environment.session == "x11" and method == "ibus":
+            text = (
+                "此配置仍使用旧版 GNOME IBus 扩展；选择它不会自动安装或完成配置。"
+                "仅已配置的环境可尝试使用，尚不能保证目标接收。"
+            )
+        elif method == "ibus-owned":
             text = (
                 "只使用新版 GNOME IBus 扩展，适用于兼容的原生 Wayland 控件；"
                 "X11 / XWayland 目标不适用。输出时检查实际目标、服务身份与协议。"
@@ -486,7 +514,12 @@ class CompatibilityPage(Page):
             self.message.setText("输入设置无法读取，请检查配置文件。")
             return
         self.refresh()
-        if method == "ibus-owned":
+        if method in {"ibus", "ibus-owned"} and detect_desktop().session == "x11":
+            self.message.setText(
+                "此操作未验证 Xorg IBus 是否可用，也未自动安装或配置输入服务。"
+                "请参考上方所选方式的状态说明。"
+            )
+        elif method == "ibus-owned":
             self.message.setText(
                 "已保存本次准备；新版扩展身份与目标将在实际输出时验证，本次未输入文字。"
                 if enabled
