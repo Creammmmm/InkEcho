@@ -3,6 +3,7 @@ import json
 import time
 import types
 
+import pytest
 from dbus_next import MessageType
 
 from inkecho.platform.ibus_owned import INTERFACE, CandidateError, Client
@@ -77,7 +78,7 @@ class Bus:
         elif member == "OwnerGuardVersion":
             sender = ":1.23"
             signature = "s"
-            body = ["owner-loss-v1"]
+            body = ["owner-loss-focus-recheck-v2"]
         elif member == "Introspect":
             sender = ":1.23"
             signature = "s"
@@ -343,6 +344,38 @@ def test_bounded_service_without_owner_guard_requires_upgrade():
         except CandidateError as error:
             assert error.code == "upgrade_required"
         assert not any(method.startswith("Begin") for method, *_ in bus.calls)
+        assert bus.disconnected
+
+    asyncio.run(run())
+
+
+@pytest.mark.parametrize(
+    "marker,expected",
+    [("owner-loss-v1", "upgrade_required"), ("unknown", "unavailable")],
+)
+def test_old_runtime_marker_cannot_claim_focus_recheck(marker, expected):
+    import asyncio
+
+    from inkecho.platform.ibus_owned import CandidateError, Client
+
+    async def run():
+        class OldRuntime(Bus):
+            async def call(self, message):
+                reply = await super().call(message)
+                if message.member == "OwnerGuardVersion":
+                    reply.body = [marker]
+                return reply
+
+        bus = OldRuntime(xml())
+        client = Client(
+            Cap(), bus_factory=lambda: bus, owner_verifier=lambda _: async_true()
+        )
+        with pytest.raises(CandidateError, match=expected):
+            await client.begin()
+        assert not any(
+            name.startswith("Begin") or name.startswith("Commit")
+            for name, _, _ in bus.calls
+        )
         assert bus.disconnected
 
     asyncio.run(run())

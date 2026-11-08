@@ -73,7 +73,7 @@ BOUNDED_V1_FILES = {
 }
 
 
-FILES = {
+FOCUS_V1_FILES = {
     "probe.js": {
         "sha256": "39adc6ccc1109bf7d9cae419314781164dccbf0a2f6d6a778888a15755a12dc4",
         "size": 951,
@@ -105,10 +105,23 @@ FILES = {
 }
 
 PREVIOUS_FILES = {
-    **FILES,
+    **FOCUS_V1_FILES,
     "extension.js": {
         "sha256": "df03fdd67c4da5253a9fa9ec63ffc3d8585158de4dcff2a7b2cf05d06563ac6a",
         "size": 9172,
+    },
+}
+
+
+FILES = {
+    **FOCUS_V1_FILES,
+    "extension.js": {
+        "sha256": "7e0165c9e562ac5af79808f29affdec6a18d012979da99f5b896996fef05a75b",
+        "size": 9566,
+    },
+    "owned_gate.js": {
+        "sha256": "e64c700e3a039b94de094d964efc0bc63c3655aabed2d9194299de7a55efc3dd",
+        "size": 6483,
     },
 }
 
@@ -140,6 +153,7 @@ def verified_installation(root=None):
         for name in FILES:
             maximum = max(
                 FILES[name]["size"],
+                FOCUS_V1_FILES[name]["size"],
                 BOUNDED_V1_FILES[name]["size"],
                 PREVIOUS_FILES[name]["size"],
                 LEGACY_FILES[name]["size"],
@@ -165,7 +179,13 @@ def verified_installation(root=None):
             finally:
                 os.close(fd)
         # Accept complete old V5 or complete current bounded bridge, never a mixed set.
-        if observed not in (FILES, PREVIOUS_FILES, BOUNDED_V1_FILES, LEGACY_FILES):
+        if observed not in (
+            FILES,
+            FOCUS_V1_FILES,
+            PREVIOUS_FILES,
+            BOUNDED_V1_FILES,
+            LEGACY_FILES,
+        ):
             raise ValueError
         return True
     except (OSError, ValueError):

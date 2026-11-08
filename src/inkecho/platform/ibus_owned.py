@@ -169,8 +169,11 @@ class Client:
             if (
                 result.message_type != MessageType.METHOD_RETURN
                 or getattr(result, "signature", None) != "s"
-                or result.body != ["owner-loss-v1"]
             ):
+                raise CandidateError("unavailable")
+            if result.body == ["owner-loss-v1"]:
+                raise CandidateError("upgrade_required")
+            if result.body != ["owner-loss-focus-recheck-v2"]:
                 raise CandidateError("unavailable")
 
         # Require the complete bounded protocol. A complete legacy schema needs

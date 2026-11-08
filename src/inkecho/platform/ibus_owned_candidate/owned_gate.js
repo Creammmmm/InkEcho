@@ -1,7 +1,7 @@
 import {verdict} from './identity.js';
 const BOUNDED = Symbol('bounded');
 
-// One pending query per session. Never retries or credits target receipt.
+// One pending guard per session. Only undispatched focus checks may repeat.
 export class OwnedGate {
     constructor(delivery, snapshot, current, boundary) {
         this.delivery = delivery;
@@ -74,21 +74,36 @@ export class OwnedGate {
         const generation = this.generation;
         this.pending = true;
         try {
-            const before = this.snapshot();
-            // Composition is never a reason to fall back to keyboard output.
-            if (before.preedit !== false) { s.failed = true; return 'unknown'; }
-            if (verdict(before, before.shellPath) !== 'gnome_owned_native_candidate')
-                return this.reject();
-            const path = await this.current(before.im);
-            if (this.closed || generation !== this.generation ||
-                this.delivery.session !== s) return 'rejected';
-            if (!this.delivery.unexpired()) { s.failed = true; return 'unknown'; }
-            const after = this.snapshot();
-            if (after.preedit !== false) { s.failed = true; return 'unknown'; }
-            if (before.im !== after.im || before.epoch !== after.epoch ||
-                before.window !== after.window || before.shellPath !== after.shellPath ||
-                verdict(after, path) !== 'gnome_owned_native_candidate')
-                return this.reject();
+            for (let guard = 0; ; guard++) {
+                const before = this.snapshot();
+                // Composition is never a reason to bypass the guard.
+                if (before.preedit !== false) { s.failed = true; return 'unknown'; }
+                if (verdict(before, before.shellPath) !== 'gnome_owned_native_candidate')
+                    return this.reject();
+                const path = await this.current(before.im);
+                if (this.closed || generation !== this.generation ||
+                    this.delivery.session !== s) return 'rejected';
+                if (!this.delivery.unexpired()) { s.failed = true; return 'unknown'; }
+                const after = this.snapshot();
+                if (after.preedit !== false) { s.failed = true; return 'unknown'; }
+                if (verdict(after, after.shellPath) !== 'gnome_owned_native_candidate')
+                    return this.reject();
+                const changed = before.im !== after.im || before.epoch !== after.epoch ||
+                    before.window !== after.window || before.shellPath !== after.shellPath;
+                if (!changed) {
+                    if (verdict(after, path) !== 'gnome_owned_native_candidate')
+                        return this.reject();
+                    break;
+                }
+                if (guard >= 1) return this.reject();
+                // Let queued producer focus events settle; this is not receiver ACK.
+                // Nothing has been dispatched, so a fresh guard may follow.
+                const settled = await this.boundary();
+                if (this.closed || generation !== this.generation ||
+                    this.delivery.session !== s) return 'rejected';
+                if (!this.delivery.unexpired()) { s.failed = true; return 'unknown'; }
+                if (!settled) return this.reject();
+            }
             // No await between final identity guard and panel dispatch attempt.
             const result = batch ? this.delivery.commitBatch(sender, sequence, text) :
                 this.delivery.commit(sender, sequence, text);

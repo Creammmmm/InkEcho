@@ -117,7 +117,7 @@ export default class Candidate extends Extension {
         invocation.return_value(new GLib.Variant('(s)', [result]));
     }
     OwnerGuardVersionAsync(_args, invocation) {
-        invocation.return_value(new GLib.Variant('(s)', ['owner-loss-v1']));
+        invocation.return_value(new GLib.Variant('(s)', ['owner-loss-focus-recheck-v2']));
     }
     // Legacy methods stay introspectable but can never create or mutate a task.
     // A matching upgraded client must negotiate the bounded methods.

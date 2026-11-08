@@ -187,3 +187,30 @@ def test_status_reports_cli_failures_without_claiming_running(tmp_path, failure)
     ).status()
     assert "正在运行" not in status
     assert "不可用" in status or "操作未完成" in status
+
+
+def test_focus_recheck_preserves_complete_previous_asset_sets():
+    previous_gate = {
+        "sha256": "fff2971ee12563748496b6b0b42e06f3322fce2764f9ee6317b275689ae45422",
+        "size": 5601,
+    }
+    assert owned_installation.FOCUS_V1_FILES["owned_gate.js"] == previous_gate
+    assert owned_installation.PREVIOUS_FILES["owned_gate.js"] == previous_gate
+    assert owned_installation.FILES["owned_gate.js"] != previous_gate
+    assert owned_installation.FOCUS_V1_FILES["extension.js"] == {
+        "sha256": "c365213f1bf435e016e4b9504c06c8a7464584d2df85ded2a039c7536a5dcb7e",
+        "size": 9552,
+    }
+
+
+def test_immediate_previous_complete_set_and_mixed_refusal(tmp_path, monkeypatch):
+    historical_legacy = owned_installation.LEGACY_FILES
+    root, _ = installed(tmp_path, monkeypatch, legacy=True)
+    immediate_previous = owned_installation.LEGACY_FILES
+    monkeypatch.setattr(owned_installation, "FOCUS_V1_FILES", immediate_previous)
+    monkeypatch.setattr(owned_installation, "LEGACY_FILES", historical_legacy)
+    assert owned_installation.verified_installation(root)
+    source = Path(owned_extension.__file__).with_name("ibus_owned_candidate")
+    (root / "extension.js").write_bytes((source / "extension.js").read_bytes())
+    with pytest.raises(OutputRouterError, match="input_capability_unknown"):
+        owned_installation.verified_installation(root)
