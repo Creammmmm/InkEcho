@@ -1,6 +1,7 @@
 """Qt/asyncio orchestration; all text delivery passes through TaskController."""
 
 import asyncio
+import os
 import time
 from collections.abc import Awaitable
 
@@ -188,7 +189,9 @@ class Session(QObject):
         super().__init__()
         self.store = store or ConfigStore()
         self.inputs = (
-            inputs if inputs is not None else OutputRouter(keyboard_for_desktop())
+            inputs
+            if inputs is not None
+            else OutputRouter(keyboard_for_desktop(), desktop_environ=os.environ)
         )
         configure_diagnostics = getattr(self.inputs, "set_diagnostic_handler", None)
         if callable(configure_diagnostics):

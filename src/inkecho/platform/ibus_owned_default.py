@@ -22,11 +22,16 @@ class DefaultAutoOutputRouter(OwnedAutoOutputRouter):
         self,
         keyboard,
         *,
+        desktop_environ=None,
         state_probe=installation_state,
         system_detector=detect_system_framework,
         **kwargs,
     ):
         super().__init__(keyboard, system_detector=system_detector, **kwargs)
+        env = {} if desktop_environ is None else desktop_environ
+        self._xorg_session = env.get(
+            "XDG_SESSION_TYPE", ""
+        ).lower() == "x11" and not env.get("WAYLAND_DISPLAY")
         self._state_probe = state_probe
         self._legacy_detector = system_detector
 
@@ -196,6 +201,13 @@ class DefaultAutoOutputRouter(OwnedAutoOutputRouter):
     async def _choose_auto(self, can_continue=lambda: True, deadline=None):
         if getattr(self, "_explicit_owned_task", False):
             return await self._choose_explicit_owned(can_continue, deadline)
+        if self._xorg_session:
+            # Native-Wayland-only extension state cannot authorize or block Xorg.
+            # Keep the existing verified Fcitx/keyboard policy on this session.
+            self._fcitx_keyboard_fallback_allowed = True
+            self._owned_install_state = "absent"
+            self._fcitx_evidence = None
+            return await self._legacy_auto(can_continue, deadline)
         self._owned_auto_candidate = True
         self._fcitx_keyboard_fallback_allowed = False
         self._owned_install_state = "unknown"
