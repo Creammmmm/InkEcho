@@ -17,5 +17,5 @@ def test_owned_upgrade_instructions_are_actionable(window):
         "gnome-extensions uninstall inkecho-ibus-owned-v5-prototype@local.invalid"
         in guidance
     )
-    assert "安装自动输入扩展" in guidance and "启用自动输入扩展" in guidance
+    assert "配置 IBus 输入桥" in guidance and "再次点击同一按钮" in guidance
     assert "重新登录" in guidance and "不会自动卸载或覆盖" in guidance

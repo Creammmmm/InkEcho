@@ -1437,12 +1437,11 @@ def test_input_bridge_action_blocks_hotkey_during_background_change(
     started, release = threading.Event(), threading.Event()
 
     class Manager:
-        def install(self):
+        def configure(self):
             started.set()
             assert release.wait(5)
 
-        configure = install
-        disable = install
+        disable = configure
 
         def status(self):
             return "状态已检查"
@@ -1465,11 +1464,7 @@ def test_input_bridge_action_blocks_hotkey_during_background_change(
     async def scenario():
         action = asyncio.create_task(
             getattr(page, f"{backend}_action")(
-                "configure"
-                if backend == "fcitx"
-                else "disable"
-                if backend == "ibus"
-                else "install"
+                "disable" if backend == "ibus" else "configure"
             )
         )
         try:
@@ -1768,21 +1763,20 @@ def test_unconfirmed_wayland_sends_explicit_uncertainty_notice(window):
 
 
 @pytest.mark.parametrize("window", ["wayland"], indirect=True)
-def test_owned_extension_buttons_call_owned_not_legacy_manager(window):
+def test_owned_extension_buttons_call_owned_not_legacy_manager(window, monkeypatch):
     page = window.settings_page.compatibility
     calls = []
 
     class Owned:
-        def install(self):
-            calls.append("install")
-
-        def enable(self):
-            calls.append("enable")
+        def configure(self):
+            assert page.session.input_maintenance_active
+            calls.append("configure")
 
         def disable(self):
             calls.append("disable")
 
         def status(self):
+            calls.append("status")
             return "测试文件已校验"
 
     class Legacy:
@@ -1791,14 +1785,33 @@ def test_owned_extension_buttons_call_owned_not_legacy_manager(window):
 
     page.owned_extension = Owned()
     page.ibus_extension = Legacy()
+    monkeypatch.setattr(page, "run", asyncio.run)
+    (configure,) = (
+        item
+        for item in page.findChildren(QPushButton)
+        if item.text() == "配置 IBus 输入桥"
+    )
+    configure.click()
+    assert calls == ["configure", "status"]
+    assert page.owned_status.text() == "测试文件已校验"
+    asyncio.run(page.owned_action("disable"))
+    assert calls == ["configure", "status", "disable", "status"]
 
-    async def scenario():
-        for operation in ("install", "enable", "disable", "status"):
-            await page.owned_action(operation)
-        assert calls == ["install", "enable", "disable"]
-        assert page.owned_status.text() == "测试文件已校验"
 
-    asyncio.run(scenario())
+@pytest.mark.parametrize("window", ["wayland"], indirect=True)
+def test_owned_configure_shows_relogin_after_partial_install(window, monkeypatch):
+    from inkecho.platform.ibus_extension import ExtensionError
+
+    page = window.settings_page.compatibility
+    guidance = "请重新登录桌面后再次点击「配置 IBus 输入桥」。"
+
+    def configure():
+        raise ExtensionError(guidance)
+
+    monkeypatch.setattr(page.owned_extension, "configure", configure)
+    asyncio.run(page.owned_action("configure"))
+    assert page.message.text() == page.owned_status.text() == guidance
+    assert not page.session.input_maintenance_active
 
 
 @pytest.mark.parametrize("window", ["wayland-legacy"], indirect=True)
@@ -1817,8 +1830,11 @@ def test_extension_action_reports_success_when_followup_status_fails(
     calls = []
 
     class Manager:
-        def install(self):
-            calls.append("install")
+        def disable(self):
+            calls.append("disable")
+
+        def configure(self):
+            calls.append("configure")
 
         def status(self):
             if unexpected:
@@ -1831,8 +1847,9 @@ def test_extension_action_reports_success_when_followup_status_fails(
     attribute = "ibus_extension" if backend == "ibus" else "owned_extension"
     setattr(page, attribute, Manager())
     monkeypatch.setattr(page.session, "run_input_maintenance", maintenance)
-    asyncio.run(getattr(page, f"{backend}_action")("install"))
-    assert calls == ["install"]
+    operation = "disable" if backend == "ibus" else "configure"
+    asyncio.run(getattr(page, f"{backend}_action")(operation))
+    assert calls == [operation]
     assert "操作已提交" in page.message.text()
     status = page.ibus_status if backend == "ibus" else page.owned_status
     assert "状态检查失败" in status.text()
@@ -1921,7 +1938,8 @@ def test_auto_input_explanation_distinguishes_optional_bridge_and_unknown(window
         item.text() for item in window.settings_page.compatibility.findChildren(QLabel)
     ]
     explanation = next(text for text in labels if "自动模式优先" in text)
-    assert "Fcitx5" in explanation and "GNOME 自动输入扩展" in explanation
+    assert "Fcitx5" in explanation and "已配置的 IBus 输入桥" in explanation
+    assert "随应用提供的 GNOME 扩展" in explanation
     assert "未安装或合法停用" in explanation
     assert "预编辑无法确认时会停止" in explanation
     assert "已尝试但未确认的文字不会重放" in explanation

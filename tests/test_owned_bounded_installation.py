@@ -57,7 +57,7 @@ def test_complete_set_is_detected_but_only_current_can_be_enabled(
     )
     if legacy:
         before = {p.name: p.read_bytes() for p in root.iterdir()}
-        for action in [manager.enable, manager.install]:
+        for action in (manager.enable, manager.install, manager.configure):
             with pytest.raises(ExtensionError, match="旧版"):
                 action()
         assert all(c[1] != "enable" and c[1] != "install" for c in calls)
@@ -88,10 +88,42 @@ def test_invalid_assets_never_enable_or_install(tmp_path, monkeypatch, change):
     manager = owned_extension.OwnedExtensionManager(
         source=source, runner=runner(root, calls)
     )
-    for action in [manager.enable, manager.install]:
+    for action in (manager.enable, manager.install, manager.configure):
         with pytest.raises(ExtensionError):
             action()
     assert not any(c[1] in {"enable", "install"} for c in calls)
+
+
+@pytest.mark.parametrize("initially_discovered", [True, False])
+def test_configure_installs_once_and_enables_when_shell_discovers_bridge(
+    tmp_path, monkeypatch, initially_discovered
+):
+    root, source = installed(tmp_path, monkeypatch)
+    prepared = root.rename(tmp_path / "prepared")
+    discovered = initially_discovered
+    calls = []
+
+    def run(arguments, **_):
+        action = arguments[1]
+        calls.append(action)
+        if action == "install":
+            prepared.rename(root)
+        if action == "info" and not discovered:
+            return SimpleNamespace(returncode=1, stdout="")
+        return SimpleNamespace(returncode=0, stdout=f"Path: {root}\n")
+
+    manager = owned_extension.OwnedExtensionManager(source=source, runner=run)
+    if initially_discovered:
+        manager.configure()
+        assert calls == ["install", "info", "enable"]
+    else:
+        with pytest.raises(ExtensionError, match="重新登录桌面后再次点击"):
+            manager.configure()
+        assert calls == ["install", "info"]
+        assert owned_installation.verified_installation(root)
+        discovered = True
+        manager.configure()
+        assert calls == ["install", "info", "info", "enable"]
 
 
 def test_manifest_is_exact_current_asset_set():
@@ -123,7 +155,7 @@ def test_previous_bounded_asset_set_is_detected_but_never_overwritten(
     manager = owned_extension.OwnedExtensionManager(
         source=source, runner=runner(root, calls)
     )
-    for action in (manager.enable, manager.install):
+    for action in (manager.enable, manager.install, manager.configure):
         with pytest.raises(ExtensionError, match="旧版"):
             action()
     assert not any(call[1] in {"enable", "install"} for call in calls)

@@ -1,3 +1,4 @@
+import asyncio
 from dataclasses import replace
 
 import pytest
@@ -44,6 +45,11 @@ def test_extension_controls_follow_session_without_migration(
     buttons = [b.text() for b in page.findChildren(QPushButton)]
     assert "安装实验扩展" not in buttons
     assert "启用实验扩展" not in buttons
+    assert "安装自动输入扩展" not in buttons
+    assert "启用自动输入扩展" not in buttons
+    assert buttons.count("配置 IBus 输入桥") == (session == "wayland")
+    if session == "x11":
+        asyncio.run(page.owned_action("configure"))
     assert ("停用旧版 IBus 扩展" in buttons) == (
         session == "wayland" and method == "ibus"
     )

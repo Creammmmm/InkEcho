@@ -139,9 +139,9 @@ class CompatibilityPage(Page):
             layout.addWidget(
                 label(
                     "Fcitx5 可使用下方按钮配置随应用提供的输入桥。"
-                    "IBus 需要手动启用实验性 GNOME 扩展。"
-                    "自动模式优先使用检测与握手通过的 Fcitx5；也可使用下方单独安装、"
-                    "启用的 GNOME 自动输入扩展。"
+                    "IBus 可通过下方按钮配置随应用提供的 GNOME 扩展。"
+                    "自动模式优先使用检测与握手通过的 Fcitx5。"
+                    "也可使用已配置的 IBus 输入桥。"
                     "扩展未安装或合法停用时保留原有自动策略。"
                     "目标、扩展状态或预编辑无法确认时会停止，不盲目切换键盘；"
                     "已尝试但未确认的文字不会重放。应用可能使用不同的输入方式。"
@@ -309,11 +309,12 @@ class CompatibilityPage(Page):
         if self._saved_output_method == "ibus":
             self._add_legacy_ibus_controls()
         owned_frame, owned_layout = card()
-        owned_layout.addWidget(label("自动方式的可选 GNOME 输入扩展"))
+        owned_layout.addWidget(label("GNOME Wayland 的 IBus 输入桥"))
         owned_layout.addWidget(
             label(
                 "适用于 GNOME 原生 Wayland 的兼容输入控件。"
-                "安装和启用后，自动方式或所选「IBus（GNOME Wayland）」可使用此扩展；"
+                "配置会安装并尝试启用随应用提供的 GNOME 扩展。"
+                "启用后，自动方式或所选「IBus（GNOME Wayland）」可使用输入桥。"
                 "它不会切换输入法，也无法确认目标是否收到文字。"
                 "本版本只使用带服务端期限的新协议；旧扩展需先停用并卸载，"
                 "再安装匹配版本并重新登录桌面；仅停用再启用可能仍加载缓存代码。"
@@ -331,8 +332,8 @@ class CompatibilityPage(Page):
                 "选择卸载。若没有卸载选项，可在终端运行：\n"
                 "gnome-extensions uninstall "
                 "inkecho-ibus-owned-v5-prototype@local.invalid\n"
-                "3. 返回这里点击「安装自动输入扩展」，然后点击「启用自动输入扩展」。\n"
-                "4. 退出桌面会话并重新登录，重启 InkEcho 后点击「检查自动输入扩展」。"
+                "3. 返回这里点击「配置 IBus 输入桥」。\n"
+                "4. 若 GNOME 尚未发现扩展，请重新登录桌面后再次点击同一按钮。"
                 "程序不会自动卸载或覆盖旧扩展。",
                 muted=True,
             )
@@ -342,10 +343,7 @@ class CompatibilityPage(Page):
         owned_layout.addWidget(
             actions(
                 button(
-                    "安装自动输入扩展", lambda: self.run(self.owned_action("install"))
-                ),
-                button(
-                    "启用自动输入扩展", lambda: self.run(self.owned_action("enable"))
+                    "配置 IBus 输入桥", lambda: self.run(self.owned_action("configure"))
                 ),
                 button(
                     "停用自动输入扩展", lambda: self.run(self.owned_action("disable"))
@@ -386,6 +384,8 @@ class CompatibilityPage(Page):
         await self._run_ibus_action(self.ibus_extension, self.ibus_status, operation)
 
     async def owned_action(self, operation):
+        if not self._gnome_wayland:
+            return
         await self._run_ibus_action(self.owned_extension, self.owned_status, operation)
 
     async def _run_ibus_action(self, manager, status, operation):
@@ -427,6 +427,8 @@ class CompatibilityPage(Page):
         except ExtensionError as error:
             if operation == "status":
                 status.setText(f"状态检查失败：{error}")
+            elif operation == "configure":
+                status.setText(str(error))
             self.message.setText(str(error))
 
     def save_output_method(self):

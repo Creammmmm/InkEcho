@@ -61,6 +61,9 @@ class OwnedExtensionManager(ExtensionManager):
         ]
         if paths != [str(installed_directory())]:
             raise ExtensionError("无法确认已安装扩展的位置；未启用。")
+        self._verify_installed_files()
+
+    def _verify_installed_files(self):
         try:
             valid = verified_installation()
         except Exception:
@@ -86,8 +89,22 @@ class OwnedExtensionManager(ExtensionManager):
             )
         super().install()
 
+    def configure(self) -> None:
+        """Install the bundled bridge if needed, then try to enable it."""
+        if not os.path.lexists(installed_directory()):
+            self.install()
+        self.enable()
+
     def enable(self):
-        self._verify_installed(self._run("info", UUID))
+        try:
+            info = self._run("info", UUID)
+        except ExtensionError:
+            self._verify_installed_files()
+            raise ExtensionError(
+                "输入桥文件已安装并校验，但 GNOME 尚未确认扩展可用。"
+                "若刚安装，请重新登录桌面后再次点击「配置 IBus 输入桥」。"
+            ) from None
+        self._verify_installed(info)
         self._run("enable", UUID)
 
     def disable(self):
@@ -110,7 +127,7 @@ class OwnedExtensionManager(ExtensionManager):
             "ACTIVE": "扩展显示正在运行；自动输出仍须验证当前目标和服务身份。",
             "ENABLED": "扩展已启用，但运行状态未确认；必要时重新登录桌面。",
             "INACTIVE": "扩展已安装但未运行；请检查 GNOME 扩展设置。",
-            "DISABLED": "扩展已停用；请点击启用自动输入扩展。",
+            "DISABLED": "扩展已停用；可点击「配置 IBus 输入桥」重新启用。",
             "ERROR": "扩展运行出错；请检查 GNOME 扩展设置或停用扩展。",
             "OUT_OF_DATE": "扩展与当前 GNOME 版本不兼容。",
         }.get(states[0], "扩展文件已校验，但运行状态无法确认。")

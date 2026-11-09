@@ -69,3 +69,65 @@ Xorg 文案前的源码，保留在 `output/ui-smoke`，不作为最终源码证
 
 本次未打包、未更新稳定入口或发布。0.16.14 同哈希包的既有验证不包含本次
 设置页变更。后续新包仍需按项目规范完成同版本同哈希的双系统验收。
+
+## GNOME Wayland 的 IBus 输入桥配置合并
+
+当前 Wayland 页面将安装、启用合并到「配置 IBus 输入桥」，保留检查和停用。打开
+页面或保持自动模式不触发配置。明确点击后，缺少时安装随应用提供的校验文件，随后
+尝试由 GNOME 启用。安装和启用纳入一次输入维护操作。GNOME 若尚未识别新文件，
+界面提示重新登录并再点同一按钮。旧扩展升级仍遵循停用和卸载指引。GNOME 50.1 的
+本地安装命令把文件移入用户扩展目录，运行中的 Shell 拒绝尚未登记的 UUID 时，
+启用命令报告失败。 [GNOME 安装命令](https://github.com/GNOME/gnome-shell/blob/50.1/subprojects/extensions-tool/src/command-install.c#L121-L150) · [GNOME 启用命令](https://github.com/GNOME/gnome-shell/blob/50.1/subprojects/extensions-tool/src/command-enable.c#L40-L78)
+
+独立 Ubuntu 26.04.1 GNOME 50.1 Wayland 客机使用 Qt Wayland、IBus 1.5.34~rc2-1
+与 GTK 3.24.52。运行时为 0.16.14 AppImage，SHA-256 为
+`1294d46ccaa35878011c462407c44d025ac405b12ea5293ee6256d633bdeb8b9`。仅在
+解包的运行时中覆盖 `information.py` 和 `owned_extension.py`，对应源码 SHA-256 为
+`34a8e357890adf2741cd2a96e9127bfcf652b993ec2513d2dfc0eb576f490bc3` 和
+`fce207ae707de005bfe8c4ff371c617ccc5603d42e1f8da3e9bc8255828a589d`。
+
+- 暂存客机原扩展并重新登录，打开独立 `CompatibilityPage`。页面显示单个配置
+  按钮，打开前后临时应用配置、扩展文件状态及 GNOME 设置一致，输出方式为 auto。
+  对真实可见按钮发送一组 Qt 鼠标按下、释放事件，确认仅触发一次。首次安装七个
+  匹配内置摘要的文件，目录 0700、文件 0600。当前会话没有启用扩展，界面给出
+  重新登录、再点同一按钮的提示，GNOME 设置仍与点击前一致。
+- GDM 重新登录后，同一按钮一次点击完成启用。UUID 目录和七个文件的 inode、
+  修改时间、权限及文件摘要均相同。运行探针为 `enabled`，Shell 接口返回
+  `owner-loss-focus-recheck-v2`。应用配置字节、auto 与系统输入源保持原值。
+- 两个独立原生 GTK 文本框验证启用后的自动输出。A 收到「甲」，B 实际获得焦点
+  后收到「乙丙」，无迟到或键盘回退调用。路由选中 IBus、记录三次派发和
+  `ibus_delivery_unknown`。实际正文由 GTK 事件独立观察，路由状态本身不确认接收。
+
+在 `/tmp/inkecho-ibus-configure-wayland26.Gd1n6o/` 可重放夹具。按 `launch.json`
+启动一次性客机，将 input 挂载到 `/mnt/input`，output 挂载到 `/mnt/output`。
+用测试用户运行 `desktop-state.py stage` 后重新登录，依次运行
+`launch-configure.py initial`、再次重新登录、`launch-configure.py retry` 和
+`launch-probe.py`。两个按钮阶段均退出 0。首次夹具因包内无 QtTest 而未点击，
+最终使用 QtGui 鼠标事件。GTK 首次遇到夹具 JSON 读写竞争，保留失败日志，改用
+原子写入后复验通过。原始 JSON、页面截图、输出及清理日志均在 `output`。
+
+本轮是 Ubuntu 26.04 Wayland 源码覆盖验证，目标是独立测试窗口。未覆盖完整主窗口
+布局、物理鼠标或全局快捷键、活动组词、真实语音、Xorg 或新 AppImage。客机原扩展和
+设置已恢复，夹具进程为空，QEMU 与容器正常退出 0，专用容器已删除。
+
+### Ubuntu 24.04 GNOME Wayland 按钮复验
+
+一次性 Ubuntu 24.04.5 LTS 客机的座席会话为 active Wayland，Qt 使用 wayland。
+运行时为上文同 SHA-256 的 0.16.14 AppImage，两处源码覆盖的 SHA-256 也与上文
+一致。打开页面时临时应用配置、系统输入源、扩展文件及 GNOME 设置均保持原样。
+真实可见的「配置 IBus 输入桥」按钮接收一组 Qt 鼠标按下、释放事件。首次点击
+安装七个与内置摘要匹配的文件，界面提示重新登录后点击同一按钮，扩展尚未启用。
+
+客机 GDM 重新登录后，Shell 总线拥有者由 `:1.27` 变为 `:1.23`。再次点击同一
+按钮后，运行探针为 `enabled`，接口返回 `owner-loss-focus-recheck-v2`。从首次
+安装到第二次点击完成，扩展目录及七个文件的 inode、修改时间、权限与摘要完全
+一致。两次应用配置均为 auto，系统输入源保持原值。
+
+原始 JSON、按钮可见截图与夹具位于
+`/tmp/inkecho-ibus-configure-wayland24.3p2GXU/`。从只读基盘启动一次性客机，
+将 input 挂载到 `/mnt/input`，output 挂载到 `/mnt/output`，依次执行
+`guest-setup.sh`、`desktop-state.py stage` 和 `launch-configure.py initial`。
+重新登录后运行 `launch-configure.py retry`。两个阶段均退出 0。清理恢复了
+客机 GNOME 设置和 GDM 配置，移除了测试扩展，夹具进程为空。QEMU 与容器均
+退出 0，专用容器已删除。本轮仅验证源码覆盖下的配置按钮及扩展运行状态，
+未测 GTK 输出，未生成新 AppImage。

@@ -35,12 +35,12 @@ def test_xorg_legacy_ibus_does_not_claim_configuration(window, monkeypatch, meth
 
 
 @pytest.mark.parametrize("window", ["wayland"], indirect=True)
-def test_wayland_description_remains(window):
+def test_wayland_description_explains_combined_configuration(window):
     page = window.settings_page.compatibility
     labels = "".join(x.text() for x in page.findChildren(QLabel))
     assert (
         "Fcitx5 可使用下方按钮配置随应用提供的输入桥。"
-        "IBus 需要手动启用实验性 GNOME 扩展。" in labels
+        "IBus 可通过下方按钮配置随应用提供的 GNOME 扩展。" in labels
     )
-    assert "下方单独安装、启用的 GNOME 自动输入扩展" in labels
+    assert "自动模式优先使用检测与握手通过的 Fcitx5" in labels
     assert "此版本尚未提供免扩展" not in labels
