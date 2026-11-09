@@ -1,3 +1,3 @@
 """InkEcho desktop voice input."""
 
-__version__ = "0.16.25"
+__version__ = "0.17.0"
