@@ -253,3 +253,45 @@ VocaLinux 0.18.5 在输出时临时切换到自有引擎并尝试恢复。Fedora
 [IBus 主对象](https://github.com/ibus/ibus/blob/1.5.35/bus/ibusimpl.c#L189-L240) ·
 [提交通知](https://github.com/ibus/ibus/blob/1.5.35/bus/inputcontext.c#L275-L330) ·
 [连接权限](https://github.com/ibus/ibus/blob/1.5.35/bus/inputcontext.c#L1537-L1600)
+
+## 直接调用原装 Engine 对象的对照
+
+`Engine` 与前文的 `InputContext` 有不同的连接边界。IBus 1.5.29 的私有总线把
+消息发送者写成真实连接的唯一名称，随后向其他服务转发。引擎处理方法时核对
+收到消息的 GDBus 连接是否为自己登记的连接，没有用 `sender` 拒绝这个不同
+客户端。`CommitText` 在 Engine 接口中仍是信号，`ProcessKeyEvent` 才是可调用的
+按键方法。此路径不能由 InputContext 的跨连接超时直接推断。
+[总线转发](https://github.com/ibus/ibus/blob/1.5.29/bus/dbusimpl.c#L1494-L1579) ·
+[Engine 接口](https://github.com/ibus/ibus/blob/1.5.29/src/ibusengine.c#L208-L277) ·
+[Engine 连接与方法派发](https://github.com/ibus/ibus/blob/1.5.29/src/ibusengine.c#L1249-L1295)
+
+Ubuntu 24.04.5 隔离客机运行 GNOME 46 的 Xorg 会话。探针清除显示变量，使用独立
+session D-Bus、IBus 私有套接字和临时 HOME，目标是无窗口的自有 `IBusInputContext`。
+两轮均用发行版 IBus `1.5.29-2`。拼音轮临时安装发行版 `ibus-libpinyin 1.15.7-1build2`。
+独立调用方、上下文拥有者和引擎服务各有不同的唯一连接名。两种引擎均已确认
+`CommitText` 作为方法返回 `UnknownMethod`。下表正文仅来自自有上下文的实际信号。
+
+| 引擎及版本 | 普通客户端对 Engine 调用 `ProcessKeyEvent` 的结果 |
+| --- | --- |
+| Ubuntu 24.04 Simple `xkb:us::eng` | 空闲时 Unicode 按键 `甲`、`🙂` 各提交一次。拥有者先按重音死键，预编辑显示 `´`，随后独立客户端发送同一 `甲`，收到的是 `´甲`。拥有者再按 `e` 返回 `false`，没有 `é` 提交。 |
+| Ubuntu 24.04 libpinyin | 空闲时两次 Unicode 按键均返回 `false`，无提交。拥有者输入 `n` 后显示 `年`，独立客户端的 `i` 将其改为 `你`。直接发 `甲` 返回 `false`，随后独立客户端发空格提交 `你`。 |
+| Ubuntu 26.04 宿主，私有总线，Simple `1.5.34~rc2-1` | 空闲时两次 Unicode 按键均返回 `false`，无提交。重音组词中独立客户端的 `甲` 多产生一次 `´` 预编辑事件，未提交文字。拥有者的 `e` 随后提交 `é`。 |
+| Ubuntu 26.04 宿主，私有总线，libpinyin `1.16.5-2` | 同样拒绝两次空闲 Unicode 按键，允许独立客户端改变拼音预编辑和提交候选 `你`。 |
+
+24.04 Simple 的结果与源码一致。未匹配组词的可打印非 ASCII 字符可直接提交，死键
+回退还可将重音与下一个字符一起提交。新版 Simple 删除了普通非 ASCII 字符的本地
+提交分支。可达的引擎按键方法没有任意文本提交的语义，也没有验证当前焦点与预编辑
+为空再提交的原子条件。24.04 的反例证实即使空闲样本可用，活动组词仍会被提前提交。
+[1.5.29 的 Simple 回退](https://github.com/ibus/ibus/blob/1.5.29/src/ibusenginesimple.c#L620-L659) ·
+[1.5.34-rc2 的 Simple 回退](https://github.com/ibus/ibus/blob/1.5.34-rc2/src/ibusenginesimple.c#L860-L907)
+
+原始脚本在 `/tmp/inkecho-engine-peer-noble.mDn7hK/input/probe/`。在隔离客机以普通
+测试用户将 `probe.py` 和 `run.sh` 复制到 `mktemp -d /tmp/inkecho-engine-peer-XXXXXX`
+生成的目录，在该目录依次运行 `INKECHO_ENGINE_PEER_PROBE=1 ENGINE_NAME=xkb:us::eng bash run.sh`
+和 `INKECHO_ENGINE_PEER_PROBE=1 ENGINE_NAME=libpinyin bash run.sh`。依赖系统 IBus、
+`python3-gi`、`gir1.2-ibus-1.0`、`dbus-run-session`，第二轮另需发行版拼音引擎。
+对象路径由测试中的固定服务唯一拥有者和对象自省确认，编号仅在该新启动的私有实例中
+用于定位。脚本版本哈希、两个退出码 0 和 JSON 在同级 `output/`；宿主结果在
+`/tmp/inkecho-engine-peer-eUcOPj/`。测试记录最后一次预编辑更新与正文提交，不用最后
+一次预编辑快照推断提交后仍在组词。客机清理了私有进程、目录及临时安装的拼音包。
+这些测试没有向图形应用发送按键，也不验证跨窗、真实用户内容或 AppImage 交付。
